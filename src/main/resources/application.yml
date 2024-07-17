@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:log4jdbc:mysql://mini.cxwee6aeygsa.ap-northeast-2.rds.amazonaws.com/movie
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    username: admin
+    password: admin1234
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:  # \uC774\uBA54\uC77C
+    password:  # APP \uBE44\uBC00\uBC88\uD638
+    properties:
+      mail:
+        smtp:
+          auth: true # \uC778\uC99D
+          starttls:
+            enable: true
+
+server:
+  port: 8099
+  servlet:
+    session:
+      timeout: 1800
+
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: DEBUG
+        transaction: DEBUG
+    com:
+      .zaxxer: DEBUG
+    sql: DEBUG
