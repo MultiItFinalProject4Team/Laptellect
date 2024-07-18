@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.test.model.dao.TestDAO">
+
+    <resultMap id="TestResultMap" type="com.multi.laptellect.test.model.dto.TestDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
+        <result column="username" property="username1" /> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
+        <result column="productname" property="productname1" />
+        <result column="productinfo" property="productinfo1" />
+        <result column="date_created" property="date_created1" />
+        <result column="productprice" property="productprice1" />
+    </resultMap>
+
+    <select id="selectTest" resultMap="TestResultMap">
+        SELECT * FROM testproduct
+        WHERE username = 'jack'
+    </select>
+
+</mapper>
