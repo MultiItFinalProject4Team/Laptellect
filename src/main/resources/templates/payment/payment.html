@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>결제하기</title> <!-- 페이지 제목 설정 -->
+    <script
+            type="text/javascript"
+            src="https://code.jquery.com/jquery-1.12.4.min.js"
+    ></script> <!-- jQuery 라이브러리 로드 -->
+    <script
+            type="text/javascript"
+            src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+    ></script> <!-- 아임포트 결제 라이브러리 로드 -->
+    <script
+            type="text/javascript"
+            src="https://unpkg.com/axios/dist/axios.min.js"
+    ></script> <!-- Axios HTTP 클라이언트 라이브러리 로드 -->
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"
+    ></script> <!-- 최신 버전의 jQuery 라이브러리 로드 (보안 무결성 검사 포함) -->
+    <script>
+        function mypayment() {
+          const myAmount = Number(document.getElementById("amount").value); // 사용자가 입력한 결제 금액을 가져와 숫자로 변환
+
+          const IMP = window.IMP; // IMP 객체 초기화 (생략 가능)
+          IMP.init("imp64527455"); // 아임포트 가맹점 식별코드로 초기화
+          IMP.request_pay(
+            {
+              // 결제 요청 파라미터
+              pg: "html5_inicis", // PG사 선택 (이니시스)
+              pay_method: "card", // 결제 수단 (카드)
+              name: "마우스", // 주문 상품 이름
+              amount: myAmount, // 결제 금액
+              buyer_email: "gildong@gmail.com", // 구매자 이메일
+              buyer_name: "홍길동", // 구매자 이름
+              buyer_tel: "010-4242-4242", // 구매자 전화번호
+              buyer_addr: "서울특별시 강남구 신사동", // 구매자 주소
+              buyer_postcode: "01181", // 구매자 우편번호
+              m_redirect_url: "", // 모바일 결제 후 리다이렉트 URL
+            },
+            async (rsp) => { // 결제 완료 후 콜백 함수
+              if (rsp.success) { // 결제 성공 시
+                alert("결제성공");
+              } else {
+                alert("실패");
+                // 결제 실패 시 처리 (구현 필요)
+              }
+            }
+          );
+        }
+    </script>
+</head>
+<body>
+결제할 금액: <input type="text" id="amount"/> <!-- 사용자가 결제 금액을 입력하는 필드 -->
+<button onclick="mypayment()">결제하기</button> <!-- 결제 버튼, 클릭 시 mypayment 함수 호출 -->
+</body>
+</html>
