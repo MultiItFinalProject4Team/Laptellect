@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>챗 봇</title>
+    <title>1:1 문의</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         .nav-pills .nav-link {
@@ -14,6 +14,7 @@
     </style>
 </head>
 <body>
+<div class="container mt-5">
 <header>
 <h1 align="center">고객센터</h1>
 <ul class="nav nav-pills justify-content-center">
@@ -21,12 +22,18 @@
         <a class="nav-link" href="/customer/user/customer_notice">공지사항</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/customer/user/customer_personalq">1:1 문의</a>
+        <a class="nav-link active" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/customer/user/customer_chatbot">챗 봇</a>
+        <a class="nav-link" href="/customer/user/customer_chatbot">챗 봇</a>
     </li>
 </ul>
 </header>
+    <form action="personalq_app" method="post" enctype="multipart/form-data">
+<!--    ckeditor 적용-->
+        <button type="submit">문의 등록</button>
+    </form>
+
+</div>
 </body>
 </html>
