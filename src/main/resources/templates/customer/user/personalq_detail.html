@@ -19,17 +19,17 @@
     <h1 align="center">공지사항</h1>
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/customer/user/customer_notice">공지사항</a>
+            <a class="nav-link" href="/customer/user/customer_notice">공지사항</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/customer/user/customer_personalq">1:1 문의</a>
+            <a class="nav-link active" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/customer/user/customer_chatbot">챗 봇</a>
         </li>
     </ul>
 </header>
-<h3 th:text="${noticeNo}">번호</h3>
+    <h3 th:text="${personalq.personalqNo}">번호</h3>
 </div>
 </body>
 </html>

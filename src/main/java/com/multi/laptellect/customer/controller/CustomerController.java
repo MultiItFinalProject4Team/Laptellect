@@ -2,6 +2,8 @@ package com.multi.laptellect.customer.controller;
 
 import com.multi.laptellect.customer.dto.NoticeDto;
 import com.multi.laptellect.customer.dto.NoticeListDto;
+import com.multi.laptellect.customer.dto.PersonalqDto;
+import com.multi.laptellect.customer.dto.PersonalqListDto;
 import com.multi.laptellect.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +28,9 @@ public class CustomerController {
     }
 
     @GetMapping("/customer_personalq")
-    public void customer_personalq(){
+    public void customer_personalq(Model model){
+        List<PersonalqListDto> list = customerService.getPersonalqList();
+        model.addAttribute("list",list);
     }
 
     @GetMapping("/customer_chatbot")
@@ -37,7 +41,14 @@ public class CustomerController {
     public String notice_detail(@PathVariable("noticeNo") int noticeNo, Model model) {
         System.out.println(noticeNo);
         NoticeDto notice = customerService.getnotice(noticeNo);
-        model.addAttribute("noticeNo",noticeNo);
-        return "/customer/user/customer_notice_detail";
+        model.addAttribute("notice",notice);
+        return "/customer/user/notice_detail";
+    }
+
+    @GetMapping("/personalq_detail/{personalqNo}")
+    public String personalq_detail(@PathVariable("personalqNo") int personalqNo, Model model){
+        PersonalqDto personalqDto = customerService.getPersonalq(personalqNo);
+        model.addAttribute("personalq",personalqDto);
+        return"/customer/user/personalq_detail";
     }
 }
