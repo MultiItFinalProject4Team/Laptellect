@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
+<head>
+    <title>SingUp Page</title>
+<!--    <link rel="stylesheet" th:href="@{/css/signup.css}">-->
+<!--    <script type="text/javascript" th:src="@{/js/signup.js}"></script>-->
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="container">
+        <div class="logo">
+            <h1 id="signupTitle">FilmPick</h1>
+        </div>
+        <form id="signUpForm" method="post" action="/sign-up">
+            <div class="form-group" mb-3>
+                <label for="email"><i class="fa fa-envelope-o" aria-hidden="true"></i> 이메일</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="로그인 시 사용할 이메일을 입력해주세요." required>
+                <div class="error-message" id="emailError" style="color: red;">중복된 이메일 입니다.</div>
+                <br>
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> 비밀번호</label>
+                <input type="password" class="form-control" id="password" placeholder="최소 8개의 숫자와 문자 또는 특수기호를 입력해주세요." pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?&quot;:{}|&lt;&gt;]).{8,}" title="최소 8개의 숫자와 문자 또는 특수기호를 입력해주세요." required>
+                <br>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword"><i class="fas fa-lock"></i> 비밀번호 확인</label>
+                <input type="password" class="form-control" id="confirmPassword" name="password" placeholder="일상적인 비밀번호는 사용할 수 없습니다." required>
+
+                <div class="error-message" id="passwordError" style="display: none; color: red;">비밀번호가 일치하지 않습니다.</div>
+                <div class="error-message" id="passwordError2" style="display: none; color: red;">비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.</div>
+                <br>
+            </div>
+
+            <div class="form-group">
+                <label for="userName"><i class="fa-light fa-user"></i> 닉네임</label>
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="닉네임을 입력해주세요."  required>
+                <div class="error-message" id="nameError" style="color: red;">중복된 닉네임 입니다.</div>
+                <br>
+            </div>
+
+            <div class="form-group">
+                <label for="phone"><i class="fas fa-phone"></i> 핸드폰 번호</label>
+                <input type="tel" class="form-control" id="phone" name="tel" placeholder="- 을 제외한 숫자로 입력해주세요." required pattern="[0-9]{11}" title="- 을 제외한 숫자로 입력해주세요.">
+                <br>
+            </div>
+
+            <div class="form-group">
+                <label for="address"><i class="fa-solid fa-location-dot"></i> 주소</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="주소를 검색 해주세요."readonly onclick="findAddr()" required>
+                <br>
+            </div>
+            <button type="submit" class="btn btn-custom w-100" id="sing-up">회원가입</button>
+        </form>
+
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    </div>
+</div>
+</body>
+</html>
