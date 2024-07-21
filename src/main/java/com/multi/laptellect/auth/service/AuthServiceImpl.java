@@ -14,10 +14,15 @@ import java.sql.SQLException;
 public class AuthServiceImpl implements AuthService{
     private final AuthMapper authMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+//    private final SecureRandom secureRandom;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void createMember(MemberDTO memberDTO) throws SQLException {
+        // 소셜 회원가입 시 ID 설정 ( 추후 수정 )
+//        memberDTO.setUserName(memberDTO.getLoginType() != null ? createUserName() : memberDTO.getUserName());
+
+        // 비밀번호 암호화
         String bPw = bCryptPasswordEncoder.encode(memberDTO.getPassword());
         memberDTO.setPassword(bPw);
 
@@ -29,4 +34,16 @@ public class AuthServiceImpl implements AuthService{
             throw new SQLException("Failed to insert password");
         }
     }
+
+//    public String createUserName() {
+//        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+//
+//        StringBuilder userName = new StringBuilder();
+//
+//        for (int i = 0; i < 10; i++) {
+//            userName.append(CHARACTERS.charAt(secureRandom.nextInt(CHARACTERS.length())));
+//        }
+//
+//        return userName.toString();
+//    }
 }
