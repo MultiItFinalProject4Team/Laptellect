@@ -17,11 +17,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MemberDTO userDTO = authMapper.selectMemberByEmail(username);
+        MemberDTO userDTO = authMapper.selectMemberById(username);
 
-        if (userDTO != null) {
-            return new CustomUserDetails(userDTO);
+        if (userDTO == null) {
+            throw  new UsernameNotFoundException("존재하지 않는 ID :" + username);
         }
-        return null;
+        return new CustomUserDetails(userDTO);
     }
 }
