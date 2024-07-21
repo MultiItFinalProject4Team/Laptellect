@@ -1,5 +1,6 @@
 package com.multi.laptellect.auth.controller;
 
+import com.multi.laptellect.auth.model.dto.TokenDTO;
 import com.multi.laptellect.auth.service.AuthService;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
@@ -19,6 +21,13 @@ public class AuthController {
     @GetMapping("/signin")
     public String showLoginForm() {
         return "auth/auth-sign-in";
+    }
+
+    @PostMapping("/signin-post")
+    public TokenDTO login(@RequestBody MemberDTO memberDTO) {
+        TokenDTO test = authService.login(memberDTO);
+
+        return test;
     }
 
     @GetMapping("/signout")

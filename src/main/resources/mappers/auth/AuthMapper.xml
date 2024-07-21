@@ -7,11 +7,11 @@
 
 	<resultMap id="memberResultMap" type="memberDTO">
 		<result property="memberNo" column="member_no"/>
-		<result property="userName" column="user_name"/>
+		<result property="userName" column="member_name"/>
 		<result property="password" column="password"/>
 		<result property="point" column="point"/>
-		<result property="createDate" column="crate_date" jdbcType="TIMESTAMP"/>
-		<result property="modifyDate" column="modify_date" jdbcType="TIMESTAMP"/>
+		<result property="createDate" column="created_at" jdbcType="TIMESTAMP"/>
+		<result property="modifyDate" column="updated_at" jdbcType="TIMESTAMP"/>
 	</resultMap>
 
 	<insert id="insertMember" parameterType="memberDTO" useGeneratedKeys="true" keyProperty="memberNo">
@@ -46,14 +46,16 @@
 		)
 	</insert>
 
-	<select id="selectMemberByEmail" parameterType="String" resultMap="memberResultMap">
+	<select id="selectMemberById" parameterType="String" resultMap="memberResultMap">
 		SELECT
-			*
+			m.*,
+			p.member_password AS password
 		FROM
-			vw_mem_by_email
+			mem_member m
+		JOIN
+			mem_password p ON m.member_no = p.member_no
 		WHERE
-			email = #{ email }
-		LIMIT 1
+			m.member_name = #{userName}
 	</select>
 
 	<update id="updatePassword" parameterType="memberDTO">

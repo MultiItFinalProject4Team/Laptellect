@@ -59,7 +59,7 @@ public class SecurityConfig {
                         );
         http
                 .formLogin((auth) -> auth.loginPage("/signin")
-                        .loginProcessingUrl("/signin").permitAll());
+                        .loginProcessingUrl("/signin-post").permitAll());
 
         http
                 .exceptionHandling(exceptionHandling ->

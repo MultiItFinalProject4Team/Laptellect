@@ -1,8 +1,15 @@
 package com.multi.laptellect.auth.service;
 
+import com.multi.laptellect.auth.model.dto.TokenDTO;
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
+import com.multi.laptellect.config.Security.JwtTokenProvider;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,9 +18,12 @@ import java.sql.SQLException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService{
     private final AuthMapper authMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 //    private final SecureRandom secureRandom;
 
     @Override
@@ -35,15 +45,27 @@ public class AuthServiceImpl implements AuthService{
         }
     }
 
-//    public String createUserName() {
-//        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//
-//        StringBuilder userName = new StringBuilder();
-//
-//        for (int i = 0; i < 10; i++) {
-//            userName.append(CHARACTERS.charAt(secureRandom.nextInt(CHARACTERS.length())));
-//        }
-//
-//        return userName.toString();
-//    }
+    @Override
+    public TokenDTO login(MemberDTO memberDTO) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            memberDTO.getUserName(),
+                            memberDTO.getPassword()
+                    )
+            );
+
+            TokenDTO tokenDto = new TokenDTO(
+                    jwtTokenProvider.createAccessToken(authentication),
+                    jwtTokenProvider.createRefreshToken(authentication)
+            );
+
+            return tokenDto;
+
+        }catch(BadCredentialsException e){
+            log.info("log error = {}", e);
+            log.error("log error = {}", e);
+            throw e;
+        }
+    }
 }
