@@ -1,9 +1,11 @@
 package com.multi.laptellect.auth.controller;
 
 import com.multi.laptellect.auth.service.AuthService;
+import com.multi.laptellect.member.model.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Slf4j
@@ -21,9 +23,10 @@ public class AuthController {
     public void memberSignOut(){}
 
     @GetMapping("/signup")
-    public String showSignUpForm() {
-        String path = "auth/auth-sign-up.html";
+    public String showSignUpForm(Model model) {
+        MemberDTO memberDTO = new MemberDTO();
+        model.addAttribute("member", memberDTO);
 
-        return path;
+        return  "auth/auth-sign-up.html";
     }
 }
