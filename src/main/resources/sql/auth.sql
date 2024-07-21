@@ -3,7 +3,7 @@ CREATE TABLE mem_member (
     member_no INT NOT NULL AUTO_INCREMENT,
     member_name VARCHAR(30) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    nick_name VARCHAR(50) NOT NULL,
+    nick_name VARCHAR(50),
     tel VARCHAR(15),
     point INT NOT NULL DEFAULT 0,
     role VARCHAR(15) NOT NULL DEFAULT 'ROLE_USER',

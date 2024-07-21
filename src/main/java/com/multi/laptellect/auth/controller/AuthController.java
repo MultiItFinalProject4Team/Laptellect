@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
@@ -32,11 +33,16 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String createMember(MemberDTO memberDTO) {
+    public String createMember(MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
+        log.info("log info = {}", memberDTO);
+
         try {
-
+            authService.createMember(memberDTO);
+            redirectAttributes.addFlashAttribute("Message", "회원 가입 완료.");
         } catch (Exception e) {
-
+            log.error("log error = {}", e);
+            redirectAttributes.addFlashAttribute("Message", "회원 가입 중 오류가 발생했습니다.");
+            return "redirect:/signup";
         }
 
         return "redirect:/";

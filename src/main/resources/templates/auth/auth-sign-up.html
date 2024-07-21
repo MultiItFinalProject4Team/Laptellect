@@ -14,7 +14,7 @@
         <div class="logo">
             <h1 id="signupTitle">Laptellect</h1>
         </div>
-        <form id="signUpForm" method="post" action="/sign-up" th:object="${member}">
+        <form id="signUpForm" method="post" action="/signup" th:object="${member}">
             <div class="form-group" mb-3>
                 <label for="member_name"><i class="fa fa-envelope-o" aria-hidden="true"></i> 아이디</label>
                 <input type="text" class="form-control" id="member_name" th:field="*{userName}" placeholder="로그인 시 사용할 아이디를 입력해주세요." required>

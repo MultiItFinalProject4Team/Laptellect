@@ -11,6 +11,7 @@ public class MemberDTO {
     private String userName;
     private String email;
     private String password;
+    private String loginType;
     private String tempPassword;
     private Boolean tempPasswordIsUse;
     private Timestamp tempExpDate;
