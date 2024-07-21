@@ -12,9 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AuthController {
     private final AuthService authService;
 
+    @GetMapping("/signin")
+    public String showLoginForm() {
+        return "auth/auth-sign-in";
+    }
+
+    @GetMapping("/signout")
+    public void memberSignOut(){}
+
     @GetMapping("/signup")
     public String showSignUpForm() {
-        String path = "auth/auth-signup.html";
+        String path = "auth/auth-sign-up.html";
 
         return path;
     }

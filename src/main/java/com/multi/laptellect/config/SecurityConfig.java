@@ -43,12 +43,12 @@ public class SecurityConfig {
 //                        .anyRequest().authenticated()
                         );
         http
-                .formLogin((auth) -> auth.loginPage("/login")
-                        .loginProcessingUrl("/login").permitAll());
+                .formLogin((auth) -> auth.loginPage("/signin")
+                        .loginProcessingUrl("/signin").permitAll());
 
         http
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/signout"))
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .logoutSuccessUrl("/"));
