@@ -12,10 +12,6 @@ import java.util.Collection;
 public class CustomUserDetails implements UserDetails {
     private final MemberDTO memberDTO;
 
-    public CustomUserDetails(MemberDTO memberDTO) {
-        this.memberDTO = memberDTO;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -71,6 +67,10 @@ public class CustomUserDetails implements UserDetails {
 
     public String getNickName() {
         return memberDTO.getUserName();
+    }
+
+    public String getEmail() {
+        return  memberDTO.getEmail();
     }
 
     public String getTel() {

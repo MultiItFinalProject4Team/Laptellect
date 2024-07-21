@@ -12,19 +12,18 @@
 
     <div class="container">
         <div class="logo">
-            <h1 id="signupTitle">FilmPick</h1>
+            <h1 id="signupTitle">Laptellect</h1>
         </div>
-        <form id="signUpForm" method="post" action="/sign-up">
-
+        <form id="signUpForm" method="post" action="/sign-up" th:object="member">
             <div class="form-group" mb-3>
                 <label for="member_name"><i class="fa fa-envelope-o" aria-hidden="true"></i> 아이디</label>
-                <input type="text" class="form-control" id="member_name" name="memberName" placeholder="로그인 시 사용할 아이디를 입력해주세요." required>
-                <div class="error-message" id="emailError" style="color: red;">중복된 아이디 입니다.</div>
+                <input type="text" class="form-control" id="member_name" th:field="*{}" placeholder="로그인 시 사용할 아이디를 입력해주세요." required>
+                <div class="error-message" id="idError" style="color: red;">중복된 아이디 입니다.</div>
                 <br>
             </div>
             <div class="form-group">
                 <label for="email"><i class="fa fa-envelope-o" aria-hidden="true"></i> 이메일</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="로그인 시 사용할 이메일을 입력해주세요." required>
+                <input type="email" class="form-control" id="email" th:field="*{}" placeholder="로그인 시 사용할 이메일을 입력해주세요." required>
                 <div class="error-message" id="emailError" style="color: red;">중복된 이메일 입니다.</div>
                 <br>
             </div>
@@ -35,17 +34,14 @@
             </div>
             <div class="form-group">
                 <label for="confirmPassword"><i class="fas fa-lock"></i> 비밀번호 확인</label>
-                <input type="password" class="form-control" id="confirmPassword" name="password" placeholder="일상적인 비밀번호는 사용할 수 없습니다." required>
+                <input type="password" class="form-control" id="confirmPassword" th:field="*{}" placeholder="일상적인 비밀번호는 사용할 수 없습니다." required>
 
                 <div class="error-message" id="passwordError" style="display: none; color: red;">비밀번호가 일치하지 않습니다.</div>
                 <div class="error-message" id="passwordError2" style="display: none; color: red;">비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.</div>
                 <br>
             </div>
-
             <button type="submit" class="btn btn-custom w-100" id="sing-up">회원가입</button>
         </form>
-
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     </div>
 </div>
 </body>

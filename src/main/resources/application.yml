@@ -36,3 +36,7 @@ logging:
     com:
       .zaxxer: DEBUG
     sql: DEBUG
+
+jwt:
+  expiration_time: 1800000  # 30\uBD84
+  secret: k80pSiDFvA4kSpHX4TklloHRHsPJoH4OGIfr9XbwmBM2Bkad8n # \uC2DC\uD06C\uB9BF \uD0A4 50\uC790

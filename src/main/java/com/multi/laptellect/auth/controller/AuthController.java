@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @Controller
@@ -28,5 +29,16 @@ public class AuthController {
         model.addAttribute("member", memberDTO);
 
         return  "auth/auth-sign-up.html";
+    }
+
+    @PostMapping("/signup")
+    public String createMember(MemberDTO memberDTO) {
+        try {
+
+        } catch (Exception e) {
+
+        }
+
+        return "redirect:/";
     }
 }
