@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan(basePackages = "com.multi.mini", annotationClass = Mapper.class)
+@MapperScan(basePackages = "com.multi.laptellect", annotationClass = Mapper.class)
 public class MybatisConfig {
     @Bean
     public DataSourceTransactionManager transactionManager(DataSource dataSource) {
@@ -39,7 +39,7 @@ public class MybatisConfig {
         // Type Aliases 설정
 //        configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.mini.member.model.dto.MemberDTO.class);
 //        configuration.getTypeAliasRegistry().registerAlias("boardDTO", com.multi.mini.community.model.dto.BoardDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("NoticeListDto", com.multi.laptellect.customer.dto.NoticeListDto.class);
+        configuration.getTypeAliasRegistry().registerAlias("PersonalqAppDto", com.multi.laptellect.customer.dto.PersonalqAppDto.class);
 
 
         factoryBean.setConfiguration(configuration); // 팩토리 빈에 세팅

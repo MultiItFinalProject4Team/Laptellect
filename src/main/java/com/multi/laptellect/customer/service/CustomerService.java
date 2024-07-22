@@ -1,18 +1,17 @@
 package com.multi.laptellect.customer.service;
 
-import com.multi.laptellect.customer.dto.NoticeDto;
-import com.multi.laptellect.customer.dto.NoticeListDto;
-import com.multi.laptellect.customer.dto.PersonalqDto;
-import com.multi.laptellect.customer.dto.PersonalqListDto;
+import com.multi.laptellect.customer.dao.CustomDao;
+import com.multi.laptellect.customer.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class CustomerService {
+    @Autowired
+    private CustomDao customDao;
 
     public List<NoticeListDto> getNoticeList() {
         List<NoticeListDto> notice = new ArrayList<>();
@@ -65,9 +64,14 @@ public class CustomerService {
                 .personalqNo(personalqNo)
                 .title("title")
                 .content("content")
-                .writer("admin")
-                .createDate("2024-07-19")
+                .memberNo(1)
+//                .createDate("2024-07-19")
                 .build();
         return personalqDto;
+    }
+
+    public int personalqApp(PersonalqAppDto appDto) {
+        int result = customDao.personalqApp(appDto);
+        return result;
     }
 }

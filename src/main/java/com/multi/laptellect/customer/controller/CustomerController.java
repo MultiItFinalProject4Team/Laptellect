@@ -1,25 +1,23 @@
 package com.multi.laptellect.customer.controller;
 
-import com.multi.laptellect.customer.dto.NoticeDto;
-import com.multi.laptellect.customer.dto.NoticeListDto;
-import com.multi.laptellect.customer.dto.PersonalqDto;
-import com.multi.laptellect.customer.dto.PersonalqListDto;
+import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/customer/user")
 public class CustomerController {
 
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
 
     //공지사항 페이지(메인)
     @GetMapping("/customer_notice")
@@ -54,5 +52,12 @@ public class CustomerController {
     }
     //1:1문의 신청 페이지 이동
     @GetMapping("/personalq_app")
-        public void personalq_app(){}
+    public void personalq_app(){}
+
+    @PostMapping("/personalq_app")
+    public String personalq_app(PersonalqAppDto appDto, @RequestParam("image") MultipartFile file){
+        System.out.println(appDto);
+        int result=customerService.personalqApp(appDto);
+        return "redirect:/customer/user/customer_personalq";
+    }
 }
