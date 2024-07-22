@@ -21,6 +21,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url'https://jitpack.io' }
 }
 
 dependencies {
@@ -46,8 +47,10 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.9' // gson
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // smtp
 	implementation 'org.springframework.boot:spring-boot-starter-aop' // aop
+	
+	implementation 'com.github.shin285:KOMORAN:3.3.9' // KOMORAN
+	implementation 'org.jsoup:jsoup:1.18.1'// jsoup
 
-	implementation 'com.github.shin285:KOMORAN:3.3.9'
 }
 
 tasks.named('test') {

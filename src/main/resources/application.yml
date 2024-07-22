@@ -33,3 +33,7 @@ logging:
     com:
       .zaxxer: DEBUG
     sql: DEBUG
+
+    sentiment:
+      clientId: fh2aaa3u81
+      clientSecret: DnBWHjTVYdTW2okQENwWmb6PaftjSGR3mW4vSWCP
