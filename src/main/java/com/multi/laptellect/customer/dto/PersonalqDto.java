@@ -19,4 +19,6 @@ public class PersonalqDto {
     private String content;
     private Timestamp createDate;
     private Timestamp updateDate;
+    private String answer;
+    private String referenceCode;
 }

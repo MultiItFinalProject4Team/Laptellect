@@ -17,4 +17,10 @@
         created_at
         from personal_question
     </select>
+
+    <select id="getPersonalqDetail" resultType="com.multi.laptellect.customer.dto.PersonalqDto">
+        select * from
+        personal_question
+        where personalq_no=#{personalqNo}
+    </select>
 </mapper>

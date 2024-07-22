@@ -48,13 +48,7 @@ public class CustomerService {
     }
 
     public PersonalqDto getPersonalq(int personalqNo) {
-        PersonalqDto personalqDto = PersonalqDto.builder()
-                .personalqNo(personalqNo)
-                .title("title")
-                .content("content")
-                .memberNo(1)
-//                .createDate("2024-07-19")
-                .build();
+        PersonalqDto personalqDto = customDao.getPersonalqDetail(personalqNo);
         return personalqDto;
     }
 

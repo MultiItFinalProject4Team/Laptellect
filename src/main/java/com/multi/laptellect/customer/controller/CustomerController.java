@@ -19,11 +19,13 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+
     //공지사항 페이지(메인)
-    @GetMapping("/customer_notice")
-    public void customer_notice(Model model){
+    @GetMapping({"/customer_notice",""})
+    public String customer_notice(Model model){
         List<NoticeListDto> notice = customerService.getNoticeList();
         model.addAttribute("notice",notice);
+        return "/customer/user/customer_notice";
     }
     //1:1문의 페이지
     @GetMapping("/customer_personalq")
@@ -47,6 +49,7 @@ public class CustomerController {
     @GetMapping("/personalq_detail/{personalqNo}")
     public String personalq_detail(@PathVariable("personalqNo") int personalqNo, Model model){
         PersonalqDto personalqDto = customerService.getPersonalq(personalqNo);
+        System.out.println(personalqDto);
         model.addAttribute("personalq",personalqDto);
         return"/customer/user/personalq_detail";
     }
