@@ -1,14 +1,12 @@
 package com.multi.laptellect.auth.controller;
 
 import com.multi.laptellect.auth.service.AuthService;
-import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,7 +48,7 @@ public class AuthController {
         MemberDTO memberDTO = new MemberDTO();
         model.addAttribute("member", memberDTO);
 
-        return  "auth/auth-sign-up.html";
+        return  "auth/auth-sign-up-form.html";
     }
 
     @PostMapping("/signup")
