@@ -1,17 +1,21 @@
 package com.multi.laptellect.auth.controller;
 
 import com.multi.laptellect.auth.service.AuthService;
+import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
@@ -64,4 +68,25 @@ public class AuthController {
 
         return "redirect:/";
     }
+
+    @ResponseBody
+    @PostMapping("/check-id")
+    public boolean isId(@RequestParam("userName") String id) {
+        return authService.isMemberById(id);
+    }
+
+    @ResponseBody
+    @PostMapping("/check-email")
+    public boolean isEmail(@RequestParam("email") String email) {
+        return authService.isMemberByEmail(email);
+    }
+
+//    @ResponseBody
+//    @PostMapping("/check-nickname")
+//    public boolean isPassword(@RequestParam("nickName") String nickName) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+//
+//        return authService.isMemberByNickName(password, userDetails);
+//    }
 }

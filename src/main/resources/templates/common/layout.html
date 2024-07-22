@@ -48,7 +48,7 @@
     <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><strong>Laptellect</strong></a>
+            <a class="navbar-brand" href="/"><strong>Laptellect</strong></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -76,8 +76,11 @@
                     </th:block>
                     <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
                         <li class="nav-item">
-                            <a class="nav-link" href="/member/profile">마이페이지</a>
+                            <a class="nav-link" href="/profile">마이페이지</a>
                         </li>
+                    </th:block>
+
+                    <th:block sec:authorize="isAuthenticated()">
                         <li class="nav-item">
                             <a class="nav-link" href="/signout">로그아웃</a>
                         </li>
@@ -86,7 +89,6 @@
             </div>
         </div>
     </nav>
-
 
     <div layout:fragment="content"></div>
 <!--<script type="text/javascript" th:src="@{/js/tempPassword.js}"></script>-->

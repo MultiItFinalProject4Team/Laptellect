@@ -2,6 +2,7 @@ package com.multi.laptellect.auth.service;
 
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ public class AuthServiceImpl implements AuthService{
     private final AuthMapper authMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final MemberMapper memberMapper;
 
     //    private final SecureRandom secureRandom;
 
@@ -38,6 +40,16 @@ public class AuthServiceImpl implements AuthService{
         if(authMapper.insertPassword(memberDTO) == 0) {
             throw new SQLException("Failed to insert password");
         }
+    }
+
+    @Override
+    public boolean isMemberById(String id) {
+        return memberMapper.findMemberById(id) != null;
+    }
+
+    @Override
+    public boolean isMemberByEmail(String email) {
+        return memberMapper.findMemberByEmail(email) != null;
     }
 
 }
