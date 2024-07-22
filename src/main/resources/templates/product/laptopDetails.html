@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">상품상세</h1>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h2 th:text="${productInfo.productName}"></h2>
+        </div>
+        <div class="card-body">
+            <img th:src="@{${productInfo.imageUrl}}" alt="Product Image" class="img-fluid" style="width: 300px; height: 300px;">
+            <p><strong>Product Code:</strong> <span th:text="${productInfo.pcode}"></span></p>
+            <p><strong>Registration Month:</strong> <span th:text="${productInfo.registrationMonth}"></span></p>
+            <p><strong>Price:</strong> <span th:text="${productInfo.price} + '원'"></span></p>
+            <p><strong>Category Code:</strong> <span th:text="${productInfo.categoryCode}"></span></p>
+
+            <p><strong>OS:</strong> <span th:text="${productDetails.os}"></span></p>
+            <p><strong>CPU Manufacturer:</strong> <span th:text="${productDetails.cpuManufacturer}"></span></p>
+            <p><strong>CPU Type:</strong> <span th:text="${productDetails.cpuType}"></span></p>
+            <p><strong>CPU Code Name:</strong> <span th:text="${productDetails.cpuCodeName}"></span></p>
+            <p><strong>CPU Number:</strong> <span th:text="${productDetails.cpuNumber}"></span></p>
+            <p><strong>GPU Type:</strong> <span th:text="${productDetails.gpuType}"></span></p>
+            <p><strong>GPU Manufacturer:</strong> <span th:text="${productDetails.gpuManufacturer}"></span></p>
+            <p><strong>GPU Chipset:</strong> <span th:text="${productDetails.gpuChipset}"></span></p>
+            <p><strong>RAM Type:</strong> <span th:text="${productDetails.ramType}"></span></p>
+            <p><strong>RAM Size:</strong> <span th:text="${productDetails.ramSize}"></span></p>
+            <p><strong>Screen Size:</strong> <span th:text="${productDetails.screenSize}"></span></p>
+            <p><strong>Screen Resolution:</strong> <span th:text="${productDetails.screenResolution}"></span></p>
+            <p><strong>Storage Type:</strong> <span th:text="${productDetails.storageType}"></span></p>
+            <p><strong>Storage Capacity:</strong> <span th:text="${productDetails.storageCapacity}"></span></p>
+        </div>
+    </div>
+    <form th:action="@{/payment}" method="post">
+        <input type="hidden" name="productName" th:value="${productInfo.productName}">
+        <input type="hidden" name="imageUrl" th:value="${productInfo.imageUrl}">
+        <input type="hidden" name="price" th:value="${productInfo.price}">
+        <button type="submit" class="btn btn-primary mt-4">결제하기</button>
+    </form>
+</div>
+</body>
+</html>

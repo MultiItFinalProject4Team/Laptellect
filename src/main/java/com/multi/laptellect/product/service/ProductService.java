@@ -47,7 +47,7 @@ public class ProductService {
                     if (entity != null) {
                         String responseString = EntityUtils.toString(entity);
                         System.out.println("Page: " + page);
-                        log.info("Page: "+ page);
+                        log.info("Page: " + page);
                         parseHtml(responseString, productList);
                     }
                 } catch (IOException e) {
@@ -90,9 +90,7 @@ public class ProductService {
             }
 
 
-
             String firstPrice = price.split(" ")[0];
-
 
 
             ProductInfo productInfo = new ProductInfo();
@@ -110,6 +108,9 @@ public class ProductService {
         }
 
     }
+
+
+
 }
 
 
