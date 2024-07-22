@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Getter
 public class JwtTokenProvider {
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -73,7 +75,7 @@ public class JwtTokenProvider {
      * Refresh 토큰 생성
      */
     public String createRefreshToken(Authentication authentication){
-        Claims claims = Jwts.claims().setSubject(authentication.getName());
+        Claims claims = Jwts.claims().setSubject(authentication.getName()   );
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + refreshExpirationTime);
 
