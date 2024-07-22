@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
@@ -23,8 +23,10 @@ public class AuthController {
         return "auth/auth-sign-in";
     }
 
+    @ResponseBody
     @PostMapping("/signin-post")
-    public TokenDTO login(@RequestBody MemberDTO memberDTO) {
+    public TokenDTO login(MemberDTO memberDTO) {
+        log.info("로그인 폼 전달 = {}", memberDTO);
         TokenDTO test = authService.login(memberDTO);
 
         return test;

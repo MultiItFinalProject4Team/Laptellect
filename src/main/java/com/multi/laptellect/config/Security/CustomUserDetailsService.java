@@ -19,6 +19,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("아이디 입력 값 = {}", username);
+
         MemberDTO userDTO = authMapper.selectMemberById(username);
 
         if (userDTO == null) {

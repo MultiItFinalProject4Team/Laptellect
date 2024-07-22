@@ -1,9 +1,6 @@
 package com.multi.laptellect.config;
 
-import com.multi.laptellect.config.Security.JwtAccessDeniedHandler;
-import com.multi.laptellect.config.Security.JwtAuthenticationEntryPoint;
-import com.multi.laptellect.config.Security.JwtTokenFilter;
-import com.multi.laptellect.config.Security.JwtTokenProvider;
+import com.multi.laptellect.config.Security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +23,16 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+    private final CustomUserDetailsService customUserDetailsService;
+
     @Bean // 비밀번호 암호화
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider(customUserDetailsService, bCryptPasswordEncoder());
     }
 
     @Bean
@@ -57,15 +61,17 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                         );
-        http
-                .formLogin((auth) -> auth.loginPage("/signin")
-                        .loginProcessingUrl("/signin-post").permitAll());
+//        http
+//                .formLogin((auth) -> auth.loginPage("/signin")
+//                        .loginProcessingUrl("/signin-post")
+//                        .defaultSuccessUrl("/", true).permitAll());
 
         http
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling
                                 .accessDeniedHandler(jwtAccessDeniedHandler)
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint));
+
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
