@@ -37,6 +37,8 @@ public class MybatisConfig {
         configuration.setMapUnderscoreToCamelCase(true); // 카멜 케이스 자동 변환
 
         // Type Aliases 설정
+//        configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.mini.member.model.dto.MemberDTO.class);
+//        configuration.getTypeAliasRegistry().registerAlias("boardDTO", com.multi.mini.community.model.dto.BoardDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.laptellect.member.model.dto.MemberDTO.class);
 
 
