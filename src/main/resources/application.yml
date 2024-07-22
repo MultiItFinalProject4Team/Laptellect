@@ -8,8 +8,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:  # \uC774\uBA54\uC77C
-    password:  # APP \uBE44\uBC00\uBC88\uD638
+    username: filmpick123@gmail.com # \uC774\uBA54\uC77C
+    password: jxsccjcjrgutlxwy # APP \uBE44\uBC00\uBC88\uD638
     properties:
       mail:
         smtp:
