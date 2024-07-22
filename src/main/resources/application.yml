@@ -5,6 +5,9 @@ spring:
     username: admin
     password: admin1234
 
+
+
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -16,6 +19,8 @@ spring:
           auth: true # \uC778\uC99D
           starttls:
             enable: true
+
+
 
 server:
   port: 8099
@@ -34,6 +39,14 @@ logging:
       .zaxxer: DEBUG
     sql: DEBUG
 
+
     sentiment:
       clientId: fh2aaa3u81
       clientSecret: DnBWHjTVYdTW2okQENwWmb6PaftjSGR3mW4vSWCP
+
+
+    mybatis:
+      mapper-locations: classpath:mapper/**/*.xml
+      type-aliases-package: com.multi.laptellect.recommend.clovaapi.model.dto
+      configuration:
+        map-underscore-to-camel-case: true

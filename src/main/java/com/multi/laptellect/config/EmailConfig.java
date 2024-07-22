@@ -1,4 +1,4 @@
-package src.main.java.com.multi.laptellect.config;
+package com.multi.laptellect.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
