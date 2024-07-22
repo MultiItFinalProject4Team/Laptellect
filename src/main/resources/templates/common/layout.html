@@ -71,7 +71,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
 
-                    <th:block sec:authorize="isAuthenticated() and hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
+                    <th:block sec:authorize="isAnonymous() or hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
                         <li class="nav-item">
                             <a class="nav-link" href="/">HOME</a>
                         </li>

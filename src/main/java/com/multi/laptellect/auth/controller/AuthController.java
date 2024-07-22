@@ -68,14 +68,16 @@ public class AuthController {
     }
 
     @ResponseBody
-    @PostMapping("/check-id")
+    @PostMapping("/api/check-id")
     public boolean isId(@RequestParam("userName") String id) {
+        System.out.println("테스트");
         return authService.isMemberById(id);
     }
 
     @ResponseBody
-    @PostMapping("/check-email")
+    @PostMapping("/api/check-email")
     public boolean isEmail(@RequestParam("email") String email) {
+        System.out.println("테스트");
         return authService.isMemberByEmail(email);
     }
 
