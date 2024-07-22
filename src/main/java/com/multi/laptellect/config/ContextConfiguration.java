@@ -1,4 +1,4 @@
-package com.multi.laptellect.config;
+package src.main.java.com.multi.laptellect.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
