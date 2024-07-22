@@ -5,7 +5,7 @@
 <mapper namespace="com.multi.laptellect.customer.dao.CustomDao">
     <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
         INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
-        values(1,'personalq_member', #{title},#{content})
+        values(#{memberNo},#{productqCategorycode}, #{title},#{content})
     </insert>
 
     <select id="getPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
     <title>챗 봇</title>
@@ -14,6 +15,7 @@
     </style>
 </head>
 <body>
+<div layout:fragment="content">
 <header>
 <h1 align="center">고객센터</h1>
 <ul class="nav nav-pills justify-content-center">
@@ -28,5 +30,6 @@
     </li>
 </ul>
 </header>
+</div>
 </body>
 </html>

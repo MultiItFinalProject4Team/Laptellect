@@ -57,6 +57,8 @@ public class CustomerController {
     @PostMapping("/personalq_app")
     public String personalq_app(PersonalqAppDto appDto, @RequestParam("image") MultipartFile file){
         System.out.println(appDto);
+        appDto.setMemberNo(1);
+        appDto.setProductqCategorycode("personalq_member");
         int result=customerService.personalqApp(appDto);
         return "redirect:/customer/user/customer_personalq";
     }

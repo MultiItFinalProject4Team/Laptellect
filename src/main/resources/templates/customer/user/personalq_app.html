@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
@@ -15,6 +16,7 @@
     <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 </head>
 <body>
+<div layout:fragment="content">
 <div class="container mt-5">
 <header>
 <h1 align="center">고객센터</h1>
@@ -60,6 +62,7 @@
         CKEDITOR.replace('content');
     </script>
 
+</div>
 </div>
 </body>
 </html>

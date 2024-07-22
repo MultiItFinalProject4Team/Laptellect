@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
@@ -14,6 +15,7 @@
     </style>
 </head>
 <body>
+<div layout:fragment="content">
 <div class="container mt-5">
 <header>
 <h1 align="center">고객센터</h1>
@@ -42,7 +44,7 @@
     <tr th:each="each : ${list}" class="align-middle">
         <td th:text="${each.personalqNo}">번호</td>
         <td style="text-align: center;">
-            <a style="text-decoration: none;" th:href="@{/customer/user/personalq_detail/{personalqNo}(personalqNo=${each.personalqNo})}" th:text="${each.personalqNo}"></a>
+            <a style="text-decoration: none;" th:href="@{/customer/user/personalq_detail/{personalqNo}(personalqNo=${each.personalqNo})}" th:text="${each.title}"></a>
         </td>
         <td th:text="${each.answer}">답변 여부</td>
         <td th:text="${each.createdAt}">작성일</td>
@@ -52,6 +54,7 @@
     <div class="text-end">
         <a class="btn btn-secondary btn-sm" href="/customer/user/personalq_app" role="button">문의 등록</a>
     </div>
+</div>
 </div>
 </body>
 </html>
