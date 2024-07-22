@@ -21,11 +21,6 @@ spring:
     port: 6379
     password: 1234
 
-  jwt:
-    secret: k80pSiDFvA4kSpHX4TklloHRHsPJoH4OGIfr9XbwmBM2Bkad8n # \uC2DC\uD06C\uB9BF \uD0A4
-    access-expiration_time: 1800000  # 30\uBD84
-    refresh-expiration_time: 86400000 # 1\uC77C
-
 server:
   port: 8099
   servlet:

@@ -9,6 +9,14 @@
 <div layout:fragment="content">
 <h1> 파이널 프로젝트 시작 </h1>
 <p>hello world / 화이팅합시다!</p>
+
+  <th:block sec:authorize="isAnonymous()">
+    <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal"
+            data-bs-target="#loginModal">Login
+    </button>
+    <button type="button" th:onclick="|location.href='@{/sign-up}'|" class="btn btn-primary">Sign-up
+    </button>
+  </th:block>
 </div>
 
 </body>

@@ -2,10 +2,13 @@ package com.multi.laptellect.member.model.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
-public class MemberDTO {
+public class MemberDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int rowNum;
     private int memberNo;
     private String userName;
