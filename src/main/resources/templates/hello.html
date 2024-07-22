@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
 <body>
+<div layout:fragment="content">
 <h1> 파이널 프로젝트 시작 </h1>
 <p>hello world / 화이팅합시다!</p>
+</div>
+
 </body>
 </html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+<!--    <link rel="stylesheet" th:href="@{/css/login.css}">-->
+    <style>
+        * { padding: 0; margin: 0; }
+
+        html, body {
+          height: 100%;
+          background: #ffffff;
+        }
+
+        #container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+        }
+
+        #loginBoxLogo img {
+            width: 130px;
+            height: 130px;
+        }
+
+        #loginBox {
+          width: 300px;
+          text-align: center;
+          background-color: #ffffff;
+          padding: 20px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+        }
+        .input-form-box {
+          display: flex;
+          margin-bottom: 15px;
+        }
+        .input-form-box > span {
+          display: block;
+          text-align: left;
+          padding-top: 5px;
+          min-width: 65px;
+        }
+        .button-login-box {
+          margin: 20px 0;
+        }
+        #loginBoxTitle {
+          color: #000000;
+          font-weight: bold;
+          font-size: 32px;
+          text-transform: uppercase;
+          padding: 5px;
+          margin-bottom: 20px;
+          background: linear-gradient(to right, #270a09, #8ca6ce);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        #inputBox {
+          margin: 10px;
+        }
+
+        #inputBox button {
+          padding: 3px 5px;
+        }
+    </style>
+</head>
+<body class="text-center">
+<div id="container">
+    <div id="loginBox">
+        <div class="logo">
+            <h1 id="signupTitle">Laptellect</h1>
+            <br>
+        </div>
+
+        <div id="inputBox">
+            <form action="/signin" method="post" name="loginform">
+                <div class="input-form-box"><span>아이디 </span><input type="text" name="username" class="form-control"></div>
+                <div class="input-form-box"><span>비밀번호 </span><input type="password" name="password" class="form-control"></div>
+                <div class="button-login-box">
+                    <button type="submit" class="btn btn-primary btn-xs" style="width:100%">로그인</button>
+                </div>
+                <div class="button-login-box">
+                    <a href="#" onclick="tempPassword()" class="btn btn-link login-content2" >PW 찾기</a>
+                    | &nbsp
+                    <a href="/sign-up">회원가입</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/tempPassword.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>

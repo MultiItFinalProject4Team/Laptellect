@@ -46,6 +46,8 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.9' // gson
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // smtp
 	implementation 'org.springframework.boot:spring-boot-starter-aop' // aop
+
+	implementation 'org.springframework.session:spring-session-data-redis' // redis 세션 관리
 }
 
 tasks.named('test') {
