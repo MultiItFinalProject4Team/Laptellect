@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
     private final MemberService memberService;
 
-    @GetMapping
-    public String shwo
-
     @GetMapping("/edit")
     public String showProfileEdit(Model model) {
         CustomUserDetails userInfo = SecurityUtil.getUserDetails();
