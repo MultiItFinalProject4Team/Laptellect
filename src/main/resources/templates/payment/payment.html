@@ -18,10 +18,10 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var username = /*[[${testDto.username1}]]*/ 'default';
-        var productname = /*[[${testDto.productname1}]]*/ 'default';
-        var productinfo = /*[[${testDto.productinfo1}]]*/ 'default';
-        var productprice = /*[[${testDto.productprice1}]]*/ 0;
+        var username = /*[[${testDTO.username1}]]*/ 'default';
+        var productname = /*[[${testDTO.productname1}]]*/ 'default';
+        var productinfo = /*[[${testDTO.productinfo1}]]*/ 'default';
+        var productprice = /*[[${testDTO.productprice1}]]*/ 0;
         /*]]>*/
 
         function mypayment() {
@@ -75,7 +75,7 @@
             <form id="orderForm">
                 <div class="form-group">
                     <label for="name">구매자 성함</label>
-                    <input type="text" id="name" name="name" th:value="${testDto.username1}" required>
+                    <input type="text" id="name" name="name" th:value="${testDTO.username1}" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">연락처</label>
@@ -92,26 +92,26 @@
             </form>
         </div>
         <div class="right-section">
-            <h3 align="center" th:text="${testDto.productname1}">상품명</h3>
+            <h3 align="center" th:text="${testDTO.productname1}">상품명</h3>
             <img src="/img/payment/notebooktest.PNG" alt="Product Image" class="product-image">
-            <p align="center" th:text="${testDto.productinfo1}">상품 정보</p>
+            <p align="center" th:text="${testDTO.productinfo1}">상품 정보</p>
         </div>
     </div>
     <div class="price-info">
         <div class="price-row">
             <span>판매가</span>
-            <span th:text="${testDto.productprice1 + '원'}">0원</span>
+            <span th:text="${testDTO.productprice1 + '원'}">0원</span>
         </div>
         <div class="price-row">
             <span>할인금액</span>
-            <span>-50원</span>
+            <span>-100원</span>
         </div>
         <div class="price-row total-price">
             <span>총 결제금액</span>
-            <span th:text="${testDto.productprice1 - 50 + '원'}">0원</span>
+            <span th:text="${testDTO.productprice1 - 100 + '원'}">0원</span>
         </div>
         <div>
-            결제할 금액: <input type="text" id="amount" th:value="${testDto.productprice1 - 50}"/>
+            결제할 금액: <input type="text" id="amount" th:value="${testDTO.productprice1 - 100}"/>
             <button class="order-button" onclick="mypayment()">결제하기</button>
         </div>
     </div>

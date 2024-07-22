@@ -1,84 +1,67 @@
 package com.multi.laptellect.payment.controller;
 
-
-import com.multi.laptellect.api.payment.ApiKeys;
-import com.siot.IamportRestClient.IamportClient;
+import com.multi.laptellect.payment.model.dto.InsertDTO;
+import com.multi.laptellect.payment.model.dto.TestDTO;
+import com.multi.laptellect.payment.model.dto.VerificationRequestDto;
+import com.multi.laptellect.payment.service.PaymentService;
+import com.multi.laptellect.payment.service.TestService;
 import com.siot.IamportRestClient.exception.IamportResponseException;
-import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/payment")
 public class PaymentController {
 
-    @GetMapping("/payment")
-    public void paymentpage(){
+    private final PaymentService paymentService;
+    private final TestService testService;
+    private InsertDTO insertDTO;
+    private TestDTO testDTO;
 
+    @Autowired
+    public PaymentController(PaymentService paymentService, TestService testService) {
+        this.paymentService = paymentService;
+        this.testService = testService;
+        this.insertDTO = new InsertDTO();
     }
 
-    private final ApiKeys apiKeys;
+    @GetMapping("/orderlist")
+    public String orderlist(Model model){
+        testDTO = testService.selectTest();
+        model.addAttribute("testDTO", testDTO);
+        System.out.println(testDTO);
+        return "/payment/orderlist";
+    }
 
-    // ApiKeys 객체를 생성자 주입으로 받습니다.
-    @Autowired
-    public PaymentController(ApiKeys apiKeys) {
-        this.apiKeys = apiKeys;
+    @GetMapping("/payment")
+    public String selectTest(Model model) {
+        testDTO = testService.selectTest();
+        model.addAttribute("testDTO", testDTO);
+        System.out.println(testDTO);
+        return "/payment/payment";
     }
 
     @PostMapping("/verifyPayment")
-    public ResponseEntity<String> verifyPayment(@RequestBody VerificationRequest request) {
-        // ApiKeys 객체에서 API 키와 시크릿을 가져와 IamportClient를 초기화합니다.
-        System.out.println("검증을 시작합니다");
-        IamportClient client = new IamportClient(apiKeys.getIamportApiKey(), apiKeys.getIamportApiSecret());
-
+    public ResponseEntity<String> verifyPayment(@RequestBody VerificationRequestDto request) {
         try {
-            IamportResponse<Payment> payment = client.paymentByImpUid(request.getImpUid());
-            //포트원 api를 호출하여 주어진 imp_uid에 해당하는 결제정보를 가져옴
-            System.out.println(payment);
+            insertDTO.setUsername2(testDTO.getUsername1());
+            insertDTO.setProductname2(testDTO.getProductname1());
+            insertDTO.setProductprice2(testDTO.getProductprice1() - 100); // 할인금액
 
+            boolean verified = paymentService.verifyPayment(request, insertDTO);
 
-            if (payment.getResponse().getAmount().compareTo(BigDecimal.valueOf(request.getAmount())) == 0) {
-                // api에서 받아온 결제금액과 요청을 받은 금액을 비교함
-                System.out.println("검증성공");
+            if (verified) {
                 return ResponseEntity.ok("Payment verified successfully");
             } else {
-                System.out.println("검증실패 결제값 다름");
                 return ResponseEntity.badRequest().body("Payment amount mismatch");
             }
         } catch (IamportResponseException | IOException e) {
-            System.out.println("이건그냥에러");
             return ResponseEntity.badRequest().body("Payment verification failed: " + e.getMessage());
         }
-    }
-}
-
-class VerificationRequest {
-    private String impUid;
-    private long amount;
-
-    // Getters and setters
-    public String getImpUid() {
-        return impUid;
-    }
-
-    public void setImpUid(String impUid) {
-        this.impUid = impUid;
-    }
-
-    public long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
     }
 }

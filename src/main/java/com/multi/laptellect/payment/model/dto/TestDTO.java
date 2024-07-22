@@ -1,4 +1,4 @@
-package com.multi.laptellect.test.model.dto;
+package com.multi.laptellect.payment.model.dto;
 
 public class TestDTO {
     private String username1;

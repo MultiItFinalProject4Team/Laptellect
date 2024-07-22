@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 목록</title>
+    <link rel="stylesheet" href="/css/payment/orderlist.css">
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var username = /*[[${testDTO.username1}]]*/ 'default';
+        var productname = /*[[${testDTO.productname1}]]*/ 'default';
+        var productinfo = /*[[${testDTO.productinfo1}]]*/ 'default';
+        var productprice = /*[[${testDTO.productprice1}]]*/ 0;
+        /*]]>*/
+    </script>
+
+</head>
+<body>
+<div class="container">
+    <h1>주문 목록</h1>
+    <div class="search-bar">
+        <input type="text" placeholder="주문한 상품을 검색...">
+        <button>검색</button>
+    </div>
+    <div class="order-item">
+        <div class="order-info">
+            <img src="/img/payment/notebooktest.PNG" alt="LG GRAM PRO 16">
+            <div class="order-details">
+                <span>2024. 5. 16 주문 · 배송완료</span>
+                <h3 th:text="${testDTO.productname1}"></h3>
+                <p th:text="${testDTO.productinfo1}"></p>
+                <p th:text="${testDTO.productprice1} + '원' + ' · 1개'"></p>
+            </div>
+        </div>
+        <div class="order-actions">
+            <button>교환, 반품신청</button>
+            <button>리뷰 작성하기</button>
+        </div>
+    </div>
+    <div th:unless="${testDTO != null}">
+        <p>주문 정보가 없습니다.</p>
+    </div>
+</div>
+<div class="pagination">
+    <button>&lt; 이전</button>
+    <button>다음 &gt;</button>
+</div>
+</body>
+</html>
