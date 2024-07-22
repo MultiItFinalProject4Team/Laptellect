@@ -1,0 +1,29 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></head><body><div class="container">
+    <h1 class="mt-5">Product List</h1>
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>Product Code</th>
+            <th>Product Name</th>
+            <th>Registration Month</th>
+            <th>Price</th>
+            <th>Category Code</th>
+            <th>Image</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product, stat : ${products}">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${product.pcode}"></td>
+            <td th:text="${product.productName}"></td>
+            <td th:text="${product.registrationMonth}"></td>
+            <td th:text="${product.price} + '원'"></td>
+            <td th:text="${product.categoryCode}"></td>
+            <td><img th:src="${product.imageUrl}" alt="Product Image" style="width: 100px; height: 100px;"></td>
+        </tr>
+        </tbody>
+    </table></div></body></html>
