@@ -34,15 +34,17 @@
     <tr>
         <th>No</th>
         <th>제목</th>
+        <th>답변 여부</th>
         <th>작성일</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="each : ${list}" class="align-middle">
-        <td th:text="${each.No}">번호</td>
+        <td th:text="${each.personalqNo}">번호</td>
         <td style="text-align: center;">
-            <a style="text-decoration: none;" th:href="@{/customer/user/personalq_detail/{personalqNo}(personalqNo=${each.No})}" th:text="${each.No}"></a>
+            <a style="text-decoration: none;" th:href="@{/customer/user/personalq_detail/{personalqNo}(personalqNo=${each.personalqNo})}" th:text="${each.personalqNo}"></a>
         </td>
+        <td th:text="${each.answer}">답변 여부</td>
         <td th:text="${each.createdAt}">작성일</td>
     </tr>
     </tbody>

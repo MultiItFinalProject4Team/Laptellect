@@ -43,19 +43,7 @@ public class CustomerService {
     }
 
     public List<PersonalqListDto> getPersonalqList() {
-        List<PersonalqListDto> list = new ArrayList<>();
-        PersonalqListDto dto = PersonalqListDto.builder()
-                .no(1)
-                .title("title1")
-                .createdAt("2024-07-19")
-                .build();
-        list.add(dto);
-        PersonalqListDto dto2 = PersonalqListDto.builder()
-                .no(2)
-                .title("title2")
-                .createdAt("2024-07-18")
-                .build();
-        list.add(dto2);
+        List<PersonalqListDto> list = customDao.getPersonalqList();
         return list;
     }
 

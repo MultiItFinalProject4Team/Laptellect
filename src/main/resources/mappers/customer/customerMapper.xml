@@ -7,4 +7,14 @@
         INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
         values(1,'personalq_member', #{title},#{content})
     </insert>
+
+    <select id="getPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+    </select>
 </mapper>
