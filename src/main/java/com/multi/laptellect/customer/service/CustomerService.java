@@ -4,9 +4,13 @@ import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -55,5 +59,44 @@ public class CustomerService {
     public int personalqApp(PersonalqAppDto appDto) {
         int result = customDao.personalqApp(appDto);
         return result;
+    }
+
+    public String getpersonalqCode(int personalqNo) {
+        return customDao.getpersonalqCode(personalqNo);
+    }
+
+
+    public int inputPersonalqAppImage(String code, MultipartFile[] images) {
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                String path = System.getProperty("user.dir")+"/uploads/";
+
+                String fileName = image.getOriginalFilename();
+                String uuid = UUID.randomUUID().toString();
+                int extIndex = fileName.lastIndexOf(".") + 1;
+                String ext = fileName.substring(extIndex);
+                String storeFileName = uuid + "." + ext;
+
+                personalqImageDto imageDto = personalqImageDto.builder()
+                        .originName(fileName)
+                        .uploadName(storeFileName)
+                        .referenceCode(code)
+                        .build();
+
+                customDao.inputPersonalqAppImage(imageDto);
+
+                File directory = new File(path);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                try {
+                    image.transferTo(new File(path+fileName));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 1;
     }
 }

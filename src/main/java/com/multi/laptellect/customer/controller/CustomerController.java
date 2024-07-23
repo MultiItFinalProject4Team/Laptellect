@@ -58,11 +58,19 @@ public class CustomerController {
     public void personalq_app(){}
 
     @PostMapping("/personalq_app")
-    public String personalq_app(PersonalqAppDto appDto, @RequestParam("image") MultipartFile file){
+    public String personalq_app(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
         System.out.println(appDto);
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                System.out.println(image.getOriginalFilename());
+            }
+        }
         appDto.setMemberNo(1);
         appDto.setProductqCategorycode("personalq_member");
-        int result=customerService.personalqApp(appDto);
+        int text_result=customerService.personalqApp(appDto);
+        String code = customerService.getpersonalqCode(appDto.getPersonalqNo());
+        System.out.println(code);
+        int image_result = customerService.inputPersonalqAppImage(code,images);
         return "redirect:/customer/user/customer_personalq";
     }
 }

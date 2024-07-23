@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.laptellect.customer.dao.CustomDao">
-    <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
+    <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto" keyProperty="personalqNo" useGeneratedKeys="true">
         INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
         values(#{memberNo},#{productqCategorycode}, #{title},#{content})
     </insert>
@@ -23,4 +23,16 @@
         personal_question
         where personalq_no=#{personalqNo}
     </select>
+
+    <select id="getpersonalqCode" resultType="string">
+        select reference_code
+        from personal_question
+        where personalq_no=#{personalqNo}
+    </select>
+
+    <insert id="inputPersonalqAppImage" parameterType="com.multi.laptellect.customer.dto.personalqImageDto">
+        insert into
+        images(origin_name, upload_name, reference_code)
+        values(#{originName}, #{uploadName}, #{referenceCode})
+    </insert>
 </mapper>
