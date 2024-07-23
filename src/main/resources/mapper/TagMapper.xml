@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="TagDAO">
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+<!--<mapper namespace="TagDAO">-->
 
-    <!-- 태그 삽입 쿼리 -->
-    <insert id="insertTag" parameterType="TagDTO">
-        INSERT INTO tags (tag_data, tag_etc)
-        VALUES (#{tag_data}, #{tag_etc})
-    </insert>
+<!--    &lt;!&ndash; 태그 삽입 쿼리 &ndash;&gt;-->
+<!--    <insert id="insertTag" parameterType="TagDTO">-->
+<!--        INSERT INTO tags (tag_data, tag_etc)-->
+<!--        VALUES (#{tag_data}, #{tag_etc})-->
+<!--    </insert>-->
 
-    <!-- 모든 태그 조회 쿼리 -->
-    <select id="getAllTags" resultType="TagDTO">
-        SELECT tag_no, tag_data, tag_etc
-        FROM tags
-    </select>
+<!--    &lt;!&ndash; 모든 태그 조회 쿼리 &ndash;&gt;-->
+<!--    <select id="getAllTags" resultType="TagDTO">-->
+<!--        SELECT tag_no, tag_data, tag_etc-->
+<!--        FROM tags-->
+<!--    </select>-->
 
-</mapper>
+<!--</mapper>-->

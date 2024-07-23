@@ -1,7 +1,7 @@
 package com.multi.laptellect.recommend.laptop.model.dto;
 
 import lombok.Data;
-
+//임의로 생성 나중에 수정
 @Data
 public class LaptopDTO {
     private Long id;
