@@ -46,7 +46,7 @@ public class AuthController {
         MemberDTO memberDTO = new MemberDTO();
         model.addAttribute("member", memberDTO);
 
-        return  "auth/auth-sign-up.html";
+        return  "auth/auth-sign-up-form.html";
     }
 
     @PostMapping("/signup")
@@ -64,4 +64,6 @@ public class AuthController {
 
         return "redirect:/";
     }
+
+
 }

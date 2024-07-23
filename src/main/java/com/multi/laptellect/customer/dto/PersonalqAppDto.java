@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonalqAppDto {
+    private int personalqNo;
     private int memberNo;
     private String productqCategorycode;
     private String title;

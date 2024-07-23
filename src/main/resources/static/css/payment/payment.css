@@ -1,0 +1,93 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+.left-section {
+    width: 45%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+.right-section {
+    width: 50%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+h2 {
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input[type="text"], input[type="tel"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.product-image {
+    width: 100%;
+    max-width: 400px;
+    display: block;
+    margin: 10px auto 10px;  /* 상단 여백 증가 */
+}
+.price-info {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 50%;
+    margin: 0 auto;  /* 중앙 정렬 */
+}
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.total-price {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #e44d26;
+}
+.order-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 20px;
+}
+.order-button:hover {
+    background-color: #45a049;
+}
+#amount {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}

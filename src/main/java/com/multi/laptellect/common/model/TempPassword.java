@@ -1,11 +1,11 @@
-package com.multi.laptellect.common.model.dto;
+package com.multi.laptellect.common.model;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class TempPasswordDTO {
+public class TempPassword {
     private int memberNo;
     private String tempPw;
     private Boolean isUse;
