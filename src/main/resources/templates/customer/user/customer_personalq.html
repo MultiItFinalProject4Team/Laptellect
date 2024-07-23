@@ -54,6 +54,25 @@
     <div class="text-end">
         <a class="btn btn-secondary btn-sm" href="/customer/user/personalq_app" role="button">문의 등록</a>
     </div>
+    <div th:if="${totalPages > 1}" class="pagination justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                </li>
+                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 </div>
 </body>

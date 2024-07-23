@@ -2,6 +2,7 @@ package com.multi.laptellect.customer.controller;
 
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
+import com.multi.laptellect.customer.service.PaginationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -24,6 +25,8 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private PaginationService pagination;
 
 
     //공지사항 페이지(메인)
@@ -35,9 +38,16 @@ public class CustomerController {
     }
     //1:1문의 페이지
     @GetMapping("/customer_personalq")
-    public void customer_personalq(Model model){
-        List<PersonalqListDto> list = customerService.getPersonalqList();
-        model.addAttribute("list",list);
+    public void customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo=1;
+        List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<PersonalqListDto> paginationList=pagination.paginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
     }
     //챗봇 페이지
     @GetMapping("/customer_chatbot")
@@ -56,20 +66,16 @@ public class CustomerController {
     public String personalq_detail(@PathVariable("personalqNo") int personalqNo, Model model){
         PersonalqDto personalqDto = customerService.getPersonalq(personalqNo);
         String[] imageList = customerService.getImage(personalqDto.getReferenceCode());
-        for(String image : imageList){
-            System.out.println(image);
-        }
         model.addAttribute("personalq",personalqDto);
         model.addAttribute("imageList",imageList);
+
         if(personalqDto.getAnswer().equals("Y")) {
             PersonalqAnswerDto answerDto = customerService.getPersonala(personalqNo);
             String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
-            for(String image : imageList2){
-                System.out.println(image);
-            }
             model.addAttribute("personala", answerDto);
             model.addAttribute("imageList2", imageList2);
         }
+
         return"/customer/user/personalq_detail";
     }
     //1:1문의 신청 페이지 이동

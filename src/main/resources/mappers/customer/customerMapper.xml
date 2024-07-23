@@ -16,6 +16,8 @@
         answer,
         created_at
         from personal_question
+        where member_no=#{memberNo}
+        order by personalq_no desc
     </select>
 
     <select id="getPersonalqDetail" resultType="com.multi.laptellect.customer.dto.PersonalqDto">

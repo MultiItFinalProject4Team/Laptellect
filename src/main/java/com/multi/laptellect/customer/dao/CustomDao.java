@@ -9,7 +9,7 @@ import java.util.List;
 public interface CustomDao {
     int personalqApp(PersonalqAppDto appDto);
 
-    List<PersonalqListDto> getPersonalqList();
+    List<PersonalqListDto> getPersonalqList(int memberNo);
 
     PersonalqDto getPersonalqDetail(int personalqNo);
 

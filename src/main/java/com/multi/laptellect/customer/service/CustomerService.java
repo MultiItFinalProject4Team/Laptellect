@@ -46,8 +46,8 @@ public class CustomerService {
         return noticeDto;
     }
 
-    public List<PersonalqListDto> getPersonalqList() {
-        List<PersonalqListDto> list = customDao.getPersonalqList();
+    public List<PersonalqListDto> getPersonalqList(int memberNo) {
+        List<PersonalqListDto> list = customDao.getPersonalqList(memberNo);
         return list;
     }
 
