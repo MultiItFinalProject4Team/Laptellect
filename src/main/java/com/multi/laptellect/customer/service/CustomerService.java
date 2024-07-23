@@ -66,7 +66,7 @@ public class CustomerService {
     }
 
 
-    public int inputPersonalqAppImage(String code, MultipartFile[] images) {
+    public int inputImage(String code, MultipartFile[] images) {
         for(MultipartFile image : images){
             if(!image.isEmpty()){
                 String path = System.getProperty("user.dir")+"/uploads/";
@@ -83,7 +83,7 @@ public class CustomerService {
                         .referenceCode(code)
                         .build();
 
-                customDao.inputPersonalqAppImage(imageDto);
+                customDao.inputImage(imageDto);
 
                 File directory = new File(path);
                 if (!directory.exists()) {
@@ -100,7 +100,23 @@ public class CustomerService {
         return 1;
     }
 
-    public String[] getPersonalqImage(String referenceCode) {
-        return customDao.getPersonalqImage(referenceCode);
+    public String[] getImage(String referenceCode) {
+        return customDao.getImage(referenceCode);
+    }
+
+    public void personalAnswerApp(PersonalqAnswerDto answerDto) {
+        customDao.personalAnswerApp(answerDto);
+    }
+
+    public String getPersonalaCode(int personalaNo) {
+        return customDao.getPersonalaCode(personalaNo);
+    }
+
+    public PersonalqAnswerDto getPersonala(int personalqNo) {
+        return customDao.getPersonala(personalqNo);
+    }
+
+    public void personalAnwerChange(int personalqNo) {
+        customDao.personalAnwerChange(personalqNo);
     }
 }

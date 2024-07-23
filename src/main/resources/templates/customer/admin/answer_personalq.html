@@ -35,7 +35,9 @@
     </li>
 </ul>
 </header>
-    <form action="/customer/user/personalq_app" method="post" enctype="multipart/form-data">
+    <form action="/customer/admin/answer_personalq" method="post" enctype="multipart/form-data">
+        <label for="personalqNo">번호</label>
+        <input type="text" th:value="${personalqNo}" readonly="true" id="personalqNo" name="personalqNo">
         <label for="title">제목:</label>
         <input type="text" id="title" name="title" required><br><br>
 

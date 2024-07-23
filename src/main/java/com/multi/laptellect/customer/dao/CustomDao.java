@@ -1,9 +1,6 @@
 package com.multi.laptellect.customer.dao;
 
-import com.multi.laptellect.customer.dto.PersonalqAppDto;
-import com.multi.laptellect.customer.dto.PersonalqDto;
-import com.multi.laptellect.customer.dto.PersonalqListDto;
-import com.multi.laptellect.customer.dto.personalqImageDto;
+import com.multi.laptellect.customer.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,7 +15,15 @@ public interface CustomDao {
 
     String getpersonalqCode(int personalqNo);
 
-    void inputPersonalqAppImage(personalqImageDto imageDto);
+    void inputImage(personalqImageDto imageDto);
 
-    String[] getPersonalqImage(String referenceCode);
+    String[] getImage(String referenceCode);
+
+    void personalAnswerApp(PersonalqAnswerDto answerDto);
+
+    String getPersonalaCode(int personalaNo);
+
+    PersonalqAnswerDto getPersonala(int personalqNo);
+
+    void personalAnwerChange(int personalqNo);
 }

@@ -55,13 +55,21 @@ public class CustomerController {
     @GetMapping("/personalq_detail/{personalqNo}")
     public String personalq_detail(@PathVariable("personalqNo") int personalqNo, Model model){
         PersonalqDto personalqDto = customerService.getPersonalq(personalqNo);
-        String[] imageList = customerService.getPersonalqImage(personalqDto.getReferenceCode());
-        System.out.println(personalqDto);
+        String[] imageList = customerService.getImage(personalqDto.getReferenceCode());
         for(String image : imageList){
             System.out.println(image);
         }
         model.addAttribute("personalq",personalqDto);
         model.addAttribute("imageList",imageList);
+        if(personalqDto.getAnswer().equals("Y")) {
+            PersonalqAnswerDto answerDto = customerService.getPersonala(personalqNo);
+            String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
+            for(String image : imageList2){
+                System.out.println(image);
+            }
+            model.addAttribute("personala", answerDto);
+            model.addAttribute("imageList2", imageList2);
+        }
         return"/customer/user/personalq_detail";
     }
     //1:1문의 신청 페이지 이동
@@ -81,7 +89,7 @@ public class CustomerController {
         int text_result=customerService.personalqApp(appDto);
         String code = customerService.getpersonalqCode(appDto.getPersonalqNo());
         System.out.println(code);
-        int image_result = customerService.inputPersonalqAppImage(code,images);
+        int image_result = customerService.inputImage(code,images);
         return "redirect:/customer/user/customer_personalq";
     }
 
@@ -91,7 +99,9 @@ public class CustomerController {
         String directory = System.getProperty("user.dir") + "/uploads/";
         String filePath = directory + fileName;
         File file = new File(filePath);
-
+        if (!file.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         Resource resource = new FileSystemResource(file); // 파일을 리소스로 변환
 
 

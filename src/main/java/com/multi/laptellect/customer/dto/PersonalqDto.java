@@ -17,8 +17,8 @@ public class PersonalqDto {
     private String productqCategorycode;
     private String title;
     private String content;
-    private Timestamp createDate;
-    private Timestamp updateDate;
+    private Timestamp createdAt;
+    private Timestamp updateAt;
     private String answer;
     private String referenceCode;
 }

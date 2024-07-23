@@ -30,16 +30,42 @@
         where personalq_no=#{personalqNo}
     </select>
 
-    <insert id="inputPersonalqAppImage" parameterType="com.multi.laptellect.customer.dto.personalqImageDto">
+    <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.personalqImageDto">
         insert into
         images(origin_name, upload_name, reference_code)
         values(#{originName}, #{uploadName}, #{referenceCode})
     </insert>
 
-    <select id="getPersonalqImage" resultType="string">
+    <select id="getImage" resultType="string">
         select upload_name
         from
         images
         where reference_code=#{referenceCode}
     </select>
+
+    <insert id="personalAnswerApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto" useGeneratedKeys="true" keyProperty="personalaNo">
+        insert into
+        personal_answer(personalq_no, title, content)
+        values(#{personalqNo},#{title},#{content})
+    </insert>
+
+    <select id="getPersonalaCode" resultType="string">
+        select reference_code
+        from personal_answer
+        where personala_no=#{personalaNo}
+    </select>
+
+    <select id="getPersonala" resultType="com.multi.laptellect.customer.dto.PersonalqAnswerDto">
+        select *
+        from
+        personal_answer
+        where personalq_no=#{personalqNo}
+    </select>
+
+    <update id="personalAnwerChange">
+        update
+        personal_question
+        set answer='Y'
+        where personalq_no=#{personalqNo}
+    </update>
 </mapper>
