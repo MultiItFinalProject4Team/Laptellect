@@ -19,4 +19,6 @@ public interface CustomDao {
     String getpersonalqCode(int personalqNo);
 
     void inputPersonalqAppImage(personalqImageDto imageDto);
+
+    String[] getPersonalqImage(String referenceCode);
 }

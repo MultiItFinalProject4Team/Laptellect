@@ -91,12 +91,16 @@ public class CustomerService {
                 }
 
                 try {
-                    image.transferTo(new File(path+fileName));
+                    image.transferTo(new File(path+storeFileName));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
         return 1;
+    }
+
+    public String[] getPersonalqImage(String referenceCode) {
+        return customDao.getPersonalqImage(referenceCode);
     }
 }

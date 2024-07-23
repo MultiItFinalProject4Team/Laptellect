@@ -35,4 +35,11 @@
         images(origin_name, upload_name, reference_code)
         values(#{originName}, #{uploadName}, #{referenceCode})
     </insert>
+
+    <select id="getPersonalqImage" resultType="string">
+        select upload_name
+        from
+        images
+        where reference_code=#{referenceCode}
+    </select>
 </mapper>

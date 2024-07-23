@@ -4,11 +4,17 @@ import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -49,14 +55,19 @@ public class CustomerController {
     @GetMapping("/personalq_detail/{personalqNo}")
     public String personalq_detail(@PathVariable("personalqNo") int personalqNo, Model model){
         PersonalqDto personalqDto = customerService.getPersonalq(personalqNo);
+        String[] imageList = customerService.getPersonalqImage(personalqDto.getReferenceCode());
         System.out.println(personalqDto);
+        for(String image : imageList){
+            System.out.println(image);
+        }
         model.addAttribute("personalq",personalqDto);
+        model.addAttribute("imageList",imageList);
         return"/customer/user/personalq_detail";
     }
     //1:1문의 신청 페이지 이동
     @GetMapping("/personalq_app")
     public void personalq_app(){}
-
+    //1:1 문의 신청
     @PostMapping("/personalq_app")
     public String personalq_app(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
         System.out.println(appDto);
@@ -72,5 +83,40 @@ public class CustomerController {
         System.out.println(code);
         int image_result = customerService.inputPersonalqAppImage(code,images);
         return "redirect:/customer/user/customer_personalq";
+    }
+
+    //이미지 출력
+    @GetMapping("/images/{image}")
+    public ResponseEntity<Resource> downloadImage(@PathVariable("image") String fileName)  {
+        String directory = System.getProperty("user.dir") + "/uploads/";
+        String filePath = directory + fileName;
+        File file = new File(filePath);
+
+        Resource resource = new FileSystemResource(file); // 파일을 리소스로 변환
+
+
+        // 파일 확장자를 통해 MIME 타입을 결정
+        String mimeType;
+        String ext = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        switch (ext) {
+            case "jpg":
+            case "jpeg":
+                mimeType = "image/jpeg";
+                break;
+            case "png":
+                mimeType = "image/png";
+                break;
+            case "gif":
+                mimeType = "image/gif";
+                break;
+            default:
+                mimeType = "application/octet-stream";  // 일반적인 바이너리 파일
+        }
+
+        // Content-Type 헤더를 설정하고 파일을 반환
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, mimeType);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 }
