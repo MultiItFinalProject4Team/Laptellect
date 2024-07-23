@@ -1,30 +1,35 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
     <title>Product List</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></head><body><div class="container">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
     <h1 class="mt-5">Product List</h1>
-    <table class="table table-bordered mt-3">
-        <thead>
-        <tr>
-            <th>No</th>
-            <th>Product Code</th>
-            <th>Product Name</th>
-            <th>Registration Month</th>
-            <th>Price</th>
-            <th>Category Code</th>
-            <th>Image</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="product, stat : ${products}">
-            <td th:text="${stat.index + 1}"></td>
-            <td th:text="${product.pcode}"></td>
-            <td th:text="${product.productName}"></td>
-            <td th:text="${product.registrationMonth}"></td>
-            <td th:text="${product.price} + '원'"></td>
-            <td th:text="${product.categoryCode}"></td>
-            <td><img th:src="${product.imageUrl}" alt="Product Image" style="width: 100px; height: 100px;"></td>
-            <td><a th:href="@{/product/laptopDetails?pcode={pcode}(pcode=${product.pcode})}">Details</a></td>
-        </tr>
-        </tbody>
-    </table></div></body></html>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped mt-3">
+                <thead>
+                <tr>
+                    <th>상품명</th>
+                    <th>가격</th>
+                    <th>상품코드</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${products}">
+                    <td>
+                        <a th:href="@{/productDetails(pcode=${product.productCode})}" th:text="${product.productName}">상품명</a>
+                    </td>
+                    <td th:text="${product.price} + ' 원'">가격</td>
+                    <td th:text="${product.productCode}">상품코드</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

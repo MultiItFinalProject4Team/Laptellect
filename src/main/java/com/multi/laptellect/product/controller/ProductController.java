@@ -2,7 +2,7 @@ package com.multi.laptellect.product.controller;
 
 
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.ProductInfo;
+import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.LaptopDetailsService;
 import com.multi.laptellect.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,38 +21,31 @@ public class ProductController {
 
 
     @Autowired
-    ProductService productService;
+    CrawlingService crawlingService;
 
     @Autowired
     LaptopDetailsService laptopDetailsService;
 
+    @Autowired
+    ProductService productService;
+
     @GetMapping("/productList")
-    public String laptopCrawl(@RequestParam(value = "pages", defaultValue = "1") int pages, Model model) throws IOException {
-        List<ProductInfo> products = productService.crawlProducts(pages);
-        model.addAttribute("products", products);
-        return "product/productList";
+    public String laptopCrawl() throws IOException {
+        crawlingService.crawlAndSaveProducts(2); // 크롤링 페이지 수 설정
+        return "redirect:/product/productList";
     }
 
-    @GetMapping("/laptopDetails")
-    public String getProductDetails(@RequestParam("pcode") String pcode, Model model) throws IOException {
+    @GetMapping("/products")
+    public String viewProducts(Model model) {
+        List<ProductDTO> productList = productService.getAllProducts();
+        model.addAttribute("products", productList);
+        return "product/list";
+    }
 
-        ProductInfo productInfo = productService.crawlProducts(1).stream()
-                .filter(product -> product.getPcode().equals(pcode))
-                .findFirst()
-                .orElse(null);
-
-        if (productInfo == null) {
-            // 상품 정보를 찾을 수 없는 경우 처리
-            return "error/404";
-        }
-
-
-
-        ProductDTO productDetails = laptopDetailsService.getProductDetails(productInfo);
-        model.addAttribute("productInfo", productInfo);
-        model.addAttribute("productDetails", productDetails);
-
-        return "product/laptopDetails";
+    @GetMapping("/productDetails")
+    public String getProductDetails(@RequestParam("productCode") String productCode, Model model) {
+        model.addAttribute("product", productService.getProductByCode(productCode));
+        return "product/productDetails";
     }
 
 

@@ -1,6 +1,6 @@
 package com.multi.laptellect.product.service;
 
-import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.LaptopSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -22,9 +22,9 @@ import java.io.IOException;
 @Service
 public class LaptopDetailsService {
 
-    public ProductDTO getProductDetails(ProductInfo productInfo) {
+    public LaptopSpecDTO getProductDetails(ProductInfo productInfo) {
 
-        ProductDTO prodcutDTO = new ProductDTO();
+        LaptopSpecDTO prodcutDTO = new LaptopSpecDTO();
 
         try {
             String url = "https://prod.danawa.com/info/ajax/getProductDescription.ajax.php";
@@ -90,6 +90,7 @@ public class LaptopDetailsService {
         }
         return "정보 없음";
     }
+
     private String getAdditionalFeatures(Document doc) {
         StringBuilder features = new StringBuilder();
         Elements rows = doc.select("table.spec_tbl tr");
