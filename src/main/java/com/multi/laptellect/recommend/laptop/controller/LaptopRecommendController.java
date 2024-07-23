@@ -36,4 +36,10 @@ public class LaptopRecommendController {
     public String recommendResultPage() {
         return "recommendpage";
     }
+
+    @GetMapping("/detail/{id}")
+    @ResponseBody
+    public Map<String, Object> getLaptopDetail(@PathVariable Long id) {
+        return laptopService.getLaptopDetail(id);
+    }
 }

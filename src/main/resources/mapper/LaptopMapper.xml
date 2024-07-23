@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LaptopDAO">
-    <select id="getAllLaptops" resultType="LaptopDTO">
-        SELECT * FROM laptops
-        WHERE
-        <foreach item="tag" collection="tags" separator=" OR " open="(" close=")">
-            tags LIKE CONCAT('%', #{tag}, '%')
+    <select id="findLaptopsByTags" resultType="LaptopDTO">
+        SELECT id, tag_data, tag_etc
+        FROM tags
+        WHERE tag_data IN
+        <foreach item="tag" collection="tags" separator="," open="(" close=")">
+            #{tag}
         </foreach>
         ORDER BY RAND()
-        LIMIT 10
+        LIMIT 5
+    </select>
+
+    <select id="findLaptopDetailById" resultType="java.util.HashMap">
+        SELECT *
+        FROM laptop_details
+        WHERE id = #{id}
     </select>
 </mapper>

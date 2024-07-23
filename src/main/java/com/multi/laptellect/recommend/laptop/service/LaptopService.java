@@ -5,10 +5,7 @@ import com.multi.laptellect.recommend.laptop.model.dto.LaptopDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class LaptopService {
@@ -33,57 +30,33 @@ public class LaptopService {
     }
 
     public List<LaptopDTO> getRecommendedLaptops(Map<String, Object> surveyResults) {
-        List<LaptopDTO> allLaptops = laptopDAO.getAllLaptops();
-        return allLaptops.stream()
-                .filter(laptop -> matchesSurveyResults(laptop, surveyResults))
-                .limit(5)  // 상위 5개 추천
-                .collect(Collectors.toList());
+        List<String> tags = new ArrayList<>();
+
+        addTagsFromList(tags, (List<String>) surveyResults.get("categories"));
+        addTag(tags, (String) surveyResults.get("priceRange"));
+        addTag(tags, (String) surveyResults.get("cpuBrand"));
+        addTag(tags, (String) surveyResults.get("gpuBrand"));
+
+        if (Boolean.TRUE.equals(surveyResults.get("asImportant"))) {
+            tags.add("AS 중요");
+        }
+
+        return laptopDAO.findLaptopsByTags(tags);
     }
 
-    private boolean matchesSurveyResults(LaptopDTO laptop, Map<String, Object> surveyResults) {
-        boolean matches = true;
-
-        // 카테고리 매칭
-        List<String> categories = (List<String>) surveyResults.get("categories");
-        if (categories != null && !categories.isEmpty()) {
-            matches &= categories.stream()
-                    .anyMatch(category -> laptop.getTags().contains(category));
+    private void addTagsFromList(List<String> tags, List<String> newTags) {
+        if (newTags != null) {
+            tags.addAll(newTags);
         }
+    }
 
-        // 가격대 매칭
-        String priceRange = (String) surveyResults.get("priceRange");
-        if (priceRange != null) {
-            switch (priceRange) {
-                case "50만원 이하":
-                    matches &= laptop.getPrice() <= 500000;
-                    break;
-                case "100~200만원":
-                    matches &= laptop.getPrice() > 1000000 && laptop.getPrice() <= 2000000;
-                    break;
-                case "200만원 이상":
-                    matches &= laptop.getPrice() > 2000000;
-                    break;
-            }
+    private void addTag(List<String> tags, String tag) {
+        if (tag != null && !tag.isEmpty()) {
+            tags.add(tag);
         }
+    }
 
-        // CPU 브랜드 매칭
-        String cpuBrand = (String) surveyResults.get("cpuBrand");
-        if (cpuBrand != null) {
-            matches &= laptop.getCpu().toLowerCase().contains(cpuBrand.toLowerCase());
-        }
-
-        // GPU 브랜드 매칭
-        String gpuBrand = (String) surveyResults.get("gpuBrand");
-        if (gpuBrand != null) {
-            matches &= laptop.getGpu().toLowerCase().contains(gpuBrand.toLowerCase());
-        }
-
-        // AS 중요도 매칭
-        Boolean asImportant = (Boolean) surveyResults.get("asImportant");
-        if (asImportant != null && asImportant) {
-            matches &= laptop.getTags().contains("AS 중요");
-        }
-
-        return matches;
+    public Map<String, Object> getLaptopDetail(Long id) {
+        return laptopDAO.findLaptopDetailById(id);
     }
 }
