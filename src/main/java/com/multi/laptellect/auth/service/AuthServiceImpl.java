@@ -104,14 +104,14 @@ public class AuthServiceImpl implements AuthService{
     public boolean isVerifyEmail(String verifyCode) throws Exception { // 인증코드 검증
         String redisVerifyCode = redisUtil.getData(verifyCode);
 
+        // 프론트에서 바꿀 가능성 있으므로 작업 후 인증코드 삭제하는 로직 추가해야함
+        // ex) redisUtil.deleteData(verifyCode);
         return redisVerifyCode != null;
     }
 
     @Override
     public void sendTempPassword(Email email) throws Exception { // 임시 비밀번호 발급 및 이메일 전송 메서드
-        // 이메일 존재 검증
         MemberDTO userData = memberMapper.findMemberByEmail(email.getReceiveAddress());
-
         int memberNo = userData.getMemberNo();
 
         // 임시 비밀번호 생성
@@ -122,6 +122,7 @@ public class AuthServiceImpl implements AuthService{
 
         emailUtil.sendEmail(email);
 
+        // 회원번호 Key, 임시 비밀번호 Value
         redisUtil.setDataExpire(String.valueOf(memberNo), tempPasswordStr, 60*3L);
     }
 
