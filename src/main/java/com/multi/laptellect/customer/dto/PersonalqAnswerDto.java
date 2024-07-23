@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonalqAppDto {
+public class PersonalqAnswerDto {
+    private int personalaNo;
     private int personalqNo;
-    private int memberNo;
-    private String productqCategorycode;
     private String title;
     private String content;
+    private String createdAt;
+    private String updatedAt;
+    private String referenceCode;
 }
