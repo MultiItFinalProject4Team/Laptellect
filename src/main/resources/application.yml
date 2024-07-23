@@ -8,8 +8,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: filmpick123@gmail.com # \uC774\uBA54\uC77C
-    password: jxsccjcjrgutlxwy # APP \uBE44\uBC00\uBC88\uD638
+    username: ckatnfl1234@gmail.com
+    password: sjzhdwackhueuoce # APP \uBE44\uBC00\uBC88\uD638
     properties:
       mail:
         smtp:
@@ -20,6 +20,12 @@ spring:
     host: localhost
     port: 6379
     password: 1234
+
+  coolsms:
+    api:
+      key: NCSJX8SJCCALFXZ6
+      secret: F0WFPI4WRVMRJJP5SNEDGGAE9LNSEO0J
+    caller: 01092526582
 
 server:
   port: 8099

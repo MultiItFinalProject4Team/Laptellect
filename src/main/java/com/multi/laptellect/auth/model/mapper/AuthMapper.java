@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AuthMapper {
-    MemberDTO selectMemberById(String username);
+    MemberDTO selectMemberById(String memberName);
 
     int insertMember(MemberDTO memberDTO);
 

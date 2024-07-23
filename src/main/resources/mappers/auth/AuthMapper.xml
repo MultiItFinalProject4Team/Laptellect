@@ -7,7 +7,7 @@
 
 	<resultMap id="memberResultMap" type="memberDTO">
 		<result property="memberNo" column="member_no"/>
-		<result property="userName" column="member_name"/>
+		<result property="memberName" column="member_name"/>
 		<result property="password" column="password"/>
 		<result property="point" column="point"/>
 		<result property="createDate" column="created_at" jdbcType="TIMESTAMP"/>
@@ -19,17 +19,13 @@
 		(
 			  member_name
 			, email
-		<if test="loginType != null">
-			, #{ login_type }
-		</if>
+			, login_type
 		)
 		VALUES
 		(
-			  #{ userName }
+			  #{ memberName }
 			, #{ email }
-		<if test="loginType != null">
 			, #{ loginType }
-		</if>
 		)
 	</insert>
 
@@ -55,7 +51,7 @@
 		JOIN
 			mem_password p ON m.member_no = p.member_no
 		WHERE
-			m.member_name = #{userName}
+			m.member_name = #{memberName}
 	</select>
 
 	<update id="updatePassword" parameterType="memberDTO">
