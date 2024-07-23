@@ -108,7 +108,7 @@ public class MemberController {
         boolean result = true;
 
         try {
-            memberService.changeMemberInfo("nickName", nickName);
+//            memberService.changeMemberInfo("nickName", nickName);
         } catch (Exception e) {
             result = false;
         }
@@ -125,7 +125,7 @@ public class MemberController {
         boolean result = true;
 
         try {
-            memberService.changeMemberInfo(password);
+//            memberService.changeMemberInfo(password);
 
         } catch (Exception e) {
             result = false;
@@ -143,7 +143,7 @@ public class MemberController {
         boolean result = true;
 
         try {
-            memberService.changeMemberInfo(email);
+//            memberService.changeMemberInfo(email);
         } catch (Exception e) {
             result = false;
         }

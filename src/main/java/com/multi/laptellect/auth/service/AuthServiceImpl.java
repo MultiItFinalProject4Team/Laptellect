@@ -1,8 +1,11 @@
 package com.multi.laptellect.auth.service;
 
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
+import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
+import com.multi.laptellect.util.EmailUtil;
+import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,8 @@ public class AuthServiceImpl implements AuthService{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final MemberMapper memberMapper;
+    private final EmailUtil emailUtil;
+    private final RedisUtil redisUtil;
 
     //    private final SecureRandom secureRandom;
 
@@ -78,6 +84,41 @@ public class AuthServiceImpl implements AuthService{
                 }
                 break;
         }
+    }
+
+    @Override
+    public void sendTempPassword(Email email) throws Exception { // 임시 비밀번호 발급 및 이메일 전송
+        // 이메일 존재 검증
+        MemberDTO userData = memberMapper.findMemberByEmail(email.getReceiveAddress());
+
+        int memberNo = userData.getMemberNo();
+
+        // 임시 비밀번호 생성
+        String tempPasswordStr = createTempPassword();
+
+        email.setMailTitle("Laptellect 임시 비밀번호");
+        email.setMailContent("임시 비밀번호 : " + tempPasswordStr);
+
+        emailUtil.sendEmail(email);
+
+        redisUtil.setDataExpire(String.valueOf(memberNo), tempPasswordStr, 60*3L);
+    }
+
+    public String createTempPassword() { // 임시 비밀번호 생성
+        Random random = new Random();
+        int PasswordSize = 8;
+        char[] passwordCodeChars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+        StringBuilder tempPassword = new StringBuilder();
+
+        for (int i = 0; i < PasswordSize; i++) {
+            int randomNum = random.nextInt(passwordCodeChars.length);
+            tempPassword.append(passwordCodeChars[randomNum]);
+        }
+
+        return tempPassword.toString();
     }
 
     @Override
