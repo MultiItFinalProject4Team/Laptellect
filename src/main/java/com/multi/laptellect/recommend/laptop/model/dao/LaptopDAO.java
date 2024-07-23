@@ -11,4 +11,6 @@ import java.util.List;
 public interface LaptopDAO {
 
     List<LaptopDTO> findLaptopsByTags(@Param("tags") List<String> tage);
+
+    List<LaptopDTO> getAllLaptops();
 }
