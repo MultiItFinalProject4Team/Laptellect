@@ -1,25 +1,25 @@
-package com.multi.laptellect.common.service;
+package com.multi.laptellect.util;
 
-
-import com.multi.laptellect.common.model.dto.EmailDTO;
+import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.config.EmailConfig;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Slf4j
 @RequiredArgsConstructor
-public class EmailServiceImpl implements EmailService{
+@Component
+public class EmailUtil {
     private final JavaMailSender javaMailSender;
     private final EmailConfig emailConfig;
 
-    @Override
-    public void sendEmail(EmailDTO emailDTO) throws Exception {
+    public void sendEmail(Email email) throws Exception { // 이메일 전송 클래스
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(emailDTO.getReceiveAddress());
-        message.setSubject(emailDTO.getMailTitle());
-        message.setText(emailDTO.getMailContent());
+        message.setTo(email.getReceiveAddress());
+        message.setSubject(email.getMailTitle());
+        message.setText(email.getMailContent());
         message.setFrom(emailConfig.getUsername());
         message.setReplyTo(emailConfig.getUsername());
 

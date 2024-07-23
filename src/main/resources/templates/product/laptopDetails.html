@@ -7,40 +7,95 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5">상품상세</h1>
-    <div class="card mt-3">
-        <div class="card-header">
-            <h2 th:text="${productInfo.productName}"></h2>
-        </div>
-        <div class="card-body">
-            <img th:src="@{${productInfo.imageUrl}}" alt="Product Image" class="img-fluid" style="width: 300px; height: 300px;">
-            <p><strong>Product Code:</strong> <span th:text="${productInfo.pcode}"></span></p>
-            <p><strong>Registration Month:</strong> <span th:text="${productInfo.registrationMonth}"></span></p>
-            <p><strong>Price:</strong> <span th:text="${productInfo.price} + '원'"></span></p>
-            <p><strong>Category Code:</strong> <span th:text="${productInfo.categoryCode}"></span></p>
-
-            <p><strong>OS:</strong> <span th:text="${productDetails.os}"></span></p>
-            <p><strong>CPU Manufacturer:</strong> <span th:text="${productDetails.cpuManufacturer}"></span></p>
-            <p><strong>CPU Type:</strong> <span th:text="${productDetails.cpuType}"></span></p>
-            <p><strong>CPU Code Name:</strong> <span th:text="${productDetails.cpuCodeName}"></span></p>
-            <p><strong>CPU Number:</strong> <span th:text="${productDetails.cpuNumber}"></span></p>
-            <p><strong>GPU Type:</strong> <span th:text="${productDetails.gpuType}"></span></p>
-            <p><strong>GPU Manufacturer:</strong> <span th:text="${productDetails.gpuManufacturer}"></span></p>
-            <p><strong>GPU Chipset:</strong> <span th:text="${productDetails.gpuChipset}"></span></p>
-            <p><strong>RAM Type:</strong> <span th:text="${productDetails.ramType}"></span></p>
-            <p><strong>RAM Size:</strong> <span th:text="${productDetails.ramSize}"></span></p>
-            <p><strong>Screen Size:</strong> <span th:text="${productDetails.screenSize}"></span></p>
-            <p><strong>Screen Resolution:</strong> <span th:text="${productDetails.screenResolution}"></span></p>
-            <p><strong>Storage Type:</strong> <span th:text="${productDetails.storageType}"></span></p>
-            <p><strong>Storage Capacity:</strong> <span th:text="${productDetails.storageCapacity}"></span></p>
+    <h1 class="mt-5">Product Details</h1>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped mt-3">
+                <tr>
+                    <th>상품명</th>
+                    <td th:text="${product.productName}">상품명</td>
+                </tr>
+                <tr>
+                    <th>가격</th>
+                    <td th:text="${product.price}">가격</td>
+                </tr>
+                <tr>
+                    <th>운영체제(OS)</th>
+                    <td th:text="${product.os}">운영체제</td>
+                </tr>
+                <tr>
+                    <th>CPU 제조사</th>
+                    <td th:text="${product.cpuManufacturer}">CPU 제조사</td>
+                </tr>
+                <tr>
+                    <th>CPU 종류</th>
+                    <td th:text="${product.cpuType}">CPU 종류</td>
+                </tr>
+                <tr>
+                    <th>CPU 코드명</th>
+                    <td th:text="${product.cpuCodeName}">CPU 코드명</td>
+                </tr>
+                <tr>
+                    <th>CPU 넘버</th>
+                    <td th:text="${product.cpuNumber}">CPU 넘버</td>
+                </tr>
+                <tr>
+                    <th>GPU 종류</th>
+                    <td th:text="${product.gpuType}">GPU 종류</td>
+                </tr>
+                <tr>
+                    <th>GPU 제조사</th>
+                    <td th:text="${product.gpuManufacturer}">GPU 제조사</td>
+                </tr>
+                <tr>
+                    <th>GPU 칩셋</th>
+                    <td th:text="${product.gpuChipset}">GPU 칩셋</td>
+                </tr>
+                <tr>
+                    <th>램 타입</th>
+                    <td th:text="${product.ramType}">램 타입</td>
+                </tr>
+                <tr>
+                    <th>램 용량</th>
+                    <td th:text="${product.ramSize}">램 용량</td>
+                </tr>
+                <tr>
+                    <th>화면 크기</th>
+                    <td th:text="${product.screenSize}">화면 크기</td>
+                </tr>
+                <tr>
+                    <th>해상도</th>
+                    <td th:text="${product.screenResolution}">해상도</td>
+                </tr>
+                <tr>
+                    <th>저장장치 종류</th>
+                    <td th:text="${product.storageType}">저장장치 종류</td>
+                </tr>
+                <tr>
+                    <th>저장 용량</th>
+                    <td th:text="${product.storageCapacity}">저장 용량</td>
+                </tr>
+                <tr>
+                    <th>패널 표면 처리</th>
+                    <td th:text="${product.convenienceFeatures}">패널 표면 처리</td>
+                </tr>
+                <tr>
+                    <th>부가 기능</th>
+                    <td th:text="${product.additionalFeatures}">부가 기능</td>
+                </tr>
+                <tr>
+                    <th>용도</th>
+                    <td th:text="${product.usage}">용도</td>
+                </tr>
+            </table>
+            <form th:action="@{/payment}" method="post">
+                <input type="hidden" name="productName" th:value="${product.productName}">
+                <input type="hidden" name="imageUrl" th:value="${product.imageUrl}">
+                <input type="hidden" name="price" th:value="${product.price}">
+                <button type="submit" class="btn btn-primary mt-4">결제하기</button>
+            </form>
         </div>
     </div>
-    <form th:action="@{/payment}" method="post">
-        <input type="hidden" name="productName" th:value="${productInfo.productName}">
-        <input type="hidden" name="imageUrl" th:value="${productInfo.imageUrl}">
-        <input type="hidden" name="price" th:value="${productInfo.price}">
-        <button type="submit" class="btn btn-primary mt-4">결제하기</button>
-    </form>
 </div>
 </body>
 </html>

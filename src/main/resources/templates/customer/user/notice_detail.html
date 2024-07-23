@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
     <title>공지사항</title>
@@ -14,6 +15,7 @@
     </style>
 </head>
 <body>
+<div layout:fragment="content">
 <div class="container mt-5">
 <header>
     <h1 align="center">공지사항</h1>
@@ -39,6 +41,7 @@
     <div class="btn-group" aria-label="Small button group">
         <a href="/customer/user/customer_notice" class="btn bg-body-secondary">목록으로</a>
     </div>
+</div>
 </div>
 </body>
 </html>

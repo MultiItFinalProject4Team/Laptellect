@@ -1,20 +1,19 @@
 package com.multi.laptellect.product.controller;
 
 
-import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.LaptopSpecDTO;
+import com.multi.laptellect.product.model.dto.ProductInfo;
 import com.multi.laptellect.product.service.CrawlingService;
-import com.multi.laptellect.product.service.LaptopDetailsService;
-import com.multi.laptellect.product.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/product")
 public class ProductController {
@@ -23,30 +22,41 @@ public class ProductController {
     @Autowired
     CrawlingService crawlingService;
 
-    @Autowired
-    LaptopDetailsService laptopDetailsService;
+    @PostMapping("/crawl")
+    public String crawl(Model model) throws IOException {
 
-    @Autowired
-    ProductService productService;
+        List<ProductInfo> products = crawlingService.crawlProducts(5);
+
+        crawlingService.saveProductsToDB(products);
+
+        model.addAttribute("products", products);
+        return "product/productList";
+    }
+
 
     @GetMapping("/productList")
-    public String laptopCrawl() throws IOException {
-        crawlingService.crawlAndSaveProducts(2); // 크롤링 페이지 수 설정
-        return "redirect:/product/productList";
+    public String ProductList(Model model){
+
+        List<ProductInfo> products = crawlingService.getStoredProducts();
+        model.addAttribute("products", products);
+
+
+        return "product/productList";
     }
-
-    @GetMapping("/products")
-    public String viewProducts(Model model) {
-        List<ProductDTO> productList = productService.getAllProducts();
-        model.addAttribute("products", productList);
-        return "product/list";
+    @GetMapping("/laptopDetails")
+    public String productDetails(@RequestParam("pcode") String pcode, Model model) {
+        log.info("1. 제품 세부정보 요청을 받았습니다.: {}", pcode);
+        // 제품 상세 정보 가져오기
+        ProductInfo productInfo = crawlingService.getProductByCode(pcode);
+        if (productInfo != null) {
+            LaptopSpecDTO laptopSpecDTO = crawlingService.getLaptopDetails(productInfo);
+            model.addAttribute("product", laptopSpecDTO);
+            log.info("2. 제품에 대한 반품 보기: {}", productInfo.getProductName());
+        } else {
+            log.warn("3. 제품을 찾을 수 없습니다.: {}", pcode);
+        }
+        return "product/laptopDetails";
     }
-
-    @GetMapping("/productDetails")
-    public String getProductDetails(@RequestParam("productCode") String productCode, Model model) {
-        model.addAttribute("product", productService.getProductByCode(productCode));
-        return "product/productDetails";
-    }
-
-
 }
+
+

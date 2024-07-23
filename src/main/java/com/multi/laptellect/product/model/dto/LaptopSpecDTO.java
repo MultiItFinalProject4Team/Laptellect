@@ -21,5 +21,6 @@ public class LaptopSpecDTO {
     private String storageCapacity;
     private String convenienceFeatures;
     private String additionalFeatures;
+    private String usage;
 
 }

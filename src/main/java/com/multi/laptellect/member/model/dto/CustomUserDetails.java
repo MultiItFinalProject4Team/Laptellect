@@ -4,18 +4,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails, Serializable {
+    private static final long serialVersionUID = 1L;
     private final MemberDTO memberDTO;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(() -> memberDTO.getRole());
+        authorities.add(memberDTO::getRole);
         return authorities;
     }
 
@@ -83,6 +85,10 @@ public class CustomUserDetails implements UserDetails {
 
     public int getPoint() {
         return  memberDTO.getPoint();
+    }
+
+    public String getLoginType() {
+        return  memberDTO.getLoginType();
     }
 
     public void update(MemberDTO updateDTO) {

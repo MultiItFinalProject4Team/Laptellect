@@ -4,9 +4,13 @@ import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -42,36 +46,77 @@ public class CustomerService {
         return noticeDto;
     }
 
-    public List<PersonalqListDto> getPersonalqList() {
-        List<PersonalqListDto> list = new ArrayList<>();
-        PersonalqListDto dto = PersonalqListDto.builder()
-                .no(1)
-                .title("title1")
-                .createdAt("2024-07-19")
-                .build();
-        list.add(dto);
-        PersonalqListDto dto2 = PersonalqListDto.builder()
-                .no(2)
-                .title("title2")
-                .createdAt("2024-07-18")
-                .build();
-        list.add(dto2);
+    public List<PersonalqListDto> getPersonalqList(int memberNo) {
+        List<PersonalqListDto> list = customDao.getPersonalqList(memberNo);
         return list;
     }
 
     public PersonalqDto getPersonalq(int personalqNo) {
-        PersonalqDto personalqDto = PersonalqDto.builder()
-                .personalqNo(personalqNo)
-                .title("title")
-                .content("content")
-                .memberNo(1)
-//                .createDate("2024-07-19")
-                .build();
+        PersonalqDto personalqDto = customDao.getPersonalqDetail(personalqNo);
         return personalqDto;
     }
 
     public int personalqApp(PersonalqAppDto appDto) {
         int result = customDao.personalqApp(appDto);
         return result;
+    }
+
+    public String getpersonalqCode(int personalqNo) {
+        return customDao.getpersonalqCode(personalqNo);
+    }
+
+
+    public int inputImage(String code, MultipartFile[] images) {
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                String path = System.getProperty("user.dir")+"/uploads/";
+
+                String fileName = image.getOriginalFilename();
+                String uuid = UUID.randomUUID().toString();
+                int extIndex = fileName.lastIndexOf(".") + 1;
+                String ext = fileName.substring(extIndex);
+                String storeFileName = uuid + "." + ext;
+
+                personalqImageDto imageDto = personalqImageDto.builder()
+                        .originName(fileName)
+                        .uploadName(storeFileName)
+                        .referenceCode(code)
+                        .build();
+
+                customDao.inputImage(imageDto);
+
+                File directory = new File(path);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                try {
+                    image.transferTo(new File(path+storeFileName));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 1;
+    }
+
+    public String[] getImage(String referenceCode) {
+        return customDao.getImage(referenceCode);
+    }
+
+    public void personalAnswerApp(PersonalqAnswerDto answerDto) {
+        customDao.personalAnswerApp(answerDto);
+    }
+
+    public String getPersonalaCode(int personalaNo) {
+        return customDao.getPersonalaCode(personalaNo);
+    }
+
+    public PersonalqAnswerDto getPersonala(int personalqNo) {
+        return customDao.getPersonala(personalqNo);
+    }
+
+    public void personalAnwerChange(int personalqNo) {
+        customDao.personalAnwerChange(personalqNo);
     }
 }

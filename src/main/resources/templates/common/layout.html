@@ -44,16 +44,33 @@
         font-size: 1rem;
         font-weight: 500;
     }
+    .modal-img {
+            width: 48px;
+            height: 48px;
+    }
+    .image-container {
+            display: inline-block;
+            text-align: center;
+            margin: 0 10px;
+    }
+    .modal-dialog {
+        max-width: 350px;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
 </style>
     <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><strong>Laptellect</strong></a>
+            <a class="navbar-brand" href="/"><strong>Laptellect</strong></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+<<<<<<< HEAD
                     <li class="nav-item">
                         <a class="nav-link" href="/">HOME</a>
                     </li>
@@ -61,34 +78,115 @@
                         <a class="nav-link" href="/recommended">추천</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/product/productList?pages=1">스토어</a>
+                        <a class="nav-link" href="/product/productList">스토어</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/customer">고객센터</a>
                     </li>
                     <th:block sec:authorize="isAnonymous()">
+=======
+
+                    <th:block sec:authorize="isAnonymous() or hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
+
+>>>>>>> 61a47deb10ad6041ae3bb0b3215109a7717e1441
                         <li class="nav-item">
-                            <a class="nav-link" href="/signin">로그인</a>
+                            <a class="nav-link" href="/">HOME</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/signup">회원가입</a>
+                            <a class="nav-link" href="/recommended">추천</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product/productList?pages=1">스토어</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/customer/user">고객센터</a>
                         </li>
                     </th:block>
+
+                    <th:block sec:authorize="hasAnyAuthority('ROLE_SELLER')">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">HOME</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">스토어</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">대시보드</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">상품관리</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">주문관리</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/customer">고객센터</a>
+                        </li>
+                    </th:block>
+
+                    <th:block sec:authorize="isAnonymous()">
+                        <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/signin}'|">로그인</button>
+                        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal"
+                                data-bs-target="#loginModal">회원가입
+                        </button>
+                    </th:block>
+
                     <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/member/profile">마이페이지</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/signout">로그아웃</a>
-                        </li>
+                        <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/profile}'|">마이페이지</button>
+                    </th:block>
+
+                    <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/admin}'|">어드민페이지</button>
+                    </th:block>
+
+                    <th:block sec:authorize="isAuthenticated()">
+                        <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/signout}'|">로그아웃</button>
                     </th:block>
                 </ul>
             </div>
         </div>
     </nav>
 
-
     <div layout:fragment="content"></div>
-<!--<script type="text/javascript" th:src="@{/js/tempPassword.js}"></script>-->
+
+    <!-- 회원가입 모달 -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <h4 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #6c5ce7;">Laptellect</h4>
+                    <br> <br>
+                    <div class="image-container">
+                        <a href="#">
+                        <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
+                        <div>카카오</div>
+                        </a>
+                    </div>
+                    <div class="image-container">
+                        <a href="#">
+                        <img th:src="@{/img/common/naver-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
+                        <div>네이버</div>
+                        </a>
+                    </div>
+                    <div class="image-container">
+                        <a href="/signup">
+                            <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
+                            <div>일반회원</div>
+                        </a>
+                    </div>
+
+                    <br> <br>
+                    <div>
+                        <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
