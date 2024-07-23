@@ -1,8 +1,10 @@
-package com.multi.laptellect.config;
+package com.multi.laptellect.config.Security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -14,18 +16,25 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-//    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean // 비밀번호 암호화
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-//    // CustomAuthenticationProvider 원본 비밀번호와 임시 비밀번호 동시 사용을 위해 커스텀
-//    @Bean
-//    public CustomAuthenticationProvider customAuthenticationProvider() {
-//        return new CustomAuthenticationProvider(customUserDetailsService, bCryptPasswordEncoder());
-//    }
+    // CustomAuthenticationProvider 원본 비밀번호와 임시 비밀번호 동시 사용을 위해 커스텀
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider(customUserDetailsService, bCryptPasswordEncoder());
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration
+    ) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
     @Bean // static 예외 처리
     public WebSecurityCustomizer configure() {
@@ -40,16 +49,16 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/**").permitAll()
-//                        .anyRequest().authenticated()
-                        );
+                        .anyRequest().authenticated()
+                );
         http
-                .formLogin((auth) -> auth.loginPage("/login")
-                        .loginProcessingUrl("/login").permitAll());
+                .formLogin((auth) -> auth.loginPage("/signin")
+                        .loginProcessingUrl("/signin").permitAll());
 
         http
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .deleteCookies("JSESSIONID")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/signout"))
+//                        .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .logoutSuccessUrl("/"));
 
@@ -60,8 +69,8 @@ public class SecurityConfig {
 
         http
                 .exceptionHandling(exceptionHandling ->
-                                exceptionHandling
-                                        .accessDeniedPage("/error/denied"));
+                        exceptionHandling
+                                .accessDeniedPage("/error/denied"));
 
         http
                 .csrf((auth) -> auth.disable());

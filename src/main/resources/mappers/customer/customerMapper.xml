@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.customer.dao.CustomDao">
+    <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
+        INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
+        values(1,'personalq_member', #{title},#{content})
+    </insert>
+</mapper>
