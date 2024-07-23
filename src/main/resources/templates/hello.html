@@ -1,15 +1,23 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <html layout:decorate="~{common/layout}">
+
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>파이널 프로젝트 시작</title>
+  <style>
+    /* 기존 스타일 유지 */
+  </style>
 </head>
 <body>
-<div layout:fragment="content">
-<h1> 파이널 프로젝트 시작 </h1>
+
+<h1>파이널 프로젝트 시작</h1>
 <p>hello world / 화이팅합시다!</p>
-</div>
+<a href="/payment/payment" class="button">결제기능</a>
+<br>
+<a href="/payment/orderlist" class="button">주문내역</a>
 
 </body>
 </html>

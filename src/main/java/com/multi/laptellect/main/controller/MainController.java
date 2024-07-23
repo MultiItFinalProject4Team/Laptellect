@@ -11,5 +11,10 @@ public class MainController {
         return "common/main";
     }
 
+    @GetMapping("/hello")
+    public String hellopage(){
+        return "hello";
+    }
+
 
 }

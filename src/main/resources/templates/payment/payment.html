@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>결제하기</title>
+    <!-- jQuery 라이브러리 로드 -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- 포트원(구 아임포트) 결제 라이브러리 로드 -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <!-- Axios HTTP 클라이언트 라이브러리 로드 -->
+    <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- 최신 버전의 jQuery 라이브러리 로드 (보안 무결성 검사 포함) -->
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/css/payment/payment.css">
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var username = /*[[${testDTO.username1}]]*/ 'default';
+        var productname = /*[[${testDTO.productname1}]]*/ 'default';
+        var productinfo = /*[[${testDTO.productinfo1}]]*/ 'default';
+        var productprice = /*[[${testDTO.productprice1}]]*/ 0;
+        /*]]>*/
+
+        function mypayment() {
+          // 사용자가 입력한 결제 금액을 가져와 숫자로 변환합니다.
+          const myAmount = Number(document.getElementById("amount").value);
+
+          // 포트원 객체를 초기화합니다.
+          const IMP = window.IMP;
+          IMP.init("imp64527455");  // 가맹점 식별코드
+
+          // 결제 요청을 시작합니다.
+          IMP.request_pay(
+            {
+              pg: "html5_inicis",        // PG사 선택 (이니시스)
+              pay_method: "card",        // 결제 수단 (카드)
+              name: productname,         // 주문 상품 이름을 TestDTO에서 가져옴
+              amount: myAmount,          // 결제 금액
+              buyer_email: "gildong@gmail.com",  // 구매자 이메일
+              buyer_name: username,      // 구매자 이름을 TestDTO에서 가져옴
+              buyer_tel: "010-4242-4242",  // 구매자 전화번호
+              buyer_addr: "서울특별시 강남구 신사동",  // 구매자 주소
+              buyer_postcode: "01181",   // 구매자 우편번호
+              m_redirect_url: "",        // 모바일 결제 후 리다이렉트 URL
+            },
+            async (rsp) => {  // 결제 완료 후 실행되는 콜백 함수
+              if (rsp.success) {  // 결제 성공 시
+                // 서버로 결제 검증 요청을 보냅니다.
+                try {
+                  const { data } = await axios.post('/payment/verifyPayment', {
+                    impUid: rsp.imp_uid,  // 포트원 결제 고유 ID
+                    amount: myAmount      // 결제 금액
+                  });
+                  alert("결제 및 검증 성공");
+                  window.location.href = '/hello';
+                } catch (error) {
+                  alert("검증 실패: " + error.response.data);
+                }
+              } else {
+                // 결제 실패 시 사용자에게 알립니다.
+                alert("결제 실패: " + rsp.error_msg);
+              }
+            }
+          );
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="main-content">
+        <div class="left-section">
+            <h2>주문/결제</h2>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="name">구매자 성함</label>
+                    <input type="text" id="name" name="name" th:value="${testDTO.username1}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">연락처</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">배송지 주소</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="delivery_request">배송시 요청사항</label>
+                    <input type="text" id="delivery_request" name="delivery_request" required>
+                </div>
+            </form>
+        </div>
+        <div class="right-section">
+            <h3 align="center" th:text="${testDTO.productname1}">상품명</h3>
+            <img src="/img/payment/notebooktest.PNG" alt="Product Image" class="product-image">
+            <p align="center" th:text="${testDTO.productinfo1}">상품 정보</p>
+        </div>
+    </div>
+    <div class="price-info">
+        <div class="price-row">
+            <span>판매가</span>
+            <span th:text="${testDTO.productprice1 + '원'}">0원</span>
+        </div>
+        <div class="price-row">
+            <span>할인금액</span>
+            <span>0원</span>
+        </div>
+        <div class="price-row total-price">
+            <span>총 결제금액</span>
+            <span th:text="${testDTO.productprice1 + '원'}">0원</span>
+        </div>
+        <div>
+            결제할 금액: <input type="text" id="amount" th:value="${testDTO.productprice1}"/>
+            <button class="order-button" onclick="mypayment()">결제하기</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
