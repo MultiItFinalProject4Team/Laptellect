@@ -26,29 +26,36 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void createMember(MemberDTO memberDTO) throws SQLException {
-        // 소셜 회원가입 시 ID 설정 ( 추후 수정 )
-//        memberDTO.setUserName(memberDTO.getLoginType() != null ? createUserName() : memberDTO.getUserName());
+
+
+
 
         // 비밀번호 암호화
         String bPw = bCryptPasswordEncoder.encode(memberDTO.getPassword());
         memberDTO.setPassword(bPw);
 
-        if(authMapper.insertMember(memberDTO) == 0) {
-            throw new SQLException("Failed to insert member");
-        }
+        if(memberDTO.getLoginType().equals("kakao") || memberDTO.getLoginType().equals("naver")) { // 소셜 회원 가입
+            // ID 설정 ( 추후 수정 )
+//        memberDTO.setUserName(memberDTO.getLoginType() != null ? createUserName() : memberDTO.getUserName());
 
-        if(authMapper.insertPassword(memberDTO) == 0) {
-            throw new SQLException("Failed to insert password");
+        } else { // 일반 회원 가입
+            if(authMapper.insertMember(memberDTO) == 0) {
+                throw new SQLException("Failed to insert member");
+            }
+
+            if(authMapper.insertPassword(memberDTO) == 0) {
+                throw new SQLException("Failed to insert password");
+            }
         }
     }
 
     @Override
-    public boolean isMemberById(String id) {
+    public boolean isMemberById(String id) { // id check
         return memberMapper.findMemberById(id) != null;
     }
 
     @Override
-    public boolean isMemberByEmail(String email) {
+    public boolean isMemberByEmail(String email) { // email check
         return memberMapper.findMemberByEmail(email) != null;
     }
 
