@@ -12,4 +12,7 @@ public interface MemberMapper {
 
     @Select("SELECT member_no FROM mem_member WHERE email = #{ email }")
     MemberDTO findMemberByEmail(String email);
+
+    @Select("SELECT member_no FROM mem_member WHERE nick_name = #{ nickName }")
+    MemberDTO findMemberByNickName(String nickName);
 }

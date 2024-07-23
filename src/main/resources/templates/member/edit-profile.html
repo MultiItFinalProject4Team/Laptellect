@@ -8,35 +8,197 @@
 <body>
 <div layout:fragment="content">
   <p>회원정보 수정 페이지 테스트</p>
-  <form th:object="${member}">
-    <div class="form-group" mb-3>
+
+  <form th:object="${userInfo}" method="post" action="/changeMemberInfo">
+    <div class="form-group">
       <label for="member_name"><i class="fa fa-envelope-o" aria-hidden="true"></i> 아이디</label>
-      <input type="text" class="form-control" id="member_name" th:field="*{userName}" required>
+      <input type="text" class="form-control" id="member_name" th:field="*{username}" readonly>
       <br>
     </div>
     <div class="form-group">
       <label for="nickName"><i class="fa fa-envelope-o" aria-hidden="true"></i> 닉네임</label>
-      <input type="text" class="form-control" id="nickName" th:field="*{nickName}" required>
+      <input type="text" class="form-control" id="nickName" th:field="*{nickName}">
+
       <br>
     </div>
     <div class="form-group">
       <label for="email"><i class="fas fa-lock"></i> 이메일</label>
-      <input type="emial" class="form-control" id="email" th:field="*{email}" required>
+      <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
+      <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#emailModal">변경</button>
       <br>
     </div>
-    <div class="form-group>
-      <label for="confirmPassword><i class="fas fa-lock"></i> 비밀번호</label>
-      <input type="password" class="form-control" id="confirmPassword" th:field="*{password}" required>
+    <div class="form-group">
+      <label for="confirmPassword"><i class="fas fa-lock"></i> 비밀번호</label>
+      <input type="password" class="form-control" id="confirmPassword" th:field="*{password}" readonly>
+      <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#passwordModal">변경</button>
       <br>
     </div>
-    <div class="form-group>
-      <label for="phoneNumber><i class="fas fa-lock"></i> 휴대폰 번호</label>
-      <input type="tel" class="form-control" id="phoneNumber" th:field="*{password}" required>
+    <div class="form-group">
+      <label for="phoneNumber"><i class="fas fa-lock"></i> 휴대폰 번호</label>
+      <input type="tel" class="form-control" id="phoneNumber" th:field="*{tel}" required>
+      <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#phoneModal">변경</button>
       <br>
     </div>
-    <button type="submit" class="btn btn-custom w-100" id="sing-up">저장</button>
+    <button type="submit" class="btn btn-custom w-100" id="sign-up">저장</button>
   </form>
-  </form>
+
+  <!-- 이메일 변경 모달 -->
+  <div class="modal fade" id="emailModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">이메일 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="form-floating flex-grow-1">
+              <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
+              <label for="emailInput">이메일을 입력해주세요.</label>
+            </div>
+            <button type="button" class="btn btn-primary" id="emailVerifyButton" onclick="sendEmailVerification()">인증</button>
+          </div>
+
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
+            <label for="emailVer">인증번호를 입력해주세요.</label>
+            <div class="error-message" id="idError" style="color: red">
+              인증번호가 틀렸습니다.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <a th:href="@{/member/reSign}" class="btn btn-primary">확인</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 비밀번호 변경 모달 -->
+  <div class="modal fade" id="passwordModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">비밀번호 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-floating">
+              <input type="password" class="form-control" id="beforePassword" placeholder="email" value="">
+              <label for="beforePassword">변경 전 비밀번호를 입력해주세요.</label>
+              <div class="error-message" id="passwordError" style="color: red">
+                비밀번호가 틀렸습니다.
+              </div>
+            </div>
+            <br>
+
+            <div class="form-floating">
+              <input type="password" class="form-control" id="afterPassword" placeholder="emailNum" value="">
+              <label for="afterPassword">변경 할 비밀번호를 입력해주세요.</label>
+              <div class="error-message" id="password2Error" style="color: red">
+                비밀번호 오류
+              </div>
+            </div>
+            <br>
+
+            <div class="form-floating">
+              <input type="password" class="form-control" id="afterPassword2" placeholder="emailNum" value="">
+              <label for="afterPassword2">한 번 더 입력해주세요.</label>
+              <div class="error-message" id="password3Error" style="color: red">
+                비밀번호 오류2
+              </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <a th:href="@{/member/reSign}" class="btn btn-primary">확인</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 휴대폰 번호 변경 모달 -->
+  <div class="modal fade" id="phoneModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">휴대폰 번호 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+
+            <div class="form-floating flex-grow-1">
+              <input type="email" class="form-control" id="phoneNumInput" placeholder="phone" value="">
+              <label for="phoneNumInput">휴대폰 번호를 입력해주세요.</label>
+            </div>
+            <button type="button" class="btn btn-primary" id="emailButton" onclick="sendEmailVerification()">인증</button>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="phoneNumVer" placeholder="phoneNumVer" value="">
+            <label for="phoneNumVer">인증번호를 입력해주세요.</label>
+            <div class="error-message" id="phoneError" style="color: red">
+              인증번호가 틀렸습니다.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <a th:href="@{/member/reSign}" class="btn btn-primary">확인</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 회원탈퇴 모달 -->
+  <div class="modal fade" id="resignModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">회원 탈퇴</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>모든 정보가 삭제 됩니다.</p>
+          <p>정말로 탈퇴 하시겠습니까?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <a th:href="@{/member/reSign}" class="btn btn-primary">확인</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!--  <script>-->
+<!--    document.querySelectorAll('.changeButton').forEach(function(button) {-->
+<!--      button.addEventListener('click', function(event) {-->
+<!--        event.preventDefault(); // 폼 제출 기본 동작 막기-->
+<!--      });-->
+<!--    });-->
+
+<!--    function changeNickName() { // 닉네임 변경-->
+<!--      window.open("/api/change-nickName","_blank", "width=400,height=300,menubar=no,toolbar=no");-->
+<!--    }-->
+
+<!--    function changeEmail() { // 이메일 변경-->
+<!--      window.open("/api/change-email","_blank", "width=400,height=300,menubar=no,toolbar=no");-->
+<!--    }-->
+
+<!--    function changePassword() { // 비밀번호 변경-->
+<!--      window.open("/api/change-password","_blank", "width=400,height=300,menubar=no,toolbar=no");-->
+<!--    }-->
+
+<!--    function changePhoneNumber() { // 휴대폰 번호 변경-->
+<!--      window.open("/api/change-phoneNumber","_blank", "width=400,height=300,menubar=no,toolbar=no");-->
+<!--    }-->
+<!--  </script>-->
+
 </div>
 
 </body>
