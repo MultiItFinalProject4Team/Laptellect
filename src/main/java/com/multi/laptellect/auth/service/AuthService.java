@@ -10,4 +10,8 @@ public interface AuthService {
     boolean isMemberById(String id);
 
     boolean isMemberByEmail(String email);
+
+    boolean isMemberByNickName(String nickName);
+
+    boolean isSocialMember();
 }

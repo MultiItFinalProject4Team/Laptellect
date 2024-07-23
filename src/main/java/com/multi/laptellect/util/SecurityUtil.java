@@ -10,6 +10,11 @@ public class SecurityUtil {
     public static CustomUserDetails getUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            log.error("log error = {}", "로그인 하지 않은 사용자 입니다.");
+            throw new IllegalStateException("로그인 하지 않은 사용자 입니다.");
+        }
+
         return (CustomUserDetails) authentication.getPrincipal();
     }
 }

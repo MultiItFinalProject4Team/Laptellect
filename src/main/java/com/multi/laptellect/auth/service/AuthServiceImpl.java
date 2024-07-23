@@ -3,6 +3,7 @@ package com.multi.laptellect.auth.service;
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,18 +28,11 @@ public class AuthServiceImpl implements AuthService{
     @Transactional(rollbackFor = Exception.class)
     public void createMember(MemberDTO memberDTO) throws SQLException {
 
-
-
-
         // 비밀번호 암호화
         String bPw = bCryptPasswordEncoder.encode(memberDTO.getPassword());
         memberDTO.setPassword(bPw);
 
-        if(memberDTO.getLoginType().equals("kakao") || memberDTO.getLoginType().equals("naver")) { // 소셜 회원 가입
-            // ID 설정 ( 추후 수정 )
-//        memberDTO.setUserName(memberDTO.getLoginType() != null ? createUserName() : memberDTO.getUserName());
-
-        } else { // 일반 회원 가입
+        if(memberDTO.getLoginType().equals("local")) { // 일반 회원가입
             if(authMapper.insertMember(memberDTO) == 0) {
                 throw new SQLException("Failed to insert member");
             }
@@ -46,6 +40,43 @@ public class AuthServiceImpl implements AuthService{
             if(authMapper.insertPassword(memberDTO) == 0) {
                 throw new SQLException("Failed to insert password");
             }
+        } else { // 소셜 회원가입
+            // ID 설정 ( 추후 수정 )
+            if(authMapper.insertMember(memberDTO) == 0) {
+                throw new SQLException("Failed to insert member");
+            }
+        }
+
+        switch (memberDTO.getLoginType()) {
+            case "kakao":
+            case "naver":
+                // 소셜 회원 가입
+                if (authMapper.insertMember(memberDTO) == 0) {
+                    throw new SQLException("Failed to insert member");
+                }
+                break;
+
+//            case "seller":
+//                // 판매자 회원 가입
+//                if (authMapper.insertMember(memberDTO) == 0) {
+//                    throw new SQLException("Failed to insert member");
+//                }
+//                if (authMapper.insertPassword(memberDTO) == 0) {
+//                    throw new SQLException("Failed to insert password");
+//                }
+//
+//                if (authMapper.insertSeller(memberDTO))
+//                break;
+
+            default:
+                // 일반 회원 가입
+                if (authMapper.insertMember(memberDTO) == 0) {
+                    throw new SQLException("Failed to insert member");
+                }
+                if (authMapper.insertPassword(memberDTO) == 0) {
+                    throw new SQLException("Failed to insert password");
+                }
+                break;
         }
     }
 
@@ -57,6 +88,18 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public boolean isMemberByEmail(String email) { // email check
         return memberMapper.findMemberByEmail(email) != null;
+    }
+
+    @Override
+    public boolean isMemberByNickName(String nickName) { // NickName check
+        return memberMapper.findMemberByNickName(nickName) != null;
+    }
+
+    @Override
+    public boolean isSocialMember() { // social member check
+        String loginType = SecurityUtil.getUserDetails().getLoginType();
+
+        return loginType.equals("kakao") || loginType.equals("naver");
     }
 
 }

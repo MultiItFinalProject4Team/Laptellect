@@ -85,6 +85,10 @@ public class CustomUserDetails implements UserDetails {
         return  memberDTO.getPoint();
     }
 
+    public String getLoginType() {
+        return  memberDTO.getLoginType();
+    }
+
     public void update(MemberDTO updateDTO) {
         this.memberDTO.setUserName(updateDTO.getUserName());
         this.memberDTO.setTel(updateDTO.getTel());
