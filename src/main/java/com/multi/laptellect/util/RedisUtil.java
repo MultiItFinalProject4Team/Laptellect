@@ -9,7 +9,7 @@ import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
-public class RedisUtil {
+public class RedisUtil { // Redis 사용 클래스
     private final RedisTemplate<String, String> redisTemplate;
 
     public void setData(String key, String value) { // Key Value 구조로 저장

@@ -15,7 +15,7 @@ public class EmailUtil {
     private final JavaMailSender javaMailSender;
     private final EmailConfig emailConfig;
 
-    public void sendEmail(Email email) throws Exception {
+    public void sendEmail(Email email) throws Exception { // 이메일 전송 클래스
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email.getReceiveAddress());
         message.setSubject(email.getMailTitle());

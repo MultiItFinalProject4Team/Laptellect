@@ -8,7 +8,9 @@ import java.sql.SQLException;
 public interface AuthService {
     void createMember(MemberDTO memberDTO) throws SQLException;
 
-    String createTempPassword();
+    void sendVerifyEmail(Email email) throws Exception;
+
+    boolean isVerifyEmail(String verifyCode) throws Exception;
 
     void sendTempPassword(Email email) throws Exception;
 

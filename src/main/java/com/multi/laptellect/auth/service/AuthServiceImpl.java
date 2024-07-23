@@ -4,18 +4,17 @@ import com.multi.laptellect.auth.model.mapper.AuthMapper;
 import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
+import com.multi.laptellect.util.CodeGenerator;
 import com.multi.laptellect.util.EmailUtil;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ import java.util.Random;
 public class AuthServiceImpl implements AuthService{
     private final AuthMapper authMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final MemberMapper memberMapper;
     private final EmailUtil emailUtil;
     private final RedisUtil redisUtil;
@@ -87,14 +85,39 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public void sendTempPassword(Email email) throws Exception { // 임시 비밀번호 발급 및 이메일 전송
+    public void sendVerifyEmail(Email email) throws Exception {
+        String verifyCode;
+
+        do {
+            verifyCode = CodeGenerator.createRandomString(8);
+        } while (redisUtil.getData(verifyCode) != null);
+
+        email.setMailTitle("Laptellect 인증번호 요청");
+        email.setMailContent("인증번호 : " + verifyCode);
+
+        emailUtil.sendEmail(email);
+
+        redisUtil.setDataExpire(verifyCode, email.getReceiveAddress(), 60*3L);
+    }
+
+    @Override
+    public boolean isVerifyEmail(String verifyCode) throws Exception {
+        String redisVerifyCode = redisUtil.getData(verifyCode);
+
+        
+
+        return false;
+    }
+
+    @Override
+    public void sendTempPassword(Email email) throws Exception { // 임시 비밀번호 발급 및 이메일 전송 메서드
         // 이메일 존재 검증
         MemberDTO userData = memberMapper.findMemberByEmail(email.getReceiveAddress());
 
         int memberNo = userData.getMemberNo();
 
         // 임시 비밀번호 생성
-        String tempPasswordStr = createTempPassword();
+        String tempPasswordStr = CodeGenerator.createRandomString(8);
 
         email.setMailTitle("Laptellect 임시 비밀번호");
         email.setMailContent("임시 비밀번호 : " + tempPasswordStr);
@@ -102,23 +125,6 @@ public class AuthServiceImpl implements AuthService{
         emailUtil.sendEmail(email);
 
         redisUtil.setDataExpire(String.valueOf(memberNo), tempPasswordStr, 60*3L);
-    }
-
-    public String createTempPassword() { // 임시 비밀번호 생성
-        Random random = new Random();
-        int PasswordSize = 8;
-        char[] passwordCodeChars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
-        StringBuilder tempPassword = new StringBuilder();
-
-        for (int i = 0; i < PasswordSize; i++) {
-            int randomNum = random.nextInt(passwordCodeChars.length);
-            tempPassword.append(passwordCodeChars[randomNum]);
-        }
-
-        return tempPassword.toString();
     }
 
     @Override

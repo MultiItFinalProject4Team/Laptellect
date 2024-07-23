@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @Slf4j
-public class SecurityUtil {
+public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 클래스
     public static CustomUserDetails getUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
