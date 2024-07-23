@@ -50,8 +50,18 @@ dependencies {
 	
 	implementation 'com.github.shin285:KOMORAN:3.3.9' // KOMORAN
 	implementation 'org.jsoup:jsoup:1.18.1'// jsoup
+	implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.23.0'
 
-}
+	implementation group: 'org.codehaus.janino', name: 'janino', version: '3.0.16' // janino
+	implementation group: 'org.codehaus.janino', name: 'commons-compiler', version: '3.0.16' //
+
+	// Spark MLlib 의존성 추가
+	compileOnly group: 'org.apache.spark', name: 'spark-mllib_2.13', version: '3.5.1' // spark mllib
+	implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.9.1' // webdrivermanager
+	}
+
+
+
 
 tasks.named('test') {
 	useJUnitPlatform()

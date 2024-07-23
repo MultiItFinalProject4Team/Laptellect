@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>노트북 추천</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .laptop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .laptop-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .laptop-image {
+            width: 100%;
+            height: auto;
+        }
+        .tag-button {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .tag-button.selected {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>어떤 노트북을 원하세요?</h1>
+
+<div id="tags">
+    <button class="tag-button" data-tag="게이밍">게이밍</button>
+    <button class="tag-button" data-tag="프로그래밍">프로그래밍</button>
+    <button class="tag-button" data-tag="그래픽/디자인">그래픽/디자인</button>
+    <button class="tag-button" data-tag="학생용">학생용</button>
+    <button class="tag-button" data-tag="사무용">사무용</button>
+    <!-- 추가 태그 버튼들 -->
+</div>
+
+<div id="laptopList" class="laptop-grid">
+    <!-- 추천 노트북 목록이 여기에 동적으로 로드됩니다 -->
+</div>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        var selectedTags = [];
+
+        $('.tag-button').click(function() {
+            var tag = $(this).data('tag');
+            if (selectedTags.includes(tag)) {
+                selectedTags = selectedTags.filter(t => t !== tag);
+                $(this).removeClass('selected');
+            } else {
+                selectedTags.push(tag);
+                $(this).addClass('selected');
+            }
+            getRecommendations();
+        });
+
+        function getRecommendations() {
+            $.ajax({
+                url: '/getRecommendations',
+                type: 'POST',
+                data: { tags: selectedTags },
+                traditional: true,
+                success: function(response) {
+                    $('#laptopList').html(response);
+                }
+            });
+        }
+    });
+</script>
+
+<div id="laptopList" class="laptop-grid" th:fragment="laptopList">
+    <div th:each="laptop : ${recommendations}" class="laptop-item">
+        <img th:src="${laptop.imageUrl}" th:alt="${laptop.model}" class="laptop-image">
+        <h3 th:text="${laptop.model}"></h3>
+        <p th:text="'CPU: ' + ${laptop.cpu}"></p>
+        <p th:text="'GPU: ' + ${laptop.gpu}"></p>
+        <p th:text="'RAM: ' + ${laptop.ram} + 'GB'"></p>
+        <p th:text="'저장공간: ' + ${laptop.storage}"></p>
+        <p th:text="'디스플레이: ' + ${laptop.display}"></p>
+        <p th:text="'가격: ' + ${laptop.price} + '원'"></p>
+    </div>
+</div>
+</body>
+</html>
