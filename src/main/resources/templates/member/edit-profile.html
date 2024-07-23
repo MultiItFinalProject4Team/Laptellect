@@ -11,6 +11,7 @@
         $(".error-message").hide();
 
         $(".changeBtn").prop("disabled", true);
+        $("#emailVerifyButton").prop("disabled", true);
 
         // 정규식 변수
         let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
@@ -71,6 +72,33 @@
           });
         });
 
+        $("#emailInput").on("blur", function () {
+          let afterEmail = $(this).val();
+          console.log(afterEmail);
+
+          $.ajax({
+            url: "/api/check-email",
+            type: "POST",
+            data: { email: afterEmail },
+            success: function (response) {
+              if (response === true) {
+                console.log("이메일 중복 확인 완료");
+                $("#emailError").show();
+                $("#emailVerifyButton").prop("disabled", true);
+                
+              } else {
+                console.log("이메일 중복 확인 실패");
+                $("#emailError").hide();
+                $("#emailVerifyButton").prop("disabled", false);
+              }
+              
+            },
+            error: function () {
+              console.log("이메일 확인 실패");
+            },
+          });
+        });
+
         function sendEmailVerification() {
           let afterEmail = $('#emailInput').val();
 
@@ -105,11 +133,11 @@
             success: function (response) {
               if (response === true) {
                 console.log("인증번호 확인 완료");
-                $("#emailError").hide();
+                $("#emailError2").hide();
                 $("#emailChangeBtn").prop("disabled", false);
               } else {
                 console.log("틀린 인증번호");
-                $("#emailError").show();
+                $("#emailError2").show();
                 $("#emailChangeBtn").prop("disabled", true);
               }
               
@@ -151,6 +179,120 @@
             },
           });
         });
+
+        
+        
+
+
+
+
+
+
+
+
+        // $("#beforePassword").on("blur", function () {
+        //   let beforePassword = $(this).val();
+        //   console.log(beforePassword);
+
+        //   $.ajax({
+        //     url: "/api/check-password",
+        //     type: "POST",
+        //     data: { beforePassword: beforePassword },
+        //     success: function (response) {
+        //       if (response === true) {
+        //         console.log("패스워드 확인 완료");
+        //         $("#passwordError").hide();
+        //       } else {
+        //         console.log("틀린 비밀번호");
+        //         $("#passwordError").show();
+        //         $("#emailChangeBtn").prop("disabled", true);
+        //       }
+              
+        //     },
+        //     error: function () {
+        //       console.log("비밀번호 확인 실패");
+        //     },
+        //   });
+        // });
+
+        
+        // $("#beforePassword").on("blur", function () {
+        //   let beforePassword = $(this).val();
+        //   console.log(beforePassword);
+
+        //   $.ajax({
+        //     url: "/api/check-password",
+        //     type: "POST",
+        //     data: { beforePassword: beforePassword },
+        //     success: function (response) {
+        //       if (response === true) {
+        //         console.log("패스워드 확인 완료");
+        //         $("#passwordError").hide();
+        //         $("#afterPassword").prop("readonly", false);
+        //       } else {
+        //         console.log("틀린 비밀번호");
+        //         $("#passwordError").show();
+        //         $("#afterPassword").prop("readonly", true);
+        //         $("#passwordChangeBtn").prop("disabled", true);
+        //       }
+              
+        //     },
+        //     error: function () {
+        //       console.log("비밀번호 확인 실패");
+        //     },
+        //   });
+        // });
+
+        // $("#afterPassword").on("blur", function () {
+        //   let afterPassword = $(this).val();
+        //   console.log(afterPassword);
+
+          
+        // });
+
+        // $("#emailChangeBtn").on("click", function () {
+        //   let afterEmail = $('#emailInput').val();
+        //   let verifyCode = $('#emailVer').val();
+        //   console.log(afterEmail, verifyCode);
+
+
+        //   $.ajax({
+        //     url: "/api/update-password",
+        //     type: "POST",
+        //     data: { email: afterEmail, verifyCode: verifyCode },
+        //     success: function (response) {
+        //       if (response === true) {
+        //         alert("이메일 변경 완료");
+        //         $('#emailModal').modal('hide');
+
+        //         $("#email").prop("readonly", false);
+        //         $("#email").val(afterEmail);
+        //         $("#email").prop("readonly", true);
+
+        //         $("#emailChangeBtn").prop("disabled", true);
+        //       } else {
+        //         console.log("이메일 변경 실패");
+        //         alert("이메일 변경 실패")
+        //       }
+              
+        //     },
+        //     error: function () {
+        //       alert("이메일 변경 확인 실패")
+        //     },
+        //   });
+        // });
+
+
+
+
+
+
+
+
+
+
+
+
 
         function sendSmsVerification() {
           let tel = $('#phoneNumInput').val();
@@ -324,12 +466,15 @@
             </div>
             <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
           </div>
+          <div class="error-message" id="emailError" style="color: red">
+            중복된 이메일 입니다.
+          </div>
 
 
           <div class="form-floating">
             <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
             <label for="emailVer">인증번호를 입력해주세요.</label>
-            <div class="error-message" id="emailError" style="color: red">
+            <div class="error-message" id="emailError2" style="color: red">
               인증번호가 틀렸습니다.
             </div>
           </div>
@@ -352,7 +497,7 @@
         </div>
         <div class="modal-body">
             <div class="form-floating">
-              <input type="password" class="form-control" id="beforePassword" placeholder="email" value="">
+              <input type="password" class="form-control" id="beforePassword" placeholder="password" value="">
               <label for="beforePassword">변경 전 비밀번호를 입력해주세요.</label>
               <div class="error-message" id="passwordError" style="color: red">
                 비밀번호가 틀렸습니다.
@@ -361,18 +506,18 @@
             <br>
 
             <div class="form-floating">
-              <input type="password" class="form-control" id="afterPassword" placeholder="emailNum" value="">
+              <input type="password" class="form-control" id="afterPassword" placeholder="password" value="" readonly>
               <label for="afterPassword">변경 할 비밀번호를 입력해주세요.</label>
-              <div class="error-message" id="password2Error" style="color: red">
+              <div class="error-message" id="passwordError2" style="color: red">
                 비밀번호 오류
               </div>
             </div>
             <br>
 
             <div class="form-floating">
-              <input type="password" class="form-control" id="afterPassword2" placeholder="emailNum" value="">
+              <input type="password" class="form-control" id="afterPassword2" placeholder="password" value="">
               <label for="afterPassword2">한 번 더 입력해주세요.</label>
-              <div class="error-message" id="password3Error" style="color: red">
+              <div class="error-message" id="passwordError3" style="color: red">
                 비밀번호 오류2
               </div>
             </div>
@@ -380,7 +525,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <a th:href="@{/member/reSign}" class="btn btn-primary ">확인</a>
+          <button type="button" class="btn btn-primary changeBtn" id="passwordChangeBtn">확인</button>
         </div>
       </div>
     </div>

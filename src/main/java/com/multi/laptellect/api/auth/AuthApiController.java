@@ -42,7 +42,7 @@ public class AuthApiController {
 
     @ResponseBody
     @PostMapping("/check-password")
-    public boolean isPassword(@RequestParam("password") String password) {
+    public boolean isPassword(@RequestParam("beforePassword") String password) {
         return authService.isMemberByPassword(password);
     }
 

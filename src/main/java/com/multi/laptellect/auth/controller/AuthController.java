@@ -26,20 +26,7 @@ public class AuthController {
         return "auth/auth-sign-in";
     }
 
-    @PostMapping("/signin")
-    public String login(MemberDTO memberDTO, HttpServletResponse response) {
-        log.info("로그인 폼 전달 = {}", memberDTO);
 
-        return "redirect:/";
-    }
-
-    @GetMapping("/signout")
-    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-        }
-        return "redirect:/";
-    }
 
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
