@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public void sendVerifyEmail(Email email) throws Exception {
+    public void sendVerifyEmail(Email email) throws Exception { // 이메일 인증
         String verifyCode;
 
         do {
@@ -101,12 +101,10 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public boolean isVerifyEmail(String verifyCode) throws Exception {
+    public boolean isVerifyEmail(String verifyCode) throws Exception { // 인증코드 검증
         String redisVerifyCode = redisUtil.getData(verifyCode);
 
-        
-
-        return false;
+        return redisVerifyCode != null;
     }
 
     @Override
