@@ -11,6 +11,17 @@
         <result column="productinfo" property="productinfo1"/>
         <result column="date_created" property="date_created1"/>
         <result column="productprice" property="productprice1"/>
+        <result column="imd" property="imd1"/>
+    </resultMap>
+
+    <resultMap id="OrderlistResultMap"
+               type="com.multi.laptellect.payment.model.dto.OrderlistDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
+        <result column="username" property="username1"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
+        <result column="productname" property="productname1"/>
+        <result column="productinfo" property="productinfo1"/>
+        <result column="date_created" property="date_created1"/>
+        <result column="productprice" property="productprice1"/>
+        <result column="imd" property="imd1"/>
     </resultMap>
 
     <select id="selectTest" resultMap="TestResultMap">
@@ -22,14 +33,31 @@
         INSERT INTO testprice (
         username,
         productname,
+        productinfo,
         productprice,
-        date_created
+        date_created,
+        imd
         ) VALUES (
         #{username2},
         #{productname2},
+        #{productinfo2},
         #{productprice2},
-        NOW()  <!-- 현재 시간을 자동으로 삽입 -->
+        NOW(),  <!-- 현재 시간을 자동으로 삽입 -->
+        #{imd2}
         )
     </insert>
+
+    <select id="selectAllOrders" resultMap="OrderlistResultMap">
+        SELECT * FROM testprice
+        WHERE refund = 'N'
+        ORDER BY date_created DESC
+    </select>
+
+    <update id="updateRefundStatus" parameterType="com.multi.laptellect.payment.model.dto.OrderlistDTO">
+        UPDATE testprice
+        SET refund = 'Y',
+        refund_date = NOW()
+        WHERE imd = #{ImpUid}
+    </update>
 
 </mapper>

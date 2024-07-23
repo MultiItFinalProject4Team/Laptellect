@@ -1,23 +1,27 @@
 package com.multi.laptellect.payment.model.dto;
 
-public class TestDTO {
+public class OrderlistDTO {
     private String username1;
     private String productname1;
     private String productinfo1;
     private String date_created1;
     private int productprice1;
     private String imd1;
+    private String refund1;
+    private String refund_date1;
 
-    public TestDTO() {
+    public OrderlistDTO() {
     }
 
-    public TestDTO(String username1, String productname1, String productinfo1, String date_created1, int productprice1, String imd1) {
+    public OrderlistDTO(String username1, String productname1, String productinfo1, String date_created1, int productprice1, String imd1, String refund1, String refund_date1) {
         this.username1 = username1;
         this.productname1 = productname1;
         this.productinfo1 = productinfo1;
         this.date_created1 = date_created1;
         this.productprice1 = productprice1;
         this.imd1 = imd1;
+        this.refund1 = refund1;
+        this.refund_date1 = refund_date1;
     }
 
     public String getUsername1() {
@@ -68,15 +72,33 @@ public class TestDTO {
         this.imd1 = imd1;
     }
 
+    public String getRefund1() {
+        return refund1;
+    }
+
+    public void setRefund1(String refund1) {
+        this.refund1 = refund1;
+    }
+
+    public String getRefund_date1() {
+        return refund_date1;
+    }
+
+    public void setRefund_date1(String refund_date1) {
+        this.refund_date1 = refund_date1;
+    }
+
     @Override
     public String toString() {
-        return "TestDTO{" +
+        return "OrderlistDTO{" +
                 "username1='" + username1 + '\'' +
                 ", productname1='" + productname1 + '\'' +
                 ", productinfo1='" + productinfo1 + '\'' +
                 ", date_created1='" + date_created1 + '\'' +
                 ", productprice1=" + productprice1 +
                 ", imd1='" + imd1 + '\'' +
+                ", refund1='" + refund1 + '\'' +
+                ", refund_date1='" + refund_date1 + '\'' +
                 '}';
     }
 }

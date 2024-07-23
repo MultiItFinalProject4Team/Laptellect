@@ -3,18 +3,22 @@ package com.multi.laptellect.payment.model.dto;
 public class InsertDTO {
     private String username2;
     private String productname2;
+    private String productinfo2;
     private int productprice2;
     private String date_created2;
+    private String imd2;
 
     public InsertDTO() {
 
     }
 
-    public InsertDTO(String username2, String productname2, int productprice2, String date_created2) {
+    public InsertDTO(String username2, String productname2, String productinfo2, int productprice2, String date_created2, String imd2) {
         this.username2 = username2;
         this.productname2 = productname2;
+        this.productinfo2 = productinfo2;
         this.productprice2 = productprice2;
         this.date_created2 = date_created2;
+        this.imd2 = imd2;
     }
 
     public String getUsername2() {
@@ -33,6 +37,14 @@ public class InsertDTO {
         this.productname2 = productname2;
     }
 
+    public String getProductinfo2() {
+        return productinfo2;
+    }
+
+    public void setProductinfo2(String productinfo2) {
+        this.productinfo2 = productinfo2;
+    }
+
     public int getProductprice2() {
         return productprice2;
     }
@@ -49,13 +61,23 @@ public class InsertDTO {
         this.date_created2 = date_created2;
     }
 
+    public String getImd2() {
+        return imd2;
+    }
+
+    public void setImd2(String imd2) {
+        this.imd2 = imd2;
+    }
+
     @Override
     public String toString() {
         return "InsertDTO{" +
                 "username2='" + username2 + '\'' +
                 ", productname2='" + productname2 + '\'' +
+                ", productinfo2='" + productinfo2 + '\'' +
                 ", productprice2=" + productprice2 +
                 ", date_created2='" + date_created2 + '\'' +
+                ", imd2='" + imd2 + '\'' +
                 '}';
     }
 }

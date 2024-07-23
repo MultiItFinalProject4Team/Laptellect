@@ -54,7 +54,8 @@
                     impUid: rsp.imp_uid,  // 포트원 결제 고유 ID
                     amount: myAmount      // 결제 금액
                   });
-                  alert("결제 및 검증 성공: " + data);
+                  alert("결제 및 검증 성공");
+                  window.location.href = '/hello';
                 } catch (error) {
                   alert("검증 실패: " + error.response.data);
                 }
@@ -104,14 +105,14 @@
         </div>
         <div class="price-row">
             <span>할인금액</span>
-            <span>-100원</span>
+            <span>0원</span>
         </div>
         <div class="price-row total-price">
             <span>총 결제금액</span>
-            <span th:text="${testDTO.productprice1 - 100 + '원'}">0원</span>
+            <span th:text="${testDTO.productprice1 + '원'}">0원</span>
         </div>
         <div>
-            결제할 금액: <input type="text" id="amount" th:value="${testDTO.productprice1 - 100}"/>
+            결제할 금액: <input type="text" id="amount" th:value="${testDTO.productprice1}"/>
             <button class="order-button" onclick="mypayment()">결제하기</button>
         </div>
     </div>

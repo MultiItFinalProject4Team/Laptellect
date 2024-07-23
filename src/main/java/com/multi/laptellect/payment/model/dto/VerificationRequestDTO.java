@@ -1,10 +1,11 @@
 package com.multi.laptellect.payment.model.dto;
 
-public class VerificationRequestDto {
-    private String impUid;
-    private long amount;
+import java.math.BigDecimal;
 
-    // Getters and setters
+public class VerificationRequestDTO {
+    private String impUid;
+    private BigDecimal amount;
+
     public String getImpUid() {
         return impUid;
     }
@@ -13,11 +14,11 @@ public class VerificationRequestDto {
         this.impUid = impUid;
     }
 
-    public long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 }
