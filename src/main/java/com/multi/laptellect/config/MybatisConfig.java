@@ -39,7 +39,13 @@ public class MybatisConfig {
         // Type Aliases 설정
 //        configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.mini.member.model.dto.MemberDTO.class);
 //        configuration.getTypeAliasRegistry().registerAlias("boardDTO", com.multi.mini.community.model.dto.BoardDTO.class);
+
+        configuration.getTypeAliasRegistry().registerAlias("testDTO", com.multi.laptellect.payment.model.dto.TestDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("orderlistDTO", com.multi.laptellect.payment.model.dto.OrderlistDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("insertDTO", com.multi.laptellect.payment.model.dto.InsertDTO.class);
+
         configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.laptellect.member.model.dto.MemberDTO.class);
+
 
 
         factoryBean.setConfiguration(configuration); // 팩토리 빈에 세팅
