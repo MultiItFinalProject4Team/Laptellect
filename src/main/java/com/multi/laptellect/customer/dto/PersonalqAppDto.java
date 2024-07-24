@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class PersonalqAppDto {
     private int personalqNo;
     private int memberNo;
-    private String productqCategorycode;
+    private String personalqCategorycode;
     private String title;
     private String content;
 }

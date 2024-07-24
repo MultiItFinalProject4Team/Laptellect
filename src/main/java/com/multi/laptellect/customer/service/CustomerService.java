@@ -116,7 +116,75 @@ public class CustomerService {
         return customDao.getPersonala(personalqNo);
     }
 
-    public void personalAnwerChange(int personalqNo) {
-        customDao.personalAnwerChange(personalqNo);
+    public void personalAnwerChange(int personalqNo, String state) {
+        customDao.personalAnwerChange(personalqNo, state);
+    }
+
+    public List<PersonalqCategoryDto> getPersonalqCategory() {
+        return customDao.getPersonalqCategory();
+    }
+
+    public int updatePersonalq(PersonalqAppDto appDto) {
+        return customDao.updatePersonalq(appDto);
+    }
+
+    public int deletePersonalq(int personalqNo) {
+        return customDao.deletePersonalq(personalqNo);
+    }
+
+    public int updateImage(String code, MultipartFile[] images) {
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                customDao.deleteImages(code);
+                break;
+            }
+        }
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                String path = System.getProperty("user.dir")+"/uploads/";
+
+                String fileName = image.getOriginalFilename();
+                String uuid = UUID.randomUUID().toString();
+                int extIndex = fileName.lastIndexOf(".") + 1;
+                String ext = fileName.substring(extIndex);
+                String storeFileName = uuid + "." + ext;
+
+                personalqImageDto imageDto = personalqImageDto.builder()
+                        .originName(fileName)
+                        .uploadName(storeFileName)
+                        .referenceCode(code)
+                        .build();
+
+                customDao.inputImage(imageDto);
+
+                File directory = new File(path);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                try {
+                    image.transferTo(new File(path+storeFileName));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 1;
+    }
+
+    public void updatePersonala(PersonalqAnswerDto answerDto) {
+        customDao.updatePersonala(answerDto);
+    }
+
+    public void setPersonalqCode(int personalqNo, String code) {
+        customDao.setPersonalqCode(personalqNo, code);
+    }
+
+    public void setPersonalaCode(int personalaNo, String code) {
+        customDao.setPersonalaCode(personalaNo,code);
+    }
+
+    public void deletePersonala(int personalqNo) {
+        customDao.deletePersonala(personalqNo);
     }
 }

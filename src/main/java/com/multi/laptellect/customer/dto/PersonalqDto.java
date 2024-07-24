@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 public class PersonalqDto {
     private int personalqNo;
     private int memberNo;
-    private String productqCategorycode;
+    private String personalCategorycode;
     private String title;
     private String content;
     private Timestamp createdAt;

@@ -70,67 +70,6 @@ CREATE TABLE images(
 	reference_code varchar(100)
 );
 
-DELIMITER //
-
-CREATE TRIGGER before_insert_personal_question
-BEFORE INSERT ON personal_question
-FOR EACH ROW
-BEGIN
-    DECLARE next_id INT;
-    SET next_id = (SELECT AUTO_INCREMENT
-                   FROM information_schema.TABLES
-                   WHERE TABLE_SCHEMA = DATABASE()
-                   AND TABLE_NAME = 'personal_question');
-    SET NEW.reference_code = CONCAT('personalq', next_id);
-END //
-
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER before_insert_product_question
-BEFORE INSERT ON product_question
-FOR EACH ROW
-BEGIN
-    DECLARE next_id INT;
-    SET next_id = (SELECT AUTO_INCREMENT
-                   FROM information_schema.TABLES
-                   WHERE TABLE_SCHEMA = DATABASE()
-                   AND TABLE_NAME = 'product_question');
-    SET NEW.reference_code = CONCAT('productq', next_id);
-END //
-
-DELIMITER ;
-
-DELIMITER //
-
-CREATE TRIGGER before_insert_personal_answer
-BEFORE INSERT ON personal_answer
-FOR EACH ROW
-BEGIN
-    DECLARE next_id INT;
-    SET next_id = (SELECT AUTO_INCREMENT
-                   FROM information_schema.TABLES
-                   WHERE TABLE_SCHEMA = DATABASE()
-                   AND TABLE_NAME = 'personal_answer');
-    SET NEW.reference_code = CONCAT('personala', next_id);
-END //
-
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER before_insert_product_answer
-BEFORE INSERT ON product_answer
-FOR EACH ROW
-BEGIN
-    DECLARE next_id INT;
-    SET next_id = (SELECT AUTO_INCREMENT
-                   FROM information_schema.TABLES
-                   WHERE TABLE_SCHEMA = DATABASE()
-                   AND TABLE_NAME = 'product_answer');
-    SET NEW.reference_code = CONCAT('producta', next_id);
-END //
-
-DELIMITER ;
 
 INSERT INTO personalquestion_category VALUES ('personalq_member','회원');
 INSERT INTO personalquestion_category VALUES ('personalq_else','기타');

@@ -5,7 +5,7 @@
 <mapper namespace="com.multi.laptellect.customer.dao.CustomDao">
     <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto" keyProperty="personalqNo" useGeneratedKeys="true">
         INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
-        values(#{memberNo},#{productqCategorycode}, #{title},#{content})
+        values(#{memberNo},#{personalqCategorycode}, #{title},#{content})
     </insert>
 
     <select id="getPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
@@ -25,6 +25,20 @@
         personal_question
         where personalq_no=#{personalqNo}
     </select>
+
+    <update id="setPersonalqCode">
+        update
+        personal_question
+        set reference_code=#{code}
+        where personalq_no=#{personalqNo}
+    </update>
+
+    <update id="setPersonalaCode">
+        update
+        personal_answer
+        set reference_code=#{code}
+        where personala_no=#{personalaNo}
+    </update>
 
     <select id="getpersonalqCode" resultType="string">
         select reference_code
@@ -67,7 +81,40 @@
     <update id="personalAnwerChange">
         update
         personal_question
-        set answer='Y'
+        set answer=#{state}
         where personalq_no=#{personalqNo}
     </update>
+
+    <select id="getPersonalqCategory" resultType="com.multi.laptellect.customer.dto.PersonalqCategoryDto">
+        select *
+        from personalquestion_category
+    </select>
+
+    <update id="updatePersonalq" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
+        update
+        personal_question
+        set personalq_categorycode=#{personalqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        where personalq_no = #{personalqNo}
+    </update>
+
+    <delete id="deletePersonalq">
+        delete from personal_question
+        where personalq_no=#{personalqNo}
+    </delete>
+
+    <delete id="deleteImages">
+        delete from images
+        where reference_code=#{code}
+    </delete>
+
+    <update id="updatePersonala" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto">
+        update
+        personal_answer
+        set title=#{title}, content=#{content}, updated_at=current_timestamp
+    </update>
+
+    <delete id="deletePersonala">
+        delete from personal_answer
+        where personalq_no=#{personalqNo}
+    </delete>
 </mapper>
