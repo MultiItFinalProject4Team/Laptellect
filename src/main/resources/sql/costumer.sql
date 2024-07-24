@@ -70,6 +70,7 @@ CREATE TABLE images(
 	reference_code varchar(100)
 );
 
+
 INSERT INTO personalquestion_category VALUES ('personalq_member','회원');
 INSERT INTO personalquestion_category VALUES ('personalq_else','기타');
 INSERT INTO productquestion_category VALUES ('productq_product','상품');
