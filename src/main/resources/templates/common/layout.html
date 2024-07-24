@@ -71,23 +71,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/recommended">추천</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/product/productList">스토어</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/customer">고객센터</a>
-                    </li>
-                    <th:block sec:authorize="isAnonymous()">
-
-                    <th:block sec:authorize="isAnonymous() or hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
-
-
                     <th:block sec:authorize="isAnonymous() or hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
 
                         <li class="nav-item">

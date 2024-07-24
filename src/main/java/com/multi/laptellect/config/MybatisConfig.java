@@ -48,6 +48,13 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("productDTO", com.multi.laptellect.product.model.dto.ProductDTO.class);
 
 
+
+        configuration.getTypeAliasRegistry().registerAlias("sentimentDTO", com.multi.laptellect.recommend.clovaapi.model.dto.SentimentDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("laptopDTO", com.multi.laptellect.recommend.laptop.model.dto.LaptopDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("tagDTO", com.multi.laptellect.recommend.reviewtag.model.dto.TagDTO.class);
+
+
+
         factoryBean.setConfiguration(configuration); // 팩토리 빈에 세팅
 
         return factoryBean.getObject();

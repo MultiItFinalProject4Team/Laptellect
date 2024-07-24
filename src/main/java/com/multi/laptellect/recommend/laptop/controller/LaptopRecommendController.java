@@ -17,13 +17,13 @@ public class LaptopRecommendController {
     @Autowired
     private LaptopService laptopService;
 
-    @GetMapping("/recommend")
+    @GetMapping("/recommended")
     public String recommendPage(Model model) { //설문 페이지로 이동
         model.addAttribute("categories", laptopService.getCategories());
         model.addAttribute("cpuBrands", laptopService.getCpuBrands());
         model.addAttribute("gpuBrands", laptopService.getGpuBrands());
         model.addAttribute("priceRanges", laptopService.getPriceRanges()); //설문 페이지에 필요한 정보들을 model에 담아서 전달
-        return "recommend"; //설문 페이지로 이동
+        return "recommend/recommend"; //설문 페이지로 이동
     }
 
     @PostMapping("/getRecommendations")
@@ -34,7 +34,7 @@ public class LaptopRecommendController {
 
     @GetMapping("/recommendResult") //추천 결과 페이지로 이동
     public String recommendResultPage() {
-        return "recommendpage";
+        return "recommend/recommendpage";
     }
 
 //    @GetMapping("/detail/{id}") //노트북 상세 정보인데 필요하면 풀것
