@@ -1,33 +1,31 @@
 spring:
   datasource:
-    url: jdbc:log4jdbc:mysql://mini.cxwee6aeygsa.ap-northeast-2.rds.amazonaws.com/movie
+    url: jdbc:log4jdbc:mysql://localhost:3306/scott?
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    username: admin
-    password: admin1234
-
-
-
+    username: scott
+    password: tiger
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username:  # \uC774\uBA54\uC77C
-    password:  # APP \uBE44\uBC00\uBC88\uD638
+    username: filmpick123@gmail.com # \uC774\uBA54\uC77C
+    password: jxsccjcjrgutlxwy # APP \uBE44\uBC00\uBC88\uD638
     properties:
       mail:
         smtp:
           auth: true # \uC778\uC99D
           starttls:
             enable: true
-
-
+  redis:
+    host: localhost
+    port: 6379
+    password: 1234
 
 server:
   port: 8099
   servlet:
     session:
       timeout: 1800
-
 
 logging:
   level:
@@ -39,14 +37,6 @@ logging:
       .zaxxer: DEBUG
     sql: DEBUG
 
-
-    sentiment:
-      clientId: fh2aaa3u81
-      clientSecret: DnBWHjTVYdTW2okQENwWmb6PaftjSGR3mW4vSWCP
-
-
-    mybatis:
-      mapper-locations: classpath:mapper/**/*.xml
-      type-aliases-package: com.multi.laptellect.recommend.laptop.model.dto
-      configuration:
-        map-underscore-to-camel-case: true
+sentiment:
+  clientId: fh2aaa3u81
+  clientSecret: DnBWHjTVYdTW2okQENwWmb6PaftjSGR3mW4vSWCP
