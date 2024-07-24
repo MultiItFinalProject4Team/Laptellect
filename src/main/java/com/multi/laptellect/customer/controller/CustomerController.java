@@ -68,19 +68,24 @@ public class CustomerController {
         String[] imageList = customerService.getImage(personalqDto.getReferenceCode());
         model.addAttribute("personalq",personalqDto);
         model.addAttribute("imageList",imageList);
+        System.out.println("질문: "+personalqDto);
 
         if(personalqDto.getAnswer().equals("Y")) {
             PersonalqAnswerDto answerDto = customerService.getPersonala(personalqNo);
             String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
             model.addAttribute("personala", answerDto);
             model.addAttribute("imageList2", imageList2);
+            System.out.println("답변: "+answerDto);
         }
-
         return"/customer/user/personalq_detail";
     }
     //1:1문의 신청 페이지 이동
     @GetMapping("/personalq_app")
-    public void personalq_app(){}
+    public void personalq_app(Model model){
+        List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
+        System.out.println(category);
+        model.addAttribute("category",category);
+    }
     //1:1 문의 신청
     @PostMapping("/personalq_app")
     public String personalq_app(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
@@ -91,11 +96,45 @@ public class CustomerController {
             }
         }
         appDto.setMemberNo(1);
-        appDto.setProductqCategorycode("personalq_member");
         int text_result=customerService.personalqApp(appDto);
         String code = customerService.getpersonalqCode(appDto.getPersonalqNo());
         System.out.println(code);
         int image_result = customerService.inputImage(code,images);
+        return "redirect:/customer/user/customer_personalq";
+    }
+
+    //1:1문의 질문 수정 페이지
+    @GetMapping("/update_personalq/{personalqNo}")
+    public String update_personalq(Model model, @PathVariable("personalqNo") int personalqNo){
+        System.out.println(personalqNo);
+        PersonalqDto dto = customerService.getPersonalq(personalqNo);
+        List<PersonalqCategoryDto> categoryDto = customerService.getPersonalqCategory();
+        model.addAttribute("category",categoryDto);
+        model.addAttribute("dto",dto);
+        return "/customer/user/personalq_update";
+    }
+    //1:1문의 질문 수정
+    @PostMapping("/update_personalq")
+    public String update_personalq(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        System.out.println(appDto);
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                System.out.println("이미지:"+image.getOriginalFilename());
+            }
+        }
+        appDto.setMemberNo(1);
+        int text_result=customerService.updatePersonalq(appDto);
+        String code = customerService.getpersonalqCode(appDto.getPersonalqNo());
+        System.out.println(code);
+        int image_result = customerService.updateImage(code,images);
+        String redirectUrl = String.format("/customer/user/personalq_detail/%s", appDto.getPersonalqNo());
+        return "redirect:"+redirectUrl;
+    }
+
+    //1:1 문의 질문 삭제
+    @GetMapping("/delete_personalq/{personalqNo}")
+    public String delete_personalq(@PathVariable("personalqNo") int personalqNo){
+        int result = customerService.deletePersonalq(personalqNo);
         return "redirect:/customer/user/customer_personalq";
     }
 

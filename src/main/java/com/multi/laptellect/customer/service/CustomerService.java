@@ -119,4 +119,56 @@ public class CustomerService {
     public void personalAnwerChange(int personalqNo) {
         customDao.personalAnwerChange(personalqNo);
     }
+
+    public List<PersonalqCategoryDto> getPersonalqCategory() {
+        return customDao.getPersonalqCategory();
+    }
+
+    public int updatePersonalq(PersonalqAppDto appDto) {
+        return customDao.updatePersonalq(appDto);
+    }
+
+    public int deletePersonalq(int personalqNo) {
+        return customDao.deletePersonalq(personalqNo);
+    }
+
+    public int updateImage(String code, MultipartFile[] images) {
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                customDao.deleteImages(code);
+                break;
+            }
+        }
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                String path = System.getProperty("user.dir")+"/uploads/";
+
+                String fileName = image.getOriginalFilename();
+                String uuid = UUID.randomUUID().toString();
+                int extIndex = fileName.lastIndexOf(".") + 1;
+                String ext = fileName.substring(extIndex);
+                String storeFileName = uuid + "." + ext;
+
+                personalqImageDto imageDto = personalqImageDto.builder()
+                        .originName(fileName)
+                        .uploadName(storeFileName)
+                        .referenceCode(code)
+                        .build();
+
+                customDao.inputImage(imageDto);
+
+                File directory = new File(path);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                try {
+                    image.transferTo(new File(path+storeFileName));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 1;
+    }
 }

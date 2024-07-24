@@ -26,4 +26,12 @@ public interface CustomDao {
     PersonalqAnswerDto getPersonala(int personalqNo);
 
     void personalAnwerChange(int personalqNo);
+
+    List<PersonalqCategoryDto> getPersonalqCategory();
+
+    int updatePersonalq(PersonalqAppDto appDto);
+
+    int deletePersonalq(int personalqNo);
+
+    void deleteImages(String code);
 }

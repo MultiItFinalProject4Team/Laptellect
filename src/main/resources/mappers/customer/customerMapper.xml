@@ -5,7 +5,7 @@
 <mapper namespace="com.multi.laptellect.customer.dao.CustomDao">
     <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto" keyProperty="personalqNo" useGeneratedKeys="true">
         INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
-        values(#{memberNo},#{productqCategorycode}, #{title},#{content})
+        values(#{memberNo},#{personalqCategorycode}, #{title},#{content})
     </insert>
 
     <select id="getPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
@@ -70,4 +70,26 @@
         set answer='Y'
         where personalq_no=#{personalqNo}
     </update>
+
+    <select id="getPersonalqCategory" resultType="com.multi.laptellect.customer.dto.PersonalqCategoryDto">
+        select *
+        from personalquestion_category
+    </select>
+
+    <update id="updatePersonalq" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
+        update
+        personal_question
+        set personalq_categorycode=#{personalqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        where personalq_no = #{personalqNo}
+    </update>
+
+    <delete id="deletePersonalq">
+        delete from personal_question
+        where personalq_no=#{personalqNo}
+    </delete>
+
+    <delete id="deleteImages">
+        delete from images
+        where reference_code=#{code}
+    </delete>
 </mapper>
