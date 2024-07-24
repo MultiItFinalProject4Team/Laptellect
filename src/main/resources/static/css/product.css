@@ -1,0 +1,13 @@
+.price {
+    color: red;
+    font-weight: bold;
+}
+
+.product-name {
+    font-weight: bold;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: contain;
+}
