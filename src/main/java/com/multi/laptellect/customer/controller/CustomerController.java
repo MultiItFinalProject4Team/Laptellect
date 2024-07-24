@@ -97,7 +97,8 @@ public class CustomerController {
         }
         appDto.setMemberNo(1);
         int text_result=customerService.personalqApp(appDto);
-        String code = customerService.getpersonalqCode(appDto.getPersonalqNo());
+        String code="personalq"+appDto.getPersonalqNo();
+        customerService.setPersonalqCode(appDto.getPersonalqNo(),code);
         System.out.println(code);
         int image_result = customerService.inputImage(code,images);
         return "redirect:/customer/user/customer_personalq";

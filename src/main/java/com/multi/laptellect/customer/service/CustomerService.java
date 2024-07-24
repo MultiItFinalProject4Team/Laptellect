@@ -116,8 +116,8 @@ public class CustomerService {
         return customDao.getPersonala(personalqNo);
     }
 
-    public void personalAnwerChange(int personalqNo) {
-        customDao.personalAnwerChange(personalqNo);
+    public void personalAnwerChange(int personalqNo, String state) {
+        customDao.personalAnwerChange(personalqNo, state);
     }
 
     public List<PersonalqCategoryDto> getPersonalqCategory() {
@@ -170,5 +170,21 @@ public class CustomerService {
             }
         }
         return 1;
+    }
+
+    public void updatePersonala(PersonalqAnswerDto answerDto) {
+        customDao.updatePersonala(answerDto);
+    }
+
+    public void setPersonalqCode(int personalqNo, String code) {
+        customDao.setPersonalqCode(personalqNo, code);
+    }
+
+    public void setPersonalaCode(int personalaNo, String code) {
+        customDao.setPersonalaCode(personalaNo,code);
+    }
+
+    public void deletePersonala(int personalqNo) {
+        customDao.deletePersonala(personalqNo);
     }
 }
