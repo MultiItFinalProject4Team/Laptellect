@@ -59,6 +59,7 @@ public class CustomerAdminController {
         customerService.deletePersonala(personalqNo);
         String state="N";
         customerService.personalAnwerChange(personalqNo,state);
-        return "redirect:/customer/user/customer_personalq";
+        String redirectUrl = String.format("/customer/user/personalq_detail/%s", personalqNo);
+        return "redirect:"+redirectUrl;
     }
 }
