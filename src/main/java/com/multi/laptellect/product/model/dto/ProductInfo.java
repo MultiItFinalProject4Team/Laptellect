@@ -12,4 +12,5 @@ public class ProductInfo {
     private String pcode;
     private String imageUrl;
     private String cate3;
+    private ProductTypeDTO productTypeDTO;
 }

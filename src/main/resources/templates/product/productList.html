@@ -5,13 +5,20 @@
     <title>Product List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/product.css}">
-
 </head>
 <body>
 <div class="container">
     <h1 class="mt-5">Product List</h1>
     <form th:action="@{/product/crawl}" method="post">
         <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
+    </form>
+    <form th:action="@{/productType}" method="post">
+        <label for="productType">상품 분류:</label>
+        <select name="typeNo" id="productType">
+            <option value="">선택하세요</option>
+            <option th:each="type : ${types}" th:value="${type.typeNo}" th:text="${type.typeName}"></option>
+        </select>
+        <button type="submit">필터 적용</button>
     </form>
     <div class="row">
         <div class="col-md-4 mb-4" th:each="product, iterStat : ${products}">
@@ -21,7 +28,6 @@
                     <h5 class="card-title product-name" th:text="${product.productName}">상품명</h5>
                     <p class="card-text">
                         <strong>가격:</strong> <span class="price" th:text="${product.price} + ' 원'">가격</span><br>
-                        <strong>상품코드:</strong> <span th:text="${product.pcode}">상품코드</span>
                     </p>
                     <a th:href="@{/product/laptopDetails(pcode=${product.pcode})}" class="btn btn-primary">상세 정보</a>
                 </div>

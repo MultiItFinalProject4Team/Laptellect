@@ -1,20 +1,18 @@
 package com.multi.laptellect.product.model.dto;
 
+
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Data
-public class ProductDTO {
-    private String productNo;
-    private String productCode;
-    private int typeNo;
-    private String productName;
-    private int price;
+public class ImageDTO {
+
+    private int imageNo;
     private String referenceCode;
-    private String image;
+    private String originName;
+    private String uploadName;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
 }
-

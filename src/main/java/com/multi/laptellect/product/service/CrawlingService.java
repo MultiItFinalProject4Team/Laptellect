@@ -1,7 +1,6 @@
 package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.LaptopSpecDTO;
-import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.ProductInfo;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +28,7 @@ public class CrawlingService {
 
     private static final String URL = "https://prod.danawa.com/list/ajax/getProductList.ajax.php";
     private static final String PRODUCT_DETAILS_URL = "https://prod.danawa.com/info/ajax/getProductDescription.ajax.php";
+
 
     @Autowired
     private ProductMapper productMapper;
@@ -112,61 +110,6 @@ public class CrawlingService {
         return productInfo;
     }
 
-    public void saveProductsToDB(List<ProductInfo> productList) {
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
-        for (ProductInfo productInfo : productList) {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setProductName(productInfo.getProductName());
-            productDTO.setPrice(Integer.parseInt(productInfo.getPrice()));
-            productDTO.setProductCode(productInfo.getPcode());
-            productDTO.setReferenceCode(productInfo.getImageUrl());
-            productDTO.setCreatedAt(Timestamp.valueOf(now));
-            productDTOList.add(productDTO);
-        }
-        // 중복 확인 및 데이터베이스 삽입
-        for (ProductDTO productDTO : productDTOList) {
-            int count = productMapper.countByProductCode(productDTO.getProductCode());
-            if (count == 0) {
-                productMapper.insertProduct(productDTO);
-            } else {
-                log.info("Product with code " + productDTO.getProductCode() + " already exists.");
-            }
-        }
-
-    }
-
-    public List<ProductInfo> getStoredProducts() {
-
-        List<ProductDTO> productDTOList = productMapper.getAllProducts();
-        List<ProductInfo> productInfoList = new ArrayList<>();
-
-        for (ProductDTO productDTO : productDTOList) {
-            ProductInfo productInfo = new ProductInfo();
-
-            productInfo.setPcode(productDTO.getProductCode());
-            productInfo.setProductName(productDTO.getProductName());
-            productInfo.setPrice(String.valueOf(productDTO.getPrice()));
-            productInfo.setImageUrl(productDTO.getReferenceCode());
-            productInfoList.add(productInfo);
-        }
-
-        return productInfoList;
-    }
-
-    public ProductInfo getProductByCode(String pcode) {
-        ProductDTO productDTO = productMapper.getProductByCode(pcode);
-        if (productDTO == null) {
-            return null;
-        }
-        ProductInfo productInfo = new ProductInfo();
-        productInfo.setPcode(productDTO.getProductCode());
-        productInfo.setProductName(productDTO.getProductName());
-        productInfo.setPrice(String.valueOf(productDTO.getPrice()));
-        productInfo.setImageUrl(productDTO.getReferenceCode());
-        return productInfo;
-    }
-
 
     public LaptopSpecDTO getLaptopDetails(ProductInfo productInfo) {
 
@@ -180,7 +123,9 @@ public class CrawlingService {
             String responseHtml = sendPostRequest(url, referer, bodyData);
             Document doc = Jsoup.parse(responseHtml);
 
-
+            laptopSpecDTO.setProductName(productInfo.getProductName());
+            laptopSpecDTO.setPrice(productInfo.getPrice());
+            laptopSpecDTO.setImageUrl(productInfo.getImageUrl());
             laptopSpecDTO.setOs(getSpecValue(doc, "운영체제(OS)"));
             laptopSpecDTO.setCpuManufacturer(getSpecValue(doc, "CPU 제조사"));
             laptopSpecDTO.setCpuType(getSpecValue(doc, "CPU 종류"));
@@ -196,8 +141,8 @@ public class CrawlingService {
             laptopSpecDTO.setStorageType(getSpecValue(doc, "저장장치 종류"));
             laptopSpecDTO.setStorageCapacity(getSpecValue(doc, "저장 용량"));
             laptopSpecDTO.setConvenienceFeatures(getSpecValue(doc, "패널 표면 처리"));
-            laptopSpecDTO.setAdditionalFeatures(getSpecValue(doc, "부가 기능"));
-            laptopSpecDTO.setUsage(getSpecValue(doc,"용도"));
+            laptopSpecDTO.setWeight(getSpecValue(doc, "무게"));
+
 
         } catch (
                 IOException e) {
@@ -216,6 +161,7 @@ public class CrawlingService {
 
             StringEntity entity = new StringEntity(bodyData);
             post.setEntity(entity);
+
 
             try (CloseableHttpResponse response = client.execute(post))  {
                 HttpEntity responseEntity = response.getEntity();

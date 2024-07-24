@@ -6,11 +6,18 @@
 
 
     <!-- 제품 삽입 쿼리-->
-    <insert id="insertProduct" parameterType="com.multi.laptellect.product.model.dto.ProductDTO">
-        INSERT INTO product(type_no, product_name, price, reference_code, created_at, product_code)
-        values(#{typeNo}, #{productName}, #{price}, #{referenceCode}, #{createdAt}, #{productCode})
+    <insert id="insertProduct" parameterType="com.multi.laptellect.product.model.dto.ProductDTO" useGeneratedKeys="true" keyProperty="productNo">
+        INSERT INTO product(type_no, product_name, price, product_code, created_at)
+        values(#{typeNo}, #{productName}, #{price}, #{productCode}, #{createdAt})
     </insert>
 
+    <update id="updateReferenceCode" parameterType="com.multi.laptellect.product.model.dto.ProductDTO">
+        UPDATE product SET reference_code = #{referenceCode}, updated_at = updated_at WHERE product_no = #{productNo}
+    </update>
+
+    <select id="findTypeNameByNo" resultType="string" parameterType="int">
+        SELECT type_name FROM product_type WHERE type_no = #{typeNo}
+    </select>
     <!-- 중복 확인-->
     <select id="countByProductCode" resultType="int" parameterType="string">
         SELECT COUNT(*) FROM product WHERE product_code = #{productCode}
@@ -26,7 +33,27 @@
     <select id="getProductByCode" parameterType="String" resultType="com.multi.laptellect.product.model.dto.ProductDTO">
         SELECT * FROM product WHERE product_code = #{productCode}
     </select>
-    
+
+
+    <select id="findByOptions" parameterType="string" resultType="com.multi.laptellect.product.model.dto.ProductCategoryDTO">
+        SELECT * FROM product_category WHERE options = #{options}
+    </select>
+
+    <insert id="insertProductCategory" parameterType="com.multi.laptellect.product.model.dto.ProductCategoryDTO">
+        INSERT INTO product_category (type_no, options)
+        VALUES (#{typeNo}, #{options})
+    </insert>
+
+    <insert id="insertProductSpec" parameterType="com.multi.laptellect.product.model.dto.ProductSpecDTO">
+        INSERT INTO product_spec (product_no, category_no, option_value)
+        VALUES (#{productNo}, #{categoryNo}, #{optionValue})
+    </insert>
+
+
+<!--    <insert id="insertImage" parameterType="" useGeneratedKeys="true" keyProperty="">-->
+<!--        INSERT INTO images(image_no, reference_code, origin_name, upload_name,created_at)-->
+<!--        VALUES (#{imageNo}, #{referenceCode}, #{originName}, #{uploadName}, #{createdAt})-->
+<!--    </insert>-->
 
 
 </mapper>
