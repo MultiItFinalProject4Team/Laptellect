@@ -3,127 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>노트북 선호도 조사</title>
+    <title>노트북 추천 설문조사</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
         }
         h1 {
-            text-align: left;
-            color: #333;
-            padding: 10px;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        fieldset {
             margin-bottom: 20px;
-        }
-        .option-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        .option {
-            background-color: white;
             border: 1px solid #ddd;
-            border-radius: 5px;
             padding: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .option input[type="radio"] {
-            margin-left: auto;
+        legend {
+            font-weight: bold;
         }
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+        label {
+            display: block;
+            margin-bottom: 5px;
         }
-        .button {
+        select, input[type="checkbox"] {
+            margin-bottom: 10px;
+        }
+        button {
+            align-self: center;
             padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            width: 48%;
         }
-        .prev-button {
-            background-color: #ddd;
-            color: #333;
-        }
-        .next-button {
-            background-color: #e6e6fa;
-            color: #333;
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-<h1>어떤 노트북을 원하세요?</h1>
+<h1>노트북 추천 설문조사</h1>
+<form id="surveyForm">
+    <fieldset>
+        <legend>사용 목적 (복수 선택 가능)</legend>
+        <label><input type="checkbox" name="categories" value="게이밍"> 게이밍</label>
+        <label><input type="checkbox" name="categories" value="프로그래밍"> 프로그래밍</label>
+        <label><input type="checkbox" name="categories" value="그래픽/디자인"> 그래픽/디자인</label>
+        <label><input type="checkbox" name="categories" value="학생용"> 학생용</label>
+    </fieldset>
 
-<form id="laptopSurvey">
-    <div class="option-container">
-        <div class="option">
-            <label for="gaming">게이밍</label>
-            <input type="radio" id="gaming" name="laptopType" value="gaming">
-        </div>
-        <div class="option">
-            <label for="programming">프로그래밍</label>
-            <input type="radio" id="programming" name="laptopType" value="programming">
-        </div>
-        <div class="option">
-            <label for="graphicDesign">그래픽/디자인</label>
-            <input type="radio" id="graphicDesign" name="laptopType" value="graphicDesign">
-        </div>
-        <div class="option">
-            <label for="student">학생용</label>
-            <input type="radio" id="student" name="laptopType" value="student">
-        </div>
-        <div class="option">
-            <label for="intel">인텔</label>
-            <input type="radio" id="intel" name="cpuBrand" value="intel">
-        </div>
-        <div class="option">
-            <label for="ryzen">라이젠</label>
-            <input type="radio" id="ryzen" name="cpuBrand" value="ryzen">
-        </div>
-        <div class="option">
-            <label for="nvidia">엔디비아</label>
-            <input type="radio" id="nvidia" name="gpuBrand" value="nvidia">
-        </div>
-        <div class="option">
-            <label for="amd">암드</label>
-            <input type="radio" id="amd" name="gpuBrand" value="amd">
-        </div>
-        <div class="option">
-            <label for="under500k">50만원 이하</label>
-            <input type="radio" id="under500k" name="priceRange" value="under500k">
-        </div>
-        <div class="option">
-            <label for="100to200m">100~200만원</label>
-            <input type="radio" id="100to200m" name="priceRange" value="100to200m">
-        </div>
-        <div class="option">
-            <label for="over200m">200만원 이상</label>
-            <input type="radio" id="over200m" name="priceRange" value="over200m">
-        </div>
-        <div class="option">
-            <label for="asImportant">AS 중요</label>
-            <input type="radio" id="asImportant" name="asImportance" value="important">
-        </div>
-    </div>
+    <fieldset>
+        <legend>가격대</legend>
+        <select name="priceRange" required>
+            <option value="">선택해주세요</option>
+            <option value="50만원 이하">50만원 이하</option>
+            <option value="100~200만원">100~200만원</option>
+            <option value="200만원 이상">200만원 이상</option>
+        </select>
+    </fieldset>
 
-    <div class="button-container">
-        <button type="button" class="button prev-button">이전 페이지</button>
-        <button type="button" class="button next-button">다음 페이지</button>
-    </div>
+    <fieldset>
+        <legend>CPU 브랜드</legend>
+        <select name="cpuBrand" required>
+            <option value="">선택해주세요</option>
+            <option value="인텔">인텔</option>
+            <option value="라이젠">라이젠</option>
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <legend>GPU 브랜드</legend>
+        <select name="gpuBrand" required>
+            <option value="">선택해주세요</option>
+            <option value="엔비디아">엔비디아</option>
+            <option value="AMD">AMD</option>
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <legend>AS 중요도</legend>
+        <label><input type="checkbox" name="asImportant"> AS가 중요합니다</label>
+    </fieldset>
+
+    <button type="submit">추천 받기</button>
 </form>
 
 <script>
-    // 필요한 JavaScript 코드를 여기에 추가할 수 있습니다.
+    document.getElementById('surveyForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const surveyResults = {
+            categories: formData.getAll('categories'),
+            priceRange: formData.get('priceRange'),
+            cpuBrand: formData.get('cpuBrand'),
+            gpuBrand: formData.get('gpuBrand'),
+            asImportant: formData.get('asImportant') === 'on'
+        };
+
+        fetch('/laptop/getRecommendations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(surveyResults),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                localStorage.setItem('recommendedLaptops', JSON.stringify(data));
+                window.location.href = '/laptop/recommendResult';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred: ' + error.message);
+            });
+    });
 </script>
 </body>
+</html>
 </html>

@@ -12,9 +12,9 @@
         LIMIT 5
     </select>
 
-    <select id="findLaptopDetailById" resultType="java.util.HashMap">
-        SELECT *
-        FROM laptop_details
-        WHERE id = #{id}
-    </select>
+<!--    <select id="findLaptopDetailById" resultType="java.util.HashMap">--> <!-- This is for testing purpose -->
+<!--        SELECT *-->
+<!--        FROM laptop_details-->
+<!--        WHERE id = #{id}-->
+<!--    </select>-->
 </mapper>

@@ -3,166 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>노트북 쇼핑몰</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>노트북 추천 결과</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .laptop-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .laptop-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .laptop-card img {
+            max-width: 100%;
+            height: auto;
+        }
+        .laptop-card button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .laptop-card button:hover {
+            background-color: #45a049;
+        }
+        #laptopDetailModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-<header>
-    <h1>추천</h1>
-    <nav>
-        <ul>
-            <li>무료배송</li>
-            <li>쇼핑혜택</li>
-        </ul>
-    </nav>
-</header>
+<h1>추천 노트북 목록</h1>
+<div id="laptopList" class="laptop-list"></div>
 
-<main>
-    <section class="product-grid">
-        <div class="product">
-            <img src="laptop1.jpg" alt="노트북 1">
-            <h3>LG전자 2023 그램17 17Z90R-GA76K</h3>
-            <div class="tags">
-                <span>인텔 코어</span>
-                <span>게이밍</span>
-                <span>17인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop2.jpg" alt="노트북 2">
-            <h3>ASUS ROG Zephyrus M16</h3>
-            <div class="tags">
-                <span>인텔 코어</span>
-                <span>게이밍</span>
-                <span>16인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop3.jpg" alt="노트북 3">
-            <h3>Apple 2023 맥북 프로 14</h3>
-            <div class="tags">
-                <span>M2 Pro</span>
-                <span>14인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop4.jpg" alt="노트북 4">
-            <h3>ASUS 비보북 15 X1502ZA-BQ274</h3>
-            <div class="tags">
-                <span>인텔 코어</span>
-                <span>15.6인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop5.jpg" alt="노트북 5">
-            <h3>HP 2023 노트북 15s-fq5090TU</h3>
-            <div class="tags">
-                <span>인텔 코어</span>
-                <span>15.6인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop6.jpg" alt="노트북 6">
-            <h3>ASUS TUF Gaming A15 FA507NU-LP051</h3>
-            <div class="tags">
-                <span>AMD 라이젠</span>
-                <span>게이밍</span>
-                <span>15.6인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop7.jpg" alt="노트북 7">
-            <h3>DELL Vostro 3525</h3>
-            <div class="tags">
-                <span>AMD 라이젠</span>
-                <span>15.6인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop8.jpg" alt="노트북 8">
-            <h3>LG전자 2023 울트라PC 14U380-GR56K</h3>
-            <div class="tags">
-                <span>인텔 코어</span>
-                <span>14인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop9.jpg" alt="노트북 9">
-            <h3>DELL Inspiron 14 5420</h3>
-            <div class="tags">
-                <span>인텔 코어</span>
-                <span>14인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-        <div class="product">
-            <img src="laptop10.jpg" alt="노트북 10">
-            <h3>MSI 모던 14 C5M-i5156W11</h3>
-            <div class="tags">
-                <span>AMD 라이젠</span>
-                <span>14인치</span>
-                <span>RAM</span>
-                <span>SSD</span>
-            </div>
-        </div>
-    </section>
+<div id="laptopDetailModal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="laptopDetailContent"></div>
+    </div>
+</div>
 
-    <section class="brand-slider">
-        <div class="brand">
-            <img src="acer_logo.jpg" alt="Acer">
-            <p>Acer</p>
-        </div>
-        <div class="brand">
-            <img src="apple_logo.jpg" alt="Apple">
-            <p>Apple</p>
-        </div>
-        <div class="brand">
-            <img src="asus_logo.jpg" alt="ASUS">
-            <p>ASUS</p>
-        </div>
-        <div class="brand">
-            <img src="msi_logo.jpg" alt="MSI">
-            <p>MSI</p>
-        </div>
-        <div class="brand">
-            <img src="lenovo_logo.jpg" alt="Lenovo">
-            <p>Lenovo</p>
-        </div>
-        <div class="brand">
-            <img src="lg_logo.jpg" alt="LG">
-            <p>LG</p>
-        </div>
-    </section>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const recommendedLaptops = JSON.parse(localStorage.getItem('recommendedLaptops'));
+        const laptopListElement = document.getElementById('laptopList');
+        const modal = document.getElementById('laptopDetailModal');
+        const modalContent = document.getElementById('laptopDetailContent');
+        const closeBtn = document.getElementsByClassName('close')[0];
 
-    <section class="promotions">
-        <div class="promotion">
-            <img src="promo1.jpg" alt="7월 사용후기 이벤트">
-        </div>
-        <div class="promotion">
-            <img src="promo2.jpg" alt="7월 인기제품 사은품 증정">
-        </div>
-    </section>
-</main>
+        if (recommendedLaptops && recommendedLaptops.length > 0) {
+            recommendedLaptops.forEach(laptop => {
+                const laptopCard = document.createElement('div');
+                laptopCard.className = 'laptop-card';
+                laptopCard.innerHTML = `
+                        <h3>${laptop.tag_data}</h3>
+                        <p>${laptop.tag_etc}</p>
+                        <button onclick="showLaptopDetail(${laptop.id})">상세 정보</button>
+                    `;
+                laptopListElement.appendChild(laptopCard);
+            });
+        } else {
+            laptopListElement.innerHTML = '<p>추천된 노트북이 없습니다.</p>';
+        }
 
-<footer>
-    <!-- 페이지 하단 내용 -->
-</footer>
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    });
+
+    function showLaptopDetail(id) {
+        fetch(`/laptop/detail/${id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const modalContent = document.getElementById('laptopDetailContent');
+                modalContent.innerHTML = `
+                        <h2>${data.name}</h2>
+                        <p>CPU: ${data.cpu}</p>
+                        <p>GPU: ${data.gpu}</p>
+                        <p>RAM: ${data.ram}</p>
+                        <p>저장장치: ${data.storage}</p>
+                        <p>화면: ${data.display}</p>
+                        <p>가격: ${data.price}원</p>
+                    `;
+                document.getElementById('laptopDetailModal').style.display = "block";
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching laptop details.');
+            });
+    }
+</script>
 </body>
 </html>

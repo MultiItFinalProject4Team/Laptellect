@@ -47,6 +47,6 @@ logging:
 
     mybatis:
       mapper-locations: classpath:mapper/**/*.xml
-      type-aliases-package: com.multi.laptellect.recommend.clovaapi.model.dto
+      type-aliases-package: com.multi.laptellect.recommend.laptop.model.dto
       configuration:
         map-underscore-to-camel-case: true
