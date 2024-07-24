@@ -70,7 +70,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-<<<<<<< HEAD
+
                     <li class="nav-item">
                         <a class="nav-link" href="/">HOME</a>
                     </li>
@@ -84,11 +84,12 @@
                         <a class="nav-link" href="/customer">고객센터</a>
                     </li>
                     <th:block sec:authorize="isAnonymous()">
-=======
 
                     <th:block sec:authorize="isAnonymous() or hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
 
->>>>>>> 61a47deb10ad6041ae3bb0b3215109a7717e1441
+
+                    <th:block sec:authorize="isAnonymous() or hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
+
                         <li class="nav-item">
                             <a class="nav-link" href="/">HOME</a>
                         </li>
