@@ -16,7 +16,7 @@
             margin-bottom: 10px;
         }
     </style>
-    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
 </head>
 <body>
 <div layout:fragment="content">
@@ -55,8 +55,37 @@
         <button type="submit">등록</button>
     </form>
 
-    <script>
-        CKEDITOR.replace('content');
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
+            }
+        }
+    </script>
+    <script type="module">
+        import {
+            ClassicEditor,
+            Essentials,
+            Paragraph,
+            Bold,
+            Italic,
+            Font
+        } from 'ckeditor5';
+        ClassicEditor
+            .create( document.querySelector( '#content' ), {
+                plugins: [ Essentials, Paragraph, Bold, Italic, Font ],
+                toolbar: [
+                    'undo', 'redo', '|', 'bold', 'italic', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                ]
+            } )
+            .then( editor => {
+                window.editor = content;
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
     </script>
     <script>
         let fileInputCount = 1;
