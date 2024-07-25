@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.multi.laptellect.auth.model.mapper.AuthMapper">
+<mapper namespace="com.multi.laptellect.member.model.mapper.MemberMapper">
 
 	<resultMap id="memberResultMap" type="memberDTO">
 		<result property="memberNo" column="member_no"/>
@@ -13,6 +13,56 @@
 		<result property="createDate" column="created_at" jdbcType="TIMESTAMP"/>
 		<result property="modifyDate" column="updated_at" jdbcType="TIMESTAMP"/>
 	</resultMap>
+
+	<insert id="insertMember" parameterType="memberDTO" useGeneratedKeys="true" keyProperty="memberNo">
+		INSERT INTO
+			mem_member
+		(
+			  member_name
+			, email
+		<if test="nickName != null">
+			, nick_name
+		</if>
+			, login_type
+		)
+		VALUES
+		(
+			  #{ memberName }
+			, #{ email }
+		<if test="nickName != null">
+			, #{ nickName }
+		</if>
+			, #{ loginType }
+		)
+	</insert>
+
+	<insert id="insertPassword" parameterType="memberDTO">
+		INSERT INTO
+			mem_password
+		(
+			  member_no
+			, member_password
+		)
+		VALUES
+		(
+			  #{ memberNo }
+			, #{ password }
+		)
+	</insert>
+
+	<insert id="insertSocialMember" parameterType="kakaoDTO" useGeneratedKeys="true" keyProperty="socialId">
+		INSERT INTO
+			mem_social_member
+		(
+			  member_no
+			, external_id
+		)
+		VALUES
+		(
+			  #{ memberNo }
+			, #{ externalId }
+		)
+	</insert>
 
 	<select id="selectMemberById" parameterType="String" resultMap="memberResultMap">
 		SELECT

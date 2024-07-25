@@ -11,14 +11,17 @@ public interface MemberMapper {
     @Select("SELECT * FROM mem_member WHERE member_no = #{ memberNo }")
     MemberDTO findMemberByNo(int memberNo);
 
-    @Select("SELECT member_no FROM mem_member WHERE member_name = #{ id }")
+    @Select("SELECT * FROM mem_member WHERE member_name = #{ id }")
     MemberDTO findMemberById(String id);
 
-    @Select("SELECT member_no FROM mem_member WHERE email = #{ email }")
+    @Select("SELECT * FROM mem_member WHERE email = #{ email } AND login_type = local")
     MemberDTO findMemberByEmail(String email);
 
-    @Select("SELECT member_no FROM mem_member WHERE nick_name = #{ nickName }")
+    @Select("SELECT * FROM mem_member WHERE nick_name = #{ nickName }")
     MemberDTO findMemberByNickName(String nickName);
+
+    @Select("SELECT * FROM mem_member WHERE tel = #{ tel } AND login_type = local")
+    MemberDTO findMemberByTel(String tel);
 
     @Update("UPDATE mem_member SET email = #{ email } WHERE member_no = #{ memberNo}")
     int updateEmail(MemberDTO memberDTO);
@@ -28,4 +31,6 @@ public interface MemberMapper {
 
     @Update("UPDATE mem_member SET tel = #{ tel } WHERE member_no = #{ memberNo}")
     int updateTel(MemberDTO memberDTO);
+
+
 }

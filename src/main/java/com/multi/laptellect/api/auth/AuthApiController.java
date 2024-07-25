@@ -167,6 +167,23 @@ public class AuthApiController {
     }
 
     @ResponseBody
+    @PostMapping("/find-user-id")
+    public String findUserId(@RequestParam(name = "email", required = false) String email,
+                             @RequestParam(name = "tel", required = false) String tel) {
+        String request ="";
+        MemberDTO memberDTO = new MemberDTO();
+
+        try {
+            memberDTO.setEmail(email);
+            memberDTO.setTel(tel);
+            request = "회원님의 아이디는 " + memberService.findUserId(memberDTO) + "입니다.";
+        } catch (Exception e) {
+            request = "존재하지 않는 회원 입니다";
+        }
+        return request;
+    }
+
+    @ResponseBody
     @PostMapping("/signup")
     public int createMember(MemberDTO memberDTO) {
         log.info("회원가입 실행 = {}", memberDTO);
@@ -210,4 +227,6 @@ public class AuthApiController {
             return false;
         }
     }
+
+
 }

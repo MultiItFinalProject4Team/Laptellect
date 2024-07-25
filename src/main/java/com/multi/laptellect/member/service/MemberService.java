@@ -8,4 +8,6 @@ public interface MemberService {
     boolean updateNickName(MemberDTO memberDTO) throws Exception;
 
     boolean updateTel(MemberDTO memberDTO, String verifyCode) throws Exception;
+
+    String findUserId(MemberDTO memberDTO) throws Exception;
 }

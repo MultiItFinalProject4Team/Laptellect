@@ -67,4 +67,25 @@ public class MemberServiceImpl implements MemberService{
             return false;
         }
     }
+
+    @Override
+    public String findUserId(MemberDTO memberDTO) throws Exception {
+        String request = "";
+        String memberName = "";
+        String email = memberDTO.getEmail();
+        String tel = memberDTO.getTel();
+
+
+        if(email == null) {
+            memberDTO.setTel(tel);
+            memberName = memberMapper.findMemberByEmail(email).getMemberName();
+            request = "회원님의 아이디는 [" + memberName + "] 입니다.";
+        } else {
+            memberDTO.setEmail(email);
+            memberName = memberMapper.findMemberByTel(tel).getMemberName();
+            request = "회원님의 아이디는 [" + memberName + "] 입니다.";
+        }
+
+        return request;
+    }
 }
