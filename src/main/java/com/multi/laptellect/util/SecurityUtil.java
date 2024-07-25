@@ -13,12 +13,24 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+/**
+ * 시큐리티 세션 정보를 가져오기 위한 Util 클래스
+ *
+ * @author : 이강석
+ * @fileName : SecurityUtil.java
+ * @since : 2024-07-26
+ */
 @Slf4j
 public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 클래스
 
     @Autowired
     private MemberMapper memberMapper;
 
+    /**
+     * 세션에서 사용자 정보를 가져오기 위한 메서드
+     *
+     * @return the user details
+     */
     public static CustomUserDetails getUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -30,6 +42,11 @@ public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 �
         return (CustomUserDetails) authentication.getPrincipal();
     }
 
+    /**
+     * 로그인한 사용자의 세션을 업데이트 하기 위한 메서드
+     *
+     * @param memberDTO 업데이트 정보가 담긴 MemberDTO 객체
+     */
     public static void updateUserDetails(MemberDTO memberDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

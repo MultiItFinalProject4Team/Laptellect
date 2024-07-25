@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * 인증/인가 관련 API 매핑에 사용하는 클래스
+ *
+ * @fileName      : AuthApiController.java
+ * @author        : 이강석
+ * @since         : 2024-07-26
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -22,30 +29,61 @@ public class AuthApiController {
     private final AuthService authService;
     private final MemberService memberService;
 
+
+    /**
+     * 입력 받은 ID로 Member 유무 체크
+     *
+     * @param id 조회에 사용할 파라미터 값
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/check-id")
     public boolean isId(@RequestParam("userName") String id) {
         return authService.isMemberById(id);
     }
 
+    /**
+     * 입력 받은 닉네임으로 Member 유무 체크
+     *
+     * @param nickName 조회에 사용할 파라미터 값
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/check-nickname")
     public boolean isNickName(@RequestParam("nickName") String nickName) {
         return authService.isMemberByNickName(nickName);
     }
 
+    /**
+     * 입력 받은 email으로 Member 유무 체크
+     *
+     * @param email 조회에 사용할 파라미터 값
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/check-email")
     public boolean isEmail(@RequestParam("email") String email) {
         return authService.isMemberByEmail(email);
     }
 
+    /**
+     * Is 입력 받은 Password로 현재 Password와 일치한지 체크
+     *
+     * @param password 조회에 사용할 파라미터 값
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/check-password")
     public boolean isPassword(@RequestParam("beforePassword") String password) {
         return authService.isMemberByPassword(password);
     }
 
+    /**
+     * 이메일 인증 시 이메일을 보내는 메서드
+     *
+     * @param userEmail the user email
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/verify-email")
     public boolean sendVerifyEmail(@RequestParam("email") String userEmail) {
@@ -61,6 +99,12 @@ public class AuthApiController {
         }
     }
 
+    /**
+     * 이메일 인증 시 인증 코드가 맞는지 검증하는 메서드
+     *
+     * @param verifyCode the verify code
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/check-verify-email")
     public boolean isVerifyEmail(@RequestParam("verifyCode") String verifyCode) {
@@ -76,6 +120,13 @@ public class AuthApiController {
         }
     }
 
+    /**
+     * 사용자 이메일을 업데이트 메서드
+     *
+     * @param userEmail  the user email
+     * @param verifyCode the verify code
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/update-email")
     public boolean updateEmail(@RequestParam("email") String userEmail, @RequestParam("verifyCode") String verifyCode) {
@@ -97,6 +148,12 @@ public class AuthApiController {
         }
     }
 
+    /**
+     * 사용자 닉네임을 업데이트 하는 메서드
+     *
+     * @param nickName the nick name
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/update-nickname")
     public boolean updateNickName(@RequestParam("nickName") String nickName) {
@@ -118,6 +175,12 @@ public class AuthApiController {
         }
     }
 
+    /**
+     * 사용자 패스워드를 업데이트 하는 메서드
+     *
+     * @param passsword the passsword
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/update-password")
     public boolean updatePassword(@RequestParam("password") String passsword) {
@@ -139,6 +202,13 @@ public class AuthApiController {
         }
     }
 
+
+    /**
+     * SMS 인증 시 문자를 보내는 메서드
+     *
+     * @param tel the tel
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/verify-tel")
     public boolean sendVerifySms(@RequestParam("tel") String tel) {
@@ -151,6 +221,12 @@ public class AuthApiController {
         }
     }
 
+    /**
+     * SMS 인증번호를 검증하는 메서드
+     *
+     * @param verifyCode the verify code
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/check-verify-tel")
     public boolean isVerifyTel(@RequestParam("verifyCode") String verifyCode) {
@@ -166,6 +242,13 @@ public class AuthApiController {
         }
     }
 
+    /**
+     * 이메일 또는 전화번호를 통해 ID를 찾는 메서드
+     *
+     * @param email the email
+     * @param tel   the tel
+     * @return the string
+     */
     @ResponseBody
     @PostMapping("/find-user-id")
     public String findUserId(@RequestParam(name = "email", required = false) String email,
@@ -183,6 +266,12 @@ public class AuthApiController {
         return request;
     }
 
+    /**
+     * 회원가입을 실행하는 메서드
+     *
+     * @param memberDTO the member dto
+     * @return the int
+     */
     @ResponseBody
     @PostMapping("/signup")
     public int createMember(MemberDTO memberDTO) {
@@ -207,6 +296,13 @@ public class AuthApiController {
 
     }
 
+    /**
+     * 사용자 연락처를 업데이트 하는 메서드
+     *
+     * @param tel        the tel
+     * @param verifyCode the verify code
+     * @return the boolean
+     */
     @ResponseBody
     @PostMapping("/update-tel")
     public boolean updateTel(@RequestParam("tel") String tel, @RequestParam("verifyCode") String verifyCode) {

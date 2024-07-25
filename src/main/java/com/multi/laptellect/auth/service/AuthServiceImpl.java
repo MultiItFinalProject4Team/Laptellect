@@ -14,6 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 
+/**
+ * 인증/인가에 관한 비지니스 로직을 처리하기 위한 클래스
+ *
+ * @author : 이강석
+ * @fileName : AuthServiceImpl.java
+ * @since : 2024-07-26
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -27,6 +34,7 @@ public class AuthServiceImpl implements AuthService{
     private final KakaoConfig kakaoConfig;
 
     //    private final SecureRandom secureRandom;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)

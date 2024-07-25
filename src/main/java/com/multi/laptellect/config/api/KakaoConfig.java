@@ -4,6 +4,13 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 카카오 API 설정 클래스
+ *
+ * @fileName      : KakaoConfig.java
+ * @author        : 이강석
+ * @since         : 2024-07-26
+ */
 @Configuration
 @Getter
 public class KakaoConfig {
