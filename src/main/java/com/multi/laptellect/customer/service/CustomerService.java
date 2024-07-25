@@ -1,7 +1,9 @@
 package com.multi.laptellect.customer.service;
 
+import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
+import com.multi.laptellect.util.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +18,8 @@ import java.util.UUID;
 public class CustomerService {
     @Autowired
     private CustomDao customDao;
+    @Autowired
+    private EmailUtil emailUtil;
 
     public List<NoticeListDto> getNoticeList() {
         List<NoticeListDto> notice = new ArrayList<>();
@@ -106,6 +110,19 @@ public class CustomerService {
 
     public void personalAnswerApp(PersonalqAnswerDto answerDto) {
         customDao.personalAnswerApp(answerDto);
+        String contents = answerDto.getContent();
+        contents=contents.replaceAll("<[^>]*>", " ");
+        Email email=new Email();
+        email.setMailTitle("답변이 완료되었습니다");
+        email.setMailContent("문의주신 "+getPersonalq(answerDto.getPersonalqNo()).getTitle()+"의 문의에 관리자가 답변을 남겼습니다.\n 답변내용: \n"+contents);
+        email.setReceiveAddress("anjy0821@naver.com");
+
+        try {
+            emailUtil.sendEmail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String getPersonalaCode(int personalaNo) {
