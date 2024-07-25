@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class personalqImageDto {
+public class ImageDto {
     private String originName;
     private String uploadName;
     private String createdAt;

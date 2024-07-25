@@ -53,7 +53,7 @@
         <div class="carousel-inner">
             <th:block th:each="item, num : ${imageList}">
                 <div th:classappend="${num.index == 0} ? 'carousel-item active' : 'carousel-item'">
-                    <img th:src="@{/customer/user/images/{image}(image=${item})}" class="d-block w-100" alt="..." width="214px" height="400px">
+                    <img th:src="@{/images/{image}(image=${item})}" class="d-block w-100" alt="..." width="214px" height="400px">
                 </div>
             </th:block>
         </div>
@@ -87,7 +87,7 @@
         <div class="carousel-inner">
             <th:block th:each="item, num : ${imageList2}">
                 <div th:classappend="${num.index == 0} ? 'carousel-item active' : 'carousel-item'">
-                    <img th:src="@{/customer/user/images/{image}(image=${item})}" class="d-block w-100" alt="..." width="214px" height="400px">
+                    <img th:src="@{/images/{image}(image=${item})}" class="d-block w-100" alt="..." width="214px" height="400px">
                 </div>
             </th:block>
         </div>
