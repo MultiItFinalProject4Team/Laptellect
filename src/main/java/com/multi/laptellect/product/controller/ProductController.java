@@ -75,13 +75,9 @@ public class ProductController {
     @GetMapping("/productList")
     public String ProductList(Model model){
         List<ProductDTO> products = productService.getStoredProducts();
-        products.forEach(product -> {
-            List<String> images = productService.getImgae(product.getReferenceCode());
+        products.get(0).getImage();
 
-            log.info("testtest"+images.toString());
-
-            model.addAttribute("images", images);
-        });
+        System.out.println("이미지:" + products.get(0).getImage());
 
         model.addAttribute("products", products);
 

@@ -4,6 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.laptellect.product.model.mapper.ProductMapper">
 
+    <resultMap id="productResultMap" type="productDTO">
+        <result property="productNo" column="product_no"/>
+        <result property="typeNo" column="type_no"/>
+        <result property="productName" column="product_name"/>
+        <result property="price" column="price"/>
+        <result property="referenceCode" column="reference_code"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="productCode" column="product_code"/>
+        <result property="image" column="upload_name"/>
+    </resultMap>
 
     <!-- 제품 삽입 쿼리-->
     <insert id="insertProduct" parameterType="com.multi.laptellect.product.model.dto.ProductDTO" useGeneratedKeys="true" keyProperty="productNo">
@@ -24,9 +35,21 @@
     </select>
 
     <!-- 전체 제품 조회-->
-    <select id="getAllProducts" resultType="com.multi.laptellect.product.model.dto.ProductDTO">
-        SELECT product_no AS productNo, type_no AS typeNo, product_name AS productName, price, reference_code AS referenceCode, created_at AS createdAt, updated_at AS updatedAt, product_code AS productCode
-        FROM product
+    <select id="getAllProducts" resultType="com.multi.laptellect.product.model.dto.ProductDTO" resultMap="productResultMap">
+        SELECT p.product_no,
+        p.type_no,
+        p.product_name,
+        p.price,
+        p.reference_code,
+        p.created_at,
+        p.updated_at,
+        p.product_code,
+        i.upload_name
+        FROM
+        product p
+        JOIN images i
+        on i.reference_code = p.reference_code
+
     </select>
     
 

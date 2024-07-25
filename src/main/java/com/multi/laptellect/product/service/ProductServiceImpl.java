@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
                 //이미지 처리
                 ImageDTO imageDTO = new ImageDTO();
                 String url = "http:" + productDTO.getImage();
-                String filePath = "product";
+                String filePath = "src/main/resources/static/img/product";
 
 
 
@@ -114,23 +114,23 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getStoredProducts() {
 
         List<ProductDTO> productDTOList = productMapper.getAllProducts();
-        List<ProductDTO> processedProductDTOList = new ArrayList<>();
+        
+//        for (ProductDTO productDTO : productDTOList) {
+//            ProductDTO dto = new ProductDTO();
+//
+//
+//            dto.setProductCode(productDTO.getProductCode());
+//            dto.setProductName(productDTO.getProductName());
+//            dto.setPrice(productDTO.getPrice());
+//            dto.setReferenceCode(productDTO.getReferenceCode());
+//            dto.setImage(productDTO.getImage());
+//
+//            processedProductDTOList.add(dto);
+//
+//
+//        }
 
-        for (ProductDTO productDTO : productDTOList) {
-            ProductDTO dto = new ProductDTO();
-
-
-            dto.setProductCode(productDTO.getProductCode());
-            dto.setProductName(productDTO.getProductName());
-            dto.setPrice(productDTO.getPrice());
-            dto.setReferenceCode(productDTO.getReferenceCode());
-
-            processedProductDTOList.add(dto);
-
-
-        }
-
-        return processedProductDTOList;
+        return productDTOList;
     }
 
     @Override
