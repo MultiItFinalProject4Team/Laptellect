@@ -72,15 +72,15 @@ public class ProductServiceImpl implements ProductService {
                 //이미지 처리
                 ImageDTO imageDTO = new ImageDTO();
                 String url = "http:" + productDTO.getImage();
-                String filePath = "./uploads/";
+                String filePath = "product";
 
-                crawlingService.downloadImage(url,filePath);
+
 
 
                 String uuid = UUID.randomUUID().toString();
                 String uploadName = uuid + ".jpg";
 
-
+                crawlingService.downloadImage(url,filePath, uploadName);
 
                 System.out.println(uploadName);
                 log.info(uploadName);

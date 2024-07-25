@@ -17,11 +17,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -293,12 +293,26 @@ public class CrawlingService {
         return values.isEmpty() ? null : values;
     }
 
-    public void downloadImage(String imageUrl, String destinationFile) throws IOException {
+    public static void downloadImage(String imageUrl, String saveDirectory, String imageName) {
+        // 디렉토리 경로에 이미지 파일명을 추가
+        String savePath = saveDirectory + "/" + imageName;
 
-        URL url = new URL(imageUrl);
-        try (InputStream in = url.openStream()) {
+        // 디렉토리 생성 (존재하지 않는 경우)
+        File directory = new File(saveDirectory);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
 
-            Files.copy(in, Paths.get(destinationFile));
+        try (BufferedInputStream in = new BufferedInputStream(new URL(imageUrl).openStream());
+             FileOutputStream fileOutputStream = new FileOutputStream(savePath)) {
+            byte dataBuffer[] = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                fileOutputStream.write(dataBuffer, 0, bytesRead);
+            }
+            System.out.println("Image successfully downloaded: " + savePath);
+        } catch (IOException e) {
+            System.out.println("Error downloading image: " + e.getMessage());
         }
     }
 
