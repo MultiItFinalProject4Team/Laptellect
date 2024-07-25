@@ -46,7 +46,7 @@
         where personalq_no=#{personalqNo}
     </select>
 
-    <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.personalqImageDto">
+    <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.ImageDto">
         insert into
         images(origin_name, upload_name, reference_code)
         values(#{originName}, #{uploadName}, #{referenceCode})
@@ -117,4 +117,17 @@
         delete from personal_answer
         where personalq_no=#{personalqNo}
     </delete>
+
+    <select id="getProudctqList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo}
+    </select>
+
+    <select id="getProductqCategory" resultType="com.multi.laptellect.customer.dto.ProductqCategoryDto">
+        select *
+        from
+        productquestion_category
+    </select>
 </mapper>

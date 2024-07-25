@@ -37,17 +37,18 @@
 </ul>
 </header>
     <form action="/customer/user/update_personalq" method="post" enctype="multipart/form-data">
-        <label for="title">제목:</label>
-        <input type="text" id="title" name="title" th:value="${dto.title}" required><br><br>
+        <div class="input-group form-row">
+        <label class="input-group-text" for="title">제목:</label>
+        <input class="col-md-9" type="text" id="title" name="title" th:value="${dto.title}" required><br><br>
 
         <label class="input-group-text" for="inputGroupSelect01" >카테고리</label>
-        <select class="form-select" id="inputGroupSelect01" name="personalqCategorycode">
+        <select class="form-select col-md-3" id="inputGroupSelect01" name="personalqCategorycode">
             <option th:each="categories : ${category}"
                     th:value="${categories.personalqCategorycode}"
                     th:text="${categories.personalqCategoryname}">
             </option>
         </select>
-
+        </div>
         <label for="content">내용:</label>
         <textarea id="content" name="content" rows="10" cols="80" required th:text="${dto.content}"></textarea><br><br>
 

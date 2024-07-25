@@ -1,5 +1,6 @@
 package com.multi.laptellect.customer.service;
 
+import com.multi.laptellect.customer.dto.ImageDto;
 import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
@@ -81,13 +82,11 @@ public class CustomerService {
                 String ext = fileName.substring(extIndex);
                 String storeFileName = uuid + "." + ext;
 
-                personalqImageDto imageDto = personalqImageDto.builder()
+                ImageDto imageDto = ImageDto.builder()
                         .originName(fileName)
                         .uploadName(storeFileName)
                         .referenceCode(code)
                         .build();
-
-                customDao.inputImage(imageDto);
 
                 File directory = new File(path);
                 if (!directory.exists()) {
@@ -99,6 +98,7 @@ public class CustomerService {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                customDao.inputImage(imageDto);
             }
         }
         return 1;
@@ -166,14 +166,11 @@ public class CustomerService {
                 String ext = fileName.substring(extIndex);
                 String storeFileName = uuid + "." + ext;
 
-                personalqImageDto imageDto = personalqImageDto.builder()
+                ImageDto imageDto = ImageDto.builder()
                         .originName(fileName)
                         .uploadName(storeFileName)
                         .referenceCode(code)
                         .build();
-
-                customDao.inputImage(imageDto);
-
                 File directory = new File(path);
                 if (!directory.exists()) {
                     directory.mkdirs();
@@ -184,6 +181,7 @@ public class CustomerService {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                customDao.inputImage(imageDto);
             }
         }
         return 1;
@@ -203,5 +201,13 @@ public class CustomerService {
 
     public void deletePersonala(int personalqNo) {
         customDao.deletePersonala(personalqNo);
+    }
+
+    public List<ProuductqListDto> getProudctqList(int productNo) {
+        return customDao.getProudctqList(productNo);
+    }
+
+    public List<ProductqCategoryDto> getProductqCategory() {
+        return customDao.getProductqCategory();
     }
 }

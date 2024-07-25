@@ -1,5 +1,6 @@
 package com.multi.laptellect.customer.dao;
 
+import com.multi.laptellect.customer.dto.ImageDto;
 import com.multi.laptellect.customer.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,7 +17,7 @@ public interface CustomDao {
 
     String getpersonalqCode(int personalqNo);
 
-    void inputImage(personalqImageDto imageDto);
+    void inputImage(ImageDto imageDto);
 
     String[] getImage(String referenceCode);
 
@@ -43,4 +44,8 @@ public interface CustomDao {
     void setPersonalaCode(@Param("personalaNo") int personalaNo, @Param("code") String code);
 
     void deletePersonala(int personalqNo);
+
+    List<ProuductqListDto> getProudctqList(int productNo);
+
+    List<ProductqCategoryDto> getProductqCategory();
 }
