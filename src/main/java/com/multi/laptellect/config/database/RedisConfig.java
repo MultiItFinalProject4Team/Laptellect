@@ -1,4 +1,4 @@
-package com.multi.laptellect.config;
+package com.multi.laptellect.config.database;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

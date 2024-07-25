@@ -167,6 +167,30 @@ public class AuthApiController {
     }
 
     @ResponseBody
+    @PostMapping("/signup")
+    public int createMember(MemberDTO memberDTO) {
+        log.info("회원가입 실행 = {}", memberDTO);
+
+        try {
+            if (authService.isMemberById(memberDTO.getMemberName())) {
+                log.error("아이디 중복 = {}", memberDTO.getMemberName());
+                return 1; // ID 중복
+            }
+            if (authService.isMemberByEmail(memberDTO.getEmail())) {
+                log.error("이메일 중복 = {}", memberDTO.getEmail());
+                return 2; // 이메일 중복
+            }
+            authService.createMember(memberDTO);
+            log.info("회원가입 완료 = {}", memberDTO);
+            return 0; // 회원 가입 완료
+        } catch (Exception e) {
+            log.error("회원가입 에러 = " + e);
+            return 3; // 회원가입 에러
+        }
+
+    }
+
+    @ResponseBody
     @PostMapping("/update-tel")
     public boolean updateTel(@RequestParam("tel") String tel, @RequestParam("verifyCode") String verifyCode) {
         CustomUserDetails userDetails = SecurityUtil.getUserDetails();

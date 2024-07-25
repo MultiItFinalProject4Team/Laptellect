@@ -1,7 +1,7 @@
 package com.multi.laptellect.util;
 
 import com.multi.laptellect.common.model.Email;
-import com.multi.laptellect.config.EmailConfig;
+import com.multi.laptellect.config.api.EmailConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;

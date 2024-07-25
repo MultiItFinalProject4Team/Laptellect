@@ -2,6 +2,7 @@ package com.multi.laptellect.auth.service;
 
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
 import com.multi.laptellect.common.model.Email;
+import com.multi.laptellect.config.api.KakaoConfig;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.util.*;
@@ -23,6 +24,7 @@ public class AuthServiceImpl implements AuthService{
     private final EmailUtil emailUtil;
     private final RedisUtil redisUtil;
     private final SmsUtil smsUtil;
+    private final KakaoConfig kakaoConfig;
 
     //    private final SecureRandom secureRandom;
 

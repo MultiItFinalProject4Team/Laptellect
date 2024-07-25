@@ -1,4 +1,4 @@
-package com.multi.laptellect.config;
+package com.multi.laptellect.error;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;

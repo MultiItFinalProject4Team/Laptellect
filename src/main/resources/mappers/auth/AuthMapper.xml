@@ -15,22 +15,30 @@
 	</resultMap>
 
 	<insert id="insertMember" parameterType="memberDTO" useGeneratedKeys="true" keyProperty="memberNo">
-		INSERT INTO mem_member
+		INSERT INTO
+			mem_member
 		(
 			  member_name
 			, email
+		<if test="nickName != null">
+			, nick_name
+		</if>
 			, login_type
 		)
 		VALUES
 		(
 			  #{ memberName }
 			, #{ email }
+		<if test="nickName != null">
+			, #{ nickName }
+		</if>
 			, #{ loginType }
 		)
 	</insert>
 
 	<insert id="insertPassword" parameterType="memberDTO">
-		INSERT INTO mem_password
+		INSERT INTO
+			mem_password
 		(
 			  member_no
 			, member_password
@@ -39,6 +47,20 @@
 		(
 			  #{ memberNo }
 			, #{ password }
+		)
+	</insert>
+
+	<insert id="insertSocialMember" parameterType="kakaoDTO" useGeneratedKeys="true" keyProperty="socialId">
+		INSERT INTO
+			mem_social_member
+		(
+			  member_no
+			, external_id
+		)
+		VALUES
+		(
+			  #{ memberNo }
+			, #{ externalId }
 		)
 	</insert>
 
@@ -62,4 +84,38 @@
 		WHERE
 			member_no = #{ memberNo }
 	</update>
+
+	<!-- Member Find 회원 번호  -->
+	<select id="findMemberByMemberNo" parameterType="int" resultMap="memberResultMap">
+		SELECT
+			m.*,
+			p.member_password AS password
+		FROM
+			mem_member m
+		LEFT JOIN
+			mem_password p ON m.member_no = p.member_no
+		WHERE
+			m.member_no = #{ memberNo }
+	</select>
+
+	<select id="findMemberBySocialId" parameterType="Long" resultMap="memberResultMap">
+		SELECT
+			*
+		FROM
+			mem_social_member s
+		JOIN
+			mem_member m ON s.member_no = m.member_no
+		WHERE
+			s.social_id = #{ socialId }
+	</select>
+
+	<!-- 소셜 회원 Find  -->
+	<select id="findSocialMemberByExternalId" parameterType="Long">
+		SELECT
+			*
+		FROM
+			mem_social_member
+		WHERE
+			external_id = #{ externalId }
+	</select>
 </mapper>

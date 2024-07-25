@@ -27,4 +27,5 @@ public interface AuthService {
     void sendSms(String tel) throws Exception;
 
     boolean isVerifyTel(String verifyCode) throws Exception;
+
 }

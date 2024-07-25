@@ -49,6 +49,7 @@ dependencies {
 
 	implementation 'org.springframework.session:spring-session-data-redis' // redis 세션 관리
 	implementation 'net.nurigo:sdk:4.3.0' // coolsms
+
 }
 
 tasks.named('test') {
