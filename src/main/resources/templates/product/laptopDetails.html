@@ -11,13 +11,15 @@
     <div class="row">
         <div class="col-12">
             <table class="table table-striped mt-3">
+
+                <img th:src="${product.imageUrl}" class="card-img-top" alt="상품 이미지" style="height: 200px; object-fit: contain;">
                 <tr>
                     <th>상품명</th>
                     <td th:text="${product.productName}">상품명</td>
                 </tr>
                 <tr>
                     <th>가격</th>
-                    <td th:text="${product.price}">가격</td>
+                    <td th:text="${product.price + '원'}">가격</td>
                 </tr>
                 <tr>
                     <th>운영체제(OS)</th>
@@ -80,13 +82,10 @@
                     <td th:text="${product.convenienceFeatures}">패널 표면 처리</td>
                 </tr>
                 <tr>
-                    <th>부가 기능</th>
-                    <td th:text="${product.additionalFeatures}">부가 기능</td>
+                    <th>무게</th>
+                    <td th:text="${product.weight}">무게</td>
                 </tr>
-                <tr>
-                    <th>용도</th>
-                    <td th:text="${product.usage}">용도</td>
-                </tr>
+
             </table>
             <form th:action="@{/payment}" method="post">
                 <input type="hidden" name="productName" th:value="${product.productName}">

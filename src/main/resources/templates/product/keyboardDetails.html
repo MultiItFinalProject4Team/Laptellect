@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Product Details</h1>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <img th:src="${product.imageUrl}" class="card-img-top" alt="상품 이미지" style="height: 300px; object-fit: contain;">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.productName}">상품명</h5>
+                    <p class="card-text" th:text="${product.price + '원'}">가격</p>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <th>제조회사</th>
+                    <td th:text="${product.manufactureCompany}">제조회사</td>
+                </tr>
+                <tr>
+                    <th>사이즈</th>
+                    <td th:text="${product.size}">사이즈</td>
+                </tr>
+                <tr>
+                    <th>연결 방식</th>
+                    <td th:text="${product.contactMethod}">연결 방식</td>
+                </tr>
+                <tr>
+                    <th>무선 연결</th>
+                    <td th:text="${product.wirelessConnection}">무선 연결</td>
+                </tr>
+                <tr>
+                    <th>배터리</th>
+                    <td th:text="${product.battery}">배터리</td>
+                </tr>
+                <tr>
+                    <th>키 배열</th>
+                    <td th:text="${product.keyArrangement}">키 배열</td>
+                </tr>
+                <tr>
+                    <th>인터페이스</th>
+                    <td th:text="${product.interfaceKeyBoard}">인터페이스</td>
+                </tr>
+                <tr>
+                    <th>접점 방식</th>
+                    <td th:text="${product.contactMethod}">접점 방식</td>
+                </tr>
+                <tr>
+                    <th>스위치</th>
+                    <td th:text="${product.keyBoardSwitch}">스위치</td>
+                </tr>
+                <tr>
+                    <th>키보드 형태</th>
+                    <td>
+                        <ul>
+                            <li th:each="type : ${product.keyBoardType}" th:text="${type}">키보드 형태</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>키 스위치</th>
+                    <td th:text="${product.keySwitch}">키 스위치</td>
+                </tr>
+                <tr>
+                    <th>키압</th>
+                    <td th:text="${product.keyPressure}">키압</td>
+                </tr>
+                <tr>
+                    <th>동시입력</th>
+                    <td th:text="${product.simultaneousInput}">동시입력</td>
+                </tr>
+                <tr>
+                    <th>응답속도</th>
+                    <td th:text="${product.responseSpeed}">응답속도</td>
+                </tr>
+                <tr>
+                    <th>키캡 재질</th>
+                    <td th:text="${product.keycapMaterial}">키캡 재질</td>
+                </tr>
+                <tr>
+                    <th>키캡 각인방식</th>
+                    <td th:text="${product.keycapEngraving}">키캡 각인방식</td>
+                </tr>
+                <tr>
+                    <th>각인 위치</th>
+                    <td th:text="${product.engravingLocation}">각인 위치</td>
+                </tr>
+                <tr>
+                    <th>부가 기능</th>
+                    <td>
+                        <ul>
+                            <li th:each="addon : ${product.addOns}" th:text="${addon}">부가 기능</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>가로</th>
+                    <td th:text="${product.width}">가로</td>
+                </tr>
+                <tr>
+                    <th>세로</th>
+                    <td th:text="${product.length}">세로</td>
+                </tr>
+                <tr>
+                    <th>높이</th>
+                    <td th:text="${product.height}">높이</td>
+                </tr>
+                <tr>
+                    <th>무게</th>
+                    <td th:text="${product.weight}">무게</td>
+                </tr>
+                <tr>
+                    <th>케이블 길이</th>
+                    <td th:text="${product.cableLength}">케이블 길이</td>
+                </tr>
+                </tbody>
+            </table>
+            <form th:action="@{/payment}" method="post">
+                <input type="hidden" name="productName" th:value="${product.productName}">
+                <input type="hidden" name="imageUrl" th:value="${product.imageUrl}">
+                <input type="hidden" name="price" th:value="${product.price}">
+                <button type="submit" class="btn btn-primary mt-4">결제하기</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

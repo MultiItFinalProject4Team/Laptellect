@@ -6,10 +6,12 @@ import lombok.Data;
 public class ProductInfo {
 
     private String productName;
-    private String registrationMonth;
+    private String referenceCode;
     private String price;
     private String categoryCode;
-    private String pcode;
+    private String productCode;
     private String imageUrl;
     private String cate3;
+    private int typeNo;
+    private ProductTypeDTO productTypeDTO;
 }

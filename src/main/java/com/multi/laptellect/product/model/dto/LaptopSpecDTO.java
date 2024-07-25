@@ -4,6 +4,9 @@ import lombok.Data;
 
 @Data
 public class LaptopSpecDTO {
+    private String productName;
+    private String price;
+    private String imageUrl;
     private String pcode;
     private String os;
     private String cpuManufacturer;
@@ -21,6 +24,6 @@ public class LaptopSpecDTO {
     private String storageCapacity;
     private String convenienceFeatures;
     private String additionalFeatures;
-    private String usage;
+    private String weight;
 
 }
