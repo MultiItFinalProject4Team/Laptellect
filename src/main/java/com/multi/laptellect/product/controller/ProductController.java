@@ -2,21 +2,19 @@ package com.multi.laptellect.product.controller;
 
 
 import com.multi.laptellect.product.model.dto.LaptopSpecDTO;
+import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.ProductInfo;
-import com.multi.laptellect.product.model.dto.ProductTypeDTO;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -30,30 +28,69 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+
+    //상품별 크롤링 검색 기능
     @PostMapping("/crawl")
-    public String crawl(Model model) throws IOException {
+    public String crawl(@RequestParam("products")String productType , Model model) throws IOException {
+        int typeNo;
+        String type;
 
-        List<ProductInfo> products = crawlingService.crawlProducts(5);
+        switch (productType) {
+            case "1": // 노트북
+                typeNo = 1;
+                type = "laptop";
+                break;
+            case "2": // 마우스
+                typeNo = 2;
+                type = "mouse";
+                break;
+            case "3": // 키보드
+                typeNo = 3;
+                type = "keyboard";
+                break;
+            default:
+                typeNo = 0; // 기본값 또는 에러 처리
+                type = "unknown";
+                break;
+        }
 
-        productService.saveProductsToDB(products);
 
-        model.addAttribute("products", products);
+     try {
+         List<ProductInfo> products = crawlingService.crawlProducts(5 ,type);
+         productService.saveProductsToDB(products,typeNo);
+
+         model.addAttribute("products", products);
+
+     } catch (Exception e){
+
+         log.error("에러발생", e);
+
+     }
+
         return "product/productList";
     }
 
 
+    //상품리스트 조회
     @GetMapping("/productList")
     public String ProductList(Model model){
+        List<ProductDTO> products = productService.getStoredProducts();
+        products.forEach(product -> {
+            List<String> images = productService.getImgae(product.getReferenceCode());
 
-        List<ProductInfo> products = productService.getStoredProducts();
+            log.info("testtest"+images.toString());
+
+            model.addAttribute("images", images);
+        });
+
         model.addAttribute("products", products);
-
 
 
         return "product/productList";
     }
 
 
+    //상세 정보
     @GetMapping("/laptopDetails")
     public String productDetails(@RequestParam("pcode") String pcode, Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", pcode);
@@ -69,12 +106,18 @@ public class ProductController {
         return "product/laptopDetails";
     }
 
-    //상품 분류 가져오는곳
-    @PostMapping("/productType")
-    public String productType(Model model){
+    @GetMapping("/keyboardDetails")
+    public String keyboardDetails(@RequestParam("pcode") String pcode, Model model){
 
-        List<ProductTypeDTO> types = productService.getAllProductTypes();
-        model.addAttribute("types", types);
+        return "product/keyboardDetails";
+    }
+
+    @PostMapping("/productType")
+    public String productType(@RequestBody Map<String, Integer> request, Model model){
+        int typeNo = request.get("typeNo");
+
+        List<ProductDTO> products = productService.getTypeByProduct(typeNo);
+        model.addAttribute("products", products);
 
         return "productList";
     }

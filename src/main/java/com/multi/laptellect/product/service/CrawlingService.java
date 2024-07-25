@@ -1,8 +1,8 @@
 package com.multi.laptellect.product.service;
 
+import com.multi.laptellect.product.model.dto.KeyBoardSpecDTO;
 import com.multi.laptellect.product.model.dto.LaptopSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductInfo;
-import com.multi.laptellect.product.model.mapper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,10 +15,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,21 +29,57 @@ import java.util.List;
 @Service
 public class CrawlingService {
 
-    private static final String URL = "https://prod.danawa.com/list/ajax/getProductList.ajax.php";
-    private static final String PRODUCT_DETAILS_URL = "https://prod.danawa.com/info/ajax/getProductDescription.ajax.php";
+    private final String PRODUCT_LIST_URL = "https://prod.danawa.com/list/ajax/getProductList.ajax.php";
+    private final String PRODUCT_DETAILS_URL = "https://prod.danawa.com/info/ajax/getProductDescription.ajax.php";
 
 
-    @Autowired
-    private ProductMapper productMapper;
+    private String sendPostRequest(CloseableHttpClient httpClient, int page, String productType) throws IOException {
+        HttpPost post = new HttpPost(PRODUCT_LIST_URL);
 
-    private String sendPostRequest(CloseableHttpClient httpClient, int page) throws IOException {
-        HttpPost post = new HttpPost(URL);
-        post.setHeader("Referer", "https://prod.danawa.com/list/?cate=112758&15main_11_02=");
+        String referer;
+        StringEntity params;
+
+        switch (productType) {
+            case "laptop":
+                referer = "https://prod.danawa.com/list/?cate=112758&15main_11_02=";
+                params = new StringEntity("page=" + page +
+                        "&listCategoryCode=758" +
+                        "&categoryCode=758" +
+                        "&physicsCate1=860" +
+                        "&physicsCate2=869" +
+                        "&sortMethod=BoardCount" +
+                        "&viewMethod=LIST" +
+                        "&listCount=30");
+                break;
+            case "mouse":
+                referer = "https://prod.danawa.com/list/?cate=112787";
+                params = new StringEntity("page=" + page +
+                        "&listCategoryCode=787" +
+                        "&categoryCode=787" +
+                        "&physicsCate1=861" +
+                        "&physicsCate2=902" +
+                        "&sortMethod=BoardCount" +
+                        "&viewMethod=LIST" +
+                        "&listCount=10");
+                break;
+            case "keyboard":
+                referer = "https://prod.danawa.com/list/?cate=112782&15main_11_02";
+                params = new StringEntity("page=" + page +
+                        "&listCategoryCode=782" +
+                        "&categoryCode=782" +
+                        "&physicsCate1=861" +
+                        "&physicsCate2=861" +
+                        "&sortMethod=BoardCount" +
+                        "&viewMethod=LIST" +
+                        "&listCount=10");
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid product type: " + productType);
+        }
+        post.setHeader("Referer", referer);
         post.setHeader("Content-type", "application/x-www-form-urlencoded");
-
-        StringEntity params = new StringEntity("page=" + page +
-                "&listCategoryCode=758&categoryCode=758&physicsCate1=860&physicsCate2=869&sortMethod=BoardCount&viewMethod=LIST&listCount=10");
         post.setEntity(params);
+
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
             HttpEntity entity = response.getEntity();
@@ -68,12 +107,11 @@ public class CrawlingService {
         }
     }
 
-
-    public List<ProductInfo> crawlProducts(int pages) throws IOException {
+    public List<ProductInfo> crawlProducts(int pages, String type) throws IOException {
         List<ProductInfo> productList = new ArrayList<>();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             for (int page = 1; page <= pages; page++) {
-                String responseString = sendPostRequest(httpClient, page);
+                String responseString = sendPostRequest(httpClient, page, type);
                 parseHtml(responseString, productList);
             }
         }
@@ -101,7 +139,7 @@ public class CrawlingService {
         String firstPrice = price.split(" ")[0];
 
         ProductInfo productInfo = new ProductInfo();
-        productInfo.setPcode(productCode);
+        productInfo.setProductCode(productCode);
         productInfo.setProductName(productName);
         productInfo.setPrice(firstPrice);
         productInfo.setImageUrl(imageUrl);
@@ -117,8 +155,8 @@ public class CrawlingService {
 
         try {
             String url = PRODUCT_DETAILS_URL;
-            String referer = "https://prod.danawa.com/info/?pcode=" + productInfo.getPcode() + "&cate=112758";
-            String bodyData = "pcode=" + productInfo.getPcode() + "&cate1=860&cate2=869&cate3=" + productInfo.getCate3();
+            String referer = "https://prod.danawa.com/info/?pcode=" + productInfo.getProductCode() + "&cate=112758";
+            String bodyData = "pcode=" + productInfo.getProductCode() + "&cate1=860&cate2=869&cate3=" + productInfo.getCate3();
 
             String responseHtml = sendPostRequest(url, referer, bodyData);
             Document doc = Jsoup.parse(responseHtml);
@@ -153,7 +191,56 @@ public class CrawlingService {
 
     }
 
-    private static String sendPostRequest(String url, String referer, String bodyData) throws IOException{
+    public KeyBoardSpecDTO getKeyBoardDetails(ProductInfo productInfo){
+
+        KeyBoardSpecDTO dto = new KeyBoardSpecDTO();
+        try {
+            String url = PRODUCT_DETAILS_URL;
+            String referer = "https://prod.danawa.com/info/?pcode=" + productInfo.getProductCode() + "&cate=112758";
+            String bodyData = "pcode=" + productInfo.getProductCode() + "&cate1=860&cate2=869&cate3=" + productInfo.getCate3();
+
+            String responseHtml = sendPostRequest(url, referer, bodyData);
+            Document doc = Jsoup.parse(responseHtml);
+
+
+            dto.setManufactureCompany(getSpecValue(doc, "제조회사"));
+            dto.setSize(getSpecValue(doc, "사이즈"));
+            dto.setConnectionMethod(getSpecValue(doc, "연결 방식"));
+            dto.setWirelessConnection(getSpecValue(doc, "무선 연결"));
+            dto.setBattery(getSpecValue(doc, "배터리"));
+            dto.setKeyArrangement(getSpecValue(doc, "키 배열"));
+            dto.setInterfaceKeyBoard(getSpecValue(doc, "인터페이스"));
+            dto.setContactMethod(getSpecValue(doc, "접점 방식"));
+            dto.setKeyBoardSwitch(getSpecValue(doc, "스위치"));
+            dto.setKeyBoardType(getSpecValues(doc,"키보드형태"));
+            dto.setKeySwitch(getSpecValue(doc, "키 스위치"));
+            dto.setKeyPressure(getSpecValue(doc, "키압"));
+            dto.setSimultaneousInput(getSpecValue(doc, "동시입력"));
+            dto.setResponseSpeed(getSpecValue(doc, "응답속도"));
+            dto.setKeycapMaterial(getSpecValue(doc, "키캡 재질"));
+            dto.setKeycapEngraving(getSpecValue(doc,"키캡 각인방식"));
+            dto.setEngravingLocation(getSpecValue(doc, "각인 위치"));
+            dto.setAddOns(getSpecValues(doc,"부가 기능"));
+            dto.setWidth(getSpecValue(doc, "가로"));
+            dto.setLength(getSpecValue(doc, "세로"));
+            dto.setHeight(getSpecValue(doc, "높이"));
+            dto.setWeight(getSpecValue(doc, "무게"));
+            dto.setCableLength(getSpecValue(doc, "케이블 길이"));
+
+            log.info("키보드 스펙: " + dto.toString());
+
+            
+
+
+        } catch (
+                IOException e) {
+            log.error("Error while getting product details", e);
+        }
+        return dto;
+
+    }
+
+    private static String sendPostRequest(String url, String referer, String bodyData) throws IOException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpPost post = new HttpPost(url);
             post.setHeader("Referer", referer);
@@ -163,7 +250,7 @@ public class CrawlingService {
             post.setEntity(entity);
 
 
-            try (CloseableHttpResponse response = client.execute(post))  {
+            try (CloseableHttpResponse response = client.execute(post)) {
                 HttpEntity responseEntity = response.getEntity();
                 return responseEntity != null ? new String(responseEntity.getContent().readAllBytes()) : "";
             }
@@ -171,7 +258,7 @@ public class CrawlingService {
     }
 
 
-    private static String getSpecValue(Document doc, String specName) {
+    private String getSpecValue(Document doc, String specName) {
         Elements rows = doc.select("table.spec_tbl tr");
         for (Element row : rows) {
             Elements th = row.select("th");
@@ -185,6 +272,34 @@ public class CrawlingService {
             }
         }
         return "정보 없음";
+    }
+
+    private List<String> getSpecValues(Document doc, String specName) {
+        List<String> values = new ArrayList<>();
+        Elements rows = doc.select("table.spec_tbl tr");
+        for (Element row : rows) {
+            Elements thElements = row.select("th");
+            for (Element thElement : thElements) {
+                if (thElement.text().contains(specName)) {
+                    Elements tdElements = row.select("td");
+                    for (Element tdElement : tdElements) {
+                        values.add(tdElement.text().trim());
+                    }
+                    break;
+                }
+            }
+
+        }
+        return values.isEmpty() ? null : values;
+    }
+
+    public void downloadImage(String imageUrl, String destinationFile) throws IOException {
+
+        URL url = new URL(imageUrl);
+        try (InputStream in = url.openStream()) {
+
+            Files.copy(in, Paths.get(destinationFile));
+        }
     }
 
 }

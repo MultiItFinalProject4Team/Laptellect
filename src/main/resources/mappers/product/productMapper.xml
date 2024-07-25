@@ -28,11 +28,19 @@
         SELECT product_no AS productNo, type_no AS typeNo, product_name AS productName, price, reference_code AS referenceCode, created_at AS createdAt, updated_at AS updatedAt, product_code AS productCode
         FROM product
     </select>
+    
+
 
     <!-- 선택 제품 조회-->
     <select id="getProductByCode" parameterType="String" resultType="com.multi.laptellect.product.model.dto.ProductDTO">
         SELECT * FROM product WHERE product_code = #{productCode}
     </select>
+
+
+    <insert id="saveCategoryOptions" parameterType="com.multi.laptellect.product.model.dto.ProductCategoryDTO">
+        INSERT INTO product_category(type_no, options) VALUES (#{typeNo}, #{options})
+
+    </insert>
 
 
     <select id="findByOptions" parameterType="string" resultType="com.multi.laptellect.product.model.dto.ProductCategoryDTO">
@@ -50,10 +58,18 @@
     </insert>
 
 
-<!--    <insert id="insertImage" parameterType="" useGeneratedKeys="true" keyProperty="">-->
-<!--        INSERT INTO images(image_no, reference_code, origin_name, upload_name,created_at)-->
-<!--        VALUES (#{imageNo}, #{referenceCode}, #{originName}, #{uploadName}, #{createdAt})-->
-<!--    </insert>-->
+    <insert id="inputImage" parameterType="com.multi.laptellect.product.model.dto.ImageDTO" useGeneratedKeys="true">
+        INSERT INTO
+        images( reference_code, origin_name, upload_name)
+        VALUES ( #{referenceCode}, #{originName}, #{uploadName})
+    </insert>
+
+    <select id="getImage" resultType="string">
+        SELECT upload_name
+        FROM
+        images
+        WHERE reference_code=#{referenceCode}
+    </select>
 
 
 </mapper>
