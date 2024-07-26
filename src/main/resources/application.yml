@@ -30,13 +30,16 @@ server:
       timeout: 1800
 
 
+
+
 logging:
   level:
-    org:
-      springframework:
-        jdbc: DEBUG
-        transaction: DEBUG
-    com:
-      .zaxxer: DEBUG
-    sql: DEBUG
+    org.springframework: INFO
+    com.multi.laptellect: INFO
 
+    sql: DEBUG
+    jdbc.audit: ERROR
+    jdbc.sqlonly: ERROR
+    jdbc.sqltiming: ERROR
+    jdbc.resultset: ERROR
+    jdbc.resultsettable: DEBUG
