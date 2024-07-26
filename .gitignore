@@ -234,3 +234,4 @@ gradle-app.setting
 /uploads/
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,gradle,java,windows
+/uploads/

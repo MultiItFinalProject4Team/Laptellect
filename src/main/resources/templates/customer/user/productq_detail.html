@@ -26,14 +26,14 @@
         </ul>
     </header>
     <div>
-        <h3 th:text="${personalq.personalqNo}" id="personalqNo" >번호</h3>
-        <h3 th:text="${personalq.title}">제목</h3>
-        <p th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">작성일</p>
+        <h3 th:text="${productq.productqNo}" id="productqNo" >번호</h3>
+        <h3 th:text="${productq.title}">제목</h3>
+        <p th:text="${#dates.format(productq.createdAt, 'YY/MM/dd HH:mm')}">작성일</p>
         <div class="btn-group" aria-label="Small button group">
-            <a th:href="@{/customer/user/update_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" th:if="${personalq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>
-            <a th:href="@{/customer/user/delete_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" class="btn bg-body-secondary">문의 삭제</a>
-            <a th:href="@{/customer/admin/update_personala/{personalqNo}(personalqNo=${personalq.personalqNo})}" th:if="${personalq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>
-            <a th:href="@{/customer/admin/delete_personala/{personalqNo}(personalqNo=${personalq.personalqNo})}" th:if="${personalq.answer=='Y'}" class="btn bg-body-secondary">답변 삭제</a>
+            <a th:href="@{/customer/user/update_productq/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>
+            <a th:href="@{/customer/user/delete_productq/{productqNo}(productqNo=${productq.productqNo})}" class="btn bg-body-secondary">문의 삭제</a>
+            <a th:href="@{/customer/admin/update_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>
+            <a th:href="@{/customer/admin/delete_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 삭제</a>
         </div>
     </div>
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="width: 300px;">
@@ -60,15 +60,15 @@
         </button>
     </div>
     <hr class="border border-dark">
-    <div id="content" name="content" th:utext="${personalq.content}" readonly="true">내용</div>
+    <div id="content" name="content" th:utext="${productq.content}" readonly="true">내용</div>
 
     <hr class="border border-dark">
 
-<div  th:if="${personalq.answer=='Y'}">
+<div  th:if="${productq.answer=='Y'}">
 
     <div>
-        <h3 th:text="${personala.title}">제목</h3>
-        <p th:text="${personala.createdAt}">작성일</p>
+        <h3 th:text="${producta.title}">제목</h3>
+        <p th:text="${producta.createdAt}">작성일</p>
     </div>
     <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel" style="width: 300px;">
         <div class="carousel-indicators">
@@ -95,17 +95,17 @@
     </div>
 
     <hr class="border border-dark">
-    <div id="content2" name="content2" th:utext="${personala.content}" readonly="true">내용</div>
+    <div id="content2" name="content2" th:utext="${producta.content}" readonly="true">내용</div>
 
     <hr class="border border-dark">
 </div>
 
 </div>
-    <div class="btn-group" aria-label="Small button group" th:if="${personalq.answer=='N'}">
-        <a th:href="@{/customer/admin/answer_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" class="btn bg-body-secondary">답변하기</a>
+    <div class="btn-group" aria-label="Small button group" th:if="${productq.answer=='N'}">
+        <a th:href="@{/customer/admin/answer_producta/{productqNo}(productqNo=${productq.productqNo})}" class="btn bg-body-secondary">답변하기</a>
     </div>
 <div class="btn-group" aria-label="Small button group">
-    <a href="/customer/user/customer_personalq" class="btn bg-body-secondary">목록으로</a>
+    <a th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productq.productNo})}" class="btn bg-body-secondary">목록으로</a>
 </div>
 </div>
 </body>

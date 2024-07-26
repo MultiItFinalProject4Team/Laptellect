@@ -130,4 +130,23 @@
         from
         productquestion_category
     </select>
+
+    <insert id="productqApp" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto" useGeneratedKeys="true" keyProperty="productqNo">
+        insert into
+        product_question(member_no, product_no, productq_categorycode, title, content, secret)
+        values(#{memberNo},#{productNo},#{productqCategorycode},#{title},#{content},#{secret})
+    </insert>
+
+    <update id="setProductqCode">
+        update product_question
+        set reference_code=#{code}
+        where productq_no=#{productqNo}
+    </update>
+
+    <select id="getProductq" resultType="com.multi.laptellect.customer.dto.ProductqDto">
+        select *
+        from
+        product_question
+        where productq_no=#{productqNo}
+    </select>
 </mapper>
