@@ -135,10 +135,7 @@ public class CustomerController {
 
     //임시 상품(1)
     @GetMapping("/product")
-    public void product(){
-
-    }
-
+    public void product(){}
 
     //상품 문의 이동
     @GetMapping("/customer_productq/{productNo}")
@@ -148,11 +145,22 @@ public class CustomerController {
         model.addAttribute("productqList",productqList);
         return "/customer/user/customer_productq";
     }
-
+    //상품 문의 신청 이동
     @GetMapping("/productq_app")
     public void productq_app(Model model){
         List<ProductqCategoryDto> category = customerService.getProductqCategory();
         System.out.println(category);
         model.addAttribute("category",category);
+    }
+    /**
+     * 상품 문의를 전송하는 메서드
+     *
+     * @param appDto the ProductqAppDto
+     * @return the String
+     */
+    @PostMapping("/productq_app")
+    public String productq_app(ProductqAppDto appDto){
+        String redirectUrl = String.format("/customer/user/customer_productq/%s", 1);
+        return "redirect:"+redirectUrl;
     }
 }
