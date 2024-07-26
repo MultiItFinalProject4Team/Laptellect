@@ -60,8 +60,22 @@
         text-decoration: none;
         color: black;
     }
+        #wrapper{
+      height: auto;
+      min-height: 100%;
+      padding-bottom: 60px;
+    }
+    footer{
+      height: 60px;
+      position : relative;
+      transform : translateY(-100%);
+    }
+
+
 </style>
-    <body>
+</head>
+<body>
+<div id="wrapper">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/"><strong>Laptellect</strong></a>
@@ -70,7 +84,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-
                     <th:block sec:authorize="isAnonymous() or hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
                         <li class="nav-item">
                             <a class="nav-link" href="/">HOME</a>
@@ -78,11 +91,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/recommended">추천</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="/product/productList">스토어</a>
+                            <a class="nav-link" href="/product/productList?pages=1">스토어</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/customer">고객센터</a>
+                            <a class="nav-link" href="/customer/user">고객센터</a>
                         </li>
                     </th:block>
 
@@ -130,49 +144,55 @@
         </div>
     </nav>
 
-    <div layout:fragment="content"></div>
+    <div class="content" layout:fragment="content">
+        <!-- Your content here -->
+    </div>
 
-    <!-- 회원가입 모달 -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+<!--    <footer class="py-3 my-4">-->
+<!--        <ul class="nav justify-content-center border-bottom pb-3 mb-3">-->
 
-                <div class="modal-body text-center">
-                    <h4 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #6c5ce7;">Laptellect</h4>
-                    <br> <br>
-                    <div class="image-container">
-                        <a href="#">
+<!--        </ul>-->
+<!--        <p class="text-center text-muted">© 2023 프로젝트 실패하면 중장비 타러감</p>-->
+<!--    </footer>-->
+</div>
+
+<!-- 회원가입 모달 -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <h4 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #6c5ce7;">Laptellect</h4>
+                <br> <br>
+                <div class="image-container">
+                    <a href="#">
                         <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
                         <div>카카오</div>
-                        </a>
-                    </div>
-                    <div class="image-container">
-                        <a href="#">
+                    </a>
+                </div>
+                <div class="image-container">
+                    <a href="#">
                         <img th:src="@{/img/common/naver-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
                         <div>네이버</div>
-                        </a>
-                    </div>
-                    <div class="image-container">
-                        <a href="/signup">
-                            <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
-                            <div>일반회원</div>
-                        </a>
-                    </div>
-
-                    <br> <br>
-                    <div>
-                        <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
-                    </div>
+                    </a>
+                </div>
+                <div class="image-container">
+                    <a href="/signup">
+                        <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
+                        <div>일반회원</div>
+                    </a>
                 </div>
 
-                <div class="modal-footer">
-
+                <br> <br>
+                <div>
+                    <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

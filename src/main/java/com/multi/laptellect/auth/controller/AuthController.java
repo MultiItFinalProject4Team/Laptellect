@@ -1,48 +1,51 @@
 package com.multi.laptellect.auth.controller;
 
+import com.multi.laptellect.member.model.dto.KakaoDTO;
 import com.multi.laptellect.auth.service.AuthService;
+import com.multi.laptellect.auth.service.OAuthService;
+import com.multi.laptellect.config.api.KakaoConfig;
 import com.multi.laptellect.member.model.dto.MemberDTO;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * 인증/인가에 사용되는 컨트롤러
+ *
+ * @author : 이강석
+ * @fileName : AuthController.java
+ * @since : 2024-07-26
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
+    private final KakaoConfig kakaoConfig;
     private final AuthService authService;
+    private final OAuthService oAuthService;
 
+    /**
+     * 로그인화면 출력 메서드
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/signin")
-    public String showLoginForm() {
+    public String showSignInForm(Model model) {
 
         return "auth/auth-sign-in";
     }
 
-    @PostMapping("/signin")
-    public String login(MemberDTO memberDTO, HttpServletResponse response) {
-        log.info("로그인 폼 전달 = {}", memberDTO);
-
-        return "redirect:/";
-    }
-
-    @GetMapping("/signout")
-    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-        }
-        return "redirect:/";
-    }
-
+    /**
+     * 회원가입 화면 출력 메서드
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         MemberDTO memberDTO = new MemberDTO();
@@ -51,42 +54,40 @@ public class AuthController {
         return  "auth/auth-sign-up-form.html";
     }
 
-    @PostMapping("/signup")
-    public String createMember(MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
-        log.info("log info = {}", memberDTO);
+    /**
+     * 카카오 로그인 및 회원가입 화면을 출력하는 메서드
+     *
+     * @return the string
+     */
+    @GetMapping("/signin/kakao")
+    public String kakaoSingIn() {
+        String kakaoApiKey = kakaoConfig.getKakaoApiKey();
+        String redirectURL = kakaoConfig.getKakaoRedirectUri();
+        String loginURL = "https://kauth.kakao.com/oauth/authorize?response_type=code"
+                + "&client_id=" + kakaoApiKey
+                + "&redirect_uri=" + redirectURL;
+        return "redirect:" + loginURL;
+    }
 
+
+    /**
+     * 카카오 로그인 CallBack 메서드
+     *
+     * @param code the code
+     * @return the string
+     */
+    @RequestMapping("/signin/oauth/kakao")
+    public String kakaoSignIn(@RequestParam("code") String code) {
         try {
-            authService.createMember(memberDTO);
-            redirectAttributes.addFlashAttribute("Message", "회원 가입 완료.");
+            String token = oAuthService.getKakaoAccessToken(code);
+            KakaoDTO kakaoDTO = oAuthService.getKaKaoProfileInfo(token);
+
+            oAuthService.processKakaoUser(kakaoDTO);
         } catch (Exception e) {
-            log.error("log error = {}", e);
-            redirectAttributes.addFlashAttribute("Message", "회원 가입 중 오류가 발생했습니다.");
-            return "redirect:/signup";
+
         }
 
         return "redirect:/";
     }
 
-    @ResponseBody
-    @PostMapping("/api/check-id")
-    public boolean isId(@RequestParam("userName") String id) {
-        System.out.println("테스트");
-        return authService.isMemberById(id);
-    }
-
-    @ResponseBody
-    @PostMapping("/api/check-email")
-    public boolean isEmail(@RequestParam("email") String email) {
-        System.out.println("테스트");
-        return authService.isMemberByEmail(email);
-    }
-
-//    @ResponseBody
-//    @PostMapping("/check-nickname")
-//    public boolean isPassword(@RequestParam("nickName") String nickName) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-//
-//        return authService.isMemberByNickName(password, userDetails);
-//    }
 }

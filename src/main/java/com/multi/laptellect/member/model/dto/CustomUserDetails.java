@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails, Serializable {
+    private static final long serialVersionUID = 1L;
     private final MemberDTO memberDTO;
 
     @Override
@@ -38,7 +40,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return memberDTO.getUserName();
+        return memberDTO.getMemberName();
     }
 
     @Override
@@ -66,7 +68,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public String getNickName() {
-        return memberDTO.getUserName();
+        return memberDTO.getNickName();
     }
 
     public String getEmail() {
@@ -85,8 +87,18 @@ public class CustomUserDetails implements UserDetails {
         return  memberDTO.getPoint();
     }
 
+    public String getLoginType() {
+        return  memberDTO.getLoginType();
+    }
+
+    public String getMemberName() {
+        return memberDTO.getMemberName();
+    }
+
     public void update(MemberDTO updateDTO) {
-        this.memberDTO.setUserName(updateDTO.getUserName());
+        this.memberDTO.setMemberName(updateDTO.getMemberName());
+        this.memberDTO.setNickName(updateDTO.getNickName());
+        this.memberDTO.setEmail(updateDTO.getEmail());
         this.memberDTO.setTel(updateDTO.getTel());
         this.memberDTO.setPoint(updateDTO.getPoint());
     }

@@ -10,13 +10,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CustomAuthenticationProvider implements AuthenticationProvider {
-    private final CustomUserDetailsService customUserDetailsService;
-    private final PasswordEncoder passwordEncoder;
+public class CustomAuthenticationProvider implements AuthenticationProvider, Serializable {
+    private transient final CustomUserDetailsService customUserDetailsService;
+    private transient final PasswordEncoder passwordEncoder;
+    private static final long serialVersionUID = 1L;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -36,6 +38,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         boolean passwordMatches = passwordEncoder.matches(password, customUserDetails.getPassword()) ||
                 (password.equals(customUserDetails.getTempPassword()) && // 임시 비밀번호 일치
                         customUserDetails.getTempExpDate().isAfter(LocalDateTime.now())); // 만료시간이 현재시간 이전인지 확인
+
+        if(!customUserDetails.getLoginType().equals("local")) {
+            passwordMatches = true;
+        }
 
         // 비밀번호 false 일 시 예외 처리
         if (!passwordMatches) {

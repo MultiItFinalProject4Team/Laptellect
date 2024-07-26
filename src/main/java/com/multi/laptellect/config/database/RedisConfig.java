@@ -1,10 +1,11 @@
-package com.multi.laptellect.config;
+package com.multi.laptellect.config.database;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -12,7 +13,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-
+/**
+ * Redis 설정 클래스
+ *
+ * @author : 이강석
+ * @fileName : RedisConfig.java
+ * @since : 2024-07-26
+ */
 @Configuration
 @RequiredArgsConstructor
 @EnableRedisRepositories
@@ -41,6 +48,7 @@ public class RedisConfig {
 
 
     @Bean
+    @Primary
     public RedisTemplate<String, String> redisTemplate() {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());

@@ -7,11 +7,11 @@ import java.sql.Timestamp;
 
 @Data
 public class MemberDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 804705291130202933L;
 
     private int rowNum;
     private int memberNo;
-    private String userName;
+    private String memberName;
     private String email;
     private String password;
     private String loginType;

@@ -1,4 +1,10 @@
 spring:
+  kakao:
+    key: 2054fe8c4c87791f3cb467fb9687a326
+    rest-key: 2260d1ff32638c0b096300eec96b9386
+    secret-key: G7fFXG0Ae7kVifhHnBJj70S9V7N5NC6r
+    redirect: http://localhost:8099/signin/oauth/kakao
+
   datasource:
 
     url: jdbc:log4jdbc:mysql://localhost:3306/scott?
@@ -6,11 +12,14 @@ spring:
     username: scott
     password: tiger
 
+
+
+
   mail:
     host: smtp.gmail.com
     port: 587
-    username: filmpick123@gmail.com # \uC774\uBA54\uC77C
-    password: jxsccjcjrgutlxwy # APP \uBE44\uBC00\uBC88\uD638
+    username: ckatnfl1234@gmail.com
+    password: sjzhdwackhueuoce # APP \uBE44\uBC00\uBC88\uD638
     properties:
       mail:
         smtp:
@@ -22,6 +31,11 @@ spring:
     port: 6379
     password: 1234
 
+  coolsms:
+    api:
+      key: NCSJX8SJCCALFXZ6
+      secret: F0WFPI4WRVMRJJP5SNEDGGAE9LNSEO0J
+    caller: 01092526582
 
 server:
   port: 8099
@@ -35,7 +49,16 @@ server:
 logging:
   level:
     org.springframework: INFO
-    com.multi.laptellect: INFO
+
+    com.multi.laptellect: DEBUG
+
+    sql: DEBUG
+    jdbc.audit: ERROR
+    jdbc.sqlonly: ERROR
+    jdbc.sqltiming: ERROR
+    jdbc.resultset: ERROR
+    jdbc.resultsettable: DEBUG
+
 
     sql: DEBUG
     jdbc.audit: ERROR

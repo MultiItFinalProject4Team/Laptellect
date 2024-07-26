@@ -3,8 +3,131 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.laptellect.customer.dao.CustomDao">
-    <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
+    <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto" keyProperty="personalqNo" useGeneratedKeys="true">
         INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
-        values(1,'personalq_member', #{title},#{content})
+        values(#{memberNo},#{personalqCategorycode}, #{title},#{content})
     </insert>
+
+    <select id="getPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        where member_no=#{memberNo}
+        order by personalq_no desc
+    </select>
+
+    <select id="getPersonalqDetail" resultType="com.multi.laptellect.customer.dto.PersonalqDto">
+        select * from
+        personal_question
+        where personalq_no=#{personalqNo}
+    </select>
+
+    <update id="setPersonalqCode">
+        update
+        personal_question
+        set reference_code=#{code}
+        where personalq_no=#{personalqNo}
+    </update>
+
+    <update id="setPersonalaCode">
+        update
+        personal_answer
+        set reference_code=#{code}
+        where personala_no=#{personalaNo}
+    </update>
+
+    <select id="getpersonalqCode" resultType="string">
+        select reference_code
+        from personal_question
+        where personalq_no=#{personalqNo}
+    </select>
+
+    <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.ImageDto">
+        insert into
+        images(origin_name, upload_name, reference_code)
+        values(#{originName}, #{uploadName}, #{referenceCode})
+    </insert>
+
+    <select id="getImage" resultType="string">
+        select upload_name
+        from
+        images
+        where reference_code=#{referenceCode}
+    </select>
+
+    <insert id="personalAnswerApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto" useGeneratedKeys="true" keyProperty="personalaNo">
+        insert into
+        personal_answer(personalq_no, title, content)
+        values(#{personalqNo},#{title},#{content})
+    </insert>
+
+    <select id="getPersonalaCode" resultType="string">
+        select reference_code
+        from personal_answer
+        where personala_no=#{personalaNo}
+    </select>
+
+    <select id="getPersonala" resultType="com.multi.laptellect.customer.dto.PersonalqAnswerDto">
+        select *
+        from
+        personal_answer
+        where personalq_no=#{personalqNo}
+    </select>
+
+    <update id="personalAnwerChange">
+        update
+        personal_question
+        set answer=#{state}
+        where personalq_no=#{personalqNo}
+    </update>
+
+    <select id="getPersonalqCategory" resultType="com.multi.laptellect.customer.dto.PersonalqCategoryDto">
+        select *
+        from personalquestion_category
+    </select>
+
+    <update id="updatePersonalq" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
+        update
+        personal_question
+        set personalq_categorycode=#{personalqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        where personalq_no = #{personalqNo}
+    </update>
+
+    <delete id="deletePersonalq">
+        delete from personal_question
+        where personalq_no=#{personalqNo}
+    </delete>
+
+    <delete id="deleteImages">
+        delete from images
+        where reference_code=#{code}
+    </delete>
+
+    <update id="updatePersonala" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto">
+        update
+        personal_answer
+        set title=#{title}, content=#{content}, updated_at=current_timestamp
+    </update>
+
+    <delete id="deletePersonala">
+        delete from personal_answer
+        where personalq_no=#{personalqNo}
+    </delete>
+
+    <select id="getProudctqList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo}
+    </select>
+
+    <select id="getProductqCategory" resultType="com.multi.laptellect.customer.dto.ProductqCategoryDto">
+        select *
+        from
+        productquestion_category
+    </select>
 </mapper>
