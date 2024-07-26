@@ -43,6 +43,8 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("testDTO", com.multi.laptellect.payment.model.dto.TestDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("orderlistDTO", com.multi.laptellect.payment.model.dto.OrderlistDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("insertDTO", com.multi.laptellect.payment.model.dto.InsertDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("paymentReviewDTO", com.multi.laptellect.payment.model.dto.PaymentReviewDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("paymentpointDTO", com.multi.laptellect.payment.model.dto.PaymentpointDTO.class);
 
         configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.laptellect.member.model.dto.MemberDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("productDTO", com.multi.laptellect.product.model.dto.ProductDTO.class);

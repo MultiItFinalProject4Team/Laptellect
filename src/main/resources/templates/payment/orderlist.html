@@ -6,156 +6,26 @@
     <title>주문 목록</title>
     <link rel="stylesheet" href="/css/payment/orderlist.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script th:inline="javascript">
-        let currentPage = 1;
-        const itemsPerPage = 3;
-        let filteredOrders = [];
-        let totalItems = 0;
-
-        function cancelOrder(impUid, amount) {
-            if (confirm('정말로 주문을 취소하시겠습니까?')) {
-                fetch('/payment/cancel', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        impUid: impUid,
-                        amount: parseFloat(amount)
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        alert(data.message || '주문 취소에 실패했습니다.');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert('주문 취소 중 오류가 발생했습니다.');
-                });
-            }
-        }
-
-        function updateTotalItemsCount() {
-            totalItems = filteredOrders.length > 0 ? filteredOrders.length : document.getElementsByClassName('order-item').length;
-            document.getElementById('totalItemsCount').textContent = totalItems;
-        }
-
-        function searchOrders() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const orderItems = document.getElementsByClassName('order-item');
-            filteredOrders = [];
-
-            for (let item of orderItems) {
-                const productName = item.querySelector('h3').textContent.toLowerCase();
-                if (productName.includes(searchText)) {
-                    filteredOrders.push(item);
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            }
-
-            currentPage = 1;
-            updateTotalItemsCount();
-            displayPage(currentPage);
-            updatePagination();
-        }
-
-        function displayPage(page) {
-            const startIndex = (page - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const orderItems = filteredOrders.length > 0 ? filteredOrders : document.getElementsByClassName('order-item');
-
-            for (let i = 0; i < orderItems.length; i++) {
-                if (i >= startIndex && i < endIndex) {
-                    orderItems[i].style.display = '';
-                } else {
-                    orderItems[i].style.display = 'none';
-                }
-            }
-        }
-
-        function updatePagination() {
-            const totalItems = filteredOrders.length > 0 ? filteredOrders.length : document.getElementsByClassName('order-item').length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            const paginationElement = document.querySelector('.pagination');
-            paginationElement.innerHTML = '';
-
-            // 이전 버튼
-            const prevButton = document.createElement('button');
-            prevButton.textContent = '< 이전';
-            prevButton.onclick = () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    displayPage(currentPage);
-                    updatePagination();
-                }
-            };
-            paginationElement.appendChild(prevButton);
-
-            // 페이지 숫자
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.onclick = () => {
-                    currentPage = i;
-                    displayPage(currentPage);
-                    updatePagination();
-                };
-                if (i === currentPage) {
-                    pageButton.classList.add('active');
-                }
-                paginationElement.appendChild(pageButton);
-            }
-
-            // 다음 버튼
-            const nextButton = document.createElement('button');
-            nextButton.textContent = '다음 >';
-            nextButton.onclick = () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    displayPage(currentPage);
-                    updatePagination();
-                }
-            };
-            paginationElement.appendChild(nextButton);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('searchButton').addEventListener('click', searchOrders);
-            document.getElementById('searchInput').addEventListener('keyup', function(event) {
-                if (event.key === 'Enter') {
-                    searchOrders();
-                }
-            });
-
-            updateTotalItemsCount();
-            displayPage(currentPage);
-            updatePagination();
-        });
-    </script>
+    <script src="/js/payment/orderlist.js"></script>
 </head>
+
 <body>
 <div class="container">
     <h1>주문 목록</h1>
+
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="주문한 상품을 검색...">
+        <input type="text" id="searchInput" placeholder="검색">
         <button id="searchButton">검색</button>
     </div>
+
     <div>
-        <p>주문한 상품 개수: <span id="totalItemsCount">0</span>개</p>
+        주문한 상품 개수: <span id="totalItemsCount">0</span>개
     </div>
+
     <div th:if="${not #lists.isEmpty(orderList)}">
-        <div th:each="order : ${orderList}" class="order-item">
+        <div class="order-item" th:each="order : ${orderList}" th:data-username="${order.username1}">
             <div class="order-info">
                 <img src="/img/payment/notebooktest.PNG" alt="Product Image">
-
                 <div class="order-details">
                     <p th:text="${order.date_created1.substring(0, 10)} + ' 주문 · 배송완료'"></p>
                     <h3 th:text="${order.productname1}"></h3>
@@ -164,22 +34,46 @@
                     <p th:text="'가격: ' + ${order.productprice1} + '원 · 1개'"></p>
                 </div>
             </div>
-
             <div class="order-actions">
-                <button th:attr="data-imp-uid=${order.imd1}, data-amount=${order.productprice1}"
-                        onclick="cancelOrder(this.getAttribute('data-imp-uid'), this.getAttribute('data-amount'))">
-                    주문 취소하기
+                <button onclick="cancelOrder(this.getAttribute('data-imp-uid'), this.getAttribute('data-amount'))"
+                        th:data-imp-uid="${order.imd1}" th:data-amount="${order.productprice1}">주문 취소하기</button>
+                <button th:if="${!reviewedOrders.contains(order.imd1)}"
+                        onclick="openReviewModal(this.getAttribute('data-product-name'), this.getAttribute('data-username'), this.getAttribute('data-imp-uid'))"
+                        th:data-product-name="${order.productname1}"
+                        th:data-username="${order.username1}"
+                        th:data-imp-uid="${order.imd1}">
+                    리뷰 작성하기
                 </button>
-                <button>리뷰 작성하기</button>
             </div>
         </div>
     </div>
+
     <div th:if="${#lists.isEmpty(orderList)}">
         주문 정보가 없습니다.
     </div>
+
+    <div class="pagination"></div>
+
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>리뷰 작성하기</h2>
+            <p>작성자: <span id="reviewUsername"></span></p>
+            <p>상품명: <span id="reviewProductName"></span></p>
+            <p>평점:
+                <select id="reviewRating">
+                    <option value="5">5점</option>
+                    <option value="4">4점</option>
+                    <option value="3">3점</option>
+                    <option value="2">2점</option>
+                    <option value="1">1점</option>
+                </select>
+            </p>
+            <p>리뷰 내용: <textarea id="reviewContent"></textarea></p>
+            <button onclick="submitReview()">리뷰 제출</button>
+        </div>
+    </div>
 </div>
-<div class="pagination">
-    <!-- 페이지 버튼들이 여기에 동적으로 추가됩니다 -->
-</div>
+
 </body>
 </html>
