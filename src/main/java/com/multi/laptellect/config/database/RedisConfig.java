@@ -1,4 +1,4 @@
-package com.multi.laptellect.config;
+package com.multi.laptellect.config.database;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-
+/**
+ * Redis 설정 클래스
+ *
+ * @author : 이강석
+ * @fileName : RedisConfig.java
+ * @since : 2024-07-26
+ */
 @Configuration
 @RequiredArgsConstructor
 @EnableRedisRepositories

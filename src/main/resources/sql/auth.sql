@@ -9,7 +9,7 @@ CREATE TABLE mem_member (
     role VARCHAR(15) NOT NULL DEFAULT 'ROLE_USER',
     login_type VARCHAR(15) NOT NULL DEFAULT 'local',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (member_no),
     UNIQUE (member_name),
     UNIQUE (nick_name)
@@ -21,7 +21,16 @@ CREATE TABLE mem_password (
     member_no INT NOT NULL,
     password VARCHAR(128) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (password_id),
+    FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+);
+
+-- 소셜 회원 테이블
+CREATE TABLE mem_social_member (
+    social_id INT NOT NULL AUTO_INCREMENT,
+    member_no INT NOT NULL,
+    external_id VARCHAR(64) NOT NULL,
+    PRIMARY KEY (social_id),
     FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );

@@ -1,4 +1,4 @@
-package com.multi.laptellect.config;
+package com.multi.laptellect.config.database;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -46,6 +46,7 @@ public class MybatisConfig {
 
         configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.laptellect.member.model.dto.MemberDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("productDTO", com.multi.laptellect.product.model.dto.ProductDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("kakaoDTO", com.multi.laptellect.member.model.dto.KakaoDTO.class);
 
 
         factoryBean.setConfiguration(configuration); // 팩토리 빈에 세팅

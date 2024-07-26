@@ -1,9 +1,16 @@
-package com.multi.laptellect.config;
+package com.multi.laptellect.config.api;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Email 설정 클래스
+ *
+ * @fileName      : EmailConfig.java
+ * @author        : 이강석
+ * @since         : 2024-07-26
+ */
 @Configuration
 @Getter
 public class EmailConfig {

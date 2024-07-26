@@ -1,4 +1,4 @@
-* { padding: 0; margin: 0; }
+        * { padding: 0; margin: 0; }
 
         html, body {
           height: 100%;
@@ -13,13 +13,9 @@
           height: 100%;
         }
 
-        #loginBoxLogo img {
-            width: 130px;
-            height: 130px;
-        }
-
         #loginBox {
-          width: 300px;
+          height: 425px;
+          width: 400px;
           text-align: center;
           background-color: #ffffff;
           padding: 20px;
@@ -39,7 +35,7 @@
         .button-login-box {
           margin: 20px 0;
         }
-        #loginBoxTitle {
+        #signupTitle {
           color: #000000;
           font-weight: bold;
           font-size: 32px;
@@ -57,3 +53,30 @@
         #inputBox button {
           padding: 3px 5px;
         }
+
+        .login-content2 {
+          font-size: 15px;
+        }
+        .separator {
+    margin: 0 10px;
+    color: #333;
+}
+        .login-img {
+            width: 60px;
+            height: 60px;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    .login-content {
+        text-decoration: none;
+        color: black;
+        font-size: 15px;
+    }
+
+    .find-content {
+        text-decoration: none;
+        color: black;
+        font-size: 12px;
+    }

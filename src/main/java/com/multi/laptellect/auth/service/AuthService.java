@@ -21,4 +21,11 @@ public interface AuthService {
     boolean isMemberByNickName(String nickName);
 
     boolean isSocialMember();
+
+    boolean isMemberByPassword(String password);
+
+    void sendSms(String tel) throws Exception;
+
+    boolean isVerifyTel(String verifyCode) throws Exception;
+
 }
