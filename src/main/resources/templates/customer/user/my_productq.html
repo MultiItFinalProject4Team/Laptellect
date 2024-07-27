@@ -50,7 +50,7 @@
 </table>
     <div class="text-end">
         <a class="btn btn-secondary btn-sm" th:href="@{/customer/user/productq_app(productNo=${productNo})}" role="button">상품 문의 등록</a>
-        <a class="btn btn-secondary btn-sm" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
+        <a class="btn btn-secondary btn-sm" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}" role="button">전체 문의 보기</a>
     </div>
 <!--    <div th:if="${totalPages > 1}" class="pagination justify-content-center">-->
 <!--        <nav aria-label="Page navigation example">-->

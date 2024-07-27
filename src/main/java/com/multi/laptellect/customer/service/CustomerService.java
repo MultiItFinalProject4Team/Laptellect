@@ -222,4 +222,8 @@ public class CustomerService {
     public ProductqDto getProductq(int productqNo) {
         return customDao.getProductq(productqNo);
     }
+
+    public List<ProuductqListDto> getMyProudctqList(int productNo, int memberNo) {
+        return customDao.getMyProudctqList(productNo, memberNo);
+    }
 }

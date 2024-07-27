@@ -149,4 +149,11 @@
         product_question
         where productq_no=#{productqNo}
     </select>
+
+    <select id="getMyProudctqList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo} and member_no=#{memberNo}
+    </select>
 </mapper>

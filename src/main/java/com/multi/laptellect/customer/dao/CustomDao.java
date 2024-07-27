@@ -54,4 +54,6 @@ public interface CustomDao {
     void setProductqCode(@Param("productqNo") int productqNo, @Param("code") String code);
 
     ProductqDto getProductq(int productqNo);
+
+    List<ProuductqListDto> getMyProudctqList(@Param("productNo") int productNo, @Param("memberNo") int memberNo);
 }
