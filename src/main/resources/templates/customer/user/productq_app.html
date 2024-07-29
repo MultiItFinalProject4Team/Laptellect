@@ -8,34 +8,29 @@
     <!--    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>-->
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
     <style>
-        .nav-pills .nav-link {
-            font-size: 25px;
-        }
-        .nav-link {
-        margin: 0 100px;
-        }
         .file-input-wrapper {
             margin-bottom: 10px;
         }
     </style>
+    <link href="/css/customer/nav.css" rel="stylesheet">
 </head>
 <body>
 <div layout:fragment="content">
 <div class="container mt-5">
-<header>
-<h1 align="center">고객센터</h1>
-<ul class="nav nav-pills justify-content-center">
-    <li class="nav-item">
-        <a class="nav-link" href="/customer/user/customer_notice">공지사항</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/customer/user/customer_chatbot">챗 봇</a>
-    </li>
-</ul>
-</header>
+    <header>
+        <h1 align="center">고객센터</h1>
+        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
+            <li class="nav-item">
+                <a class="nav-link cus_nav" href="/customer/user/customer_notice">공지사항</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
+            </li>
+        </ul>
+    </header>
     <form action="/customer/user/productq_app" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">
         <label class="input-group-text" for="title">제목:</label>
@@ -52,7 +47,15 @@
 
         <label for="content">내용:</label>
         <textarea id="content" name="content" rows="10" cols="80"></textarea><br><br>
-
+        <div>
+            <label>비밀글: </label>
+            <label>
+                <input type="radio" name="secret" value="Y"> Yes
+            </label>
+            <label>
+                <input type="radio" name="secret" value="N" checked> No
+            </label>
+        </div>
         <div id="file-input-container">
             <div class="file-input-wrapper">
                 <label for="image1">이미지 1:</label>
@@ -60,7 +63,7 @@
             </div>
         </div>
         <button type="button" onclick="addFileInput()">이미지 추가</button>
-
+        <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
         <button type="submit">등록</button>
     </form>
 

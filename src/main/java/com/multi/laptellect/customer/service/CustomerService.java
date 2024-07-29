@@ -210,4 +210,16 @@ public class CustomerService {
     public List<ProductqCategoryDto> getProductqCategory() {
         return customDao.getProductqCategory();
     }
+
+    public int productqApp(ProductqAppDto appDto) {
+        return customDao.productqApp(appDto);
+    }
+
+    public void setProductqCode(int productqNo, String code) {
+        customDao.setProductqCode(productqNo, code);
+    }
+
+    public ProductqDto getProductq(int productqNo) {
+        return customDao.getProductq(productqNo);
+    }
 }

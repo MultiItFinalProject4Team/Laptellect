@@ -1,8 +1,6 @@
 package com.multi.laptellect.payment.model.dao;
 
-import com.multi.laptellect.payment.model.dto.InsertDTO;
-import com.multi.laptellect.payment.model.dto.OrderlistDTO;
-import com.multi.laptellect.payment.model.dto.TestDTO;
+import com.multi.laptellect.payment.model.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,4 +17,14 @@ public interface TestDAO {
     List<OrderlistDTO> selectAllOrders();
 
     int updateRefundStatus(String ImpUid);
+
+    int saveReview(PaymentReviewDTO paymentReviewDTO);
+
+    List<String> getReviewedOrders();
+
+    PaymentpointDTO selectpoint(String username);
+
+    int usepoint(PaymentpointDTO paymentpointDTO);
+
+    int givepoint(PaymentpointDTO paymentpointDTO);
 }

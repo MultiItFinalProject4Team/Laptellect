@@ -135,24 +135,66 @@ public class CustomerController {
 
     //임시 상품(1)
     @GetMapping("/product")
-    public void product(){
-
-    }
-
+    public void product(){}
 
     //상품 문의 이동
     @GetMapping("/customer_productq/{productNo}")
     public String customer_productq(@PathVariable("productNo") int productNo, Model model){
         List<ProuductqListDto> productqList = customerService.getProudctqList(productNo);
-        System.out.println(productqList.size());;
+        int memberNo = 1;
+        System.out.println(productNo);
         model.addAttribute("productqList",productqList);
+        model.addAttribute("productNo",productNo);
+        model.addAttribute("memberNo",memberNo);
         return "/customer/user/customer_productq";
     }
-
+    //상품 문의 신청 이동
     @GetMapping("/productq_app")
-    public void productq_app(Model model){
+    public void productq_app(Model model, @RequestParam("productNo") int productNo){
         List<ProductqCategoryDto> category = customerService.getProductqCategory();
         System.out.println(category);
+        System.out.println(productNo);
         model.addAttribute("category",category);
+        model.addAttribute("productNo",productNo);
+    }
+    /**
+     * 상품 문의를 전송하는 메서드
+     *
+     * @param appDto the ProductqAppDto
+     * @return the String
+     */
+    @PostMapping("/productq_app")
+    public String productq_app(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        appDto.setMemberNo(1);
+        System.out.println(appDto);
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                System.out.println(image.getOriginalFilename());
+            }
+        }
+        int text_result=customerService.productqApp(appDto);
+        String code="productq"+appDto.getProductqNo();
+        customerService.setProductqCode(appDto.getProductqNo(),code);
+        System.out.println(code);
+        int image_result = customerService.inputImage(code,images);
+        String redirectUrl = String.format("/customer/user/customer_productq/%s", appDto.getProductNo());
+        return "redirect:"+redirectUrl;
+    }
+
+    @GetMapping("/productq_detail/{productqNo}")
+    public String productq_detail(@PathVariable("productqNo") int productqNo, Model model){
+        ProductqDto productqDto = customerService.getProductq(productqNo);
+        String[] imageList = customerService.getImage(productqDto.getReferenceCode());
+        model.addAttribute("productq",productqDto);
+        model.addAttribute("imageList",imageList);
+
+//        if(productqDto.getAnswer().equals("Y")) {
+//            ProductqAnserDto answerDto = customerService.getProducta(productqNo);
+//            String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
+//            model.addAttribute("producta", answerDto);
+//            model.addAttribute("imageList2", imageList2);
+//            System.out.println("답변: "+answerDto);
+//        }
+        return"/customer/user/productq_detail";
     }
 }

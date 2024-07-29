@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -17,8 +17,8 @@ public class PersonalqDto {
     private String personalCategorycode;
     private String title;
     private String content;
-    private Timestamp createdAt;
-    private Timestamp updateAt;
+    private Date createdAt;
+    private Date updateAt;
     private String answer;
     private String referenceCode;
 }

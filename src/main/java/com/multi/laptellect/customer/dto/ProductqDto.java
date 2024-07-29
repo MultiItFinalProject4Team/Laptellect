@@ -7,16 +7,21 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class ProuductqListDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductqDto {
     private int productqNo;
     private int memberNo;
+    private String productqCategoryCode;
     private int productNo;
     private String title;
-    private String secret;
-    private String answer;
+    private String content;
     private Date createdAt;
+    private Date updatedAt;
+    private String answer;
+    private String secret;
+    private String referenceCode;
 }

@@ -1,7 +1,10 @@
 package com.multi.laptellect.payment.service;
 
 import com.multi.laptellect.api.payment.ApiKeys;
+import com.multi.laptellect.payment.model.dao.TestDAO;
 import com.multi.laptellect.payment.model.dto.InsertDTO;
+import com.multi.laptellect.payment.model.dto.PaymentReviewDTO;
+import com.multi.laptellect.payment.model.dto.PaymentpointDTO;
 import com.multi.laptellect.payment.model.dto.VerificationRequestDTO;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -14,12 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class PaymentService {
 
     private final ApiKeys apiKeys;
     private final TestService testService;
+
+    @Autowired
+    private TestDAO testDao;
 
     @Autowired
     public PaymentService(ApiKeys apiKeys, TestService testService) {
@@ -62,5 +69,35 @@ public class PaymentService {
 
 
         return client.cancelPaymentByImpUid(cancelData);
+    }
+
+    @Transactional
+    public int saveReview(PaymentReviewDTO paymentReviewDTO) {
+        return testDao.saveReview(paymentReviewDTO);
+    }
+
+    public List<String> getReviewedOrders() {
+        return testDao.getReviewedOrders();
+    }
+
+    public PaymentpointDTO selectpoint() {
+        String username = "jack";  // 고정된 username 사용
+        PaymentpointDTO paymentpointDTO = testDao.selectpoint(username);
+
+        if (paymentpointDTO == null) {
+            paymentpointDTO = new PaymentpointDTO();
+            paymentpointDTO.setUsername(username);
+            paymentpointDTO.setPossessionpoint(0);  // 기본값 설정
+        }
+
+        return paymentpointDTO;
+    }
+
+    public int usepoint(PaymentpointDTO paymentpointDTO){
+        return testDao.usepoint(paymentpointDTO);
+    }
+
+    public int givepoint(PaymentpointDTO paymentpointDTO){
+        return testDao.givepoint(paymentpointDTO);
     }
 }
