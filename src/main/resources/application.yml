@@ -13,16 +13,7 @@ server:
 logging:
   level:
     org.springframework: INFO
-
     com.multi.laptellect: DEBUG
-
-    sql: DEBUG
-    jdbc.audit: ERROR
-    jdbc.sqlonly: ERROR
-    jdbc.sqltiming: ERROR
-    jdbc.resultset: ERROR
-    jdbc.resultsettable: DEBUG
-
 
     sql: DEBUG
     jdbc.audit: ERROR
