@@ -99,7 +99,12 @@ public class CustomerController {
         return "redirect:/customer/user/customer_personalq";
     }
 
-    //1:1문의 질문 수정 페이지
+    /**
+     * 1:1문의 수정 페이지
+     * @param model
+     * @param personalqNo
+     * @return
+     */
     @GetMapping("/update_personalq/{personalqNo}")
     public String update_personalq(Model model, @PathVariable("personalqNo") int personalqNo){
         System.out.println(personalqNo);
@@ -109,7 +114,13 @@ public class CustomerController {
         model.addAttribute("dto",dto);
         return "/customer/user/personalq_update";
     }
-    //1:1문의 질문 수정
+
+    /**
+     * 1:1문의 질문 수정
+     * @param appDto
+     * @param images
+     * @return
+     */
     @PostMapping("/update_personalq")
     public String update_personalq(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
         System.out.println(appDto);
@@ -223,5 +234,42 @@ public class CustomerController {
         return "/customer/user/customer_productq";
     }
 
+    /**
+     * 상품문의 수정 페이지
+     * @param model
+     * @param productqNo
+     * @return
+     */
+    @GetMapping("/update_productq/{productqNo}")
+    public String update_productq(Model model, @PathVariable("productqNo") int productqNo){
+        ProductqDto dto = customerService.getProductq(productqNo);
+        List<ProductqCategoryDto> categoryDto = customerService.getProductqCategory();
+        model.addAttribute("category",categoryDto);
+        model.addAttribute("dto",dto);
+        return "/customer/user/productq_update";
+    }
+
+    /**
+     * 상품 문의 수정 메소
+     * @param appDto
+     * @param images
+     * @return
+     */
+    @PostMapping("/update_productq")
+    public String update_productq(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        System.out.println(appDto);
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                System.out.println("이미지:"+image.getOriginalFilename());
+            }
+        }
+        appDto.setMemberNo(memberNo);
+        int text_result=customerService.updateProductq(appDto);
+        String code = customerService.getproductqCode(appDto.getProductqNo());
+        System.out.println(code);
+        int image_result = customerService.updateImage(code,images);
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", appDto.getProductqNo());
+        return "redirect:"+redirectUrl;
+    }
 
 }

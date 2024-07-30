@@ -183,4 +183,17 @@
         product_answer
         where productq_no=#{productqNo}
     </select>
+
+    <update id="updateProductq" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto">
+        update
+        product_question
+        set productq_categorycode=#{productqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        where productq_no = #{productqNo}
+    </update>
+
+    <select id="getproductqCode" resultType="String">
+        select reference_code
+        from product_question
+        where productq_no=#{productqNo}
+    </select>
 </mapper>
