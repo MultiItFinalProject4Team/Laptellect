@@ -3,6 +3,7 @@ package com.multi.laptellect.customer.controller;
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,13 +18,12 @@ import java.util.List;
 @RequestMapping("/customer/user")
 public class CustomerController {
 
-    int memberNo=1;
-
     @Autowired
     private CustomerService customerService;
     @Autowired
     private PaginationService pagination;
-
+    @Autowired
+    SecurityUtil securityUtil;
 
     //공지사항 페이지(메인)
     @GetMapping({"/customer_notice",""})
@@ -34,7 +34,13 @@ public class CustomerController {
     }
     //1:1문의 페이지
     @GetMapping("/customer_personalq")
-    public void customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+    public String customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "auth/auth-sign-in";
+        }
         List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
         int page_size=10;
         int adjustPage=page-1;
@@ -43,6 +49,7 @@ public class CustomerController {
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        return "/customer/user/customer_personalq";
     }
     //챗봇 페이지
     @GetMapping("/customer_chatbot")
@@ -250,7 +257,7 @@ public class CustomerController {
     }
 
     /**
-     * 상품 문의 수정 메소
+     * 상품 문의 수정 메소드
      * @param appDto
      * @param images
      * @return
