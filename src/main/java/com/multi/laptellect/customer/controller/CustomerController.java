@@ -3,6 +3,7 @@ package com.multi.laptellect.customer.controller;
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,13 +18,10 @@ import java.util.List;
 @RequestMapping("/customer/user")
 public class CustomerController {
 
-    int memberNo=1;
-
     @Autowired
     private CustomerService customerService;
     @Autowired
     private PaginationService pagination;
-
 
     //공지사항 페이지(메인)
     @GetMapping({"/customer_notice",""})
@@ -34,7 +32,13 @@ public class CustomerController {
     }
     //1:1문의 페이지
     @GetMapping("/customer_personalq")
-    public void customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+    public String customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
         int page_size=10;
         int adjustPage=page-1;
@@ -43,6 +47,7 @@ public class CustomerController {
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        return "/customer/user/customer_personalq";
     }
     //챗봇 페이지
     @GetMapping("/customer_chatbot")
@@ -84,6 +89,12 @@ public class CustomerController {
     //1:1 문의 신청
     @PostMapping("/personalq_app")
     public String personalq_app(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         System.out.println(appDto);
         for(MultipartFile image : images){
             if(!image.isEmpty()){
@@ -99,7 +110,12 @@ public class CustomerController {
         return "redirect:/customer/user/customer_personalq";
     }
 
-    //1:1문의 질문 수정 페이지
+    /**
+     * 1:1문의 수정 페이지
+     * @param model
+     * @param personalqNo
+     * @return
+     */
     @GetMapping("/update_personalq/{personalqNo}")
     public String update_personalq(Model model, @PathVariable("personalqNo") int personalqNo){
         System.out.println(personalqNo);
@@ -109,9 +125,21 @@ public class CustomerController {
         model.addAttribute("dto",dto);
         return "/customer/user/personalq_update";
     }
-    //1:1문의 질문 수정
+
+    /**
+     * 1:1문의 질문 수정
+     * @param appDto
+     * @param images
+     * @return
+     */
     @PostMapping("/update_personalq")
     public String update_personalq(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         System.out.println(appDto);
         for(MultipartFile image : images){
             if(!image.isEmpty()){
@@ -141,6 +169,12 @@ public class CustomerController {
     //상품 문의 이동
     @GetMapping("/customer_productq/{productNo}")
     public String customer_productq(@PathVariable("productNo") int productNo, Model model){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         List<ProuductqListDto> productqList = customerService.getProudctqList(productNo);
         System.out.println(productNo);
         model.addAttribute("productqList",productqList);
@@ -166,6 +200,12 @@ public class CustomerController {
      */
     @PostMapping("/productq_app")
     public String productq_app(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         appDto.setMemberNo(memberNo);
         System.out.println(appDto);
         for(MultipartFile image : images){
@@ -214,6 +254,12 @@ public class CustomerController {
      */
     @GetMapping("/my_productq/{productNo}")
     public String my_productq(@PathVariable("productNo") int productNo, Model model){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         System.out.println(productNo);
         List<ProuductqListDto> productqList = customerService.getMyProudctqList(productNo, memberNo);
         model.addAttribute("productqList",productqList);
@@ -223,5 +269,48 @@ public class CustomerController {
         return "/customer/user/customer_productq";
     }
 
+    /**
+     * 상품문의 수정 페이지
+     * @param model
+     * @param productqNo
+     * @return
+     */
+    @GetMapping("/update_productq/{productqNo}")
+    public String update_productq(Model model, @PathVariable("productqNo") int productqNo){
+        ProductqDto dto = customerService.getProductq(productqNo);
+        List<ProductqCategoryDto> categoryDto = customerService.getProductqCategory();
+        model.addAttribute("category",categoryDto);
+        model.addAttribute("dto",dto);
+        return "/customer/user/productq_update";
+    }
+
+    /**
+     * 상품 문의 수정 메소드
+     * @param appDto
+     * @param images
+     * @return
+     */
+    @PostMapping("/update_productq")
+    public String update_productq(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
+        System.out.println(appDto);
+        for(MultipartFile image : images){
+            if(!image.isEmpty()){
+                System.out.println("이미지:"+image.getOriginalFilename());
+            }
+        }
+        appDto.setMemberNo(memberNo);
+        int text_result=customerService.updateProductq(appDto);
+        String code = customerService.getproductqCode(appDto.getProductqNo());
+        System.out.println(code);
+        int image_result = customerService.updateImage(code,images);
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", appDto.getProductqNo());
+        return "redirect:"+redirectUrl;
+    }
 
 }

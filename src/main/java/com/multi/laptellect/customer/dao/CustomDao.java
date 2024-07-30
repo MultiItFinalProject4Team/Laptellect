@@ -64,4 +64,8 @@ public interface CustomDao {
     void setproductaCode(@Param("productaNo") int productaNo, @Param("code") String code);
 
     ProductqAnswerDto getProducta(int productqNo);
+
+    int updateProductq(ProductqAppDto appDto);
+
+    String getproductqCode(int productqNo);
 }

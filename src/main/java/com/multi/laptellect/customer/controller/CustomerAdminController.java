@@ -76,6 +76,12 @@ public class CustomerAdminController {
         return"/customer/admin/answer_productq";
     }
 
+    /**
+     * 상품 문의 답변하기
+     * @param answerDto
+     * @param images
+     * @return
+     */
     @PostMapping("/answer_productq")
     public String answer_producta(ProductqAnswerDto answerDto, @RequestParam("image[]") MultipartFile[] images){
         System.out.println(answerDto);
