@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
@@ -46,7 +48,7 @@
             </tbody>
         </table>
         <div class="text-end">
-            <a class="btn btn-secondary btn-sm" href="/customer/user/personalq_app" role="button">문의 등록</a>
+            <a class="btn btn-secondary btn-sm" sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/personalq_app" role="button">문의 등록</a>
             <a class="btn btn-secondary btn-sm" href="/customer/user/product" role="button">상품 문의(임시)</a>
         </div>
     </div>

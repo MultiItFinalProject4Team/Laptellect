@@ -16,7 +16,7 @@
         answer,
         created_at
         from personal_question
-<!--        where member_no=#{memberNo}-->
+        where member_no=#{memberNo}
         order by personalq_no desc
     </select>
 
@@ -196,4 +196,9 @@
         from product_question
         where productq_no=#{productqNo}
     </select>
+
+    <delete id="deleteProductq">
+        delete from product_question
+        where productq_no=#{productqNo}
+    </delete>
 </mapper>

@@ -31,7 +31,7 @@
         <p th:text="${#dates.format(productq.createdAt, 'YY/MM/dd HH:mm')}">작성일</p>
         <div class="btn-group" aria-label="Small button group">
             <a th:href="@{/customer/user/update_productq/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>
-            <a th:href="@{/customer/user/delete_productq/{productqNo}(productqNo=${productq.productqNo})}" class="btn bg-body-secondary">문의 삭제</a>
+            <a th:href="@{/customer/user/delete_productq/{productqNo}/{productNo}(productqNo=${productq.productqNo}, productNo=${productq.productNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 삭제</a>
             <a th:href="@{/customer/admin/update_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>
             <a th:href="@{/customer/admin/delete_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 삭제</a>
         </div>

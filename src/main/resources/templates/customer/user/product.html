@@ -34,10 +34,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr class="align-middle">
-        <td th:text="1">번호</td>
+    <tr th:each="each : ${plist}" class="align-middle">
+        <td th:text="${each}">번호</td>
         <td style="text-align: center;">
-            <a style="text-decoration: none;" th:href="@{/customer/user/customer_productq/{productNo}(productNo=1)}" th:text="노트북">상품명</a>
+            <a style="text-decoration: none;" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${each})}" th:text="노트북">상품명</a>
         </td>
         <td th:text="999">가격</td>
         <td th:text="2024-07-19">날짜</td>

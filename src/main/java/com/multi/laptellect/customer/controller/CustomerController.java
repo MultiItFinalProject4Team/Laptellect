@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -164,7 +165,13 @@ public class CustomerController {
 
     //임시 상품(1)
     @GetMapping("/product")
-    public void product(){}
+    public void product(Model model){
+        List<Integer> plist = new ArrayList<>();
+        for(int i=1; i<=5; i++){
+            plist.add(i);
+        }
+        model.addAttribute("plist",plist);
+    }
 
     //상품 문의 이동
     @GetMapping("/customer_productq/{productNo}")
@@ -313,4 +320,16 @@ public class CustomerController {
         return "redirect:"+redirectUrl;
     }
 
+    /**
+     * 상품 문의 삭제
+     * @param productqNo
+     * @param productNo
+     * @return
+     */
+    @GetMapping("/delete_productq/{productqNo}/{productNo}")
+    public String delete_productq(@PathVariable("productqNo") int productqNo, @PathVariable("productNo") int productNo){
+        int result = customerService.deleteProductq(productqNo);
+        String redirectUrl = String.format("/customer/user/customer_productq/%s", productNo);
+        return "redirect:"+redirectUrl;
+    }
 }

@@ -68,4 +68,6 @@ public interface CustomDao {
     int updateProductq(ProductqAppDto appDto);
 
     String getproductqCode(int productqNo);
+
+    int deleteProductq(int productqNo);
 }

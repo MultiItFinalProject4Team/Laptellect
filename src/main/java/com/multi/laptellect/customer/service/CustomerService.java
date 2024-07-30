@@ -262,4 +262,8 @@ public class CustomerService {
     public String getproductqCode(int productqNo) {
         return customDao.getproductqCode(productqNo);
     }
+
+    public int deleteProductq(int productqNo) {
+        return customDao.deleteProductq(productqNo);
+    }
 }
