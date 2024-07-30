@@ -64,6 +64,7 @@
         .login-img {
             width: 60px;
             height: 60px;
+            border-radius: 75%;
     }
     a {
         text-decoration: none;
