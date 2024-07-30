@@ -66,8 +66,16 @@ public class PaymentController {
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
             paymentpointDTO.setUsedPoints(request.getUsedPoints());
-            if(Integer.parseInt(paymentpointDTO.getUsedPoints()) > 0)
-                paymentService.usepoint(paymentpointDTO);
+
+            if(paymentpointDTO.getPossessionpoint() <= 0) {
+                verified = false;
+            }
+            else{
+                if (Integer.parseInt(paymentpointDTO.getUsedPoints()) > 0)
+                    paymentService.usepoint(paymentpointDTO);
+            }
+
+
 
             if (verified) {
                 return ResponseEntity.ok(Map.of("success", true, "message", "Payment verified successfully"));
