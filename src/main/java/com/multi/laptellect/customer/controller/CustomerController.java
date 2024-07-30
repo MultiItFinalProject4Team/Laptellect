@@ -22,8 +22,6 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private PaginationService pagination;
-    @Autowired
-    SecurityUtil securityUtil;
 
     //공지사항 페이지(메인)
     @GetMapping({"/customer_notice",""})
@@ -39,7 +37,7 @@ public class CustomerController {
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
         }catch (Exception e){
-            return "auth/auth-sign-in";
+            return "/auth/auth-sign-in";
         }
         List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
         int page_size=10;
@@ -91,6 +89,12 @@ public class CustomerController {
     //1:1 문의 신청
     @PostMapping("/personalq_app")
     public String personalq_app(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         System.out.println(appDto);
         for(MultipartFile image : images){
             if(!image.isEmpty()){
@@ -130,6 +134,12 @@ public class CustomerController {
      */
     @PostMapping("/update_personalq")
     public String update_personalq(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         System.out.println(appDto);
         for(MultipartFile image : images){
             if(!image.isEmpty()){
@@ -159,6 +169,12 @@ public class CustomerController {
     //상품 문의 이동
     @GetMapping("/customer_productq/{productNo}")
     public String customer_productq(@PathVariable("productNo") int productNo, Model model){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         List<ProuductqListDto> productqList = customerService.getProudctqList(productNo);
         System.out.println(productNo);
         model.addAttribute("productqList",productqList);
@@ -184,6 +200,12 @@ public class CustomerController {
      */
     @PostMapping("/productq_app")
     public String productq_app(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         appDto.setMemberNo(memberNo);
         System.out.println(appDto);
         for(MultipartFile image : images){
@@ -232,6 +254,12 @@ public class CustomerController {
      */
     @GetMapping("/my_productq/{productNo}")
     public String my_productq(@PathVariable("productNo") int productNo, Model model){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         System.out.println(productNo);
         List<ProuductqListDto> productqList = customerService.getMyProudctqList(productNo, memberNo);
         model.addAttribute("productqList",productqList);
@@ -264,6 +292,12 @@ public class CustomerController {
      */
     @PostMapping("/update_productq")
     public String update_productq(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         System.out.println(appDto);
         for(MultipartFile image : images){
             if(!image.isEmpty()){
