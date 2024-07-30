@@ -102,7 +102,7 @@
 
 </div>
     <div class="btn-group" aria-label="Small button group" th:if="${productq.answer=='N'}">
-        <a th:href="@{/customer/admin/answer_producta/{productqNo}(productqNo=${productq.productqNo})}" class="btn bg-body-secondary">답변하기</a>
+        <a th:href="@{/customer/admin/answer_productq/{productqNo}(productqNo=${productq.productqNo})}" class="btn bg-body-secondary">답변하기</a>
     </div>
 <div class="btn-group" aria-label="Small button group">
     <a th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productq.productNo})}" class="btn bg-body-secondary">목록으로</a>

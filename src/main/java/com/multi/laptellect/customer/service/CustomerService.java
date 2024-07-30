@@ -226,4 +226,20 @@ public class CustomerService {
     public List<ProuductqListDto> getMyProudctqList(int productNo, int memberNo) {
         return customDao.getMyProudctqList(productNo, memberNo);
     }
+
+    public void productAnwerApp(ProductqAnswerDto answerDto) {
+        customDao.productAnwerApp(answerDto);
+    }
+
+    public void productAnwerChange(int productqNo, String state) {
+        customDao.productAnwerChange(productqNo, state);
+    }
+
+    public void setproductaCode(int productaNo, String code) {
+        customDao.setproductaCode(productaNo, code);
+    }
+
+    public ProductqAnswerDto getProducta(int productqNo) {
+        return customDao.getProducta(productqNo);
+    }
 }

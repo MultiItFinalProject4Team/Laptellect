@@ -40,8 +40,8 @@
         <td th:text="${each.productqNo}">번호</td>
         <td style="text-align: center;">
             <a style="text-decoration: none;" th:if="${each.secret == 'N'}" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.title}"></a>
-            <a style="text-decoration: none;" th:if="${each.secret == 'Y' and each.memberNo != memberNo}">비밀글입니다</a>
-            <a style="text-decoration: none;" th:if="${each.secret == 'Y' and each.memberNo == memberNo}" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}">비밀글입니다</a>
+            <a style="text-decoration: none;" th:if="${each.secret == 'Y' and each.memberNo != memberNo}">비밀글입니다 🔒</a>
+            <a style="text-decoration: none;" th:if="${each.secret == 'Y' and each.memberNo == memberNo}" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.title}+' 🔒'">비밀글입니다</a>
         </td>
         <td th:text="${each.answer=='Y'}?'답변 완료':'답변 대기'">답변 여부</td>
         <td th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>
@@ -50,7 +50,8 @@
 </table>
     <div class="text-end">
         <a class="btn btn-secondary btn-sm" th:href="@{/customer/user/productq_app(productNo=${productNo})}" role="button">상품 문의 등록</a>
-        <a class="btn btn-secondary btn-sm" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
+        <a class="btn btn-secondary btn-sm" th:if="${state=='all'}" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
+        <a class="btn btn-secondary btn-sm" th:if="${state=='my'}" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}" role="button">전체 문의 보기</a>
     </div>
 <!--    <div th:if="${totalPages > 1}" class="pagination justify-content-center">-->
 <!--        <nav aria-label="Page navigation example">-->

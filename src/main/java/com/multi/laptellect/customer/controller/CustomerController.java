@@ -146,6 +146,7 @@ public class CustomerController {
         model.addAttribute("productqList",productqList);
         model.addAttribute("productNo",productNo);
         model.addAttribute("memberNo",memberNo);
+        model.addAttribute("state","all");
         return "/customer/user/customer_productq";
     }
     //상품 문의 신청 이동
@@ -191,19 +192,26 @@ public class CustomerController {
     public String productq_detail(@PathVariable("productqNo") int productqNo, Model model){
         ProductqDto productqDto = customerService.getProductq(productqNo);
         String[] imageList = customerService.getImage(productqDto.getReferenceCode());
+        System.out.println(productqDto);
         model.addAttribute("productq",productqDto);
         model.addAttribute("imageList",imageList);
 
-//        if(productqDto.getAnswer().equals("Y")) {
-//            ProductqAnserDto answerDto = customerService.getProducta(productqNo);
-//            String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
-//            model.addAttribute("producta", answerDto);
-//            model.addAttribute("imageList2", imageList2);
-//            System.out.println("답변: "+answerDto);
-//        }
+        if(productqDto.getAnswer().equals("Y")) {
+            ProductqAnswerDto answerDto = customerService.getProducta(productqNo);
+            String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
+            model.addAttribute("producta", answerDto);
+            model.addAttribute("imageList2", imageList2);
+            System.out.println("답변: "+answerDto);
+        }
         return"/customer/user/productq_detail";
     }
 
+    /**
+     * 내 문의 보기 메소드
+     * @param productNo
+     * @param model
+     * @return
+     */
     @GetMapping("/my_productq/{productNo}")
     public String my_productq(@PathVariable("productNo") int productNo, Model model){
         System.out.println(productNo);
@@ -211,6 +219,9 @@ public class CustomerController {
         model.addAttribute("productqList",productqList);
         model.addAttribute("productNo",productNo);
         model.addAttribute("memberNo",memberNo);
-        return "/customer/user/my_productq";
+        model.addAttribute("state","my");
+        return "/customer/user/customer_productq";
     }
+
+
 }

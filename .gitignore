@@ -232,3 +232,10 @@ gradle-app.setting
 *.hprof
 
 /uploads/
+
+# End of https://www.toptal.com/developers/gitignore/api/intellij,gradle,java,windows
+
+# Yml 설정 파일 예외처리
+/src/main/resources/api.yml
+/src/main/resources/database.yml
+/src/main/resources/static/img/product

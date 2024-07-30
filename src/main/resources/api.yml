@@ -1,0 +1,24 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ckatnfl1234@gmail.com
+    password: sjzhdwackhueuoce
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  coolsms:
+    api:
+      key: NCSJX8SJCCALFXZ6
+      secret: F0WFPI4WRVMRJJP5SNEDGGAE9LNSEO0J
+    caller: 01092526582
+
+
+  kakao:
+    key: 2054fe8c4c87791f3cb467fb9687a326
+    rest-key: 2260d1ff32638c0b096300eec96b9386
+    secret-key: G7fFXG0Ae7kVifhHnBJj70S9V7N5NC6r
+    redirect: http://localhost:8099/signin/oauth/kakao
