@@ -17,6 +17,8 @@ import java.util.List;
 @RequestMapping("/customer/user")
 public class CustomerController {
 
+    int memberNo=1;
+
     @Autowired
     private CustomerService customerService;
     @Autowired
@@ -33,7 +35,6 @@ public class CustomerController {
     //1:1문의 페이지
     @GetMapping("/customer_personalq")
     public void customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
-        int memberNo=1;
         List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
         int page_size=10;
         int adjustPage=page-1;
@@ -89,7 +90,7 @@ public class CustomerController {
                 System.out.println(image.getOriginalFilename());
             }
         }
-        appDto.setMemberNo(1);
+        appDto.setMemberNo(memberNo);
         int text_result=customerService.personalqApp(appDto);
         String code="personalq"+appDto.getPersonalqNo();
         customerService.setPersonalqCode(appDto.getPersonalqNo(),code);
@@ -117,7 +118,7 @@ public class CustomerController {
                 System.out.println("이미지:"+image.getOriginalFilename());
             }
         }
-        appDto.setMemberNo(1);
+        appDto.setMemberNo(memberNo);
         int text_result=customerService.updatePersonalq(appDto);
         String code = customerService.getpersonalqCode(appDto.getPersonalqNo());
         System.out.println(code);
@@ -141,11 +142,11 @@ public class CustomerController {
     @GetMapping("/customer_productq/{productNo}")
     public String customer_productq(@PathVariable("productNo") int productNo, Model model){
         List<ProuductqListDto> productqList = customerService.getProudctqList(productNo);
-        int memberNo = 1;
         System.out.println(productNo);
         model.addAttribute("productqList",productqList);
         model.addAttribute("productNo",productNo);
         model.addAttribute("memberNo",memberNo);
+        model.addAttribute("state","all");
         return "/customer/user/customer_productq";
     }
     //상품 문의 신청 이동
@@ -158,14 +159,14 @@ public class CustomerController {
         model.addAttribute("productNo",productNo);
     }
     /**
-     * 상품 문의를 전송하는 메서드
+     * 상품 문의 신청 메서드
      *
      * @param appDto the ProductqAppDto
      * @return the String
      */
     @PostMapping("/productq_app")
     public String productq_app(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
-        appDto.setMemberNo(1);
+        appDto.setMemberNo(memberNo);
         System.out.println(appDto);
         for(MultipartFile image : images){
             if(!image.isEmpty()){
@@ -181,20 +182,46 @@ public class CustomerController {
         return "redirect:"+redirectUrl;
     }
 
+    /**
+     * 상품 문의 상세보기 메서드
+     *
+     * @param productqNo the productqNo
+     * @return the String
+     */
     @GetMapping("/productq_detail/{productqNo}")
     public String productq_detail(@PathVariable("productqNo") int productqNo, Model model){
         ProductqDto productqDto = customerService.getProductq(productqNo);
         String[] imageList = customerService.getImage(productqDto.getReferenceCode());
+        System.out.println(productqDto);
         model.addAttribute("productq",productqDto);
         model.addAttribute("imageList",imageList);
 
-//        if(productqDto.getAnswer().equals("Y")) {
-//            ProductqAnserDto answerDto = customerService.getProducta(productqNo);
-//            String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
-//            model.addAttribute("producta", answerDto);
-//            model.addAttribute("imageList2", imageList2);
-//            System.out.println("답변: "+answerDto);
-//        }
+        if(productqDto.getAnswer().equals("Y")) {
+            ProductqAnswerDto answerDto = customerService.getProducta(productqNo);
+            String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
+            model.addAttribute("producta", answerDto);
+            model.addAttribute("imageList2", imageList2);
+            System.out.println("답변: "+answerDto);
+        }
         return"/customer/user/productq_detail";
     }
+
+    /**
+     * 내 문의 보기 메소드
+     * @param productNo
+     * @param model
+     * @return
+     */
+    @GetMapping("/my_productq/{productNo}")
+    public String my_productq(@PathVariable("productNo") int productNo, Model model){
+        System.out.println(productNo);
+        List<ProuductqListDto> productqList = customerService.getMyProudctqList(productNo, memberNo);
+        model.addAttribute("productqList",productqList);
+        model.addAttribute("productNo",productNo);
+        model.addAttribute("memberNo",memberNo);
+        model.addAttribute("state","my");
+        return "/customer/user/customer_productq";
+    }
+
+
 }

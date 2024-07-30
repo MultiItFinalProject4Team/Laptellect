@@ -1,6 +1,7 @@
 package com.multi.laptellect.customer.controller;
 
 import com.multi.laptellect.customer.dto.PersonalqAnswerDto;
+import com.multi.laptellect.customer.dto.ProductqAnswerDto;
 import com.multi.laptellect.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,31 @@ public class CustomerAdminController {
         String state="N";
         customerService.personalAnwerChange(personalqNo,state);
         String redirectUrl = String.format("/customer/user/personalq_detail/%s", personalqNo);
+        return "redirect:"+redirectUrl;
+    }
+
+    /**
+     * 상품문의 답변페이지 이동
+     * @param productqNo
+     * @param model
+     * @return
+     */
+    @GetMapping("/answer_productq/{productqNo}")
+    public String answer_producta(@PathVariable("productqNo") int productqNo, Model model){
+        model.addAttribute("productqNo",productqNo);
+        return"/customer/admin/answer_productq";
+    }
+
+    @PostMapping("/answer_productq")
+    public String answer_producta(ProductqAnswerDto answerDto, @RequestParam("image[]") MultipartFile[] images){
+        System.out.println(answerDto);
+        customerService.productAnwerApp(answerDto);
+        String state = "Y";
+        customerService.productAnwerChange(answerDto.getProductqNo(), state);
+        String code = "producta"+answerDto.getProductaNo();
+        customerService.setproductaCode(answerDto.getProductaNo(),code);
+        customerService.inputImage(code,images);
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
         return "redirect:"+redirectUrl;
     }
 }

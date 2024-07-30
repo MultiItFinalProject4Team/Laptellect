@@ -68,7 +68,7 @@
 
     <div>
         <h3 th:text="${personala.title}">제목</h3>
-        <p th:text="${personala.createdAt}">작성일</p>
+        <p th:text="${#dates.format(personala.createdAt, 'YY/MM/dd HH:mm')}">작성일</p>
     </div>
     <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel" style="width: 300px;">
         <div class="carousel-indicators">

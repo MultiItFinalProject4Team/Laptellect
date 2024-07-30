@@ -16,7 +16,7 @@
         answer,
         created_at
         from personal_question
-        where member_no=#{memberNo}
+<!--        where member_no=#{memberNo}-->
         order by personalq_no desc
     </select>
 
@@ -147,6 +147,40 @@
         select *
         from
         product_question
+        where productq_no=#{productqNo}
+    </select>
+
+    <select id="getMyProudctqList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo} and member_no=#{memberNo}
+    </select>
+
+    <insert id="productAnwerApp" parameterType="com.multi.laptellect.customer.dto.ProductqAnswerDto" useGeneratedKeys="true" keyProperty="productaNo">
+        insert into
+        product_answer(productq_no, title, content)
+        values(#{productqNo}, #{title}, #{content})
+    </insert>
+
+    <update id="productAnwerChange">
+        update
+        product_question
+        set answer=#{state}
+        where productq_no=#{productqNo}
+    </update>
+
+    <update id="setproductaCode">
+        update
+        product_answer
+        set reference_code=#{code}
+        where producta_no=#{productaNo}
+    </update>
+
+    <select id="getProducta" resultType="com.multi.laptellect.customer.dto.ProductqAnswerDto">
+        select *
+        from
+        product_answer
         where productq_no=#{productqNo}
     </select>
 </mapper>
