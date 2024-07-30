@@ -48,4 +48,24 @@ public interface CustomDao {
     List<ProuductqListDto> getProudctqList(int productNo);
 
     List<ProductqCategoryDto> getProductqCategory();
+
+    int productqApp(ProductqAppDto appDto);
+
+    void setProductqCode(@Param("productqNo") int productqNo, @Param("code") String code);
+
+    ProductqDto getProductq(int productqNo);
+
+    List<ProuductqListDto> getMyProudctqList(@Param("productNo") int productNo, @Param("memberNo") int memberNo);
+
+    void productAnwerApp(ProductqAnswerDto answerDto);
+
+    void productAnwerChange(@Param("productqNo") int productqNo, @Param("state") String state);
+
+    void setproductaCode(@Param("productaNo") int productaNo, @Param("code") String code);
+
+    ProductqAnswerDto getProducta(int productqNo);
+
+    int updateProductq(ProductqAppDto appDto);
+
+    String getproductqCode(int productqNo);
 }

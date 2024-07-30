@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <title>1:1 문의</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!--    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>-->
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
     <style>
         .file-input-wrapper {
             margin-bottom: 10px;
         }
     </style>
     <link href="/css/customer/nav.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
 </head>
 <body>
 <div layout:fragment="content">
@@ -31,31 +30,15 @@
             </li>
         </ul>
     </header>
-    <form action="/customer/user/productq_app" method="post" enctype="multipart/form-data">
-        <div class="input-group form-row">
-        <label class="input-group-text" for="title">제목:</label>
-        <input class="col-md-9" type="text" id="title" name="title" required><br><br>
-
-        <label class="input-group-text" for="inputGroupSelect01" >카테고리</label>
-        <select class="form-select col-md-3" id="inputGroupSelect01" name="productqCategorycode">
-            <option th:each="categories : ${category}"
-                    th:value="${categories.productqCategorycode}"
-                    th:text="${categories.productqCategoryname}">
-            </option>
-        </select>
-        </div>
+    <form action="/customer/admin/answer_productq" method="post" enctype="multipart/form-data">
+        <label for="productqNo">번호</label>
+        <input type="text" th:value="${productqNo}" readonly="true" id="productqNo" name="productqNo">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title" required><br><br>
 
         <label for="content">내용:</label>
-        <textarea id="content" name="content" rows="10" cols="80"></textarea><br><br>
-        <div>
-            <label>비밀글: </label>
-            <label>
-                <input type="radio" name="secret" value="Y"> Yes
-            </label>
-            <label>
-                <input type="radio" name="secret" value="N" checked> No
-            </label>
-        </div>
+        <textarea id="content" name="content"></textarea><br><br>
+
         <div id="file-input-container">
             <div class="file-input-wrapper">
                 <label for="image1">이미지 1:</label>
@@ -63,7 +46,6 @@
             </div>
         </div>
         <button type="button" onclick="addFileInput()">이미지 추가</button>
-        <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
         <button type="submit">등록</button>
     </form>
 

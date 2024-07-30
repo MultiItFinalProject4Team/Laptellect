@@ -5,16 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductqAppDto {
+public class ProductqAnswerDto {
+    private int productaNo;
     private int productqNo;
-    private int memberNo;
     private int productNo;
-    private String productqCategorycode;
     private String title;
     private String content;
-    private String secret;
+    private Date createdAt;
+    private Date updatedAt;
+    private String referenceCode;
 }
