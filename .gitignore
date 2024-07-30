@@ -238,6 +238,6 @@ gradle-app.setting
 # Yml 설정 파일 예외처리
 /src/main/resources/api.yml
 /src/main/resources/database.yml
-/src/main/resources/static/img/product
+/src/main/resources/application.yml
 
 
