@@ -16,7 +16,7 @@ public class ReviewAnalysisController {
 
     @PostMapping("/analyze")
     public String analyzeReviews(@RequestParam String url) {
-        reviewAnalysisService.performFullAnalysis(url);
-        return "Analysis completed successfully";
+        reviewAnalysisService.performFullAnalysis(url); // 리뷰 분석 수행
+        return "Analysis completed successfully"; // 리뷰 분석이 완료되었습니다.
     }
 }

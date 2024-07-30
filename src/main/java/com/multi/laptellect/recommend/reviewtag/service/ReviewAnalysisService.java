@@ -35,7 +35,7 @@ public class ReviewAnalysisService {
     private Set<String> stopWords; // 불용어 집합
 
     public ReviewAnalysisService() {
-        System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver"); // 크롬 드라이버 경로 어디? -> WebDriverManager로 대체
         WebDriverManager.chromedriver().setup(); // WebDriverManager를 사용하여 크롬 드라이버 설정
         this.driver = new ChromeDriver();
         this.komoran = new Komoran(DEFAULT_MODEL.FULL);

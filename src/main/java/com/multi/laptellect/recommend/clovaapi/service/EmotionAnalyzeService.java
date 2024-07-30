@@ -45,8 +45,9 @@ public class EmotionAnalyzeService {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("content", content);
 
-            HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
-            ResponseEntity<HashMap> response = restTemplate.exchange(url, HttpMethod.POST, entity, HashMap.class);
+            HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers); //HttpEntity는 HTTP 요청과 응답을 표현하는 인터페이스 //HttpEntity의 인자로는 body와 header가 들어감
+            ResponseEntity<HashMap> response = restTemplate.exchange(url, HttpMethod.POST, entity, HashMap.class); //RestTemplate의 exchange 메소드를 사용하여 API 호출을 하고 결과값을 반환함
+            //exchange 메소드를 사용하여 API 호출을 하고 결과값을 반환함
 
             result.put("statusCode", response.getStatusCodeValue()); // http status code를 확인 //getStatusCodeValue()는 HTTP 응답 코드를 반환
             result.put("header", response.getHeaders());
@@ -57,6 +58,7 @@ public class EmotionAnalyzeService {
                 HashMap<String, Object> document = (HashMap<String, Object>) response.getBody().get("document"); // document 정보를 가져옴 //HashMap은 key와 value로 이루어져 있음//key는 중복이 안됨//value는 중복이 가능//key는 String, value는 Object로 선언//Object는 모든 데이터 타입을 담을 수 있음
 
                 HashMap<String, Double> sentiment = (HashMap<String, Double>) document.get("sentiment");
+                //HashMap<String, Double> : key는 String, value는 Double인 HashMap
 
 
                 SentimentDTO sentimentDTO = new SentimentDTO();
@@ -69,7 +71,7 @@ public class EmotionAnalyzeService {
             }
 
             return result;
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
+        } catch (HttpClientErrorException | HttpServerErrorException e) { //HttpClientErrorException : 4xx 에러 발생 시 발생하는 예외 //HttpServerErrorException : 5xx 에러 발생 시 발생하는 예외
             result.put("statusCode", e.getRawStatusCode());
             result.put("body", e.getStatusText());
             log.error("Error: " + e.toString());
