@@ -8,9 +8,9 @@ import java.sql.SQLException;
 /**
  * 인증/인가 Service 클래스
  *
- * @fileName      : AuthService.java
- * @author        : 이강석
- * @since         : 2024-07-30
+ * @author : 이강석
+ * @fileName : AuthService.java
+ * @since : 2024-07-30
  */
 public interface AuthService {
     /**
@@ -53,6 +53,13 @@ public interface AuthService {
      * @return the boolean
      */
     boolean isMemberById(String id);
+
+    /**
+     * 소셜 멤버 검증
+     *
+     * @return the boolean
+     */
+    boolean isSocialMember();
 
     /**
      * 이메일 중복 검증.
