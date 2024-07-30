@@ -1,10 +1,11 @@
 package com.multi.laptellect.auth.controller;
 
-import com.multi.laptellect.member.model.dto.KakaoDTO;
 import com.multi.laptellect.auth.service.AuthService;
 import com.multi.laptellect.auth.service.OAuthService;
+import com.multi.laptellect.config.api.GoogleConfig;
 import com.multi.laptellect.config.api.KakaoConfig;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.dto.SocialDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class AuthController {
     private final KakaoConfig kakaoConfig;
+    private final GoogleConfig googleConfig;
     private final AuthService authService;
     private final OAuthService oAuthService;
 
@@ -80,9 +82,9 @@ public class AuthController {
     public String kakaoSignIn(@RequestParam("code") String code) {
         try {
             String token = oAuthService.getKakaoAccessToken(code);
-            KakaoDTO kakaoDTO = oAuthService.getKaKaoProfileInfo(token);
+            SocialDTO socialDTO = oAuthService.getKaKaoProfileInfo(token);
 
-            oAuthService.processKakaoUser(kakaoDTO);
+            oAuthService.processKakaoUser(socialDTO);
         } catch (Exception e) {
 
         }
@@ -90,4 +92,43 @@ public class AuthController {
         return "redirect:/";
     }
 
+    /**
+     * 구글 로그인 출력 메서드
+     *
+     * @return Login URL
+     */
+    @GetMapping("/signin/google")
+    public String googleSingIn() {
+        String googleApiKey = googleConfig.getGoogleApiKey();
+        String googleClientId = googleConfig.getGoogleClientId();
+        String redirectURL = googleConfig.getGoogleRedirectUri();
+        String loginURL = "https://accounts.google.com/o/oauth2/auth?client_id="
+                + googleClientId
+                + "&redirect_uri="
+                + redirectURL
+                + "&response_type=code"
+                + "&scope=profile%20email";
+        return "redirect:" + loginURL;
+    }
+
+    /**
+     * 구글 로그인 callback 메서드
+     *
+     * @param code 구글 로그인 반환 code 값
+     * @return the string
+     */
+    @GetMapping("/signin/oauth/google")
+    public String googleSignIn(@RequestParam("code") String code) {
+        log.debug("구글 리턴 code = {}", code);
+        try {
+            String token = oAuthService.getGoogleAccessToken(code);
+            SocialDTO SocialDTO = oAuthService.getGoogleProfileInfo(token);
+
+            oAuthService.processGoogleUser(SocialDTO);
+        } catch (Exception e) {
+            log.error("Google Login Error = ", e);
+        }
+        
+        return "redirect:/";
+    }
 }

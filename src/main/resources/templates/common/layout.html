@@ -47,6 +47,7 @@
     .modal-img {
             width: 48px;
             height: 48px;
+            border-radius: 75%;
     }
     .image-container {
             display: inline-block;
@@ -70,8 +71,6 @@
       position : relative;
       transform : translateY(-100%);
     }
-
-
 </style>
 </head>
 <body>
@@ -168,15 +167,15 @@
                 <h4 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #6c5ce7;">Laptellect</h4>
                 <br> <br>
                 <div class="image-container">
-                    <a href="#">
+                    <a href="/signin/kakao">
                         <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
                         <div>카카오</div>
                     </a>
                 </div>
                 <div class="image-container">
-                    <a href="#">
-                        <img th:src="@{/img/common/naver-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
-                        <div>네이버</div>
+                    <a href="/signin/google">
+                        <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
+                        <div>구글</div>
                     </a>
                 </div>
                 <div class="image-container">

@@ -1,19 +1,26 @@
 $(document).ready(function() {
   let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-_])(?=.*[0-9]).{8,15}$/;
-  $(".error-message").hide();
-
-  function areAnyErrorMessagesVisible() {
-    if($('.error-message:hidden').length !== $('.error-message').length) {
-      $("#insertBtn").prop("disabled", true);
-    }
-  }
+  let isId = false;
+  let isEmail = false;
+  let isPassword = false;
+  let isPassword2 = false;
 
   $("#insertBtn").prop("disabled", true);
   $(".emailVerifyButton").prop("disabled", true);
+  $(".error-message").hide();
+
+  function signupVisible() {
+    if(isId && isEmail && isPassword && isPassword2) {
+        $("#insertBtn").prop("disabled", false);
+    } else {
+        $("#insertBtn").prop("disabled", true);
+    }
+  }
+
+
 
   // 아이디 중복 체크
   $("#id").on("blur", function () {
-    areAnyErrorMessagesVisible();
     let userId = $("#id").val();
     console.log(userId);
 
@@ -25,16 +32,21 @@ $(document).ready(function() {
           if (response === true) {
             $('#id').addClass('is-invalid');
             console.log("아이디 중복")
+            isId = false;
+            signupVisible();
             $("#idError").show();
           } else {
             console.log("아이디 중복 X");
             $('#id').removeClass('is-invalid');
+            isId = true;
+            signupVisible();
             $("#idError").hide();
           }
         },
         error: function () {
           alert("아이디 중복 확인 실패")
           $("#idError").hide();
+          isId = false;
           $("#insertBtn").prop("disabled", true);
         },
     });
@@ -42,9 +54,10 @@ $(document).ready(function() {
 
   // 패스워드 정규식 검증
   $("#pass").on("blur", function () {
-    areAnyErrorMessagesVisible();
     let password = $(this).val();
+    let password2 = $("#pass2").val();
     console.log(password);
+    console.log(password2);
 
     if (!reg.test(password)) {
       $('#passwordError').show();
@@ -53,7 +66,9 @@ $(document).ready(function() {
         "pointer-events": "none",
         "user-select": "none"
       });
-      $("#insertBtn").prop("disabled", true);
+
+      isPassword = false;
+      signupVisible();
     } else {
       $('#passwordError').hide();
       $(this).removeClass('is-invalid');
@@ -61,12 +76,25 @@ $(document).ready(function() {
         "pointer-events": "",
         "user-select": ""
       });
+      isPassword = true;
+      signupVisible();
     }
+
+    if (password2 !==  "") {
+        if (password !== password2) {
+           $('#passwordError2').show();
+           isPassword2 = false;
+           signupVisible();
+         } else {
+           $('#passwordError2').hide();
+           isPassword2 = true;
+           signupVisible();
+         }
+      }
   });
 
   // 패스워드 일치 확인
   $("#pass2").on("blur", function () {
-    areAnyErrorMessagesVisible();
     let password = $("#pass").val();
     let password2 = $(this).val();
 
@@ -74,15 +102,17 @@ $(document).ready(function() {
 
     if (password !== password2) {
       $('#passwordError2').show();
-      $("#insertBtn").prop("disabled", true);
+      isPassword2 = false;
+      signupVisible();
     } else {
       $('#passwordError2').hide();
+      isPassword2 = true;
+      signupVisible();
     }
   });
 
   // 이메일 중복 체크
   $("#emailInput").on("blur", function () {
-    areAnyErrorMessagesVisible();
     let email = $(this).val();
     console.log(email);
 
@@ -92,7 +122,7 @@ $(document).ready(function() {
       data: { email: email },
       success: function (response) {
         if (response === true) {
-          console.log("이메일 중복 확인 완료");
+          console.log("이메일 중복 완료");
           $('#emailInput').addClass('is-invalid');
 
           $("#emailError").show();
@@ -137,7 +167,6 @@ $(document).ready(function() {
 
   // 이메일 인증 번호 검증
   $("#emailVer").on("blur", function () {
-    areAnyErrorMessagesVisible();
     let verifyCode = $(this).val();
     console.log(verifyCode);
 
@@ -149,18 +178,22 @@ $(document).ready(function() {
         if (response === true) {
           console.log("인증번호 확인 완료");
           $("#emailError2").hide();
-          $('#emailInput').removeClass('is-invalid');
-          $("#insertBtn").prop("disabled", false);
+          $('#emailVer').removeClass('is-invalid');
+          isEmail = true;
+          signupVisible();
         } else {
           console.log("틀린 인증번호");
           $("#emailError2").show();
-          $('#emailInput').addClass('is-invalid');
-          $("#insertBtn").prop("disabled", true);
+          $('#emailVer').addClass('is-invalid');
+          isEmail = false;
+          signupVisible();
         }
 
       },
       error: function () {
         console.log("인증번호 확인 실패");
+        isEmail = false;
+        signupVisible();
       },
     });
   });
