@@ -70,4 +70,10 @@ public interface CustomDao {
     String getproductqCode(int productqNo);
 
     int deleteProductq(int productqNo);
+
+    void updateProducta(ProductqAnswerDto answerDto);
+
+    String getProductaCode(int productaNo);
+
+    void deleteProducta(int productqNo);
 }

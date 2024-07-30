@@ -201,4 +201,23 @@
         delete from product_question
         where productq_no=#{productqNo}
     </delete>
+
+    <update id="updateProducta">
+        update
+        product_answer
+        set title=#{title}, content=#{content}, updated_at=current_timestamp
+        where productq_no=#{productqNo}
+    </update>
+
+    <select id="getProductaCode">
+        select reference_code
+        from product_answer
+        where producta_no=#{productaNo}
+    </select>
+
+    <delete id="deleteProducta">
+        delete from
+        product_answer
+        where productq_no=#{productqNo}
+    </delete>
 </mapper>

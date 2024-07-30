@@ -266,4 +266,16 @@ public class CustomerService {
     public int deleteProductq(int productqNo) {
         return customDao.deleteProductq(productqNo);
     }
+
+    public void updateProducta(ProductqAnswerDto answerDto) {
+        customDao.updateProducta(answerDto);
+    }
+
+    public String getProductaCode(int productaNo) {
+        return customDao.getProductaCode(productaNo);
+    }
+
+    public void deleteProducta(int productqNo) {
+        customDao.deleteProducta(productqNo);
+    }
 }

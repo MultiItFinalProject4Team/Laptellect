@@ -94,4 +94,42 @@ public class CustomerAdminController {
         String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
         return "redirect:"+redirectUrl;
     }
+
+    /**
+     * 상품 문의 답변 수정 페이지
+     * @param productqNo
+     * @param model
+     * @return
+     */
+    @GetMapping("/update_producta/{productqNo}")
+    public String update_proudcta(@PathVariable("productqNo") int productqNo,Model model){
+        ProductqAnswerDto dto = customerService.getProducta(productqNo);
+        model.addAttribute("dto",dto);
+        return"/customer/admin/update_producta";
+    }
+
+    /**
+     * 상품문의 답변 수정 메소드
+     * @param answerDto
+     * @param images
+     * @return
+     */
+    @PostMapping("/update_producta")
+    public String update_producta(ProductqAnswerDto answerDto, @RequestParam("image[]") MultipartFile[] images){
+        customerService.updateProducta(answerDto);
+        String code=customerService.getProductaCode(answerDto.getProductaNo());
+        System.out.println("코드"+code);
+        customerService.updateImage(code,images);
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
+        return "redirect:"+redirectUrl;
+    }
+
+    @GetMapping("/delete_producta/{productqNo}")
+    public String delete_producta(@PathVariable("productqNo") int productqNo){
+        customerService.deleteProducta(productqNo);
+        String state="N";
+        customerService.productAnwerChange(productqNo,state);
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", productqNo);
+        return "redirect:"+redirectUrl;
+    }
 }
