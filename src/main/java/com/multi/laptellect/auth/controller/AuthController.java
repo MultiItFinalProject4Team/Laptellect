@@ -42,13 +42,13 @@ public class AuthController {
         return "auth/auth-sign-in";
     }
 
+    @GetMapping("/signup")
     /**
      * 회원가입 화면 출력 메서드
      *
      * @param model the model
      * @return the string
      */
-    @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         MemberDTO memberDTO = new MemberDTO();
         model.addAttribute("member", memberDTO);
