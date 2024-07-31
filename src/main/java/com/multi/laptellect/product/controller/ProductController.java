@@ -69,25 +69,26 @@ public class ProductController {
 
 
         try {
-            System.out.println("확인합니다"+ type);
             List<ProductDTO> products = crawlingService.crawlProducts(type);
-            log.debug("제품확인 {}", products);
+            log.info("제품 확인 {}", products);
 
-           // productService.saveProductsToDB(products, typeNo);
-
-
-
-
+            productService.saveProductsToDB(products, typeNo);
+            
 
             if (!products.isEmpty()) {
                 for(int i = 0; i < products.size(); i++){
+                    log.info("products 내용확인 = {}", products);
+                    log.info("조회 횟수 확인 = {}", i+1);
+                    
                     ProductDTO productDTO = products.get(i); // 예시로 첫 번째 제품 사용
 
                     log.info("제품 코드 확인{}",productDTO.getProductCode());
-                    LaptopSpecDTO specDTO = crawlingService.getLaptopDetails(productDTO);
+                    log.info("제품 코드 확인{}",productDTO.getProductCode());
+
+                    crawlingService.processAllLaptopDetails();
 
                     model.addAttribute("products", products);
-                    model.addAttribute("specDTO", specDTO); // 필요에 따라 추가
+                  //  model.addAttribute("specDTO", specDTO); // 필요에 따라 추가
                 }
 
             }
@@ -144,11 +145,6 @@ public class ProductController {
 
     }
 
-//    @GetMapping("/keyboardDetails")
-//    public String keyboardDetails(@RequestParam("productCode") String productCode, Model model){
-//
-//        return "product/keyboardDetails";
-//    }
 
     @PostMapping("/productType")
     public String productType(@RequestBody Map<String, Integer> request, Model model) {
@@ -160,19 +156,7 @@ public class ProductController {
         return "productList";
     }
 
-//    @GetMapping("/abc")
-//    public String ad(){
-//
-//        ProductDTO ProductDTO = new ProductDTO();
-//
-//        ProductDTO.setProductCode("61842230");
-//
-//
-//        LaptopSpecDTO specDTO = crawlingService.getLaptopDetails(ProductDTO);
-//
-//
-//        return "redirect:/";
-//    }
+
 
 }
 

@@ -35,7 +35,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CrawlingService {
 
-
     private final ProductMapper productMapper;
 
     private final String PRODUCT_LIST_URL = "https://prod.danawa.com/list/ajax/getProductList.ajax.php";
@@ -47,7 +46,7 @@ public class CrawlingService {
      *
      * @param type 크롤링할 제품의 유형(laptop, mouse, keyboard)
      * @return 제품 정보를 담은 ProductDTO 리스트
-     * @throws IOException HTTP 요청 중 발생 할 수있는 예외 처리 
+     * @throws IOException HTTP 요청 중 발생 할 수있는 예외 처리
      */
     public List<ProductDTO> crawlProducts(String type) throws IOException {
         List<ProductDTO> productList = new ArrayList<>();
@@ -55,8 +54,9 @@ public class CrawlingService {
             for (int page = 1; page <= 1; page++) {
                 String responseString = sendPostRequest(httpClient, page, type);
                 parseHtml(responseString, productList);
+                log.info("productList확인{}", productList);
             }
-            log.info("productList확인{}", productList);
+
         }
         return productList;
     }
@@ -64,8 +64,9 @@ public class CrawlingService {
 
     /**
      * HTTP POST 요청을 보내는 메서드
-     * @param httpClient HTTP 클라이언트
-     * @param page 요청할 페이지 번호
+     *
+     * @param httpClient  HTTP 클라이언트
+     * @param page        요청할 페이지 번호
      * @param productType 요청할 제품의 유형
      * @return 응답으로 받은 HTML 문자열
      * @throws IOException HTTP 요청 중 발생할 수 있는 예외
@@ -86,7 +87,7 @@ public class CrawlingService {
                         "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
                         "&listCount=10");
-                log.info("laptopType {}",productType);
+                log.info("laptopType {}", productType);
                 break;
             case "mouse":
                 referer = "https://prod.danawa.com/list/?cate=112787";
@@ -98,7 +99,7 @@ public class CrawlingService {
                         "&sortMethod=BoardCount" +
                         "&viewMethod=LIST" +
                         "&listCount=10");
-                log.info("mouseType {}",productType);
+                log.info("mouseType {}", productType);
                 break;
             case "keyboard":
                 referer = "https://prod.danawa.com/list/?cate=112782&15main_11_02";
@@ -110,7 +111,7 @@ public class CrawlingService {
                         "&sortMethod=BoardCount" +
                         "&viewMethod=LIST" +
                         "&listCount=10");
-                log.info("keyboardType {}",productType);
+                log.info("keyboardType {}", productType);
                 break;
 
             default:
@@ -137,26 +138,24 @@ public class CrawlingService {
     }
 
 
-
-
     /**
      * HTML을 파싱하여 제품 정보를 추출하는 메서드
-     * @param html 크롤링한 HTML 문자열
+     *
+     * @param html        크롤링한 HTML 문자열
      * @param productList 추출한 제품 정보를 저장할 리스트
      */
     private void parseHtml(String html, List<ProductDTO> productList) {
 
         //HTML 문자열 파싱 (웹 페이지를 읽기 쉬운 구조로 변환하는 과정)
         Document doc = Jsoup.parse(html);
-
         //제품 요소 선택
         Elements productElements = doc.select(".prod_item.prod_layer");
 
-        log.info("제품요소 {}",productElements);
+        log.info("제품요소 {}", productElements);
 
         for (Element product : productElements) {
             ProductDTO ProductDTO = extractProductDTO(product); //제품 정보 DTO로 추출
-            log.info("parseHtml제품정보 {}",product);
+            log.info("parseHtml제품정보 {}", product);
             if (ProductDTO != null) {
                 productList.add(ProductDTO);
             }
@@ -164,9 +163,9 @@ public class CrawlingService {
     }
 
 
-
     /**
      * HTML 요소에서 제품 정보를 추출하는 메서드
+     *
      * @param product 제품 정보를 포함한 HTML 요소
      * @return 추출한 제품 정보를 담은 ProductDTO 객체
      */
@@ -191,7 +190,7 @@ public class CrawlingService {
         }
 
 
-        if (productName.isEmpty() || price.isEmpty() || productCode.isEmpty() ) {
+        if (productName.isEmpty() || price.isEmpty() || productCode.isEmpty()) {
             return null;
         }
 
@@ -210,31 +209,48 @@ public class CrawlingService {
         return ProductDTO;
     }
 
+    public void processAllLaptopDetails() {
+        //제품 번호의 리스트 가져옴
+        List<ProductDTO> productNos = productMapper.findProduct();
+
+        log.info("productNos리스트 {}", productNos);
+
+        //각 제품에 대한 처리
+        for (ProductDTO productDTO : productNos) {
+            log.info("1. 제품 리스트 단계 확인 작업 = {}",productNos);
+            log.info("2. 제품 리스트 단계 확인 작업 = {}",productDTO);
+
+            int productNo = productDTO.getProductNo();
+            String productCode = productDTO.getProductCode();
+
+            getLaptopDetails(productNo, productCode);
+        }
+    }
+
 
     /**
      * 제품 세부 정보를 가져오는 메서드
-     * @param ProductDTO 제품 정보가 담긴 DTO
+     *
+     * @param productCode 제품의 코드 (url 경로 매핑시키기 위함)
+     * @param productNo   제품의 번호
      * @return 제품 세부 정보가 담긴 LaptopSpecDTO 객체
      */
-    public LaptopSpecDTO getLaptopDetails(ProductDTO ProductDTO) {
-
+    public LaptopSpecDTO getLaptopDetails(int productNo, String productCode) {
+        log.info("크롤링 사전 준비 제품 번호 = {} ",productNo);
+        log.info("크롤링 사전 준비 제품 코드 = {} ",productCode);
         LaptopSpecDTO laptopSpecDTO = new LaptopSpecDTO();
-        CPU cpu = new CPU();
-        GPU gpu = new GPU();
-        RAM ram = new RAM();
-        Display display = new Display();
 
         try {
 
             String cate = "112758";
             String url = PRODUCT_DETAILS_URL;
-            String referer = "https://prod.danawa.com/info/?pcode=" + ProductDTO.getProductCode() + "&cate=" + cate;
-            String bodyData = "pcode=" + ProductDTO.getProductCode() +
+            String referer = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=" + cate;
+            String bodyData = "pcode=" + productCode +
                     "&cate1=860" +
                     "&cate2=869";
 
-            String responseHtml = sendPostRequest(url, referer, bodyData);
-            Document doc = Jsoup.parse(responseHtml);
+            String responseHtml = sendPostRequest(url, referer, bodyData); // 다나와에 Post 요청
+            Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
 
 
             ArrayList<String> laptopSpecValue = new ArrayList<>();
@@ -284,7 +300,7 @@ public class CrawlingService {
             laptopSpecValue.add(getSpecValue(doc, "쿨링팬"));
             laptopSpecValue.add(getSpecValue(doc, "스피커"));
 
-            log.info("전원 = {}",getSpecValue(doc, "전원"));
+            log.info("전원 = {}", getSpecValue(doc, "전원"));
 
 
             ArrayList<String> laptopSpecName = new ArrayList<>();
@@ -333,60 +349,49 @@ public class CrawlingService {
             laptopSpecName.add("쿨링팬");
             laptopSpecName.add("스피커");
 
-            List<ProductDTO> productNo = productMapper.findLaptopProductNo();
-
-            for (ProductDTO product : productNo) {
-                for (int i = 0; i < laptopSpecName.size(); i++) {
-
-                    //
-                    ProductCategoryDTO specname = productMapper.findByOptions(laptopSpecName.get(i));
-
-                    String options = (productMapper.findCategorytNo(laptopSpecName.get(i)));
+            log.debug("카테고리 추가 시작 = {}", laptopSpecName);
+            int insertCount = 0;
+            for (int i = 0; i < laptopSpecName.size(); i++) { // 카테고리 추가를 위한 For문
+                ProductCategoryDTO specname = productMapper.findByOptions(laptopSpecName.get(i));
 
 
-                    log.info("productNo = {}:", productNo);
-                    log.info("specname {}:", specname);
-                    log.info("options {}:", options);
-                    log.info("laptopSpecName {}:", laptopSpecValue.get(i));
+                log.info("specname {}:", specname);
+                log.info("laptopSpecName {}:", laptopSpecValue.get(i));
 
-                    if (specname == null) {
+                if (specname == null) { // 카테고리가 DB에 존재하지 않을 시 Insert
+                    int o = productMapper.insertProductCategory(1, laptopSpecName.get(i));
+                    log.info("상품 카테고리 Insert 완료 = {}", o);
+                }
 
-                        int o = productMapper.insertProductCategory(1, laptopSpecName.get(i));
-                        log.info("=========================== {}", o);
+            }
+            log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
+            for (int i = 0; i < laptopSpecValue.size(); i++) { // 상품 스펙을 Insert 하기 위한 For문
+
+                String specName = laptopSpecName.get(i); // 옵션 이름
+                String specValue = laptopSpecValue.get(i); // 옵션 값
+                int options = Integer.parseInt((productMapper.findCategorytNo(specName))); // 옵션의 PK 키 조회
 
 
-                    } else {
-                        log.info("옵션명 {} 옵션값 {}", specname.getOptions(), laptopSpecValue);
+                if (specValue.equals("정보 없음")) {
+                    log.info("옵션 정보 없음 = {}", specValue);
+                } else {
+                    log.info("옵션 키값 = {}, 옵션 이름 = {}, 옵션 값 = {}", options, specName, specValue);
 
-                        if (!laptopSpecValue.get(i).equals("정보 없음"))
-                            log.info("옵션값넣어주기위함 {}", specname.getOptions());
-
-
-                        productMapper.insertProductSpec(product.getProductNo(), Integer.parseInt(options), laptopSpecValue.get(i));
-
-                        log.info("옵션이름{}", laptopSpecName);
-                        log.info("product번호{}", product);
-                        log.info("laptopSpecValue확인{}", laptopSpecValue);
+                    //중복 확인 쿼리
+                  int exists = productMapper.checkSpecExists(productNo, options, specValue);
+                    if(exists == 0){
+                        productMapper.insertProductSpec(productNo, options, specValue);
+                        insertCount++;
+                        log.info("ProductSpec Insert 완료 (현재 횟수: {})", insertCount);
                     }
 
 
+                    log.info("ProductSpec Insert 완료");
                 }
-
             }
 
-            for (int i = 0; i < laptopSpecName.size(); i++) {
-
-                if (laptopSpecValue.get(i).equals("정보 없음")) {
-                    continue;
-                }
-
-
-            }
-
-
-            log.info("Laptop Spec: {}", laptopSpecDTO);
-        } catch (
-                IOException e) {
+            log.info("ProductSpec Insert 실행횟수 확인 = {}",insertCount);
+        } catch (IOException e) {
             log.error("Error while getting product details", e);
         }
         return laptopSpecDTO;
@@ -395,8 +400,9 @@ public class CrawlingService {
 
     /**
      * HTTP POST 요청을 보내는 정적 메서드
-     * @param url 요청을 보낼 URL
-     * @param referer 리퍼러 URL
+     *
+     * @param url      요청을 보낼 URL
+     * @param referer  리퍼러 URL
      * @param bodyData 요청 본문 데이터
      * @return 응답으로 받은 문자열
      * @throws IOException HTTP 요청 중 발생할 수 있는 예외
@@ -404,7 +410,9 @@ public class CrawlingService {
     private static String sendPostRequest(String url, String referer, String bodyData) throws IOException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpPost post = new HttpPost(url);
+            log.info("url 확인 {} =",url);
             post.setHeader("Referer", referer);
+            log.info("리퍼러 확인 {} =", referer);
             post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
             StringEntity entity = new StringEntity(bodyData);
@@ -420,7 +428,8 @@ public class CrawlingService {
 
     /**
      * HTML 문서에서 특정 스펙의 값을 추출하는 메서드
-     * @param doc HTML 문서
+     *
+     * @param doc      HTML 문서
      * @param specName 추출할 스펙 이름
      * @return 스펙 값
      */
@@ -441,12 +450,12 @@ public class CrawlingService {
     }
 
 
-
     /**
      * 이미지 파일을 다운로드하는 메서드
-     * @param imageUrl 이미지 URL
+     *
+     * @param imageUrl      이미지 URL
      * @param saveDirectory 저장할 디렉토리 경로
-     * @param imageName 저장할 이미지 파일명
+     * @param imageName     저장할 이미지 파일명
      */
     public static void downloadImage(String imageUrl, String saveDirectory, String imageName) {
         // 디렉토리 경로에 이미지 파일명을 추가

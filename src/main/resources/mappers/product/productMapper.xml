@@ -93,13 +93,22 @@
         VALUES (#{productNo}, #{categoryNo}, #{optionValue})
     </insert>
     
-    <select id="findLaptopProductNo" parameterType="productDTO">
-        SELECT product_no
+    <select id="findProduct" parameterType="productDTO">
+        SELECT *
         FROM
         product
         WHERE type_no = 1
-
     </select>
+
+    <select id="checkSpecExists" resultType="int">
+        SELECT COUNT(*)
+        FROM product_spec
+        WHERE product_no = #{productNo}
+        AND category_no = #{categoryNo}
+        AND option_value = #{options}
+    </select>
+
+
 
 
 
