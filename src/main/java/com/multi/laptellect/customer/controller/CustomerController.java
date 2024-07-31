@@ -58,6 +58,7 @@ public class CustomerController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("category",category);
+        model.addAttribute("role","user");
         return "/customer/user/customer_personalq";
     }
     //챗봇 페이지
@@ -359,6 +360,14 @@ public class CustomerController {
         return "redirect:"+redirectUrl;
     }
 
+    /**
+     * 1:1 문의 검색
+     * @param model
+     * @param category
+     * @param keyword
+     * @param page
+     * @return
+     */
     @GetMapping("/search_personalq")
     public String search_personalq(Model model, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
@@ -378,6 +387,8 @@ public class CustomerController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("category",categories);
-        return "/customer/user/customer_personalq";
+        model.addAttribute("page_category",category);
+        model.addAttribute("page_keyword",keyword);
+        return "/customer/user/search_personalq";
     }
 }

@@ -236,4 +236,15 @@
         </if>
         order by personalq_no desc
     </select>
+
+    <select id="getAllPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        order by personalq_no desc
+    </select>
 </mapper>

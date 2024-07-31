@@ -291,4 +291,8 @@ public class CustomerService {
     public List<PersonalqListDto> getPersonalqSearchList(int memberNo, String keyword, String category) {
         return customDao.getPersonalqSearchList(memberNo, keyword, category);
     }
+
+    public List<PersonalqListDto> getAllPersonalqList() {
+        return customDao.getAllPersonalqList();
+    }
 }
