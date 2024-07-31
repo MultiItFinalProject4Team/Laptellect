@@ -89,7 +89,7 @@ public class MemberController {
     public String showProfileEdit(Model model) {
         CustomUserDetails userInfo = SecurityUtil.getUserDetails();
 
-        log.info("profile edit = memberNO : {}, memberID {}", userInfo.getMemberNo(), userInfo.getUsername());
+        log.info("profile edit = memberNO : {}, memberID {}, password {}", userInfo.getMemberNo(), userInfo.getUsername(), userInfo.getPassword());
 
         model.addAttribute("userInfo", userInfo);
 
