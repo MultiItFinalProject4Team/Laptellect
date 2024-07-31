@@ -26,6 +26,4 @@ public class GlobalExceptionHandler {
     public void handleIllegalStateException(IllegalStateException ex, HttpServletResponse response) throws IOException {
         response.sendRedirect("/signin");
     }
-
-
 }

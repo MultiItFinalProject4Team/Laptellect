@@ -14,7 +14,7 @@ public interface MemberMapper {
     @Select("SELECT * FROM mem_member WHERE member_name = #{ id }")
     MemberDTO findMemberById(String id);
 
-    @Select("SELECT * FROM mem_member WHERE email = #{ email } AND login_type = local")
+    @Select("SELECT * FROM mem_member WHERE email = #{ email } AND login_type = #{ loginType }")
     MemberDTO findMemberByEmail(String email);
 
     @Select("SELECT * FROM mem_member WHERE nick_name = #{ nickName }")

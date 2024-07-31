@@ -210,4 +210,56 @@ public class CustomerService {
     public List<ProductqCategoryDto> getProductqCategory() {
         return customDao.getProductqCategory();
     }
+
+    public int productqApp(ProductqAppDto appDto) {
+        return customDao.productqApp(appDto);
+    }
+
+    public void setProductqCode(int productqNo, String code) {
+        customDao.setProductqCode(productqNo, code);
+    }
+
+    public ProductqDto getProductq(int productqNo) {
+        return customDao.getProductq(productqNo);
+    }
+
+    public List<ProuductqListDto> getMyProudctqList(int productNo, int memberNo) {
+        return customDao.getMyProudctqList(productNo, memberNo);
+    }
+
+    public void productAnwerApp(ProductqAnswerDto answerDto) {
+        customDao.productAnwerApp(answerDto);
+        String contents = answerDto.getContent();
+        contents=contents.replaceAll("<[^>]*>", " ");
+        Email email=new Email();
+        email.setMailTitle("답변이 완료되었습니다");
+        email.setMailContent("문의주신 상품문의 "+getProductq(answerDto.getProductqNo()).getTitle()+"에 관리자가 답변을 남겼습니다.\n 답변내용: \n"+contents);
+        email.setReceiveAddress("anjy0821@naver.com");
+
+        try {
+            emailUtil.sendEmail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void productAnwerChange(int productqNo, String state) {
+        customDao.productAnwerChange(productqNo, state);
+    }
+
+    public void setproductaCode(int productaNo, String code) {
+        customDao.setproductaCode(productaNo, code);
+    }
+
+    public ProductqAnswerDto getProducta(int productqNo) {
+        return customDao.getProducta(productqNo);
+    }
+
+    public int updateProductq(ProductqAppDto appDto) {
+        return customDao.updateProductq(appDto);
+    }
+
+    public String getproductqCode(int productqNo) {
+        return customDao.getproductqCode(productqNo);
+    }
 }

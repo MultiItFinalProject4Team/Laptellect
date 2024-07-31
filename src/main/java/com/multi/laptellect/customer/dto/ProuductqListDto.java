@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,5 +18,5 @@ public class ProuductqListDto {
     private String title;
     private String secret;
     private String answer;
-    private String createdAt;
+    private Date createdAt;
 }
