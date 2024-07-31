@@ -1,11 +1,13 @@
 package com.multi.laptellect.member.service;
 
+import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class MemberServiceImpl implements MemberService{
     private final RedisUtil redisUtil;
     private final MemberMapper memberMapper;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public boolean updateEmail(MemberDTO memberDTO, String verifyCode) throws Exception{ // email update
@@ -87,5 +90,33 @@ public class MemberServiceImpl implements MemberService{
         }
 
         return request;
+    }
+
+    @Override
+    public boolean updatePassword(String beforePassword, String afterPassword) {
+        CustomUserDetails userInfo = SecurityUtil.getUserDetails();
+        int memberNo = userInfo.getMemberNo();
+        String loginType = userInfo.getLoginType();
+
+        // 현재 비밀번호가 바꿀 비밀번호가 동일할 시 업데이트 거부
+        if(beforePassword.equals(afterPassword)) return false;
+        
+        // local 로그인 유형이 아니면 비밀번호 업데이트 거부 (소셜 회원의 경우)
+        if(!loginType.equals("local")) return false;
+
+        String userPassword = memberMapper.findPasswordByMemberNo(memberNo);
+
+        log.debug("비밀번호 업데이트 시작 = {}", beforePassword);
+        // 변경 전 비밀번호를 다시 검증하여 보안 강화
+        if(bCryptPasswordEncoder.matches(beforePassword, userPassword)) {
+            String password = bCryptPasswordEncoder.encode(afterPassword);
+            memberMapper.updatePassword(memberNo, password);
+            log.info("비밀번호 변경 성공 {}", password);
+        } else {
+            log.info("비밀번호 검증 실패", beforePassword);
+            return false;
+        }
+
+        return true;
     }
 }

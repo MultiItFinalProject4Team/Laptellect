@@ -86,6 +86,15 @@ public interface AuthService {
     boolean isMemberByPassword(String password);
 
     /**
+     * 현재 비밀번호와 변경할 비밀번호 검증
+     *
+     * @param beforePassword 이전 비밀번호
+     * @param afterPassword  변경할 비밀번호
+     * @return the boolean
+     */
+    boolean isPasswordsDifferent(String beforePassword, String afterPassword);
+
+    /**
      * SMS 인증 보내기
      *
      * @param tel 사용자가 입력한 휴대폰 번호
@@ -101,5 +110,4 @@ public interface AuthService {
      * @throws Exception the exception
      */
     boolean isVerifyTel(String verifyCode) throws Exception;
-
 }
