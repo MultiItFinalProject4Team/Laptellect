@@ -220,4 +220,20 @@
         product_answer
         where productq_no=#{productqNo}
     </delete>
+
+    <select id="getPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        where member_no=#{memberNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'personalq_all'">
+            AND personalq_categorycode LIKE #{category}
+        </if>
+        order by personalq_no desc
+    </select>
 </mapper>

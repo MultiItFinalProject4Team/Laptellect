@@ -138,7 +138,12 @@ public class CustomerService {
     }
 
     public List<PersonalqCategoryDto> getPersonalqCategory() {
-        return customDao.getPersonalqCategory();
+        List<PersonalqCategoryDto> category = customDao.getPersonalqCategory();
+        PersonalqCategoryDto category_all  = new PersonalqCategoryDto();
+        category_all.setPersonalqCategorycode("personalq_all");
+        category_all.setPersonalqCategoryname("전체");
+        category.add(0,category_all);
+        return category;
     }
 
     public int updatePersonalq(PersonalqAppDto appDto) {
@@ -281,5 +286,9 @@ public class CustomerService {
     public void deleteProducta(int productqNo, String code) {
         customDao.deleteImages(code);
         customDao.deleteProducta(productqNo);
+    }
+
+    public List<PersonalqListDto> getPersonalqSearchList(int memberNo, String keyword, String category) {
+        return customDao.getPersonalqSearchList(memberNo, keyword, category);
     }
 }

@@ -53,9 +53,11 @@ public class CustomerController {
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
         int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
         if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",category);
         return "/customer/user/customer_personalq";
     }
     //챗봇 페이지
@@ -355,5 +357,27 @@ public class CustomerController {
         int result = customerService.deleteProductq(productqNo, code);
         String redirectUrl = String.format("/customer/user/customer_productq/%s", productNo);
         return "redirect:"+redirectUrl;
+    }
+
+    @GetMapping("/search_personalq")
+    public String search_personalq(Model model, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
+        List<PersonalqListDto> list = customerService.getPersonalqSearchList(memberNo, keyword, category);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> categories = customerService.getPersonalqCategory();
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",categories);
+        return "/customer/user/customer_personalq";
     }
 }
