@@ -58,7 +58,7 @@
     </insert>
 
 
-    <select id="selectAllOrders" resultMap="OrderlistResultMap">
+    <select id="selectOrders" resultMap="OrderlistResultMap">
         SELECT * FROM payment
         WHERE refund = 'N'
         AND username = 'jack'

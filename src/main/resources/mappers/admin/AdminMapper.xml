@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.admin.model.dao.AdminDAO">
+
+    <resultMap id="AdminReviewResultMap"
+               type="com.multi.laptellect.admin.model.dto.AdminReviewDTO">
+        <result column="payment_product_reviews_no" property="payment_product_reviews_no"/>
+        <result column="username" property="username"/>
+        <result column="product_name" property="product_name"/>
+        <result column="content" property="content"/>
+        <result column="rating" property="rating"/>
+        <result column="create_date" property="create_date"/>
+        <result column="modify_date" property="modify_date"/>
+    </resultMap>
+
+    <select id="selectAllReviews" resultMap="AdminReviewResultMap">
+        SELECT payment_product_reviews_no,
+        username,
+        product_name,
+        content,
+        rating,
+        create_date,
+        modify_date
+        FROM payment_product_reviews
+    </select>
+
+    <delete id="deleteReviews" parameterType="list">
+        DELETE FROM payment_product_reviews
+        WHERE payment_product_reviews_no IN
+        <foreach collection="reviewIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
