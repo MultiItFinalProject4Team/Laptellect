@@ -156,6 +156,7 @@
         from
         product_question
         where product_no=#{productNo} and member_no=#{memberNo}
+        order by productq_no desc
     </select>
 
     <insert id="productAnwerApp" parameterType="com.multi.laptellect.customer.dto.ProductqAnswerDto" useGeneratedKeys="true" keyProperty="productaNo">
@@ -254,6 +255,18 @@
         from
         product_question
         where product_no=#{productNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'productq_all'">
+            AND productq_categorycode LIKE #{category}
+        </if>
+        order by productq_no desc
+    </select>
+
+    <select id="getMyProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo} and member_no=#{memberNo}
         AND title LIKE CONCAT('%', #{keyword}, '%')
         <if test="category != 'productq_all'">
             AND productq_categorycode LIKE #{category}
