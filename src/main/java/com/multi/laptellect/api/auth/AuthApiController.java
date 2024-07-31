@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 인증/인가 관련 API 매핑에 사용하는 클래스
  *
- * @fileName      : AuthApiController.java
- * @author        : 이강석
- * @since         : 2024-07-26
+ * @author : 이강석
+ * @fileName : AuthApiController.java
+ * @since : 2024-07-26
  */
 @Slf4j
 @Controller
@@ -76,6 +76,20 @@ public class AuthApiController {
     @PostMapping("/check-password")
     public boolean isPassword(@RequestParam("beforePassword") String password) {
         return authService.isMemberByPassword(password);
+    }
+
+    /**
+     * 변경 전 비밀번호와 변경 후 비밀번호 동일한지 검증
+     *
+     * @param beforePassword 변경 전 비밀번호
+     * @param afterPassword  변경 후 비밀번호
+     * @return the boolean
+     */
+    @ResponseBody
+    @PostMapping("/check-after-password")
+    public boolean isPasswordsDifferent(@RequestParam("beforePassword") String beforePassword,
+                                   @RequestParam("afterPassword") String afterPassword) {
+        return authService.isPasswordsDifferent(beforePassword, afterPassword);
     }
 
     /**
@@ -175,29 +189,26 @@ public class AuthApiController {
         }
     }
 
+
     /**
      * 사용자 패스워드를 업데이트 하는 메서드
      *
-     * @param passsword the passsword
+     * @param beforePassword 사용자 변경 전 비밀번호
+     * @param afterPassword  사용자 변경 후 비밀번호
      * @return the boolean
      */
     @ResponseBody
     @PostMapping("/update-password")
-    public boolean updatePassword(@RequestParam("password") String passsword) {
-        CustomUserDetails userDetails = SecurityUtil.getUserDetails();
-        MemberDTO memberDTO = new MemberDTO();
-
-        memberDTO.setMemberNo(userDetails.getMemberNo());
-        memberDTO.setPassword(passsword);
-
+    public boolean updatePassword(@RequestParam("beforePassword") String beforePassword,
+                                  @RequestParam("afterPassword") String afterPassword) {
         try {
-            if(memberService.updateNickName(memberDTO)) {
+            if(memberService.updatePassword(beforePassword, afterPassword)) {
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
-            log.error("NickName Update Code Error = ", e);
+            log.error("Password Update Code Error = ", e);
             return false;
         }
     }

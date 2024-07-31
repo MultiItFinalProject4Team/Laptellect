@@ -125,6 +125,8 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void sendTempPassword(Email email) throws Exception { // 임시 비밀번호 발급 및 이메일 전송 메서드
+        String loginType = SecurityUtil.getUserDetails().getLoginType();
+
         MemberDTO userData = memberMapper.findMemberByEmail(email.getReceiveAddress());
         int memberNo = userData.getMemberNo();
 
@@ -147,6 +149,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public boolean isMemberByEmail(String email) { // email check
+        String loginType = SecurityUtil.getUserDetails().getLoginType();
         return memberMapper.findMemberByEmail(email) != null;
     }
 
@@ -164,7 +167,15 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public boolean isMemberByPassword(String password) {
-        return false;
+        int memberNo = SecurityUtil.getUserDetails().getMemberNo();
+        String userPassword = memberMapper.findPasswordByMemberNo(memberNo);
+
+        return bCryptPasswordEncoder.matches(password, userPassword);
+    }
+
+    @Override
+    public boolean isPasswordsDifferent(String beforePassword, String afterPassword) {
+        return (!beforePassword.equals(afterPassword));
     }
 
     @Override

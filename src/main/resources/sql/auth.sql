@@ -5,7 +5,7 @@ CREATE TABLE mem_member (
     email VARCHAR(255) NOT NULL,
     nick_name VARCHAR(50),
     tel VARCHAR(15),
-    point INT NOT NULL DEFAULT 0,
+    point INT NOT NULL DEFAULT 0 CHECK (payment_possession_point >= 0),
     role VARCHAR(15) NOT NULL DEFAULT 'ROLE_USER',
     login_type VARCHAR(15) NOT NULL DEFAULT 'local',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

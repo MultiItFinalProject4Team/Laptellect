@@ -9,12 +9,9 @@
             height: 80px;
         }
 
-        .d-flex {
-            display: flex;
-        }
         .sidebar {
             width: 240px;
-            height: 600px;
+            height: 700px;
             box-sizing: border-box;
             text-color: black;
             border: 1px solid #dee2e6;
@@ -30,7 +27,8 @@
             display: block;
         }
         .sidebar a:hover {
-            background-color: #495057;
+            background-color: #3498DB;
+            color:white !important;
         }
         .sidebar .profile {
             padding: 15px;
@@ -41,8 +39,15 @@
             margin: 0;
             color: white;
         }
-/*
-        .content {
-            flex-grow: 1;
+
+        .profile-box {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
             padding: 20px;
-        }*/
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 700px;
+            margin-top: -15px;
+        }
+
+

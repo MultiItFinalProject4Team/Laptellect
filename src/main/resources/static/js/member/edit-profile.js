@@ -6,7 +6,7 @@ $(function () {
         $("#emailVerifyButton").prop("disabled", true);
 
         // 정규식 변수
-        let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+        let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-_])(?=.*[0-9]).{8,15}$/;
 
         $("#nickNameInput").on("blur", function () {
           let nickName = $(this).val();
@@ -20,16 +20,19 @@ $(function () {
               if (response === true) {
                 console.log("중복된 닉네임");
                 $("#nickNameError").show();
+                $('#nickNameInput').addClass('is-invalid');
                 $("#nickNameChangeBtn").prop("disabled", true);
               } else {
                 console.log("중복되지 않은 닉네임");
                 $("#nickNameError").hide();
+                $('#nickNameInput').removeClass('is-invalid');
                 $("#nickNameChangeBtn").prop("disabled", false);
               }
 
             },
             error: function () {
               console.log("닉네임 확인 실패");
+              $('#nickNameInput').addClass('is-invalid');
             },
           });
         });
@@ -74,13 +77,15 @@ $(function () {
             data: { email: afterEmail },
             success: function (response) {
               if (response === true) {
-                console.log("이메일 중복 확인 완료");
+                console.log("이메일 중복 입니다.");
                 $("#emailError").show();
+                $('#emailInput').addClass('is-invalid');
                 $("#emailVerifyButton").prop("disabled", true);
 
               } else {
-                console.log("이메일 중복 확인 실패");
+                console.log("이메일 중복 아닙니다.");
                 $("#emailError").hide();
+                $('#emailInput').removeClass('is-invalid');
                 $("#emailVerifyButton").prop("disabled", false);
               }
 
@@ -126,10 +131,12 @@ $(function () {
               if (response === true) {
                 console.log("인증번호 확인 완료");
                 $("#emailError2").hide();
+                $('#emailVer').removeClass('is-invalid');
                 $("#emailChangeBtn").prop("disabled", false);
               } else {
                 console.log("틀린 인증번호");
                 $("#emailError2").show();
+                $('#emailVer').addClass('is-invalid');
                 $("#emailChangeBtn").prop("disabled", true);
               }
 
@@ -172,111 +179,142 @@ $(function () {
           });
         });
 
+        // 비밀번호 검증 함수
+        $("#beforePassword").on("blur", function () {
+          let beforePassword = $(this).val();
+          let afterPassword2 = $('#afterPassword2').val();
+          console.log(beforePassword);
+
+          $.ajax({
+            url: "/api/check-password",
+            type: "POST",
+            data: { beforePassword: beforePassword },
+            success: function (response) {
+              if (response === true) {
+                console.log("패스워드 확인 완료");
+                $("#passwordError").hide();
+                $('#beforePassword').removeClass('is-invalid');
+                $('#afterPassword').prop('readonly', false);
+                if(afterPassword2 !== "") {
+                  $("#passwordChangeBtn").prop("disabled", false);
+                }
+              } else {
+                console.log("틀린 비밀번호");
+                $("#passwordError").show();
+                $('#beforePassword').addClass('is-invalid');
+                $('#afterPassword').prop('readonly', true);
+                if(afterPassword2 !== "") {
+                  $("#passwordChangeBtn").prop("disabled", true);
+                }
+              }
+
+            },
+            error: function () {
+              console.log("비밀번호 확인 실패");
+              $('#beforePassword').addClass('is-invalid');
+              $('#afterPassword').prop('readonly', true);
+            },
+          });
+        });
+
+        $("#afterPassword").on("blur", function () {
+          let beforePassword = $('#beforePassword').val();
+          let afterPassword = $(this).val();
+          let afterPassword2 = $('#afterPassword2').val();
+          console.log(afterPassword);
+
+          if(!reg.test(afterPassword)) {
+            $('#passwordError2').show();
+            $('#afterPassword').addClass('is-invalid');
+            $('#afterPassword2').prop('readonly', true);
+
+          } else {
+            $('#passwordError2').hide();
+            
+
+            $.ajax({
+              url: "/api/check-after-password",
+              type: "POST",
+              data: { beforePassword: beforePassword, afterPassword: afterPassword },
+              success: function (response) {
+                if (response === true) {
+                  $('#passwordError3').hide();
+                  $('#afterPassword').removeClass('is-invalid');
+                  $('#afterPassword2').prop('readonly', false);
+                } else {
+                  $('#passwordError3').show();
+                  $('#afterPassword').addClass('is-invalid');
+                  $('#afterPassword2').prop('readonly', true);
+                }
+              },
+              error: function () {
+                console.log("비밀번호 검증 실패")
+              },
+            });
+          }
+
+          if (afterPassword2 !==  "") {
+            if (afterPassword !== afterPassword2) {
+              $('#passwordError4').show();
+              $('#afterPassword2').addClass('is-invalid');
+              $("#passwordChangeBtn").prop("disabled", true);
+            } else {
+              $('#passwordError4').hide();
+              $('#afterPassword2').addClass('is-invalid');
+              $("#passwordChangeBtn").prop("disabled", false);
+            }
+          }
+        });
+
+        $("#afterPassword2").on("blur", function () {
+          let afterPassword2 = $(this).val();
+          let afterPassword = $('#afterPassword').val();
+          console.log(afterPassword2);
+
+          if (afterPassword2 !==  "") {
+            if (afterPassword !== afterPassword2) {
+              $('#passwordError4').show();
+              $('#afterPassword2').addClass('is-invalid');
+              $("#passwordChangeBtn").prop("disabled", true);
+            } else {
+              $('#passwordError4').hide();
+              $('#afterPassword2').addClass('is-invalid');
+              $("#passwordChangeBtn").prop("disabled", false);
+            }
+          }
+        });
 
 
+        $("#passwordChangeBtn").on("click", function () {
+          let afterPassword2 = $('#afterPassword2').val();
+          let beforePassword = $('#beforePassword').val();
+          console.log(beforePassword, afterPassword2);
 
-        // $("#beforePassword").on("blur", function () {
-        //   let beforePassword = $(this).val();
-        //   console.log(beforePassword);
+          $.ajax({
+            url: "/api/update-password",
+            type: "POST",
+            data: { beforePassword: beforePassword, afterPassword: afterPassword2 },
+            success: function (response) {
+              if (response === true) {
+                alert("비밀번호 변경 완료");
+                $('#passwordModal').modal('hide');
 
-        //   $.ajax({
-        //     url: "/api/check-password",
-        //     type: "POST",
-        //     data: { beforePassword: beforePassword },
-        //     success: function (response) {
-        //       if (response === true) {
-        //         console.log("패스워드 확인 완료");
-        //         $("#passwordError").hide();
-        //       } else {
-        //         console.log("틀린 비밀번호");
-        //         $("#passwordError").show();
-        //         $("#emailChangeBtn").prop("disabled", true);
-        //       }
+                $("#password").prop("readonly", false);
+                $("#password").val(afterPassword2);
+                $("#password").prop("readonly", true);
 
-        //     },
-        //     error: function () {
-        //       console.log("비밀번호 확인 실패");
-        //     },
-        //   });
-        // });
+                $("#passwordChangeBtn").prop("disabled", true);
+              } else {
+                console.log("비밀번호 변경 실패");
+                alert("비밀번호 변경 실패")
+              }
 
-
-        // $("#beforePassword").on("blur", function () {
-        //   let beforePassword = $(this).val();
-        //   console.log(beforePassword);
-
-        //   $.ajax({
-        //     url: "/api/check-password",
-        //     type: "POST",
-        //     data: { beforePassword: beforePassword },
-        //     success: function (response) {
-        //       if (response === true) {
-        //         console.log("패스워드 확인 완료");
-        //         $("#passwordError").hide();
-        //         $("#afterPassword").prop("readonly", false);
-        //       } else {
-        //         console.log("틀린 비밀번호");
-        //         $("#passwordError").show();
-        //         $("#afterPassword").prop("readonly", true);
-        //         $("#passwordChangeBtn").prop("disabled", true);
-        //       }
-
-        //     },
-        //     error: function () {
-        //       console.log("비밀번호 확인 실패");
-        //     },
-        //   });
-        // });
-
-        // $("#afterPassword").on("blur", function () {
-        //   let afterPassword = $(this).val();
-        //   console.log(afterPassword);
-
-
-        // });
-
-        // $("#emailChangeBtn").on("click", function () {
-        //   let afterEmail = $('#emailInput').val();
-        //   let verifyCode = $('#emailVer').val();
-        //   console.log(afterEmail, verifyCode);
-
-
-        //   $.ajax({
-        //     url: "/api/update-password",
-        //     type: "POST",
-        //     data: { email: afterEmail, verifyCode: verifyCode },
-        //     success: function (response) {
-        //       if (response === true) {
-        //         alert("이메일 변경 완료");
-        //         $('#emailModal').modal('hide');
-
-        //         $("#email").prop("readonly", false);
-        //         $("#email").val(afterEmail);
-        //         $("#email").prop("readonly", true);
-
-        //         $("#emailChangeBtn").prop("disabled", true);
-        //       } else {
-        //         console.log("이메일 변경 실패");
-        //         alert("이메일 변경 실패")
-        //       }
-
-        //     },
-        //     error: function () {
-        //       alert("이메일 변경 확인 실패")
-        //     },
-        //   });
-        // });
-
-
-
-
-
-
-
-
-
-
-
+            },
+            error: function () {
+              alert("비밀번호 변경 확인 실패")
+            },
+          });
+        });
 
 
         function sendSmsVerification() {
