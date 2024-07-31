@@ -30,7 +30,7 @@ public class PaymentController {
 
     @GetMapping("/orderlist")
     public String orderList(Model model) {
-        List<OrderlistDTO> orderList = paymentService.selectAllOrders();
+        List<OrderlistDTO> orderList = paymentService.selectOrders();
         List<String> reviewedOrders = paymentService.getReviewedOrders();
         model.addAttribute("orderList", orderList);
         model.addAttribute("reviewedOrders", reviewedOrders);

@@ -49,9 +49,10 @@ public class PaymentService {
     }
 
     @Transactional
-    public List<OrderlistDTO> selectAllOrders() {
-        return paymentDAO.selectAllOrders();
+    public List<OrderlistDTO> selectOrders() {
+        return paymentDAO.selectOrders();
     }
+
 
     @Transactional
     public int updateRefundStatus(String ImpUid) {
