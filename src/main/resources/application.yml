@@ -60,9 +60,3 @@ logging:
     jdbc.resultsettable: DEBUG
 
 
-    sql: DEBUG
-    jdbc.audit: ERROR
-    jdbc.sqlonly: ERROR
-    jdbc.sqltiming: ERROR
-    jdbc.resultset: ERROR
-    jdbc.resultsettable: DEBUG

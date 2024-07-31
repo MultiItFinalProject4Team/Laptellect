@@ -8,11 +8,11 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface TestDAO {
+public interface PaymentDAO {
 
-    TestDTO selectTest();
+    PaymentpageDTO selectpaymentpage();
 
-    int insertTest(InsertDTO insertDTO);
+    int insertPayment(PaymentDTO paymentDTO);
 
     List<OrderlistDTO> selectAllOrders();
 

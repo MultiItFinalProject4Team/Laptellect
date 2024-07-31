@@ -35,13 +35,21 @@
                 </div>
             </div>
             <div class="order-actions">
-                <button onclick="cancelOrder(this.getAttribute('data-imp-uid'), this.getAttribute('data-amount'))"
-                        th:data-imp-uid="${order.imd1}" th:data-amount="${order.productprice1}">주문 취소하기</button>
-                <button th:if="${!reviewedOrders.contains(order.imd1)}"
-                        onclick="openReviewModal(this.getAttribute('data-product-name'), this.getAttribute('data-username'), this.getAttribute('data-imp-uid'))"
+                <button class="cancel-button"
+                        th:classappend="${reviewedOrders.contains(order.imd1)} ? 'disabled' : ''"
+                        th:onclick="${!reviewedOrders.contains(order.imd1)} ? 'cancelOrder(this.getAttribute(\'data-imp-uid\'), this.getAttribute(\'data-amount\'))' : 'void(0)'"
+                        th:data-imp-uid="${order.imd1}"
+                        th:data-amount="${order.productprice1}"
+                        th:disabled="${reviewedOrders.contains(order.imd1)}">
+                    주문 취소하기
+                </button>
+                <button class="review-button"
+                        th:classappend="${reviewedOrders.contains(order.imd1)} ? 'reviewed' : ''"
+                        th:onclick="${!reviewedOrders.contains(order.imd1)} ? 'openReviewModal(this.getAttribute(\'data-product-name\'), this.getAttribute(\'data-username\'), this.getAttribute(\'data-imp-uid\'))' : 'void(0)'"
                         th:data-product-name="${order.productname1}"
                         th:data-username="${order.username1}"
-                        th:data-imp-uid="${order.imd1}">
+                        th:data-imp-uid="${order.imd1}"
+                        th:disabled="${reviewedOrders.contains(order.imd1)}">
                     리뷰 작성하기
                 </button>
             </div>
@@ -70,7 +78,7 @@
                 </select>
             </p>
             <p>리뷰 내용: <textarea id="reviewContent"></textarea></p>
-            <button onclick="submitReview()">리뷰 제출</button>
+            <button id="submitReviewButton" onclick="submitReview()" disabled>리뷰 제출</button>
         </div>
     </div>
 </div>

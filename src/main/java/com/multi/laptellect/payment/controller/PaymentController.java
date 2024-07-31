@@ -2,7 +2,6 @@ package com.multi.laptellect.payment.controller;
 
 import com.multi.laptellect.payment.model.dto.*;
 import com.multi.laptellect.payment.service.PaymentService;
-import com.multi.laptellect.payment.service.TestService;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
@@ -22,17 +21,16 @@ import java.util.HashMap;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final TestService testService;
 
 
-    public PaymentController(PaymentService paymentService, TestService testService) {
+
+    public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
-        this.testService = testService;
     }
 
     @GetMapping("/orderlist")
     public String orderList(Model model) {
-        List<OrderlistDTO> orderList = testService.selectAllOrders();
+        List<OrderlistDTO> orderList = paymentService.selectAllOrders();
         List<String> reviewedOrders = paymentService.getReviewedOrders();
         model.addAttribute("orderList", orderList);
         model.addAttribute("reviewedOrders", reviewedOrders);
@@ -40,10 +38,10 @@ public class PaymentController {
     }
 
     @GetMapping("/payment")
-    public String selectTest(Model model) { //로그인된 유저의 이름으로 바꾸기
-        TestDTO testDTO = testService.selectTest();
+    public String selectpaymentpage(Model model) { //로그인된 유저의 이름으로 바꾸기
+        PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
-        model.addAttribute("testDTO", testDTO);
+        model.addAttribute("paymentpageDTO", paymentpageDTO);
         model.addAttribute("paymentpointDTO", paymentpointDTO);
 
         return "/payment/payment";
@@ -53,15 +51,15 @@ public class PaymentController {
     @PostMapping("/verifyPayment")
     public ResponseEntity<Map<String, Object>> verifyPayment(@RequestBody VerificationRequestDTO request) {
         try {
-            TestDTO testDTO = testService.selectTest();
-            InsertDTO insertDTO = new InsertDTO();
-            insertDTO.setUsername2(testDTO.getUsername1());
-            insertDTO.setProductinfo2(testDTO.getProductinfo1());
-            insertDTO.setProductname2(testDTO.getProductname1());
-            insertDTO.setProductprice2(request.getAmount().intValue());
-            insertDTO.setImd2(request.getImpUid());
+            PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
+            PaymentDTO paymentDTO = new PaymentDTO();
+            paymentDTO.setUsername2(paymentpageDTO.getUsername1());
+            paymentDTO.setProductinfo2(paymentpageDTO.getProductinfo1());
+            paymentDTO.setProductname2(paymentpageDTO.getProductname1());
+            paymentDTO.setProductprice2(request.getAmount().intValue());
+            paymentDTO.setImd2(request.getImpUid());
 
-            boolean verified = paymentService.verifyPayment(request, insertDTO);
+            boolean verified = paymentService.verifyPayment(request, paymentDTO);
             System.out.println(request.getUsedPoints());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
@@ -100,7 +98,7 @@ public class PaymentController {
                     "고객 요청으로 인한 취소"
             );
 
-            testService.updateRefundStatus(cancelRequest.getImpUid());
+            paymentService.updateRefundStatus(cancelRequest.getImpUid());
 
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
