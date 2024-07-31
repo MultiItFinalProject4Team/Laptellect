@@ -2,10 +2,10 @@ package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.ImageDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.ProductInfo;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,29 +17,30 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
-    @Autowired
-    private CrawlingService crawlingService;
 
+    private final CrawlingService crawlingService;
 
     @Override
     @Transactional
-    public void saveProductsToDB(List<ProductInfo> productList ,int typeNo) throws Exception{
+    public void saveProductsToDB(List<ProductDTO> productList, int typeNo) throws Exception {
 
         List<ProductDTO> productDTOList = new ArrayList<>();
-
         LocalDateTime now = LocalDateTime.now();
 
-        for (ProductInfo productInfo : productList) {
+        try {
+
+
+        for (ProductDTO ProductDTO : productList) {
             ProductDTO productDTO = new ProductDTO();
-            productDTO.setProductName(productInfo.getProductName());
-            productDTO.setPrice(Integer.parseInt(productInfo.getPrice()));
-            productDTO.setProductCode(productInfo.getProductCode());
-            productDTO.setImage(productInfo.getImageUrl());
+            productDTO.setProductName(ProductDTO.getProductName());
+            productDTO.setPrice(ProductDTO.getPrice());
+            productDTO.setProductCode(ProductDTO.getProductCode());
+            productDTO.setImage(ProductDTO.getImage());
             productDTO.setCreatedAt(Timestamp.valueOf(now));
             productDTO.setTypeNo(typeNo);
 
@@ -65,8 +66,6 @@ public class ProductServiceImpl implements ProductService {
 
                 //DTO에 담기
                 productDTO.setReferenceCode(code);
-
-
                 // 레퍼런트코드 업데이트
                 productMapper.updateReferenceCode(productDTO);
                 //이미지 처리
@@ -74,13 +73,12 @@ public class ProductServiceImpl implements ProductService {
                 String url = "http:" + productDTO.getImage();
                 String filePath = "src/main/resources/static/img/product";
 
-
-
-
                 String uuid = UUID.randomUUID().toString();
                 String uploadName = uuid + ".jpg";
 
-                crawlingService.downloadImage(url,filePath, uploadName);
+                crawlingService.downloadImage(url, filePath, uploadName);
+
+
 
                 System.out.println(uploadName);
                 log.info(uploadName);
@@ -93,19 +91,23 @@ public class ProductServiceImpl implements ProductService {
                 productMapper.inputImage(imageDTO);
 
 
-
             } else {
                 log.info("제품코드는: " + productDTO.getProductCode() + " 입니다.");
             }
         }
 
+        } catch (Exception e){
+            log.error("제품 저장 중 오류 발생", e);
+
+        }
     }
 
 
 
+
     @Override
-    public List<String> getImgae(String referenceCode) {
-        return productMapper.getImage(referenceCode);
+   public void getImgae(String referenceCode) {
+         productMapper.getImage(referenceCode);
     }
 
     //상품 전체 조회
@@ -114,63 +116,33 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getStoredProducts() {
 
         List<ProductDTO> productDTOList = productMapper.getAllProducts();
-        
-//        for (ProductDTO productDTO : productDTOList) {
-//            ProductDTO dto = new ProductDTO();
-//
-//
-//            dto.setProductCode(productDTO.getProductCode());
-//            dto.setProductName(productDTO.getProductName());
-//            dto.setPrice(productDTO.getPrice());
-//            dto.setReferenceCode(productDTO.getReferenceCode());
-//            dto.setImage(productDTO.getImage());
-//
-//            processedProductDTOList.add(dto);
-//
-//
-//        }
 
         return productDTOList;
     }
 
     @Override
-    public List<ProductDTO> getTypeByProduct(int typeNo){
+    public List<ProductDTO> getTypeByProduct(int typeNo) {
 
         List<ProductDTO> productDTOList = productMapper.getTypeByProduct(typeNo);
-        List<ProductInfo> productInfoList = new ArrayList<>();
-
-        for (ProductDTO productDTO : productDTOList) {
-            ProductInfo productInfo = new ProductInfo();
 
 
-            productInfo.setProductCode(productDTO.getProductCode());
-            productInfo.setProductName(productDTO.getProductName());
-            productInfo.setPrice(String.valueOf(productDTO.getPrice()));
-            productInfo.setImageUrl(productDTO.getImage());
-            productInfoList.add(productInfo);
-
-
-        }
         return productDTOList;
     }
 
-
-
-
     @Override
-    public ProductInfo getProductByCode(String pcode) {
-        ProductDTO productDTO = productMapper.getProductByCode(pcode);
-        if (productDTO == null) {
-            return null;
-        }
+    public LaptopSpecDTO getProductByCode(String pcode) {
 
-        ProductInfo productInfo = new ProductInfo();
-        productInfo.setProductCode(productDTO.getProductCode());
-        productInfo.setProductName(productDTO.getProductName());
-        productInfo.setPrice(String.valueOf(productDTO.getPrice()));
-        productInfo.setImageUrl(productDTO.getReferenceCode());
-        return productInfo;
+        LaptopSpecDTO laptopSpecDTO = productMapper.getProductByCode(pcode);
+
+        log.info("laptopSpecDTO {} :" ,laptopSpecDTO);
+
+        return laptopSpecDTO;
     }
+
+
+
+
+
 
 
 

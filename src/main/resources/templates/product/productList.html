@@ -29,7 +29,7 @@
 <body>
 <div class="container">
     <h1 class="mt-5">Product List</h1>
-    <form th:action="@{/product/crawl}" method="post">
+    <form th:action="@{/product/test}" method="post">
         <select id ="productType" name = "products">
             <option value="1">노트북</option>
             <option value="2">마우스</option>
@@ -44,8 +44,6 @@
             <a href="#" onclick="sendData(3)" class="btn btn-primary">키보드</a>
         </div>
     </div>
-
-
 
     <div class="row">
         <div class="col-md-4 mb-4" th:each="product, iterStat : ${products}">

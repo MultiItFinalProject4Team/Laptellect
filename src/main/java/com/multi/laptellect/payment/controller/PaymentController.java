@@ -60,7 +60,7 @@ public class PaymentController {
     public ResponseEntity<Map<String, Object>> verifyPayment(@RequestBody VerificationRequestDTO request) {
         try {
             insertDTO.setUsername2(testDTO.getUsername1());
-            insertDTO.setProductinfo2(testDTO.getProductinfo1());
+            insertDTO.setProductDTO2(testDTO.getProductDTO1());
             insertDTO.setProductname2(testDTO.getProductname1());
             insertDTO.setProductprice2(testDTO.getProductprice1()); // 할인금액
             insertDTO.setImd2(request.getImpUid());

@@ -1,8 +1,11 @@
 package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.ImageDTO;
+import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,8 +18,7 @@ public interface ProductMapper {
 
     List<ProductDTO> getAllProducts();
 
-    ProductDTO getProductByCode(String productCode);
-
+    LaptopSpecDTO getProductByCode(String productCode);
 
     List<ProductDTO> getTypeByProduct(int typeNo);
 
@@ -24,7 +26,19 @@ public interface ProductMapper {
 
     void inputImage(ImageDTO imageDTO);
 
-    List<String> getImage(String referenceCode);
+    void getImage(String referenceCode);
+
+    ProductCategoryDTO findByOptions(String s);
+
+    String findCategorytNo(String options);
+
+
+    int insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options);
+
+    int insertProductSpec(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("optionValue") String optionValue);
+
+    List<ProductDTO> findLaptopProductNo();
+
 
 
 

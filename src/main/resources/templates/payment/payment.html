@@ -20,7 +20,7 @@
         /*<![CDATA[*/
         var username = /*[[${testDTO.username1}]]*/ 'default';
         var productname = /*[[${testDTO.productname1}]]*/ 'default';
-        var productinfo = /*[[${testDTO.productinfo1}]]*/ 'default';
+        var ProductDTO = /*[[${testDTO.ProductDTO1}]]*/ 'default';
         var productprice = /*[[${testDTO.productprice1}]]*/ 0;
         /*]]>*/
 
@@ -95,7 +95,7 @@
         <div class="right-section">
             <h3 align="center" th:text="${testDTO.productname1}">상품명</h3>
             <img src="/img/payment/notebooktest.PNG" alt="Product Image" class="product-image">
-            <p align="center" th:text="${testDTO.productinfo1}">상품 정보</p>
+            <p align="center" th:text="${testDTO.ProductDTO1}">상품 정보</p>
         </div>
     </div>
     <div class="price-info">

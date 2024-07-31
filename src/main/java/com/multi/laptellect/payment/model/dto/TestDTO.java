@@ -3,7 +3,7 @@ package com.multi.laptellect.payment.model.dto;
 public class TestDTO {
     private String username1;
     private String productname1;
-    private String productinfo1;
+    private String ProductDTO1;
     private String date_created1;
     private int productprice1;
     private String imd1;
@@ -11,10 +11,10 @@ public class TestDTO {
     public TestDTO() {
     }
 
-    public TestDTO(String username1, String productname1, String productinfo1, String date_created1, int productprice1, String imd1) {
+    public TestDTO(String username1, String productname1, String ProductDTO1, String date_created1, int productprice1, String imd1) {
         this.username1 = username1;
         this.productname1 = productname1;
-        this.productinfo1 = productinfo1;
+        this.ProductDTO1 = ProductDTO1;
         this.date_created1 = date_created1;
         this.productprice1 = productprice1;
         this.imd1 = imd1;
@@ -36,12 +36,12 @@ public class TestDTO {
         this.productname1 = productname1;
     }
 
-    public String getProductinfo1() {
-        return productinfo1;
+    public String getProductDTO1() {
+        return ProductDTO1;
     }
 
-    public void setProductinfo1(String productinfo1) {
-        this.productinfo1 = productinfo1;
+    public void setProductDTO1(String ProductDTO1) {
+        this.ProductDTO1 = ProductDTO1;
     }
 
     public String getDate_created1() {
@@ -73,7 +73,7 @@ public class TestDTO {
         return "TestDTO{" +
                 "username1='" + username1 + '\'' +
                 ", productname1='" + productname1 + '\'' +
-                ", productinfo1='" + productinfo1 + '\'' +
+                ", ProductDTO1='" + ProductDTO1 + '\'' +
                 ", date_created1='" + date_created1 + '\'' +
                 ", productprice1=" + productprice1 +
                 ", imd1='" + imd1 + '\'' +

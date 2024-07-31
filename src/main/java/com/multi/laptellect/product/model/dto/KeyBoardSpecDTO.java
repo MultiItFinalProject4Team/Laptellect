@@ -2,7 +2,7 @@ package com.multi.laptellect.product.model.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Data
 public class KeyBoardSpecDTO {
@@ -17,13 +17,13 @@ public class KeyBoardSpecDTO {
     private String keyBoardSwitch;
     private String keySwitch;
     private String keyPressure;
-    private List<String> keyBoardType;
+    private ArrayList<String> keyBoardType;
     private String simultaneousInput;
     private String responseSpeed;
     private String keycapMaterial;
     private String keycapEngraving;
     private String engravingLocation;
-    private List<String> addOns;
+    private ArrayList<String> addOns;
     private String width;
     private String length;
     private String height;
