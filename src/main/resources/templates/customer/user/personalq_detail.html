@@ -33,6 +33,7 @@
         <div class="btn-group" aria-label="Small button group">
             <a th:href="@{/customer/user/update_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" th:if="${personalq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>
             <a th:href="@{/customer/user/delete_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" th:if="${personalq.answer=='N'}" class="btn bg-body-secondary">문의 삭제</a>
+            <a th:href="@{/customer/user/delete_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:if="${personalq.answer=='Y'}" class="btn bg-body-secondary">문의 삭제</a>
             <a th:href="@{/customer/admin/update_personala/{personalqNo}(personalqNo=${personalq.personalqNo})}"
                sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:if="${personalq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>
             <a th:href="@{/customer/admin/delete_personala/{personalqNo}(personalqNo=${personalq.personalqNo})}"

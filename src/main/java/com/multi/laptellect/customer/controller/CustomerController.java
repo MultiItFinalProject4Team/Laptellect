@@ -95,6 +95,7 @@ public class CustomerController {
     @GetMapping("/personalq_app")
     public void personalq_app(Model model){
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
+        category.remove(0);
         System.out.println(category);
         model.addAttribute("category",category);
     }
@@ -133,6 +134,7 @@ public class CustomerController {
         System.out.println(personalqNo);
         PersonalqDto dto = customerService.getPersonalq(personalqNo);
         List<PersonalqCategoryDto> categoryDto = customerService.getPersonalqCategory();
+        categoryDto.remove(0);
         model.addAttribute("category",categoryDto);
         model.addAttribute("dto",dto);
         return "/customer/user/personalq_update";
@@ -215,6 +217,7 @@ public class CustomerController {
     @GetMapping("/productq_app")
     public void productq_app(Model model, @RequestParam("productNo") int productNo){
         List<ProductqCategoryDto> category = customerService.getProductqCategory();
+        category.remove(0);
         System.out.println(category);
         System.out.println(productNo);
         model.addAttribute("category",category);
@@ -316,6 +319,7 @@ public class CustomerController {
     public String update_productq(Model model, @PathVariable("productqNo") int productqNo){
         ProductqDto dto = customerService.getProductq(productqNo);
         List<ProductqCategoryDto> categoryDto = customerService.getProductqCategory();
+        categoryDto.remove(0);
         model.addAttribute("category",categoryDto);
         model.addAttribute("dto",dto);
         return "/customer/user/productq_update";
@@ -433,6 +437,15 @@ public class CustomerController {
         return "/customer/user/search_productq";
     }
 
+    /**
+     * 내 상품 문의 검색
+     * @param model
+     * @param productNo
+     * @param category
+     * @param keyword
+     * @param page
+     * @return
+     */
     @GetMapping("/search_myproductq/{productNo}")
     public String search_myproductq(Model model, @PathVariable("productNo") int productNo, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;

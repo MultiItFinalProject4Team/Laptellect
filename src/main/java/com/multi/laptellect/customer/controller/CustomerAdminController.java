@@ -169,4 +169,23 @@ public class CustomerAdminController {
         model.addAttribute("role","admin");
         return "/customer/user/customer_personalq";
     }
+
+    @GetMapping("/search_all_personalq")
+    public String search_all_personalq(Model model, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<PersonalqListDto> list = customerService.getAllPersonalqSearchList(category, keyword);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> categories = customerService.getPersonalqCategory();
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",categories);
+        model.addAttribute("page_category",category);
+        model.addAttribute("page_keyword",keyword);
+        model.addAttribute("role","admin");
+        return "/customer/admin/search_all_personalq";
+    }
 }

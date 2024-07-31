@@ -308,4 +308,8 @@ public class CustomerService {
     public List<ProuductqListDto> getMyProudctqSearchList(int productNo, int memberNo, String keyword, String category) {
         return customDao.getMyProudctqSearchList(productNo, memberNo, keyword, category);
     }
+
+    public List<PersonalqListDto> getAllPersonalqSearchList(String category, String keyword) {
+        return customDao.getAllPersonalqSearchList(category, keyword);
+    }
 }

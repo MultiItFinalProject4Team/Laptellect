@@ -34,7 +34,7 @@
     <form action="/customer/user/update_productq" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">
         <label class="input-group-text" for="title">제목:</label>
-        <input class="col-md-9" type="text" id="title" name="title" th:value="${dto.title}" required><br><br>
+            <input class="col-md-9" type="text" id="title" name="title" maxlength="100" th:value="${dto.title}" required><br><br>
 
         <label class="input-group-text" for="inputGroupSelect01" >카테고리</label>
         <select class="form-select col-md-3" id="inputGroupSelect01" name="productqCategorycode">
@@ -105,7 +105,19 @@
             fileInputContainer.appendChild(newFileInputWrapper);
         }
     </script>
+    <script>
+        $(document).ready(function() {
+            var maxLength = 100;
 
+            $('#title').on('input', function() {
+                var length = $(this).val().length;
+                if (length > maxLength) {
+                    alert('최대 100자까지 입력 가능합니다.');
+                    $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
+                }
+            });
+        });
+    </script>
 </div>
 </div>
 </body>

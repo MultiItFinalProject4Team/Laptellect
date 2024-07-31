@@ -273,4 +273,19 @@
         </if>
         order by productq_no desc
     </select>
+
+    <select id="getAllPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        where title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'personalq_all'">
+            AND personalq_categorycode LIKE #{category}
+        </if>
+        order by personalq_no desc
+    </select>
 </mapper>
