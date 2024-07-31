@@ -53,26 +53,33 @@
         <a class="btn btn-secondary btn-sm" th:if="${state=='all'}" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
         <a class="btn btn-secondary btn-sm" th:if="${state=='my'}" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}" role="button">전체 문의 보기</a>
     </div>
-<!--    <div th:if="${totalPages > 1}" class="pagination justify-content-center">-->
-<!--        <nav aria-label="Page navigation example">-->
-<!--            <ul class="pagination">-->
-<!--                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">-->
-<!--                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${currentPage - 1})}" aria-label="Previous">-->
-<!--                        <span aria-hidden="true">&laquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">-->
-<!--                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>-->
-<!--                </li>-->
-<!--                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">-->
-<!--                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${currentPage + 1})}" aria-label="Next">-->
-<!--                        <span aria-hidden="true">&raquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </nav>-->
-<!--    </div>-->
 </div>
+    <div class="pagination-container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                    <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                    <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                </li>
+                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 </body>
 </html>

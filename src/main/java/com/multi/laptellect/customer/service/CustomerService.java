@@ -145,7 +145,8 @@ public class CustomerService {
         return customDao.updatePersonalq(appDto);
     }
 
-    public int deletePersonalq(int personalqNo) {
+    public int deletePersonalq(int personalqNo, String code) {
+        customDao.deleteImages(code);
         return customDao.deletePersonalq(personalqNo);
     }
 
@@ -199,7 +200,8 @@ public class CustomerService {
         customDao.setPersonalaCode(personalaNo,code);
     }
 
-    public void deletePersonala(int personalqNo) {
+    public void deletePersonala(int personalqNo,String code) {
+        customDao.deleteImages(code);
         customDao.deletePersonala(personalqNo);
     }
 
@@ -263,7 +265,8 @@ public class CustomerService {
         return customDao.getproductqCode(productqNo);
     }
 
-    public int deleteProductq(int productqNo) {
+    public int deleteProductq(int productqNo, String code) {
+        customDao.deleteImages(code);
         return customDao.deleteProductq(productqNo);
     }
 
@@ -275,7 +278,8 @@ public class CustomerService {
         return customDao.getProductaCode(productaNo);
     }
 
-    public void deleteProducta(int productqNo) {
+    public void deleteProducta(int productqNo, String code) {
+        customDao.deleteImages(code);
         customDao.deleteProducta(productqNo);
     }
 }

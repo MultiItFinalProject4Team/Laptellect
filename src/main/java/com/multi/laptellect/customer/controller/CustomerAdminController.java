@@ -57,7 +57,8 @@ public class CustomerAdminController {
     //답변 삭제
     @GetMapping("/delete_personala/{personalqNo}")
     public String delete_answer(@PathVariable("personalqNo") int personalqNo){
-        customerService.deletePersonala(personalqNo);
+        String code = customerService.getPersonala(personalqNo).getReferenceCode();
+        customerService.deletePersonala(personalqNo, code);
         String state="N";
         customerService.personalAnwerChange(personalqNo,state);
         String redirectUrl = String.format("/customer/user/personalq_detail/%s", personalqNo);
@@ -124,9 +125,15 @@ public class CustomerAdminController {
         return "redirect:"+redirectUrl;
     }
 
+    /**
+     * 상품문의 답변 삭제
+     * @param productqNo
+     * @return
+     */
     @GetMapping("/delete_producta/{productqNo}")
     public String delete_producta(@PathVariable("productqNo") int productqNo){
-        customerService.deleteProducta(productqNo);
+        String code = customerService.getProducta(productqNo).getReferenceCode();
+        customerService.deleteProducta(productqNo, code);
         String state="N";
         customerService.productAnwerChange(productqNo,state);
         String redirectUrl = String.format("/customer/user/productq_detail/%s", productqNo);

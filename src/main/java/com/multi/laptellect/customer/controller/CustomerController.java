@@ -26,9 +26,16 @@ public class CustomerController {
 
     //공지사항 페이지(메인)
     @GetMapping({"/customer_notice",""})
-    public String customer_notice(Model model){
-        List<NoticeListDto> notice = customerService.getNoticeList();
-        model.addAttribute("notice",notice);
+    public String customer_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         return "/customer/user/customer_notice";
     }
     //1:1문의 페이지
@@ -43,8 +50,9 @@ public class CustomerController {
         List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
         int page_size=10;
         int adjustPage=page-1;
-        List<PersonalqListDto> paginationList=pagination.paginate(list, adjustPage, page_size);
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
         int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
@@ -159,7 +167,8 @@ public class CustomerController {
     //1:1 문의 질문 삭제
     @GetMapping("/delete_personalq/{personalqNo}")
     public String delete_personalq(@PathVariable("personalqNo") int personalqNo){
-        int result = customerService.deletePersonalq(personalqNo);
+        String code = customerService.getPersonalq(personalqNo).getReferenceCode();
+        int result = customerService.deletePersonalq(personalqNo, code);
         return "redirect:/customer/user/customer_personalq";
     }
 
@@ -175,7 +184,7 @@ public class CustomerController {
 
     //상품 문의 이동
     @GetMapping("/customer_productq/{productNo}")
-    public String customer_productq(@PathVariable("productNo") int productNo, Model model){
+    public String customer_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -184,7 +193,14 @@ public class CustomerController {
         }
         List<ProuductqListDto> productqList = customerService.getProudctqList(productNo);
         System.out.println(productNo);
-        model.addAttribute("productqList",productqList);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("productqList",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("productNo",productNo);
         model.addAttribute("memberNo",memberNo);
         model.addAttribute("state","all");
@@ -260,7 +276,7 @@ public class CustomerController {
      * @return
      */
     @GetMapping("/my_productq/{productNo}")
-    public String my_productq(@PathVariable("productNo") int productNo, Model model){
+    public String my_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -269,7 +285,14 @@ public class CustomerController {
         }
         System.out.println(productNo);
         List<ProuductqListDto> productqList = customerService.getMyProudctqList(productNo, memberNo);
-        model.addAttribute("productqList",productqList);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("productqList",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("productNo",productNo);
         model.addAttribute("memberNo",memberNo);
         model.addAttribute("state","my");
@@ -328,7 +351,8 @@ public class CustomerController {
      */
     @GetMapping("/delete_productq/{productqNo}/{productNo}")
     public String delete_productq(@PathVariable("productqNo") int productqNo, @PathVariable("productNo") int productNo){
-        int result = customerService.deleteProductq(productqNo);
+        String code = customerService.getProductq(productqNo).getReferenceCode();
+        int result = customerService.deleteProductq(productqNo, code);
         String redirectUrl = String.format("/customer/user/customer_productq/%s", productNo);
         return "redirect:"+redirectUrl;
     }
