@@ -26,9 +26,16 @@ public class CustomerController {
 
     //공지사항 페이지(메인)
     @GetMapping({"/customer_notice",""})
-    public String customer_notice(Model model){
-        List<NoticeListDto> notice = customerService.getNoticeList();
-        model.addAttribute("notice",notice);
+    public String customer_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         return "/customer/user/customer_notice";
     }
     //1:1문의 페이지
@@ -43,11 +50,15 @@ public class CustomerController {
         List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
         int page_size=10;
         int adjustPage=page-1;
-        List<PersonalqListDto> paginationList=pagination.paginate(list, adjustPage, page_size);
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
         int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",category);
+        model.addAttribute("role","user");
         return "/customer/user/customer_personalq";
     }
     //챗봇 페이지
@@ -84,6 +95,7 @@ public class CustomerController {
     @GetMapping("/personalq_app")
     public void personalq_app(Model model){
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
+        category.remove(0);
         System.out.println(category);
         model.addAttribute("category",category);
     }
@@ -122,6 +134,7 @@ public class CustomerController {
         System.out.println(personalqNo);
         PersonalqDto dto = customerService.getPersonalq(personalqNo);
         List<PersonalqCategoryDto> categoryDto = customerService.getPersonalqCategory();
+        categoryDto.remove(0);
         model.addAttribute("category",categoryDto);
         model.addAttribute("dto",dto);
         return "/customer/user/personalq_update";
@@ -159,7 +172,8 @@ public class CustomerController {
     //1:1 문의 질문 삭제
     @GetMapping("/delete_personalq/{personalqNo}")
     public String delete_personalq(@PathVariable("personalqNo") int personalqNo){
-        int result = customerService.deletePersonalq(personalqNo);
+        String code = customerService.getPersonalq(personalqNo).getReferenceCode();
+        int result = customerService.deletePersonalq(personalqNo, code);
         return "redirect:/customer/user/customer_personalq";
     }
 
@@ -175,7 +189,7 @@ public class CustomerController {
 
     //상품 문의 이동
     @GetMapping("/customer_productq/{productNo}")
-    public String customer_productq(@PathVariable("productNo") int productNo, Model model){
+    public String customer_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -183,10 +197,19 @@ public class CustomerController {
             return "/auth/auth-sign-in";
         }
         List<ProuductqListDto> productqList = customerService.getProudctqList(productNo);
+        List<ProductqCategoryDto> category = customerService.getProductqCategory();
         System.out.println(productNo);
-        model.addAttribute("productqList",productqList);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("productqList",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("productNo",productNo);
         model.addAttribute("memberNo",memberNo);
+        model.addAttribute("category",category);
         model.addAttribute("state","all");
         return "/customer/user/customer_productq";
     }
@@ -194,6 +217,7 @@ public class CustomerController {
     @GetMapping("/productq_app")
     public void productq_app(Model model, @RequestParam("productNo") int productNo){
         List<ProductqCategoryDto> category = customerService.getProductqCategory();
+        category.remove(0);
         System.out.println(category);
         System.out.println(productNo);
         model.addAttribute("category",category);
@@ -260,7 +284,7 @@ public class CustomerController {
      * @return
      */
     @GetMapping("/my_productq/{productNo}")
-    public String my_productq(@PathVariable("productNo") int productNo, Model model){
+    public String my_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -269,7 +293,16 @@ public class CustomerController {
         }
         System.out.println(productNo);
         List<ProuductqListDto> productqList = customerService.getMyProudctqList(productNo, memberNo);
-        model.addAttribute("productqList",productqList);
+        List<ProductqCategoryDto> category = customerService.getProductqCategory();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("productqList",paginationList);
+        model.addAttribute("category",category);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("productNo",productNo);
         model.addAttribute("memberNo",memberNo);
         model.addAttribute("state","my");
@@ -286,6 +319,7 @@ public class CustomerController {
     public String update_productq(Model model, @PathVariable("productqNo") int productqNo){
         ProductqDto dto = customerService.getProductq(productqNo);
         List<ProductqCategoryDto> categoryDto = customerService.getProductqCategory();
+        categoryDto.remove(0);
         model.addAttribute("category",categoryDto);
         model.addAttribute("dto",dto);
         return "/customer/user/productq_update";
@@ -328,8 +362,115 @@ public class CustomerController {
      */
     @GetMapping("/delete_productq/{productqNo}/{productNo}")
     public String delete_productq(@PathVariable("productqNo") int productqNo, @PathVariable("productNo") int productNo){
-        int result = customerService.deleteProductq(productqNo);
+        String code = customerService.getProductq(productqNo).getReferenceCode();
+        int result = customerService.deleteProductq(productqNo, code);
         String redirectUrl = String.format("/customer/user/customer_productq/%s", productNo);
         return "redirect:"+redirectUrl;
+    }
+
+    /**
+     * 1:1 문의 검색
+     * @param model
+     * @param category
+     * @param keyword
+     * @param page
+     * @return
+     */
+    @GetMapping("/search_personalq")
+    public String search_personalq(Model model, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
+        List<PersonalqListDto> list = customerService.getPersonalqSearchList(memberNo, keyword, category);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> categories = customerService.getPersonalqCategory();
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",categories);
+        model.addAttribute("page_category",category);
+        model.addAttribute("page_keyword",keyword);
+        return "/customer/user/search_personalq";
+    }
+
+    /**
+     * 상품 문의 검색
+     * @param model
+     * @param productNo
+     * @param category
+     * @param keyword
+     * @param page
+     * @return
+     */
+    @GetMapping("/search_productq/{productNo}")
+    public String search_productq(Model model, @PathVariable("productNo") int productNo, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
+        List<ProuductqListDto> productqList = customerService.getProudctqSearchList(productNo, keyword, category);
+        List<ProductqCategoryDto> categories = customerService.getProductqCategory();
+        System.out.println(productNo);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("productqList",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("productNo",productNo);
+        model.addAttribute("memberNo",memberNo);
+        model.addAttribute("category",categories);
+        model.addAttribute("page_category",category);
+        model.addAttribute("page_keyword",keyword);
+        model.addAttribute("state","all");
+        return "/customer/user/search_productq";
+    }
+
+    /**
+     * 내 상품 문의 검색
+     * @param model
+     * @param productNo
+     * @param category
+     * @param keyword
+     * @param page
+     * @return
+     */
+    @GetMapping("/search_myproductq/{productNo}")
+    public String search_myproductq(Model model, @PathVariable("productNo") int productNo, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
+        System.out.println(productNo);
+        List<ProuductqListDto> productqList = customerService.getMyProudctqSearchList(productNo, memberNo, keyword, category);
+        List<ProductqCategoryDto> categories = customerService.getProductqCategory();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("productqList",paginationList);
+        model.addAttribute("category",categories);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("productNo",productNo);
+        model.addAttribute("memberNo",memberNo);
+        model.addAttribute("page_category",category);
+        model.addAttribute("page_keyword",keyword);
+        model.addAttribute("state","my");
+        return "/customer/user/search_productq";
     }
 }

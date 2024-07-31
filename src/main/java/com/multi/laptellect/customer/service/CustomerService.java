@@ -138,14 +138,20 @@ public class CustomerService {
     }
 
     public List<PersonalqCategoryDto> getPersonalqCategory() {
-        return customDao.getPersonalqCategory();
+        List<PersonalqCategoryDto> category = customDao.getPersonalqCategory();
+        PersonalqCategoryDto category_all  = new PersonalqCategoryDto();
+        category_all.setPersonalqCategorycode("personalq_all");
+        category_all.setPersonalqCategoryname("전체");
+        category.add(0,category_all);
+        return category;
     }
 
     public int updatePersonalq(PersonalqAppDto appDto) {
         return customDao.updatePersonalq(appDto);
     }
 
-    public int deletePersonalq(int personalqNo) {
+    public int deletePersonalq(int personalqNo, String code) {
+        customDao.deleteImages(code);
         return customDao.deletePersonalq(personalqNo);
     }
 
@@ -199,7 +205,8 @@ public class CustomerService {
         customDao.setPersonalaCode(personalaNo,code);
     }
 
-    public void deletePersonala(int personalqNo) {
+    public void deletePersonala(int personalqNo,String code) {
+        customDao.deleteImages(code);
         customDao.deletePersonala(personalqNo);
     }
 
@@ -208,7 +215,12 @@ public class CustomerService {
     }
 
     public List<ProductqCategoryDto> getProductqCategory() {
-        return customDao.getProductqCategory();
+        List<ProductqCategoryDto> category = customDao.getProductqCategory();
+        ProductqCategoryDto category_all  = new ProductqCategoryDto();
+        category_all.setProductqCategorycode("productq_all");
+        category_all.setProductqCategoryname("전체");
+        category.add(0,category_all);
+        return category;
     }
 
     public int productqApp(ProductqAppDto appDto) {
@@ -263,7 +275,8 @@ public class CustomerService {
         return customDao.getproductqCode(productqNo);
     }
 
-    public int deleteProductq(int productqNo) {
+    public int deleteProductq(int productqNo, String code) {
+        customDao.deleteImages(code);
         return customDao.deleteProductq(productqNo);
     }
 
@@ -275,7 +288,28 @@ public class CustomerService {
         return customDao.getProductaCode(productaNo);
     }
 
-    public void deleteProducta(int productqNo) {
+    public void deleteProducta(int productqNo, String code) {
+        customDao.deleteImages(code);
         customDao.deleteProducta(productqNo);
+    }
+
+    public List<PersonalqListDto> getPersonalqSearchList(int memberNo, String keyword, String category) {
+        return customDao.getPersonalqSearchList(memberNo, keyword, category);
+    }
+
+    public List<PersonalqListDto> getAllPersonalqList() {
+        return customDao.getAllPersonalqList();
+    }
+
+    public List<ProuductqListDto> getProudctqSearchList(int productNo, String keyword, String category) {
+        return customDao.getProudctqSearchList(productNo, keyword, category);
+    }
+
+    public List<ProuductqListDto> getMyProudctqSearchList(int productNo, int memberNo, String keyword, String category) {
+        return customDao.getMyProudctqSearchList(productNo, memberNo, keyword, category);
+    }
+
+    public List<PersonalqListDto> getAllPersonalqSearchList(String category, String keyword) {
+        return customDao.getAllPersonalqSearchList(category, keyword);
     }
 }

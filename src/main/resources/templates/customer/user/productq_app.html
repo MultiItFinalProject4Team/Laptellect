@@ -114,7 +114,19 @@
             fileInputContainer.appendChild(newFileInputWrapper);
         }
     </script>
+    <script>
+        $(document).ready(function() {
+            var maxLength = 100;
 
+            $('#title').on('input', function() {
+                var length = $(this).val().length;
+                if (length > maxLength) {
+                    alert('최대 100자까지 입력 가능합니다.');
+                    $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
+                }
+            });
+        });
+    </script>
 </div>
 </div>
 </body>

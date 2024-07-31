@@ -1,8 +1,11 @@
 package com.multi.laptellect.customer.controller;
 
 import com.multi.laptellect.customer.dto.PersonalqAnswerDto;
+import com.multi.laptellect.customer.dto.PersonalqCategoryDto;
+import com.multi.laptellect.customer.dto.PersonalqListDto;
 import com.multi.laptellect.customer.dto.ProductqAnswerDto;
 import com.multi.laptellect.customer.service.CustomerService;
+import com.multi.laptellect.customer.service.PaginationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,12 +13,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/customer/admin")
 @RequiredArgsConstructor
 public class CustomerAdminController {
     @Autowired
     CustomerService customerService;
+    @Autowired
+    PaginationService pagination;
     //답변 페이지 이동
     @GetMapping("/answer_personalq/{personalqNo}")
     public String move_answer_personalq(@PathVariable("personalqNo") int personalqNo, Model model){
@@ -57,7 +64,8 @@ public class CustomerAdminController {
     //답변 삭제
     @GetMapping("/delete_personala/{personalqNo}")
     public String delete_answer(@PathVariable("personalqNo") int personalqNo){
-        customerService.deletePersonala(personalqNo);
+        String code = customerService.getPersonala(personalqNo).getReferenceCode();
+        customerService.deletePersonala(personalqNo, code);
         String state="N";
         customerService.personalAnwerChange(personalqNo,state);
         String redirectUrl = String.format("/customer/user/personalq_detail/%s", personalqNo);
@@ -124,12 +132,60 @@ public class CustomerAdminController {
         return "redirect:"+redirectUrl;
     }
 
+    /**
+     * 상품문의 답변 삭제
+     * @param productqNo
+     * @return
+     */
     @GetMapping("/delete_producta/{productqNo}")
     public String delete_producta(@PathVariable("productqNo") int productqNo){
-        customerService.deleteProducta(productqNo);
+        String code = customerService.getProducta(productqNo).getReferenceCode();
+        customerService.deleteProducta(productqNo, code);
         String state="N";
         customerService.productAnwerChange(productqNo,state);
         String redirectUrl = String.format("/customer/user/productq_detail/%s", productqNo);
         return "redirect:"+redirectUrl;
+    }
+
+    /**
+     * 관리자 페이지 1:1 문의 전체 조회
+     * @param model
+     * @param page
+     * @return
+     */
+    @GetMapping("/all_personal_question")
+    public String all_personal_question(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<PersonalqListDto> list = customerService.getAllPersonalqList();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",category);
+        model.addAttribute("role","admin");
+        return "/customer/user/customer_personalq";
+    }
+
+    @GetMapping("/search_all_personalq")
+    public String search_all_personalq(Model model, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<PersonalqListDto> list = customerService.getAllPersonalqSearchList(category, keyword);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> categories = customerService.getPersonalqCategory();
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",categories);
+        model.addAttribute("page_category",category);
+        model.addAttribute("page_keyword",keyword);
+        model.addAttribute("role","admin");
+        return "/customer/admin/search_all_personalq";
     }
 }
