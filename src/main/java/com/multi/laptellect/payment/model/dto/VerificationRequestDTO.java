@@ -1,24 +1,12 @@
 package com.multi.laptellect.payment.model.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
+@Data
 public class VerificationRequestDTO {
     private String impUid;
     private BigDecimal amount;
-
-    public String getImpUid() {
-        return impUid;
-    }
-
-    public void setImpUid(String impUid) {
-        this.impUid = impUid;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+    private String usedPoints;
 }

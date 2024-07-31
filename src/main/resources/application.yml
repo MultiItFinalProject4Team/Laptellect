@@ -1,27 +1,8 @@
 spring:
-  datasource:
-
-    url: jdbc:log4jdbc:mysql://localhost:3306/scott?
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    username: scott
-    password: tiger
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: filmpick123@gmail.com # \uC774\uBA54\uC77C
-    password: jxsccjcjrgutlxwy # APP \uBE44\uBC00\uBC88\uD638
-    properties:
-      mail:
-        smtp:
-          auth: true # \uC778\uC99D
-          starttls:
-            enable: true
-  redis:
-    host: localhost
-    port: 6379
-    password: 1234
-
+  config:
+    import:
+      - api.yml
+      - database.yml
 
 server:
   port: 8099
@@ -29,14 +10,16 @@ server:
     session:
       timeout: 1800
 
-
 logging:
   level:
-    org:
-      springframework:
-        jdbc: DEBUG
-        transaction: DEBUG
-    com:
-      .zaxxer: DEBUG
+    org.springframework: INFO
+    com.multi.laptellect: DEBUG
+
     sql: DEBUG
+    jdbc.audit: ERROR
+    jdbc.sqlonly: ERROR
+    jdbc.sqltiming: ERROR
+    jdbc.resultset: ERROR
+
+    jdbc.resultsettable: DEBUG
 

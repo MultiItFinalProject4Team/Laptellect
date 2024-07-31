@@ -1,0 +1,9 @@
+#customer_nav-pills .cus_nav {
+            font-size: 25px;
+        }
+        .cus_nav {
+            margin: 0 100px;
+        }
+#customer_nav-pills {
+    margin-bottom: 20px; /* 네비게이션 바와 테이블 사이에 여백 추가 */
+}

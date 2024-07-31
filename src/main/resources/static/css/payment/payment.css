@@ -51,24 +51,38 @@ input[type="text"], input[type="tel"] {
     width: 100%;
     max-width: 400px;
     display: block;
-    margin: 10px auto 10px;  /* 상단 여백 증가 */
+    margin: 10px auto;
+}
+.product-details {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #666;
 }
 .price-info {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    width: 50%;
-    margin: 0 auto;  /* 중앙 정렬 */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 }
-.price-row {
+.price-row, .payment-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 10px;
 }
 .total-price {
     font-weight: bold;
     font-size: 1.2em;
     color: #e44d26;
+}
+.payment-row input {
+    width: 60%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 .order-button {
     background-color: #4CAF50;
@@ -84,10 +98,9 @@ input[type="text"], input[type="tel"] {
 .order-button:hover {
     background-color: #45a049;
 }
-#amount {
-    width: 100%;
+#pointInput {
+    width: 60%;
     padding: 8px;
-    margin-top: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
