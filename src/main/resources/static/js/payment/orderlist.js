@@ -122,6 +122,24 @@ function openReviewModal(productName, username, impUid) {
     document.getElementById('reviewProductName').textContent = productName;
     document.getElementById('reviewUsername').textContent = username;
     document.getElementById('reviewModal').dataset.impuid = impUid;
+
+    // 리뷰 내용 입력 필드와 제출 버튼 초기화
+    const reviewContent = document.getElementById('reviewContent');
+    const submitReviewButton = document.getElementById('submitReviewButton');
+    reviewContent.value = '';
+    submitReviewButton.disabled = true;
+    submitReviewButton.classList.add('disabled');  // 클래스 추가
+
+    // 리뷰 내용 입력 이벤트 리스너 추가
+    reviewContent.addEventListener('input', function() {
+        const isEmpty = this.value.trim() === '';
+        submitReviewButton.disabled = isEmpty;
+        if (isEmpty) {
+            submitReviewButton.classList.add('disabled');
+        } else {
+            submitReviewButton.classList.remove('disabled');
+        }
+    });
 }
 
 function closeReviewModal() {
@@ -129,39 +147,56 @@ function closeReviewModal() {
 }
 
 function submitReview() {
-    const productName = document.getElementById('reviewProductName').textContent;
-    const username = document.getElementById('reviewUsername').textContent;
-    const rating = document.getElementById('reviewRating').value;
-    const content = document.getElementById('reviewContent').value;
-    const impUid = document.getElementById('reviewModal').dataset.impuid;  // 저장된 impUid 가져오기
+    if (confirm("리뷰를 작성하게 되면 주문 취소가 불가능해집니다. \n리뷰를 등록하시겠습니까?")) {
+        const productName = document.getElementById('reviewProductName').textContent;
+        const username = document.getElementById('reviewUsername').textContent;
+        const rating = document.getElementById('reviewRating').value;
+        const content = document.getElementById('reviewContent').value;
+        const impUid = document.getElementById('reviewModal').dataset.impuid;
 
-    fetch('/payment/reviews', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            productName: productName,
-            username: username,
-            rating: rating,
-            content: content,
-            impUid: impUid  // impUid 추가
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            closeReviewModal();
-            window.location.reload();
-        } else {
-            alert(data.message || '리뷰 제출에 실패했습니다.');
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        alert('리뷰 제출 중 오류가 발생했습니다.');
-    });
+        fetch('/payment/reviews', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productName: productName,
+                username: username,
+                rating: rating,
+                content: content,
+                impUid: impUid
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                closeReviewModal();
+
+                // 리뷰 버튼과 취소 버튼 상태 업데이트
+                const reviewButton = document.querySelector(`button.review-button[data-imp-uid="${impUid}"]`);
+                const cancelButton = document.querySelector(`button.cancel-button[data-imp-uid="${impUid}"]`);
+                if (reviewButton) {
+                    reviewButton.classList.add('reviewed');
+                    reviewButton.disabled = true;
+                    reviewButton.onclick = null;
+                }
+                if (cancelButton) {
+                    cancelButton.classList.add('disabled');
+                    cancelButton.disabled = true;
+                    cancelButton.onclick = null;
+                }
+
+                window.location.reload();
+            } else {
+                alert(data.message || '리뷰 제출에 실패했습니다.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('리뷰 제출 중 오류가 발생했습니다.');
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -184,13 +219,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 리뷰 작성 버튼에 이벤트 리스너 추가
-    document.querySelectorAll('.order-actions button:nth-child(2)').forEach(button => {
-        button.addEventListener('click', function() {
-            const productName = this.getAttribute('data-product-name');
-            const username = this.getAttribute('data-username');
-            const impUid = this.getAttribute('data-imp-uid');
-            openReviewModal(productName, username, impUid);
-        });
+    // 리뷰 내용 입력 필드에 이벤트 리스너 추가
+    document.getElementById('reviewContent').addEventListener('input', function() {
+        const submitReviewButton = document.getElementById('submitReviewButton');
+        const isEmpty = this.value.trim() === '';
+        submitReviewButton.disabled = isEmpty;
+        if (isEmpty) {
+            submitReviewButton.classList.add('disabled');
+        } else {
+            submitReviewButton.classList.remove('disabled');
+        }
     });
 });
+
+// CSS 스타일 추가
+const style = document.createElement('style');
+style.textContent = `
+    .review-button.reviewed,
+    .cancel-button.disabled,
+    #submitReviewButton.disabled {
+        background-color: #cccccc;
+        color: #666666;
+        cursor: not-allowed;
+    }
+`;
+document.head.appendChild(style);
