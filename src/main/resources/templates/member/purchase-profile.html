@@ -4,215 +4,149 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>
+  <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+  <style>
+    .purchase-tap {
+      background-color: #3498DB;
+      color: white !important;
+    }
+
+  </style>
 </head>
 <body>
 <div layout:fragment="content">
-  <div class="custom-box">
-    <h2>구매 내역</h2>
+<!--  <div class="profile-box" style="height: 400px;">-->
+<!--    <h2>구매 내역</h2>-->
+<!--    <hr> <br>-->
+<!--  </div>-->
+
+<!--  <br> <br>-->
+
+  <div class="profile-box">
+    <h2>주문목록 / 배송 조회</h2>
+    <div class="input-group mb-3 d-flex align-items-center">
+      <input type="date" id="startDate" class="form-control" placeholder="시작 날짜" aria-label="Start date" style="flex: 0.5; margin-right: 8px;">
+
+      <span class="mx-2" style="margin-right: 8px;">~</span>
+
+      <input type="date" id="endDate" class="form-control" placeholder="종료 날짜" aria-label="End date" style="flex: 0.5; margin-right: 12px;">
+
+      <select class="form-control" id="filterSelect" style="flex: 0.8; margin-right: 12px;">
+        <option value="all">All</option>
+        <option value="orderNumber">주문번호</option>
+        <option value="productName">상품명</option>
+      </select>
+
+      <input type="text" class="form-control" placeholder="주문번호 또는 상품명 검색" aria-label="Search" style="flex: 2; margin-right: 12px;">
+
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" onclick="filterByDateRange()">검색</button>
+      </div>
+    </div>
     <hr> <br>
+    <table class="table table-striped text-center">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 5%;">번호</th>
+          <th scope="col" style="width: 20%;">주문번호</th>
+          <th scope="col" style="width: 30%;">상품명</th>
+          <th scope="col" style="width: 10%;">금액</th>
+          <th scope="col" style="width: 10%;">주문상태</th>
+          <th scope="col" style="width: 15%;">날짜</th>
+          <th scope="col" style="width: 10%;">구매확정</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">4</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">5</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">6</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">7</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">8</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <form th:object="${userInfo}" method="post" action="/changeMemberInfo">
-      <div class="form-group">
-        <label for="member_name"><i class="fa fa-envelope-o" aria-hidden="true"></i> 아이디</label>
-        <input type="text" class="form-control" id="member_name" th:field="*{memberName}" readonly>
-        <br>
-      </div>
-      <div class="form-group">
-        <label for="nickName"><i class="fa fa-envelope-o" aria-hidden="true"></i> 닉네임</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="nickName" th:field="*{nickName}" readonly>
-          <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#nickNameModal">변경</button>
-        </div>
-        <br>
-      </div>
-      <div class="form-group">
-        <label for="email"><i class="fas fa-lock"></i> 이메일</label>
-        <div class="input-group">
-          <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
-          <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#emailModal">변경</button>
-        </div>
-        <br>
-      </div>
-      <div class="form-group">
-        <label for="password"><i class="fas fa-lock"></i> 비밀번호</label>
-        <div class="input-group">
-          <input type="password" class="form-control" id="password" th:field="*{password}" readonly>
-          <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#passwordModal">변경</button>
-        </div>
-        <br>
-      </div>
-      <div class="form-group">
-        <label for="phoneNumber"><i class="fas fa-lock"></i> 휴대폰 번호</label>
-        <div class="input-group">
-          <input type="tel" class="form-control" id="phoneNumber" th:field="*{tel}" required>
-          <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#phoneModal">변경</button>
-        </div>
-        <br>
-      </div>
-    </form>
-  </div>
-
-  <!-- 닉네임 변경 모달 -->
-  <div class="modal fade" id="nickNameModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">닉네임 변경</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <div class="form-floating flex-grow-1">
-              <input type="text" class="form-control" id="nickNameInput" placeholder="nickName" value="">
-              <label for="emailInput">닉네임을 입력해주세요.</label>
-            </div>
-          </div>
-          <div class="error-message" id="nickNameError" style="color: red">
-            중복된 닉네임 입니다.
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary changeBtn" id="nickNameChangeBtn">확인</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 이메일 변경 모달 -->
-  <div class="modal fade" id="emailModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">이메일 변경</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <div class="form-floating flex-grow-1">
-              <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
-              <label for="emailInput">이메일을 입력해주세요.</label>
-            </div>
-            <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
-          </div>
-          <div class="error-message" id="emailError" style="color: red">
-            중복된 이메일 입니다.
-          </div>
-
-
-          <div class="form-floating">
-            <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
-            <label for="emailVer">인증번호를 입력해주세요.</label>
-            <div class="error-message" id="emailError2" style="color: red">
-              인증번호가 틀렸습니다.
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary changeBtn" id="emailChangeBtn">확인</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 비밀번호 변경 모달 -->
-  <div class="modal fade" id="passwordModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">비밀번호 변경</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-floating">
-            <input type="password" class="form-control" id="beforePassword" placeholder="password" value="">
-            <label for="beforePassword">변경 전 비밀번호를 입력해주세요.</label>
-            <div class="error-message" id="passwordError" style="color: red">
-              비밀번호가 틀렸습니다.
-            </div>
-          </div>
-          <br>
-
-          <div class="form-floating">
-            <input type="password" class="form-control" id="afterPassword" placeholder="password" value="" readonly>
-            <label for="afterPassword">변경 할 비밀번호를 입력해주세요.</label>
-            <div class="error-message" id="passwordError2" style="color: red">
-              비밀번호 오류
-            </div>
-          </div>
-          <br>
-
-          <div class="form-floating">
-            <input type="password" class="form-control" id="afterPassword2" placeholder="password" value="">
-            <label for="afterPassword2">한 번 더 입력해주세요.</label>
-            <div class="error-message" id="passwordError3" style="color: red">
-              비밀번호 오류2
-            </div>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary changeBtn" id="passwordChangeBtn">확인</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 휴대폰 번호 변경 모달 -->
-  <div class="modal fade" id="phoneModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">휴대폰 번호 변경</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-
-            <div class="form-floating flex-grow-1">
-              <input type="tel" class="form-control" id="phoneNumInput" placeholder="phone" value="">
-              <label for="phoneNumInput">휴대폰 번호를 입력해주세요.</label>
-            </div>
-            <button type="button" class="btn btn-primary" id="smsVerifyButton">인증</button>
-          </div>
-
-          <div class="form-floating">
-            <input type="text" class="form-control" id="phoneNumVer" placeholder="phoneNumVer" value="">
-            <label for="phoneNumVer">인증번호를 입력해주세요.</label>
-            <div class="error-message" id="phoneError" style="color: red">
-              인증번호가 틀렸습니다.
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary changeBtn" id="telChangeBtn">확인</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 회원탈퇴 모달 -->
-  <div class="modal fade" id="resignModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">회원 탈퇴</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>모든 정보가 삭제 됩니다.</p>
-          <p>정말로 탈퇴 하시겠습니까?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <a th:href="@{/member/reSign}" class="btn btn-primary">확인</a>
-        </div>
-      </div>
-    </div>
+    <nav aria-label="...">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <span class="page-link">이전</span>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item active" aria-current="page">
+          <span class="page-link">2</span>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">다음</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
 

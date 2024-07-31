@@ -128,6 +128,7 @@
             <div class="profile">
                 <p class="text-dark">환영합니다.</p>
                 <p class="text-dark" th:text="${#authentication.principal.getUsername} + 님">사용자 이름</p>
+                <input type="text" th:value="${#authentication.principal.getPoint} + ' 점'" readonly class="profile-point">
             </div>
             <ul class="nav nav-pills flex-column mb-auto">
                 <!--        <li class="nav-item">-->
@@ -135,22 +136,22 @@
                 <!--        </li>-->
                 <hr>
                 <li class="nav-item">
-                    <a href="/profile/purchase" class="nav-link text-dark">구매 내역</a>
+                    <a href="/profile/purchase" class="nav-link text-dark purchase-tap">구매 내역</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/profile/review" class="nav-link text-dark">리뷰 내역</a>
+                    <a href="/profile/review" class="nav-link text-dark review-tap">리뷰 내역</a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/profile/wishlist}" class="nav-link text-dark">관심 상품</a>
+                    <a th:href="@{/profile/wishlist}" class="nav-link text-dark wishlist-tap">관심 상품</a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/admin/membermanage}" class="nav-link text-dark">포인트</a>
+                    <a th:href="@{/profile/point}" class="nav-link text-dark point-tap">포인트</a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/profile/point}" class="nav-link text-dark">배송지 관리</a>
+                    <a th:href="@{/profile/delivery}" class="nav-link text-dark delivery-tap">배송지 관리</a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/profile/edit}" class="nav-link text-dark">회원 정보 수정</a>
+                    <a th:href="@{/profile/edit}" class="nav-link text-dark edit-tap">회원 정보 수정</a>
                 </li>
                 <hr>
             </ul>

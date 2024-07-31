@@ -11,7 +11,7 @@
 
         .sidebar {
             width: 240px;
-            height: 700px;
+            height: auto;
             box-sizing: border-box;
             text-color: black;
             border: 1px solid #dee2e6;
@@ -44,10 +44,20 @@
             border: 1px solid #dee2e6;
             border-radius: 8px;
             padding: 20px;
-            margin-bottom: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             height: 700px;
-            margin-top: -15px;
+            margin-top: -17px;
         }
+
+        .profile-point {
+            width: 100%;
+            margin: 10px 0;
+            padding: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            text-align: right; /* 점수를 오른쪽으로 정렬 */
+        }
+
 
 

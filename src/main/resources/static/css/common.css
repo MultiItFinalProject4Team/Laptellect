@@ -37,6 +37,11 @@
         color: black;
     }
 
+    .table th, .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     /* Footer */
     #tempaltemo_footer a { color: #dcdde1;}
