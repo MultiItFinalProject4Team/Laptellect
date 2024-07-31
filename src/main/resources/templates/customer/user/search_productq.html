@@ -85,7 +85,7 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
-                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/search_productq/{productNo}(category=${page_category}, keyword=${page_keyword}, productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                     <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
@@ -93,11 +93,11 @@
                     </a>
                 </li>
                 <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
-                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/search_productq/{productNo}(category=${page_category}, keyword=${page_keyword}, productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
                     <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
                 </li>
                 <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
-                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/search_productq/{productNo}(category=${page_category}, keyword=${page_keyword}, productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                     <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">

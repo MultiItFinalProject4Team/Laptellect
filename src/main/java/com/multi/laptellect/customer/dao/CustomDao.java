@@ -80,4 +80,6 @@ public interface CustomDao {
     List<PersonalqListDto> getPersonalqSearchList(@Param("memberNo") int memberNo, @Param("keyword") String keyword, @Param("category") String category);
 
     List<PersonalqListDto> getAllPersonalqList();
+
+    List<ProuductqListDto> getProudctqSearchList(@Param("productNo") int productNo, @Param("keyword") String keyword, @Param("category") String category);
 }

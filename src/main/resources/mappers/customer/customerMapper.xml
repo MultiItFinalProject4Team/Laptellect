@@ -123,6 +123,7 @@
         from
         product_question
         where product_no=#{productNo}
+        order by productq_no desc
     </select>
 
     <select id="getProductqCategory" resultType="com.multi.laptellect.customer.dto.ProductqCategoryDto">
@@ -246,5 +247,17 @@
         created_at
         from personal_question
         order by personalq_no desc
+    </select>
+
+    <select id="getProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'productq_all'">
+            AND productq_categorycode LIKE #{category}
+        </if>
+        order by productq_no desc
     </select>
 </mapper>
