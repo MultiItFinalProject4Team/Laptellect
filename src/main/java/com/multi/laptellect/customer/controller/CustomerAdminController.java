@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -84,18 +83,16 @@ public class CustomerAdminController {
     /**
      * 상품 문의 답변하기
      * @param answerDto
-     * @param images
      * @return
      */
     @PostMapping("/answer_productq")
-    public String answer_producta(ProductqAnswerDto answerDto, @RequestParam("image[]") MultipartFile[] images){
+    public String answer_producta(ProductqAnswerDto answerDto){
         System.out.println(answerDto);
         customerService.productAnwerApp(answerDto);
         String state = "Y";
         customerService.productAnwerChange(answerDto.getProductqNo(), state);
         String code = "producta"+answerDto.getProductaNo();
         customerService.setproductaCode(answerDto.getProductaNo(),code);
-        customerService.inputImage(code,images);
         String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
         return "redirect:"+redirectUrl;
     }
@@ -116,15 +113,13 @@ public class CustomerAdminController {
     /**
      * 상품문의 답변 수정 메소드
      * @param answerDto
-     * @param images
      * @return
      */
     @PostMapping("/update_producta")
-    public String update_producta(ProductqAnswerDto answerDto, @RequestParam("image[]") MultipartFile[] images){
+    public String update_producta(ProductqAnswerDto answerDto){
         customerService.updateProducta(answerDto);
         String code=customerService.getProductaCode(answerDto.getProductaNo());
         System.out.println("코드"+code);
-        customerService.updateImage(code,images);
         String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
         return "redirect:"+redirectUrl;
     }

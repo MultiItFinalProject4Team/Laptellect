@@ -56,21 +56,6 @@
         }
     </script>
     <script type="module" src="/js/customer/ckeditor.js"></script>
-    <script>
-        let fileInputCount = 1;
-
-        function addFileInput() {
-            fileInputCount++;
-            const fileInputContainer = document.getElementById('file-input-container');
-            const newFileInputWrapper = document.createElement('div');
-            newFileInputWrapper.className = 'file-input-wrapper';
-            newFileInputWrapper.innerHTML = `
-                <label for="image${fileInputCount}">이미지 ${fileInputCount}:</label>
-                <input type="file" id="image${fileInputCount}" name="image[]"><br><br>
-            `;
-            fileInputContainer.appendChild(newFileInputWrapper);
-        }
-    </script>
 
 </div>
 </div>
