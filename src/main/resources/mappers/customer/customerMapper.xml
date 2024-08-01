@@ -48,8 +48,8 @@
 
     <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.ImageDto">
         insert into
-        images(origin_name, upload_name, reference_code)
-        values(#{originName}, #{uploadName}, #{referenceCode})
+        images(origin_name, upload_name)
+        values(#{originName}, #{uploadName})
     </insert>
 
     <select id="getImage" resultType="string">
@@ -288,4 +288,11 @@
         </if>
         order by personalq_no desc
     </select>
+
+    <update id="setImage" parameterType="string">
+        update
+        images
+        set reference_code=#{code}
+        where reference_code is null
+    </update>
 </mapper>
