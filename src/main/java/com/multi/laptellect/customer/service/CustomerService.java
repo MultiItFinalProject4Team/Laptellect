@@ -334,7 +334,20 @@ public class CustomerService {
     }
 
     public void deleteProducta(int productqNo, String code) {
-        customDao.deleteImages(code);
+        String path = System.getProperty("user.dir");
+        List<String> urls = new ArrayList<>();
+        Document document = Jsoup.parse(customDao.getProducta(productqNo).getContent());
+        for (Element img : document.select("img")) {
+            urls.add(img.attr("src"));
+        }
+        for(String url : urls){
+            Path filePath = Paths.get(path, url);
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         customDao.deleteProducta(productqNo);
     }
 
