@@ -312,4 +312,16 @@ public class CustomerService {
     public List<PersonalqListDto> getAllPersonalqSearchList(String category, String keyword) {
         return customDao.getAllPersonalqSearchList(category, keyword);
     }
+    public int inputImage(String originName, String fileName) {
+        ImageDto imageDto=ImageDto.builder()
+                .originName(originName)
+                .uploadName(fileName)
+                .build();
+        customDao.inputImage(imageDto);
+        return 1;
+    }
+
+    public void setImage(String code) {
+        customDao.setImage(code);
+    }
 }

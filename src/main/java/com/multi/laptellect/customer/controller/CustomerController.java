@@ -6,13 +6,19 @@ import com.multi.laptellect.customer.service.PaginationService;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -101,7 +107,7 @@ public class CustomerController {
     }
     //1:1 문의 신청
     @PostMapping("/personalq_app")
-    public String personalq_app(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+    public String personalq_app(PersonalqAppDto appDto){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -109,17 +115,11 @@ public class CustomerController {
             return "/auth/auth-sign-in";
         }
         System.out.println(appDto);
-        for(MultipartFile image : images){
-            if(!image.isEmpty()){
-                System.out.println(image.getOriginalFilename());
-            }
-        }
         appDto.setMemberNo(memberNo);
         int text_result=customerService.personalqApp(appDto);
         String code="personalq"+appDto.getPersonalqNo();
         customerService.setPersonalqCode(appDto.getPersonalqNo(),code);
-        System.out.println(code);
-        int image_result = customerService.inputImage(code,images);
+        customerService.setImage(code);
         return "redirect:/customer/user/customer_personalq";
     }
 
@@ -472,5 +472,40 @@ public class CustomerController {
         model.addAttribute("page_keyword",keyword);
         model.addAttribute("state","my");
         return "/customer/user/search_productq";
+    }
+
+    @PostMapping("/imageUpload")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> imageUpload(@RequestParam("upload") MultipartFile image) {
+        Map<String, Object> response = new HashMap<>();
+        if (image.isEmpty()) {
+            response.put("error", "No file uploaded");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            // 파일 확장자와 파일 이름 처리
+            String uploadDir = System.getProperty("user.dir") + "/uploads/";
+            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+            String uuid = UUID.randomUUID().toString();
+            String extension = fileName.substring(fileName.lastIndexOf("."));
+            String storeFileName = uuid + extension;
+
+            // 업로드 디렉토리 설정 및 파일 저장
+            Path filePath = Paths.get(uploadDir, storeFileName);
+            Files.createDirectories(filePath.getParent());
+            image.transferTo(filePath.toFile());
+
+            // 파일 접근 URL 반환
+            String fileUrl = "/uploads/" + storeFileName;
+            response.put("url", fileUrl);
+            customerService.inputImage(fileName,storeFileName);
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            response.put("error", "Failed to upload file");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -40,29 +40,7 @@
                sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:if="${personalq.answer=='Y'}" class="btn bg-body-secondary">답변 삭제</a>
         </div>
     </div>
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="width: 300px;">
-        <div class="carousel-indicators">
-            <th:block th:each="item, num : ${imageList}">
-                <button type="button" th:attr="data-bs-target='#carouselExampleIndicators', data-bs-slide-to=${num.index}, class=${num.index == 0} ? 'active' : ''"
-                        aria-current="${num.index == 0 ? 'true' : 'false'}"></button>
-            </th:block>
-        </div>
-        <div class="carousel-inner">
-            <th:block th:each="item, num : ${imageList}">
-                <div th:classappend="${num.index == 0} ? 'carousel-item active' : 'carousel-item'">
-                    <img th:src="@{/images/{image}(image=${item})}" class="d-block w-100" alt="..." width="214px" height="200px">
-                </div>
-            </th:block>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+
     <hr class="border border-dark">
     <div id="content" name="content" th:utext="${personalq.content}" readonly="true">내용</div>
 
