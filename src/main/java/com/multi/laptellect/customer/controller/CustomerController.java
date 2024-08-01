@@ -143,11 +143,10 @@ public class CustomerController {
     /**
      * 1:1문의 질문 수정
      * @param appDto
-     * @param images
      * @return
      */
     @PostMapping("/update_personalq")
-    public String update_personalq(PersonalqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+    public String update_personalq(PersonalqAppDto appDto){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -155,16 +154,10 @@ public class CustomerController {
             return "/auth/auth-sign-in";
         }
         System.out.println(appDto);
-        for(MultipartFile image : images){
-            if(!image.isEmpty()){
-                System.out.println("이미지:"+image.getOriginalFilename());
-            }
-        }
         appDto.setMemberNo(memberNo);
         int text_result=customerService.updatePersonalq(appDto);
         String code = customerService.getpersonalqCode(appDto.getPersonalqNo());
-        System.out.println(code);
-        int image_result = customerService.updateImage(code,images);
+        customerService.setImage(code);
         String redirectUrl = String.format("/customer/user/personalq_detail/%s", appDto.getPersonalqNo());
         return "redirect:"+redirectUrl;
     }

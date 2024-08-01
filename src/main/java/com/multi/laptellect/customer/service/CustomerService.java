@@ -151,6 +151,15 @@ public class CustomerService {
     }
 
     public int deletePersonalq(int personalqNo, String code) {
+        String path = System.getProperty("user.dir") + "/uploads/";
+        String[] images = customDao.getImage(code);
+        for(String image : images){
+            File file = new File(path+image);
+            if(file.exists()){
+                file.delete();
+                System.out.println("삭제 완료");
+            }
+        }
         customDao.deleteImages(code);
         return customDao.deletePersonalq(personalqNo);
     }
