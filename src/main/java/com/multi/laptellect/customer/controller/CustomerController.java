@@ -83,16 +83,12 @@ public class CustomerController {
     @GetMapping("/personalq_detail/{personalqNo}")
     public String personalq_detail(@PathVariable("personalqNo") int personalqNo, Model model){
         PersonalqDto personalqDto = customerService.getPersonalq(personalqNo);
-        String[] imageList = customerService.getImage(personalqDto.getReferenceCode());
         model.addAttribute("personalq",personalqDto);
-        model.addAttribute("imageList",imageList);
         System.out.println("질문: "+personalqDto);
 
         if(personalqDto.getAnswer().equals("Y")) {
             PersonalqAnswerDto answerDto = customerService.getPersonala(personalqNo);
-            String[] imageList2 = customerService.getImage(answerDto.getReferenceCode());
             model.addAttribute("personala", answerDto);
-            model.addAttribute("imageList2", imageList2);
             System.out.println("답변: "+answerDto);
         }
         return"/customer/user/personalq_detail";
@@ -223,7 +219,7 @@ public class CustomerController {
      * @return the String
      */
     @PostMapping("/productq_app")
-    public String productq_app(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+    public String productq_app(ProductqAppDto appDto){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -232,16 +228,10 @@ public class CustomerController {
         }
         appDto.setMemberNo(memberNo);
         System.out.println(appDto);
-        for(MultipartFile image : images){
-            if(!image.isEmpty()){
-                System.out.println(image.getOriginalFilename());
-            }
-        }
         int text_result=customerService.productqApp(appDto);
         String code="productq"+appDto.getProductqNo();
         customerService.setProductqCode(appDto.getProductqNo(),code);
         System.out.println(code);
-        int image_result = customerService.inputImage(code,images);
         String redirectUrl = String.format("/customer/user/customer_productq/%s", appDto.getProductNo());
         return "redirect:"+redirectUrl;
     }
@@ -321,11 +311,10 @@ public class CustomerController {
     /**
      * 상품 문의 수정 메소드
      * @param appDto
-     * @param images
      * @return
      */
     @PostMapping("/update_productq")
-    public String update_productq(ProductqAppDto appDto, @RequestParam("image[]") MultipartFile[] images){
+    public String update_productq(ProductqAppDto appDto){
         int memberNo;
         try {
             memberNo=SecurityUtil.getUserDetails().getMemberNo();
@@ -333,16 +322,10 @@ public class CustomerController {
             return "/auth/auth-sign-in";
         }
         System.out.println(appDto);
-        for(MultipartFile image : images){
-            if(!image.isEmpty()){
-                System.out.println("이미지:"+image.getOriginalFilename());
-            }
-        }
         appDto.setMemberNo(memberNo);
         int text_result=customerService.updateProductq(appDto);
         String code = customerService.getproductqCode(appDto.getProductqNo());
         System.out.println(code);
-        int image_result = customerService.updateImage(code,images);
         String redirectUrl = String.format("/customer/user/productq_detail/%s", appDto.getProductqNo());
         return "redirect:"+redirectUrl;
     }
@@ -467,6 +450,11 @@ public class CustomerController {
         return "/customer/user/search_productq";
     }
 
+    /**
+     * ck에디터 사진 업로드
+     * @param image
+     * @return
+     */
     @PostMapping("/imageUpload")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> imageUpload(@RequestParam("upload") MultipartFile image) {
@@ -492,7 +480,6 @@ public class CustomerController {
             // 파일 접근 URL 반환
             String fileUrl = "/uploads/" + storeFileName;
             response.put("url", fileUrl);
-            customerService.inputImage(fileName,storeFileName);
             return ResponseEntity.ok(response);
 
         } catch (IOException e) {
@@ -501,4 +488,9 @@ public class CustomerController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //파일 업로드 사용 예제
+    //public void uploadFilesSample(
+    //            @RequestPart(value = "files") List<MultipartFile> multipartFiles) {
+    //        FileService.uploadFiles(multipartFiles, "customer");
+    //    }
 }

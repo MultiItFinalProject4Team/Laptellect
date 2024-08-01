@@ -31,15 +31,13 @@ public class CustomerAdminController {
     }
     //답변 전송
     @PostMapping("/answer_personalq")
-    public String answer_personalq(PersonalqAnswerDto answerDto, @RequestParam("image[]") MultipartFile[] images){
+    public String answer_personalq(PersonalqAnswerDto answerDto){
         System.out.println(answerDto);
         customerService.personalAnswerApp(answerDto);
         String state="Y";
         customerService.personalAnwerChange(answerDto.getPersonalqNo(),state);
         String code="personala"+answerDto.getPersonalaNo();
         customerService.setPersonalaCode(answerDto.getPersonalaNo(), code);
-        System.out.println("코드:"+code);
-        customerService.inputImage(code,images);
         String redirectUrl = String.format("/customer/user/personalq_detail/%s", answerDto.getPersonalqNo());
         return "redirect:"+redirectUrl;
     }
@@ -52,11 +50,10 @@ public class CustomerAdminController {
     }
     //답변 수정 전송
     @PostMapping("/update_personala")
-    public String update_answer(PersonalqAnswerDto answerDto, @RequestParam("image[]") MultipartFile[] images){
+    public String update_answer(PersonalqAnswerDto answerDto){
         customerService.updatePersonala(answerDto);
         String code=customerService.getPersonalaCode(answerDto.getPersonalaNo());
         System.out.println("코드"+code);
-        customerService.updateImage(code,images);
         String redirectUrl = String.format("/customer/user/personalq_detail/%s", answerDto.getPersonalqNo());
         return "redirect:"+redirectUrl;
     }
