@@ -1,6 +1,7 @@
 package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.ImageDTO;
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
@@ -110,6 +111,12 @@ public class ProductServiceImpl implements ProductService {
          productMapper.getImage(referenceCode);
     }
 
+    @Override
+    public List<LaptopDetailsDTO> getLaptopProductDetails(String productCode) {
+
+        return productMapper.laptopProductDetails(productCode);
+    }
+
     //상품 전체 조회
     @Override
     @Transactional
@@ -138,6 +145,8 @@ public class ProductServiceImpl implements ProductService {
 
         return laptopSpecDTO;
     }
+
+
 
 
 

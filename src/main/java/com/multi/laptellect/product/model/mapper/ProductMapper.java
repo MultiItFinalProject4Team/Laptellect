@@ -1,6 +1,7 @@
 package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.ImageDTO;
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
@@ -41,7 +42,7 @@ public interface ProductMapper {
 
     int checkSpecExists(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("options") String options);
 
-
+    List<LaptopDetailsDTO> laptopProductDetails(String productCode);
 
 
 

@@ -101,6 +101,7 @@ public class CrawlingService {
                         "&listCount=10");
                 log.info("mouseType {}", productType);
                 break;
+
             case "keyboard":
                 referer = "https://prod.danawa.com/list/?cate=112782&15main_11_02";
                 params = new StringEntity("page=" + page +
@@ -439,7 +440,7 @@ public class CrawlingService {
             Elements th = row.select("th");
             Elements td = row.select("td");
             for (int i = 0; i < th.size(); i++) {
-                if (th.get(i).text().contains(specName)) {
+                if (th.get(i).text().equals(specName)) {
                     if (td.size() > i) {
                         return td.get(i).text().trim();
                     }

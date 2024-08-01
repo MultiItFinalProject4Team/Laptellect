@@ -108,6 +108,14 @@
         AND option_value = #{options}
     </select>
 
+    <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
+        SELECT *
+        FROM
+        product_detail
+        WHERE
+        product_code = #{productCode}
+    </select>
+
 
 
 

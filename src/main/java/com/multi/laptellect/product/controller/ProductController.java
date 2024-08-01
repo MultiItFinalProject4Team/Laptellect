@@ -1,8 +1,8 @@
 package com.multi.laptellect.product.controller;
 
 
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,22 +74,22 @@ public class ProductController {
             log.info("제품 확인 {}", products);
 
             productService.saveProductsToDB(products, typeNo);
-            
+
 
             if (!products.isEmpty()) {
-                for(int i = 0; i < products.size(); i++){
+                for (int i = 0; i < products.size(); i++) {
                     log.info("products 내용확인 = {}", products);
-                    log.info("조회 횟수 확인 = {}", i+1);
-                    
+                    log.info("조회 횟수 확인 = {}", i + 1);
+
                     ProductDTO productDTO = products.get(i); // 예시로 첫 번째 제품 사용
 
-                    log.info("제품 코드 확인{}",productDTO.getProductCode());
-                    log.info("제품 코드 확인{}",productDTO.getProductCode());
+                    log.info("제품 코드 확인{}", productDTO.getProductCode());
+                    log.info("제품 코드 확인{}", productDTO.getProductCode());
 
                     crawlingService.processAllLaptopDetails();
 
                     model.addAttribute("products", products);
-                  //  model.addAttribute("specDTO", specDTO); // 필요에 따라 추가
+                    //  model.addAttribute("specDTO", specDTO); // 필요에 따라 추가
                 }
 
             }
@@ -97,7 +98,7 @@ public class ProductController {
 
             log.error("1.에러발생", e);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("2.에러발생", e);
         }
         return "product/productList";
@@ -133,14 +134,36 @@ public class ProductController {
     public String productDetails(@RequestParam("productCode") String productCode,
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productCode);
-
-
         // 제품 상세 정보 가져오기
-        LaptopSpecDTO laptopSpecDTO = productService.getProductByCode(productCode);
+        List<LaptopDetailsDTO> laptopDetails = productService.getLaptopProductDetails(productCode);
+        log.info("상세정보를 조회 = {}: ", laptopDetails);
+        if (!laptopDetails.isEmpty()) {
+            LaptopDetailsDTO details = laptopDetails.get(0);
 
-        log.info("laptopSpecDTO {}: ", laptopSpecDTO);
+            model.addAttribute("productName", details.getProductName());
+            model.addAttribute("price", details.getPrice());
+            model.addAttribute("img", details.getUploadName());
 
-        model.addAttribute("product", laptopSpecDTO);
+            log.info("details 확인작업 = {}", details);
+
+            List<String> options = new ArrayList<>();
+            List<String> optionsValue = new ArrayList<>();
+
+            for (LaptopDetailsDTO detail : laptopDetails) {
+                options.add(detail.getOptions());
+                optionsValue.add(detail.getOptionValue());
+            }
+
+
+
+
+            model.addAttribute("options",options);
+            model.addAttribute("optionValue", optionsValue);
+
+
+        }
+
+
         return "product/laptopDetails";
 
     }
@@ -155,7 +178,6 @@ public class ProductController {
 
         return "productList";
     }
-
 
 
 }

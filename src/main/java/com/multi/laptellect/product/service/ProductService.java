@@ -1,5 +1,6 @@
 package com.multi.laptellect.product.service;
 
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 
@@ -16,4 +17,8 @@ public interface ProductService {
     List<ProductDTO> getTypeByProduct(int typeNo);
 
     void getImgae(String referenceCode);
+
+    List<LaptopDetailsDTO> getLaptopProductDetails(String productCode);
+
+
 }
