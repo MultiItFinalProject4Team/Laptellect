@@ -1,5 +1,6 @@
 package com.multi.laptellect.member.model.mapper;
 
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -37,4 +38,6 @@ public interface MemberMapper {
 
     @Update("UPDATE mem_password SET member_password = #{ password } WHERE member_no = #{ memberNo }")
     void updatePassword(int memberNo, String password);
+
+    void insertAddress(AddressDTO addressDTO);
 }

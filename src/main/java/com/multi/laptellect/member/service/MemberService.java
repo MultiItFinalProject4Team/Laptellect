@@ -1,5 +1,6 @@
 package com.multi.laptellect.member.service;
 
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 
 /**
@@ -52,4 +53,6 @@ public interface MemberService {
      * @return the boolean
      */
     boolean updatePassword(String beforePassword, String afterPassword);
+
+    int createMemberAddress(AddressDTO addressDTO) throws Exception;
 }

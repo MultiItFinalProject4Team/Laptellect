@@ -1,5 +1,6 @@
 package com.multi.laptellect.member.service;
 
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
@@ -118,5 +119,22 @@ public class MemberServiceImpl implements MemberService{
         }
 
         return true;
+    }
+
+    @Override
+    public int createMemberAddress(AddressDTO addressDTO) throws Exception {
+        int result = 1;
+        int memberNo = SecurityUtil.getUserDetails().getMemberNo();
+        addressDTO.setMemberNo(memberNo);
+
+        String addressName = addressDTO.getAddressName();
+
+        // 배송지 명이 Null이면 Error 발생하므로 검증하기 위함
+        if(addressName == null) result = 0;
+
+        memberMapper.insertAddress(addressDTO);
+        log.info("주소 Insert 완료 = {}", addressDTO);
+
+        return result;
     }
 }

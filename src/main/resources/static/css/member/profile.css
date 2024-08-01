@@ -59,5 +59,7 @@
             text-align: right; /* 점수를 오른쪽으로 정렬 */
         }
 
+        .text-dark { color: black; }
+
 
 

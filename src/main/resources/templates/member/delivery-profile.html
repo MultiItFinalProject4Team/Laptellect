@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+  <script type="text/javascript" th:src="@{/js/member/delivery-profile.js}"></script>
   <style>
     .delivery-tap {
       background-color: #3498DB;
       color: white !important;
     }
-
   </style>
 </head>
 <body>
@@ -70,9 +70,157 @@
     </nav>
 
     <div class="d-grid gap-2">
-      <button class="btn btn-primary" type="button">배송지 추가</button>
+      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#add-delivery-modal">배송지 추가</button>
     </div>
   </div>
+
+  <!-- 배송지 추가 모달 -->
+  <div class="modal fade" id="add-delivery-modal" tabindex="-1" aria-labelledby="add-delivery-modal" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          <h4 class="modal-title w-100 text-center">배송지 등록</h4>
+          <br> <br>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address-name" placeholder="address-name" value="">
+            <label for="address-name">배송지 이름</label>
+            <div class="error-message" id="addressError" style="color: red">
+              저장할 배송지 이름을 입력해주세요.
+            </div>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="recipient-name" placeholder="recipient-name" value="">
+            <label for="address-name">받는 사람 이름</label>
+            <br>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="form-floating flex-grow-1">
+              <input type="text" class="form-control" id="postal-code" placeholder="postal-code" value="" readonly>
+              <label for="postal-code">우편번호</label>
+            </div>
+            <button class="btn btn-outline-secondary" type="button" onclick="postCode()">찾기</button>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address" placeholder="address" value="" readonly>
+            <label for="address-name">주소</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="detail-address" placeholder="detail-address" value="">
+            <label for="address-name">상세주소</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="recipient-phone" placeholder="recipient-phone" value="">
+            <label for="address-name">받는 사람 연락처</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="request" placeholder="request" value="">
+            <label for="request">배송 요청사항</label>
+          </div>
+
+          <br> <br>
+          <div>
+            <button type="button" class="btn btn-primary w-100 addAddressBtn">배송지 등록</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 배송지 수정 모달 -->
+  <div class="modal fade" id="update-delivery-modal" tabindex="-1" aria-labelledby="update-delivery-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          <h4 class="modal-title w-100 text-center" style="color: #6c5ce7;">Laptellect</h4>
+          <br> <br>
+          <div class="image-container">
+            <a href="/signin/kakao">
+              <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
+              <div>카카오</div>
+            </a>
+          </div>
+          <div class="image-container">
+            <a href="/signin/google">
+              <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
+              <div>구글</div>
+            </a>
+          </div>
+          <div class="image-container">
+            <a href="/signup">
+              <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
+              <div>일반회원</div>
+            </a>
+          </div>
+
+          <br> <br>
+          <div>
+            <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 배송지 삭제 모달 -->
+  <div class="modal fade" id="delete-delivery-modal" tabindex="-1" aria-labelledby="delete-delivery-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          <h4 class="modal-title w-100 text-center" style="color: #6c5ce7;">Laptellect</h4>
+          <br> <br>
+          <div class="image-container">
+            <a href="/signin/kakao">
+              <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
+              <div>카카오</div>
+            </a>
+          </div>
+          <div class="image-container">
+            <a href="/signin/google">
+              <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
+              <div>구글</div>
+            </a>
+          </div>
+          <div class="image-container">
+            <a href="/signup">
+              <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
+              <div>일반회원</div>
+            </a>
+          </div>
+
+          <br> <br>
+          <div>
+            <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script type="text/javascript" th:src="@{/js/common/kakao-post-api.js}"></script>
 </div>
 
 </body>
