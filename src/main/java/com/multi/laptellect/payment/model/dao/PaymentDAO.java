@@ -27,4 +27,9 @@ public interface PaymentDAO {
     int usepoint(PaymentpointDTO paymentpointDTO);
 
     int givepoint(PaymentpointDTO paymentpointDTO);
+
+    PaymentpointDTO select_refundpoint(String impUid);
+
+    int refundpoint(PaymentpointDTO paymentpointDTO);
+
 }

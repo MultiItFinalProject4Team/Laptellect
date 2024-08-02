@@ -13,6 +13,7 @@ CREATE TABLE payment (
     productname VARCHAR(50),
     productinfo VARCHAR(255),
     productprice INT,
+    purchaseprice INT,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     imd varchar(255),
     refund CHAR(1) DEFAULT 'N',
@@ -37,6 +38,7 @@ SELECT * FROM paymentpage;
 CREATE TABLE payment_point (
     payment_price_no INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255),
+    imd varchar(255),
     payment_possession_point INT DEFAULT 0 CHECK (payment_possession_point >= 0),
     payment_point_change VARCHAR(255),
     payment_point_info VARCHAR(255),
@@ -44,7 +46,7 @@ CREATE TABLE payment_point (
     -- CONSTRAINT `payment_price` FOREIGN KEY (`payment_no`) REFERENCES `payment` (`payment_no`)
 );
 
-INSERT INTO payment_point values( NULL , "jack", 100 , null, null , NOW());
+INSERT INTO payment_point values( NULL , "jack",NULL, 1000 , null, null , NOW());
 DROP TABLE payment_point;
 SELECT * FROM payment_point;
 
