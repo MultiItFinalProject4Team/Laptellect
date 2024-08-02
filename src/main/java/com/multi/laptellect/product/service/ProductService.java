@@ -10,7 +10,9 @@ public interface ProductService {
 
     void saveProductsToDB(List<ProductDTO> prodctList, int typeNo) throws Exception;
 
-    List<ProductDTO> getStoredProducts();
+    List<ProductDTO> getStoredProducts(int pageNumber, int pageSize);
+
+    int getTotalProducts();
 
     LaptopSpecDTO getProductByCode(String pcode);
 
@@ -19,6 +21,7 @@ public interface ProductService {
     void getImgae(String referenceCode);
 
     List<LaptopDetailsDTO> getLaptopProductDetails(String productCode);
+
 
 
 }

@@ -35,7 +35,6 @@ public class ProductServiceImpl implements ProductService {
 
         try {
 
-
         for (ProductDTO ProductDTO : productList) {
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductName(ProductDTO.getProductName());
@@ -120,11 +119,15 @@ public class ProductServiceImpl implements ProductService {
     //상품 전체 조회
     @Override
     @Transactional
-    public List<ProductDTO> getStoredProducts() {
+    public List<ProductDTO> getStoredProducts(int pageNumber, int pageSize) {
 
-        List<ProductDTO> productDTOList = productMapper.getAllProducts();
+        int offset = (pageNumber - 1) * pageSize;
+        return productMapper.getAllProducts(pageSize,offset);
+    }
 
-        return productDTOList;
+    @Override
+    public int getTotalProducts(){
+        return productMapper.getTotalProducts();
     }
 
     @Override

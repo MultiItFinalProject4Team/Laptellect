@@ -25,11 +25,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
-
-
+    /**
+     * The Crawling service.
+     */
     @Autowired
     CrawlingService crawlingService;
 
+    /**
+     * The Product service.
+     */
     @Autowired
     ProductService productService;
 
@@ -44,37 +48,30 @@ public class ProductController {
      */
 //상품별 크롤링 검색 기능
     @PostMapping("/test")
-    public String crawl(@RequestParam("products") String productType,
-                        Model model) throws IOException {
+    public String crawlProducts(@RequestParam("products") String productType, Model model) throws IOException {
         int typeNo;
-        String type;
 
         switch (productType) {
             case "1": // 노트북
                 typeNo = 1;
-                type = "laptop";
+
                 break;
             case "2": // 마우스
                 typeNo = 2;
-                type = "mouse";
                 break;
             case "3": // 키보드
                 typeNo = 3;
-                type = "keyboard";
                 break;
             default:
                 typeNo = 0; // 기본값 또는 에러 처리
-                type = "unknown";
                 break;
         }
 
-
         try {
-            List<ProductDTO> products = crawlingService.crawlProducts(type);
+            List<ProductDTO> products = crawlingService.crawlProducts(typeNo);
             log.info("제품 확인 {}", products);
 
             productService.saveProductsToDB(products, typeNo);
-
 
             if (!products.isEmpty()) {
                 for (int i = 0; i < products.size(); i++) {
@@ -84,12 +81,20 @@ public class ProductController {
                     ProductDTO productDTO = products.get(i); // 예시로 첫 번째 제품 사용
 
                     log.info("제품 코드 확인{}", productDTO.getProductCode());
-                    log.info("제품 코드 확인{}", productDTO.getProductCode());
-
-                    crawlingService.processAllLaptopDetails();
+                    switch (typeNo) {
+                        case 1:
+                            crawlingService.processLaptopDetails();
+                            break;
+                        case 2:
+                           // crawlingService.processMouseDetails(productDTO);
+                            break;
+                        case 3:
+                         //   crawlingService.processKeyboardDetails(productDTO);
+                            break;
+                    }
 
                     model.addAttribute("products", products);
-                    //  model.addAttribute("specDTO", specDTO); // 필요에 따라 추가
+
                 }
 
             }
@@ -112,15 +117,34 @@ public class ProductController {
      * @param model the model
      * @return the string
      */
-//상품리스트 조회
     @GetMapping("/productList")
-    public String ProductList(Model model) {
-        List<ProductDTO> products = productService.getStoredProducts();
+    public String ProductList(Model model,
+                              @RequestParam(defaultValue = "1") int pageNumber,
+                              @RequestParam(defaultValue = "12") int pageSize) {
+
+        //페이징 처리
+        List<ProductDTO> products = productService.getStoredProducts(pageNumber, pageSize);
+
+        // 전체 제품 수
+        int totalProducts = productService.getTotalProducts();
+
+        // 총 페이지 계산
+        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+
+        int displayPageCount = 10;
+        int startPage = Math.max(1, pageNumber - (displayPageCount / 2));
+        int endPage = Math.min(totalPages, startPage + displayPageCount - 1);
 
         model.addAttribute("products", products);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "product/productList";
     }
+
 
     /**
      * Product details string.
@@ -129,7 +153,6 @@ public class ProductController {
      * @param model       the model
      * @return the string
      */
-//상세 정보
     @GetMapping("/laptopDetails")
     public String productDetails(@RequestParam("productCode") String productCode,
                                  Model model) {
@@ -155,9 +178,7 @@ public class ProductController {
             }
 
 
-
-
-            model.addAttribute("options",options);
+            model.addAttribute("options", options);
             model.addAttribute("optionValue", optionsValue);
 
 

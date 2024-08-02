@@ -37,34 +37,35 @@
 
     <!-- 전체 제품 조회-->
     <select id="getAllProducts" resultType="productDTO" resultMap="productResultMap">
-        SELECT p.product_no,
-        p.type_no,
-        p.product_name,
-        p.price,
-        p.reference_code,
-        p.created_at,
-        p.updated_at,
-        p.product_code,
-        i.upload_name
+        SELECT
+            p.product_no,
+            p.type_no,
+            p.product_name,
+            p.price,
+            p.reference_code,
+            p.created_at,
+            p.updated_at,
+            p.product_code,
+            i.upload_name
         FROM
-        product p
-        JOIN images i
-        on i.reference_code = p.reference_code
+            product p
+        JOIN
+            images i
+        on
+            i.reference_code = p.reference_code
+        ORDER BY p.product_no
+        LIMIT #{pageSize} OFFSET #{offset}
 
     </select>
 
+    <select id="getTotalProducts" resultType="int">
+        SELECT COUNT(*) FROM product
+    </select>
 
     <!-- 선택 제품 조회-->
     <select id="getProductByCode" parameterType="String" resultType="laptopSpecDTO">
         SELECT * FROM product WHERE product_code = #{productCode}
     </select>
-
-
-
-    <insert id="saveCategoryOptions" parameterType="productCategoryDTO">
-        INSERT INTO product_category(type_no, options)
-        VALUES (#{typeNo}, #{options})
-    </insert>
 
 
     <select id="findByOptions" parameterType="String" resultType="productCategoryDTO">
@@ -115,9 +116,6 @@
         WHERE
         product_code = #{productCode}
     </select>
-
-
-
 
 
 

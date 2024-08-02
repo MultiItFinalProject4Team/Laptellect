@@ -44,15 +44,15 @@ public class CrawlingService {
     /**
      * 지정된 타입의 제품을 크롤링하는 메서드
      *
-     * @param type 크롤링할 제품의 유형(laptop, mouse, keyboard)
+     * @param typeNo 크롤링할 제품의 유형(laptop, mouse, keyboard)
      * @return 제품 정보를 담은 ProductDTO 리스트
      * @throws IOException HTTP 요청 중 발생 할 수있는 예외 처리
      */
-    public List<ProductDTO> crawlProducts(String type) throws IOException {
+    public List<ProductDTO> crawlProducts(int typeNo) throws IOException {
         List<ProductDTO> productList = new ArrayList<>();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            for (int page = 1; page <= 1; page++) {
-                String responseString = sendPostRequest(httpClient, page, type);
+            for (int page = 1; page <= 12; page++) {
+                String responseString = sendPostRequest(httpClient, page, typeNo);
                 parseHtml(responseString, productList);
                 log.info("productList확인{}", productList);
             }
@@ -71,13 +71,13 @@ public class CrawlingService {
      * @return 응답으로 받은 HTML 문자열
      * @throws IOException HTTP 요청 중 발생할 수 있는 예외
      */
-    private String sendPostRequest(CloseableHttpClient httpClient, int page, String productType) throws IOException {
+    private String sendPostRequest(CloseableHttpClient httpClient, int page, int productType) throws IOException {
         HttpPost post = new HttpPost(PRODUCT_LIST_URL); // 요청 보낼 url 설정
         String referer;
         StringEntity params;
 
         switch (productType) {
-            case "laptop":
+            case 1:
                 referer = "https://prod.danawa.com/list/?cate=112758&15main_11_02=";
                 params = new StringEntity("page=" + page +
                         "&listCategoryCode=758" +
@@ -86,10 +86,10 @@ public class CrawlingService {
                         "&physicsCate2=869" +
                         "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
-                        "&listCount=10");
+                        "&listCount=90");
                 log.info("laptopType {}", productType);
                 break;
-            case "mouse":
+            case 2:
                 referer = "https://prod.danawa.com/list/?cate=112787";
                 params = new StringEntity("page=" + page +
                         "&listCategoryCode=787" +
@@ -102,7 +102,7 @@ public class CrawlingService {
                 log.info("mouseType {}", productType);
                 break;
 
-            case "keyboard":
+            case 3:
                 referer = "https://prod.danawa.com/list/?cate=112782&15main_11_02";
                 params = new StringEntity("page=" + page +
                         "&listCategoryCode=782" +
@@ -177,13 +177,13 @@ public class CrawlingService {
         String imageUrl = product.select(".thumb_image img").attr("data-original");
 
         Elements specElements = product.select(".spec_list a");
-        String cate1 = specElements.size() > 2 ? specElements.get(0).text().trim() : "";
-        String cate2 = specElements.size() > 2 ? specElements.get(1).text().trim() : "";
-        String cate3 = specElements.size() > 2 ? specElements.get(2).text().trim() : "";
+//        String cate1 = specElements.size() > 2 ? specElements.get(0).text().trim() : "";
+//        String cate2 = specElements.size() > 2 ? specElements.get(1).text().trim() : "";
+//        String cate3 = specElements.size() > 2 ? specElements.get(2).text().trim() : "";
 
-        log.info("speccate1{}:", cate1);
-        log.info("speccate2{}:", cate2);
-        log.info("speccate3{}:", cate3);
+//        log.info("speccate1{}:", cate1);
+//        log.info("speccate2{}:", cate2);
+//        log.info("speccate3{}:", cate3);
 
 
         if (imageUrl == null || imageUrl.isEmpty()) { // 이미지 URL이 없을 경우 대체 URL 사용
@@ -210,7 +210,7 @@ public class CrawlingService {
         return ProductDTO;
     }
 
-    public void processAllLaptopDetails() {
+    public void processLaptopDetails() {
         //제품 번호의 리스트 가져옴
         List<ProductDTO> productNos = productMapper.findProduct();
 
@@ -218,14 +218,113 @@ public class CrawlingService {
 
         //각 제품에 대한 처리
         for (ProductDTO productDTO : productNos) {
-            log.info("1. 제품 리스트 단계 확인 작업 = {}",productNos);
-            log.info("2. 제품 리스트 단계 확인 작업 = {}",productDTO);
+            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
+            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
 
             int productNo = productDTO.getProductNo();
             String productCode = productDTO.getProductCode();
 
             getLaptopDetails(productNo, productCode);
         }
+    }
+
+    public void processMouseDetails() {
+        //제품 번호의 리스트 가져옴
+        List<ProductDTO> productNos = productMapper.findProduct();
+
+        log.info("productNos리스트 {}", productNos);
+
+        //각 제품에 대한 처리
+        for (ProductDTO productDTO : productNos) {
+            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
+            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
+
+            int productNo = productDTO.getProductNo();
+            String productCode = productDTO.getProductCode();
+
+            getLaptopDetails(productNo, productCode);
+        }
+    }
+
+    public void processKeyboardDetails() {
+        //제품 번호의 리스트 가져옴
+        List<ProductDTO> productNos = productMapper.findProduct();
+
+        log.info("productNos리스트 {}", productNos);
+
+        //각 제품에 대한 처리
+        for (ProductDTO productDTO : productNos) {
+            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
+            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
+
+            int productNo = productDTO.getProductNo();
+            String productCode = productDTO.getProductCode();
+
+            getLaptopDetails(productNo, productCode);
+        }
+    }
+
+    public static void reviewCrawler(ProductDTO productDTO) {
+        int totalPages = 1;
+        String url =
+                    "https://prod.danawa.com/info/dpg/ajax/companyProductReview.ajax.php?" +
+                            "t=0.8990118455164167" +
+                            "&prodCode=3798967" +
+                            "&cate1Code=861" +
+                            "&page=" + totalPages +
+                            "&limit=100" +
+                            "&score=0" +
+                            "&sortType=" +
+                            "&onlyPhotoReview=" +
+                            "&usefullScore=Y" +
+                            "&innerKeyword=" +
+                            "&subjectWord=0" +
+                            "&subjectWordString=" +
+                            "&subjectSimilarWordString=" +
+                            "&_=1722562970811";
+        try {
+
+
+            Document doc = Jsoup.connect(url).get();
+
+            Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
+
+            Elements paginationElements = doc.select(".page_nav_area .page_num");
+            if (!paginationElements.isEmpty()) {
+                // 마지막 페이지 번호를 추출
+                totalPages = Integer.parseInt(paginationElements.last().text());
+            }
+            log.info("페이지 = {}",paginationElements);
+
+            for(int pageNum =1; pageNum <= totalPages; pageNum++){
+                Document doc1 = Jsoup.connect(url + pageNum).get();
+
+                int reviewCount = 0;
+
+                for(Element review : reviews){
+                    String ratingStyle = review.select(".star_mask").attr("style");
+                    String rating = ratingStyle.replace("width:","").replace("%","").trim();
+
+                    String title = review.select(".tit_W .tit").text();
+
+                    String content = review.select(".atc").text();
+
+                    reviewCount++;
+
+                    log.info("상품 별점 = {}, 상품 리뷰 제목 = {}, 상품 리뷰 내용 = {}", rating, title, content);
+                }
+                log.info("조회된 리뷰 계수  = {}", reviewCount);
+
+            }
+
+
+
+
+        } catch (Exception e){
+
+        }
+
+
     }
 
 
@@ -237,20 +336,19 @@ public class CrawlingService {
      * @return 제품 세부 정보가 담긴 LaptopSpecDTO 객체
      */
     public LaptopSpecDTO getLaptopDetails(int productNo, String productCode) {
-        log.info("크롤링 사전 준비 제품 번호 = {} ",productNo);
-        log.info("크롤링 사전 준비 제품 코드 = {} ",productCode);
+        log.info("크롤링 사전 준비 제품 번호 = {} ", productNo);
+        log.info("크롤링 사전 준비 제품 코드 = {} ", productCode);
         LaptopSpecDTO laptopSpecDTO = new LaptopSpecDTO();
 
         try {
 
-            String cate = "112758";
-            String url = PRODUCT_DETAILS_URL;
-            String referer = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=" + cate;
+
+            String referer = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=112758";
             String bodyData = "pcode=" + productCode +
                     "&cate1=860" +
                     "&cate2=869";
 
-            String responseHtml = sendPostRequest(url, referer, bodyData); // 다나와에 Post 요청
+            String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
             Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
 
 
@@ -379,8 +477,8 @@ public class CrawlingService {
                     log.info("옵션 키값 = {}, 옵션 이름 = {}, 옵션 값 = {}", options, specName, specValue);
 
                     //중복 확인 쿼리
-                  int exists = productMapper.checkSpecExists(productNo, options, specValue);
-                    if(exists == 0){
+                    int exists = productMapper.checkSpecExists(productNo, options, specValue);
+                    if (exists == 0) {
                         productMapper.insertProductSpec(productNo, options, specValue);
                         insertCount++;
                         log.info("ProductSpec Insert 완료 (현재 횟수: {})", insertCount);
@@ -391,7 +489,7 @@ public class CrawlingService {
                 }
             }
 
-            log.info("ProductSpec Insert 실행횟수 확인 = {}",insertCount);
+            log.info("ProductSpec Insert 실행횟수 확인 = {}", insertCount);
         } catch (IOException e) {
             log.error("Error while getting product details", e);
         }
@@ -411,7 +509,7 @@ public class CrawlingService {
     private static String sendPostRequest(String url, String referer, String bodyData) throws IOException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpPost post = new HttpPost(url);
-            log.info("url 확인 {} =",url);
+            log.info("url 확인 {} =", url);
             post.setHeader("Referer", referer);
             log.info("리퍼러 확인 {} =", referer);
             post.setHeader("Content-Type", "application/x-www-form-urlencoded");

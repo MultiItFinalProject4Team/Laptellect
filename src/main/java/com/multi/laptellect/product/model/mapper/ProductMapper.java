@@ -17,7 +17,9 @@ public interface ProductMapper {
 
     int countByProductCode(String productCode); //상품코드 계수
 
-    List<ProductDTO> getAllProducts();
+    List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
+
+    int getTotalProducts();
 
     LaptopSpecDTO getProductByCode(String productCode);
 

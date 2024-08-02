@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<html layout:decorate="~{common/layout}">
+
 <head>
     <meta charset="UTF-8">
     <title>Product Details</title>
@@ -31,6 +31,10 @@
                     <td th:text="${price + '원'}">가격</td>
                 </tr>
             </table>
+            <div>
+                <a class="btn btn-primary" href="#" role="button">장바구니</a>
+                <a class="btn btn-primary" href="#" role="button">위시리스트</a>
+            </div>
 
             <h2>상세 정보</h2>
             <!-- 상품 스펙 정보 테이블 -->
@@ -51,6 +55,7 @@
 
             <!-- 결제 폼 -->
             <form th:action="@{/payment}" method="post">
+                <input type="hidden" name="img" th:value="${img}">
                 <input type="hidden" name="productName" th:value="${productName}">
                 <input type="hidden" name="price" th:value="${price}">
                 <button type="submit" class="btn btn-primary mt-4">결제하기</button>
