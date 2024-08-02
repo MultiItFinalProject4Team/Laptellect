@@ -39,14 +39,15 @@ CREATE TABLE mem_social_member (
 CREATE TABLE mem_delivery_address (
     address_id INT NOT NULL AUTO_INCREMENT,
     member_no INT NOT NULL,
-    recipient_name VARCHAR(100) NOT NULL,
-    postal_code VARCHAR(10) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    detail_address VARCHAR(255) NOT NULL,
-    recipient_phone VARCHAR(15) NOT NULL,
-    request VARCHAR(255) NOT NULL,
+    address_name VARCHAR(255) NOT NULL,
+    recipient_name VARCHAR(100),
+    postal_code VARCHAR(10),
+    address VARCHAR(255),
+    detail_address VARCHAR(255),
+    recipient_phone VARCHAR(15),
+    request VARCHAR(255),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (address_id),
     FOREIGN KEY (member_no) REFERENCES mem_member(member_no)
 );

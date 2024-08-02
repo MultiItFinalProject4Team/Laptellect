@@ -19,6 +19,6 @@ public class AddressDTO {
     private String postalCode;
     private String address;
     private String detailAddress;
-    private String tel;
+    private String recipientPhone;
     private String request;
 }

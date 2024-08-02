@@ -167,7 +167,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public boolean isMemberByPassword(String password) {
-        int memberNo = SecurityUtil.getUserDetails().getMemberNo();
+        int memberNo = SecurityUtil.getUserNo();
         String userPassword = memberMapper.findPasswordByMemberNo(memberNo);
 
         return bCryptPasswordEncoder.matches(password, userPassword);
@@ -180,7 +180,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void sendSms(String tel) throws Exception {
-        int memberNo = SecurityUtil.getUserDetails().getMemberNo();
+        int memberNo = SecurityUtil.getUserNo();
         String verifyCode;
 
         do {

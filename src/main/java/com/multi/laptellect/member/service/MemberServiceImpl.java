@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -123,18 +125,60 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public int createMemberAddress(AddressDTO addressDTO) throws Exception {
-        int result = 1;
-        int memberNo = SecurityUtil.getUserDetails().getMemberNo();
+        int memberNo = SecurityUtil.getUserNo();
         addressDTO.setMemberNo(memberNo);
 
         String addressName = addressDTO.getAddressName();
+        int addressCount = memberMapper.findAddressCount(memberNo);
 
-        // 배송지 명이 Null이면 Error 발생하므로 검증하기 위함
-        if(addressName == null) result = 0;
-
-        memberMapper.insertAddress(addressDTO);
-        log.info("주소 Insert 완료 = {}", addressDTO);
-
-        return result;
+        // 배송지가 10개 초과하지 않도록 검증하기 위함
+        if(addressCount >= 10) {
+            log.error("사용자 배송지 10개 초과 = {}", addressCount);
+            return 101;
+        }
+        if(memberMapper.insertAddress(addressDTO) != 0) {
+            log.info("주소 Insert 완료 = {}", addressDTO);
+            return 1;
+        } else {
+            throw  new Exception("Insert Error");
+        }
     }
+
+    @Override
+    public ArrayList<AddressDTO> findAllAddressByMemberNo() throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+
+        return memberMapper.findAllAddressByMemberNo(memberNo);
+    }
+
+    @Override
+    public AddressDTO findAddressByAddressId(int addressId) throws Exception {
+        return memberMapper.findAllAddressByAddressId(addressId);
+    }
+
+    @Override
+    public int updateMemberAddress(AddressDTO addressDTO) {
+        int userNo = SecurityUtil.getUserNo();
+        int memberNo = addressDTO.getMemberNo();
+
+        log.debug("유저 일치 검증 시작 = {} {}", userNo, memberNo);
+        // 로그인 한 유저가 지우는 배송지의 유저와 일치하지 않으면 삭제 거부
+        if(userNo != memberNo) return 401;
+
+        log.debug("배송지 주소 업데이트 시작 = {}", addressDTO);
+        return memberMapper.updateAddress(addressDTO);
+    }
+
+    @Override
+    public boolean deleteMemberAddress(int addressId) {
+        int userNo = SecurityUtil.getUserNo();
+        int memberNo = memberMapper.findOwnerByAddressId(addressId);
+
+        // 로그인 한 유저가 지우는 배송지의 유저와 일치하지 않으면 삭제 거부
+        if(userNo != memberNo) return false;
+
+        return memberMapper.deleteAddressByAddressId(addressId) != 0;
+    }
+
+
 }

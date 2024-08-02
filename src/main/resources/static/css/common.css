@@ -18,6 +18,17 @@
     text-align: center;
   }
 
+  /* Button */
+  .btn-custom-primary {
+    background-color: #3498DB;
+    color: white;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: #2980B9;
+    color: white;
+  }
+
   /* modal */
     .modal-img {
             width: 48px;
