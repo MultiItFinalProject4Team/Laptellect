@@ -1,9 +1,12 @@
 package com.multi.laptellect.member.model.mapper;
 
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.ArrayList;
 
 @Mapper
 public interface MemberMapper {
@@ -37,4 +40,21 @@ public interface MemberMapper {
 
     @Update("UPDATE mem_password SET member_password = #{ password } WHERE member_no = #{ memberNo }")
     void updatePassword(int memberNo, String password);
+
+    int insertAddress(AddressDTO addressDTO);
+
+    ArrayList<AddressDTO> findAllAddressByMemberNo(int memberNo);
+
+    @Select("SELECT COUNT(*) FROM mem_delivery_address WHERE member_no = #{ memberNo }")
+    int findAddressCount(int memberNo);
+
+    @Select("SELECT * FROM mem_delivery_address WHERE address_id = #{ addressId }")
+    AddressDTO findAllAddressByAddressId(int addressId);
+
+    @Select("SELECT member_no FROM mem_delivery_address WHERE address_id = #{ addressId }")
+    int findOwnerByAddressId(int addressId);
+
+    int deleteAddressByAddressId(int addressId);
+
+    int updateAddress(AddressDTO addressDTO);
 }

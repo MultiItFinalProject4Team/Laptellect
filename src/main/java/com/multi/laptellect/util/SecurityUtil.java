@@ -42,6 +42,10 @@ public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 �
         return (CustomUserDetails) authentication.getPrincipal();
     }
 
+    public static int getUserNo() {
+        return getUserDetails().getMemberNo();
+    }
+
     /**
      * 로그인한 사용자의 세션을 업데이트 하기 위한 메서드
      *
