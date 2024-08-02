@@ -1,0 +1,82 @@
+  /* logo */
+  .navbar-brand.logo.h1 { font-size: 30px; }
+  .logo { color: #3498DB }
+
+  /* nav bar */
+  #templatemo_main_nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .nav.navbar-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Button */
+  .btn-custom-primary {
+    background-color: #3498DB;
+    color: white;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: #2980B9;
+    color: white;
+  }
+
+  /* modal */
+    .modal-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 75%;
+    }
+    .image-container {
+            display: inline-block;
+            text-align: center;
+            margin: 0 10px;
+    }
+    .modal-dialog {
+        max-width: 350px;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .table th, .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Footer */
+    #tempaltemo_footer a { color: #dcdde1;}
+    #tempaltemo_footer a:hover { color: #3498DB;}
+    #tempaltemo_footer ul.footer-link-list li { padding-top: 10px;}
+    #tempaltemo_footer ul.footer-icons li {
+      width: 2.6em;
+      height: 2.6em;
+      line-height: 2.6em;
+    }
+    #tempaltemo_footer ul.footer-icons li:hover {
+      background-color: #cfd6e1;
+      transition: .5s;
+    }
+    #tempaltemo_footer ul.footer-icons li:hover i {
+      color: #212934;
+      transition: .5s;
+    }
+    #tempaltemo_footer .border-light { border-color: #2d343f !important;}
+
+    #wrapper{
+      height: auto;
+      min-height: 100%;
+      padding-bottom: 60px;
+    }
+
+    body { font-family: 'Noto Sans KR', sans-serif; }

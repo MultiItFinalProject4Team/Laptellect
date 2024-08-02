@@ -1,8 +1,8 @@
 package com.multi.laptellect.payment.service;
 
 import com.multi.laptellect.api.payment.ApiKeys;
-import com.multi.laptellect.payment.model.dto.InsertDTO;
-import com.multi.laptellect.payment.model.dto.VerificationRequestDTO;
+import com.multi.laptellect.payment.model.dao.PaymentDAO;
+import com.multi.laptellect.payment.model.dto.*;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
@@ -14,27 +14,73 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class PaymentService {
 
     private final ApiKeys apiKeys;
-    private final TestService testService;
+
 
     @Autowired
-    public PaymentService(ApiKeys apiKeys, TestService testService) {
+    private PaymentDAO paymentDAO;
+
+    @Autowired
+    public PaymentService(ApiKeys apiKeys) {
         this.apiKeys = apiKeys;
-        this.testService = testService;
+    }
+
+    public int usepoint(PaymentpointDTO paymentpointDTO){
+        return paymentDAO.usepoint(paymentpointDTO);
+    }
+
+    public int givepoint(PaymentpointDTO paymentpointDTO){
+        return paymentDAO.givepoint(paymentpointDTO);
     }
 
     @Transactional
-    public boolean verifyPayment(VerificationRequestDTO request, InsertDTO insertDTO) throws IamportResponseException, IOException {
+    public PaymentpageDTO selectpaymentpage() {
+        return paymentDAO.selectpaymentpage();
+    }
+
+    @Transactional
+    public int insertPayment(PaymentDTO paymentDTO) {
+        return paymentDAO.insertPayment(paymentDTO);
+    }
+
+    @Transactional
+    public List<OrderlistDTO> selectOrders() {
+        return paymentDAO.selectOrders();
+    }
+
+
+    @Transactional
+    public int updateRefundStatus(String ImpUid) {
+        return paymentDAO.updateRefundStatus(ImpUid);
+    }
+
+    @Transactional
+    public int refundpoint(String impUid) {
+        PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(impUid);
+        if (paymentpointDTO != null && paymentpointDTO.getPointchange() != null) {
+            int usedPoints = Math.abs(Integer.parseInt(paymentpointDTO.getPointchange()));
+            if (usedPoints > 0) {
+                paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
+                paymentDAO.refundpoint(paymentpointDTO);
+                return usedPoints;
+            }
+        }
+        return 0;
+    }
+
+    @Transactional
+    public boolean verifyPayment(VerificationRequestDTO request, PaymentDTO paymentDTO) throws IamportResponseException, IOException {
         IamportClient client = new IamportClient(apiKeys.getIamportApiKey(), apiKeys.getIamportApiSecret());
         IamportResponse<Payment> payment = client.paymentByImpUid(request.getImpUid());
 
         if (payment.getResponse().getAmount().compareTo(request.getAmount()) == 0) {
-            testService.insertTest(insertDTO);
-            System.out.println(insertDTO);
+            insertPayment(paymentDTO);
+            System.out.println(paymentDTO);
             return true;
         }
         return false;
@@ -63,4 +109,28 @@ public class PaymentService {
 
         return client.cancelPaymentByImpUid(cancelData);
     }
+
+    @Transactional
+    public int saveReview(PaymentReviewDTO paymentReviewDTO) {
+        return paymentDAO.saveReview(paymentReviewDTO);
+    }
+
+    public List<String> getReviewedOrders() {
+        return paymentDAO.getReviewedOrders();
+    }
+
+    public PaymentpointDTO selectpoint() {
+        String username = "jack";  // 고정된 username 사용
+        PaymentpointDTO paymentpointDTO = paymentDAO.selectpoint(username);
+
+        if (paymentpointDTO == null) {
+            paymentpointDTO = new PaymentpointDTO();
+            paymentpointDTO.setUsername(username);
+            paymentpointDTO.setPossessionpoint(0);  // 기본값 설정
+        }
+
+        return paymentpointDTO;
+    }
+
+
 }

@@ -6,13 +6,15 @@ import java.sql.Timestamp;
 
 @Data
 public class ProductDTO {
-    private String productNo;
+    private int productNo;
     private String productCode;
     private int typeNo;
     private String productName;
     private int price;
     private String referenceCode;
+    private String image;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
 }
+

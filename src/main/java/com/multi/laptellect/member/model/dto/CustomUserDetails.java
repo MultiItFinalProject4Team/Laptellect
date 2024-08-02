@@ -40,7 +40,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
     @Override
     public String getUsername() {
-        return memberDTO.getUserName();
+        return memberDTO.getMemberName();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
     }
 
     public String getNickName() {
-        return memberDTO.getUserName();
+        return memberDTO.getNickName();
     }
 
     public String getEmail() {
@@ -91,8 +91,14 @@ public class CustomUserDetails implements UserDetails, Serializable {
         return  memberDTO.getLoginType();
     }
 
+    public String getMemberName() {
+        return memberDTO.getMemberName();
+    }
+
     public void update(MemberDTO updateDTO) {
-        this.memberDTO.setUserName(updateDTO.getUserName());
+        this.memberDTO.setMemberName(updateDTO.getMemberName());
+        this.memberDTO.setNickName(updateDTO.getNickName());
+        this.memberDTO.setEmail(updateDTO.getEmail());
         this.memberDTO.setTel(updateDTO.getTel());
         this.memberDTO.setPoint(updateDTO.getPoint());
     }

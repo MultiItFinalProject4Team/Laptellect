@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Admin Layout</title>
@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- css + js 파일 Load-->
-  <link rel="stylesheet" th:href="@{/css/adminsidebar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/admin/adminpagesidebar.css}"/>
 
 </head>
 <body>
@@ -40,54 +40,98 @@
   }
   /*]]>*/
 </script>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/"><strong>Laptellect</strong></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">HOME</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/recommended">추천</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/product/productList">스토어</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/customer">고객센터</a>
+        </li>
+        <th:block sec:authorize="isAnonymous()">
+          <li class="nav-item">
+            <a class="nav-link" href="/signin">로그인</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/signup">회원가입</a>
+          </li>
+        </th:block>
+        <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">마이페이지</a>
+          </li>
+        </th:block>
+
+        <th:block sec:authorize="isAuthenticated()">
+          <li class="nav-item">
+            <a class="nav-link" href="/signout">로그아웃</a>
+          </li>
+        </th:block>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 <div class="d-flex">
     <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-        <img th:src="@{/img/common/logo.png}" alt="Logo" id="adminLogo"/>
-        <span class="fs-4">FilmPick</span>
+        <span class="fs-4">Laptellect</span>
       </a>
+      <p>관리자님 환영합니다</p>
       <hr>
-      <div class="profile">
-        <p th:text="${#authentication.principal.nickName}">사용자이름</p>
-        <p th:text="${#authentication.principal.Authorities}">권한 이름</p>
-      </div>
+<!--      <div class="profile">-->
+<!--        <p th:text="${#authentication.principal.nickName}">사용자이름</p>-->
+<!--        <p th:text="${#authentication.principal.Authorities}">권한 이름</p>-->
+<!--      </div>-->
       <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-          <a th:href="@{/home}" class="nav-link text-white">사이트 바로가기</a>
-        </li>
 <!--        <li class="nav-item">-->
-<!--          <a th:href="@{/admin}" class="nav-link text-white">대시보드</a>-->
+<!--          <a th:href="@{/home}" class="nav-link text-white">사이트 바로가기</a>-->
 <!--        </li>-->
-        <hr>
         <li class="nav-item">
-          <a href="/admin/movie/moviemanage" class="nav-link text-white">영화 관리</a>
-        </li>
-        <li class="nav-item">
-          <a href="/admin/ticketing" class="nav-link text-white">예매 내역 관리</a>
-        </li>
-        <li class="nav-item">
-          <a th:href="@{/admin/cinemamanage}" class="nav-link text-white">영화관 관리</a>
+          <a th:href="@{/admin/dashboard}" class="nav-link text-white">대시보드</a>
         </li>
         <hr>
         <li class="nav-item">
-          <a th:href="@{/admin/membermanage}" class="nav-link text-white">회원 관리</a>
-        </li>
-        <li class="nav-item">
-          <a th:href="@{/admin/coupon}" class="nav-link text-white">쿠폰 관리</a>
+          <a href="/admin/movie/moviemanage" class="nav-link text-white">회원 및 권한관리</a>
         </li>
         <hr>
         <li class="nav-item">
-          <a th:href="@{/admin/product}" class="nav-link text-white">상품 관리</a>
+          <a href="/admin/ticketing" class="nav-link text-white">상품 관리</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/admin/orders_manage}" class="nav-link text-white">주문 관리</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/admin/reviews_manage}" class="nav-link text-white">리뷰 관리</a>
         </li>
         <hr>
         <li class="nav-item">
-          <a th:href="@{/admin/notice}" class="nav-link text-white">공지 관리</a>
+          <a th:href="@{/admin/coupon}" class="nav-link text-white">공지사항 관리</a>
         </li>
         <hr>
         <li class="nav-item">
-          <a th:href="@{/admin/question}" class="nav-link text-white">Q&A 관리</a>
+          <a th:href="@{/admin/product}" class="nav-link text-white">이벤트 관리</a>
         </li>
+        <hr>
+        <li class="nav-item">
+          <a th:href="@{/admin/notice}" class="nav-link text-white">고객센터 관리</a>
+        </li>
+<!--        <hr>-->
+<!--        <li class="nav-item">-->
+<!--          <a th:href="@{/admin/question}" class="nav-link text-white">Q&A 관리</a>-->
+<!--        </li>-->
       </ul>
       <hr>
     </div>

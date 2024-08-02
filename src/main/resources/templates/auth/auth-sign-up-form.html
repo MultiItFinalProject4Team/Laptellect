@@ -6,239 +6,85 @@
   <html layout:decorate="~{common/layout}">
     <head>
       <title>SingUp Page</title>
-      <!--    <link rel="stylesheet" th:href="@{/css/signup.css}">-->
-      <!--    <script type="text/javascript" th:src="@{/js/signup.js}"></script>-->
+          <link rel="stylesheet" th:href="@{/css/auth/signup.css}">
+          <script type="text/javascript" th:src="@{/js/auth/signup.js}"></script>
     </head>
     <body>
       <div layout:fragment="content">
-        <div class="container">
-          <!--        <div class="logo">-->
-          <!--            <h1 id="signupTitle">Laptellect</h1>-->
-          <!--        </div>-->
-
-<!--          <form>-->
-<!--            <div class="form-floating">-->
-<!--              <input-->
-<!--                type="text"-->
-<!--                class="form-control"-->
-<!--                id="id2"-->
-<!--                placeholder="id"-->
-<!--                value=""-->
-<!--              />-->
-<!--              <label for="id2">아이디</label>-->
-<!--              <br />-->
-<!--              &lt;!&ndash;                is-invalid 클래스에 넣으면 경고&ndash;&gt;-->
-<!--            </div>-->
-
-<!--            <div class="form-floating">-->
-<!--              <input-->
-<!--                type="email"-->
-<!--                class="form-control"-->
-<!--                id="email2"-->
-<!--                placeholder="email"-->
-<!--                value=""-->
-<!--              />-->
-<!--              <label for="email2">이메일</label>-->
-<!--              <br />-->
-<!--            </div>-->
-
-<!--            <div class="form-floating">-->
-<!--              <input-->
-<!--                type="password"-->
-<!--                class="form-control"-->
-<!--                id="pass"-->
-<!--                placeholder="pass"-->
-<!--                value=""-->
-<!--              />-->
-<!--              <label for="pass">비밀번호</label>-->
-<!--              <br />-->
-<!--            </div>-->
-
-<!--            <div class="form-floating">-->
-<!--              <input-->
-<!--                type="password"-->
-<!--                class="form-control"-->
-<!--                id="pass2"-->
-<!--                placeholder="pass2"-->
-<!--                value=""-->
-<!--              />-->
-<!--              <label for="pass2">비밀번호 확인</label>-->
-<!--              <br />-->
-<!--            </div>-->
-<!--          </form>-->
-
-          <form
-            id="signUpForm"
-            method="post"
-            action="/signup"
-            th:object="${member}"
-          >
-            <div class="form-group" mb-3>
-              <label for="member_name"
-                ><i class="fa fa-envelope-o" aria-hidden="true"></i>
-                아이디</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="member_name"
-                th:field="*{userName}"
-                placeholder="로그인 시 사용할 아이디를 입력해주세요."
-                required
-              />
+        <br> <br>
+        <div id="container">
+          <div id="loginBox">
+            <div class="logo">
+              <h1 id="signupTitle">Laptellect</h1>
+            </div>
+            <div id="inputBox">
+                <div class="form-floating id-form">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="id"
+                        placeholder="id"
+                        value=""
+                />
+                <label for="id">아이디</label>
+              </div>
               <div class="error-message" id="idError" style="color: red">
                 중복된 아이디 입니다.
               </div>
               <br />
-            </div>
-            <div class="form-group" mb-3>
-              <label for="email"
-                ><i class="fa fa-envelope-o" aria-hidden="true"></i>
-                이메일</label
-              >
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                th:field="*{email}"
-                placeholder="로그인 시 사용할 이메일을 입력해주세요."
-                required
-              />
-              <div class="error-message" id="emailError" style="color: red">
-                중복된 이메일 입니다.
-              </div>
-              <br />
-            </div>
-            <div class="form-group" mb-3>
-              <label for="password"><i class="fas fa-lock"></i> 비밀번호</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                placeholder="최소 8개의 숫자와 문자 또는 특수기호를 입력해주세요."
-                pattern='(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|&lt;&gt;]).{8,}'
-                title="최소 8개의 숫자와 문자 또는 특수기호를 입력해주세요."
-                required
-              />
-              <br />
-            </div>
-            <div class="form-group" mb-3>
-              <label for="confirmPassword"
-                ><i class="fas fa-lock"></i> 비밀번호 확인</label
-              >
-              <input
-                type="password"
-                class="form-control"
-                id="confirmPassword"
-                th:field="*{password}"
-                placeholder="일상적인 비밀번호는 사용할 수 없습니다."
-                required
-              />
 
-              <div
-                class="error-message"
-                id="passwordError"
-                style="display: none; color: red"
-              >
-                비밀번호가 일치하지 않습니다.
+              <div class="form-floating password-form">
+                <input
+                        type="password"
+                        class="form-control"
+                        id="pass"
+                        placeholder="pass"
+                        value=""
+                />
+                <label for="pass">비밀번호</label>
+                <br />
               </div>
-              <div
-                class="error-message"
-                id="passwordError2"
-                style="display: none; color: red"
-              >
-                비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를
-                포함해야 합니다.
+
+              <div class="form-floating password-form">
+                <input
+                        type="password"
+                        class="form-control"
+                        id="pass2"
+                        placeholder="pass2"
+                        value=""
+                        style="pointer-events: none;
+                       user-select: none;"
+                />
+                <label for="pass2">비밀번호 확인</label>
+
               </div>
+              <div class="error-message" id="passwordError" style="color: red;">비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.</div>
+              <div class="error-message" id="passwordError2" style="color: red;">비밀번호가 일치하지 않습니다.</div>
               <br />
+
+              <div class="input-group mb-3">
+                <div class="form-floating flex-grow-1">
+                  <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
+                  <label for="emailInput">이메일을 입력해주세요.</label>
+                </div>
+                <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
+              </div>
+              <div class="error-message" id="emailError" style="color: red;">중복된 이메일 입니다.</div>
+              <br />
+
+              <div class="form-floating emailVer-form">
+                <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
+                <label for="emailVer">인증번호를 입력해주세요.</label>
+              </div>
+              <div class="error-message" id="emailError2" style="color: red;">틀린 인증번호 입니다.</div>
+              <br />
+
+              <button type="submit" class="btn btn-primary w-100 nextBtn" id="insertBtn">
+                회원가입
+              </button>
             </div>
-            <button type="submit" class="btn btn-primary w-100" id="sing-up">
-              회원가입
-            </button>
-          </form>
+          </div>
         </div>
-
-        <script>
-          $(function () {
-            $(document).ready(function () {
-              console.log("테스트");
- 
-              $(".error-message").hide();
-              $("#sing-up").prop("disabled", true);
-
-              // 정규식 변수
-              let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-
-              function isEmailAndNameAndPassWord() {
-                $("#sing-up").prop(
-                  "disabled",
-                  $("#idError").is(":visible") ||
-                    $("#emailError").is(":visible") ||
-                    $("#passwordError").is(":visible") ||
-                    $("#passwordError2").is(":visible")
-                );
-              }
-
-              $("#member_name").on("blur", function () {
-                let memberName = $(this).val();
-                console.log(memberName);
-
-                $.ajax({
-                  url: "/api/check-id",
-                  type: "POST",
-                  data: { userName: memberName },
-                  success: function (response) {
-                    if (response === true) {
-                      console.log("중복된 아이디 입니다");
-                      $("#idError").show();
-                    } else if (response === false) {
-                      console.log("중복되지 않은 아이디 입니다");
-                      $("#idError").hide();
-                    }
-                    isEmailAndNameAndPassWord();
-                  },
-                  error: function () {
-                    console.log("아이디 중복 확인 실패");
-                    isEmailAndNameAndPassWord();
-                  },
-                });
-              });
-
-              $("#email").on("blur", function () {
-                let email = $(this).val();
-                console.log(email);
-
-                if (email.length == 0) {
-                  $("#emailError").hide();
-                  isEmailAndNameAndPassWord();
-                  return;
-                }
-
-                $.ajax({
-                  url: "/api/check-email",
-                  type: "POST",
-                  data: { email: email },
-                  success: function (response) {
-                    if (response === true) {
-                      console.log("중복된 이메일 입니다");
-                      $("#emailError").show();
-                    } else if (response === false) {
-                      console.log("중복되지 않은 이메일 입니다");
-                      $("#emailError").hide();
-                    }
-                    isEmailAndNameAndPassWord();
-                  },
-                  error: function () {
-                    console.log("이메일 중복 확인 실패");
-                    isEmailAndNameAndPassWord();
-                  },
-                });
-              });
-
-              
-            });
-          });
-        </script>
       </div>
     </body>
   </html>

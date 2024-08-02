@@ -5,32 +5,25 @@
     <meta charset="UTF-8">
     <title>공지사항</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style>
-        .nav-pills .nav-link {
-            font-size: 25px;
-        }
-        .nav-link {
-        margin: 0 100px;
-    }
-    </style>
+    <link href="/css/customer/nav.css" rel="stylesheet">
 </head>
 <body>
 <div layout:fragment="content">
 <div class="container mt-5">
-<header>
-<h1 align="center">고객센터</h1>
-<ul class="nav nav-pills justify-content-center">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/customer/user/customer_notice">공지사항</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/customer/user/customer_personalq">1:1 문의</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/customer/user/customer_chatbot">챗 봇</a>
-    </li>
-</ul>
-</header>
+    <header>
+        <h1 align="center">고객센터</h1>
+        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_notice">공지사항</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  cus_nav" href="/customer/user/customer_personalq">1:1 문의</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
+            </li>
+        </ul>
+    </header>
 
 <table class="table table-striped" style="text-align: center">
     <thead>
@@ -41,7 +34,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="note : ${notice}" class="align-middle">
+    <tr th:each="note : ${list}" class="align-middle">
         <td th:text="${note.No}">번호</td>
         <td style="text-align: center;">
             <a style="text-decoration: none;" th:href="@{/customer/user/notice_detail/{noticeNo}(noticeNo=${note.No})}" th:text="${note.No}"></a>
@@ -51,6 +44,25 @@
     </tbody>
 </table>
 </div>
+    <div class="pagination-container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/customer/user/customer_notice(page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/customer/user/customer_notice(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                </li>
+                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/customer/user/customer_notice(page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 </body>
 </html>

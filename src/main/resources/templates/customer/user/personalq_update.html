@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>1:1 문의</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/customer/ckeditor.css">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
+    <style>
+        .file-input-wrapper {
+            margin-bottom: 10px;
+        }
+    </style>
+    <link href="/css/customer/nav.css" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container mt-5">
+    <header>
+        <h1 align="center">고객센터</h1>
+        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
+            <li class="nav-item">
+                <a class="nav-link cus_nav" href="/customer/user/customer_notice">공지사항</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
+            </li>
+        </ul>
+    </header>
+    <form action="/customer/user/update_personalq" method="post" enctype="multipart/form-data">
+        <div class="input-group form-row">
+        <label class="input-group-text" for="title">제목:</label>
+        <input class="col-md-9" type="text" id="title" name="title" th:value="${dto.title}" required><br><br>
+
+        <label class="input-group-text" for="inputGroupSelect01" >카테고리</label>
+        <select class="form-select col-md-3" id="inputGroupSelect01" name="personalqCategorycode">
+            <option th:each="categories : ${category}"
+                    th:value="${categories.personalqCategorycode}"
+                    th:text="${categories.personalqCategoryname}">
+            </option>
+        </select>
+        </div>
+        <div class="editor-container editor-container_classic-editor" id="editor-container">
+            <div class="editor-container__editor" aria-required="true"><textarea id="content" name="content" th:text="${dto.content}"></textarea></div>
+        </div>
+
+        <input type="hidden" id="personalqNo" name="personalqNo" th:value="${dto.personalqNo}">
+        <button type="submit">수정하기</button>
+    </form>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.2/"
+            }
+        }
+    </script>
+    <script type="module" src="/js/customer/ckeditor.js"></script>
+    <script>
+        $(document).ready(function() {
+            var maxLength = 100;
+
+            $('#title').on('input', function() {
+                var length = $(this).val().length;
+                if (length > maxLength) {
+                    alert('최대 100자까지 입력 가능합니다.');
+                    $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
+                }
+            });
+        });
+    </script>
+</div>
+</div>
+</body>
+</html>

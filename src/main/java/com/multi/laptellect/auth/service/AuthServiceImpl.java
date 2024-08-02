@@ -2,12 +2,10 @@ package com.multi.laptellect.auth.service;
 
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
 import com.multi.laptellect.common.model.Email;
+import com.multi.laptellect.config.api.KakaoConfig;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
-import com.multi.laptellect.util.CodeGenerator;
-import com.multi.laptellect.util.EmailUtil;
-import com.multi.laptellect.util.RedisUtil;
-import com.multi.laptellect.util.SecurityUtil;
+import com.multi.laptellect.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 
+/**
+ * 인증/인가에 관한 비지니스 로직을 처리하기 위한 클래스
+ *
+ * @author : 이강석
+ * @fileName : AuthServiceImpl.java
+ * @since : 2024-07-26
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,31 +30,40 @@ public class AuthServiceImpl implements AuthService{
     private final MemberMapper memberMapper;
     private final EmailUtil emailUtil;
     private final RedisUtil redisUtil;
+    private final SmsUtil smsUtil;
+    private final KakaoConfig kakaoConfig;
 
     //    private final SecureRandom secureRandom;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void createMember(MemberDTO memberDTO) throws SQLException {
+        String loginType = memberDTO.getLoginType();
 
         // 비밀번호 암호화
         String bPw = bCryptPasswordEncoder.encode(memberDTO.getPassword());
         memberDTO.setPassword(bPw);
 
-        if(memberDTO.getLoginType().equals("local")) { // 일반 회원가입
-            if(authMapper.insertMember(memberDTO) == 0) {
-                throw new SQLException("Failed to insert member");
-            }
-
-            if(authMapper.insertPassword(memberDTO) == 0) {
-                throw new SQLException("Failed to insert password");
-            }
-        } else { // 소셜 회원가입
-            // ID 설정 ( 추후 수정 )
-            if(authMapper.insertMember(memberDTO) == 0) {
-                throw new SQLException("Failed to insert member");
-            }
+        if (loginType == null) {
+            loginType = "local";
+            memberDTO.setLoginType(loginType);
         }
+
+//        if(memberDTO.getLoginType().equals("local")) { // 일반 회원가입
+//            if(authMapper.insertMember(memberDTO) == 0) {
+//                throw new SQLException("Failed to insert member");
+//            }
+//
+//            if(authMapper.insertPassword(memberDTO) == 0) {
+//                throw new SQLException("Failed to insert password");
+//            }
+//        } else { // 소셜 회원가입
+//            // ID 설정 ( 추후 수정 )
+//            if(authMapper.insertMember(memberDTO) == 0) {
+//                throw new SQLException("Failed to insert member");
+//            }
+//        }
 
         switch (memberDTO.getLoginType()) {
             case "kakao":
@@ -111,6 +125,8 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void sendTempPassword(Email email) throws Exception { // 임시 비밀번호 발급 및 이메일 전송 메서드
+        String loginType = SecurityUtil.getUserDetails().getLoginType();
+
         MemberDTO userData = memberMapper.findMemberByEmail(email.getReceiveAddress());
         int memberNo = userData.getMemberNo();
 
@@ -146,6 +162,42 @@ public class AuthServiceImpl implements AuthService{
         String loginType = SecurityUtil.getUserDetails().getLoginType();
 
         return loginType.equals("kakao") || loginType.equals("naver");
+    }
+
+    @Override
+    public boolean isMemberByPassword(String password) {
+        int memberNo = SecurityUtil.getUserNo();
+        String userPassword = memberMapper.findPasswordByMemberNo(memberNo);
+
+        return bCryptPasswordEncoder.matches(password, userPassword);
+    }
+
+    @Override
+    public boolean isPasswordsDifferent(String beforePassword, String afterPassword) {
+        return (!beforePassword.equals(afterPassword));
+    }
+
+    @Override
+    public void sendSms(String tel) throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+        String verifyCode;
+
+        do {
+            verifyCode = CodeGenerator.createRandomString(6);
+        } while (redisUtil.getData(verifyCode) != null);
+
+        smsUtil.sendOne(tel, verifyCode);
+
+        redisUtil.setDataExpire(verifyCode, String.valueOf(memberNo), 60*3L);
+    }
+
+    @Override
+    public boolean isVerifyTel(String verifyCode) throws Exception {
+        String redisVerifyCode = redisUtil.getData(verifyCode);
+
+        // 프론트에서 바꿀 가능성 있으므로 작업 후 인증코드 삭제하는 로직 추가해야함
+        // ex) redisUtil.deleteData(verifyCode);
+        return redisVerifyCode != null;
     }
 
 }

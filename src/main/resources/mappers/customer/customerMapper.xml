@@ -5,7 +5,7 @@
 <mapper namespace="com.multi.laptellect.customer.dao.CustomDao">
     <insert id="personalqApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto" keyProperty="personalqNo" useGeneratedKeys="true">
         INSERT INTO personal_question(member_no,personalq_categorycode,title,content)
-        values(#{memberNo},#{productqCategorycode}, #{title},#{content})
+        values(#{memberNo},#{personalqCategorycode}, #{title},#{content})
     </insert>
 
     <select id="getPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
@@ -26,16 +26,30 @@
         where personalq_no=#{personalqNo}
     </select>
 
+    <update id="setPersonalqCode">
+        update
+        personal_question
+        set reference_code=#{code}
+        where personalq_no=#{personalqNo}
+    </update>
+
+    <update id="setPersonalaCode">
+        update
+        personal_answer
+        set reference_code=#{code}
+        where personala_no=#{personalaNo}
+    </update>
+
     <select id="getpersonalqCode" resultType="string">
         select reference_code
         from personal_question
         where personalq_no=#{personalqNo}
     </select>
 
-    <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.personalqImageDto">
+    <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.ImageDto">
         insert into
-        images(origin_name, upload_name, reference_code)
-        values(#{originName}, #{uploadName}, #{referenceCode})
+        images(origin_name, upload_name)
+        values(#{originName}, #{uploadName})
     </insert>
 
     <select id="getImage" resultType="string">
@@ -67,7 +81,218 @@
     <update id="personalAnwerChange">
         update
         personal_question
-        set answer='Y'
+        set answer=#{state}
         where personalq_no=#{personalqNo}
+    </update>
+
+    <select id="getPersonalqCategory" resultType="com.multi.laptellect.customer.dto.PersonalqCategoryDto">
+        select *
+        from personalquestion_category
+    </select>
+
+    <update id="updatePersonalq" parameterType="com.multi.laptellect.customer.dto.PersonalqAppDto">
+        update
+        personal_question
+        set personalq_categorycode=#{personalqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        where personalq_no = #{personalqNo}
+    </update>
+
+    <delete id="deletePersonalq">
+        delete from personal_question
+        where personalq_no=#{personalqNo}
+    </delete>
+
+    <delete id="deleteImages">
+        delete from images
+        where reference_code=#{code}
+    </delete>
+
+    <update id="updatePersonala" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto">
+        update
+        personal_answer
+        set title=#{title}, content=#{content}, updated_at=current_timestamp
+    </update>
+
+    <delete id="deletePersonala">
+        delete from personal_answer
+        where personalq_no=#{personalqNo}
+    </delete>
+
+    <select id="getProudctqList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo}
+        order by productq_no desc
+    </select>
+
+    <select id="getProductqCategory" resultType="com.multi.laptellect.customer.dto.ProductqCategoryDto">
+        select *
+        from
+        productquestion_category
+    </select>
+
+    <insert id="productqApp" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto" useGeneratedKeys="true" keyProperty="productqNo">
+        insert into
+        product_question(member_no, product_no, productq_categorycode, title, content, secret)
+        values(#{memberNo},#{productNo},#{productqCategorycode},#{title},#{content},#{secret})
+    </insert>
+
+    <update id="setProductqCode">
+        update product_question
+        set reference_code=#{code}
+        where productq_no=#{productqNo}
+    </update>
+
+    <select id="getProductq" resultType="com.multi.laptellect.customer.dto.ProductqDto">
+        select *
+        from
+        product_question
+        where productq_no=#{productqNo}
+    </select>
+
+    <select id="getMyProudctqList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo} and member_no=#{memberNo}
+        order by productq_no desc
+    </select>
+
+    <insert id="productAnwerApp" parameterType="com.multi.laptellect.customer.dto.ProductqAnswerDto" useGeneratedKeys="true" keyProperty="productaNo">
+        insert into
+        product_answer(productq_no, title, content)
+        values(#{productqNo}, #{title}, #{content})
+    </insert>
+
+    <update id="productAnwerChange">
+        update
+        product_question
+        set answer=#{state}
+        where productq_no=#{productqNo}
+    </update>
+
+    <update id="setproductaCode">
+        update
+        product_answer
+        set reference_code=#{code}
+        where producta_no=#{productaNo}
+    </update>
+
+    <select id="getProducta" resultType="com.multi.laptellect.customer.dto.ProductqAnswerDto">
+        select *
+        from
+        product_answer
+        where productq_no=#{productqNo}
+    </select>
+
+    <update id="updateProductq" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto">
+        update
+        product_question
+        set productq_categorycode=#{productqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        where productq_no = #{productqNo}
+    </update>
+
+    <select id="getproductqCode" resultType="String">
+        select reference_code
+        from product_question
+        where productq_no=#{productqNo}
+    </select>
+
+    <delete id="deleteProductq">
+        delete from product_question
+        where productq_no=#{productqNo}
+    </delete>
+
+    <update id="updateProducta">
+        update
+        product_answer
+        set title=#{title}, content=#{content}, updated_at=current_timestamp
+        where productq_no=#{productqNo}
+    </update>
+
+    <select id="getProductaCode">
+        select reference_code
+        from product_answer
+        where producta_no=#{productaNo}
+    </select>
+
+    <delete id="deleteProducta">
+        delete from
+        product_answer
+        where productq_no=#{productqNo}
+    </delete>
+
+    <select id="getPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        where member_no=#{memberNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'personalq_all'">
+            AND personalq_categorycode LIKE #{category}
+        </if>
+        order by personalq_no desc
+    </select>
+
+    <select id="getAllPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        order by personalq_no desc
+    </select>
+
+    <select id="getProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'productq_all'">
+            AND productq_categorycode LIKE #{category}
+        </if>
+        order by productq_no desc
+    </select>
+
+    <select id="getMyProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo} and member_no=#{memberNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'productq_all'">
+            AND productq_categorycode LIKE #{category}
+        </if>
+        order by productq_no desc
+    </select>
+
+    <select id="getAllPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        where title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'personalq_all'">
+            AND personalq_categorycode LIKE #{category}
+        </if>
+        order by personalq_no desc
+    </select>
+
+    <update id="setImage" parameterType="string">
+        update
+        images
+        set reference_code=#{code}
+        where reference_code is null
     </update>
 </mapper>
