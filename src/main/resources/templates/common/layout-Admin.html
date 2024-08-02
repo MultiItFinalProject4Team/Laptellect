@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- css + js 파일 Load-->
-  <link rel="stylesheet" th:href="@{/css/adminsidebar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/admin/adminpagesidebar.css}"/>
 
 </head>
 <body>
@@ -100,7 +100,7 @@
 <!--          <a th:href="@{/home}" class="nav-link text-white">사이트 바로가기</a>-->
 <!--        </li>-->
         <li class="nav-item">
-          <a th:href="@{/admin}" class="nav-link text-white">대시보드</a>
+          <a th:href="@{/admin/dashboard}" class="nav-link text-white">대시보드</a>
         </li>
         <hr>
         <li class="nav-item">
@@ -111,10 +111,10 @@
           <a href="/admin/ticketing" class="nav-link text-white">상품 관리</a>
         </li>
         <li class="nav-item">
-          <a th:href="@{/admin/cinemamanage}" class="nav-link text-white">리뷰 관리</a>
+          <a th:href="@{/admin/orders_manage}" class="nav-link text-white">주문 관리</a>
         </li>
         <li class="nav-item">
-          <a th:href="@{/admin/membermanage}" class="nav-link text-white">주문 관리</a>
+          <a th:href="@{/admin/reviews_manage}" class="nav-link text-white">리뷰 관리</a>
         </li>
         <hr>
         <li class="nav-item">

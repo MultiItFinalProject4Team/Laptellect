@@ -76,4 +76,16 @@ public interface CustomDao {
     String getProductaCode(int productaNo);
 
     void deleteProducta(int productqNo);
+
+    List<PersonalqListDto> getPersonalqSearchList(@Param("memberNo") int memberNo, @Param("keyword") String keyword, @Param("category") String category);
+
+    List<PersonalqListDto> getAllPersonalqList();
+
+    List<ProuductqListDto> getProudctqSearchList(@Param("productNo") int productNo, @Param("keyword") String keyword, @Param("category") String category);
+
+    List<ProuductqListDto> getMyProudctqSearchList(@Param("productNo") int productNo, @Param("memberNo") int memberNo, @Param("keyword") String keyword, @Param("category") String category);
+
+    List<PersonalqListDto> getAllPersonalqSearchList(@Param("category") String category, @Param("keyword") String keyword);
+
+    void setImage(String code);
 }

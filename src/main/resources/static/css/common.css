@@ -37,9 +37,13 @@
         color: black;
     }
 
+    .table th, .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     /* Footer */
-
-
     #tempaltemo_footer a { color: #dcdde1;}
     #tempaltemo_footer a:hover { color: #3498DB;}
     #tempaltemo_footer ul.footer-link-list li { padding-top: 10px;}

@@ -15,6 +15,7 @@ public class ProuductqListDto {
     private int productqNo;
     private int memberNo;
     private int productNo;
+    private int productqCategorycode;
     private String title;
     private String secret;
     private String answer;

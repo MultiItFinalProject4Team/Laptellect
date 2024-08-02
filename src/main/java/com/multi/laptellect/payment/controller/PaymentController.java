@@ -22,15 +22,13 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-
-
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }
 
     @GetMapping("/orderlist")
     public String orderList(Model model) {
-        List<OrderlistDTO> orderList = paymentService.selectAllOrders();
+        List<OrderlistDTO> orderList = paymentService.selectOrders();
         List<String> reviewedOrders = paymentService.getReviewedOrders();
         model.addAttribute("orderList", orderList);
         model.addAttribute("reviewedOrders", reviewedOrders);
@@ -53,17 +51,19 @@ public class PaymentController {
         try {
             PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
             PaymentDTO paymentDTO = new PaymentDTO();
-            paymentDTO.setUsername2(paymentpageDTO.getUsername1());
-            paymentDTO.setProductinfo2(paymentpageDTO.getProductinfo1());
-            paymentDTO.setProductname2(paymentpageDTO.getProductname1());
-            paymentDTO.setProductprice2(request.getAmount().intValue());
-            paymentDTO.setImd2(request.getImpUid());
+            paymentDTO.setUsername(paymentpageDTO.getUsername());
+            paymentDTO.setProductinfo(paymentpageDTO.getProductinfo());
+            paymentDTO.setProductname(paymentpageDTO.getProductname());
+            paymentDTO.setProductprice(paymentpageDTO.getProductprice());
+            paymentDTO.setPurchaseprice(request.getAmount().intValue());
+            paymentDTO.setImd(request.getImpUid());
 
             boolean verified = paymentService.verifyPayment(request, paymentDTO);
             System.out.println(request.getUsedPoints());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
             paymentpointDTO.setUsedPoints(request.getUsedPoints());
+            paymentpointDTO.setImd(request.getImpUid());
 
             if(paymentpointDTO.getPossessionpoint() <= 0) {
                 verified = false;
@@ -100,6 +100,8 @@ public class PaymentController {
 
             paymentService.updateRefundStatus(cancelRequest.getImpUid());
 
+            int refundedPoints = paymentService.refundpoint(cancelRequest.getImpUid());
+
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "취소 실패: " + e.getMessage()));
@@ -112,6 +114,7 @@ public class PaymentController {
         Map<String, Object> response = new HashMap<>();
         if (result > 0) {
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
+            paymentpointDTO.setImd(reviewDTO.getImpUid());
             paymentService.givepoint(paymentpointDTO);
 
             response.put("success", true);

@@ -6,17 +6,18 @@
 
     <resultMap id="PaymentpageResultMap"
                type="com.multi.laptellect.payment.model.dto.PaymentpageDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
-        <result column="username" property="username1"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
-        <result column="productname" property="productname1"/>
-        <result column="productinfo" property="productinfo1"/>
-        <result column="date_created" property="date_created1"/>
-        <result column="productprice" property="productprice1"/>
-        <result column="imd" property="imd1"/>
+        <result column="username" property="username"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
+        <result column="productname" property="productname"/>
+        <result column="productinfo" property="productinfo"/>
+        <result column="date_created" property="date_created"/>
+        <result column="productprice" property="productprice"/>
+        <result column="imd" property="imd"/>
     </resultMap>
 
     <resultMap id="PointResultMap"
                type="com.multi.laptellect.payment.model.dto.PaymentpointDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
         <result column="username" property="username"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
+        <result column="imd" property="imd"/>
         <result column="payment_possession_point" property="possessionpoint"/>
         <result column="payment_point_change" property="pointchange"/>
         <result column="payment_point_info" property="pointinfo"/>
@@ -24,12 +25,12 @@
 
     <resultMap id="OrderlistResultMap"
                type="com.multi.laptellect.payment.model.dto.OrderlistDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
-        <result column="username" property="username1"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
-        <result column="productname" property="productname1"/>
-        <result column="productinfo" property="productinfo1"/>
-        <result column="date_created" property="date_created1"/>
-        <result column="productprice" property="productprice1"/>
-        <result column="imd" property="imd1"/>
+        <result column="username" property="username"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
+        <result column="productname" property="productname"/>
+        <result column="productinfo" property="productinfo"/>
+        <result column="date_created" property="date_created"/>
+        <result column="purchaseprice" property="purchaseprice"/>
+        <result column="imd" property="imd"/>
     </resultMap>
 
     <select id="selectpaymentpage" resultMap="PaymentpageResultMap">
@@ -44,21 +45,23 @@
         productname,
         productinfo,
         productprice,
+        purchaseprice,
         date_created,
         imd
         ) VALUES (
         null,
-        #{username2},
-        #{productname2},
-        #{productinfo2},
-        #{productprice2},
+        #{username},
+        #{productname},
+        #{productinfo},
+        #{productprice},
+        #{purchaseprice},
         NOW(),  <!-- 현재 시간을 자동으로 삽입 -->
-        #{imd2}
+        #{imd}
         )
     </insert>
 
 
-    <select id="selectAllOrders" resultMap="OrderlistResultMap">
+    <select id="selectOrders" resultMap="OrderlistResultMap">
         SELECT * FROM payment
         WHERE refund = 'N'
         AND username = 'jack'
@@ -97,10 +100,10 @@
     </select>
 
 
-
     <insert id="usepoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
         INSERT INTO payment_point (
         username,
+        imd,
         payment_possession_point,
         payment_point_change,
         payment_point_info,
@@ -108,6 +111,7 @@
         )
         SELECT
         #{username},
+        #{imd},
         (SELECT payment_possession_point FROM payment_point WHERE username = #{username} ORDER BY payment_price_no DESC LIMIT 1) - #{usedPoints},
         CONCAT('-', #{usedPoints}),
         '구매 시 포인트사용',
@@ -120,6 +124,7 @@
     <insert id="givepoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
         INSERT INTO payment_point (
         username,
+        imd,
         payment_possession_point,
         payment_point_change,
         payment_point_info,
@@ -127,9 +132,41 @@
         )
         SELECT
         #{username},
+        #{imd},
         (SELECT payment_possession_point FROM payment_point WHERE username = #{username} ORDER BY payment_price_no DESC LIMIT 1) + 500,
         CONCAT('+', 500),
         '구매 후 리뷰작성 포인트지급',
         NOW()
     </insert>
+
+    <insert id="refundpoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        username,
+        imd,
+        payment_possession_point,
+        payment_point_change,
+        payment_point_info,
+        create_date
+        )
+        SELECT
+        #{username},
+        #{imd},
+        COALESCE((SELECT payment_possession_point
+        FROM payment_point
+        WHERE username = #{username}
+        ORDER BY payment_price_no DESC
+        LIMIT 1), 0) + CAST(#{usedPoints} AS SIGNED),
+        CONCAT('+', #{usedPoints}),
+        '상품환불로인한 사용포인트 환불',
+        NOW()
+        FROM dual
+        WHERE EXISTS (SELECT 1 FROM payment_point WHERE username = #{username})
+    </insert>
+
+    <select id="select_refundpoint" resultMap="PointResultMap">
+        SELECT * FROM payment_point
+        WHERE imd = #{impUid}
+        ORDER BY payment_price_no DESC LIMIT 1
+    </select>
+
 </mapper>

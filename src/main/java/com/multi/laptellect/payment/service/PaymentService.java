@@ -49,13 +49,28 @@ public class PaymentService {
     }
 
     @Transactional
-    public List<OrderlistDTO> selectAllOrders() {
-        return paymentDAO.selectAllOrders();
+    public List<OrderlistDTO> selectOrders() {
+        return paymentDAO.selectOrders();
     }
+
 
     @Transactional
     public int updateRefundStatus(String ImpUid) {
         return paymentDAO.updateRefundStatus(ImpUid);
+    }
+
+    @Transactional
+    public int refundpoint(String impUid) {
+        PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(impUid);
+        if (paymentpointDTO != null && paymentpointDTO.getPointchange() != null) {
+            int usedPoints = Math.abs(Integer.parseInt(paymentpointDTO.getPointchange()));
+            if (usedPoints > 0) {
+                paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
+                paymentDAO.refundpoint(paymentpointDTO);
+                return usedPoints;
+            }
+        }
+        return 0;
     }
 
     @Transactional

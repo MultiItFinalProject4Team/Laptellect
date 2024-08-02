@@ -32,7 +32,7 @@ public class MemberController {
 
         }
 
-        model.addAttribute(userInfo);
+        model.addAttribute("userInfo", userInfo);
 
         return "member/purchase-profile";
     }
@@ -48,7 +48,7 @@ public class MemberController {
 
         }
 
-        model.addAttribute(userInfo);
+        model.addAttribute("userInfo", userInfo);
 
         return "member/review-profile";
     }
@@ -64,7 +64,7 @@ public class MemberController {
 
         }
 
-        model.addAttribute(userInfo);
+        model.addAttribute("userInfo", userInfo);
 
         return "member/wishlist-profile";
     }
@@ -80,16 +80,32 @@ public class MemberController {
 
         }
 
-        model.addAttribute(userInfo);
+        model.addAttribute("userInfo", userInfo);
 
         return "member/point-profile";
+    }
+
+    @GetMapping("/profile/delivery")
+    public String showProfileDelivery(Model model) {
+        CustomUserDetails userInfo = SecurityUtil.getUserDetails();
+
+        log.debug("profile point find start = {}", userInfo.getPoint());
+        try {
+
+        } catch (Exception e) {
+
+        }
+
+        model.addAttribute("userInfo", userInfo);
+
+        return "member/delivery-profile";
     }
 
     @GetMapping("/profile/edit")
     public String showProfileEdit(Model model) {
         CustomUserDetails userInfo = SecurityUtil.getUserDetails();
 
-        log.info("profile edit = memberNO : {}, memberID {}", userInfo.getMemberNo(), userInfo.getUsername());
+        log.info("profile edit = memberNO : {}, memberID {}, password {}", userInfo.getMemberNo(), userInfo.getUsername(), userInfo.getPassword());
 
         model.addAttribute("userInfo", userInfo);
 

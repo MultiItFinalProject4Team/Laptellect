@@ -1,16 +1,22 @@
 package com.multi.laptellect.customer.service;
 
-import com.multi.laptellect.customer.dto.ImageDto;
 import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
+import com.multi.laptellect.customer.dto.ImageDto;
 import com.multi.laptellect.util.EmailUtil;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -138,14 +144,33 @@ public class CustomerService {
     }
 
     public List<PersonalqCategoryDto> getPersonalqCategory() {
-        return customDao.getPersonalqCategory();
+        List<PersonalqCategoryDto> category = customDao.getPersonalqCategory();
+        PersonalqCategoryDto category_all  = new PersonalqCategoryDto();
+        category_all.setPersonalqCategorycode("personalq_all");
+        category_all.setPersonalqCategoryname("전체");
+        category.add(0,category_all);
+        return category;
     }
 
     public int updatePersonalq(PersonalqAppDto appDto) {
         return customDao.updatePersonalq(appDto);
     }
 
-    public int deletePersonalq(int personalqNo) {
+    public int deletePersonalq(int personalqNo, String code) {
+        String path = System.getProperty("user.dir");
+        List<String> urls = new ArrayList<>();
+        Document document = Jsoup.parse(customDao.getPersonalqDetail(personalqNo).getContent());
+        for (Element img : document.select("img")) {
+            urls.add(img.attr("src"));
+        }
+        for(String url : urls){
+            Path filePath = Paths.get(path, url);
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return customDao.deletePersonalq(personalqNo);
     }
 
@@ -199,7 +224,21 @@ public class CustomerService {
         customDao.setPersonalaCode(personalaNo,code);
     }
 
-    public void deletePersonala(int personalqNo) {
+    public void deletePersonala(int personalqNo,String code) {
+        String path = System.getProperty("user.dir");
+        List<String> urls = new ArrayList<>();
+        Document document = Jsoup.parse(customDao.getPersonala(personalqNo).getContent());
+        for (Element img : document.select("img")) {
+            urls.add(img.attr("src"));
+        }
+        for(String url : urls){
+            Path filePath = Paths.get(path, url);
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         customDao.deletePersonala(personalqNo);
     }
 
@@ -208,7 +247,12 @@ public class CustomerService {
     }
 
     public List<ProductqCategoryDto> getProductqCategory() {
-        return customDao.getProductqCategory();
+        List<ProductqCategoryDto> category = customDao.getProductqCategory();
+        ProductqCategoryDto category_all  = new ProductqCategoryDto();
+        category_all.setProductqCategorycode("productq_all");
+        category_all.setProductqCategoryname("전체");
+        category.add(0,category_all);
+        return category;
     }
 
     public int productqApp(ProductqAppDto appDto) {
@@ -263,7 +307,21 @@ public class CustomerService {
         return customDao.getproductqCode(productqNo);
     }
 
-    public int deleteProductq(int productqNo) {
+    public int deleteProductq(int productqNo, String code) {
+        String path = System.getProperty("user.dir");
+        List<String> urls = new ArrayList<>();
+        Document document = Jsoup.parse(customDao.getProductq(productqNo).getContent());
+        for (Element img : document.select("img")) {
+            urls.add(img.attr("src"));
+        }
+        for(String url : urls){
+            Path filePath = Paths.get(path, url);
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return customDao.deleteProductq(productqNo);
     }
 
@@ -275,7 +333,53 @@ public class CustomerService {
         return customDao.getProductaCode(productaNo);
     }
 
-    public void deleteProducta(int productqNo) {
+    public void deleteProducta(int productqNo, String code) {
+        String path = System.getProperty("user.dir");
+        List<String> urls = new ArrayList<>();
+        Document document = Jsoup.parse(customDao.getProducta(productqNo).getContent());
+        for (Element img : document.select("img")) {
+            urls.add(img.attr("src"));
+        }
+        for(String url : urls){
+            Path filePath = Paths.get(path, url);
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         customDao.deleteProducta(productqNo);
+    }
+
+    public List<PersonalqListDto> getPersonalqSearchList(int memberNo, String keyword, String category) {
+        return customDao.getPersonalqSearchList(memberNo, keyword, category);
+    }
+
+    public List<PersonalqListDto> getAllPersonalqList() {
+        return customDao.getAllPersonalqList();
+    }
+
+    public List<ProuductqListDto> getProudctqSearchList(int productNo, String keyword, String category) {
+        return customDao.getProudctqSearchList(productNo, keyword, category);
+    }
+
+    public List<ProuductqListDto> getMyProudctqSearchList(int productNo, int memberNo, String keyword, String category) {
+        return customDao.getMyProudctqSearchList(productNo, memberNo, keyword, category);
+    }
+
+    public List<PersonalqListDto> getAllPersonalqSearchList(String category, String keyword) {
+        return customDao.getAllPersonalqSearchList(category, keyword);
+    }
+    public int inputImage(String originName, String fileName) {
+        ImageDto imageDto=ImageDto.builder()
+                .originName(originName)
+                .uploadName(fileName)
+                .build();
+        customDao.inputImage(imageDto);
+        return 1;
+    }
+
+    public void setImage(String code) {
+        customDao.setImage(code);
     }
 }
