@@ -8,6 +8,7 @@ public class LaptellectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LaptellectApplication.class, args);
+
 	}
 
 }

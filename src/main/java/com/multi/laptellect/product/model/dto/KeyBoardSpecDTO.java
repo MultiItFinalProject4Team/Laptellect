@@ -2,8 +2,6 @@ package com.multi.laptellect.product.model.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class KeyBoardSpecDTO {
     private String manufactureCompany;
@@ -17,13 +15,11 @@ public class KeyBoardSpecDTO {
     private String keyBoardSwitch;
     private String keySwitch;
     private String keyPressure;
-    private List<String> keyBoardType;
     private String simultaneousInput;
     private String responseSpeed;
     private String keycapMaterial;
     private String keycapEngraving;
     private String engravingLocation;
-    private List<String> addOns;
     private String width;
     private String length;
     private String height;

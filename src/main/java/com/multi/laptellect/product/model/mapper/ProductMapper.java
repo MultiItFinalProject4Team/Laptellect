@@ -1,8 +1,12 @@
 package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.ImageDTO;
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
+import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,10 +17,11 @@ public interface ProductMapper {
 
     int countByProductCode(String productCode); //상품코드 계수
 
-    List<ProductDTO> getAllProducts();
+    List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    ProductDTO getProductByCode(String productCode);
+    int getTotalProducts();
 
+    LaptopSpecDTO getProductByCode(String productCode);
 
     List<ProductDTO> getTypeByProduct(int typeNo);
 
@@ -24,8 +29,22 @@ public interface ProductMapper {
 
     void inputImage(ImageDTO imageDTO);
 
-    List<String> getImage(String referenceCode);
+    void getImage(String referenceCode);
 
+    ProductCategoryDTO findByOptions(String s);
+
+    String findCategorytNo(String options);
+
+
+    int insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options);
+
+    int insertProductSpec(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("optionValue") String optionValue);
+
+    List<ProductDTO> findProduct();
+
+    int checkSpecExists(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("options") String options);
+
+    List<LaptopDetailsDTO> laptopProductDetails(String productCode);
 
 
 
