@@ -1,9 +1,6 @@
 package com.multi.laptellect.customer.controller;
 
-import com.multi.laptellect.customer.dto.PersonalqAnswerDto;
-import com.multi.laptellect.customer.dto.PersonalqCategoryDto;
-import com.multi.laptellect.customer.dto.PersonalqListDto;
-import com.multi.laptellect.customer.dto.ProductqAnswerDto;
+import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
 import lombok.RequiredArgsConstructor;
@@ -162,9 +159,16 @@ public class CustomerAdminController {
         return "/customer/user/customer_personalq";
     }
 
+    /**
+     * 1:1 문의 전체 검색
+     * @param model
+     * @param page
+     * @param searchDto
+     * @return
+     */
     @GetMapping("/search_all_personalq")
-    public String search_all_personalq(Model model, @RequestParam("category") String category, @RequestParam("keyword") String keyword, @RequestParam(value = "page",defaultValue = "1") int page){
-        List<PersonalqListDto> list = customerService.getAllPersonalqSearchList(category, keyword);
+    public String search_all_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page, PersonalqSearchDto searchDto){
+        List<PersonalqListDto> list = customerService.getAllPersonalqSearchList(searchDto);
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
@@ -175,9 +179,11 @@ public class CustomerAdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("category",categories);
-        model.addAttribute("page_category",category);
-        model.addAttribute("page_keyword",keyword);
+        model.addAttribute("page_category",searchDto.getCategory());
+        model.addAttribute("page_keyword",searchDto.getKeyword());
         model.addAttribute("role","admin");
+        model.addAttribute("answer",searchDto.getAnswer());
+        model.addAttribute("date",searchDto.getDate());
         return "/customer/admin/search_all_personalq";
     }
 }
