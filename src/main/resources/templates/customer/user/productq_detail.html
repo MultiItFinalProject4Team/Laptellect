@@ -31,34 +31,12 @@
         <p th:text="${#dates.format(productq.createdAt, 'YY/MM/dd HH:mm')}">작성일</p>
         <div class="btn-group" aria-label="Small button group">
             <a th:href="@{/customer/user/update_productq/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>
-            <a th:href="@{/customer/user/delete_productq/{productqNo}(productqNo=${productq.productqNo})}" class="btn bg-body-secondary">문의 삭제</a>
+            <a th:href="@{/customer/user/delete_productq/{productqNo}/{productNo}(productqNo=${productq.productqNo}, productNo=${productq.productNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 삭제</a>
             <a th:href="@{/customer/admin/update_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>
             <a th:href="@{/customer/admin/delete_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 삭제</a>
         </div>
     </div>
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="width: 300px;">
-        <div class="carousel-indicators">
-            <th:block th:each="item, num : ${imageList}">
-                <button type="button" th:attr="data-bs-target='#carouselExampleIndicators', data-bs-slide-to=${num.index}, class=${num.index == 0} ? 'active' : ''"
-                        aria-current="${num.index == 0 ? 'true' : 'false'}"></button>
-            </th:block>
-        </div>
-        <div class="carousel-inner">
-            <th:block th:each="item, num : ${imageList}">
-                <div th:classappend="${num.index == 0} ? 'carousel-item active' : 'carousel-item'">
-                    <img th:src="@{/images/{image}(image=${item})}" class="d-block w-100" alt="..." width="214px" height="200px">
-                </div>
-            </th:block>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+
     <hr class="border border-dark">
     <div id="content" name="content" th:utext="${productq.content}" readonly="true">내용</div>
 

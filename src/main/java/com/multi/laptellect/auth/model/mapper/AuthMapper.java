@@ -1,6 +1,6 @@
 package com.multi.laptellect.auth.model.mapper;
 
-import com.multi.laptellect.member.model.dto.KakaoDTO;
+import com.multi.laptellect.member.model.dto.SocialDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,11 +12,11 @@ public interface AuthMapper {
 
     int insertPassword(MemberDTO memberDTO);
 
-    int insertSocialMember(KakaoDTO kakaoDTO);
+    int insertSocialMember(SocialDTO socialDTO);
 
 //    MemberDTO findMemberByExternalId(Long externalId);
 
-    KakaoDTO findSocialMemberByExternalId(Long externalId);
+    SocialDTO findSocialMemberByExternalId(String externalId);
 
     MemberDTO findMemberBySocialId(Long socialId);
 

@@ -1,6 +1,7 @@
 <!--수정안함-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/css/customer/nav.css" rel="stylesheet">
     <link href="/css/customer/table.css" rel="stylesheet">
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .form-select {
+            flex: 0 0 25%;
+        }
+        .form-control {
+            flex: 1;
+            width: 0;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -26,6 +40,20 @@
             </li>
         </ul>
     </header>
+    <div class="form-container">
+        <form class="d-flex" role="search" th:action="${state=='all'} ?
+        @{/customer/user/search_productq/{productNo}(productNo=${productNo})} : @{/customer/user/search_myproductq/{productNo}(productNo=${productNo})}">
+            <select class="form-select" id="categorySelect" name="category">
+                <option th:each="categories : ${category}"
+                        th:value="${categories.productqCategorycode}"
+                        th:text="${categories.productqCategoryname}">
+                </option>
+            </select>
+
+            <input class="form-control me-2" type="search" placeholder="제목" aria-label="Search" style="width: 300px;" name="keyword">
+            <button id="searchButton" class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
 <table class="table table-striped fixed-table" style="text-align: center">
     <thead>
     <tr>
@@ -38,10 +66,22 @@
     <tbody>
     <tr th:each="each : ${productqList}" class="align-middle">
         <td th:text="${each.productqNo}">번호</td>
-        <td style="text-align: center;">
+        <td style="text-align: center;" sec:authorize="hasAnyAuthority('ROLE_USER')">
             <a style="text-decoration: none;" th:if="${each.secret == 'N'}" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.title}"></a>
             <a style="text-decoration: none;" th:if="${each.secret == 'Y' and each.memberNo != memberNo}">비밀글입니다 🔒</a>
-            <a style="text-decoration: none;" th:if="${each.secret == 'Y' and each.memberNo == memberNo}" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.title}+' 🔒'">비밀글입니다</a>
+            <a style="text-decoration: none;"
+               th:if="${(each.secret == 'Y' and each.memberNo == memberNo)}"
+               th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}"
+               th:text="${each.title} + ' 🔒'">비밀글입니다</a>
+
+        </td>
+        <td style="text-align: center;" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+            <a style="text-decoration: none;" th:if="${each.secret == 'N'}" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.title}"></a>
+            <a style="text-decoration: none;"
+               th:if="${(each.secret == 'Y')}"
+               th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}"
+               th:text="${each.title} + ' 🔒'">비밀글입니다</a>
+
         </td>
         <td th:text="${each.answer=='Y'}?'답변 완료':'답변 대기'">답변 여부</td>
         <td th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>
@@ -53,26 +93,33 @@
         <a class="btn btn-secondary btn-sm" th:if="${state=='all'}" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
         <a class="btn btn-secondary btn-sm" th:if="${state=='my'}" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}" role="button">전체 문의 보기</a>
     </div>
-<!--    <div th:if="${totalPages > 1}" class="pagination justify-content-center">-->
-<!--        <nav aria-label="Page navigation example">-->
-<!--            <ul class="pagination">-->
-<!--                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">-->
-<!--                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${currentPage - 1})}" aria-label="Previous">-->
-<!--                        <span aria-hidden="true">&laquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">-->
-<!--                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>-->
-<!--                </li>-->
-<!--                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">-->
-<!--                    <a class="page-link" th:href="@{/customer/user/customer_personalq(page=${currentPage + 1})}" aria-label="Next">-->
-<!--                        <span aria-hidden="true">&raquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </nav>-->
-<!--    </div>-->
 </div>
+    <div class="pagination-container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                    <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                    <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                </li>
+                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                    <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 </body>
 </html>

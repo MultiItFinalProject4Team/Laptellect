@@ -4,10 +4,150 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+  <style>
+    .purchase-tap {
+      background-color: #3498DB;
+      color: white !important;
+    }
+
+  </style>
 </head>
 <body>
 <div layout:fragment="content">
-  <p>회원정보 수정 페이지 테스트</p>
+<!--  <div class="profile-box" style="height: 400px;">-->
+<!--    <h2>구매 내역</h2>-->
+<!--    <hr> <br>-->
+<!--  </div>-->
+
+<!--  <br> <br>-->
+
+  <div class="profile-box">
+    <h2>주문목록 / 배송 조회</h2>
+    <div class="input-group mb-3 d-flex align-items-center">
+      <input type="date" id="startDate" class="form-control" placeholder="시작 날짜" aria-label="Start date" style="flex: 0.5; margin-right: 8px;">
+
+      <span class="mx-2" style="margin-right: 8px;">~</span>
+
+      <input type="date" id="endDate" class="form-control" placeholder="종료 날짜" aria-label="End date" style="flex: 0.5; margin-right: 12px;">
+
+      <select class="form-control" id="filterSelect" style="flex: 0.8; margin-right: 12px;">
+        <option value="all">All</option>
+        <option value="orderNumber">주문번호</option>
+        <option value="productName">상품명</option>
+      </select>
+
+      <input type="text" class="form-control" placeholder="주문번호 또는 상품명 검색" aria-label="Search" style="flex: 2; margin-right: 12px;">
+
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" onclick="filterByDateRange()">검색</button>
+      </div>
+    </div>
+    <hr> <br>
+    <table class="table table-striped text-center">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 5%;">번호</th>
+          <th scope="col" style="width: 20%;">주문번호</th>
+          <th scope="col" style="width: 30%;">상품명</th>
+          <th scope="col" style="width: 10%;">금액</th>
+          <th scope="col" style="width: 10%;">주문상태</th>
+          <th scope="col" style="width: 15%;">날짜</th>
+          <th scope="col" style="width: 10%;">구매확정</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">4</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">5</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">6</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">7</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+        <tr>
+          <th scope="row">8</th>
+          <td><a href="#" style="color: blue;">12345678</a></td>
+          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
+          <td>588990 원</td>
+          <td>결제완료</td>
+          <td>2024.07.31</td>
+          <td><div class="btn btn-primary">구매확정</div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <nav aria-label="...">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <span class="page-link">이전</span>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item active" aria-current="page">
+          <span class="page-link">2</span>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">다음</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
 
 </body>

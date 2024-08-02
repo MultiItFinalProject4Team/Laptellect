@@ -4,11 +4,53 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+  <style>
+    .wishlist-tap {
+      background-color: #3498DB;
+      color: white !important;
+    }
+  </style>
 </head>
 <body>
 <div layout:fragment="content">
-  <p>회원정보 수정 페이지 테스트</p>
-</div>
+  <div class="profile-box" style="height: 825px;">
+    <h4>관심상품 전체 <span>(2개)</span></h4>
+    <hr>
+    <div class="d-flex align-items-center">
+      <div class="form-check mr-3">
+        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+        <label class="form-check-label" for="defaultCheck1">전체선택</label>
+      </div>
+      <button type="button" class="btn btn-outline-dark" style="padding: 2px 10px; margin: 5px; font-size: 14px;">삭제</button>
+    </div>
+    <hr> <br>
+    <div class="profile-box" style="height: 650px;">
+      <br>
+      <div class="profile-box" style="height: 175px;"></div>
+      <br>
+      <div class="profile-box" style="height: 175px;"></div>
+      <br>
+      <div class="profile-box" style="height: 175px;"></div>
+      <br>
 
+      <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <span class="page-link">이전</span>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">2</span>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">다음</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
 </body>
 </html>

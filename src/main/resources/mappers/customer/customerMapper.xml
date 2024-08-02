@@ -16,7 +16,7 @@
         answer,
         created_at
         from personal_question
-<!--        where member_no=#{memberNo}-->
+        where member_no=#{memberNo}
         order by personalq_no desc
     </select>
 
@@ -48,8 +48,8 @@
 
     <insert id="inputImage" parameterType="com.multi.laptellect.customer.dto.ImageDto">
         insert into
-        images(origin_name, upload_name, reference_code)
-        values(#{originName}, #{uploadName}, #{referenceCode})
+        images(origin_name, upload_name)
+        values(#{originName}, #{uploadName})
     </insert>
 
     <select id="getImage" resultType="string">
@@ -123,6 +123,7 @@
         from
         product_question
         where product_no=#{productNo}
+        order by productq_no desc
     </select>
 
     <select id="getProductqCategory" resultType="com.multi.laptellect.customer.dto.ProductqCategoryDto">
@@ -155,6 +156,7 @@
         from
         product_question
         where product_no=#{productNo} and member_no=#{memberNo}
+        order by productq_no desc
     </select>
 
     <insert id="productAnwerApp" parameterType="com.multi.laptellect.customer.dto.ProductqAnswerDto" useGeneratedKeys="true" keyProperty="productaNo">
@@ -196,4 +198,101 @@
         from product_question
         where productq_no=#{productqNo}
     </select>
+
+    <delete id="deleteProductq">
+        delete from product_question
+        where productq_no=#{productqNo}
+    </delete>
+
+    <update id="updateProducta">
+        update
+        product_answer
+        set title=#{title}, content=#{content}, updated_at=current_timestamp
+        where productq_no=#{productqNo}
+    </update>
+
+    <select id="getProductaCode">
+        select reference_code
+        from product_answer
+        where producta_no=#{productaNo}
+    </select>
+
+    <delete id="deleteProducta">
+        delete from
+        product_answer
+        where productq_no=#{productqNo}
+    </delete>
+
+    <select id="getPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        where member_no=#{memberNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'personalq_all'">
+            AND personalq_categorycode LIKE #{category}
+        </if>
+        order by personalq_no desc
+    </select>
+
+    <select id="getAllPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        order by personalq_no desc
+    </select>
+
+    <select id="getProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'productq_all'">
+            AND productq_categorycode LIKE #{category}
+        </if>
+        order by productq_no desc
+    </select>
+
+    <select id="getMyProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
+        select productq_no, member_no, product_no, title, secret, answer, created_at
+        from
+        product_question
+        where product_no=#{productNo} and member_no=#{memberNo}
+        AND title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'productq_all'">
+            AND productq_categorycode LIKE #{category}
+        </if>
+        order by productq_no desc
+    </select>
+
+    <select id="getAllPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+        select
+        personalq_no,
+        member_no,
+        title,
+        answer,
+        created_at
+        from personal_question
+        where title LIKE CONCAT('%', #{keyword}, '%')
+        <if test="category != 'personalq_all'">
+            AND personalq_categorycode LIKE #{category}
+        </if>
+        order by personalq_no desc
+    </select>
+
+    <update id="setImage" parameterType="string">
+        update
+        images
+        set reference_code=#{code}
+        where reference_code is null
+    </update>
 </mapper>

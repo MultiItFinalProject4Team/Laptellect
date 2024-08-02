@@ -4,10 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
+import com.multi.laptellect.config.api.GoogleConfig;
 import com.multi.laptellect.config.api.KakaoConfig;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
-import com.multi.laptellect.member.model.dto.KakaoDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.dto.SocialDTO;
 import com.multi.laptellect.util.CodeGenerator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,15 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+/**
+ * 소셜 인가/인증 관련 클래스
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class OAuthServiceImpl implements OAuthService{
     private final KakaoConfig kakaoConfig;
+    private final GoogleConfig googleConfig;
     private final AuthMapper authMapper;
 
     @Override
@@ -73,7 +78,7 @@ public class OAuthServiceImpl implements OAuthService{
     }
 
     @Override
-    public KakaoDTO getKaKaoProfileInfo(String accessToken) {
+    public SocialDTO getKaKaoProfileInfo(String accessToken) {
         String KakaoRestApiKey = kakaoConfig.getKakaoRestApiKey();
         String KakaoSecretKey = kakaoConfig.getKakaoSecretKey();
         String redirectURL = kakaoConfig.getKakaoRedirectUri();
@@ -96,30 +101,31 @@ public class OAuthServiceImpl implements OAuthService{
         );
 
         JsonObject jsonObject = JsonParser.parseString(response.getBody()).getAsJsonObject();
-        long id = jsonObject.get("id").getAsLong();
+        String id = jsonObject.get("id").getAsString();
         String nickname = jsonObject.get("properties").getAsJsonObject().get("nickname").getAsString();
         String email = jsonObject.get("kakao_account").getAsJsonObject().get("email").getAsString();
 
 
         log.info("카카오 JSON 리턴 = {}", jsonObject);
 
-        KakaoDTO kakaoDTO = new KakaoDTO();
-        kakaoDTO.setExternalId(id);
-        kakaoDTO.setEmail(email);
-        kakaoDTO.setNickName(nickname);
+        SocialDTO socialDTO = new SocialDTO();
+        socialDTO.setExternalId(id);
+        socialDTO.setEmail(email);
+        socialDTO.setNickName(nickname);
 
-        log.info("카카오 파싱 = {}", kakaoDTO);
+        log.info("카카오 파싱 = {}", socialDTO);
 
-        return kakaoDTO;
+        return socialDTO;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void processKakaoUser(KakaoDTO kakaoDTO) {
+    public void processKakaoUser(SocialDTO socialDTO) {
         MemberDTO memberDTO = new MemberDTO();
+        socialDTO.setLoginType("kakao");
 
-        Long externalId = kakaoDTO.getExternalId();
-        KakaoDTO kakaoUser = authMapper.findSocialMemberByExternalId(externalId);
+        String externalId = socialDTO.getExternalId();
+        SocialDTO kakaoUser = authMapper.findSocialMemberByExternalId(externalId);
 
         log.debug("카카오 로그인 실행 = {}", externalId);
         if(kakaoUser != null) {
@@ -128,16 +134,138 @@ public class OAuthServiceImpl implements OAuthService{
             log.info("존재하는 사용자 = {}", memberDTO);
         } else {
             memberDTO.setMemberName(CodeGenerator.createRandomString(5));
-            memberDTO.setNickName(kakaoDTO.getNickName());
-            memberDTO.setEmail(kakaoDTO.getEmail());
-            memberDTO.setLoginType(kakaoDTO.getLoginType());
+            memberDTO.setNickName(socialDTO.getNickName());
+            memberDTO.setEmail(socialDTO.getEmail());
+            memberDTO.setLoginType(socialDTO.getLoginType());
 
             authMapper.insertMember(memberDTO);
-            kakaoDTO.setMemberNo(memberDTO.getMemberNo());
-            log.info("Member Insert 완료 = {}", kakaoDTO.getMemberNo());
+            socialDTO.setMemberNo(memberDTO.getMemberNo());
+            log.info("Member Insert 완료 = {}", socialDTO.getMemberNo());
 
-            authMapper.insertSocialMember(kakaoDTO);
-            Long socialId = kakaoDTO.getSocialId();
+            authMapper.insertSocialMember(socialDTO);
+            Long socialId = socialDTO.getSocialId();
+            log.info("SocialMember Insert 완료 = {}", socialId);
+
+            memberDTO = authMapper.findMemberBySocialId(socialId);
+            log.info("Member 조회 완료 = {}", memberDTO);
+        }
+        CustomUserDetails userDetails = new CustomUserDetails(memberDTO);
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession(true);
+
+        if (session != null) {
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            log.info("Session updated with new authentication details");
+        }
+    }
+
+    @Override
+    public String getGoogleAccessToken(String code) {
+        String googleClientId = googleConfig.getGoogleClientId();
+        String googleClientSecretKey = googleConfig.getGoogleClientSecretKey();
+        String redirectURL = googleConfig.getGoogleRedirectUri();
+
+        String tokenURL = "https://oauth2.googleapis.com/token";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", code);
+        params.add("client_id", googleClientId);
+        params.add("client_secret", googleClientSecretKey);
+        params.add("redirect_uri", redirectURL);
+        params.add("grant_type", "authorization_code");
+
+
+        HttpEntity<MultiValueMap<String, String>> googleTokenRequest = new HttpEntity<>(params, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                tokenURL, // https://{요청할 서버 주소}
+                HttpMethod.POST, // 요청할 방식
+                googleTokenRequest, // 요청할 때 보낼 데이터
+                String.class // 요청 시 반환되는 데이터 타입
+        );
+
+        String responseBody = response.getBody();
+        JsonElement element = JsonParser.parseString(responseBody);
+
+        String accessToken = element.getAsJsonObject().get("access_token").getAsString();
+
+        log.info("구글 JSON 반환 = {}", element);
+        log.info("구글 엑세스 토큰 = {}", accessToken);
+
+        return accessToken;
+    }
+
+    @Override
+    public SocialDTO getGoogleProfileInfo(String accessToken) {
+        String profileURL = "https://www.googleapis.com/userinfo/v2/me";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization", "Bearer " + accessToken);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<String> googleTokenRequest = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                profileURL, // https://{요청할 서버 주소}
+                HttpMethod.GET, // GET 메소드 사용
+                googleTokenRequest, // 요청할 때 보낼 데이터
+                String.class // 요청 시 반환되는 데이터 타입
+        );
+
+        JsonObject jsonObject = JsonParser.parseString(response.getBody()).getAsJsonObject();
+        String id = jsonObject.get("id").getAsString();
+        String email = jsonObject.get("email").getAsString();
+        String nickName = jsonObject.get("name").getAsString();
+
+        log.info("Google JSON 리턴 = {}", jsonObject);
+
+        SocialDTO SocialDTO = new SocialDTO();
+
+        SocialDTO.setExternalId(id);
+        SocialDTO.setEmail(email);
+        SocialDTO.setNickName(nickName);
+
+        log.info("Google 파싱 = {}", SocialDTO);
+
+        return SocialDTO;
+    }
+
+    @Override
+    public void processGoogleUser(SocialDTO socialDTO) {
+        MemberDTO memberDTO = new MemberDTO();
+        socialDTO.setLoginType("google");
+
+        String externalId = socialDTO.getExternalId();
+        SocialDTO googleUser = authMapper.findSocialMemberByExternalId(externalId);
+
+        log.debug("구글 로그인 실행 = {}", externalId);
+        if(googleUser != null) {
+            int memberNo = googleUser.getMemberNo();
+            memberDTO = authMapper.findMemberByMemberNo(memberNo);
+            log.info("존재하는 사용자 = {}", memberDTO);
+        } else {
+            memberDTO.setMemberName(CodeGenerator.createRandomString(5));
+            memberDTO.setNickName(socialDTO.getNickName());
+            memberDTO.setEmail(socialDTO.getEmail());
+            memberDTO.setLoginType(socialDTO.getLoginType());
+            log.info("멤버 DTO 확인 = {}", memberDTO);
+
+            authMapper.insertMember(memberDTO);
+            socialDTO.setMemberNo(memberDTO.getMemberNo());
+            log.info("Member Insert 완료 = {}", socialDTO.getMemberNo());
+
+            authMapper.insertSocialMember(socialDTO);
+            Long socialId = socialDTO.getSocialId();
             log.info("SocialMember Insert 완료 = {}", socialId);
 
             memberDTO = authMapper.findMemberBySocialId(socialId);

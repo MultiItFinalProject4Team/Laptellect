@@ -6,8 +6,8 @@
   <html layout:decorate="~{common/layout}">
     <head>
       <title>SingUp Page</title>
-          <link rel="stylesheet" th:href="@{/css/signup.css}">
-          <script type="text/javascript" th:src="@{/js/signup.js}"></script>
+          <link rel="stylesheet" th:href="@{/css/auth/signup.css}">
+          <script type="text/javascript" th:src="@{/js/auth/signup.js}"></script>
     </head>
     <body>
       <div layout:fragment="content">
@@ -76,7 +76,7 @@
                 <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
                 <label for="emailVer">인증번호를 입력해주세요.</label>
               </div>
-              <div class="error-message" id="emailErro2" style="color: red;">틀린 인증번호 입니다.</div>
+              <div class="error-message" id="emailError2" style="color: red;">틀린 인증번호 입니다.</div>
               <br />
 
               <button type="submit" class="btn btn-primary w-100 nextBtn" id="insertBtn">

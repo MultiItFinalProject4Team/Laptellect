@@ -20,18 +20,18 @@
 		(
 			  member_name
 			, email
-		<if test="nickName != null">
-			, nick_name
-		</if>
+<!--		<if test="nickName != null">-->
+<!--			, nick_name-->
+<!--		</if>-->
 			, login_type
 		)
 		VALUES
 		(
 			  #{ memberName }
 			, #{ email }
-		<if test="nickName != null">
-			, #{ nickName }
-		</if>
+<!--		<if test="nickName != null">-->
+<!--			, #{ nickName }-->
+<!--		</if>-->
 			, #{ loginType }
 		)
 	</insert>
@@ -50,7 +50,7 @@
 		)
 	</insert>
 
-	<insert id="insertSocialMember" parameterType="kakaoDTO" useGeneratedKeys="true" keyProperty="socialId">
+	<insert id="insertSocialMember" parameterType="socialDTO" useGeneratedKeys="true" keyProperty="socialId">
 		INSERT INTO
 			mem_social_member
 		(
@@ -110,7 +110,7 @@
 	</select>
 
 	<!-- 소셜 회원 Find  -->
-	<select id="findSocialMemberByExternalId" parameterType="Long">
+	<select id="findSocialMemberByExternalId" parameterType="String">
 		SELECT
 			*
 		FROM

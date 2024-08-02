@@ -16,7 +16,7 @@ CREATE TABLE personal_question (
     title VARCHAR(100) NOT NULL,
     content text NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP,
+    updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     answer VARCHAR(2) DEFAULT 'N',
     reference_code VARCHAR(100),
     FOREIGN KEY (member_no) REFERENCES member(member_no),
@@ -31,7 +31,7 @@ CREATE TABLE product_question (
     title VARCHAR(100) NOT NULL,
     content text NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP,
+    updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     answer VARCHAR(2) DEFAULT 'N',
     secret VARCHAR(2) DEFAULT 'N',
     reference_code VARCHAR(100),
@@ -46,7 +46,7 @@ CREATE TABLE personal_answer(
 	title varchar(100) NOT null,
 	content text NOT NULL,
 	created_at timestamp DEFAULT current_timestamp,
-	updated_at timestamp,
+	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
 	reference_code varchar(100),
 	FOREIGN KEY (personalq_no) REFERENCES personal_question(personalq_no)
 );
@@ -57,7 +57,7 @@ CREATE TABLE product_answer(
 	title varchar(100) NOT null,
 	content text NOT NULL,
 	created_at timestamp DEFAULT current_timestamp,
-	updated_at timestamp,
+	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
 	reference_code varchar(100),
 	FOREIGN KEY (productq_no) REFERENCES product_question(productq_no)
 );
@@ -67,7 +67,7 @@ CREATE TABLE images(
 	origin_name varchar(255),
 	upload_name varchar(255),
 	created_at timestamp DEFAULT current_timestamp,
-	updated_at timestamp,
+	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
 	reference_code varchar(100)
 );
 
