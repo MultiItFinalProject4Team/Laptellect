@@ -140,8 +140,8 @@ public class RecommendationService {
             tags.addAll(Arrays.asList("Apple", "LG_Gram")); //이건 하드코딩 상황
         }
 
-        // 동세대 최고 성능
-        // 동세대 최고 성능
+        // 동세대 최고 성능 하드코딩 예정 정보 봐야 알듯?
+        // 동세대 최고 성능 하드코딩 예정 정보 봐야 알듯?
         if ("performance".equals(request.getPriority())) { //이것도 하드코딩
             tags.addAll(Arrays.asList("NVIDIA GeForce RTX 4090 Laptop GPU", "AMD Radeon RX 6950 XT",
                     "AMD Ryzen 9 7945HX", "AMD Ryzen 9 7940HX", "Intel Core i9-13980HX", "Intel Core i9-14900HX"));
