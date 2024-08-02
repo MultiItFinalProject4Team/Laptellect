@@ -17,12 +17,13 @@
     </resultMap>
 
     <!-- 제품 삽입 쿼리-->
-    <insert id="insertProduct" parameterType="com.multi.laptellect.product.model.dto.ProductDTO" useGeneratedKeys="true" keyProperty="productNo">
+    <insert id="insertProduct" parameterType="productDTO" useGeneratedKeys="true" keyProperty="productNo">
         INSERT INTO product(type_no, product_name, price, product_code, created_at)
         values(#{typeNo}, #{productName}, #{price}, #{productCode}, #{createdAt})
     </insert>
 
-    <update id="updateReferenceCode" parameterType="com.multi.laptellect.product.model.dto.ProductDTO">
+
+    <update id="updateReferenceCode" parameterType="productDTO">
         UPDATE product SET reference_code = #{referenceCode}, updated_at = updated_at WHERE product_no = #{productNo}
     </update>
 
@@ -35,64 +36,104 @@
     </select>
 
     <!-- 전체 제품 조회-->
-    <select id="getAllProducts" resultType="com.multi.laptellect.product.model.dto.ProductDTO" resultMap="productResultMap">
-        SELECT p.product_no,
-        p.type_no,
-        p.product_name,
-        p.price,
-        p.reference_code,
-        p.created_at,
-        p.updated_at,
-        p.product_code,
-        i.upload_name
+    <select id="getAllProducts" resultType="productDTO" resultMap="productResultMap">
+        SELECT
+            p.product_no,
+            p.type_no,
+            p.product_name,
+            p.price,
+            p.reference_code,
+            p.created_at,
+            p.updated_at,
+            p.product_code,
+            i.upload_name
         FROM
-        product p
-        JOIN images i
-        on i.reference_code = p.reference_code
+            product p
+        JOIN
+            images i
+        on
+            i.reference_code = p.reference_code
+        ORDER BY p.product_no
+        LIMIT #{pageSize} OFFSET #{offset}
 
     </select>
-    
 
+    <select id="getTotalProducts" resultType="int">
+        SELECT COUNT(*) FROM product
+    </select>
 
     <!-- 선택 제품 조회-->
-    <select id="getProductByCode" parameterType="String" resultType="com.multi.laptellect.product.model.dto.ProductDTO">
+    <select id="getProductByCode" parameterType="String" resultType="laptopSpecDTO">
         SELECT * FROM product WHERE product_code = #{productCode}
     </select>
 
 
-    <insert id="saveCategoryOptions" parameterType="com.multi.laptellect.product.model.dto.ProductCategoryDTO">
-        INSERT INTO product_category(type_no, options) VALUES (#{typeNo}, #{options})
-
-    </insert>
-
-
-    <select id="findByOptions" parameterType="string" resultType="com.multi.laptellect.product.model.dto.ProductCategoryDTO">
-        SELECT * FROM product_category WHERE options = #{options}
+    <select id="findByOptions" parameterType="String" resultType="productCategoryDTO">
+        SELECT *
+        FROM product_category
+        WHERE options = #{s}
     </select>
 
-    <insert id="insertProductCategory" parameterType="com.multi.laptellect.product.model.dto.ProductCategoryDTO">
+    <select id="findCategorytNo" parameterType="String">
+        SELECT category_no
+        FROM product_category
+        WHERE options = #{options}
+
+    </select>
+
+
+    <insert id="insertProductCategory" parameterType="productCategoryDTO">
         INSERT INTO product_category (type_no, options)
         VALUES (#{typeNo}, #{options})
     </insert>
 
-    <insert id="insertProductSpec" parameterType="com.multi.laptellect.product.model.dto.ProductSpecDTO">
+
+
+    <insert id="insertProductSpec" parameterType="productSpecDTO">
         INSERT INTO product_spec (product_no, category_no, option_value)
         VALUES (#{productNo}, #{categoryNo}, #{optionValue})
     </insert>
+    
+    <select id="findProduct" parameterType="productDTO">
+        SELECT *
+        FROM
+        product
+        WHERE type_no = 1
+    </select>
+
+    <select id="checkSpecExists" resultType="int">
+        SELECT COUNT(*)
+        FROM product_spec
+        WHERE product_no = #{productNo}
+        AND category_no = #{categoryNo}
+        AND option_value = #{options}
+    </select>
+
+    <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
+        SELECT *
+        FROM
+        product_detail
+        WHERE
+        product_code = #{productCode}
+    </select>
 
 
-    <insert id="inputImage" parameterType="com.multi.laptellect.product.model.dto.ImageDTO" useGeneratedKeys="true">
+
+    <!--이미지를 저장시키는 쿼리-->
+    <insert id="inputImage" parameterType="imageDTO" useGeneratedKeys="true">
         INSERT INTO
         images( reference_code, origin_name, upload_name)
         VALUES ( #{referenceCode}, #{originName}, #{uploadName})
     </insert>
 
+    <!--저장된 이미지를 불러오는 쿼리-->
     <select id="getImage" resultType="string">
         SELECT upload_name
         FROM
         images
         WHERE reference_code=#{referenceCode}
     </select>
+
 
 
 </mapper>

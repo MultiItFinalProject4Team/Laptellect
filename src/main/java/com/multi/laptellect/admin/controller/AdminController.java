@@ -1,6 +1,8 @@
 package com.multi.laptellect.admin.controller;
 
+import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
 import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
+import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
 import com.multi.laptellect.admin.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +21,9 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/main")
-    public String adminmainpage() {
-        return "/admin/main";
+    @GetMapping("/dashboard")
+    public String admin_dashboard_page() {
+        return "/admin/dashboard";
     }
 
     @GetMapping("/reviews_manage")
@@ -32,7 +34,9 @@ public class AdminController {
     }
 
     @GetMapping("/orders_manage")
-    public String orders_manage_page() {
+    public String orders_manage_page(Model model) {
+        List<AdminOrderlistDTO> selectAllOrders = adminService.selectAllOrders();
+        model.addAttribute("selectAllOrders", selectAllOrders);
         return "/admin/orders_manage";
     }
 
@@ -41,5 +45,11 @@ public class AdminController {
     public Map<String, Boolean> deleteReviews(@RequestBody List<Long> reviewIds) {
         boolean success = adminService.deleteReviews(reviewIds);
         return Map.of("success", success);
+    }
+
+    @GetMapping("/dashboard-data")
+    @ResponseBody
+    public List<AdminDashboardDTO> getDashboardData() {
+        return adminService.getLastSevenDaysSales();
     }
 }

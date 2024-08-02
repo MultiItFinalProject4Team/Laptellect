@@ -15,6 +15,20 @@
         <result column="modify_date" property="modify_date"/>
     </resultMap>
 
+    <resultMap id="AdminOrdersResultMap"
+               type="com.multi.laptellect.admin.model.dto.AdminOrderlistDTO">
+        <result column="payment_no" property="payment_no"/>
+        <result column="username" property="username"/>
+        <result column="productname" property="productname"/>
+        <result column="productinfo" property="productinfo"/>
+        <result column="productprice" property="productprice"/>
+        <result column="purchaseprice" property="purchaseprice"/>
+        <result column="date_created" property="date_created"/>
+        <result column="imd" property="imd"/>
+        <result column="refund" property="refund"/>
+        <result column="refund_date" property="refund_date"/>
+    </resultMap>
+
     <select id="selectAllReviews" resultMap="AdminReviewResultMap">
         SELECT payment_product_reviews_no,
         username,
@@ -33,5 +47,24 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectAllOrders" resultMap="AdminOrdersResultMap">
+        SELECT *
+        FROM payment
+    </select>
+
+    <select id="getLastSevenDaysSales" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
+        SELECT
+        DATE(date_created) as date,
+        COUNT(*) as saleCount
+        FROM
+        payment
+        WHERE
+        date_created >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        GROUP BY
+        DATE(date_created)
+        ORDER BY
+        date ASC
+    </select>
 
 </mapper>

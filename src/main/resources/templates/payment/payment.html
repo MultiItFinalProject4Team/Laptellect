@@ -26,7 +26,7 @@
             <form id="orderForm">
                 <div class="form-group">
                     <label for="name">구매자 성함</label>
-                    <input type="text" id="name" name="name" th:value="${paymentpageDTO.username1}" required>
+                    <input type="text" id="name" name="name" th:value="${paymentpageDTO.username}" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">연락처</label>
@@ -43,15 +43,15 @@
             </form>
         </div>
         <div class="right-section">
-            <h3 align="center" th:text="${paymentpageDTO.productname1}">상품명</h3>
+            <h3 align="center" th:text="${paymentpageDTO.productname}">상품명</h3>
             <img src="/img/payment/notebooktest.PNG" alt="Product Image" class="product-image">
-            <p align="center" th:text="${paymentpageDTO.productinfo1}">상품 정보</p>
+            <p align="center" th:text="${paymentpageDTO.productinfo}">상품 정보</p>
         </div>
     </div>
     <div class="price-info">
         <div class="price-row">
             <span>판매가</span>
-            <span id="originalPrice" th:text="${paymentpageDTO.productprice1 + '원'}">0원</span>
+            <span id="originalPrice" th:text="${paymentpageDTO.productprice + '원'}">0원</span>
         </div>
         <div class="price-row">
             <span>보유포인트 :</span>
@@ -61,14 +61,14 @@
         </div>
         <div class="price-row total-price">
             <span>총 결제금액</span>
-            <span id="amount" th:text="${paymentpageDTO.productprice1 + '원'}">0원</span>
+            <span id="amount" th:text="${paymentpageDTO.productprice + '원'}">0원</span>
         </div>
         <button class="order-button" onclick="mypayment()">결제하기</button>
     </div>
 </div>
 <script th:inline="javascript">
     // Thymeleaf 변수를 JavaScript 변수로 변환
-    var originalPrice = /*[[${paymentpageDTO.productprice1}]]*/ 0;
+    var originalPrice = /*[[${paymentpageDTO.productprice}]]*/ 0;
     var possessionPoint = /*[[${paymentpointDTO.possessionpoint}]]*/ 0;
 </script>
 </body>

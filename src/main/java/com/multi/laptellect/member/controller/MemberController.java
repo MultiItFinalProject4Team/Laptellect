@@ -88,14 +88,6 @@ public class MemberController {
     @GetMapping("/profile/delivery")
     public String showProfileDelivery(Model model) {
         CustomUserDetails userInfo = SecurityUtil.getUserDetails();
-
-        log.debug("profile point find start = {}", userInfo.getPoint());
-        try {
-
-        } catch (Exception e) {
-
-        }
-
         model.addAttribute("userInfo", userInfo);
 
         return "member/delivery-profile";

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout-Admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 대시보드</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      height: calc(100vh - 100px);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .dashboard-panel {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    #curve_chart, #daily_stats, #recent_reviews_table, #recent_questions_table {
+      width: 100%;
+      flex-grow: 1;
+    }
+    .table-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .table-content {
+      flex-grow: 1;
+      overflow: auto;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .pagination button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .pagination button:hover:not(:disabled) {
+      background-color: #e0e0e0;
+      color: #000;
+    }
+    .pagination button:disabled {
+      background-color: #f9f9f9;
+      color: #999;
+      cursor: not-allowed;
+      border-color: #eee;
+    }
+  </style>
+  <script th:inline="javascript">
+    google.charts.load('current', {'packages':['corechart', 'table', 'bar']});
+    google.charts.setOnLoadCallback(drawCharts);
+
+    let reviewsCurrentPage = 1;
+    let questionsCurrentPage = 1;
+    const itemsPerPage = 5;
+
+    function drawCharts() {
+      fetch('/admin/dashboard-data')
+        .then(response => response.json())
+        .then(data => {
+          drawLineChart(data);
+          drawDailyStats(data);
+        })
+        .catch(error => console.error('Error:', error));
+
+      drawRecentReviewsTable();
+      drawRecentQuestionsTable();
+    }
+
+    function drawLineChart(dashboardData) {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Date');
+      data.addColumn('number', '일일 방문자');
+      data.addColumn('number', '상품 판매개수');
+
+      dashboardData.forEach(item => {
+        data.addRow([item.date, item.visitCount, item.saleCount]);
+      });
+
+      var options = {
+        title: '방문자 및 판매 현황',
+        legend: { position: 'bottom' },
+        hAxis: { title: '날짜' },
+        vAxis: {
+          title: '수량',
+          ticks: [0, 2, 4, 6, 8],
+          viewWindow: {
+            min: 0,
+            max: 8
+          }
+        },
+        pointSize: 5,
+        chartArea: {width: '80%', height: '70%'}
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      chart.draw(data, options);
+    }
+
+    function drawDailyStats(dashboardData) {
+      var data = google.visualization.arrayToDataTable([
+        ['항목', '수량', { role: 'style' }],
+        ['오늘의 방문자', dashboardData[dashboardData.length - 1].visitCount, '#76A7FA'],
+        ['오늘의 판매 개수', dashboardData[dashboardData.length - 1].saleCount, '#4285F4']
+      ]);
+
+      var options = {
+        title: '일일 지표',
+        chartArea: {width: '70%', height: '70%'},
+        legend: { position: 'none' },
+        hAxis: {
+          title: '항목',
+          titleTextStyle: {color: '#333'}
+        },
+        vAxis: {
+          title: '수량',
+          minValue: 0,
+          titleTextStyle: {color: '#333'}
+        },
+        bar: {groupWidth: "65%"}
+      };
+
+      var chart = new google.visualization.ColumnChart(document.getElementById('daily_stats'));
+      chart.draw(data, options);
+    }
+
+    function drawRecentReviewsTable() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', '번호');
+      data.addColumn('string', '상품명');
+      data.addColumn('string', '작성자');
+      data.addColumn('string', '평점');
+      data.addColumn('string', '작성일자');
+
+      for(let i = 1; i <= 20; i++) {
+        data.addRow([i.toString(), '상품 ' + i, '사용자 ' + i, (Math.random() * 5).toFixed(1), '2023-08-0' + (i % 9 + 1)]);
+      }
+
+      var view = new google.visualization.DataView(data);
+      var startIndex = (reviewsCurrentPage - 1) * itemsPerPage;
+      view.setRows(data.getFilteredRows([{column: 0, minValue: startIndex + 1, maxValue: startIndex + itemsPerPage}]));
+
+      var table = new google.visualization.Table(document.getElementById('recent_reviews_table'));
+      table.draw(view, {
+        showRowNumber: false,
+        width: '100%',
+        height: '100%'
+      });
+
+      updateReviewsPagination(data.getNumberOfRows());
+    }
+
+    function drawRecentQuestionsTable() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', '번호');
+      data.addColumn('string', '제목');
+      data.addColumn('string', '작성자');
+      data.addColumn('string', '문의 종류');
+      data.addColumn('string', '작성일자');
+
+      for(let i = 1; i <= 20; i++) {
+        data.addRow([i.toString(), '문의 제목 ' + i, '문의자 ' + i, ['배송', '상품', '결제', '기타'][i % 4], '2023-08-0' + (i % 9 + 1)]);
+      }
+
+      var view = new google.visualization.DataView(data);
+      var startIndex = (questionsCurrentPage - 1) * itemsPerPage;
+      view.setRows(data.getFilteredRows([{column: 0, minValue: startIndex + 1, maxValue: startIndex + itemsPerPage}]));
+
+      var table = new google.visualization.Table(document.getElementById('recent_questions_table'));
+      table.draw(view, {
+        showRowNumber: false,
+        width: '100%',
+        height: '100%'
+      });
+
+      updateQuestionsPagination(data.getNumberOfRows());
+    }
+
+    function updateReviewsPagination(totalItems) {
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      document.getElementById('reviewsPrevBtn').disabled = reviewsCurrentPage === 1;
+      document.getElementById('reviewsNextBtn').disabled = reviewsCurrentPage === totalPages;
+      document.getElementById('reviewsCurrentPage').textContent = reviewsCurrentPage;
+      document.getElementById('reviewsTotalPages').textContent = totalPages;
+    }
+
+    function updateQuestionsPagination(totalItems) {
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      document.getElementById('questionsPrevBtn').disabled = questionsCurrentPage === 1;
+      document.getElementById('questionsNextBtn').disabled = questionsCurrentPage === totalPages;
+      document.getElementById('questionsCurrentPage').textContent = questionsCurrentPage;
+      document.getElementById('questionsTotalPages').textContent = totalPages;
+    }
+
+    function changeReviewsPage(change) {
+      reviewsCurrentPage += change;
+      drawRecentReviewsTable();
+    }
+
+    function changeQuestionsPage(change) {
+      questionsCurrentPage += change;
+      drawRecentQuestionsTable();
+    }
+  </script>
+</head>
+<body>
+<div layout:fragment="content">
+  <h3>관리자 대시보드</h3>
+  <div class="dashboard-container">
+    <div class="dashboard-panel">
+      <div class="panel-title">방문자 현황</div>
+      <div id="curve_chart"></div>
+    </div>
+    <div class="dashboard-panel">
+      <div class="panel-title">일일 지표</div>
+      <div id="daily_stats"></div>
+    </div>
+    <div class="dashboard-panel">
+      <div class="panel-title">최근 리뷰 내역</div>
+      <div class="table-container">
+        <div class="table-content" id="recent_reviews_table"></div>
+        <div class="pagination">
+          <button id="reviewsPrevBtn" onclick="changeReviewsPage(-1)">&lt; 이전</button>
+          <span>페이지 <span id="reviewsCurrentPage"></span> / <span id="reviewsTotalPages"></span></span>
+          <button id="reviewsNextBtn" onclick="changeReviewsPage(1)">다음 &gt;</button>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-panel">
+      <div class="panel-title">최근 문의 내역</div>
+      <div class="table-container">
+        <div class="table-content" id="recent_questions_table"></div>
+        <div class="pagination">
+          <button id="questionsPrevBtn" onclick="changeQuestionsPage(-1)">&lt; 이전</button>
+          <span>페이지 <span id="questionsCurrentPage"></span> / <span id="questionsTotalPages"></span></span>
+          <button id="questionsNextBtn" onclick="changeQuestionsPage(1)">다음 &gt;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

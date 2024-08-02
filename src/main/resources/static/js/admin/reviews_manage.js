@@ -1,14 +1,22 @@
 let currentPage = 1;
 const itemsPerPage = 12;
 let filteredReviews = [];
+let currentReviewId = null;
 
 function renderTable() {
   const tableBody = document.getElementById('reviewTableBody');
+  const reviewsToShow = filteredReviews.length > 0 ? filteredReviews : reviews;
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  const pageReviews = (filteredReviews.length > 0 ? filteredReviews : reviews).slice(start, end);
+  const pageReviews = reviewsToShow.slice(start, end);
 
   tableBody.innerHTML = '';
+
+  if (reviewsToShow.length === 0) {
+    showNoResultsMessage();
+    return;
+  }
+
   pageReviews.forEach(review => {
     const row = `
       <tr>
@@ -16,7 +24,7 @@ function renderTable() {
         <td class="review-number-column">${review.payment_product_reviews_no}</td>
         <td class="product-name-column">${review.product_name}</td>
         <td class="author-column">${review.username}</td>
-        <td class="content-column">${review.content}</td>
+        <td class="content-column"><span class="review-content" onclick="openModal(${review.payment_product_reviews_no})">${review.content}</span></td>
         <td class="rating-column">${review.rating}점</td>
         <td class="date-column">${review.create_date}</td>
         <td class="date-column">${review.modify_date != null ? review.modify_date : '수정사항없음'}</td>
@@ -26,11 +34,26 @@ function renderTable() {
   });
 }
 
+function showNoResultsMessage() {
+  const tableBody = document.getElementById('reviewTableBody');
+  tableBody.innerHTML = `
+    <tr>
+      <td colspan="8" style="text-align: center; padding: 20px;">검색된 내역이 없습니다.</td>
+    </tr>
+  `;
+}
+
 function renderPagination() {
   const totalReviews = filteredReviews.length > 0 ? filteredReviews.length : reviews.length;
   const totalPages = Math.ceil(totalReviews / itemsPerPage);
   const pageNumbers = document.getElementById('pageNumbers');
   pageNumbers.innerHTML = '';
+
+  if (totalReviews === 0) {
+    document.getElementById('prevButton').disabled = true;
+    document.getElementById('nextButton').disabled = true;
+    return;
+  }
 
   for (let i = 1; i <= totalPages; i++) {
     const button = document.createElement('button');
@@ -63,15 +86,29 @@ function changePage(page) {
 }
 
 function searchReviews() {
+  const searchCategory = document.getElementById('searchCategory').value;
   const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-  filteredReviews = reviews.filter(review =>
-    review.product_name.toLowerCase().includes(searchTerm) ||
-    review.username.toLowerCase().includes(searchTerm) ||
-    review.content.toLowerCase().includes(searchTerm)
-  );
+
+  filteredReviews = reviews.filter(review => {
+    if (searchCategory === 'all') {
+      return Object.values(review).some(value =>
+        value && value.toString().toLowerCase().includes(searchTerm)
+      );
+    } else {
+      const value = review[searchCategory];
+      return value && value.toString().toLowerCase().includes(searchTerm);
+    }
+  });
+
   currentPage = 1;
-  renderTable();
-  renderPagination();
+
+  if (filteredReviews.length === 0) {
+    showNoResultsMessage();
+    renderPagination(); // 페이지네이션 업데이트
+  } else {
+    renderTable();
+    renderPagination();
+  }
 }
 
 function deleteSelectedReviews() {
@@ -96,8 +133,7 @@ function deleteSelectedReviews() {
     .then(data => {
       if (data.success) {
         alert('선택한 리뷰가 삭제되었습니다.');
-        // 삭제 후 리뷰 목록 새로고침
-        location.reload();
+        location.reload(); // 페이지 새로고침
       } else {
         alert('리뷰 삭제 중 오류가 발생했습니다.');
       }
@@ -109,12 +145,69 @@ function deleteSelectedReviews() {
   }
 }
 
-// 초기 렌더링
-renderTable();
-renderPagination();
+function openModal(reviewId) {
+  currentReviewId = reviewId;
+  const review = reviews.find(r => r.payment_product_reviews_no === reviewId);
+  if (review) {
+    document.getElementById('modalReviewNumber').textContent = review.payment_product_reviews_no;
+    document.getElementById('modalAuthor').textContent = review.username;
+    document.getElementById('modalProductName').textContent = review.product_name;
+    document.getElementById('modalRating').textContent = review.rating + '점';
+    document.getElementById('modalContent').textContent = review.content;
+    document.getElementById('modalCreateDate').textContent = review.create_date;
+    document.getElementById('modalModifyDate').textContent = review.modify_date != null ? review.modify_date : '수정사항없음';
 
-// Select all checkbox functionality
-document.getElementById('selectAll').addEventListener('change', function() {
-  const checkboxes = document.getElementsByName('reviewCheck');
-  checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+    document.getElementById('reviewModal').style.display = 'block';
+  }
+}
+
+function closeModal() {
+  document.getElementById('reviewModal').style.display = 'none';
+}
+
+function deleteSingleReview() {
+  if (currentReviewId && confirm('이 리뷰를 삭제하시겠습니까?')) {
+    fetch('/admin/deleteReviews', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([currentReviewId]),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('리뷰가 삭제되었습니다.');
+        closeModal();
+        location.reload(); // 페이지 새로고침
+      } else {
+        alert('리뷰 삭제 중 오류가 발생했습니다.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('리뷰 삭제 중 오류가 발생했습니다.');
+    });
+  }
+}
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+  renderTable();
+  renderPagination();
+
+  // 이벤트 리스너 설정
+  document.querySelector('.close').addEventListener('click', closeModal);
+  window.addEventListener('click', function(event) {
+    if (event.target == document.getElementById('reviewModal')) {
+      closeModal();
+    }
+  });
+
+  document.getElementById('selectAll').addEventListener('change', function() {
+    const checkboxes = document.getElementsByName('reviewCheck');
+    checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+  });
+
+  document.getElementById('modalDeleteButton').addEventListener('click', deleteSingleReview);
 });

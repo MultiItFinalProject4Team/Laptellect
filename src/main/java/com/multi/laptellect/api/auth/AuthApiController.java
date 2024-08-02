@@ -88,7 +88,7 @@ public class AuthApiController {
     @ResponseBody
     @PostMapping("/check-after-password")
     public boolean isPasswordsDifferent(@RequestParam("beforePassword") String beforePassword,
-                                   @RequestParam("afterPassword") String afterPassword) {
+                                        @RequestParam("afterPassword") String afterPassword) {
         return authService.isPasswordsDifferent(beforePassword, afterPassword);
     }
 

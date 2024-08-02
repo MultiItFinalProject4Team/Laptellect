@@ -49,7 +49,7 @@ public class CustomerController {
     public String customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
             return "/auth/auth-sign-in";
         }
@@ -108,7 +108,7 @@ public class CustomerController {
     public String personalq_app(PersonalqAppDto appDto){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
             return "/auth/auth-sign-in";
         }
@@ -147,7 +147,7 @@ public class CustomerController {
     public String update_personalq(PersonalqAppDto appDto){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
             return "/auth/auth-sign-in";
         }
@@ -183,7 +183,7 @@ public class CustomerController {
     public String customer_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
             return "/auth/auth-sign-in";
         }
@@ -226,7 +226,7 @@ public class CustomerController {
     public String productq_app(ProductqAppDto appDto){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
             return "/auth/auth-sign-in";
         }
@@ -274,7 +274,7 @@ public class CustomerController {
     public String my_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
             return "/auth/auth-sign-in";
         }
@@ -323,7 +323,7 @@ public class CustomerController {
     public String update_productq(ProductqAppDto appDto){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
             return "/auth/auth-sign-in";
         }
@@ -360,7 +360,7 @@ public class CustomerController {
     public String search_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page, PersonalqSearchDto searchDto){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
             return "/auth/auth-sign-in";
@@ -395,7 +395,7 @@ public class CustomerController {
     public String search_productq(Model model, @RequestParam(value = "page",defaultValue = "1") int page,ProductSearchDto searchDto, @PathVariable("productNo") int productNo){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
             return "/auth/auth-sign-in";
@@ -433,7 +433,7 @@ public class CustomerController {
     public String search_myproductq(Model model, @PathVariable("productNo") int productNo, ProductSearchDto searchDto, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserDetails().getMemberNo();
+            memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
             return "/auth/auth-sign-in";
