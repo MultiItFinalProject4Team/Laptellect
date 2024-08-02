@@ -22,9 +22,6 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-
-
-
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }
@@ -104,9 +101,6 @@ public class PaymentController {
             paymentService.updateRefundStatus(cancelRequest.getImpUid());
 
             int refundedPoints = paymentService.refundpoint(cancelRequest.getImpUid());
-//            Map<String, Object> responseData = new HashMap<>();
-//            responseData.put("cancelResponse", response);
-//            responseData.put("refundedPoints", refundedPoints);
 
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
