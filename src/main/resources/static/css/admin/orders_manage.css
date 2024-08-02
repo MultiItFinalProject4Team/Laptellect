@@ -18,7 +18,6 @@
   align-items: center;
 }
 
-/* 새로운 스타일: searchCategory 선택 요소 */
 #searchCategory {
   padding: 8px;
   font-size: 14px;
@@ -42,6 +41,7 @@
 
 .table-container {
   flex-grow: 1;
+  overflow-x: auto;
   overflow-y: auto;
 }
 
@@ -49,6 +49,13 @@ table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+  z-index: 10;
 }
 
 th, td {
@@ -60,20 +67,17 @@ th, td {
   white-space: nowrap;
 }
 
-th {
-  background-color: #f2f2f2;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
 .checkbox-column { width: 30px; }
-.review-number-column { width: 80px; }
+.order-number-column { width: 80px; }
+.username-column { width: 100px; }
 .product-name-column { width: 150px; }
-.author-column { width: 100px; }
-.content-column { width: 200px; }
-.rating-column { width: 50px; }
+.product-info-column { width: 200px; }
+.price-column { width: 80px; }
+.purchase-price-column { width: 80px; }
 .date-column { width: 120px; }
+.imd-column { width: 120px; }
+.refund-column { width: 80px; }
+.refund-date-column { width: 120px; }
 
 .pagination {
   display: flex;
@@ -130,22 +134,21 @@ th {
   border-radius: 4px;
 }
 
-/* 리뷰 내용 열 스타일 수정 */
-.content-column {
+.product-info-column {
   position: relative;
 }
 
-.review-content {
+.order-content {
   cursor: pointer;
   color: #2196F3;
   transition: all 0.3s ease;
 }
 
-.review-content:hover {
+.order-content:hover {
   text-decoration: underline;
 }
 
-.review-content::after {
+.order-content::after {
   content: '클릭하여 상세보기';
   position: absolute;
   bottom: -20px;
@@ -161,11 +164,10 @@ th {
   pointer-events: none;
 }
 
-.review-content:hover::after {
+.order-content:hover::after {
   opacity: 1;
 }
 
-/* 모달 스타일 개선 */
 .modal {
   display: none;
   position: fixed;
@@ -195,6 +197,8 @@ th {
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   position: relative;
   animation: slideIn 0.3s;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 @keyframes slideIn {
@@ -222,39 +226,4 @@ th {
 .modal-content h2 {
   margin-top: 0;
   color: #333;
-  font-size: 24px;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-}
-
-.modal-content p {
-  margin: 10px 0;
-  line-height: 1.6;
-}
-
-.modal-content strong {
-  color: #555;
-  font-weight: 600;
-}
-
-#modalContent {
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  padding: 15px;
-  margin-top: 10px;
-  white-space: pre-wrap;
-  line-height: 1.5;
-}
-
-#modalRating {
-  font-size: 18px;
-  color: #555;
-  font-weight: bold;
-}
-
-#modalCreateDate, #modalModifyDate {
-  font-style: italic;
-  color: #666;
-}
+  font-size: 24px

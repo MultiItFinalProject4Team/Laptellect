@@ -11,6 +11,16 @@
   <h1>리뷰 관리</h1>
   <div class="controls">
     <div class="search-group">
+      <select id="searchCategory">
+        <option value="all">전체</option>
+        <option value="payment_product_reviews_no">리뷰번호</option>
+        <option value="product_name">상품명</option>
+        <option value="username">작성자</option>
+        <option value="content">리뷰내용</option>
+        <option value="rating">평점</option>
+        <option value="create_date">등록일자</option>
+        <option value="modify_date">수정일자</option>
+      </select>
       <input type="text" id="searchInput" placeholder="검색">
       <button class="btn" onclick="searchReviews()">검색</button>
     </div>
@@ -38,6 +48,23 @@
     <button id="prevButton" onclick="changePage('prev')">&lt; 이전</button>
     <div id="pageNumbers"></div>
     <button id="nextButton" onclick="changePage('next')">다음 &gt;</button>
+  </div>
+
+  <!-- 모달 -->
+  <div id="reviewModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>리뷰 상세 내용</h2>
+      <p><strong>리뷰 번호:</strong> <span id="modalReviewNumber"></span></p>
+      <p><strong>작성자:</strong> <span id="modalAuthor"></span></p>
+      <p><strong>상품명:</strong> <span id="modalProductName"></span></p>
+      <p><strong>평점:</strong> <span id="modalRating"></span></p>
+      <p><strong>리뷰 내용:</strong></p>
+      <div id="modalContent"></div>
+      <p><strong>등록일자:</strong> <span id="modalCreateDate"></span></p>
+      <p><strong>수정일자:</strong> <span id="modalModifyDate"></span></p>
+      <button id="modalDeleteButton" class="btn">삭제</button>
+    </div>
   </div>
 
   <script th:inline="javascript">
