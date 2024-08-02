@@ -286,8 +286,8 @@ public class CrawlingService {
 
 
             Document doc = Jsoup.connect(url).get();
-
             Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
+
 
             Elements paginationElements = doc.select(".page_nav_area .page_num");
             if (!paginationElements.isEmpty()) {
@@ -297,8 +297,10 @@ public class CrawlingService {
             log.info("페이지 = {}",paginationElements);
 
             for(int pageNum =1; pageNum <= totalPages; pageNum++){
+
                 Document doc1 = Jsoup.connect(url + pageNum).get();
 
+                Elements review1 = doc1.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
                 int reviewCount = 0;
 
                 for(Element review : reviews){
@@ -316,9 +318,6 @@ public class CrawlingService {
                 log.info("조회된 리뷰 계수  = {}", reviewCount);
 
             }
-
-
-
 
         } catch (Exception e){
 
