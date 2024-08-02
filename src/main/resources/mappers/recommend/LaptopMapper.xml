@@ -1,20 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.multi.laptellect.recommend.laptop.model.dao.LaptopDAO">
-    <select id="findLaptopsByTags" resultType="LaptopDTO">
-        SELECT id, tag_data, tag_etc
-        FROM tags
-        WHERE tag_data IN
-        <foreach item="tag" collection="tags" separator="," open="(" close=")">
-            #{tag}
-        </foreach>
-        ORDER BY RAND()
-        LIMIT 5
+<mapper namespace="com.multi.laptellect.recommend.laptop.model.dao.ProductDAO">
+    <select id="findByTags" resultType="com.multi.laptellect.recommend.laptop.model.dto.LaptopDTO">
+        SELECT p.product_no, p.type_no, p.product_name, p.price, p.reference_code,
+        ps_weight.option_value as weight, ps_screen.option_value as screen_size,
+        ps_brand.option_value as brand, ps_series.option_value as series
+        FROM product p
+        JOIN product_spec ps_weight ON p.product_no = ps_weight.product_no AND ps_weight.category_no = (SELECT category_no FROM product_category WHERE options = 'weight')
+        JOIN product_spec ps_screen ON p.product_no = ps_screen.product_no AND ps_screen.category_no = (SELECT category_no FROM product_category WHERE options = 'screen_size')
+        JOIN product_spec ps_brand ON p.product_no = ps_brand.product_no AND ps_brand.category_no = (SELECT category_no FROM product_category WHERE options = 'brand')
+        JOIN product_spec ps_series ON p.product_no = ps_series.product_no AND ps_series.category_no = (SELECT category_no FROM product_category WHERE options = 'series')
+        WHERE 1=1
+        <if test="list.contains('gaming')">
+            AND p.product_no IN (SELECT product_no FROM product_spec WHERE category_no = (SELECT category_no FROM product_category WHERE options = 'usage') AND option_value = 'gaming')
+        </if>
+        <if test="list.contains('office')">
+            AND p.product_no IN (SELECT product_no FROM product_spec WHERE category_no = (SELECT category_no FROM product_category WHERE options = 'usage') AND option_value = 'office')
+        </if>
+        <if test="list.contains('student')">
+            AND p.product_no IN (SELECT product_no FROM product_spec WHERE category_no = (SELECT category_no FROM product_category WHERE options = 'usage') AND option_value = 'student')
+        </if>
+        <if test="list.contains('weight_over_2.5')">
+            AND CAST(ps_weight.option_value AS DECIMAL) > 2.5
+        </if>
+        <if test="list.contains('weight_under_2.5')">
+            AND CAST(ps_weight.option_value AS DECIMAL) <= 2.5
+        </if>
+        <if test="list.contains('screen_size_15_plus')">
+            AND CAST(ps_screen.option_value AS DECIMAL) >= 15
+        </if>
+        <if test="list.contains('screen_size_13_to_15')">
+            AND CAST(ps_screen.option_value AS DECIMAL) >= 13 AND CAST(ps_screen.option_value AS DECIMAL) < 15
+        </if>
+        <if test="list.contains('screen_size_under_13')">
+            AND CAST(ps_screen.option_value AS DECIMAL) < 13
+        </if>
+        <if test="list.contains('price_under_1000000')">
+            AND p.price < 1000000
+        </if>
+        <if test="list.contains('price_over_2000000')">
+            AND p.price > 2000000
+        </if>
+        <if test="list.contains('price_1000000_to_2000000')">
+            AND p.price >= 1000000 AND p.price <= 2000000
+        </if>
+        <if test="list.contains('Apple') or list.contains('LG_Gram')">
+            AND (ps_brand.option_value = 'Apple' OR ps_brand.option_value = 'LG')
+        </if>
+        <if test="list.contains('NVIDIA GeForce RTX 4090 Laptop GPU') or list.contains('AMD Radeon RX 6950 XT') or list.contains('AMD Ryzen 9 7945HX') or list.contains('AMD Ryzen 9 7940HX') or list.contains('Intel Core i9-13980HX') or list.contains('Intel Core i9-14900HX')">
+            AND p.product_no IN (
+            SELECT product_no FROM product_spec
+            WHERE (category_no = (SELECT category_no FROM product_category WHERE options = 'gpu')
+            AND option_value IN ('NVIDIA GeForce RTX 4090 Laptop GPU', 'AMD Radeon RX 6950 XT'))
+            OR (category_no = (SELECT category_no FROM product_category WHERE options = 'cpu')
+            AND option_value IN ('AMD Ryzen 9 7945HX', 'AMD Ryzen 9 7940HX', 'Intel Core i9-13980HX', 'Intel Core i9-14900HX'))
+            )
+        </if>
+        <choose>
+            <when test="list.contains('sort_by_usage')">
+                ORDER BY
+                CASE
+                WHEN ps_usage.option_value = 'gaming' THEN 1
+                WHEN ps_usage.option_value = 'office' THEN 2
+                WHEN ps_usage.option_value = 'student' THEN 3
+                ELSE 4
+                END
+            </when>
+            <when test="list.contains('sort_by_screen_size')">
+                ORDER BY CAST(ps_screen.option_value AS DECIMAL) DESC
+            </when>
+            <when test="list.contains('sort_by_weight')">
+                ORDER BY CAST(ps_weight.option_value AS DECIMAL) ASC
+            </when>
+            <otherwise>
+                ORDER BY p.price ASC
+            </otherwise>
+        </choose>
     </select>
-
-<!--    <select id="findLaptopDetailById" resultType="java.util.HashMap">--> <!-- This is for testing purpose -->
-<!--        SELECT *-->
-<!--        FROM laptop_details-->
-<!--        WHERE id = #{id}-->
-<!--    </select>-->
 </mapper>

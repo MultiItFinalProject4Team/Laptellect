@@ -51,6 +51,7 @@ public class MybatisConfig {
 
         configuration.getTypeAliasRegistry().registerAlias("sentimentDTO", com.multi.laptellect.recommend.clovaapi.model.dto.SentimentDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("laptopDTO", com.multi.laptellect.recommend.laptop.model.dto.LaptopDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("RecommendationRequestDTO", com.multi.laptellect.recommend.laptop.model.dto.RecommendationRequestDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("tagDTO", com.multi.laptellect.recommend.reviewtag.model.dto.TagDTO.class);
 
 

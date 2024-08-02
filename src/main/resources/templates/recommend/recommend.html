@@ -2,138 +2,124 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>노트북 추천 설문조사</title>
+    <title>노트북 추천 설문</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        fieldset {
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-        legend {
-            font-weight: bold;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        select, input[type="checkbox"] {
-            margin-bottom: 10px;
-        }
-        button {
-            align-self: center;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
+        .option-container { display: flex; flex-direction: column; }
+        .option-group { margin-bottom: 20px; }
+        .option { margin: 5px; padding: 10px; border: 1px solid #ccc; cursor: pointer; display: inline-block; }
+        .option.selected { background-color: #e0e0e0; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-<h1>노트북 추천 설문조사</h1>
-<form id="surveyForm">
-    <fieldset>
-        <legend>사용 목적 (복수 선택 가능)</legend>
-        <label><input type="checkbox" name="categories" value="게이밍"> 게이밍</label>
-        <label><input type="checkbox" name="categories" value="프로그래밍"> 프로그래밍</label>
-        <label><input type="checkbox" name="categories" value="그래픽/디자인"> 그래픽/디자인</label>
-        <label><input type="checkbox" name="categories" value="학생용"> 학생용</label>
-    </fieldset>
+<h1>어떤 노트북을 원하세요?</h1>
 
-    <fieldset>
-        <legend>가격대</legend>
-        <select name="priceRange" required>
-            <option value="">선택해주세요</option>
-            <option value="50만원 이하">50만원 이하</option>
-            <option value="100~200만원">100~200만원</option>
-            <option value="200만원 이상">200만원 이상</option>
-        </select>
-    </fieldset>
+<div class="option-container">
+    <!-- 용도 선택 -->
+    <div class="option-group" id="usage-group">
+        <h2>용도</h2>
+        <div class="option" data-category="usage" data-value="gaming">게이밍</div>
+        <div class="option" data-category="usage" data-value="office">사무용</div>
+    </div>
 
-    <fieldset>
-        <legend>CPU 브랜드</legend>
-        <select name="cpuBrand" required>
-            <option value="">선택해주세요</option>
-            <option value="인텔">인텔</option>
-            <option value="라이젠">라이젠</option>
-        </select>
-    </fieldset>
+    <!-- 게이밍 옵션 -->
+    <div class="option-group hidden" id="gaming-group">
+        <h2>게임 종류</h2>
+        <div class="option" data-category="game-type" data-value="steam-fps">스팀게임/FPS 게임</div>
+        <div class="option" data-category="game-type" data-value="online">온라인 게임</div>
+        <div class="option" data-category="game-type" data-value="aos">AOS게임</div>
+    </div>
 
-    <fieldset>
-        <legend>GPU 브랜드</legend>
-        <select name="gpuBrand" required>
-            <option value="">선택해주세요</option>
-            <option value="엔비디아">엔비디아</option>
-            <option value="AMD">AMD</option>
-        </select>
-    </fieldset>
+    <!-- 사무용 옵션 -->
+    <div class="option-group hidden" id="office-group">
+        <h2>사무용 종류</h2>
+        <div class="option" data-category="office-type" data-value="coding">코딩할거에요</div>
+        <div class="option" data-category="office-type" data-value="student">학생이에요</div>
+    </div>
 
-    <fieldset>
-        <legend>AS 중요도</legend>
-        <label><input type="checkbox" name="asImportant"> AS가 중요합니다</label>
-    </fieldset>
+    <!-- 가격대 -->
+    <div class="option-group">
+        <h2>가격대</h2>
+        <div class="option" data-category="price" data-value="budget">가성비용</div>
+        <div class="option" data-category="price" data-value="performance">성능용</div>
+        <div class="option" data-category="price" data-value="balanced">밸런스용</div>
+        <div class="option" data-category="price" data-value="any">알아서</div>
+    </div>
 
-    <button type="submit">추천 받기</button>
-</form>
+    <!-- 무게 -->
+    <div class="option-group">
+        <h2>무게</h2>
+        <div class="option" data-category="weight" data-value="heavy">집에만 둘거에요</div>
+        <div class="option" data-category="weight" data-value="light">가져 다닐거에요</div>
+        <div class="option" data-category="weight" data-value="any">알아서</div>
+    </div>
+
+    <!-- 화면 크기 -->
+    <div class="option-group">
+        <h2>화면 크기</h2>
+        <div class="option" data-category="screen" data-value="large">화면 넓은게 좋아요</div>
+        <div class="option" data-category="screen" data-value="medium">적당한게 좋아요</div>
+        <div class="option" data-category="screen" data-value="any">알아서</div>
+    </div>
+
+    <!-- 우선순위 -->
+    <div class="option-group">
+        <h2>우선순위</h2>
+        <div class="option" data-category="priority" data-value="usage">하고 싶은 작업을 우선해 주세요</div>
+        <div class="option" data-category="priority" data-value="screen">화면을 우선해 주세요</div>
+        <div class="option" data-category="priority" data-value="weight">무게를 우선해주세요</div>
+        <div class="option" data-category="priority" data-value="any">없으면 알아서 추천해주세요</div>
+    </div>
+</div>
+
+<div class="button-container">
+    <button id="nextBtn">추천 받기</button>
+</div>
 
 <script>
-    document.getElementById('surveyForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const surveyResults = {
-            categories: formData.getAll('categories'),
-            priceRange: formData.get('priceRange'),
-            cpuBrand: formData.get('cpuBrand'),
-            gpuBrand: formData.get('gpuBrand'),
-            asImportant: formData.get('asImportant') === 'on'
-        };
+    $(document).ready(function() {
+        let userPreferences = {};
 
-        fetch('/laptop/getRecommendations', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(surveyResults),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
-                    });
+        $('.option').click(function() {
+            let category = $(this).data('category');
+            let value = $(this).data('value');
+
+            $(this).siblings('.option').removeClass('selected');
+            $(this).toggleClass('selected');
+
+            if ($(this).hasClass('selected')) {
+                userPreferences[category] = value;
+            } else {
+                delete userPreferences[category];
+            }
+
+            if (category === 'usage') {
+                if (value === 'gaming') {
+                    $('#gaming-group').removeClass('hidden');
+                    $('#office-group').addClass('hidden');
+                } else if (value === 'office') {
+                    $('#office-group').removeClass('hidden');
+                    $('#gaming-group').addClass('hidden');
                 }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
+            }
+        });
+
+        $('#nextBtn').click(function() {
+            $.ajax({
+                url: '/api/recommendation',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userPreferences),
+                success: function(response) {
+                    window.location.href = 'recommendpage.html?recommendations=' + encodeURIComponent(JSON.stringify(response));
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
                 }
-                localStorage.setItem('recommendedLaptops', JSON.stringify(data));
-                window.location.href = '/laptop/recommendResult';
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An error occurred: ' + error.message);
             });
+        });
     });
 </script>
 </body>
-</html>
 </html>
