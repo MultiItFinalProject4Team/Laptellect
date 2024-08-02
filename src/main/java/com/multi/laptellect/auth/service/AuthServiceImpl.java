@@ -149,7 +149,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public boolean isMemberByEmail(String email) { // email check
-        String loginType = SecurityUtil.getUserDetails().getLoginType();
         return memberMapper.findMemberByEmail(email) != null;
     }
 
