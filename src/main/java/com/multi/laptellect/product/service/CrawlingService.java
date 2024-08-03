@@ -2,6 +2,7 @@ package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.ReviewDTO;
 import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
@@ -84,7 +85,7 @@ public class CrawlingService {
                         "&physicsCate2=869" +
                         "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
-                        "&listCount=30");
+                        "&listCount=10");
                 log.info("laptopType {}", productType);
                 break;
             case 2:
@@ -252,60 +253,84 @@ public class CrawlingService {
         }
     }
 
-    public void reviewCrawler(ProductDTO productDTO) {
+    public void reviewCrawler() {
+
+        List<ProductDTO> productNos = productMapper.findProduct();
         int emptyReviewData = 0;
 
-        try {
-            for (int totalPages = 1; totalPages <= 1000; totalPages++) {
-                String url =
-                        "https://prod.danawa.com/info/dpg/ajax/companyProductReview.ajax.php?" +
-                                "t=0.8990118455164167" +
-                                "&prodCode=3798967" +
-                                "&cate1Code=861" +
-                                "&page=" + totalPages +
-                                "&limit=100" +
-                                "&score=0" +
-                                "&sortType=" +
-                                "&onlyPhotoReview=" +
-                                "&usefullScore=Y" +
-                                "&innerKeyword=" +
-                                "&subjectWord=0" +
-                                "&subjectWordString=" +
-                                "&subjectSimilarWordString=" +
-                                "&_=1722562970811";
 
-                Document doc = Jsoup.connect(url).get();
-                Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
 
-                if (reviews.isEmpty()) {
-                    emptyReviewData++;
-                    log.info("조회된 리뷰가 없습니다. 페이지: {}", totalPages);
-                    if (emptyReviewData >= 3) {
-                        log.info("데이터 조회를 끝마쳤습니다 크롤링을 종료합니다.");
-                        break;
+        for(ProductDTO productDTO : productNos){
+
+            int productNo = productDTO.getProductNo();
+            String productCode = productDTO.getProductCode();
+
+            try {
+                for (int totalPages = 1; totalPages <= 1000; totalPages++) {
+                    String url =
+                            "https://prod.danawa.com/info/dpg/ajax/companyProductReview.ajax.php?" +
+                                    "t=0.8990118455164167" +
+                                    "&prodCode=" + productCode +
+                                    "&cate1Code=861" +
+                                    "&page=" + totalPages +
+                                    "&limit=100" +
+                                    "&score=0" +
+                                    "&sortType=" +
+                                    "&onlyPhotoReview=" +
+                                    "&usefullScore=Y" +
+                                    "&innerKeyword=" +
+                                    "&subjectWord=0" +
+                                    "&subjectWordString=" +
+                                    "&subjectSimilarWordString=" +
+                                    "&_=1722562970811";
+
+                    Document doc = Jsoup.connect(url).get();
+                    Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
+
+                    if (reviews.isEmpty()) {
+                        emptyReviewData++;
+                        log.info("조회된 리뷰가 없습니다. 페이지: {}", totalPages);
+                        if (emptyReviewData >= 3) {
+                            log.info("데이터 조회를 끝마쳤습니다 크롤링을 종료합니다.");
+                            break;
+                        }
+                        continue;
                     }
-                    continue;
+
+                    int reviewCount = 0;
+                    for (Element review : reviews) {
+                        String ratingStyle = review.select(".star_mask").attr("style");
+                        String rating = ratingStyle.replace("width:", "").replace("%", "").trim();
+
+                        int starRating = convertRatingToStars(Integer.parseInt(rating));
+
+                        String title = review.select(".tit_W .tit").text();
+                        String content = review.select(".atc").text();
+
+                        reviewCount++;
+
+                        log.info("상품 별점 = {}, 상품 리뷰 제목 = {}, 상품 리뷰 내용 = {}", starRating, title, content);
+
+
+                        ReviewDTO reviewDTO = new ReviewDTO();
+                        reviewDTO.setProductNo(productNo);
+                        reviewDTO.setRating(starRating);
+                        reviewDTO.setTitle(title);
+                        reviewDTO.setContent(content);
+
+                        productMapper.inputReviewDate(reviewDTO);
+
+
+                    }
+                    log.info("페이지 {}에서 조회된 리뷰 계수 = {}", totalPages, reviewCount);
                 }
-
-                int reviewCount = 0;
-                for (Element review : reviews) {
-                    String ratingStyle = review.select(".star_mask").attr("style");
-                    String rating = ratingStyle.replace("width:", "").replace("%", "").trim();
-
-                    int starRating = convertRatingToStars(Integer.parseInt(rating));
-
-                    String title = review.select(".tit_W .tit").text();
-                    String content = review.select(".atc").text();
-
-                    reviewCount++;
-
-                    log.info("상품 별점 = {}, 상품 리뷰 제목 = {}, 상품 리뷰 내용 = {}", starRating, title, content);
-                }
-                log.info("페이지 {}에서 조회된 리뷰 계수 = {}", totalPages, reviewCount);
+            } catch (Exception e) {
+                log.error("Error during crawling reviews", e);
             }
-        } catch (Exception e) {
-            log.error("Error during crawling reviews", e);
         }
+
+
+
     }
 
     private static int convertRatingToStars(int rating) {
@@ -342,8 +367,6 @@ public class CrawlingService {
         return laptopSpecDTO;
 
     }
-
-
     /**
      * HTTP POST 요청을 보내는 정적 메서드
      *
@@ -384,18 +407,10 @@ public class CrawlingService {
         for (Element row : rows) {
             Elements th = row.select("th");
             Elements td = row.select("td");
-
-            log.info("상품의 요소 확인 1 th = {}", th);
-            log.info("상품의 요소 확인 1 td = {}", td);
             for (int i = 0; i < th.size(); i++) {
                 if (th.get(i).text().equals(specName)) {
-                    // '제조회사'의 경우 a 태그 안의 텍스트 추출
-                    if (specName.equals("제조회사") && !td.select("a").isEmpty()) {
-                        return td.select("a").first().text().trim();
-                    }
-                    // 그 외의 경우 일반 텍스트 추출
                     if (td.size() > i) {
-                        return td.get(i).text().trim().replaceAll("\\s+", " ");  // 불필요한 공백 제거
+                        return td.get(i).text().trim();
                     }
                 }
             }
@@ -403,24 +418,15 @@ public class CrawlingService {
         return "정보 없음";
     }
 
-    private String getSpecValue2(Document doc, String specName) {
+    private String getSpecValue2(Document doc,String specName) {
         Elements rows = doc.select("table.spec_tbl tr");
         for (Element row : rows) {
             Elements th = row.select("th");
-            Elements td = row.select("td");
-
-            System.out.println("상품의 요소 확인 th = " + th);
-            System.out.println("상품의 요소 확인 td = " + td);
-
-            for (int i = 0; i < th.size(); i++) {
-                if (th.get(i).text().equals(specName)) {
-                    // '제조회사'의 경우 a 태그 안의 텍스트 추출
-                    if (specName.equals("제조회사") && !td.select("a").isEmpty()) {
-                        return td.select("a").first().text().trim();
-                    }
-                    // 그 외의 경우 일반 텍스트 추출
-                    if (td.size() > i) {
-                        return td.get(i).text().trim().replaceAll("\\s+", " ");  // 불필요한 공백 제거
+            for (Element thElement : th) {
+                if (thElement.text().equals(specName)) {
+                    Element td = thElement.nextElementSibling();
+                    if (td != null && td.hasClass("dsc")) {
+                        return td.text().trim(); // td 태그의 전체 텍스트를 가져옴
                     }
                 }
             }
@@ -464,7 +470,6 @@ public class CrawlingService {
 
         laptopSpecNames.add("운영체제(OS)");
         laptopSpecNames.add("제조회사");
-        laptopSpecNames.add("등록일");
         laptopSpecNames.add("등록년월");
 
         laptopSpecNames.add("CPU 종류");
@@ -540,9 +545,8 @@ public class CrawlingService {
         ArrayList<String> laptopSpecValue = new ArrayList<>();
 
         laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
-        laptopSpecValue.add(getSpecValue(doc,"제조회사"));
-        laptopSpecValue.add(getSpecValue(doc,"등록일"));
-        laptopSpecValue.add(getSpecValue(doc,"등록년월"));
+        laptopSpecValue.add(getSpecValue2(doc,"제조회사"));
+        laptopSpecValue.add(getSpecValue2(doc,"등록년월"));
 
         laptopSpecValue.add(getSpecValue(doc, "CPU 종류"));
         laptopSpecValue.add(getSpecValue(doc, "CPU 코드명"));
@@ -593,11 +597,9 @@ public class CrawlingService {
         laptopSpecValue.add(getSpecValue(doc,"화면 밝기"));
         laptopSpecValue.add(getSpecValue(doc,"패널 종류"));
 
-        log.info("제조회사",(getSpecValue2(doc,"제조회사")));
-        log.info("등록년월",(getSpecValue2(doc,"등록년월")));
-
-
-
+        log.info("제조회사 데이터 확인 = {}",(getSpecValue2(doc,"제조회사")));
+        log.info("등록년월 데이터 확인 = {}",(getSpecValue2(doc,"등록년월")));
+        
         log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
         for (int i = 0; i < laptopSpecValue.size(); i++) { // 상품 스펙을 Insert 하기 위한 For문
 

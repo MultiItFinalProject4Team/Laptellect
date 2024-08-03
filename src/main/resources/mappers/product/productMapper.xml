@@ -59,7 +59,17 @@
 
     </select>
 
-    <!--리뷰 저장(아직미작성)-->
+    <!--리뷰 저장-->
+    <insert id="inputReviewDate" parameterType="reviewDTO">
+        INSERT INTO review(product_no, rating, title, content)
+        values(#{productNo}, #{rating}, #{title}, #{content})
+    </insert>
+
+    <select id="getReviewRequired" >
+        SELECT product_no, product_code
+        FROM product
+        WHERE type_no IN(2,3);
+    </select>
 
 
     <!-- db 저장된 제품 계수 확인 -->

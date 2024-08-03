@@ -71,7 +71,7 @@ create table review (
 	product_no INT NOT NULL,
 	rating INT NOT NULL,
 	title varchar(255) NOT NULL,
-	content varchar(255) NOT null,
+	content text NOT null,
 	create_date TIMESTAMP default CURRENT_TIMESTAMP,
 	FOREIGN key (product_no) REFERENCES product(product_no) ON DELETE CASCADE
 

@@ -195,7 +195,7 @@ public class ProductController {
     public void review() {
         ProductDTO productDTO = new ProductDTO();
 
-        crawlingService.reviewCrawler(productDTO);
+        crawlingService.reviewCrawler();
     }
 
 }

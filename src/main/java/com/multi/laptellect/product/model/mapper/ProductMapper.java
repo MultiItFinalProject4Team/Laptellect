@@ -1,9 +1,6 @@
 package com.multi.laptellect.product.model.mapper;
 
-import com.multi.laptellect.product.model.dto.ImageDTO;
-import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
-import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
-import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,6 +35,7 @@ public interface ProductMapper {
 
    // String findCategoryNoBySpecName(String specName);
 
+    void inputReviewDate(ReviewDTO reviewDTO);
 
     int insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options);
 
