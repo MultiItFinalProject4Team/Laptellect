@@ -1,5 +1,6 @@
   /* logo */
   .navbar-brand.logo.h1 { font-size: 30px; }
+  .navbar-brand.logo:hover { color: #3498DB; }
   .logo { color: #3498DB }
 
   /* nav bar */
