@@ -7,6 +7,7 @@ import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -33,16 +34,22 @@ public interface ProductMapper {
 
     ProductCategoryDTO findByOptions(String s);
 
-    String findCategorytNo(String options);
+   // String findCategorytNo(String options);
+
+   // String findCategoryNoBySpecName(String specName);
 
 
     int insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options);
 
-    int insertProductSpec(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("optionValue") String optionValue);
 
     List<ProductDTO> findProduct();
 
-    int checkSpecExists(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("options") String options);
+    @Select("SELECT COUNT(*) FROM product_spec WHERE product_no = #{ productNo } AND option_value = #{ specValue }")
+    int checkSpecExists(@Param("productNo") int productNo, @Param("specValue") String specValue);
+
+    void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
+
+
 
     List<LaptopDetailsDTO> laptopProductDetails(String productCode);
 
