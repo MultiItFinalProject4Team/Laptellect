@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class MemberServiceImpl implements MemberService{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
+    @Transactional
     public boolean updateEmail(MemberDTO memberDTO, String verifyCode) throws Exception{ // email update
         if(redisUtil.getData(verifyCode).equals(memberDTO.getEmail())) {
             if(memberMapper.updateEmail(memberDTO) == 0) {
@@ -42,6 +44,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    @Transactional
     public boolean updateNickName(MemberDTO memberDTO) throws Exception{
         if(memberMapper.updateNickName(memberDTO) > 0) {
             log.info("닉네임 업데이트 완료 = {} ", memberDTO.getEmail());
@@ -55,6 +58,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    @Transactional
     public boolean updateTel(MemberDTO memberDTO, String verifyCode) throws Exception{
         if(redisUtil.getData(verifyCode).equals(String.valueOf(memberDTO.getMemberNo()))) {
             if(memberMapper.updateTel(memberDTO) == 0) {
@@ -96,6 +100,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    @Transactional
     public boolean updatePassword(String beforePassword, String afterPassword) {
         CustomUserDetails userInfo = SecurityUtil.getUserDetails();
         int memberNo = userInfo.getMemberNo();
@@ -124,6 +129,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    @Transactional
     public int createMemberAddress(AddressDTO addressDTO) throws Exception {
         int memberNo = SecurityUtil.getUserNo();
         addressDTO.setMemberNo(memberNo);
@@ -157,6 +163,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    @Transactional
     public int updateMemberAddress(AddressDTO addressDTO) {
         int userNo = SecurityUtil.getUserNo();
         int memberNo = addressDTO.getMemberNo();
@@ -170,15 +177,16 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    @Transactional
     public boolean deleteMemberAddress(int addressId) {
         int userNo = SecurityUtil.getUserNo();
         int memberNo = memberMapper.findOwnerByAddressId(addressId);
-
+        
+        log.debug("사용자 검증 시작 = {} {}", userNo, memberNo);
         // 로그인 한 유저가 지우는 배송지의 유저와 일치하지 않으면 삭제 거부
         if(userNo != memberNo) return false;
-
+        
+        log.debug("배송지 삭제 시작 = {}", addressId);
         return memberMapper.deleteAddressByAddressId(addressId) != 0;
     }
-
-
 }

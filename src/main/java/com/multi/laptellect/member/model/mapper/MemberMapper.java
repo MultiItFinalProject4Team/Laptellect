@@ -2,6 +2,7 @@ package com.multi.laptellect.member.model.mapper;
 
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -54,6 +55,7 @@ public interface MemberMapper {
     @Select("SELECT member_no FROM mem_delivery_address WHERE address_id = #{ addressId }")
     int findOwnerByAddressId(int addressId);
 
+    @Delete("DELETE FROM mem_delivery_address WHERE address_id = #{ addressId }")
     int deleteAddressByAddressId(int addressId);
 
     int updateAddress(AddressDTO addressDTO);
