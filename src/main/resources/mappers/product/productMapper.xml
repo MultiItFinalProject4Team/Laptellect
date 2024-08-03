@@ -22,7 +22,7 @@
         values(#{typeNo}, #{productName}, #{price}, #{productCode}, #{createdAt})
     </insert>
 
-
+    <!-- 이미지 레퍼런트 코드 업데이트 -->
     <update id="updateReferenceCode" parameterType="productDTO">
         UPDATE product SET reference_code = #{referenceCode}, updated_at = updated_at WHERE product_no = #{productNo}
     </update>
@@ -30,6 +30,7 @@
     <select id="findTypeNameByNo" resultType="string" parameterType="int">
         SELECT type_name FROM product_type WHERE type_no = #{typeNo}
     </select>
+
     <!-- 중복 확인-->
     <select id="countByProductCode" resultType="int" parameterType="string">
         SELECT COUNT(*) FROM product WHERE product_code = #{productCode}
@@ -58,6 +59,20 @@
 
     </select>
 
+    <!--리뷰 저장-->
+    <insert id="inputReviewDate" parameterType="reviewDTO">
+        INSERT INTO review(product_no, rating, title, content)
+        values(#{productNo}, #{rating}, #{title}, #{content})
+    </insert>
+
+    <select id="getReviewRequired" >
+        SELECT product_no, product_code
+        FROM product
+        WHERE type_no IN(2,3);
+    </select>
+
+
+    <!-- db 저장된 제품 계수 확인 -->
     <select id="getTotalProducts" resultType="int">
         SELECT COUNT(*) FROM product
     </select>
@@ -67,19 +82,19 @@
         SELECT * FROM product WHERE product_code = #{productCode}
     </select>
 
-
+    <!--제품 카테고리를 옵션으로 조회-->
     <select id="findByOptions" parameterType="String" resultType="productCategoryDTO">
         SELECT *
         FROM product_category
         WHERE options = #{s}
     </select>
 
-    <select id="findCategorytNo" parameterType="String">
-        SELECT category_no
-        FROM product_category
-        WHERE options = #{options}
+<!--    <select id="findCategorytNo" parameterType="String">-->
+<!--        SELECT category_no-->
+<!--        FROM product_category-->
+<!--        WHERE options = #{options}-->
 
-    </select>
+<!--    </select>-->
 
 
     <insert id="insertProductCategory" parameterType="productCategoryDTO">
@@ -89,26 +104,27 @@
 
 
 
-    <insert id="insertProductSpec" parameterType="productSpecDTO">
+<!--    <insert id="insertProductSpec" parameterType="productSpecDTO">-->
+<!--        INSERT INTO product_spec (product_no, category_no, option_value)-->
+<!--        VALUES (#{productNo}, #{categoryNo}, #{optionValue})-->
+<!--    </insert>-->
+
+    <insert id="insertProductSpec">
         INSERT INTO product_spec (product_no, category_no, option_value)
-        VALUES (#{productNo}, #{categoryNo}, #{optionValue})
+        VALUES (
+        #{productNo},
+        (SELECT category_no FROM product_category WHERE options = #{specName}),
+        #{specValue}
+        )
     </insert>
     
     <select id="findProduct" parameterType="productDTO">
         SELECT *
         FROM
         product
-        WHERE type_no = 1
     </select>
 
-    <select id="checkSpecExists" resultType="int">
-        SELECT COUNT(*)
-        FROM product_spec
-        WHERE product_no = #{productNo}
-        AND category_no = #{categoryNo}
-        AND option_value = #{options}
-    </select>
-
+    <!--제품의 상세 조회 -->
     <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
         SELECT *
         FROM

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org " layout:decorate="~{common/layout.html}" >
 <head>
     <meta charset="UTF-8">
-    <title>Product List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/product.css}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -29,7 +28,7 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container" layout:fragment="content">
     <h1 class="mt-5">Product List</h1>
     <form th:action="@{/product/test}" method="post">
         <select id="productType" name="products">
@@ -75,33 +74,33 @@
             <nav aria-label="Product list pagination">
                 <ul class="pagination">
                     <!-- 첫 페이지로 이동 -->
-                    <li class="page-item" th:classappend="${pageNumber == 1} ? 'disabled'">
+                    <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
                         <a class="page-link" th:href="@{/product/productList(pageNumber=1, pageSize=${pageSize})}" aria-label="First">
                             <span aria-hidden="true">&laquo;&laquo;</span>
                         </a>
                     </li>
 
                     <!-- 이전 페이지 -->
-                    <li class="page-item" th:classappend="${pageNumber == 1} ? 'disabled'">
-                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                    <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber - 1}, pageSize=${pageSize})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
 
                     <!-- 페이지 번호 -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == pageNumber} ? 'active'">
+                    <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == (pageNumber == null ? 1 : pageNumber)} ? 'active'">
                         <a class="page-link" th:href="@{/product/productList(pageNumber=${i}, pageSize=${pageSize})}" th:text="${i}"></a>
                     </li>
 
                     <!-- 다음 페이지 -->
-                    <li class="page-item" th:classappend="${pageNumber == totalPages} ? 'disabled'">
-                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber + 1}, pageSize=${pageSize})}" aria-label="Next">
+                    <li class="page-item" th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber + 1}, pageSize=${pageSize})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
 
                     <!-- 마지막 페이지로 이동 -->
-                    <li class="page-item" th:classappend="${pageNumber == totalPages} ? 'disabled'">
+                    <li class="page-item" th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
                         <a class="page-link" th:href="@{/product/productList(pageNumber=${totalPages}, pageSize=${pageSize})}" aria-label="Last">
                             <span aria-hidden="true">&raquo;&raquo;</span>
                         </a>
@@ -110,7 +109,15 @@
             </nav>
         </div>
     </div>
-
+    <script>
+        $(document).ready(function() {
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

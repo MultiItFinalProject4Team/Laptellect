@@ -62,3 +62,17 @@ CREATE TABLE images (
 	updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT images_PK PRIMARY KEY(image_no)
 );
+
+
+-- 리뷰 데이터 테이블
+
+create table review (
+	review_no INT NOT NULL AUTO_INCREMENT PRIMARY key,
+	product_no INT NOT NULL,
+	rating INT NOT NULL,
+	title varchar(255) NOT NULL,
+	content text NOT null,
+	create_date TIMESTAMP default CURRENT_TIMESTAMP,
+	FOREIGN key (product_no) REFERENCES product(product_no) ON DELETE CASCADE
+
+)

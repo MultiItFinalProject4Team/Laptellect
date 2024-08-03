@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{common/layout.html}">
 
 <head>
     <meta charset="UTF-8">
@@ -13,8 +13,9 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-5">상품 상세 정보</h1>
+
+<div class="container" layout:fragment="content">
+    <br>
     <div class="row">
         <div class="col-12 table-container">
             <!-- 상품 이미지 -->
@@ -36,7 +37,6 @@
                 <a class="btn btn-primary" href="#" role="button">위시리스트</a>
             </div>
 
-            <h2>상세 정보</h2>
             <!-- 상품 스펙 정보 테이블 -->
             <table class="table table-bordered">
                 <thead>
