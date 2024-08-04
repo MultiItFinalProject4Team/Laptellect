@@ -79,6 +79,7 @@ public class ProductController {
             switch (typeNo) {
                 case 1:
                     crawlingService.processLaptopDetails(typeNo);
+                    log.info("productController = {}", typeNo);
                     break;
                 case 2:
                     // crawlingService.processMouseDetails(productDTO);

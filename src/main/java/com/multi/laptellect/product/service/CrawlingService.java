@@ -212,6 +212,7 @@ public class CrawlingService {
         for (ProductDTO product : products) {
             int productNo = product.getProductNo();
             String productCode = product.getProductCode();
+            log.info("processLaptopDetails = {}", productType);
             getLaptopDetails(productNo, productCode, productType);
         }
     }
@@ -356,8 +357,9 @@ public class CrawlingService {
             String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
             Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
 
-            ArrayList<String> laptopSpecNames = createLaptopCategory(productType);
-            createLaptopSpec(productNo, laptopSpecNames, doc);
+            Map<String, List<String>> categoryMap = createLaptopCategory(productType);
+            log.info("getLaptopDetails = {}", productType);
+            createLaptopSpec(productNo, categoryMap, doc);
         } catch (IOException e) {
             log.error("Error while getting product details", e);
         }
@@ -464,35 +466,40 @@ public class CrawlingService {
     }
 
     public Map<String, List<String>> createLaptopCategory(int productType) {
-          //ArrayList<String> laptopSpecNames = new ArrayList<>();
-        Map<String, List<String>> categoryMap = new HashMap<>();
+        ArrayList<String> laptopSpecNames = new ArrayList<>();
+        Map<String, List<String>> categoryMap = new LinkedHashMap<>();
 
-        categoryMap.put("LC", Arrays.asList("CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS"));
-        categoryMap.put("LG", Arrays.asList("GPU 종류", "GPU 제조사", "GPU 칩셋", "GPU 코어", "GPU 클럭"));
-        categoryMap.put("LR", Arrays.asList("램 타입", "램 용량", "램 슬롯", "램 대역폭", "램 교체"));
-        categoryMap.put("LD", Arrays.asList("화면 크기", "해상도", "패널 표면 처리", "주사율", "화면 밝기", "패널 종류"));
-        categoryMap.put("LS", Arrays.asList("저장 용량", "저장장치 종류", "저장 슬롯"));
         categoryMap.put("LBI", Arrays.asList("운영체제(OS)", "제조회사", "등록년월", "무게", "두께", "스피커", "쿨링팬"));
+        categoryMap.put("LR", Arrays.asList("램 타입", "램 용량", "램 슬롯", "램 대역폭", "램 교체"));
+        categoryMap.put("LC", Arrays.asList("CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS"));
+        categoryMap.put("LS", Arrays.asList("저장 용량", "저장장치 종류", "저장 슬롯"));
+        categoryMap.put("LD", Arrays.asList("화면 크기", "해상도", "패널 표면 처리", "주사율", "화면 밝기", "패널 종류"));
         categoryMap.put("LWC", Arrays.asList("무선랜", "USB", "USB-C", "USB-A", "블루투스", "썬더볼트4"));
+        categoryMap.put("LG", Arrays.asList("GPU 종류", "GPU 제조사", "GPU 칩셋", "GPU 코어", "GPU 클럭"));
         categoryMap.put("LPA", Arrays.asList("배터리", "어댑터", "전원"));
 
         for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
             String categoryPrefix = entry.getKey();
             List<String> specs = entry.getValue();
 
+            log.info("categoryPrefix 데이터 확인 = {}",categoryPrefix);
+            log.info("specs 데이터 확인 = {}",specs);
+            log.info("createLaptopCategory = {}", productType);
+
             for (String specName : specs) {
 
-                String categoryNo = categoryPrefix;
 
-                ProductCategoryDTO spec = productMapper.findByOptions(categoryNo);
-                log.info("specname {}:", spec);
+                ProductCategoryDTO spec = productMapper.findByOptions(specName);
+                log.info("specname {}:", specName);
                 if (spec == null) {
 
-                    productMapper.insertProductCategory(categoryNo, productType, specName);
+                    productMapper.insertProductCategory(productType, specName,categoryPrefix);
+
 
                 }
             }
         }
+
         return categoryMap;
     }
 
@@ -570,8 +577,8 @@ public class CrawlingService {
 //    }
 
 
-        public void createLaptopSpec ( int productNo, ArrayList<String > laptopSpecNames, Document doc){
-            ArrayList<String> laptopSpecValue = new ArrayList<>();
+    public void createLaptopSpec(int productNo, Map<String, List<String>> categoryMap, Document doc) {
+        ArrayList<String> laptopSpecValue = new ArrayList<>();
 
 //        laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
 //        laptopSpecValue.add(getSpecValue2(doc,"제조회사"));
@@ -628,79 +635,87 @@ public class CrawlingService {
 
 
 // 노트북 CPU (LC)
-            laptopSpecValue.add(getSpecValue(doc, "CPU 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "CPU 코드명"));
-            laptopSpecValue.add(getSpecValue(doc, "CPU 넘버"));
-            laptopSpecValue.add(getSpecValue(doc, "코어 수"));
-            laptopSpecValue.add(getSpecValue(doc, "스레드 수"));
-            laptopSpecValue.add(getSpecValue(doc, "NPU 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "NPU TOPS"));
+        // 노트북 기본 정보 (LBI)
+        laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
+        laptopSpecValue.add(getSpecValue2(doc, "제조회사"));
+        laptopSpecValue.add(getSpecValue2(doc, "등록년월"));
+        laptopSpecValue.add(getSpecValue(doc, "무게"));
+        laptopSpecValue.add(getSpecValue(doc, "두께"));
+        laptopSpecValue.add(getSpecValue(doc, "스피커"));
+        laptopSpecValue.add(getSpecValue(doc, "쿨링팬"));
 
-// 노트북 GPU (LG)
-            laptopSpecValue.add(getSpecValue(doc, "GPU 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 제조사"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 칩셋"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 코어"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 클럭"));
+        // 노트북 RAM (LR)
+        laptopSpecValue.add(getSpecValue(doc, "램 타입"));
+        laptopSpecValue.add(getSpecValue(doc, "램 용량"));
+        laptopSpecValue.add(getSpecValue(doc, "램 슬롯"));
+        laptopSpecValue.add(getSpecValue(doc, "램 대역폭"));
+        laptopSpecValue.add(getSpecValue(doc, "램 교체"));
 
-// 노트북 RAM (LR)
-            laptopSpecValue.add(getSpecValue(doc, "램 타입"));
-            laptopSpecValue.add(getSpecValue(doc, "램 용량"));
-            laptopSpecValue.add(getSpecValue(doc, "램 슬롯"));
-            laptopSpecValue.add(getSpecValue(doc, "램 대역폭"));
-            laptopSpecValue.add(getSpecValue(doc, "램 교체"));
-            laptopSpecValue.add(getSpecValue(doc, "램 대역폭"));
+        // 노트북 CPU (LC)
+        laptopSpecValue.add(getSpecValue(doc, "CPU 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "CPU 코드명"));
+        laptopSpecValue.add(getSpecValue(doc, "CPU 넘버"));
+        laptopSpecValue.add(getSpecValue(doc, "코어 수"));
+        laptopSpecValue.add(getSpecValue(doc, "스레드 수"));
+        laptopSpecValue.add(getSpecValue(doc, "NPU 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "NPU TOPS"));
 
-// 노트북 디스플레이 (LD)
-            laptopSpecValue.add(getSpecValue(doc, "화면 크기"));
-            laptopSpecValue.add(getSpecValue(doc, "해상도"));
-            laptopSpecValue.add(getSpecValue(doc, "패널 표면 처리"));
-            laptopSpecValue.add(getSpecValue(doc, "주사율"));
-            laptopSpecValue.add(getSpecValue(doc, "화면 밝기"));
-            laptopSpecValue.add(getSpecValue(doc, "패널 종류"));
+        // 노트북 저장관련 (LS)
+        laptopSpecValue.add(getSpecValue(doc, "저장 용량"));
+        laptopSpecValue.add(getSpecValue(doc, "저장장치 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "저장 슬롯"));
 
-// 노트북 저장관련 (LS)
-            laptopSpecValue.add(getSpecValue(doc, "저장 용량"));
-            laptopSpecValue.add(getSpecValue(doc, "저장장치 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "저장 슬롯"));
+        // 노트북 디스플레이 (LD)
+        laptopSpecValue.add(getSpecValue(doc, "화면 크기"));
+        laptopSpecValue.add(getSpecValue(doc, "해상도"));
+        laptopSpecValue.add(getSpecValue(doc, "패널 표면 처리"));
+        laptopSpecValue.add(getSpecValue(doc, "주사율"));
+        laptopSpecValue.add(getSpecValue(doc, "화면 밝기"));
+        laptopSpecValue.add(getSpecValue(doc, "패널 종류"));
 
-// 노트북 기본 정보 (LBI)
-            laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
-            laptopSpecValue.add(getSpecValue2(doc, "제조회사"));
-            laptopSpecValue.add(getSpecValue2(doc, "등록년월"));
-            laptopSpecValue.add(getSpecValue(doc, "무게"));
-            laptopSpecValue.add(getSpecValue(doc, "두께"));
-            laptopSpecValue.add(getSpecValue(doc, "스피커"));
-            laptopSpecValue.add(getSpecValue(doc, "쿨링팬"));
+        // 무선랜 및 연결 장치 (LWC)
+        laptopSpecValue.add(getSpecValue(doc, "무선랜"));
+        laptopSpecValue.add(getSpecValue(doc, "USB"));
+        laptopSpecValue.add(getSpecValue(doc, "USB-C"));
+        laptopSpecValue.add(getSpecValue(doc, "USB-A"));
+        laptopSpecValue.add(getSpecValue(doc, "블루투스"));
+        laptopSpecValue.add(getSpecValue(doc, "썬더볼트4"));
 
-// 무선랜 및 연결 장치 (LWC)
-            laptopSpecValue.add(getSpecValue(doc, "무선랜"));
-            laptopSpecValue.add(getSpecValue(doc, "USB"));
-            laptopSpecValue.add(getSpecValue(doc, "USB-C"));
-            laptopSpecValue.add(getSpecValue(doc, "USB-A"));
-            laptopSpecValue.add(getSpecValue(doc, "블루투스"));
-            laptopSpecValue.add(getSpecValue(doc, "썬더볼트4"));
+        // 노트북 GPU (LG)
+        laptopSpecValue.add(getSpecValue(doc, "GPU 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 제조사"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 칩셋"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 코어"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 클럭"));
 
-// 노트북 전원 (LPA)
-            laptopSpecValue.add(getSpecValue(doc, "배터리"));
-            laptopSpecValue.add(getSpecValue(doc, "어댑터"));
-            laptopSpecValue.add(getSpecValue(doc, "전원"));
+        // 노트북 전원 (LPA)
+        laptopSpecValue.add(getSpecValue(doc, "배터리"));
+        laptopSpecValue.add(getSpecValue(doc, "어댑터"));
+        laptopSpecValue.add(getSpecValue(doc, "전원"));
 
-            log.info("제조회사 데이터 확인 = {}", (getSpecValue2(doc, "제조회사")));
-            log.info("등록년월 데이터 확인 = {}", (getSpecValue2(doc, "등록년월")));
+        log.info("제조회사 데이터 확인 = {}", (getSpecValue2(doc, "제조회사")));
+        log.info("등록년월 데이터 확인 = {}", (getSpecValue2(doc, "등록년월")));
 
-            log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
-            for (int i = 0; i < laptopSpecValue.size(); i++) { // 상품 스펙을 Insert 하기 위한 For문
+        log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
 
-                String specName = laptopSpecNames.get(i); // 옵션 이름
-                String specValue = laptopSpecValue.get(i); // 옵션 값
+        int index = 0;
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            List<String> specs = entry.getValue();
+
+            for (String specName : specs) {
+                if (index >= laptopSpecValue.size()) {
+                    log.error("Index out of bounds: index = {}, size = {}", index, laptopSpecValue.size());
+                    return; // 인덱스가 리스트 크기를 벗어날 때 메서드 종료
+                }
+
+                String specValue = laptopSpecValue.get(index);
 
                 if (specValue.equals("정보 없음")) {
                     log.info("옵션 정보 없음 = {}", specValue);
                 } else {
                     log.info("Insert 값 = {} : {}", specName, specValue);
 
-                    //중복 확인 쿼리
+                    // 중복 확인 쿼리
                     int exists = productMapper.checkSpecExists(productNo, specValue);
                     if (exists == 0) {
                         log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
@@ -709,11 +724,10 @@ public class CrawlingService {
                         log.info("ProductSpec Insert 완료 = {}", productNo);
                     }
 
-
                     log.info("ProductSpec Insert 완료");
                 }
+                index++;
             }
         }
-
     }
-
+}

@@ -83,10 +83,10 @@
     </select>
 
     <!--제품 카테고리를 옵션으로 조회-->
-    <select id="findByOptions" parameterType="String" resultType="productCategoryDTO">
+    <select id="findByOptions" parameterType="map" resultType="productCategoryDTO">
         SELECT *
         FROM product_category
-        WHERE options = #{s}
+        WHERE options = #{specName}
     </select>
 
 <!--    <select id="findCategorytNo" parameterType="String">-->
@@ -97,9 +97,9 @@
 <!--    </select>-->
 
 
-    <insert id="insertProductCategory" parameterType="productCategoryDTO">
-        INSERT INTO product_category (category_no, type_no, options)
-        VALUES (#{categoryNo}, #{typeNo}, #{options})
+    <insert id="insertProductCategory" parameterType="map">
+        INSERT INTO product_category (type_no, options, category_code)
+        VALUES (#{typeNo}, #{options}, #{categoryCode})
     </insert>
 
 

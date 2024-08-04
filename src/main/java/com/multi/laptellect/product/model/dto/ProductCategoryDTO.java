@@ -7,6 +7,7 @@ public class ProductCategoryDTO {
 
     private int categoryNo;
     private int typeNo;
+    private String categoryCode;
     private String options;
 
 }
