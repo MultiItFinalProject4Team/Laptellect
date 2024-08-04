@@ -4,9 +4,12 @@ import com.multi.laptellect.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * 상품 API 처리 컨트롤러
@@ -28,13 +31,15 @@ public class ProductApiController {
      * @param productNo 상품 번호
      * @return the boolean
      */
-    @GetMapping("/add-wishlist")
-    public boolean addToWishlist(@RequestParam(name = "productNo") int productNo) {
+    @ResponseBody
+    @PostMapping("/process-wishlist")
+    public boolean processWishlist(@RequestParam(name = "productNo") List<Integer> productNo) {
+        boolean result = false;
         try {
-            boolean result = productService.addTowishlist(productNo);
+            result = productService.processWishlist(productNo);
         } catch (Exception e) {
             log.error("위시리스트 등록 실패");
         }
-        return false;
+        return result;
     }
 }

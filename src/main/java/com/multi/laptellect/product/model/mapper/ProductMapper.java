@@ -55,4 +55,7 @@ public interface ProductMapper {
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")
     int insertWishlist(WishListDTO wishListDTO);
+
+    @Select("SELECT * FROM wishlist WHERE product_no = #{ productNo } AND member_no = #{ memberNo }")
+    WishListDTO findWishlist(WishListDTO wishListDTO);
 }

@@ -119,16 +119,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean addTowishlist(int productNo) throws Exception {
+    @Transactional
+    public boolean processWishlist(List<Integer> productNoList) throws Exception {
         WishListDTO wishListDTO = new WishListDTO();
         int memberNo = SecurityUtil.getUserNo();
-
-        wishListDTO.setProductNo(productNo);
         wishListDTO.setMemberNo(memberNo);
 
-        if(productMapper.insertWishlist(wishListDTO) > 0) return true;
+        for (int productNo : productNoList) {
+            wishListDTO.setProductNo(productNo);
+            log.debug("위시 리스트 추가 시작 = {}, {}", productNo, memberNo);
+            if(productMapper.findWishlist(wishListDTO) != null) {
+                log.info("위시 리스트 중복 = {}", productNo);
+            } else {
+                productMapper.insertWishlist(wishListDTO);
+                log.info("위시 리스트 등록 성공 = {}", productNo);
+            }
+        }
 
-        return false;
+        return true;
     }
 
     //상품 전체 조회

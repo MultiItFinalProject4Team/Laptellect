@@ -29,7 +29,7 @@ public interface ProductService {
      * @return 성공 여부 Bool
      * @throws Exception the exception
      */
-    boolean addTowishlist(int productNo) throws Exception;
+    boolean processWishlist(List<Integer> productNo) throws Exception;
 
 
 }
