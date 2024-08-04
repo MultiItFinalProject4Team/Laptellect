@@ -11,14 +11,14 @@
         <result column="productinfo" property="productinfo"/>
         <result column="date_created" property="date_created"/>
         <result column="productprice" property="productprice"/>
-        <result column="im_port_id" property="im_port_id"/>
+        <result column="im_port_id" property="imPortId"/>
 
     </resultMap>
 
     <resultMap id="PointResultMap"
                type="com.multi.laptellect.payment.model.dto.PaymentpointDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
         <result column="username" property="username"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
-        <result column="im_port_id" property="im_port_id"/>
+        <result column="im_port_id" property="imPortId"/>
         <result column="payment_possession_point" property="possessionpoint"/>
         <result column="payment_point_change" property="pointchange"/>
         <result column="payment_point_info" property="pointinfo"/>
@@ -31,7 +31,7 @@
         <result column="productinfo" property="productinfo"/>
         <result column="date_created" property="date_created"/>
         <result column="purchaseprice" property="purchaseprice"/>
-        <result column="im_port_id" property="im_port_id"/>
+        <result column="im_port_id" property="imPortId"/>
     </resultMap>
 
     <select id="selectpaymentpage" resultMap="PaymentpageResultMap">
@@ -57,7 +57,7 @@
         #{productprice},
         #{purchaseprice},
         NOW(),  <!-- 현재 시간을 자동으로 삽입 -->
-        #{im_port_id}
+        #{imPortId}
         )
     </insert>
 
@@ -73,7 +73,7 @@
         UPDATE payment
         SET refund = 'Y',
         refund_date = NOW()
-        WHERE im_port_id = #{im_port_id}
+        WHERE im_port_id = #{imPortId}
     </update>
 
     <insert id="saveReview" parameterType="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
@@ -84,7 +84,7 @@
         DEFAULT,
         #{content},
         #{rating},
-        #{im_port_id},
+        #{imPortId},
         NOW(),  <!-- 현재 시간을 자동으로 삽입 -->
         NULL
         )
@@ -112,7 +112,7 @@
         )
         SELECT
         #{username},
-        #{im_port_id},
+        #{imPortId},
         (SELECT payment_possession_point FROM payment_point WHERE username = #{username} ORDER BY payment_price_no DESC LIMIT 1) - #{usedPoints},
         CONCAT('-', #{usedPoints}),
         '구매 시 포인트사용',
@@ -133,7 +133,7 @@
         )
         SELECT
         #{username},
-        #{im_port_id},
+        #{imPortId},
         (SELECT payment_possession_point FROM payment_point WHERE username = #{username} ORDER BY payment_price_no DESC LIMIT 1) + 500,
         CONCAT('+', 500),
         '구매 후 리뷰작성 포인트지급',
@@ -151,7 +151,7 @@
         )
         SELECT
         #{username},
-        #{im_port_id},
+        #{imPortId},
         COALESCE((SELECT payment_possession_point
         FROM payment_point
         WHERE username = #{username}
@@ -166,7 +166,7 @@
 
     <select id="select_refundpoint" resultMap="PointResultMap">
         SELECT * FROM payment_point
-        WHERE im_port_id = #{im_port_id}
+        WHERE im_port_id = #{imPortId}
         ORDER BY payment_price_no DESC LIMIT 1
     </select>
 

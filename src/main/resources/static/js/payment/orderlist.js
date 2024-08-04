@@ -3,7 +3,7 @@ const itemsPerPage = 3;
 let filteredOrders = [];
 let totalItems = 0;
 
-function cancelOrder(im_port_id, amount) {
+function cancelOrder(imPortId, amount) {
     if (confirm('정말로 주문을 취소하시겠습니까?')) {
         fetch('/payment/cancel', {
             method: 'POST',
@@ -11,7 +11,7 @@ function cancelOrder(im_port_id, amount) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                im_port_id: im_port_id,
+                imPortId: imPortId,
                 amount: parseFloat(amount)
             }),
         })
@@ -117,11 +117,11 @@ function updatePagination() {
     paginationElement.appendChild(nextButton);
 }
 
-function openReviewModal(productName, username, im_port_id) {
+function openReviewModal(productName, username, imPortId) {
     document.getElementById('reviewModal').style.display = 'block';
     document.getElementById('reviewProductName').textContent = productName;
     document.getElementById('reviewUsername').textContent = username;
-    document.getElementById('reviewModal').dataset.im_port_id = im_port_id;
+    document.getElementById('reviewModal').dataset.imPortId = imPortId;
 
     // 리뷰 내용 입력 필드와 제출 버튼 초기화
     const reviewContent = document.getElementById('reviewContent');
@@ -152,7 +152,7 @@ function submitReview() {
         const username = document.getElementById('reviewUsername').textContent;
         const rating = document.getElementById('reviewRating').value;
         const content = document.getElementById('reviewContent').value;
-        const im_port_id = document.getElementById('reviewModal').dataset.im_port_id;
+        const imPortId = document.getElementById('reviewModal').dataset.imPortId;
 
         fetch('/payment/reviews', {
             method: 'POST',
@@ -164,7 +164,7 @@ function submitReview() {
                 username: username,
                 rating: rating,
                 content: content,
-                im_port_id: im_port_id
+                imPortId: imPortId
             }),
         })
         .then(response => response.json())
@@ -174,8 +174,8 @@ function submitReview() {
                 closeReviewModal();
 
                 // 리뷰 버튼과 취소 버튼 상태 업데이트
-                const reviewButton = document.querySelector(`button.review-button[data-imp-uid="${im_port_id}"]`);
-                const cancelButton = document.querySelector(`button.cancel-button[data-imp-uid="${im_port_id}"]`);
+                const reviewButton = document.querySelector(`button.review-button[data-imp-uid="${imPortId}"]`);
+                const cancelButton = document.querySelector(`button.cancel-button[data-imp-uid="${imPortId}"]`);
                 if (reviewButton) {
                     reviewButton.classList.add('reviewed');
                     reviewButton.disabled = true;

@@ -56,7 +56,7 @@ public class PaymentController {
             paymentDTO.setProductname(paymentpageDTO.getProductname());
             paymentDTO.setProductprice(paymentpageDTO.getProductprice());
             paymentDTO.setPurchaseprice(request.getAmount().intValue());
-            paymentDTO.setIm_port_id(request.getIm_port_id());
+            paymentDTO.setImPortId(request.getImPortId());
 
 
             boolean verified = paymentService.verifyPayment(request, paymentDTO);
@@ -64,10 +64,10 @@ public class PaymentController {
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
             paymentpointDTO.setUsedPoints(request.getUsedPoints());
-            paymentpointDTO.setIm_port_id(request.getIm_port_id());
+            paymentpointDTO.setImPortId(request.getImPortId());
 
 
-            if(paymentpointDTO.getPossessionpoint() <= 0) {
+            if(paymentpointDTO.getPossessionpoint() < 0) {
                 verified = false;
             }
             else{
@@ -90,21 +90,19 @@ public class PaymentController {
     @PostMapping("/cancel")
     public ResponseEntity<Map<String, Object>> cancelPayment(@RequestBody VerificationRequestDTO cancelRequest) {
         try {
-            if (cancelRequest.getIm_port_id() == null || cancelRequest.getIm_port_id().isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "취소 실패: 유효한 im_port_id 값이 없습니다."));
+            if (cancelRequest.getImPortId() == null || cancelRequest.getImPortId().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "취소 실패: 유효한 imPortId 값이 없습니다."));
             }
 
             IamportResponse<Payment> response = paymentService.cancelPayment(
-                    cancelRequest.getIm_port_id(),
+                    cancelRequest.getImPortId(),
                     cancelRequest.getAmount(),
                     "고객 요청으로 인한 취소"
             );
 
-            paymentService.updateRefundStatus(cancelRequest.getIm_port_id());
+            paymentService.updateRefundStatus(cancelRequest.getImPortId());
 
-            int refundedPoints = paymentService.refundpoint(cancelRequest.getIm_port_id());
-
-            int refundedPoints = paymentService.refundpoint(cancelRequest.getImpUid());
+            int refundedPoints = paymentService.refundpoint(cancelRequest.getImPortId());
 
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
@@ -119,7 +117,7 @@ public class PaymentController {
         if (result > 0) {
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
 
-            paymentpointDTO.setIm_port_id(reviewDTO.getIm_port_id());
+            paymentpointDTO.setImPortId(reviewDTO.getImPortId());
 
             paymentService.givepoint(paymentpointDTO);
 

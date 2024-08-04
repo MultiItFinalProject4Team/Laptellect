@@ -11,7 +11,7 @@ public class PaymentDTO {
     private int productprice;
     private int purchaseprice;
     private String date_created;
-    private String im_port_id;
+    private String imPortId;
 
 
 }

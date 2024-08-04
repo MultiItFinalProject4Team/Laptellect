@@ -9,7 +9,7 @@ public class PaymentpageDTO {
     private String productinfo;
     private String date_created;
     private int productprice;
-    private String im_port_id;
+    private String imPortId;
 
 
 }

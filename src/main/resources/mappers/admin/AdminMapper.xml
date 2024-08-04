@@ -24,7 +24,7 @@
         <result column="productprice" property="productprice"/>
         <result column="purchaseprice" property="purchaseprice"/>
         <result column="date_created" property="date_created"/>
-        <result column="im_port_id" property="im_port_id"/>
+        <result column="imPortId" property="imPortId"/>
         <result column="refund" property="refund"/>
         <result column="refund_date" property="refund_date"/>
     </resultMap>

@@ -62,7 +62,7 @@ function mypayment() {
             if (rsp.success) {
                 try {
                     const { data } = await axios.post('/payment/verifyPayment', {
-                        im_port_id: rsp.imp_uid,
+                        imPortId: rsp.imp_uid,
                         amount: myAmount,
                         usedPoints: usedPoints
                     });
@@ -87,10 +87,10 @@ function mypayment() {
     );
 }
 
-async function cancelPayment(im_port_id, amount) {
+async function cancelPayment(imPortId, amount) {
     try {
         await axios.post('/payment/cancel', {
-            im_port_id: im_port_id,
+            imPortId: imPortId,
             amount: amount
         });
         console.log("결제 취소 성공");
