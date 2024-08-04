@@ -3,11 +3,15 @@ package com.multi.laptellect.member.service;
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.dto.PointLogDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,6 +164,19 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public AddressDTO findAddressByAddressId(int addressId) throws Exception {
         return memberMapper.findAllAddressByAddressId(addressId);
+    }
+
+    @Override
+    public Page<PointLogDTO> getAllPointList(Pageable pageable) throws Exception{
+        int memberNo = SecurityUtil.getUserNo();
+
+        ArrayList<PointLogDTO> pointList = memberMapper.findAllPointLogByMemberNo(memberNo, pageable);
+        log.info("pointLIst 조회 = {}", pointList);
+
+        int total = memberMapper.countAllPointLogByMemberNo(memberNo);
+        log.info("count 조회 = {}", total);
+
+        return new PageImpl<>(pointList, pageable, total);
     }
 
     @Override

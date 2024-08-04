@@ -1,9 +1,14 @@
 package com.multi.laptellect.api.member;
 
 import com.multi.laptellect.member.model.dto.AddressDTO;
+import com.multi.laptellect.member.model.dto.PointLogDTO;
 import com.multi.laptellect.member.service.MemberService;
+import com.multi.laptellect.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -132,4 +137,32 @@ public class MemberApiController {
             return false;
         }
     }
+
+    @GetMapping("/all-point-list")
+    public String getPointList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+        try {
+            log.debug("포인트 내역 전체 조회 시작");
+//            ArrayList<PointLogDTO> pointList = memberService.getAllPointList(pageable);
+            Page<PointLogDTO> pointList = memberService.getAllPointList(pageable);
+            log.info("포인트 내역 조회 성공 = {}", pointList.getContent());
+
+            int page = pageable.getPageNumber();
+            int size = pageable.getPageSize();
+
+            int startPage = PaginationUtil.getStartPage(pointList);
+            int endPage = PaginationUtil.getEndPage(pointList);
+
+            model.addAttribute("pointList", pointList);
+            model.addAttribute("page", page);
+            model.addAttribute("size", size);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+        } catch (Exception e) {
+            log.error("포인트 조회 실패 = ", e);
+        }
+        return "/member/point/all-point-tab";
+    }
+
+
+
 }

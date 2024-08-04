@@ -25,22 +25,9 @@
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/css/member/profile.css}"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
 
-    <!-- 경고 메시지 -->
-    <script th:inline="javascript">
-    /*<![CDATA[*/
-    let msg = [[${msg}]];
-    if (msg != null) {
-        alert(msg);
-        fetch('/clearMessage', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
-    }
-    /*]]>*/
-</script>
+    </style>
 </head>
 <body>
 <div id="wrapper">
@@ -156,59 +143,6 @@
         </div>
     </div>
 
-<!-- Start Footer -->
-    <footer class="bg-dark" id="tempaltemo_footer">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-4 pt-5">
-                    <h2 class="h2 border-bottom pb-3 border-light logo">Laptsellet</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li>
-                            팀원: 이강석, 안진원, 박재민, 이우석, 윤상현
-                        </li>
-                        <li>
-                            <a class="text-decoration-none" href="https://github.com/MultiItFinalProject4Team/Laptellect">GitHub | Laptellect</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">노트북</a></li>
-                        <li><a class="text-decoration-none" href="#">키보드</a></li>
-                        <li><a class="text-decoration-none" href="#">마우스</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-light border-bottom pb-3 border-light">Link</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="/">Home</a></li>
-                        <li><a class="text-decoration-none" href="/recommended">Recommended</a></li>
-                        <li><a class="text-decoration-none" href="/product/productList?pages=1">Store</a></li>
-                        <li><a class="text-decoration-none" href="/customer/user">Customer</a></li>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="w-100 bg-black py-3">
-            <div class="container">
-                <div class="row pt-2">
-                    <div class="col-12">
-                        <p class="text-left text-light">
-                            &copy; 2024 프로젝트 실패하면 중장비 타러감
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-<!-- End Footer -->
-
 <!-- 회원가입 모달 -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
@@ -248,5 +182,58 @@
         </div>
     </div>
 </div>
+
+<!-- Start Footer -->
+<footer class="bg-dark" id="tempaltemo_footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 border-bottom pb-3 border-light logo">Laptsellet</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li>
+                        팀원: 이강석, 안진원, 박재민, 이우석, 윤상현
+                    </li>
+                    <li>
+                        <a class="text-decoration-none" href="https://github.com/MultiItFinalProject4Team/Laptellect">GitHub | Laptellect</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" href="#">노트북</a></li>
+                    <li><a class="text-decoration-none" href="#">키보드</a></li>
+                    <li><a class="text-decoration-none" href="#">마우스</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">Link</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" href="/">Home</a></li>
+                    <li><a class="text-decoration-none" href="/recommended">Recommended</a></li>
+                    <li><a class="text-decoration-none" href="/product/productList?pages=1">Store</a></li>
+                    <li><a class="text-decoration-none" href="/customer/user">Customer</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="w-100 bg-black py-3">
+        <div class="container">
+            <div class="row pt-2">
+                <div class="col-12">
+                    <p class="text-left text-light">
+                        &copy; 2024 프로젝트 실패하면 중장비 타러감
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer -->
 </body>
 </html>

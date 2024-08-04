@@ -2,6 +2,9 @@ package com.multi.laptellect.member.service;
 
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.dto.PointLogDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 
@@ -97,4 +100,13 @@ public interface MemberService {
      * @throws Exception the exception
      */
     AddressDTO findAddressByAddressId(int addressId) throws Exception;
+
+    /**
+     * 회원 전체 포인트 내역 조회
+     *
+     * @param pageable 페이징 객체
+     * @return Point List 객체
+     * @throws Exception the exception
+     */
+    Page<PointLogDTO> getAllPointList(Pageable pageable) throws Exception;
 }
