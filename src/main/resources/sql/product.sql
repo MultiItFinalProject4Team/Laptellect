@@ -7,7 +7,7 @@ CREATE TABLE product (
     product_code VARCHAR(20) NOT NULL,
     reference_code VARCHAR(255),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT product_PK PRIMARY KEY(product_no),
     CONSTRAINT fk_product_type_no FOREIGN KEY (type_no) REFERENCES product_type(type_no)
 );
@@ -50,3 +50,29 @@ CREATE TABLE wishlist (
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT wishlist_PK PRIMARY KEY(wishlist_no)
 );
+
+-- 이미지 매핑 테이블
+
+CREATE TABLE images (
+	image_no INT NOT NULL AUTO_INCREMENT,
+	reference_code VARCHAR(255) NOT NULL,
+	origin_name VARCHAR(255) NOT NULL,
+	upload_name VARCHAR(255) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT images_PK PRIMARY KEY(image_no)
+);
+
+
+-- 리뷰 데이터 테이블
+
+create table review (
+	review_no INT NOT NULL AUTO_INCREMENT PRIMARY key,
+	product_no INT NOT NULL,
+	rating INT NOT NULL,
+	title varchar(255) NOT NULL,
+	content text NOT null,
+	create_date TIMESTAMP default CURRENT_TIMESTAMP,
+	FOREIGN key (product_no) REFERENCES product(product_no) ON DELETE CASCADE
+
+)

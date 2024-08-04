@@ -74,6 +74,20 @@ public class PaymentService {
     }
 
     @Transactional
+    public int refundpoint(String impUid) {
+        PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(impUid);
+        if (paymentpointDTO != null && paymentpointDTO.getPointchange() != null) {
+            int usedPoints = Math.abs(Integer.parseInt(paymentpointDTO.getPointchange()));
+            if (usedPoints > 0) {
+                paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
+                paymentDAO.refundpoint(paymentpointDTO);
+                return usedPoints;
+            }
+        }
+        return 0;
+    }
+
+    @Transactional
     public boolean verifyPayment(VerificationRequestDTO request, PaymentDTO paymentDTO) throws IamportResponseException, IOException {
         IamportClient client = new IamportClient(apiKeys.getIamportApiKey(), apiKeys.getIamportApiSecret());
         IamportResponse<Payment> payment = client.paymentByImpUid(request.getIm_port_id());

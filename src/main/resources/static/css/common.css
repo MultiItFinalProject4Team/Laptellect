@@ -1,5 +1,6 @@
   /* logo */
   .navbar-brand.logo.h1 { font-size: 30px; }
+  .navbar-brand.logo:hover { color: #3498DB; }
   .logo { color: #3498DB }
 
   /* nav bar */
@@ -16,6 +17,17 @@
   .nav-item {
     flex: 1;
     text-align: center;
+  }
+
+  /* Button */
+  .btn-custom-primary {
+    background-color: #3498DB;
+    color: white;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: #2980B9;
+    color: white;
   }
 
   /* modal */

@@ -1,6 +1,9 @@
 package com.multi.laptellect.member.service;
 
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+
+import java.util.ArrayList;
 
 /**
  * The interface Member service.
@@ -48,8 +51,50 @@ public interface MemberService {
      * 사용자 비밀번호 업데이트
      *
      * @param beforePassword 변경 전 비밀번호 파라미터
-     * @param afterPassword 변경 할 비밀번호 파라미터
+     * @param afterPassword  변경 할 비밀번호 파라미터
      * @return the boolean
      */
     boolean updatePassword(String beforePassword, String afterPassword);
+
+    /**
+     * 회원 배송지 정보 생성
+     *
+     * @param addressDTO 사용자가 입력한 배송지 정보가 담긴 DTO 객체
+     * @return the int
+     * @throws Exception the exception
+     */
+    int createMemberAddress(AddressDTO addressDTO) throws Exception;
+
+    /**
+     * 회원 배송지 정보 조회
+     *
+     * @return the array list
+     * @throws Exception the exception
+     */
+    ArrayList<AddressDTO> findAllAddressByMemberNo() throws Exception;
+
+    /**
+     * 배송지 업데이트
+     *
+     * @param addressDTO 업데이트 정보가 담긴 DTO 객체
+     * @return the int
+     */
+    int updateMemberAddress(AddressDTO addressDTO);
+
+    /**
+     * 배송지 삭제
+     *
+     * @param addressId 삭제할 배송지의 PK키
+     * @return the boolean
+     */
+    boolean deleteMemberAddress(int addressId) throws Exception;
+
+    /**
+     * 배송지 단일 조회
+     *
+     * @param addressId 조회할 배송지의 PK키
+     * @return DTO 객체 반환
+     * @throws Exception the exception
+     */
+    AddressDTO findAddressByAddressId(int addressId) throws Exception;
 }

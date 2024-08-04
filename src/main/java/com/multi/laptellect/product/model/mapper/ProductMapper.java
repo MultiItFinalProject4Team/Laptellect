@@ -1,8 +1,10 @@
 package com.multi.laptellect.product.model.mapper;
 
-import com.multi.laptellect.product.model.dto.ImageDTO;
-import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.*;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -13,10 +15,11 @@ public interface ProductMapper {
 
     int countByProductCode(String productCode); //상품코드 계수
 
-    List<ProductDTO> getAllProducts();
+    List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    ProductDTO getProductByCode(String productCode);
+    int getTotalProducts();
 
+    LaptopSpecDTO getProductByCode(String productCode);
 
     List<ProductDTO> getTypeByProduct(int typeNo);
 
@@ -24,8 +27,29 @@ public interface ProductMapper {
 
     void inputImage(ImageDTO imageDTO);
 
-    List<String> getImage(String referenceCode);
+    void getImage(String referenceCode);
 
+    ProductCategoryDTO findByOptions(String s);
+
+   // String findCategorytNo(String options);
+
+   // String findCategoryNoBySpecName(String specName);
+
+    void inputReviewDate(ReviewDTO reviewDTO);
+
+    int insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options);
+
+
+    List<ProductDTO> findProduct();
+
+    @Select("SELECT COUNT(*) FROM product_spec WHERE product_no = #{ productNo } AND option_value = #{ specValue }")
+    int checkSpecExists(@Param("productNo") int productNo, @Param("specValue") String specValue);
+
+    void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
+
+
+
+    List<LaptopDetailsDTO> laptopProductDetails(String productCode);
 
 
 

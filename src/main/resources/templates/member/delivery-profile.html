@@ -5,74 +5,87 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+  <script type="text/javascript" th:src="@{/js/member/delivery-profile.js}"></script>
   <style>
     .delivery-tap {
       background-color: #3498DB;
       color: white !important;
     }
-
   </style>
 </head>
 <body>
 <div layout:fragment="content">
-  <div class="profile-box">
-    <h2>배송지 관리</h2>
-    <hr> <br>
-    <div class="profile-box" style="height: 475px;">
-      <table class="table table-striped text-center">
-        <thead>
-        <tr>
-          <th scope="col" style="width: 5%;">번호</th>
-          <th scope="col" style="width: 85%;">배송지 이름</th>
-          <th scope="col" style="width: 5%;">수정</th>
-          <th scope="col" style="width: 5%;">삭제</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>집</td>
-          <td><div class="btn btn-success">수정</div></td>
-          <td><div class="btn btn-danger">삭제</div></td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>회사</td>
-          <td><div class="btn btn-success">수정</div></td>
-          <td><div class="btn btn-danger">삭제</div></td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>학교</td>
-          <td><div class="btn btn-success">수정</div></td>
-          <td><div class="btn btn-danger">삭제</div></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="profile-box" id="address-box" style="height: auto; width: auto"></div>
 
-    <br>
+  <!-- 배송지 추가 모달 -->
+  <div class="modal fade" id="add-delivery-modal" tabindex="-1" aria-labelledby="add-delivery-modal" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-    <nav aria-label="...">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-          <span class="page-link">이전</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active" aria-current="page">
-          <span class="page-link">2</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">다음</a>
-        </li>
-      </ul>
-    </nav>
+        <div class="modal-body text-center">
+          <h4 class="modal-title w-100 text-center">배송지 등록</h4>
+          <br> <br>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address-name" placeholder="address-name" value="">
+            <label for="address-name">배송지 이름</label>
+            <div class="error-message" id="addressError" style="color: red">
+              저장할 배송지 이름을 입력해주세요.
+            </div>
+            <br>
+          </div>
 
-    <div class="d-grid gap-2">
-      <button class="btn btn-primary" type="button">배송지 추가</button>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="recipient-name" placeholder="recipient-name" value="">
+            <label for="address-name">받는 사람 이름</label>
+            <br>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="form-floating flex-grow-1">
+              <input type="text" class="form-control" id="postal-code" placeholder="postal-code" value="" readonly>
+              <label for="postal-code">우편번호</label>
+            </div>
+            <button class="btn btn-outline-secondary" type="button" onclick="postCode()">찾기</button>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address" placeholder="address" value="" readonly>
+            <label for="address-name">주소</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="detail-address" placeholder="detail-address" value="">
+            <label for="address-name">상세주소</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="recipient-phone" placeholder="recipient-phone" value="">
+            <label for="address-name">받는 사람 연락처</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="request" placeholder="request" value="">
+            <label for="request">배송 요청사항</label>
+          </div>
+
+          <br> <br>
+          <div>
+            <button type="button" class="btn btn-primary w-100 addAddressBtn">배송지 등록</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script type="text/javascript" th:src="@{/js/common/kakao-post-api.js}"></script>
 </div>
 
 </body>

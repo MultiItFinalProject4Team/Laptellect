@@ -1,0 +1,267 @@
+<h2>배송지 관리</h2>
+<hr>
+<div class="d-grid d-md-flex justify-content-md-end">
+    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#add-delivery-modal" style="background-color:#3498DB;">배송지 추가</button>
+</div>
+
+<table class="table table-striped text-center">
+    <thead>
+    <tr>
+        <th scope="col" style="width: 5%;">번호</th>
+        <th scope="col" style="width: 85%;">배송지 이름</th>
+        <th scope="col" style="width: 5%;">수정</th>
+        <th scope="col" style="width: 5%;">삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${addressList == null or #lists.isEmpty(addressList)}">
+        <td colspan="6" class="text-center">조회 정보가 없습니다</td>
+    </tr>
+    <tr th:each="address : ${addressList}">
+        <th th:text="${address.rowNum}" scope="row">1</th>
+        <td th:text="${address.addressName}"></td>
+        <td><div class="btn btn-success btn-sm" th:attr="data-id=${address.addressId}" data-bs-toggle="modal" data-bs-target="#update-delivery-modal">수정</div></td>
+        <td><div class="btn btn-danger btn-sm" th:attr="data-id=${address.addressId}" data-bs-toggle="modal" data-bs-target="#delete-delivery-modal">삭제</div></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 배송지 업데이트 모달 -->
+<div class="modal fade" id="update-delivery-modal" tabindex="-1" aria-labelledby="update-delivery-modal" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          <h4 class="modal-title w-100 text-center">배송지 수정</h4>
+          <br> <br>
+          <input type="hidden" class="form-control" id="address-id2" placeholder="address-id" value="">
+          <input type="hidden" class="form-control" id="member-no2" placeholder="member-no" value="">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address-name2" placeholder="address-name" value="">
+            <label for="address-name2">배송지 이름</label>
+            <div class="error-message" id="addressError" style="color: red">
+              저장할 배송지 이름을 입력해주세요.
+            </div>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="recipient-name2" placeholder="recipient-name" value="">
+            <label for="recipient-name2">받는 사람 이름</label>
+            <br>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="form-floating flex-grow-1">
+              <input type="text" class="form-control" id="postal-code2" placeholder="postal-code" value="" readonly>
+              <label for="postal-code2">우편번호</label>
+            </div>
+            <button class="btn btn-outline-secondary" type="button" onclick="postCode2()">찾기</button>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address2" placeholder="address" value="" readonly>
+            <label for="address-name2">주소</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="detail-address2" placeholder="detail-address" value="">
+            <label for="detail-address2">상세주소</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="recipient-phone2" placeholder="recipient-phone" value="">
+            <label for="address-name2">받는 사람 연락처</label>
+            <br>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" id="request2" placeholder="request" value="">
+            <label for="request2">배송 요청사항</label>
+          </div>
+
+          <br> <br>
+          <div>
+            <button type="button" class="btn btn-primary w-100 updateAddressBtn">배송지 수정</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 배송지 삭제 모달 -->
+<div class="modal fade" id="delete-delivery-modal" tabindex="-1" aria-labelledby="delete-delivery-modal" aria-hidden="true">
+  <div class="modal-dialog" style="max-width: 300px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100 text-center">배송지 삭제</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <input type="hidden" class="form-control" id="address-id3" placeholder="address-id" value="">
+        <input type="hidden" class="form-control" id="member-no3" placeholder="member-no" value="">
+        <p>정말로 삭제 하시겠습니까?.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary deleteAddressBtn">배송지 삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(".error-message").hide();
+
+function getAddressList() {
+    $.ajax({
+        url: "/api/member/deliveryList",
+        type: 'GET',
+        success: function(response) {
+            $('#address-box').html(response);
+        },
+        error: function() {
+            alert('서버 오류 실패');
+        }
+    });
+}
+
+$('.btn-success').on('click', function() {
+    let id = $(this).data('id');
+    console.log('수정할 ID:', id);
+
+    $.ajax({
+        url: "/api/member/delivery",
+        type: 'GET',
+        data: { addressId: id },
+        success: function(response) {
+            console.log(response);
+            $('#address-id2').val(response.addressId);
+            $('#member-no2').val(response.memberNo);
+            $('#address-name2').val(response.addressName);
+            $('#recipient-name2').val(response.recipientName);
+            $('#postal-code2').val(response.postalCode);
+            $('#address2').val(response.address);
+            $('#detail-address2').val(response.detailAddress);
+            $('#recipient-phone2').val(response.recipientPhone);
+            $('#request2').val(response.request);
+            
+        },
+        error: function() {
+            alert('서버 오류 실패');
+        }
+    });
+    // 수정 모달에 배송지 id 삽입
+});
+
+$("#address-name2").on("blur", function () {
+    let addressName = $(this).val();
+    console.log(addressName);
+
+    if(addressName !== "") {
+    $(".addAddressBtn").prop("disabled", false);
+    $("#addressError").hide();
+    } else {
+    $(".addAddressBtn").prop("disabled", true);
+    $("#addressError").show();
+    }
+    // 배송지 이름 빈칸 검증
+});
+
+$(".updateAddressBtn").on("click", function () {
+    function convertEmptyToNull(value) {
+            return value.trim() === "" ? null : value;
+    }
+
+    let addressId = $('#address-id2').val();
+    let memberNo = $('#member-no2').val();
+    let addressName = convertEmptyToNull($('#address-name2').val());
+    let recipientName = convertEmptyToNull($('#recipient-name2').val());
+    let postalCode = convertEmptyToNull($('#postal-code2').val());
+    let address = convertEmptyToNull($('#address2').val());
+    let detailAddress = convertEmptyToNull($('#detail-address2').val());
+    let recipientPhone = convertEmptyToNull($('#recipient-phone2').val());
+    let request = convertEmptyToNull($('#request2').val());
+
+    console.log(addressId, memberNo, addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
+
+    $.ajax({
+        url: "/api/member/update-address",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            addressId: addressId,
+            memberNo: memberNo,
+            addressName: addressName,
+            recipientName: recipientName,
+            postalCode: postalCode,
+            address: address,
+            detailAddress: detailAddress,
+            recipientPhone: recipientPhone,
+            request: request
+        }),
+        success: function (response) {
+            switch(response) {
+                case 1:
+                    alert("배송지 수정 성공");
+                    $('#update-delivery-modal').modal('hide');
+                    break;
+                case 0:
+                    alert("배송지 이름을 입력해주세요.");
+                case 401:
+                    alert("유저 불일치.");
+                case 500:
+                    alert("배송지 수정 실패.");
+            }
+            getAddressList()
+        },
+        error: function () {
+            alert("배송지 수정 실패");
+        }
+        // 수정 작업 수행
+    });
+});
+
+$('.btn-danger').on('click', function() {
+    let id = $(this).data('id');
+
+    $('#address-id3').val(id);
+    console.log('삭제할 배송지 : ', id);
+    // 삭제 모달에 배송지 id 삽입
+});
+
+$('.deleteAddressBtn').on('click', function() {
+    let addressId = $('#address-id3').val();
+    console.log('삭제할 배송지 : ', addressId);
+
+    $.ajax({
+        url: "/api/member/delete-address",
+        type: 'POST',
+        data: { addressId: addressId },
+        success: function(response) {
+            console.log(response);
+            if(response) {
+              alert("배송지 삭제 완료");
+              $('#delete-delivery-modal').modal('hide');
+              getAddressList()
+            } else {
+              alert("사용자가 일치하지 않습니다.");
+            }
+        },
+        error: function() {
+            alert('서버 오류 실패');
+        }
+    });
+
+    // 삭제 작업 수행
+});
+
+
+</script>

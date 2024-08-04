@@ -1,19 +1,26 @@
 package com.multi.laptellect.product.service;
 
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.ProductInfo;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 
 import java.util.List;
 
 public interface ProductService {
 
-    void saveProductsToDB(List<ProductInfo> prodctList, int typeNo) throws Exception;
+    void saveProductsToDB(List<ProductDTO> prodctList, int typeNo) throws Exception;
 
-    List<ProductDTO> getStoredProducts();
+    List<ProductDTO> getStoredProducts(int pageNumber, int pageSize);
 
-    ProductInfo getProductByCode(String pcode);
+    int getTotalProducts();
+
+    LaptopSpecDTO getProductByCode(String pcode);
 
     List<ProductDTO> getTypeByProduct(int typeNo);
 
-    List<String> getImgae(String referenceCode);
+    void getImgae(String referenceCode);
+
+    List<LaptopDetailsDTO> getLaptopProductDetails(String productCode);
+
+
 }

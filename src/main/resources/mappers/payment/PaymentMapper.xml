@@ -12,6 +12,7 @@
         <result column="date_created" property="date_created"/>
         <result column="productprice" property="productprice"/>
         <result column="im_port_id" property="im_port_id"/>
+
     </resultMap>
 
     <resultMap id="PointResultMap"

@@ -58,12 +58,14 @@ public class PaymentController {
             paymentDTO.setPurchaseprice(request.getAmount().intValue());
             paymentDTO.setIm_port_id(request.getIm_port_id());
 
+
             boolean verified = paymentService.verifyPayment(request, paymentDTO);
             System.out.println(request.getUsedPoints());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
             paymentpointDTO.setUsedPoints(request.getUsedPoints());
             paymentpointDTO.setIm_port_id(request.getIm_port_id());
+
 
             if(paymentpointDTO.getPossessionpoint() <= 0) {
                 verified = false;
@@ -102,6 +104,8 @@ public class PaymentController {
 
             int refundedPoints = paymentService.refundpoint(cancelRequest.getIm_port_id());
 
+            int refundedPoints = paymentService.refundpoint(cancelRequest.getImpUid());
+
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "취소 실패: " + e.getMessage()));
@@ -114,7 +118,9 @@ public class PaymentController {
         Map<String, Object> response = new HashMap<>();
         if (result > 0) {
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint();
+
             paymentpointDTO.setIm_port_id(reviewDTO.getIm_port_id());
+
             paymentService.givepoint(paymentpointDTO);
 
             response.put("success", true);
