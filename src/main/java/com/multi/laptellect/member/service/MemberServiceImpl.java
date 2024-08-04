@@ -173,7 +173,33 @@ public class MemberServiceImpl implements MemberService{
         ArrayList<PointLogDTO> pointList = memberMapper.findAllPointLogByMemberNo(memberNo, pageable);
         log.info("pointLIst 조회 = {}", pointList);
 
-        int total = memberMapper.countAllPointLogByMemberNo(memberNo);
+        int total = memberMapper.countAllPointLogByMemberNo(memberNo, null);
+        log.info("count 조회 = {}", total);
+
+        return new PageImpl<>(pointList, pageable, total);
+    }
+
+    @Override
+    public Page<PointLogDTO> getAllSavePointList(Pageable pageable) throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+
+        ArrayList<PointLogDTO> pointList = memberMapper.findAllSavePointLogByMemberNo(memberNo, pageable);
+        log.info("pointLIst 조회 = {}", pointList);
+
+        int total = memberMapper.countAllPointLogByMemberNo(memberNo, "save");
+        log.info("count 조회 = {}", total);
+
+        return new PageImpl<>(pointList, pageable, total);
+    }
+
+    @Override
+    public Page<PointLogDTO> getAllUsePointList(Pageable pageable) throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+
+        ArrayList<PointLogDTO> pointList = memberMapper.findAllUsePointLogByMemberNo(memberNo, pageable);
+        log.info("pointLIst 조회 = {}", pointList);
+
+        int total = memberMapper.countAllPointLogByMemberNo(memberNo, "use");
         log.info("count 조회 = {}", total);
 
         return new PageImpl<>(pointList, pageable, total);

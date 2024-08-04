@@ -89,6 +89,7 @@ public interface MemberService {
      *
      * @param addressId 삭제할 배송지의 PK키
      * @return the boolean
+     * @throws Exception the exception
      */
     boolean deleteMemberAddress(int addressId) throws Exception;
 
@@ -109,4 +110,22 @@ public interface MemberService {
      * @throws Exception the exception
      */
     Page<PointLogDTO> getAllPointList(Pageable pageable) throws Exception;
+
+    /**
+     * 회원 적립 포인트 내역 조회
+     *
+     * @param pageable 페이징 객체
+     * @return Point List 객체
+     * @throws Exception the exception
+     */
+    Page<PointLogDTO> getAllSavePointList(Pageable pageable) throws Exception;
+
+    /**
+     * 회원 사용 포인트 내역 조회
+     *
+     * @param pageable 페이징 객체
+     * @return Point List 객체
+     * @throws Exception the exception
+     */
+    Page<PointLogDTO> getAllUsePointList(Pageable pageable) throws Exception;
 }
