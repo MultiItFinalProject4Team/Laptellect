@@ -20,7 +20,7 @@ function renderTable() {
   pageOrders.forEach(order => {
     const row = `
       <tr>
-        <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.im_port_id}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
+        <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
         <td class="order-number-column">${order.payment_no}</td>
         <td class="username-column">${order.username}</td>
         <td class="product-name-column">${order.productname}</td>
@@ -28,7 +28,7 @@ function renderTable() {
         <td class="price-column">${order.productprice}</td>
         <td class="purchase-price-column">${order.purchaseprice}</td>
         <td class="date-column">${order.date_created}</td>
-        <td class="im_port_id-column">${order.im_port_id}</td>
+        <td class="imPortId-column">${order.imPortId}</td>
         <td class="refund-column">${order.refund}</td>
         <td class="refund-date-column">${order.refund_date || '환불되지 않음'}</td>
       </tr>
@@ -118,8 +118,8 @@ function refundSelectedOrders() {
   const selectedOrders = Array.from(document.getElementsByName('orderCheck'))
     .filter(checkbox => checkbox.checked && !checkbox.disabled)
     .map(checkbox => ({
-      im_port_id: checkbox.value,
-      amount: orders.find(order => order.im_port_id === checkbox.value).purchaseprice
+      imPortId: checkbox.value,
+      amount: orders.find(order => order.imPortId === checkbox.value).purchaseprice
     }));
 
   if (selectedOrders.length === 0) {
@@ -162,7 +162,7 @@ function openModal(orderId) {
     document.getElementById('modalProductPrice').textContent = order.productprice;
     document.getElementById('modalPurchasePrice').textContent = order.purchaseprice;
     document.getElementById('modalOrderDate').textContent = order.date_created;
-    document.getElementById('modalim_port_id').textContent = order.im_port_id;
+    document.getElementById('modalimPortId').textContent = order.imPortId;
     document.getElementById('modalRefundStatus').textContent = order.refund;
     document.getElementById('modalRefundDate').textContent = order.refund_date || '환불되지 않음';
 
@@ -170,7 +170,7 @@ function openModal(orderId) {
     if (order.refund === 'N') {
       modalRefundButton.style.display = 'block';
       modalRefundButton.disabled = false;
-      modalRefundButton.onclick = () => refundSingleOrder(order.im_port_id, order.purchaseprice);
+      modalRefundButton.onclick = () => refundSingleOrder(order.imPortId, order.purchaseprice);
     } else {
       modalRefundButton.style.display = 'none';
     }
@@ -180,14 +180,14 @@ function openModal(orderId) {
 }
 
 
-function refundSingleOrder(im_port_id, amount) {
+function refundSingleOrder(imPortId, amount) {
   if (confirm('이 주문을 환불하시겠습니까?')) {
     fetch('/payment/cancel', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ im_port_id, amount }),
+      body: JSON.stringify({ imPortId, amount }),
     })
     .then(response => response.json())
     .then(data => {
