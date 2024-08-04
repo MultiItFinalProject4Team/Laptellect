@@ -78,7 +78,7 @@ public class ProductController {
             log.info("상품 타입 확인 = {}", typeNo);
             switch (typeNo) {
                 case 1:
-                    crawlingService.processLaptopDetails();
+                    crawlingService.processLaptopDetails(typeNo);
                     break;
                 case 2:
                     // crawlingService.processMouseDetails(productDTO);

@@ -98,8 +98,8 @@
 
 
     <insert id="insertProductCategory" parameterType="productCategoryDTO">
-        INSERT INTO product_category (type_no, options)
-        VALUES (#{typeNo}, #{options})
+        INSERT INTO product_category (category_no, type_no, options)
+        VALUES (#{categoryNo}, #{typeNo}, #{options})
     </insert>
 
 
