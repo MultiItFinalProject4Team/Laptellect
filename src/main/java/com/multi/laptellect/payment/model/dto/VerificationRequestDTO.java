@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Data
 public class VerificationRequestDTO {
-    private String impUid;
+    private String im_port_id;
     private BigDecimal amount;
     private String usedPoints;
 }

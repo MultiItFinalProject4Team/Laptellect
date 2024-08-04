@@ -36,20 +36,20 @@
             </div>
             <div class="order-actions">
                 <button class="cancel-button"
-                        th:classappend="${reviewedOrders.contains(order.imd)} ? 'disabled' : ''"
-                        th:onclick="${!reviewedOrders.contains(order.imd)} ? 'cancelOrder(this.getAttribute(\'data-imp-uid\'), this.getAttribute(\'data-amount\'))' : 'void(0)'"
-                        th:data-imp-uid="${order.imd}"
+                        th:classappend="${reviewedOrders.contains(order.im_port_id)} ? 'disabled' : ''"
+                        th:onclick="${!reviewedOrders.contains(order.im_port_id)} ? 'cancelOrder(this.getAttribute(\'data-imp-uid\'), this.getAttribute(\'data-amount\'))' : 'void(0)'"
+                        th:data-imp-uid="${order.im_port_id}"
                         th:data-amount="${order.purchaseprice}"
-                        th:disabled="${reviewedOrders.contains(order.imd)}">
+                        th:disabled="${reviewedOrders.contains(order.im_port_id)}">
                     주문 취소하기
                 </button>
                 <button class="review-button"
-                        th:classappend="${reviewedOrders.contains(order.imd)} ? 'reviewed' : ''"
-                        th:onclick="${!reviewedOrders.contains(order.imd)} ? 'openReviewModal(this.getAttribute(\'data-product-name\'), this.getAttribute(\'data-username\'), this.getAttribute(\'data-imp-uid\'))' : 'void(0)'"
+                        th:classappend="${reviewedOrders.contains(order.im_port_id)} ? 'reviewed' : ''"
+                        th:onclick="${!reviewedOrders.contains(order.im_port_id)} ? 'openReviewModal(this.getAttribute(\'data-product-name\'), this.getAttribute(\'data-username\'), this.getAttribute(\'data-imp-uid\'))' : 'void(0)'"
                         th:data-product-name="${order.productname}"
                         th:data-username="${order.username}"
-                        th:data-imp-uid="${order.imd}"
-                        th:disabled="${reviewedOrders.contains(order.imd)}">
+                        th:data-imp-uid="${order.im_port_id}"
+                        th:disabled="${reviewedOrders.contains(order.im_port_id)}">
                     리뷰 작성하기
                 </button>
             </div>
