@@ -14,14 +14,22 @@ import java.util.stream.Collectors;
 
 @Service
 public class RecommendationService {
+    private final ProductDAO productDAO;
+
     @Autowired
-    private ProductDAO productDAO;
+    public RecommendationService(ProductDAO productDAO) {
+        this.productDAO = productDAO;
+    }
 
     public List<LaptopDTO> getRecommendations(RecommendationRequestDTO request) {
-        List<String> tags = buildTags(request);
-        List<LaptopDTO> products = productDAO.findByTags(tags);
-        return products.stream()
-                .map(this::convertToDTO)
+        List<String> requestedTags = buildTags(request);
+        List<LaptopDTO> allLaptops = productDAO.findAllLaptops();
+
+        return allLaptops.stream()
+                .filter(laptop -> {
+                    List<String> laptopTags = productDAO.findTagsByProductId(laptop.getProductNo());
+                    return laptopTags.stream().anyMatch(requestedTags::contains);
+                })
                 .collect(Collectors.toList());
     }
 
