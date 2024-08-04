@@ -11,3 +11,21 @@
     height: 200px;
     object-fit: contain;
 }
+
+.product-wap .card .product-overlay {
+  background: rgba(0,0,0,0.2);
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s;
+}
+
+
+.product-wap:hover .card .product-overlay {
+  visibility: visible;
+  opacity: 1;
+}
+
+.btn-custom { background-color: #3498DB;}
+ul li:hover .btn-custom { background-color: #2c7cbf; }
+
+ul li:active .btn-custom { background-color: #236097 !important; }

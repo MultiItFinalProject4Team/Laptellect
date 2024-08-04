@@ -36,15 +36,12 @@
           margin: 20px 0;
         }
         #signupTitle {
-          color: #000000;
+          color: #3498DB;
           font-weight: bold;
           font-size: 32px;
           text-transform: uppercase;
           padding: 5px;
           margin-bottom: 20px;
-          background: linear-gradient(to right, #270a09, #8ca6ce);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
         }
         #inputBox {
           margin: 10px;
@@ -58,10 +55,10 @@
           font-size: 15px;
         }
         .separator {
-    margin: 0 10px;
-    color: #333;
-}
-        .login-img {
+        margin: 0 10px;
+        color: #333;
+        }
+    .login-img {
             width: 60px;
             height: 60px;
             border-radius: 75%;
@@ -81,3 +78,5 @@
         color: black;
         font-size: 12px;
     }
+
+    body { font-family: 'Noto Sans KR', sans-serif; }

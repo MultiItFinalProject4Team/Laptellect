@@ -24,7 +24,7 @@ CREATE TABLE mem_password (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (password_id),
-    CONSTRAINT member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+    CONSTRAINT password_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
 -- 소셜 회원 테이블
@@ -33,7 +33,7 @@ CREATE TABLE mem_social_member (
     member_no INT NOT NULL,
     external_id VARCHAR(64) NOT NULL,
     PRIMARY KEY (social_id),
-    CONSTRAINT member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+    CONSTRAINT social_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
 -- 배송지 테이블
@@ -50,7 +50,7 @@ CREATE TABLE mem_delivery_address (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (address_id),
-    CONSTRAINT member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+    CONSTRAINT address_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
 -- ================= SELECT 목록 =================
@@ -102,3 +102,13 @@ BEGIN
     WHERE
         member_no = NEW.member_no;
 END;
+
+CREATE TABLE wishlist (
+	wishlist_no INT NOT NULL AUTO_INCREMENT,
+	product_no INT NOT NULL,
+	member_no INT NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT wishlist_PK PRIMARY KEY(wishlist_no),
+    CONSTRAINT wishlist_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no),
+	CONSTRAINT wishlist_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+);

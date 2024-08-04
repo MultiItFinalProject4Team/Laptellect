@@ -5,6 +5,15 @@
     <title>Product List</title>
     <link rel="stylesheet" th:href="@{/css/product.css}">
     <script>
+        $(document).ready(function() {
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
+            });
+        });
+    </script>
+    <script>
         function sendData(typeNo) {
             $.ajax({
                 url: "/product/productType",
@@ -21,8 +30,6 @@
                     }
             });
         }
-
-
     </script>
 </head>
 
@@ -46,23 +53,36 @@
 
         <div class="row">
             <div class="col-md-4 mb-4" th:each="product, iterStat : ${products}">
-                <div class="card h-100">
-                    <img th:src="@{'/img/product/' + ${product.image}}" class="card-img-top" alt="상품 이미지"
-                         style="height: 200px; object-fit: contain;">
-                    <div class="card-body">
-                        <h5 class="card-title product-name" th:text="${product.productName}">상품명</h5>
-                        <p class="card-text">
-                            <strong>가격:</strong> <span class="price" th:text="${product.price} + ' 원'">가격</span><br>
-                        </p>
-                        <div th:switch="${product.productType}">
-                            <a th:href="@{/product/laptopDetails(productCode=${product.productCode})}"
-                               class="btn btn-primary">상세 정보</a>
-
+                <div class="card h-100 product-wap rounded-0">
+                    <div class="card rounded-0">
+                        <img th:src="@{'/img/product/' + ${product.image}}" class="card-img-top card-img rounded-0 img-fluid" alt="상품 이미지"
+                             style="height: 200px; object-fit: contain;">
+                        <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                            <ul class="list-unstyled">
+                                <li><a class="btn btn-custom text-white" href="#"><i class="far fa-heart"></i></a></li>
+                                <li><a class="btn btn-custom text-white mt-2" th:href="@{/product/laptopDetails(productCode=${product.productCode})}"><i class="far fa-eye"></i></a></li>
+                                <li><a class="btn btn-custom text-white mt-2" href="#"><i class="fas fa-cart-plus"></i></a></li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <small class="text-muted" th:text="'상품 No. ' + ${iterStat.index + 1}">상품 No.</small>
-                    </div>
+                    <a th:href="@{/product/laptopDetails(productCode=${product.productCode})}">
+                        <div class="card-body">
+
+                            <h5 class="card-title product-name" th:text="${product.productName}">상품명</h5>
+                            <p class="card-text">
+                                <strong>가격:</strong> <span class="price" th:text="${product.price} + ' 원'">가격</span><br>
+                            </p>
+    <!--                        <div th:switch="${product.productType}">-->
+    <!--                            <a th:href="@{/product/laptopDetails(productCode=${product.productCode})}"-->
+    <!--                               class="btn btn-primary">상세 정보</a>-->
+
+    <!--                        </div>-->
+
+                        </div>
+                    </a>
+<!--                    <div class="card-footer">-->
+<!--                        <small class="text-muted" th:text="'상품 No. ' + ${iterStat.index + 1}">상품 No.</small>-->
+<!--                    </div>-->
                 </div>
             </div>
 
@@ -107,15 +127,8 @@
             </nav>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('.price').each(function() {
-                let value = $(this).text().replace(' 원', '');
-                let formattedValue = new Intl.NumberFormat().format(value);
-                $(this).text(formattedValue + ' 원');
-            });
-        });
-    </script>
+    </div>
 </div>
+
 </body>
 </html>
