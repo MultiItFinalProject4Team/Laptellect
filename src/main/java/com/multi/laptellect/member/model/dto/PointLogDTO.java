@@ -2,6 +2,7 @@ package com.multi.laptellect.member.model.dto;
 
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -18,4 +19,9 @@ public class PointLogDTO {
     private int paymentPointChange;
     private String paymentPointInfo ;
     private Date createdAt;
+
+    public String getFormatCreatedAt() {
+        SimpleDateFormat formatCreateAt = new SimpleDateFormat("yyyy.MM.dd");
+        return formatCreateAt.format(createdAt);
+    }
 }

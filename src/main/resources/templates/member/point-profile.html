@@ -32,12 +32,50 @@
 
   <script>
   $(document).ready(function() {
+    function removeTab() {
+      $('#all-point').removeClass('show active');
+      $('#save-point').removeClass('show active');
+      $('#use-point').removeClass('show active');
+    }
+
     $('#all-point-tab').on('click', function() {
         $.ajax({
             url: '/api/member/all-point-list',
             type: 'GET',
             success: function(response) {
                 $('#all-point').html(response);
+                removeTab()
+                $('#all-point').addClass('show active');
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 요청 실패:', error);
+            }
+        });
+    });
+
+    $('#save-point-tab').on('click', function() {
+        $.ajax({
+            url: '/api/member/save-point-list',
+            type: 'GET',
+            success: function(response) {
+                $('#save-point').html(response);
+                removeTab()
+                $('#save-point').addClass('show active');
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 요청 실패:', error);
+            }
+        });
+    });
+
+    $('#use-point-tab').on('click', function() {
+        $.ajax({
+            url: '/api/member/use-point-list',
+            type: 'GET',
+            success: function(response) {
+                $('#use-point').html(response);
+                removeTab()
+                $('#use-point').addClass('show active');
             },
             error: function(xhr, status, error) {
                 console.error('AJAX 요청 실패:', error);

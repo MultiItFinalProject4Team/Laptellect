@@ -48,7 +48,7 @@ public class ProductController {
      */
 //상품별 크롤링 검색 기능
     @PostMapping("/test")
-    public String crawlProducts(@RequestParam("products") String productType, Model model) throws IOException {
+    public String crawlProducts(@RequestParam(name = "products") String productType, Model model) throws IOException {
         int typeNo;
 
         switch (productType) {
@@ -119,8 +119,8 @@ public class ProductController {
      */
     @GetMapping("/productList")
     public String ProductList(Model model,
-                              @RequestParam(defaultValue = "1") int pageNumber,
-                              @RequestParam(defaultValue = "12") int pageSize) {
+                              @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+                              @RequestParam(name = "pageSize", defaultValue = "12") int pageSize) {
 
         //페이징 처리
         List<ProductDTO> products = productService.getStoredProducts(pageNumber, pageSize);
@@ -154,7 +154,7 @@ public class ProductController {
      * @return the string
      */
     @GetMapping("/laptopDetails")
-    public String productDetails(@RequestParam("productCode") String productCode,
+    public String productDetails(@RequestParam(name = "productCode") String productCode,
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productCode);
         // 제품 상세 정보 가져오기

@@ -62,6 +62,11 @@ public interface MemberMapper {
     @Select("SELECT * FROM payment_point WHERE member_no = #{ memberNo } ORDER BY payment_point_no DESC LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }")
     ArrayList<PointLogDTO> findAllPointLogByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
 
-    @Select("SELECT COUNT(*) FROM payment_point WHERE member_no = #{ memberNo }")
-    int countAllPointLogByMemberNo(int memberNo);
+
+    int countAllPointLogByMemberNo(@Param("memberNo") int memberNo, @Param("type") String type);
+
+    @Select("SELECT * FROM payment_point WHERE member_no = #{ memberNo } AND payment_point_change > 0 ORDER BY payment_point_no DESC LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }")
+    ArrayList<PointLogDTO> findAllSavePointLogByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
+    @Select("SELECT * FROM payment_point WHERE member_no = #{ memberNo } AND payment_point_change < 0 ORDER BY payment_point_no DESC LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }")
+    ArrayList<PointLogDTO> findAllUsePointLogByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
 }

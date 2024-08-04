@@ -16,7 +16,7 @@
     <th th:text="${page * size + loop.index + 1}" scope="row"></th>
     <td th:text="${ point.paymentPointChange }"></td>
     <td th:text="${ point.paymentPointInfo }"></td>
-    <td th:text="${ point.createdAt }"></td>
+    <td th:text="${ point.getFormatCreatedAt() }"></td>
   </tr>
   </tbody>
 </table>
