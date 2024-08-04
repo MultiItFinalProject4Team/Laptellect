@@ -23,5 +23,4 @@ public interface ProductService {
     List<LaptopDetailsDTO> getLaptopProductDetails(String productCode);
 
 
-
 }

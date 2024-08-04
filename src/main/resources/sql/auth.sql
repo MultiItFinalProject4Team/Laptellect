@@ -20,7 +20,7 @@ CREATE TABLE mem_member (
 CREATE TABLE mem_password (
     password_id INT NOT NULL AUTO_INCREMENT,
     member_no INT NOT NULL,
-    password VARCHAR(128) NOT NULL,
+    member_password VARCHAR(128) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (password_id),

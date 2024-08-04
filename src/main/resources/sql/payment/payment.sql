@@ -15,7 +15,7 @@ CREATE TABLE payment (
     productprice INT,
     purchaseprice INT,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    imd varchar(255),
+    im_port_id varchar(255),
     refund CHAR(1) DEFAULT 'N',
     refund_date TIMESTAMP DEFAULT NULL
 );
@@ -38,7 +38,7 @@ SELECT * FROM paymentpage;
 CREATE TABLE payment_point (
     payment_price_no INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255),
-    imd varchar(255),
+    im_port_id varchar(255),
     payment_possession_point INT DEFAULT 0 CHECK (payment_possession_point >= 0),
     payment_point_change VARCHAR(255),
     payment_point_info VARCHAR(255),
@@ -59,7 +59,7 @@ CREATE TABLE payment_product_reviews (
     tag_answer char(1) DEFAULT 'N',
     content varchar(255),
     rating varchar(255),
-    impuid varchar(255),
+    im_port_id varchar(255),
     create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modify_date TIMESTAMP DEFAULT NULL
 --     CONSTRAINT `payment_product_revies` FOREIGN KEY (`payment_product_no`) REFERENCES `payment_product` (`payment_product_no`),

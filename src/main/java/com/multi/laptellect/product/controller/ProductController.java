@@ -73,31 +73,22 @@ public class ProductController {
 
             productService.saveProductsToDB(products, typeNo);
 
-            if (!products.isEmpty()) {
-                for (int i = 0; i < products.size(); i++) {
-                    log.info("products 내용확인 = {}", products);
-                    log.info("조회 횟수 확인 = {}", i + 1);
+            int count = 0; // 상세 정보 크롤링 카운트
 
-                    ProductDTO productDTO = products.get(i); // 예시로 첫 번째 제품 사용
-
-                    log.info("제품 코드 확인{}", productDTO.getProductCode());
-                    switch (typeNo) {
-                        case 1:
-                            crawlingService.processLaptopDetails();
-                            break;
-                        case 2:
-                           // crawlingService.processMouseDetails(productDTO);
-                            break;
-                        case 3:
-                         //   crawlingService.processKeyboardDetails(productDTO);
-                            break;
-                    }
-
-                    model.addAttribute("products", products);
-
-                }
-
+            log.info("상품 타입 확인 = {}", typeNo);
+            switch (typeNo) {
+                case 1:
+                    crawlingService.processLaptopDetails();
+                    break;
+                case 2:
+                    // crawlingService.processMouseDetails(productDTO);
+                    break;
+                case 3:
+                    //   crawlingService.processKeyboardDetails(productDTO);
+                    break;
             }
+
+            model.addAttribute("products", products);
 
         } catch (IOException e) {
 
@@ -200,6 +191,12 @@ public class ProductController {
         return "productList";
     }
 
+    @GetMapping("/review")
+    public void review() {
+        ProductDTO productDTO = new ProductDTO();
+
+        crawlingService.reviewCrawler();
+    }
 
 }
 

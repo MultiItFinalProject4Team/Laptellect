@@ -27,23 +27,21 @@
 </head>
 
 <body>
-<div layout:fragment="content">
-    <div class="container">
-        <h1 class="mt-5">Product List</h1>
-        <form th:action="@{/product/test}" method="post">
-            <select id="productType" name="products">
-                <option value="1">노트북</option>
-                <option value="2">마우스</option>
-                <option value="3">키보드</option>
-            </select>
-            <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
-        </form>
-        <div>
-            <div class="btn-group">
-                <a href="#" onclick="sendData(1)" class="btn btn-primary">노트북</a>
-                <a href="#" onclick="sendData(2)" class="btn btn-primary">마우스</a>
-                <a href="#" onclick="sendData(3)" class="btn btn-primary">키보드</a>
-            </div>
+<div class="container" layout:fragment="content">
+    <h1 class="mt-5">Product List</h1>
+    <form th:action="@{/product/test}" method="post">
+        <select id="productType" name="products">
+            <option value="1">노트북</option>
+            <option value="2">마우스</option>
+            <option value="3">키보드</option>
+        </select>
+        <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
+    </form>
+    <div>
+        <div class="btn-group">
+            <a href="#" onclick="sendData(1)" class="btn btn-primary">노트북</a>
+            <a href="#" onclick="sendData(2)" class="btn btn-primary">마우스</a>
+            <a href="#" onclick="sendData(3)" class="btn btn-primary">키보드</a>
         </div>
 
         <div class="row">
@@ -68,49 +66,56 @@
                 </div>
             </div>
 
-        </div>
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                <nav aria-label="Product list pagination">
-                    <ul class="pagination">
-                        <!-- 첫 페이지로 이동 -->
-                        <li class="page-item" th:classappend="${pageNumber == 1} ? 'disabled'">
-                            <a class="page-link" th:href="@{/product/productList(pageNumber=1, pageSize=${pageSize})}" aria-label="First">
-                                <span aria-hidden="true">&laquo;&laquo;</span>
-                            </a>
-                        </li>
-
-                        <!-- 이전 페이지 -->
-                        <li class="page-item" th:classappend="${pageNumber == 1} ? 'disabled'">
-                            <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber - 1}, pageSize=${pageSize})}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-
-                        <!-- 페이지 번호 -->
-                        <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == pageNumber} ? 'active'">
-                            <a class="page-link" th:href="@{/product/productList(pageNumber=${i}, pageSize=${pageSize})}" th:text="${i}"></a>
-                        </li>
-
-                        <!-- 다음 페이지 -->
-                        <li class="page-item" th:classappend="${pageNumber == totalPages} ? 'disabled'">
-                            <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber + 1}, pageSize=${pageSize})}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-
-                        <!-- 마지막 페이지로 이동 -->
-                        <li class="page-item" th:classappend="${pageNumber == totalPages} ? 'disabled'">
-                            <a class="page-link" th:href="@{/product/productList(pageNumber=${totalPages}, pageSize=${pageSize})}" aria-label="Last">
-                                <span aria-hidden="true">&raquo;&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-
     </div>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <nav aria-label="Product list pagination">
+                <ul class="pagination">
+                    <!-- 첫 페이지로 이동 -->
+                    <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/product/productList(pageNumber=1, pageSize=${pageSize})}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- 이전 페이지 -->
+                    <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- 페이지 번호 -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == (pageNumber == null ? 1 : pageNumber)} ? 'active'">
+                        <a class="page-link" th:href="@{/product/productList(pageNumber=${i}, pageSize=${pageSize})}" th:text="${i}"></a>
+                    </li>
+
+                    <!-- 다음 페이지 -->
+                    <li class="page-item" th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber + 1}, pageSize=${pageSize})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- 마지막 페이지로 이동 -->
+                    <li class="page-item" th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/product/productList(pageNumber=${totalPages}, pageSize=${pageSize})}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
+            });
+        });
+    </script>
 </div>
 </body>
 </html>
