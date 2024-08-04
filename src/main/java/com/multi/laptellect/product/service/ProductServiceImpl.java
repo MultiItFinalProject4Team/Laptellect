@@ -3,8 +3,10 @@ package com.multi.laptellect.product.service;
 import com.multi.laptellect.product.model.dto.ImageDTO;
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.WishListDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -114,6 +116,19 @@ public class ProductServiceImpl implements ProductService {
     public List<LaptopDetailsDTO> getLaptopProductDetails(String productCode) {
 
         return productMapper.laptopProductDetails(productCode);
+    }
+
+    @Override
+    public boolean addTowishlist(int productNo) throws Exception {
+        WishListDTO wishListDTO = new WishListDTO();
+        int memberNo = SecurityUtil.getUserNo();
+
+        wishListDTO.setProductNo(productNo);
+        wishListDTO.setMemberNo(memberNo);
+
+        if(productMapper.insertWishlist(wishListDTO) > 0) return true;
+
+        return false;
     }
 
     //상품 전체 조회

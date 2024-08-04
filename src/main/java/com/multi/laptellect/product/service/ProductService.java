@@ -22,5 +22,14 @@ public interface ProductService {
 
     List<LaptopDetailsDTO> getLaptopProductDetails(String productCode);
 
+    /**
+     * 위시리스트 INSERT
+     *
+     * @param productNo 회원번호
+     * @return 성공 여부 Bool
+     * @throws Exception the exception
+     */
+    boolean addTowishlist(int productNo) throws Exception;
+
 
 }
