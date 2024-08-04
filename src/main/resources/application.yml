@@ -20,4 +20,5 @@ logging:
     jdbc.sqlonly: ERROR
     jdbc.sqltiming: ERROR
     jdbc.resultset: ERROR
+
     jdbc.resultsettable: DEBUG

@@ -22,10 +22,10 @@ public class EmotionAnalyzeService {
 
 
 
-    @Value("${sentiment.clientId}") //application.properties에 있는 값을 가져옴 //yml파일에서는 @Value("${sentiment.clientId}")로 사용
+    @Value("${spring.sentiment.clientId}") //application.properties에 있는 값을 가져옴 //yml파일에서는 @Value("${sentiment.clientId}")로 사용
     private String clientId;
 
-    @Value("${sentiment.clientSecret}")
+    @Value("${spring.sentiment.clientSecret}")
     private String clientSecret;
 
     private final SentimentDAO sentimentDAO;
