@@ -38,9 +38,7 @@ public class MybatisConfig {
         configuration.setMapUnderscoreToCamelCase(true); // 카멜 케이스 자동 변환
 
         // Type Aliases 설정
-//        configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.mini.member.model.dto.MemberDTO.class);
-//        configuration.getTypeAliasRegistry().registerAlias("boardDTO", com.multi.mini.community.model.dto.BoardDTO.class);
-
+        configuration.getTypeAliasRegistry().registerAlias("pageable", org.springframework.data.domain.Pageable.class);
 
         configuration.getTypeAliasRegistry().registerAlias("paymentpageDTO", com.multi.laptellect.payment.model.dto.PaymentpageDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("orderlistDTO", com.multi.laptellect.payment.model.dto.OrderlistDTO.class);
@@ -53,6 +51,7 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("adminDashboardDTO", com.multi.laptellect.admin.model.dto.AdminDashboardDTO.class);
 
         configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.laptellect.member.model.dto.MemberDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("pointLogDTO", com.multi.laptellect.member.model.dto.PointLogDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("addressDTO", com.multi.laptellect.member.model.dto.AddressDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("productDTO", com.multi.laptellect.product.model.dto.ProductDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("productCategoryDTO", com.multi.laptellect.product.model.dto.ProductCategoryDTO.class);

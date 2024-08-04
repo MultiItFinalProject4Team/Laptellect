@@ -1,0 +1,38 @@
+<table class="table table-striped text-center">
+  <thead>
+  <tr>
+    <th scope="col" style="width: 5%;">번호</th>
+    <th scope="col" style="width: 30%;">포인트 변화</th>
+    <th scope="col" style="width: 40%;">변동 사유</th>
+    <th scope="col" style="width: 25%;">날짜</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${pointList == null or #lists.isEmpty(pointList)}">
+    <td colspan="4" class="text-center">조회 정보가 없습니다</td>
+  </tr>
+
+  <tr th:each="point : ${pointList}">
+    <th th:text="${ point.rowNum }" scope="row"></th>
+    <td th:text="${ point.pointChange }"></td>
+    <td th:text="${ point.pointInfo }"></td>
+    <td th:text="${ point.createdAt }"></td>
+  </tr>
+  </tbody>
+</table>
+
+<nav aria-label="...">
+  <ul class="pagination justify-content-center">
+    <li class="page-item disabled">
+      <span class="page-link">이전</span>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">2</span>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">다음</a>
+    </li>
+  </ul>
+</nav>
