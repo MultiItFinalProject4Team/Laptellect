@@ -8,5 +8,5 @@ public class PaymentReviewDTO {
     private String username;
     private String rating;
     private String content;
-    private String impUid;
+    private String imPortId;
 }

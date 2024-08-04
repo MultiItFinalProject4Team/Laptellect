@@ -6,7 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/css/customer/table.css" rel="stylesheet">
     <link href="/css/customer/nav.css" rel="stylesheet">
     <style>
@@ -15,7 +14,10 @@
             justify-content: flex-end;
         }
         .form-select {
-            flex: 0 0 25%;
+            flex: 0 0 20%;
+        }
+        #categorySelect3 {
+            flex: 0 0 15%;
         }
         .form-control {
             flex: 1;
@@ -42,37 +44,50 @@
         </header>
         <div class="form-container">
             <form class="d-flex" role="search" action="/customer/user/search_personalq">
+
+                <select class="form-select" id="categorySelect2" name="answer">
+                    <option value="A" th:selected="${answer == 'A'}">답변 여부</option>
+                    <option value="N" th:selected="${answer == 'N'}">답변 대기</option>
+                    <option value="Y" th:selected="${answer == 'Y'}">답변 완료</option>
+                </select>
+
                     <select class="form-select" id="categorySelect" name="category">
                         <option th:each="categories : ${category}"
                                 th:value="${categories.personalqCategorycode}"
-                                th:text="${categories.personalqCategoryname}">
+                                th:text="${categories.personalqCategoryname}"
+                                th:selected="${categories.personalqCategorycode == page_category}">
                         </option>
                     </select>
-
-                <input class="form-control me-2" type="search" placeholder="제목" aria-label="Search" style="width: 300px;" name="keyword">
+                <input class="form-control me-2" type="search" placeholder="제목" aria-label="Search" style="width: 300px;" name="keyword" th:value="${page_keyword}">
+                <select class="form-select" id="categorySelect3" name="date">
+                    <option value="recent" th:selected="${date == 'recent'}">최신순</option>
+                    <option value="old" th:selected="${date == 'old'}">오래된순</option>
+                </select>
                 <button id="searchButton" class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
-        <table class="table table-striped fixed-table" style="text-align: center;">
-            <thead>
-            <tr>
-                <th>No</th>
-                <th>제목</th>
-                <th>답변 여부</th>
-                <th>작성일</th>
-            </tr>
-            </thead>
-            <tbody id="table-body">
-            <tr th:each="each : ${list}" class="align-middle">
-                <td th:text="${each.personalqNo}">번호</td>
-                <td style="text-align: center;">
-                    <a style="text-decoration: none;" th:href="@{/customer/user/personalq_detail/{personalqNo}(personalqNo=${each.personalqNo})}" th:text="${each.title}"></a>
-                </td>
-                <td th:text="${each.answer=='Y'}?'답변 완료':'답변 대기'">답변 여부</td>
-                <td th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="fixed-table-container">
+            <table class="table table-striped fixed-table" style="text-align: center;">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>제목</th>
+                    <th>답변 여부</th>
+                    <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                <tr th:each="each : ${list}" class="align-middle">
+                    <td th:text="${each.personalqNo}">번호</td>
+                    <td style="text-align: center;">
+                        <a style="text-decoration: none;" th:href="@{/customer/user/personalq_detail/{personalqNo}(personalqNo=${each.personalqNo})}" th:text="${each.title}"></a>
+                    </td>
+                    <td th:text="${each.answer=='Y'}?'답변 완료':'답변 대기'">답변 여부</td>
+                    <td th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="text-end">
             <a class="btn btn-secondary btn-sm" sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/personalq_app" role="button">문의 등록</a>
             <a class="btn btn-secondary btn-sm" href="/customer/user/product" role="button">상품 문의(임시)</a>
@@ -83,15 +98,22 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/customer/user/search_personalq(category=${page_category}, keyword=${page_keyword}, page=${currentPage - 1})}" aria-label="Previous">
+                    <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(category=${page_category}, keyword=${page_keyword}, date=${date}, answer=${answer}, page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                    <a class="page-link" th:href="@{/customer/user/search_personalq(category=${page_category}, keyword=${page_keyword}, date=${date}, answer=${answer}, page=${currentPage - 1})}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
-                    <a class="page-link" th:href="@{/customer/user/search_personalq(category=${page_category}, keyword=${page_keyword}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                    <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(category=${page_category}, keyword=${page_keyword}, date=${date}, answer=${answer}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                    <a class="page-link" th:href="@{/customer/user/search_personalq(category=${page_category}, keyword=${page_keyword}, date=${date}, answer=${answer}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
                 </li>
                 <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/customer/user/search_personalq(category=${page_category}, keyword=${page_keyword}, page=${currentPage + 1})}" aria-label="Next">
+                    <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(category=${page_category}, keyword=${page_keyword}, date=${date}, answer=${answer}, page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    <a class="page-link" th:href="@{/customer/user/search_personalq(category=${page_category}, keyword=${page_keyword}, date=${date}, answer=${answer}, page=${currentPage + 1})}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

@@ -11,7 +11,8 @@ public class AdminOrderlistDTO {
     private int productprice;
     private int purchaseprice;
     private String date_created;
-    private String imd;
+    private String imPortId;
+
     private String refund;
     private String refund_date;
 

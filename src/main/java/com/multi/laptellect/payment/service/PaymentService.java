@@ -55,13 +55,13 @@ public class PaymentService {
 
 
     @Transactional
-    public int updateRefundStatus(String ImpUid) {
-        return paymentDAO.updateRefundStatus(ImpUid);
+    public int updateRefundStatus(String imPortId) {
+        return paymentDAO.updateRefundStatus(imPortId);
     }
 
     @Transactional
-    public int refundpoint(String impUid) {
-        PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(impUid);
+    public int refundpoint(String imPortId) {
+        PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(imPortId);
         if (paymentpointDTO != null && paymentpointDTO.getPointchange() != null) {
             int usedPoints = Math.abs(Integer.parseInt(paymentpointDTO.getPointchange()));
             if (usedPoints > 0) {
@@ -76,7 +76,7 @@ public class PaymentService {
     @Transactional
     public boolean verifyPayment(VerificationRequestDTO request, PaymentDTO paymentDTO) throws IamportResponseException, IOException {
         IamportClient client = new IamportClient(apiKeys.getIamportApiKey(), apiKeys.getIamportApiSecret());
-        IamportResponse<Payment> payment = client.paymentByImpUid(request.getImpUid());
+        IamportResponse<Payment> payment = client.paymentByImpUid(request.getImPortId());
 
         if (payment.getResponse().getAmount().compareTo(request.getAmount()) == 0) {
             insertPayment(paymentDTO);
@@ -87,12 +87,12 @@ public class PaymentService {
     }
 
     @Transactional
-    public IamportResponse<Payment> cancelPayment(String impUid, BigDecimal requestAmount, String reason)
+    public IamportResponse<Payment> cancelPayment(String imPortId, BigDecimal requestAmount, String reason)
             throws IamportResponseException, IOException {
         IamportClient client = new IamportClient(apiKeys.getIamportApiKey(), apiKeys.getIamportApiSecret());
 
         // 먼저 결제 정보를 조회하여 취소 가능 금액 확인
-        IamportResponse<Payment> paymentResponse = client.paymentByImpUid(impUid);
+        IamportResponse<Payment> paymentResponse = client.paymentByImpUid(imPortId);
         BigDecimal paidAmount = paymentResponse.getResponse().getAmount();
         BigDecimal canceledAmount = paymentResponse.getResponse().getCancelAmount();
         BigDecimal cancelableAmount = paidAmount.subtract(canceledAmount);
@@ -101,7 +101,7 @@ public class PaymentService {
             throw new IllegalArgumentException("취소 요청 금액이 취소 가능 금액보다 큽니다.");
         }
 
-        CancelData cancelData = new CancelData(impUid, true);
+        CancelData cancelData = new CancelData(imPortId, true);
         cancelData.setChecksum(requestAmount);
         cancelData.setReason(reason);
 

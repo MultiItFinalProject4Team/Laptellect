@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout-profile}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout-profile}">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -14,7 +13,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-  <div class="profile-box">
+  <div class="profile-box" id="review-box" style="height: auto; width: auto">
     <h2>상품 후기</h2>
     <div class="input-group mb-3 d-flex align-items-center">
 
@@ -30,7 +29,7 @@
       <tr>
         <th scope="col" style="width: 5%;">번호</th>
         <th scope="col" style="width: 60%;">상품명</th>
-        <th scope="col" style="width: 30%;">날짜</th>
+        <th scope="col" style="width: 30%;">구매일자</th>
         <th scope="col" style="width: 5%;">작성</th>
       </tr>
       </thead>
@@ -39,7 +38,7 @@
         <th scope="row">1</th>
         <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
         <td>2024.07.31</td>
-        <td><div class="btn btn-primary">작성</div></td>
+        <td><div class="btn btn-primary btn-sm">작성</div></td>
       </tr>
       <tr>
         <th scope="row">2</th>

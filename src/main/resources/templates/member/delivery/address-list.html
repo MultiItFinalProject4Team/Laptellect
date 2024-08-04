@@ -88,7 +88,7 @@
 
           <br> <br>
           <div>
-            <button type="button" class="btn btn-primary w-100 updateAddressBtn">배송지 등록</button>
+            <button type="button" class="btn btn-primary w-100 updateAddressBtn">배송지 수정</button>
           </div>
         </div>
       </div>
@@ -97,41 +97,24 @@
 
 <!-- 배송지 삭제 모달 -->
 <div class="modal fade" id="delete-delivery-modal" tabindex="-1" aria-labelledby="delete-delivery-modal" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+  <div class="modal-dialog" style="max-width: 300px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100 text-center">배송지 삭제</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-        <div class="modal-body text-center">
-          <h4 class="modal-title w-100 text-center" style="color: #6c5ce7;">Laptellect</h4>
-          <br> <br>
-          <div class="image-container">
-            <a href="/signin/kakao">
-              <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
-              <div>카카오</div>
-            </a>
-          </div>
-          <div class="image-container">
-            <a href="/signin/google">
-              <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
-              <div>구글</div>
-            </a>
-          </div>
-          <div class="image-container">
-            <a href="/signup">
-              <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
-              <div>일반회원</div>
-            </a>
-          </div>
-
-          <br> <br>
-          <div>
-            <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
-          </div>
-        </div>
+      <div class="modal-body text-center">
+        <input type="hidden" class="form-control" id="address-id3" placeholder="address-id" value="">
+        <input type="hidden" class="form-control" id="member-no3" placeholder="member-no" value="">
+        <p>정말로 삭제 하시겠습니까?.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary deleteAddressBtn">배송지 삭제</button>
       </div>
     </div>
+  </div>
 </div>
 
 <script>
@@ -175,7 +158,7 @@ $('.btn-success').on('click', function() {
             alert('서버 오류 실패');
         }
     });
-    // 수정 작업 수행
+    // 수정 모달에 배송지 id 삽입
 });
 
 $("#address-name2").on("blur", function () {
@@ -229,7 +212,6 @@ $(".updateAddressBtn").on("click", function () {
                 case 1:
                     alert("배송지 수정 성공");
                     $('#update-delivery-modal').modal('hide');
-                    
                     break;
                 case 0:
                     alert("배송지 이름을 입력해주세요.");
@@ -249,35 +231,37 @@ $(".updateAddressBtn").on("click", function () {
 
 $('.btn-danger').on('click', function() {
     let id = $(this).data('id');
-    console.log('삭제할 ID:', id);
-    // 삭제 작업 수행
+
+    $('#address-id3').val(id);
+    console.log('삭제할 배송지 : ', id);
+    // 삭제 모달에 배송지 id 삽입
 });
 
-// $('#updateAddressBtn').on('click', function() {
-//     let id = $(this).data('id');
-//     console.log('수정할 ID:', id);
+$('.deleteAddressBtn').on('click', function() {
+    let addressId = $('#address-id3').val();
+    console.log('삭제할 배송지 : ', addressId);
 
-//     $.ajax({
-//         url: "/api/member/delivery",
-//         type: 'GET',
-//         data: { addressId: id },
-//         success: function(response) {
-//             console.log(response);
-//             $('#address-name2').val(response.addressName);
-//             $('#recipient-name2').val(response.recipientName);
-//             $('#postal-code2').val(response.postalCode);
-//             $('#address2').val(response.address);
-//             $('#detailAddress2').val(response.detailAddress);
-//             $('#recipient-phone2').val(response.tel);
-//             $('#request2').val(response.request);
-//         },
-//         error: function() {
-//             alert('서버 오류 실패');
-//         }
-//     });
+    $.ajax({
+        url: "/api/member/delete-address",
+        type: 'POST',
+        data: { addressId: addressId },
+        success: function(response) {
+            console.log(response);
+            if(response) {
+              alert("배송지 삭제 완료");
+              $('#delete-delivery-modal').modal('hide');
+              getAddressList()
+            } else {
+              alert("사용자가 일치하지 않습니다.");
+            }
+        },
+        error: function() {
+            alert('서버 오류 실패');
+        }
+    });
 
-//     // 수정 작업 수행
-// });
+    // 삭제 작업 수행
+});
 
 
 </script>

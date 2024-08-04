@@ -16,7 +16,7 @@ public interface PaymentDAO {
 
     List<OrderlistDTO> selectOrders();
 
-    int updateRefundStatus(String ImpUid);
+    int updateRefundStatus(String imPortId);
 
     int saveReview(PaymentReviewDTO paymentReviewDTO);
 
@@ -28,7 +28,9 @@ public interface PaymentDAO {
 
     int givepoint(PaymentpointDTO paymentpointDTO);
 
-    PaymentpointDTO select_refundpoint(String impUid);
+
+    PaymentpointDTO select_refundpoint(String imPortId);
+
 
     int refundpoint(PaymentpointDTO paymentpointDTO);
 
