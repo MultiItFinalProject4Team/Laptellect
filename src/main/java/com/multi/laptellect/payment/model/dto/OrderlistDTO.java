@@ -9,7 +9,7 @@ public class OrderlistDTO {
     private String productinfo;
     private String date_created;
     private int purchaseprice;
-    private String imd;
+    private String im_port_id;
     private String refund;
     private String refund_date;
 
