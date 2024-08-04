@@ -132,6 +132,14 @@
         WHERE
         product_code = #{productCode}
     </select>
+    
+    <select id="getProductByType" parameterType="int">
+        SELECT *
+        FROM
+        product
+        WHERE
+        type_no = #{typeNo}
+    </select>
 
 
 

@@ -102,6 +102,36 @@ public class ProductController {
 
     }
 
+    @GetMapping("/laptopList")
+    public String LaptopList(){
+        int typeNo = 1;
+
+        productService.getProductByType(typeNo);
+
+
+        return "product/laptopList";
+
+    }
+
+    @GetMapping("/mouseList")
+    public String mouseList(){
+        int typeNo = 2;
+
+        return "product/mouseList";
+
+    }
+
+    @GetMapping("/keyboardList")
+    public String keyboardList(){
+        int typeNo = 3;
+
+
+        return "product/keyboardList";
+
+    }
+
+
+
 
     /**
      * Product list string.

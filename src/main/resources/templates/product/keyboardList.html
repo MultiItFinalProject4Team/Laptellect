@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
+    <title>Product List</title>
     <link rel="stylesheet" th:href="@{/css/product.css}">
     <script>
         $(document).ready(function() {
@@ -34,8 +35,8 @@
 
 <body>
 <div class="container" layout:fragment="content">
+    <h1 class="mt-5">Product List</h1>
     <form th:action="@{/product/test}" method="post">
-
         <select id="productType" name="products">
             <option value="1">노트북</option>
             <option value="2">마우스</option>
@@ -45,20 +46,9 @@
     </form>
     <div>
         <div class="btn-group">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#" onclick="sendData(1)">전체</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="sendData(2)">노트북</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="sendData(3)">마우스</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">키보드</a>
-                </li>
-            </ul>
+            <a href="#" onclick="sendData(1)" class="btn btn-primary">노트북</a>
+            <a href="#" onclick="sendData(2)" class="btn btn-primary">마우스</a>
+            <a href="#" onclick="sendData(3)" class="btn btn-primary">키보드</a>
         </div>
 
         <div class="row">

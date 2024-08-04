@@ -35,7 +35,6 @@
 
 <body>
 <div class="container" layout:fragment="content">
-    <h1 class="mt-5">Product List</h1>
     <form th:action="@{/product/test}" method="post">
         <select id="productType" name="products">
             <option value="1">노트북</option>
@@ -45,11 +44,20 @@
         <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
     </form>
     <div>
-        <div class="btn-group">
-            <a href="#" onclick="sendData(1)" class="btn btn-primary">노트북</a>
-            <a href="#" onclick="sendData(2)" class="btn btn-primary">마우스</a>
-            <a href="#" onclick="sendData(3)" class="btn btn-primary">키보드</a>
-        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" th:href=@{/product/productList} data-toggle="tab">전체</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href=@{/product/laptopList} data-toggle="tab">노트북</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href=@{/product/mouseList} data-toggle="tab">마우스</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href=@{/product/keyboardList} data-toggle="tab">키보드</a>
+            </li>
+        </ul>
 
         <div class="row">
             <div class="col-md-4 mb-4" th:each="product, iterStat : ${products}">

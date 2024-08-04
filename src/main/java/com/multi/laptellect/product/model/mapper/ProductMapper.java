@@ -39,6 +39,8 @@ public interface ProductMapper {
 
     void insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options,@Param("categoryCode") String categoryCode);
 
+    int getProductByType(@Param("typeNo") int typeNo);
+
 
     List<ProductDTO> findProduct();
 
