@@ -8,7 +8,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:if="${pointList == null or #lists.isEmpty(pointList)}">
+  <tr th:if="${pointList == null or pointList.isEmpty()}">
     <td colspan="4" class="text-center">조회 정보가 없습니다</td>
   </tr>
 

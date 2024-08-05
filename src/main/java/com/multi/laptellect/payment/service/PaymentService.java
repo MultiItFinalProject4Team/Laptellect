@@ -159,7 +159,6 @@ public class PaymentService {
 
     public PaymentpointDTO selectpoint(int memberNo) {
 
-
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
         int memberNO = memberDTO.getMemberNo();
