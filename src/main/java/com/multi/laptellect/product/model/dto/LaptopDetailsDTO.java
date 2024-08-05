@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class LaptopDetailsDTO {
 
+    private int productNo;
     private String productName;
     private String productCode;
     private int typeNo;
