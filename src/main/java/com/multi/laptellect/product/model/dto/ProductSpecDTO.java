@@ -6,6 +6,6 @@ import lombok.Data;
 public class ProductSpecDTO {
 
     private int productNo;
-    private int categoryNo;
+    private String categoryNo;
     private String optionValue;
 }
