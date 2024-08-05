@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +28,7 @@
             <div class="order-info">
                 <img src="/img/payment/notebooktest.PNG" alt="Product Image">
                 <div class="order-details">
-                    <p th:text="${order.date_created.substring(0, 10)} + ' 주문 · 배송완료'"></p>
+                    <p th:text="${order.date_created.substring(0, 10)}"></p>
                     <h3 th:text="${order.productname}"></h3>
                     <p th:text="${order.productinfo}"></p>
                     <br><br>
