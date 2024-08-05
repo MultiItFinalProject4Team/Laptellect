@@ -1,6 +1,7 @@
 package com.multi.laptellect.util;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Redis Util 클래스
@@ -121,5 +123,66 @@ public class RedisUtil { // Redis 사용 클래스
     public void deleteToList(String key, long count, String value) { // 리스트에서 항목 삭제
         ListOperations<String, String> listOperations = redisTemplate.opsForList();
         listOperations.remove(key, count, value);
+    }
+
+    /**
+     * Hash 데이터 Set
+     *
+     * @param key      키값
+     * @param field    필드값
+     * @param value    벨류값
+     * @param duration TTL 유효기간
+     */
+    public void setHashDataExpire(String key, String field, String value, Long duration) { // Hash 데이터 저장
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        hashOperations.put(key, field, value);
+        redisTemplate.expire(key, Duration.ofSeconds(duration));
+    }
+
+    /**
+     * 특정 필드 값 업데이트
+     *
+     * @param key      키값
+     * @param field    필드값
+     * @param value    업데이트 할 벨류값
+     * @param duration TTL 유효기간
+     */
+    public void updateHashDataExpire(String key, String field, String value, Long duration) {
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        redisTemplate.expire(key, Duration.ofSeconds(duration));
+    }
+
+    /**
+     * 특정 Value 값 가져오가
+     *
+     * @param key     키값
+     * @param field 필드값
+     * @return 특정 필드의 Value 값 반환
+     */
+    public String getHashData(String key, String field) { // Hash 데이터 가져오기
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        return hashOperations.get(key, field);
+    }
+
+    /**
+     * 전체 Field Value 값 가져오가
+     *
+     * @param key 키값
+     * @return HashMap 형태로 Field, Value 값 반환
+     */
+    public Map<String, String> getAllHashData(String key) { // 전체 Hasg 데이터 가져오기
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        return hashOperations.entries(key);
+    }
+
+    /**
+     * 특정 필드 삭제
+     *
+     * @param key     키값
+     * @param field 필드값
+     */
+    public void deleteHashData(String key, String field) { // Hash 데이터 삭제
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        hashOperations.delete(key, field);
     }
 }

@@ -10,6 +10,70 @@
             margin: auto;
         }
     </style>
+    <script>
+        $(document).ready(function() {
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
+            });
+
+            // 위시리스트 추가/삭제
+            $(".btn-process-wishlist").on("click", function () {
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-wishlist",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("위시리스트 추가 완료.");
+                            break;
+                          case 2:
+                            alert("위시리스트 삭제 완료.");
+                            break;
+                          default:
+                            alert("위시리스트 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+            // 장바구니 추가/삭제
+            $(".btn-process-basket").on("click", function () {
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+        });
+    </script>
 </head>
 <body>
 
@@ -32,8 +96,8 @@
                 </tr>
             </table>
             <div>
-                <a class="btn btn-primary" href="#" role="button">장바구니</a>
-                <a class="btn btn-primary" href="#" role="button">위시리스트</a>
+                <a class="btn btn-primary btn-process-basket" th:attr="data-product-no=${productNo}" href="#" role="button">장바구니</a>
+                <a class="btn btn-primary btn-process-wishlist" th:attr="data-product-no=${productNo}" href="#" role="button">위시리스트</a>
             </div>
 
             <!-- 상품 스펙 정보 테이블 -->

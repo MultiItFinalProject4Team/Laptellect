@@ -3,7 +3,6 @@ package com.multi.laptellect.product.service;
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
-import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,6 @@ public class ProductServiceImpl implements ProductService {
 
 
     private final CrawlingService crawlingService;
-
-    private final RedisUtil redisUtil;
 
     @Override
     @Transactional
@@ -189,40 +186,6 @@ public class ProductServiceImpl implements ProductService {
         log.info("위시리스트 조회 성공 = {}", wishlist);
 
         return new PageImpl<>(wishlist, pageable, total);
-    }
-
-    @Override
-    public int processBasket(int productNo) throws Exception {
-        String memberName = SecurityUtil.getUserDetails().getMemberName();
-        memberName = memberName + "_basket";
-        String productNoString = String.valueOf(productNo);
-
-        List<String> userBasket = redisUtil.getListData(memberName);
-
-        log.debug("Redis 조회 시작 = {}", userBasket);
-        if(userBasket != null) {
-            // 중복된 값이 저장되어있는지 검증 True일 시 값 추가 False 일 시 값 삭제
-            if(!userBasket.contains(productNoString)) {
-                redisUtil.addToList(memberName, String.valueOf(productNo));
-                log.info("Redis 값 추가 성공 = {} {}", userBasket, memberName);
-
-                return 1;
-            } else {
-                redisUtil.deleteToList(memberName, 1, productNoString);
-                log.info("Redis 값 삭제 성공 = {} {}", userBasket, memberName);
-
-                return 2;
-            }
-
-        } else {
-            userBasket = new ArrayList<String>();
-            userBasket.add(productNoString);
-
-            redisUtil.setListDataExpire(memberName, userBasket, 24 * 60 * 60);
-            log.info("Redis insert 성공 = {}", memberName);
-
-            return 1;
-        }
     }
 
     //상품 전체 조회

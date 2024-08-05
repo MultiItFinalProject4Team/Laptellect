@@ -31,6 +31,30 @@
 </head>
 <body>
 <div id="wrapper">
+    <div class="top-bar">
+        <div class="container">
+            <div class="right-content">
+                <th:block sec:authorize="isAnonymous()">
+                    <a href="/signin">로그인</a>
+                    <a href="#" data-bs-toggle="modal"
+                       data-bs-target="#loginModal">회원가입
+                    </a>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
+                    <a href="/profile">마이페이지</a>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <a href="/admin">어드민페이지</a>
+                </th:block>
+
+                <th:block sec:authorize="isAuthenticated()">
+                    <a href="/signout">로그아웃</a>
+                </th:block>
+            </div>
+        </div>
+    </div>
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">
@@ -73,30 +97,9 @@
                                 <a class="nav-link" href="/customer/user">고객센터</a>
                             </li>
                         </th:block>
-                        <div>
-                            <th:block sec:authorize="isAnonymous()">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/signin}'|">로그인</button>
-                                <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal"
-                                        data-bs-target="#loginModal">회원가입
-                                </button>
-                            </th:block>
-
-                            <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/profile}'|">마이페이지</button>
-                            </th:block>
-
-                            <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/admin}'|">어드민페이지</button>
-                            </th:block>
-
-                            <th:block sec:authorize="isAuthenticated()">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/signout}'|">로그아웃</button>
-                            </th:block>
-                        </div>
                     </ul>
                 </div>
             </div>
-
         </div>
     </nav>
     <!-- Close Header -->
