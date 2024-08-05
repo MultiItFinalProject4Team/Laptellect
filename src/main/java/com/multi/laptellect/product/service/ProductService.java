@@ -36,4 +36,6 @@ public interface ProductService {
 
 
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
+
+    int processBasket(int productNo) throws Exception;
 }

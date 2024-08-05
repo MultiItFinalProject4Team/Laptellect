@@ -24,9 +24,50 @@
     <!-- css + js 파일 Load-->
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+.top-bar {
+    background-color: #f2f2f2; /* 연한 회색으로 변경 */
+    color: #333; /* 텍스트를 어두운 색으로 변경 */
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.top-bar .container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽으로 정렬 */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.top-bar .right-content {
+    display: flex;
+    align-items: center;
+}
+
+.top-bar a {
+    color: #333; /* 링크 색상을 어두운 색으로 변경 */
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+.top-bar a:hover {
+    text-decoration: underline;
+}
+
+    </style>
 </head>
 <body>
 <div id="wrapper">
+    <div class="top-bar">
+        <div class="container">
+            <div class="right-content">
+                <a href="#">로그인</a>
+                <a href="#">마이페이지</a>
+            </div>
+        </div>
+    </div>
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">

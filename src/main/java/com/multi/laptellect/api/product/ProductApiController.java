@@ -63,4 +63,15 @@ public class ProductApiController {
         }
         return "member/wishlist/wishlist";
     }
+
+    @ResponseBody
+    @PostMapping("/process-basket")
+    public int processBasket(@RequestParam(name = "productNo") int productNo) {
+        try {
+            return productService.processBasket(productNo);
+        } catch (Exception e) {
+            log.error("장바구니 Error = ", e);
+            return 0;
+        }
+    }
 }
