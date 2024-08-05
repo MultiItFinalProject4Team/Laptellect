@@ -168,7 +168,7 @@ public class PaymentService {
         if (paymentpointDTO == null) {
             paymentpointDTO = new PaymentpointDTO();
             paymentpointDTO.setMemberNo(memberDTO.getMemberNo());
-            newMemberPoint(paymentpointDTO);
+//            newMemberPoint(paymentpointDTO);
 
         }
 
