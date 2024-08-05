@@ -103,6 +103,15 @@ public interface MemberService {
     AddressDTO findAddressByAddressId(int addressId) throws Exception;
 
     /**
+
+     * 사용자 포인트 업데이트
+     *
+     * @param memberDTO 업데이트할 포인트 정보가 담긴 DTO 객체
+     * @return 업데이트된 행의 수
+     * @throws Exception 업데이트 중 발생할 수 있는 예외
+     */
+    int updatePoint(MemberDTO memberDTO) throws Exception;
+
      * 회원 전체 포인트 내역 조회
      *
      * @param pageable 페이징 객체
@@ -128,4 +137,5 @@ public interface MemberService {
      * @throws Exception the exception
      */
     Page<PointLogDTO> getAllUsePointList(Pageable pageable) throws Exception;
+
 }

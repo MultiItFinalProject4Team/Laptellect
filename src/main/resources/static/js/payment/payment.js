@@ -28,10 +28,11 @@ function updateTotalPrice() {
 
     let totalPrice = originalPrice - pointValue;
 
-    // 총 결제금액이 0 미만이 되지 않도록 제한
-    if (totalPrice < 0) {
-        totalPrice = 0;
-        pointValue = originalPrice;
+    // 총 결제금액이 100원 미만이 되지 않도록 제한
+    if (totalPrice < 100) {
+        alert("총 결제금액이 100원보다 작아질 수 없습니다");
+        totalPrice = 100;
+        pointValue = originalPrice - 100;
         pointInput.value = pointValue;
     }
 
@@ -78,6 +79,8 @@ function mypayment() {
                 } catch (error) {
                     // 검증 요청 자체가 실패한 경우 결제 취소
                     await cancelPayment(rsp.imp_uid, myAmount);
+                    console.log("Sending amount to server:", myAmount);
+                    console.log("Used points:", usedPoints);
                     alert("검증 실패로 인해 결제가 취소되었습니다: " + error.response.data);
                 }
             } else {

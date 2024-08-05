@@ -14,7 +14,7 @@ public interface PaymentDAO {
 
     int insertPayment(PaymentDTO paymentDTO);
 
-    List<OrderlistDTO> selectOrders();
+    List<OrderlistDTO> selectOrders(String memberName);
 
     int updateRefundStatus(String imPortId);
 
@@ -22,7 +22,7 @@ public interface PaymentDAO {
 
     List<String> getReviewedOrders();
 
-    PaymentpointDTO selectpoint(String username);
+    PaymentpointDTO selectpoint(int memberNO);
 
     int usepoint(PaymentpointDTO paymentpointDTO);
 
@@ -34,4 +34,11 @@ public interface PaymentDAO {
 
     int refundpoint(PaymentpointDTO paymentpointDTO);
 
+    int newMemberPoint(PaymentpointDTO paymentpointDTO);
+
+    boolean findReview(String imPortId);
+
+    int findReviewedPoint(String imPortId);
+
+    int refundReviewdPoint(PaymentpointDTO paymentpointDTO);
 }

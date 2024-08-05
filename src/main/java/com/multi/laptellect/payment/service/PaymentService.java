@@ -1,6 +1,8 @@
 package com.multi.laptellect.payment.service;
 
 import com.multi.laptellect.api.payment.ApiKeys;
+import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.payment.model.dao.PaymentDAO;
 import com.multi.laptellect.payment.model.dto.*;
 import com.siot.IamportRestClient.IamportClient;
@@ -16,26 +18,37 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 @Service
 public class PaymentService {
 
     private final ApiKeys apiKeys;
+    private final MemberMapper memberMapper;
+
 
 
     @Autowired
     private PaymentDAO paymentDAO;
 
     @Autowired
-    public PaymentService(ApiKeys apiKeys) {
+    public PaymentService(ApiKeys apiKeys, MemberMapper memberMapper) {
         this.apiKeys = apiKeys;
+        this.memberMapper = memberMapper;
+
     }
 
-    public int usepoint(PaymentpointDTO paymentpointDTO){
+    public int usepoint(PaymentpointDTO paymentpointDTO) {
         return paymentDAO.usepoint(paymentpointDTO);
     }
 
-    public int givepoint(PaymentpointDTO paymentpointDTO){
-        return paymentDAO.givepoint(paymentpointDTO);
+    public int givepoint(PaymentpointDTO paymentpointDTO) { return paymentDAO.givepoint(paymentpointDTO); }
+
+    public int refundReviewdPoint(PaymentpointDTO paymentpointDTO) { return paymentDAO.refundReviewdPoint(paymentpointDTO);
+    }
+
+    public int newMemberPoint(PaymentpointDTO paymentpointDTO) {
+        return paymentDAO.newMemberPoint(paymentpointDTO);
     }
 
     @Transactional
@@ -49,8 +62,8 @@ public class PaymentService {
     }
 
     @Transactional
-    public List<OrderlistDTO> selectOrders() {
-        return paymentDAO.selectOrders();
+    public List<OrderlistDTO> selectOrders(String memberName) {
+        return paymentDAO.selectOrders(memberName);
     }
 
 
@@ -60,14 +73,33 @@ public class PaymentService {
     }
 
     @Transactional
+    public int findReviewedPoint(String imPortId) {
+        return paymentDAO.findReviewedPoint(imPortId);
+    }
+
+    @Transactional
     public int refundpoint(String imPortId) {
         PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(imPortId);
-        if (paymentpointDTO != null && paymentpointDTO.getPointchange() != null) {
-            int usedPoints = Math.abs(Integer.parseInt(paymentpointDTO.getPointchange()));
-            if (usedPoints > 0) {
-                paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
-                paymentDAO.refundpoint(paymentpointDTO);
-                return usedPoints;
+        if (paymentpointDTO != null && paymentpointDTO.getPaymentPointChange() != null) {
+
+
+            boolean reviewExists = findReview(imPortId);
+            int usedPoints = abs(Integer.parseInt(paymentpointDTO.getPaymentPointChange()));
+
+            if(reviewExists){
+                paymentDAO.refundReviewdPoint(paymentpointDTO);
+                paymentpointDTO.setUsedPoints(String.valueOf(Math.abs(paymentDAO.findReviewedPoint(imPortId))));
+                if(Integer.parseInt(paymentpointDTO.getUsedPoints())>0) {
+                    paymentDAO.refundpoint(paymentpointDTO);
+                    usedPoints = Integer.parseInt(paymentpointDTO.getUsedPoints());
+                    return usedPoints;
+                }
+            }else{
+                if(usedPoints>0) {
+                    paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
+                    paymentDAO.refundpoint(paymentpointDTO);
+                    return usedPoints;
+                }
             }
         }
         return 0;
@@ -78,9 +110,15 @@ public class PaymentService {
         IamportClient client = new IamportClient(apiKeys.getIamportApiKey(), apiKeys.getIamportApiSecret());
         IamportResponse<Payment> payment = client.paymentByImpUid(request.getImPortId());
 
-        if (payment.getResponse().getAmount().compareTo(request.getAmount()) == 0) {
+        BigDecimal actualAmount = payment.getResponse().getAmount();
+        BigDecimal requestedAmount = request.getAmount();
+
+        System.out.println("Actual Amount: " + actualAmount);
+        System.out.println("Requested Amount: " + requestedAmount);
+        System.out.println("Comparison result: " + actualAmount.compareTo(requestedAmount));
+
+        if (actualAmount.compareTo(requestedAmount) == 0) {
             insertPayment(paymentDTO);
-            System.out.println(paymentDTO);
             return true;
         }
         return false;
@@ -106,7 +144,6 @@ public class PaymentService {
         cancelData.setReason(reason);
 
 
-
         return client.cancelPaymentByImpUid(cancelData);
     }
 
@@ -119,18 +156,27 @@ public class PaymentService {
         return paymentDAO.getReviewedOrders();
     }
 
-    public PaymentpointDTO selectpoint() {
-        String username = "jack";  // 고정된 username 사용
-        PaymentpointDTO paymentpointDTO = paymentDAO.selectpoint(username);
+
+    public PaymentpointDTO selectpoint(int memberNo) {
+
+
+        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+
+        int memberNO = memberDTO.getMemberNo();
+        PaymentpointDTO paymentpointDTO = paymentDAO.selectpoint(memberNO);
 
         if (paymentpointDTO == null) {
             paymentpointDTO = new PaymentpointDTO();
-            paymentpointDTO.setUsername(username);
-            paymentpointDTO.setPossessionpoint(0);  // 기본값 설정
+            paymentpointDTO.setMemberNo(memberDTO.getMemberNo());
+            newMemberPoint(paymentpointDTO);
+
         }
 
         return paymentpointDTO;
     }
 
+    public boolean findReview(String imPortId) {
+        return paymentDAO.findReview(imPortId);
+    }
 
 }

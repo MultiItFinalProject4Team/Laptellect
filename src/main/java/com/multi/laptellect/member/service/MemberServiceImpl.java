@@ -232,4 +232,20 @@ public class MemberServiceImpl implements MemberService{
         log.debug("배송지 삭제 시작 = {}", addressId);
         return memberMapper.deleteAddressByAddressId(addressId) != 0;
     }
+
+    @Override
+    @Transactional
+    public int updatePoint(MemberDTO memberDTO) throws Exception {
+        int result = memberMapper.updatePoint(memberDTO);
+        if (result == 0) {
+            throw new RuntimeException("포인트 업데이트 실패");
+        }
+        log.info("포인트 업데이트 완료 = {}", memberDTO.getPoint());
+
+        // 업데이트된 MemberDTO로 UserDetails 갱신
+        memberDTO = memberMapper.findMemberByNo(memberDTO.getMemberNo());
+        SecurityUtil.updateUserDetails(memberDTO);
+
+        return result;
+    }
 }
