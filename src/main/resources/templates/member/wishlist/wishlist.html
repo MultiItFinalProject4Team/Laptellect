@@ -30,64 +30,131 @@
     </style>
 </head>
 <body>
-
+    <h4>관심상품 전체 <span th:text="${total + '개'}"></span></h4>
+    <hr>
     <div class="row">
         <div class="col-12">
             <input type="checkbox" id="selectAll" class="form-check-input">
             <label for="selectAll" class="form-check-label">전체선택</label>
-            <button class="btn btn-sm btn-secondary ms-2">선택삭제</button>
+            <button class="btn btn-sm btn-secondary btn-check-delete ms-2">선택삭제</button>
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-md-12">
-            <div class="card mb-3">
+            <div th:if="${wishlist == null or #lists.isEmpty(wishlist)}">
+                <td colspan="4" class="text-center">조회 정보가 없습니다</td>
+            </div>
+            <div class="card mb-3" th:each="wishlist : ${ wishlist }">
                 <div class="row g-0 align-items-center">
                     <div class="col-auto align-self-start" style="width: 15px; margin-left: 5px; margin-right: 5px;;">
-                        <input type="checkbox" class="form-check-input">
+                        <input type="checkbox" class="form-check-input wishlist-checkbox" th:attr="data-product-no=${wishlist.productNo}">
                     </div>
                     <div class="col-md-2">
-                        <img src="https://via.placeholder.com/150" class="img-fluid rounded-start" alt="Product Image">
+                        <a th:href="@{/product/laptopDetails(productCode=${wishlist.productNo})}">
+                            <img th:src="@{'/img/product/' + ${wishlist.uploadName}}" class="img-fluid rounded-start" alt="Product Image">
+                        </a>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <a href="" class="product-name"><h6 class="card-title">빅트렉 2024 브이북 14 셀레론 인텔 11세대, 화이트, 256GB, 8GB, WIN11 Home, VIC-LPTP02</h6></a>
-                            <p class="card-text text-danger">329,000원</p>
+                            <a th:href="@{/product/laptopDetails(productCode=${wishlist.productNo})}" class="product-name"><h6 class="card-title" th:text="${wishlist.productName}"></h6></a>
+                            <p class="card-text text-danger price" th:text="${wishlist.price} + ' 원'"></p>
                         </div>
                     </div>
                     <div class="col-md-1 text-end d-flex flex-column justify-content-center btn-wishlist">
-                      <button class="btn btn btn-outline-primary mb-2">장바구니 담기</button>
-                      <button class="btn btn-outline-secondary">삭제</button>
+                      <button class="btn btn btn-outline-primary mb-2" th:attr="data-product-no=${wishlist.productNo}">장바구니 담기</button>
+                      <button class="btn btn-outline-secondary btn-delete" th:attr="data-product-no=${wishlist.productNo}">삭제</button>
                   </div>
                 </div>
             </div>
-
         </div>
     </div>
-  </div>
 
-    <nav aria-label="...">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <span class="page-link">이전</span>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item active" aria-current="page">
-                <span class="page-link">2</span>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">다음</a>
-            </li>
-        </ul>
+    <nav aria-label="Page navigation">
+        <div th:if="${!wishlist.isEmpty()}">
+            <ul class="pagination justify-content-center all-wishlist">
+                <li class="page-item" th:classappend="${!wishlist.hasPrevious} ? 'disabled'">
+                    <a class="page-link" href="#" th:data-page="${page - 1}" tabindex="-1"><</a>
+                </li>
+
+                <li class="page-item" th:classappend="${!wishlist.hasNext} ? 'disabled'">
+                    <a class="page-link btn-delete" href="#" th:data-page="${page + 1}">></a>
+                </li>
+            </ul>
+        </div>
     </nav>
-</div>
-</div>
+
 <script>
-  $('#selectAll').change(function() {
-    const isChecked = $(this).prop('checked');
-    $('.form-check-input').prop('checked', isChecked);
-  });
+$(document).ready(function() {
+    $('#selectAll').change(function() {
+       const isChecked = $(this).prop('checked');
+       $('.form-check-input').prop('checked', isChecked);
+    });
+
+    $('.price').each(function() {
+       let value = $(this).text().replace(' 원', '');
+       let formattedValue = new Intl.NumberFormat().format(value);
+       $(this).text(formattedValue + ' 원');
+    });
+
+    $('.all-wishlist').on('click', 'a.page-link', function(event) {
+        event.preventDefault();
+
+        let page = $(this).data('page');
+
+        if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
+            return;
+        }
+
+        $.ajax({
+            url: '/api/product/get-wishlist',
+            type: 'GET',
+            data: {
+                page: page,
+            },
+            success: function(response) {
+                $('#wishlist-box').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('조회 실패:', error);
+            }
+        });
+    });
+
+    $('.btn-check-delete').click(function() {
+        let selectedProducts = [];
+        $('.wishlist-checkbox:checked').each(function() {
+            selectedProducts.push($(this).data('product-no'));
+        });
+
+        if (selectedProducts.length === 0) {
+            alert('삭제할 상품을 선택해주세요.');
+            return;
+        }
+
+        $.ajax({
+            url: '/api/product/process-wishlist',
+            type: 'POST',
+            traditional: true,
+            data: {
+                productNo: selectedProducts
+            },
+            success: function(response) {
+                if(response === 500) {
+                    alert('삭제에 실패했습니다.');
+                } else {
+                    alert('삭제가 완료되었습니다.');
+                    loadWishlist();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('삭제 실패:', error);
+            }
+        });
+    });
+
+});
+
 </script>
 </body>
 </html>

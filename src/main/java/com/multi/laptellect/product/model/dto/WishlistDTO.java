@@ -12,9 +12,12 @@ import java.sql.Date;
  * @since : 2024-08-05
  */
 @Data
-public class WishListDTO {
+public class WishlistDTO {
     private int wishlistNo;
     private int productNo;
     private int memberNo;
+    private String uploadName;
+    private String productName;
+    private int price;
     private Date createdAt;
 }
