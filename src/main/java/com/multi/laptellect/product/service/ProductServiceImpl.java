@@ -201,6 +201,13 @@ public class ProductServiceImpl implements ProductService {
         return laptopSpecDTO;
     }
 
+    @Override
+    public int getProductByType(int typeNo){
+
+        return  productMapper.getProductByType(typeNo);
+
+    }
+
 
 
 

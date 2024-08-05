@@ -78,7 +78,8 @@ public class ProductController {
             log.info("상품 타입 확인 = {}", typeNo);
             switch (typeNo) {
                 case 1:
-                    crawlingService.processLaptopDetails();
+                    crawlingService.processLaptopDetails(typeNo);
+                    log.info("productController = {}", typeNo);
                     break;
                 case 2:
                     // crawlingService.processMouseDetails(productDTO);
@@ -100,6 +101,47 @@ public class ProductController {
         return "product/productList";
 
     }
+
+    @GetMapping("/laptopList")
+    public String LaptopList(){
+        int typeNo = 1;
+
+        productService.getProductByType(typeNo);
+
+
+        return "product/laptopList";
+
+    }
+
+    @GetMapping("/mouseList")
+    public String mouseList(){
+        int typeNo = 2;
+
+        return "product/mouseList";
+
+    }
+
+    @GetMapping("/keyboardList")
+    public String keyboardList(){
+        int typeNo = 3;
+
+
+        return "product/keyboardList";
+
+    }
+
+    @GetMapping("/test2")
+    public String getProductPhoto() throws IOException {
+
+
+        ProductDTO productDTO = new ProductDTO();
+
+        crawlingService.getProductPhoto(productDTO);
+
+        return "product/mouseList";
+
+    }
+
 
 
     /**

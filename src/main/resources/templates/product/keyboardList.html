@@ -11,32 +11,6 @@
                 let formattedValue = new Intl.NumberFormat().format(value);
                 $(this).text(formattedValue + ' 원');
             });
-
-            $(".btn-process-wishlist").on("click", function () {
-                let productNo = $(this).data('product-no');
-                console.log(productNo);
-
-                $.ajax({
-                    url: "/api/product/process-wishlist",
-                    type: "POST",
-                    data: { productNo: productNo },
-                    success: function (response) {
-                        switch (response) {
-                          case 1:
-                            alert("위시리스트 추가 완료.");
-                            break;
-                          case 2:
-                            alert("위시리스트 삭제 완료.");
-                            break;
-                          default:
-                            alert("위시리스트 Ajax Error");
-                        }
-                    },
-                    error: function () {
-                        console.log("위시리스트 Ajax Error");
-                    },
-                });
-            })
         });
     </script>
     <script>
@@ -61,6 +35,7 @@
 
 <body>
 <div class="container" layout:fragment="content">
+    <h1 class="mt-5">Product List</h1>
     <form th:action="@{/product/test}" method="post">
         <select id="productType" name="products">
             <option value="1">노트북</option>
@@ -70,20 +45,11 @@
         <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
     </form>
     <div>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" th:href=@{/product/productList} data-toggle="tab">전체</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/laptopList} data-toggle="tab">노트북</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/mouseList} data-toggle="tab">마우스</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/keyboardList} data-toggle="tab">키보드</a>
-            </li>
-        </ul>
+        <div class="btn-group">
+            <a href="#" onclick="sendData(1)" class="btn btn-primary">노트북</a>
+            <a href="#" onclick="sendData(2)" class="btn btn-primary">마우스</a>
+            <a href="#" onclick="sendData(3)" class="btn btn-primary">키보드</a>
+        </div>
 
         <div class="row">
             <div class="col-md-4 mb-4" th:each="product, iterStat : ${products}">
@@ -93,9 +59,9 @@
                              style="height: 200px; object-fit: contain;">
                         <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                             <ul class="list-unstyled">
-                                <li><a class="btn btn-custom text-white btn-process-wishlist" th:attr="data-product-no=${product.productNo}"><i class="far fa-heart"></i></a></li>
+                                <li><a class="btn btn-custom text-white" href="#"><i class="far fa-heart"></i></a></li>
                                 <li><a class="btn btn-custom text-white mt-2" th:href="@{/product/laptopDetails(productCode=${product.productCode})}"><i class="far fa-eye"></i></a></li>
-                                <li><a class="btn btn-custom text-white mt-2"><i class="fas fa-cart-plus"></i></a></li>
+                                <li><a class="btn btn-custom text-white mt-2" href="#"><i class="fas fa-cart-plus"></i></a></li>
                             </ul>
                         </div>
                     </div>

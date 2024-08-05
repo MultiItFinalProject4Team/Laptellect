@@ -34,6 +34,7 @@ public interface ProductService {
      */
     int processWishlist(List<Integer> productNo) throws Exception;
 
+    int getProductByType(int typeNo);
 
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
 }

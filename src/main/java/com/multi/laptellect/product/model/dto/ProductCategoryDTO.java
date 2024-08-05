@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class ProductCategoryDTO {
 
-    private int categoryNo;
+    private String categoryNo;
     private int typeNo;
+    private String categoryCode;
     private String options;
 
 }
