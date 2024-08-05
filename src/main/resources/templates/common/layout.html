@@ -24,47 +24,30 @@
     <!-- css + js 파일 Load-->
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-.top-bar {
-    background-color: #f2f2f2; /* 연한 회색으로 변경 */
-    color: #333; /* 텍스트를 어두운 색으로 변경 */
-    padding: 10px 0;
-    font-size: 14px;
-}
-
-.top-bar .container {
-    display: flex;
-    justify-content: flex-end; /* 오른쪽으로 정렬 */
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
-.top-bar .right-content {
-    display: flex;
-    align-items: center;
-}
-
-.top-bar a {
-    color: #333; /* 링크 색상을 어두운 색으로 변경 */
-    margin-left: 15px;
-    text-decoration: none;
-}
-
-.top-bar a:hover {
-    text-decoration: underline;
-}
-
-    </style>
 </head>
 <body>
 <div id="wrapper">
     <div class="top-bar">
         <div class="container">
             <div class="right-content">
-                <a href="#">로그인</a>
-                <a href="#">마이페이지</a>
+                <th:block sec:authorize="isAnonymous()">
+                    <a href="/signin">로그인</a>
+                    <a href="#" data-bs-toggle="modal"
+                       data-bs-target="#loginModal">회원가입
+                    </a>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
+                    <a href="/profile">마이페이지</a>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <a href="/admin">어드민페이지</a>
+                </th:block>
+
+                <th:block sec:authorize="isAuthenticated()">
+                    <a href="/signout">로그아웃</a>
+                </th:block>
             </div>
         </div>
     </div>
@@ -90,6 +73,17 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/customer/user">고객센터</a>
                         </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="#" class="nav-link d-flex align-items-center" style="position: relative;">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span class="ms-1">장바구니</span>
+                            </a>
+                            <span class="separator">|</span>
+                            <a href="#" class="nav-link d-flex align-items-center" style="position: relative;">
+                                <i class="fa-regular fa-heart"></i>
+                                <span class="ms-1">관심상품</span>
+                            </a>
+                        </li>
                         <th:block sec:authorize="hasAnyAuthority('ROLE_SELLER')">
                             <li class="nav-item">
                                 <a class="nav-link" href="/">Home</a>
@@ -110,30 +104,9 @@
                                 <a class="nav-link" href="/customer/user">고객센터</a>
                             </li>
                         </th:block>
-                        <div>
-                            <th:block sec:authorize="isAnonymous()">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/signin}'|">로그인</button>
-                                <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal"
-                                        data-bs-target="#loginModal">회원가입
-                                </button>
-                            </th:block>
-
-                            <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/profile}'|">마이페이지</button>
-                            </th:block>
-
-                            <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/admin}'|">어드민페이지</button>
-                            </th:block>
-
-                            <th:block sec:authorize="isAuthenticated()">
-                                <button type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/signout}'|">로그아웃</button>
-                            </th:block>
-                        </div>
                     </ul>
                 </div>
             </div>
-
         </div>
     </nav>
     <!-- Close Header -->

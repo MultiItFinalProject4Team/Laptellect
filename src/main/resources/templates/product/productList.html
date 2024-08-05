@@ -45,7 +45,7 @@
                 console.log(productNo);
 
                 $.ajax({
-                    url: "/api/product/process-basket",
+                    url: "/api/product/process-cart",
                     type: "POST",
                     data: { productNo: productNo },
                     success: function (response) {
@@ -61,7 +61,7 @@
                         }
                     },
                     error: function () {
-                        console.log("위시리스트 Ajax Error");
+                        console.log("장바구니 Ajax Error");
                     },
                 });
             })

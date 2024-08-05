@@ -50,21 +50,6 @@ public class AuthServiceImpl implements AuthService{
             memberDTO.setLoginType(loginType);
         }
 
-//        if(memberDTO.getLoginType().equals("local")) { // 일반 회원가입
-//            if(authMapper.insertMember(memberDTO) == 0) {
-//                throw new SQLException("Failed to insert member");
-//            }
-//
-//            if(authMapper.insertPassword(memberDTO) == 0) {
-//                throw new SQLException("Failed to insert password");
-//            }
-//        } else { // 소셜 회원가입
-//            // ID 설정 ( 추후 수정 )
-//            if(authMapper.insertMember(memberDTO) == 0) {
-//                throw new SQLException("Failed to insert member");
-//            }
-//        }
-
         switch (memberDTO.getLoginType()) {
             case "kakao":
             case "naver":

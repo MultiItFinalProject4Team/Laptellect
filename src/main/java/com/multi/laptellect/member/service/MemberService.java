@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 
 /**
- * The interface Member service.
+ * MemberService 인터페이스
  */
 public interface MemberService {
     /**
@@ -138,4 +138,13 @@ public interface MemberService {
      */
     Page<PointLogDTO> getAllUsePointList(Pageable pageable) throws Exception;
 
+    /**
+     * 임시 비밀번호 발급
+     *
+     * @param email      사용자 이메일
+     * @param tel        사용자 휴대폰 번호
+     * @param verifyCode 인증 코드
+     * @return 결과값 반환
+     */
+    int sendTempPassword(String email, String tel, String verifyCode);
 }

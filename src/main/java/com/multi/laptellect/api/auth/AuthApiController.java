@@ -277,6 +277,25 @@ public class AuthApiController {
         return request;
     }
 
+    @ResponseBody
+    @PostMapping("/send-temp-password")
+    public int sendTempPassword(@RequestParam(name = "email", required = false) String email,
+                                @RequestParam(name = "tel", required = false) String tel,
+                                @RequestParam(name = "verifyCode") String verifyCode) {
+        int result = 0;
+
+        try {
+            result = memberService.sendTempPassword(email, tel, verifyCode);
+
+            log.info("Temp Email Send success", result);
+            return result;
+        } catch (Exception e) {
+            log.error("sendTempPassword Error = ", e);
+            return 0;
+        }
+    }
+
+
     /**
      * 회원가입을 실행하는 메서드
      *
