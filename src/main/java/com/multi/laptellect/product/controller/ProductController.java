@@ -130,6 +130,17 @@ public class ProductController {
 
     }
 
+    @GetMapping("/test2")
+    public String getProductPhoto() throws IOException {
+
+
+        ProductDTO productDTO = new ProductDTO();
+
+        crawlingService.getProductPhoto(productDTO);
+
+        return "product/mouseList";
+
+    }
 
 
 

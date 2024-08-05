@@ -77,3 +77,33 @@ create table review (
 	FOREIGN key (product_no) REFERENCES product(product_no) ON DELETE CASCADE
 
 );
+
+-- 프로덕트 디테일 view
+CREATE VIEW product_detail AS
+SELECT
+    p.product_name,
+    p.product_code,
+    p.type_no,
+    p.price,
+    c.options,
+    s.option_value,
+    i.upload_name
+FROM
+    product p
+JOIN
+    product_spec s ON p.product_no = s.product_no
+JOIN
+    product_category c ON s.category_no = c.category_no
+JOIN
+    images i ON p.reference_code = i.reference_code
+WHERE
+    p.type_no = 1;
+
+
+-- 데이터 삭제
+
+delete from images;
+delete from product ;
+delete from product_category;
+delete from product_spec ;
+delete from review ;

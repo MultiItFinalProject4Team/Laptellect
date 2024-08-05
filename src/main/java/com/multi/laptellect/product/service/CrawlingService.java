@@ -377,7 +377,7 @@ public class CrawlingService {
 
     }
 
-    private ProductDTO getProductPhoto(ProductDTO productDTO) throws IOException {
+    public ProductDTO getProductPhoto(ProductDTO productDTO) throws IOException {
 
         try {
             String url = "https://prod.danawa.com/info/" +
@@ -385,6 +385,44 @@ public class CrawlingService {
                     "&cate=112758";
             Document doc = Jsoup.connect(url).get();
             Elements photoElements = doc.getElementsByClass("photo_w");
+
+            Elements registrationMonthElements = doc.select("span.txt");
+            for (Element element : registrationMonthElements) {
+                if (element.text().contains("등록월")) {
+                    String fullText = element.text();
+                    String[] parts = fullText.split(": ");
+                    if (parts.length == 2) {
+                        String registrationMonthLabel = parts[0].trim();
+                        String registrationMonthValue = parts[1].trim();
+                        System.out.println("등록월 레이블: " + registrationMonthLabel);
+                        System.out.println("등록월 값: " + registrationMonthValue);
+
+                    }
+                    break;
+                }
+            }
+
+            // 제조사 정보를 선택
+            Elements manufacturerElements = doc.select("span#makerTxtArea");
+            for (Element element : manufacturerElements) {
+                String fullText = element.text();
+                String[] parts = fullText.split(": ");
+                if (parts.length == 2) {
+                    String manufacturerLabel = parts[0].trim();
+                    String manufacturerValue = parts[1].trim();
+                    System.out.println("제조사 레이블: " + manufacturerLabel);
+                    System.out.println("제조사 값: " + manufacturerValue);
+
+                }
+                break;
+            }
+
+
+            // 이미지 URL 가져오기
+            Elements imageElements = doc.select("div.photo_w img#baseImage");
+            String imageUrl = !imageElements.isEmpty() ? imageElements.first().attr("src") : "이미지 URL을 찾을 수 없습니다.";
+
+            log.info("imageUrl = {}", imageUrl);
 
 
             for (Element element : photoElements) {
