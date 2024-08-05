@@ -2,6 +2,9 @@ package com.multi.laptellect.member.service;
 
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.dto.PointLogDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 
@@ -86,6 +89,7 @@ public interface MemberService {
      *
      * @param addressId 삭제할 배송지의 PK키
      * @return the boolean
+     * @throws Exception the exception
      */
     boolean deleteMemberAddress(int addressId) throws Exception;
 
@@ -99,6 +103,7 @@ public interface MemberService {
     AddressDTO findAddressByAddressId(int addressId) throws Exception;
 
     /**
+
      * 사용자 포인트 업데이트
      *
      * @param memberDTO 업데이트할 포인트 정보가 담긴 DTO 객체
@@ -106,4 +111,31 @@ public interface MemberService {
      * @throws Exception 업데이트 중 발생할 수 있는 예외
      */
     int updatePoint(MemberDTO memberDTO) throws Exception;
+
+     * 회원 전체 포인트 내역 조회
+     *
+     * @param pageable 페이징 객체
+     * @return Point List 객체
+     * @throws Exception the exception
+     */
+    Page<PointLogDTO> getAllPointList(Pageable pageable) throws Exception;
+
+    /**
+     * 회원 적립 포인트 내역 조회
+     *
+     * @param pageable 페이징 객체
+     * @return Point List 객체
+     * @throws Exception the exception
+     */
+    Page<PointLogDTO> getAllSavePointList(Pageable pageable) throws Exception;
+
+    /**
+     * 회원 사용 포인트 내역 조회
+     *
+     * @param pageable 페이징 객체
+     * @return Point List 객체
+     * @throws Exception the exception
+     */
+    Page<PointLogDTO> getAllUsePointList(Pageable pageable) throws Exception;
+
 }

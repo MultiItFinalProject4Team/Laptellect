@@ -3,8 +3,10 @@ package com.multi.laptellect.product.service;
 import com.multi.laptellect.product.model.dto.ImageDTO;
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.WishListDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -114,6 +116,40 @@ public class ProductServiceImpl implements ProductService {
     public List<LaptopDetailsDTO> getLaptopProductDetails(String productCode) {
 
         return productMapper.laptopProductDetails(productCode);
+    }
+
+    @Override
+    @Transactional
+    public int processWishlist(List<Integer> productNoList) throws Exception {
+        WishListDTO wishListDTO = new WishListDTO();
+        int memberNo = SecurityUtil.getUserNo();
+        int result = 0;
+        wishListDTO.setMemberNo(memberNo);
+
+        for (int productNo : productNoList) {
+            wishListDTO.setProductNo(productNo);
+            log.debug("위시 리스트 추가 시작 = {}, {}", productNo, memberNo);
+
+            WishListDTO wishList = productMapper.findWishlist(wishListDTO);
+            if(wishList != null) {
+                log.info("위시 리스트 중복 = {}", productNo);
+
+                int wishlistNo = wishList.getWishlistNo();
+
+                log.debug("위시리스트 삭제 시작 = {}", wishlistNo);
+                result = productMapper.deleteWishlist(wishlistNo);
+                if(result > 0) {
+                    log.info("위시리스트 삭제 성공 = {}", result);
+                    if(productNoList.size() == 1) result = 2;
+                }
+            } else {
+                productMapper.insertWishlist(wishListDTO);
+                log.info("위시 리스트 등록 성공 = {}", productNo);
+                result = 1;
+            }
+        }
+
+        return result;
     }
 
     //상품 전체 조회

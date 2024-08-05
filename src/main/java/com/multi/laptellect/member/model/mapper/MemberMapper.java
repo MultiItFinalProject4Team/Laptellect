@@ -2,10 +2,9 @@ package com.multi.laptellect.member.model.mapper;
 
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.multi.laptellect.member.model.dto.PointLogDTO;
+import org.apache.ibatis.annotations.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 
@@ -60,5 +59,18 @@ public interface MemberMapper {
 
     int updateAddress(AddressDTO addressDTO);
 
+
     int updatePoint(MemberDTO memberDTO);
+
+    @Select("SELECT * FROM payment_point WHERE member_no = #{ memberNo } ORDER BY payment_point_no DESC LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }")
+    ArrayList<PointLogDTO> findAllPointLogByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
+
+
+    int countAllPointLogByMemberNo(@Param("memberNo") int memberNo, @Param("type") String type);
+
+    @Select("SELECT * FROM payment_point WHERE member_no = #{ memberNo } AND payment_point_change > 0 ORDER BY payment_point_no DESC LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }")
+    ArrayList<PointLogDTO> findAllSavePointLogByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
+    @Select("SELECT * FROM payment_point WHERE member_no = #{ memberNo } AND payment_point_change < 0 ORDER BY payment_point_no DESC LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }")
+    ArrayList<PointLogDTO> findAllUsePointLogByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
+
 }

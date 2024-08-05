@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout-profile}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout-profile}">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+<!--  <script type="text/javascript" th:src="@{/js/member/point-profile.js}"></script>-->
   <style>
     .point-tap {
       background-color: #3498DB;
@@ -19,71 +18,75 @@
     <hr>
 
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <button class="nav-link active" id="memberInfo-tab" data-bs-toggle="tab" data-bs-target="#memberInfo" type="button" role="tab" aria-controls="memberInfo" aria-selected="true">전체내역</button>
-      <button class="nav-link" id="couponsPoints-tab" data-bs-toggle="tab" data-bs-target="#couponsPoints" type="button" role="tab" aria-controls="couponsPoints" aria-selected="false">적립내역</button>
-      <button class="nav-link" id="purchase-tab" data-bs-toggle="tab" data-bs-target="#purchase" type="button" role="tab" aria-controls="purchaseHistory" aria-selected="false">사용내역</button>
+      <button class="nav-link active" id="all-point-tab" data-bs-toggle="tab" data-bs-target="#all-point" type="button" role="tab" aria-controls="all-point" aria-selected="true">전체내역</button>
+      <button class="nav-link" id="save-point-tab" data-bs-toggle="tab" data-bs-target="#save-point" type="button" role="tab" aria-controls="save-point" aria-selected="false">적립내역</button>
+      <button class="nav-link" id="use-point-tab" data-bs-toggle="tab" data-bs-target="#use-point" type="button" role="tab" aria-controls="use-point" aria-selected="false">사용내역</button>
     </div>
 
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="memberInfo" role="tabpanel" aria-labelledby="memberInfo-tab">
-        <table class="table table-striped text-center">
-          <thead>
-          <tr>
-            <th scope="col" style="width: 5%;">번호</th>
-            <th scope="col" style="width: 30%;">포인트 변화</th>
-            <th scope="col" style="width: 40%;">변동 사유</th>
-            <th scope="col" style="width: 25%;">날짜</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>+1000</td>
-            <td>상품 구매</td>
-            <td>2024.07.31</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>-1000</td>
-            <td>상품 구매</td>
-            <td>2024.07.31</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>-500</td>
-            <td>상품 구매</td>
-            <td>2024.07.31</td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td>+100</td>
-            <td>리뷰 작성</td>
-            <td>2024.07.31</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="tab-pane fade" id="couponsPoints" role="tabpanel" aria-labelledby="couponsPoints-tab"></div>
-      <div class="tab-pane fade" id="purchase" role="tabpanel" aria-labelledby="purchase-tab"></div>
+      <div class="tab-pane fade show active" id="all-point" role="tabpanel" aria-labelledby="all-point-tab"></div>
+      <div class="tab-pane fade" id="save-point" role="tabpanel" aria-labelledby="save-point-tab"></div>
+      <div class="tab-pane fade" id="use-point" role="tabpanel" aria-labelledby="use-point-tab"></div>
     </div>
-
-    <nav aria-label="...">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-          <span class="page-link">이전</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active" aria-current="page">
-          <span class="page-link">2</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">다음</a>
-        </li>
-      </ul>
-    </nav>
   </div>
-</div>
 
+  <script>
+  $(document).ready(function() {
+    function removeTab() {
+      $('#all-point').removeClass('show active');
+      $('#save-point').removeClass('show active');
+      $('#use-point').removeClass('show active');
+    }
+
+    $('#all-point-tab').on('click', function() {
+        $.ajax({
+            url: '/api/member/all-point-list',
+            type: 'GET',
+            success: function(response) {
+                $('#all-point').html(response);
+                removeTab()
+                $('#all-point').addClass('show active');
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 요청 실패:', error);
+            }
+        });
+    });
+
+    $('#save-point-tab').on('click', function() {
+        $.ajax({
+            url: '/api/member/save-point-list',
+            type: 'GET',
+            success: function(response) {
+                $('#save-point').html(response);
+                removeTab()
+                $('#save-point').addClass('show active');
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 요청 실패:', error);
+            }
+        });
+    });
+
+    $('#use-point-tab').on('click', function() {
+        $.ajax({
+            url: '/api/member/use-point-list',
+            type: 'GET',
+            success: function(response) {
+                $('#use-point').html(response);
+                removeTab()
+                $('#use-point').addClass('show active');
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 요청 실패:', error);
+            }
+        });
+    });
+
+    $('#all-point-tab').trigger('click');
+  });
+
+  </script>
+</div>
 </body>
 </html>

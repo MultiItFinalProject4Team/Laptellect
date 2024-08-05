@@ -1,9 +1,14 @@
 package com.multi.laptellect.api.member;
 
 import com.multi.laptellect.member.model.dto.AddressDTO;
+import com.multi.laptellect.member.model.dto.PointLogDTO;
 import com.multi.laptellect.member.service.MemberService;
+import com.multi.laptellect.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -132,4 +137,100 @@ public class MemberApiController {
             return false;
         }
     }
+
+    /**
+     * 회원 포인트 전체 조회
+     *
+     * @param model    조회 결과
+     * @param pageable 페이징을 위한 객체
+     * @return the point list
+     */
+    @GetMapping("/all-point-list")
+    public String getPointList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+        try {
+            log.debug("포인트 내역 전체 조회 시작");
+            Page<PointLogDTO> pointList = memberService.getAllPointList(pageable);
+            log.info("포인트 내역 조회 성공 = {}", pointList.getContent());
+
+            int page = pageable.getPageNumber();
+            int size = pageable.getPageSize();
+
+            int startPage = PaginationUtil.getStartPage(pointList, 5);
+            int endPage = PaginationUtil.getEndPage(pointList, 5);
+
+            model.addAttribute("pointList", pointList);
+            model.addAttribute("page", page);
+            model.addAttribute("size", size);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+        } catch (Exception e) {
+            log.error("포인트 조회 실패 = ", e);
+        }
+        return "/member/point/all-point-tab";
+    }
+
+    /**
+     * 회원 포인트 적립 조회
+     *
+     * @param model    the model
+     * @param pageable the pageable
+     * @return the save point list
+     */
+    @GetMapping("/save-point-list")
+    public String getSavePointList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+        try {
+            log.debug("포인트 적립 내역 조회 시작");
+            Page<PointLogDTO> pointList = memberService.getAllSavePointList(pageable);
+            log.info("포인트 내역 조회 성공 = {}", pointList.getContent());
+
+            int page = pageable.getPageNumber();
+            int size = pageable.getPageSize();
+
+            int startPage = PaginationUtil.getStartPage(pointList, 5);
+            int endPage = PaginationUtil.getEndPage(pointList, 5);
+
+            model.addAttribute("pointList", pointList);
+            model.addAttribute("page", page);
+            model.addAttribute("size", size);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+        } catch (Exception e) {
+            log.error("포인트 조회 실패 = ", e);
+        }
+        return "/member/point/save-point-tab";
+    }
+
+    /**
+     * 회원 포인트 사용 조회
+     *
+     * @param model    the model
+     * @param pageable the pageable
+     * @return the use point list
+     */
+    @GetMapping("/use-point-list")
+    public String getUsePointList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+        try {
+            log.debug("포인트 사용 내역 조회 시작");
+            Page<PointLogDTO> pointList = memberService.getAllUsePointList(pageable);
+            log.info("포인트 내역 조회 성공 = {}", pointList.getContent());
+
+            int page = pageable.getPageNumber();
+            int size = pageable.getPageSize();
+
+            int startPage = PaginationUtil.getStartPage(pointList, 5);
+            int endPage = PaginationUtil.getEndPage(pointList, 5);
+
+            model.addAttribute("pointList", pointList);
+            model.addAttribute("page", page);
+            model.addAttribute("size", size);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+        } catch (Exception e) {
+            log.error("포인트 조회 실패 = ", e);
+        }
+        return "/member/point/use-point-tab";
+    }
+
+
+
 }

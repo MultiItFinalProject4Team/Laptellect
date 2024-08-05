@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout-profile}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout-profile}">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -14,15 +13,9 @@
 </head>
 <body>
 <div layout:fragment="content">
-<!--  <div class="profile-box" style="height: 400px;">-->
-<!--    <h2>구매 내역</h2>-->
-<!--    <hr> <br>-->
-<!--  </div>-->
-
-<!--  <br> <br>-->
-
   <div class="profile-box" id="purchase-box" style="height: auto; width: auto">
-    <h2>주문목록 / 배송 조회</h2>
+    <h2>주문목록</h2>
+<!--    <h2>주문목록 / 배송 조회</h2>-->
     <div class="input-group mb-3 d-flex align-items-center">
       <input type="date" id="startDate" class="form-control" placeholder="시작 날짜" aria-label="Start date" style="flex: 0.5; margin-right: 8px;">
 
