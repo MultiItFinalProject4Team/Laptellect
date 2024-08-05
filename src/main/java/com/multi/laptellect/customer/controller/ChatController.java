@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.UUID;
 
 
 @Controller
@@ -83,13 +84,8 @@ public class ChatController {
                     description = (String) data3.get("description");
                     chatMessage = description;
                     JSONArray contentTable = (JSONArray) data.get("contentTable");
-                    JSONArray linkArray = (JSONArray) contentTable.get(0);
-                    JSONObject link_data = (JSONObject)linkArray.get(0);
-                    JSONObject link_data2 = (JSONObject)link_data.get("data");
-                    JSONObject link_data3 = (JSONObject)link_data2.get("data");
-                    JSONObject link_data4 = (JSONObject)link_data3.get("action");
-                    JSONObject link_data5 = (JSONObject)link_data4.get("data");
-                    String link_url = (String)link_data5.get("url");
+                    String link_url = getString(contentTable);
+                    chatMessage+="\n 이동하기#"+link_url;
                     System.out.println("테스트"+(link_url));
                 }else if(type.equals("text")){
                     JSONObject data = (JSONObject) bubbles.get("data");
@@ -108,6 +104,17 @@ public class ChatController {
             chatMessage = con.getResponseMessage();
         }
         return chatMessage;
+    }
+
+    private static String getString(JSONArray contentTable) {
+        JSONArray linkArray = (JSONArray) contentTable.get(0);
+        JSONObject link_data = (JSONObject)linkArray.get(0);
+        JSONObject link_data2 = (JSONObject)link_data.get("data");
+        JSONObject link_data3 = (JSONObject)link_data2.get("data");
+        JSONObject link_data4 = (JSONObject)link_data3.get("action");
+        JSONObject link_data5 = (JSONObject)link_data4.get("data");
+        String link_url = (String)link_data5.get("url");
+        return link_url;
     }
 
     //보낼 메세지를 네이버에서 제공해준 암호화로 변경해주는 메소드
@@ -149,7 +156,7 @@ public class ChatController {
             System.out.println("##"+timestamp);
 
             obj.put("version", "v2");
-            obj.put("userId", "U47b00b58c90f8e47428af8b7bddc1231heo2");
+            obj.put("userId", "customer"+UUID.randomUUID());
             obj.put("timestamp", timestamp);
 
             JSONObject bubbles_obj = new JSONObject();
