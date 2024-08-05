@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -50,7 +51,7 @@ public class CrawlingService {
     public List<ProductDTO> crawlProducts(int typeNo) throws IOException {
         List<ProductDTO> productList = new ArrayList<>();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            for (int page = 1; page <= 10; page++) {
+            for (int page = 1; page <= 5; page++) {
                 String responseString = sendPostRequest(httpClient, page, typeNo);
                 parseHtml(responseString, productList);
                 log.info("productList확인{}", productList);
@@ -82,7 +83,7 @@ public class CrawlingService {
                         "&categoryCode=758" +
                         "&physicsCate1=860" +
                         "&physicsCate2=869" +
-                        "&sortMethod=NEW" +
+                        "&sortMethod=BoardCount" +
                         "&viewMethod=LIST" +
                         "&listCount=10");
                 log.info("laptopType {}", productType);
@@ -171,6 +172,9 @@ public class CrawlingService {
         String productName = product.select(".prod_name a").text().trim();
         String price = product.select(".price_sect strong").text().trim().replace(",", "");
         String productCode = product.attr("id").replace("productItem", "");
+
+
+
         String imageUrl = product.select(".thumb_image img").attr("data-original");
 
         Elements specElements = product.select(".spec_list a");
@@ -192,12 +196,14 @@ public class CrawlingService {
             return null;
         }
 
-        String firstPrice = price.split(" ")[0];
+        int firstPrice = Integer.parseInt(price.split(" ")[0]);
+
+        log.info("가격 데이터 확인 = {}", firstPrice);
 
         ProductDTO ProductDTO = new ProductDTO();
         ProductDTO.setProductCode(productCode);
         ProductDTO.setProductName(productName);
-        ProductDTO.setPrice(Integer.parseInt(firstPrice));
+        ProductDTO.setPrice(firstPrice);
 
         ProductDTO.setImage(imageUrl);
 
@@ -355,7 +361,11 @@ public class CrawlingService {
                     "&cate2=869";
 
             String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
+            log.info("responseHtml = {}", responseHtml);
+
             Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
+
+            log.info("doc 확인 = {}", doc);
 
             Map<String, List<String>> categoryMap = createLaptopCategory(productType);
             log.info("getLaptopDetails = {}", productType);
@@ -365,6 +375,29 @@ public class CrawlingService {
         }
         return laptopSpecDTO;
 
+    }
+
+    private ProductDTO getProductPhoto(ProductDTO productDTO) throws IOException {
+
+        try {
+            String url = "https://prod.danawa.com/info/" +
+                    "?pcode=44762393" +
+                    "&cate=112758";
+            Document doc = Jsoup.connect(url).get();
+            Elements photoElements = doc.getElementsByClass("photo_w");
+
+
+            for (Element element : photoElements) {
+
+                log.info("이미지 출력 정보 확인 = {}", photoElements);
+
+
+            }
+        } catch (IOException e) {
+
+            log.info("이미지 불러오는 중 에러 발생 = {}", e);
+        }
+        return productDTO;
     }
 
     /**
@@ -384,7 +417,7 @@ public class CrawlingService {
             log.info("리퍼러 확인 {} =", referer);
             post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            StringEntity entity = new StringEntity(bodyData);
+            StringEntity entity = new StringEntity(bodyData, StandardCharsets.UTF_8);
             post.setEntity(entity);
 
 
@@ -394,6 +427,7 @@ public class CrawlingService {
             }
         }
     }
+
 
     /**
      * HTML 문서에서 특정 스펙의 값을 추출하는 메서드
@@ -419,20 +453,39 @@ public class CrawlingService {
     }
 
     private String getSpecValue2(Document doc, String specName) {
-        Elements rows = doc.select("table.spec_tbl tr");
-        for (Element row : rows) {
-            Elements th = row.select("th");
-            for (Element thElement : th) {
-                if (thElement.text().equals(specName)) {
-                    Element td = thElement.nextElementSibling();
-                    if (td != null && td.hasClass("dsc")) {
-                        return td.text().trim(); // td 태그의 전체 텍스트를 가져옴
-                    }
-                }
-            }
-        }
+
+
+        List<Element> manufacturerElements = doc.select("th.tit:contains(제조회사) + td.dsc");
+        String manufacturer = !manufacturerElements.isEmpty() ? manufacturerElements.get(0).text() : "제조회사 정보를 찾을 수 없습니다.";
+
+        // 등록년월 정보 가져오기
+        List<Element> registrationDateElements = doc.select("th.tit:contains(등록년월) + td.dsc");
+        String registrationDate = !registrationDateElements.isEmpty() ? registrationDateElements.get(0).text() : "등록년월 정보를 찾을 수 없습니다.";
+
+        // 결과 출력
+        System.out.println("제조회사: " + manufacturer);
+        System.out.println("등록년월: " + registrationDate);
+
         return "정보 없음";
     }
+
+
+//        Elements rows = doc.select("table.spec_tbl tr");
+//        for (Element row : rows) {
+//            Elements th = row.select("th");
+//            log.info("크롤링 조회 데이터 확입 = {} ", th);
+//
+//            for (Element thElement : th) {
+//                if (thElement.text().equals(specName)) {
+//                    Element td = thElement.nextElementSibling();
+//                    if (td != null && td.hasClass("dsc")) {
+//                        return td.text().trim(); // td 태그의 전체 텍스트를 가져옴
+//                    }
+//                }
+//            }
+//        }
+//        return "정보 없음";
+//    }
 
 
     /**
@@ -478,22 +531,27 @@ public class CrawlingService {
         categoryMap.put("LG", Arrays.asList("GPU 종류", "GPU 제조사", "GPU 칩셋", "GPU 코어", "GPU 클럭"));
         categoryMap.put("LPA", Arrays.asList("배터리", "어댑터", "전원"));
 
+        int categoryCount = 0;
+
         for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
             String categoryPrefix = entry.getKey();
             List<String> specs = entry.getValue();
 
-            log.info("categoryPrefix 데이터 확인 = {}",categoryPrefix);
-            log.info("specs 데이터 확인 = {}",specs);
+            log.info("categoryPrefix 데이터 확인 = {}", categoryPrefix);
+            log.info("specs 데이터 확인 = {}", specs);
             log.info("createLaptopCategory = {}", productType);
+
 
             for (String specName : specs) {
 
+                categoryCount++;
+                String categoryNo = categoryPrefix + categoryCount;
 
                 ProductCategoryDTO spec = productMapper.findByOptions(specName);
                 log.info("specname {}:", specName);
                 if (spec == null) {
 
-                    productMapper.insertProductCategory(productType, specName,categoryPrefix);
+                    productMapper.insertProductCategory(categoryNo, productType, specName);
 
 
                 }
@@ -692,6 +750,7 @@ public class CrawlingService {
         laptopSpecValue.add(getSpecValue(doc, "배터리"));
         laptopSpecValue.add(getSpecValue(doc, "어댑터"));
         laptopSpecValue.add(getSpecValue(doc, "전원"));
+
 
         log.info("제조회사 데이터 확인 = {}", (getSpecValue2(doc, "제조회사")));
         log.info("등록년월 데이터 확인 = {}", (getSpecValue2(doc, "등록년월")));

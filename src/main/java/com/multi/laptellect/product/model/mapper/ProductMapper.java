@@ -37,7 +37,7 @@ public interface ProductMapper {
 
     void inputReviewDate(ReviewDTO reviewDTO);
 
-    void insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options,@Param("categoryCode") String categoryCode);
+    void insertProductCategory(@Param("categoryCode") String categoryCode, @Param("typeNo") int typeNo, @Param("options") String options);
 
     int getProductByType(@Param("typeNo") int typeNo);
 

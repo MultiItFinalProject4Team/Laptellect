@@ -98,8 +98,8 @@
 
 
     <insert id="insertProductCategory" parameterType="map">
-        INSERT INTO product_category (type_no, options, category_code)
-        VALUES (#{typeNo}, #{options}, #{categoryCode})
+        INSERT INTO product_category (category_no, type_no, options)
+        VALUES (#{categoryCode}, #{typeNo}, #{options})
     </insert>
 
 
