@@ -33,8 +33,8 @@ public class ProductApiController {
      */
     @ResponseBody
     @PostMapping("/process-wishlist")
-    public boolean processWishlist(@RequestParam(name = "productNo") List<Integer> productNo) {
-        boolean result = false;
+    public int processWishlist(@RequestParam(name = "productNo") List<Integer> productNo) {
+        int result = 500;
         try {
             result = productService.processWishlist(productNo);
         } catch (Exception e) {

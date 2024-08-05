@@ -21,14 +21,19 @@
                     type: "POST",
                     data: { productNo: productNo },
                     success: function (response) {
-                        if (response === true) {
-                            alert("위시리스트 추가 완료");
-                        } else {
-                            alert("위시리스트 추가 실패");
+                        switch (response) {
+                          case 1:
+                            alert("위시리스트 추가 완료.");
+                            break;
+                          case 2:
+                            alert("위시리스트 삭제 완료.");
+                            break;
+                          default:
+                            alert("위시리스트 Ajax Error");
                         }
                     },
                     error: function () {
-                        console.log("위시리스트 추가 Error");
+                        console.log("위시리스트 Ajax Error");
                     },
                 });
             })
