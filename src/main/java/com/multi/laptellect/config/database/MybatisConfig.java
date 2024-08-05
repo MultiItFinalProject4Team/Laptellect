@@ -63,6 +63,8 @@ public class MybatisConfig {
 
 
         configuration.getTypeAliasRegistry().registerAlias("socialDTO", SocialDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("wishlistDTO", com.multi.laptellect.product.model.dto.WishlistDTO.class);
+
 
 
         factoryBean.setConfiguration(configuration); // 팩토리 빈에 세팅

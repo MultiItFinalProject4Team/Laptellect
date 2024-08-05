@@ -3,7 +3,9 @@ package com.multi.laptellect.product.model.mapper;
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.*;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -51,11 +53,16 @@ public interface ProductMapper {
 
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")
-    int insertWishlist(WishListDTO wishListDTO);
+    int insertWishlist(WishlistDTO wishListDTO);
 
     @Select("SELECT * FROM wishlist WHERE product_no = #{ productNo } AND member_no = #{ memberNo }")
-    WishListDTO findWishlist(WishListDTO wishListDTO);
+    WishlistDTO findWishlist(WishlistDTO wishListDTO);
 
     @Delete("DELETE FROM wishlist WHERE wishlist_no = #{ wishlistNo }")
     int deleteWishlist(int wishlistNo);
+
+    ArrayList<WishlistDTO> findAllWishlistByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
+
+    @Select("SELECT COUNT(*) FROM wishlist WHERE member_no = #{ memberNo }")
+    int countAllWishlistByMemberNo(int memberNo);
 }

@@ -3,12 +3,15 @@ package com.multi.laptellect.product.service;
 import com.multi.laptellect.product.model.dto.ImageDTO;
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.WishListDTO;
+import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -121,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public int processWishlist(List<Integer> productNoList) throws Exception {
-        WishListDTO wishListDTO = new WishListDTO();
+        WishlistDTO wishListDTO = new WishlistDTO();
         int memberNo = SecurityUtil.getUserNo();
         int result = 0;
         wishListDTO.setMemberNo(memberNo);
@@ -130,7 +133,7 @@ public class ProductServiceImpl implements ProductService {
             wishListDTO.setProductNo(productNo);
             log.debug("위시 리스트 추가 시작 = {}, {}", productNo, memberNo);
 
-            WishListDTO wishList = productMapper.findWishlist(wishListDTO);
+            WishlistDTO wishList = productMapper.findWishlist(wishListDTO);
             if(wishList != null) {
                 log.info("위시 리스트 중복 = {}", productNo);
 
@@ -150,6 +153,19 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return result;
+    }
+
+    @Override
+    public Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+
+        log.debug("위시리스트 조회 시작 = {}", memberNo);
+        int total = productMapper.countAllWishlistByMemberNo(memberNo);
+        ArrayList<WishlistDTO> wishlist = productMapper.findAllWishlistByMemberNo(memberNo, pageable);
+
+        log.info("위시리스트 조회 성공 = {}", wishlist);
+
+        return new PageImpl<>(wishlist, pageable, total);
     }
 
     //상품 전체 조회

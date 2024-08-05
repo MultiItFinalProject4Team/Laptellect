@@ -18,72 +18,31 @@
       font-size: 15px; width: 150px; height: 35px;
     }
   </style>
-</head>
-<body>
-<div layout:fragment="content">
-  <div class="profile-box" style="height: auto;">
-    <h4>관심상품 전체 <span>(2개)</span></h4>
-    <hr>
-    <div class="row">
-      <div class="col-12">
-        <input type="checkbox" id="selectAll" class="form-check-input">
-        <label for="selectAll" class="form-check-label">전체선택</label>
-        <button class="btn btn-sm btn-secondary ms-2">선택삭제</button>
-      </div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-md-12">
-        <div class="card mb-3">
-          <div class="row g-0 align-items-center">
-            <div class="col-auto align-self-start" style="width: 15px; margin-left: 5px; margin-right: 5px;;">
-              <input type="checkbox" class="form-check-input">
-            </div>
-            <div class="col-md-2">
-              <img src="https://via.placeholder.com/150" class="img-fluid rounded-start" alt="Product Image">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <a href="" class="product-name"><h6 class="card-title">빅트렉 2024 브이북 14 셀레론 인텔 11세대, 화이트, 256GB, 8GB, WIN11 Home, VIC-LPTP02</h6></a>
-                <p class="card-text text-danger">329,000원</p>
-              </div>
-            </div>
-            <div class="col-md-1 text-end d-flex flex-column justify-content-center btn-wishlist">
-              <button class="btn btn btn-outline-primary mb-2">장바구니 담기</button>
-              <button class="btn btn-outline-secondary">삭제</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
-  $('#selectAll').change(function() {
-    const isChecked = $(this).prop('checked');
-    $('.form-check-input').prop('checked', isChecked);
+  function loadWishlist() {
+    $.ajax({
+        url: '/api/product/get-wishlist',
+        type: 'GET',
+        success: function(response) {
+            $('#wishlist-box').html(response);
+        },
+        error: function(xhr, status, error) {
+            console.error('조회 실패:', error);
+        }
+    });
+  }
+
+  $(document).ready(function() {
+     loadWishlist();
   });
 </script>
 
-    <br>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="profile-box" id="wishlist-box" style="height: auto;"></div>
 
-      <nav aria-label="...">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <span class="page-link">이전</span>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">2</span>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">다음</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
+
 </div>
 
 </body>

@@ -1,13 +1,15 @@
 package com.multi.laptellect.api.product;
 
+import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,5 +43,24 @@ public class ProductApiController {
             log.error("위시리스트 등록 실패");
         }
         return result;
+    }
+
+    @GetMapping("/get-wishlist")
+    public String getWishlist(Model model, @PageableDefault(size = 5) Pageable pageable) {
+        try {
+            Page<WishlistDTO> wishlist = productService.getWishlist(pageable);
+
+            int page = pageable.getPageNumber();
+            int size = pageable.getPageSize();
+            long total = wishlist.getTotalElements();
+
+            model.addAttribute("wishlist", wishlist);
+            model.addAttribute("total", total);
+            model.addAttribute("page", page);
+            model.addAttribute("size", size);
+        } catch (Exception e) {
+            log.error("위시리스트 조회 실패 = ", e);
+        }
+        return "member/wishlist/wishlist";
     }
 }
