@@ -2,10 +2,7 @@ package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -58,4 +55,7 @@ public interface ProductMapper {
 
     @Select("SELECT * FROM wishlist WHERE product_no = #{ productNo } AND member_no = #{ memberNo }")
     WishListDTO findWishlist(WishListDTO wishListDTO);
+
+    @Delete("DELETE FROM wishlist WHERE wishlist_no = #{ wishlistNo }")
+    int deleteWishlist(int wishlistNo);
 }
