@@ -104,4 +104,10 @@
 		</set>
 		WHERE address_id = #{ addressId }
 	</update>
+
+	<update id="updatePoint" parameterType="memberDTO">
+		UPDATE mem_member
+		SET point = #{point}
+		WHERE member_no = #{memberNo}
+	</update>
 </mapper>

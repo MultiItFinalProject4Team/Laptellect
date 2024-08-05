@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class PaymentpointDTO {
-    private String username;
-    private int possessionpoint;
+    private int paymentPointNo;
+    private int memberNo;
     private String imPortId;
-    private String pointchange;
-    private String pointinfo;
+    private String paymentPointChange;
+    private String paymentPointInfo;
     private String usedPoints;
 }

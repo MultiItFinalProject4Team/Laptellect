@@ -97,4 +97,13 @@ public interface MemberService {
      * @throws Exception the exception
      */
     AddressDTO findAddressByAddressId(int addressId) throws Exception;
+
+    /**
+     * 사용자 포인트 업데이트
+     *
+     * @param memberDTO 업데이트할 포인트 정보가 담긴 DTO 객체
+     * @return 업데이트된 행의 수
+     * @throws Exception 업데이트 중 발생할 수 있는 예외
+     */
+    int updatePoint(MemberDTO memberDTO) throws Exception;
 }

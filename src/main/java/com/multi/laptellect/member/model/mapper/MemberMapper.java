@@ -59,4 +59,6 @@ public interface MemberMapper {
     int deleteAddressByAddressId(int addressId);
 
     int updateAddress(AddressDTO addressDTO);
+
+    int updatePoint(MemberDTO memberDTO);
 }

@@ -55,7 +55,7 @@
         </div>
         <div class="price-row">
             <span>보유포인트 :</span>
-            <span th:text="${paymentpointDTO.possessionpoint + 'p'}"></span>
+            <span th:text="${memberDTO.point + 'p'}"></span>
             <input type="text" id="pointInput" placeholder="사용할 포인트 입력" onkeyup="updateTotalPrice()">
             <span id="pointUsageDisplay">0원</span>
         </div>
@@ -69,7 +69,7 @@
 <script th:inline="javascript">
     // Thymeleaf 변수를 JavaScript 변수로 변환
     var originalPrice = /*[[${paymentpageDTO.productprice}]]*/ 0;
-    var possessionPoint = /*[[${paymentpointDTO.possessionpoint}]]*/ 0;
+    var possessionPoint = /*[[${memberDTO.point}]]*/ 0;
 </script>
 </body>
 </html>
