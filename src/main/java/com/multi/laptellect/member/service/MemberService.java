@@ -112,7 +112,7 @@ public interface MemberService {
      */
     int updatePoint(MemberDTO memberDTO) throws Exception;
 
-     * 회원 전체 포인트 내역 조회
+     /* 회원 전체 포인트 내역 조회
      *
      * @param pageable 페이징 객체
      * @return Point List 객체
