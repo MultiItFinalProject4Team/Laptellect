@@ -3,10 +3,15 @@ package com.multi.laptellect.product.service;
 import com.multi.laptellect.product.model.dto.ImageDTO;
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,6 +119,53 @@ public class ProductServiceImpl implements ProductService {
     public List<LaptopDetailsDTO> getLaptopProductDetails(String productCode) {
 
         return productMapper.laptopProductDetails(productCode);
+    }
+
+    @Override
+    @Transactional
+    public int processWishlist(List<Integer> productNoList) throws Exception {
+        WishlistDTO wishListDTO = new WishlistDTO();
+        int memberNo = SecurityUtil.getUserNo();
+        int result = 0;
+        wishListDTO.setMemberNo(memberNo);
+
+        for (int productNo : productNoList) {
+            wishListDTO.setProductNo(productNo);
+            log.debug("위시 리스트 추가 시작 = {}, {}", productNo, memberNo);
+
+            WishlistDTO wishList = productMapper.findWishlist(wishListDTO);
+            if(wishList != null) {
+                log.info("위시 리스트 중복 = {}", productNo);
+
+                int wishlistNo = wishList.getWishlistNo();
+
+                log.debug("위시리스트 삭제 시작 = {}", wishlistNo);
+                result = productMapper.deleteWishlist(wishlistNo);
+                if(result > 0) {
+                    log.info("위시리스트 삭제 성공 = {}", result);
+                    if(productNoList.size() == 1) result = 2;
+                }
+            } else {
+                productMapper.insertWishlist(wishListDTO);
+                log.info("위시 리스트 등록 성공 = {}", productNo);
+                result = 1;
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+
+        log.debug("위시리스트 조회 시작 = {}", memberNo);
+        int total = productMapper.countAllWishlistByMemberNo(memberNo);
+        ArrayList<WishlistDTO> wishlist = productMapper.findAllWishlistByMemberNo(memberNo, pageable);
+
+        log.info("위시리스트 조회 성공 = {}", wishlist);
+
+        return new PageImpl<>(wishlist, pageable, total);
     }
 
     //상품 전체 조회

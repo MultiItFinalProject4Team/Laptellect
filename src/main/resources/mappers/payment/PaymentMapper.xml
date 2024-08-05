@@ -17,11 +17,11 @@
 
     <resultMap id="PointResultMap"
                type="com.multi.laptellect.payment.model.dto.PaymentpointDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
-        <result column="username" property="username"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
+        <result column="payment_point_no" property="paymentPointNo"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
+        <result column="member_no" property="memberNo"/>
         <result column="im_port_id" property="imPortId"/>
-        <result column="payment_possession_point" property="possessionpoint"/>
-        <result column="payment_point_change" property="pointchange"/>
-        <result column="payment_point_info" property="pointinfo"/>
+        <result column="payment_point_change" property="paymentPointChange"/>
+        <result column="payment_point_info" property="paymentPointInfo"/>
     </resultMap>
 
     <resultMap id="OrderlistResultMap"
@@ -32,6 +32,15 @@
         <result column="date_created" property="date_created"/>
         <result column="purchaseprice" property="purchaseprice"/>
         <result column="im_port_id" property="imPortId"/>
+    </resultMap>
+
+    <resultMap id="memberResultMap" type="memberDTO">
+        <result property="memberNo" column="member_no"/>
+        <result property="memberName" column="member_name"/>
+        <result property="password" column="password"/>
+        <result property="point" column="point"/>
+        <result property="createDate" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="modifyDate" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <select id="selectpaymentpage" resultMap="PaymentpageResultMap">
@@ -65,7 +74,7 @@
     <select id="selectOrders" resultMap="OrderlistResultMap">
         SELECT * FROM payment
         WHERE refund = 'N'
-        AND username = 'jack'
+        AND username = #{memberName}
         ORDER BY date_created DESC
     </select>
 
@@ -95,46 +104,40 @@
     </select>
 
     <select id="selectpoint" resultMap="PointResultMap">
-            SELECT * FROM payment_point
-            WHERE username = #{username}
-            ORDER BY payment_price_no DESC LIMIT 1
+        SELECT * FROM payment_point
+        WHERE member_no = #{memberNo}
+        ORDER BY payment_point_no DESC LIMIT 1
     </select>
 
 
     <insert id="usepoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
         INSERT INTO payment_point (
-        username,
+        member_no,
         im_port_id,
-        payment_possession_point,
         payment_point_change,
         payment_point_info,
-        create_date
+        created_at
         )
         SELECT
-        #{username},
+        #{memberNo},
         #{imPortId},
-        (SELECT payment_possession_point FROM payment_point WHERE username = #{username} ORDER BY payment_price_no DESC LIMIT 1) - #{usedPoints},
         CONCAT('-', #{usedPoints}),
         '구매 시 포인트사용',
         NOW()
-        FROM dual
-        WHERE (SELECT payment_possession_point FROM payment_point WHERE username = #{username} ORDER BY payment_price_no DESC LIMIT 1) >= #{usedPoints}
     </insert>
 
 
     <insert id="givepoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
         INSERT INTO payment_point (
-        username,
+        member_no,
         im_port_id,
-        payment_possession_point,
         payment_point_change,
         payment_point_info,
-        create_date
+        created_at
         )
         SELECT
-        #{username},
+        #{memberNo},
         #{imPortId},
-        (SELECT payment_possession_point FROM payment_point WHERE username = #{username} ORDER BY payment_price_no DESC LIMIT 1) + 500,
         CONCAT('+', 500),
         '구매 후 리뷰작성 포인트지급',
         NOW()
@@ -142,32 +145,70 @@
 
     <insert id="refundpoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
         INSERT INTO payment_point (
-        username,
+        member_no,
         im_port_id,
-        payment_possession_point,
         payment_point_change,
         payment_point_info,
-        create_date
+        created_at
         )
         SELECT
-        #{username},
+        #{memberNo},
         #{imPortId},
-        COALESCE((SELECT payment_possession_point
-        FROM payment_point
-        WHERE username = #{username}
-        ORDER BY payment_price_no DESC
-        LIMIT 1), 0) + CAST(#{usedPoints} AS SIGNED),
         CONCAT('+', #{usedPoints}),
         '상품환불로인한 사용포인트 환불',
         NOW()
-        FROM dual
-        WHERE EXISTS (SELECT 1 FROM payment_point WHERE username = #{username})
+    </insert>
+
+    <insert id="refundReviewdPoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        member_no,
+        im_port_id,
+        payment_point_change,
+        payment_point_info,
+        created_at
+        )
+        SELECT
+        #{memberNo},
+        #{imPortId},
+        -500,
+        '상품환불로인한 리뷰작성 포인트 환불',
+        NOW()
+    </insert>
+
+    <insert id="newMemberPoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        member_no,
+        im_port_id,
+        payment_point_change,
+        payment_point_info,
+        created_at
+        )
+        SELECT
+        #{memberNo},
+        #{imPortId},
+        0,
+        '신규회원',
+        NOW()
     </insert>
 
     <select id="select_refundpoint" resultMap="PointResultMap">
         SELECT * FROM payment_point
         WHERE im_port_id = #{imPortId}
-        ORDER BY payment_price_no DESC LIMIT 1
+        ORDER BY payment_point_no DESC LIMIT 1
     </select>
 
+    <select id="findReview" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1
+        FROM payment_product_reviews
+        WHERE im_port_id = #{imPortId}
+        ) as exists_flag
+    </select>
+
+
+    <select id="findReviewedPoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        SELECT payment_point_change FROM payment_point
+        WHERE im_port_id = #{imPortId}
+        ORDER BY payment_point_no ASC LIMIT 1
+    </select>
 </mapper>

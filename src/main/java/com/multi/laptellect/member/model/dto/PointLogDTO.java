@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 public class PointLogDTO {
     private int rowNum;
-    private int imPortId;
+    private String imPortId;
     private int paymentPointChange;
     private String paymentPointInfo ;
     private Date createdAt;

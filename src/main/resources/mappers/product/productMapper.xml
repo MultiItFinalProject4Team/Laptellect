@@ -158,6 +158,26 @@
         WHERE reference_code=#{referenceCode}
     </select>
 
-
+    <select id="findAllWishlistByMemberNo">
+        SELECT
+              w.*
+            , p.product_name
+            , p.price
+            , img.upload_name
+        FROM
+            wishlist w
+        JOIN
+            product p ON p.product_no = w.product_no
+        JOIN
+            images img ON img.reference_code = p.reference_code
+        WHERE
+            w.member_no = #{ memberNo }
+        ORDER BY
+            w.wishlist_no DESC
+        LIMIT
+            #{ pageable.pageSize }
+        OFFSET
+            #{ pageable.offset }
+    </select>
 
 </mapper>
