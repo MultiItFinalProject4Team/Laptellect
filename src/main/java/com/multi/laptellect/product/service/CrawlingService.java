@@ -490,40 +490,6 @@ public class CrawlingService {
         return "정보 없음";
     }
 
-    private String getSpecValue2(Document doc, String specName) {
-
-
-        List<Element> manufacturerElements = doc.select("th.tit:contains(제조회사) + td.dsc");
-        String manufacturer = !manufacturerElements.isEmpty() ? manufacturerElements.get(0).text() : "제조회사 정보를 찾을 수 없습니다.";
-
-        // 등록년월 정보 가져오기
-        List<Element> registrationDateElements = doc.select("th.tit:contains(등록년월) + td.dsc");
-        String registrationDate = !registrationDateElements.isEmpty() ? registrationDateElements.get(0).text() : "등록년월 정보를 찾을 수 없습니다.";
-
-        // 결과 출력
-        System.out.println("제조회사: " + manufacturer);
-        System.out.println("등록년월: " + registrationDate);
-
-        return "정보 없음";
-    }
-
-
-//        Elements rows = doc.select("table.spec_tbl tr");
-//        for (Element row : rows) {
-//            Elements th = row.select("th");
-//            log.info("크롤링 조회 데이터 확입 = {} ", th);
-//
-//            for (Element thElement : th) {
-//                if (thElement.text().equals(specName)) {
-//                    Element td = thElement.nextElementSibling();
-//                    if (td != null && td.hasClass("dsc")) {
-//                        return td.text().trim(); // td 태그의 전체 텍스트를 가져옴
-//                    }
-//                }
-//            }
-//        }
-//        return "정보 없음";
-//    }
 
 
     /**
@@ -560,7 +526,7 @@ public class CrawlingService {
         ArrayList<String> laptopSpecNames = new ArrayList<>();
         Map<String, List<String>> categoryMap = new LinkedHashMap<>();
 
-        categoryMap.put("LBI", Arrays.asList("운영체제(OS)", "제조회사", "등록년월", "무게", "두께", "스피커", "쿨링팬"));
+        categoryMap.put("LBI", Arrays.asList("운영체제(OS)", "제조사", "등록월", "무게", "두께", "스피커", "쿨링팬"));
         categoryMap.put("LR", Arrays.asList("램 타입", "램 용량", "램 슬롯", "램 대역폭", "램 교체"));
         categoryMap.put("LC", Arrays.asList("CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS"));
         categoryMap.put("LS", Arrays.asList("저장 용량", "저장장치 종류", "저장 슬롯"));
@@ -676,65 +642,11 @@ public class CrawlingService {
     public void createLaptopSpec(int productNo, Map<String, List<String>> categoryMap, Document doc) {
         ArrayList<String> laptopSpecValue = new ArrayList<>();
 
-//        laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
-//        laptopSpecValue.add(getSpecValue2(doc,"제조회사"));
-//        laptopSpecValue.add(getSpecValue2(doc,"등록년월"));
-//
-//        laptopSpecValue.add(getSpecValue(doc, "CPU 종류"));
-//        laptopSpecValue.add(getSpecValue(doc, "CPU 코드명"));
-//        laptopSpecValue.add(getSpecValue(doc, "CPU 넘버"));
-//        laptopSpecValue.add(getSpecValue(doc, "코어 수"));
-//        laptopSpecValue.add(getSpecValue(doc, "스레드 수"));
-//
-//        laptopSpecValue.add(getSpecValue(doc, "GPU 종류"));
-//        laptopSpecValue.add(getSpecValue(doc, "GPU 제조사"));
-//        laptopSpecValue.add(getSpecValue(doc, "GPU 칩셋"));
-//        laptopSpecValue.add(getSpecValue(doc, "GPU 코어"));
-//        laptopSpecValue.add(getSpecValue(doc, "GPU 클럭"));
-//
-//        laptopSpecValue.add(getSpecValue(doc, "램 타입"));
-//        laptopSpecValue.add(getSpecValue(doc, "램 용량"));
-//        laptopSpecValue.add(getSpecValue(doc, "램 슬롯"));
-//        laptopSpecValue.add(getSpecValue(doc, "램 대역폭"));
-//        laptopSpecValue.add(getSpecValue(doc, "램 교체"));
-//        laptopSpecValue.add(getSpecValue(doc, "램 대역폭"));
-//
-//        laptopSpecValue.add(getSpecValue(doc, "화면 크기"));
-//        laptopSpecValue.add(getSpecValue(doc, "해상도"));
-//
-//        laptopSpecValue.add(getSpecValue(doc, "저장 용량"));
-//        laptopSpecValue.add(getSpecValue(doc, "저장장치 종류"));
-//        laptopSpecValue.add(getSpecValue(doc, "저장 슬롯"));
-//        laptopSpecValue.add(getSpecValue(doc, "패널 표면 처리"));
-//        laptopSpecValue.add(getSpecValue(doc, "무게"));
-//
-//        laptopSpecValue.add(getSpecValue(doc, "NPU 종류"));
-//        laptopSpecValue.add(getSpecValue(doc, "NPU TOPS"));
-//        laptopSpecValue.add(getSpecValue(doc, "SoC"));
-//
-//        laptopSpecValue.add(getSpecValue(doc, "무선랜"));
-//        laptopSpecValue.add(getSpecValue(doc, "USB"));
-//        laptopSpecValue.add(getSpecValue(doc, "USB-C"));
-//        laptopSpecValue.add(getSpecValue(doc, "USB-A"));
-//        laptopSpecValue.add(getSpecValue(doc, "배터리"));
-//        laptopSpecValue.add(getSpecValue(doc, "어댑터"));
-//        laptopSpecValue.add(getSpecValue(doc, "전원"));
-//        laptopSpecValue.add(getSpecValue(doc, "두께"));
-//        laptopSpecValue.add(getSpecValue(doc, "쿨링팬"));
-//        laptopSpecValue.add(getSpecValue(doc, "스피커"));
-//
-//        laptopSpecValue.add(getSpecValue(doc,"블루투스"));
-//        laptopSpecValue.add(getSpecValue(doc,"썬더볼트4"));
-//        laptopSpecValue.add(getSpecValue(doc,"주사율"));
-//        laptopSpecValue.add(getSpecValue(doc,"화면 밝기"));
-//        laptopSpecValue.add(getSpecValue(doc,"패널 종류"));
-
-
 // 노트북 CPU (LC)
         // 노트북 기본 정보 (LBI)
         laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
-        laptopSpecValue.add(getSpecValue2(doc, "제조회사"));
-        laptopSpecValue.add(getSpecValue2(doc, "등록년월"));
+        
+        
         laptopSpecValue.add(getSpecValue(doc, "무게"));
         laptopSpecValue.add(getSpecValue(doc, "두께"));
         laptopSpecValue.add(getSpecValue(doc, "스피커"));
@@ -790,8 +702,6 @@ public class CrawlingService {
         laptopSpecValue.add(getSpecValue(doc, "전원"));
 
 
-        log.info("제조회사 데이터 확인 = {}", (getSpecValue2(doc, "제조회사")));
-        log.info("등록년월 데이터 확인 = {}", (getSpecValue2(doc, "등록년월")));
 
         log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
 
