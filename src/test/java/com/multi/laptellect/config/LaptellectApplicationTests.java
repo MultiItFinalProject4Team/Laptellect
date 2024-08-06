@@ -1,4 +1,4 @@
-package com.multi.laptellect.laptellect;
+package com.multi.laptellect.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
