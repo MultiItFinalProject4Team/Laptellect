@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Product Details</title>
+
     <style>
         .table-container {
             max-width: 800px;
@@ -96,8 +97,17 @@
                 </tr>
             </table>
             <div>
-                <a class="btn btn-primary btn-process-basket" th:attr="data-product-no=${productNo}" href="#" role="button">장바구니</a>
-                <a class="btn btn-primary btn-process-wishlist" th:attr="data-product-no=${productNo}" href="#" role="button">위시리스트</a>
+
+                <a class="btn btn-primary" href="#" role="button">장바구니</a>
+                <a class="btn btn-primary" href="#" role="button">위시리스트</a>
+                <form th:action="@{/payment}" method="post">
+                    <input type="hidden" name="productNo" th:value="${productNo}">
+                    <input type="hidden" name="img" th:value="${img}">
+                    <input type="hidden" name="productName" th:value="${productName}">
+                    <input type="hidden" name="price" th:value="${price}">
+                    <button type="submit" class="btn btn-primary mt-4">결제하기</button>
+                </form>
+
             </div>
 
             <!-- 상품 스펙 정보 테이블 -->
@@ -117,12 +127,7 @@
             </table>
 
             <!-- 결제 폼 -->
-            <form th:action="@{/payment}" method="post">
-                <input type="hidden" name="img" th:value="${img}">
-                <input type="hidden" name="productName" th:value="${productName}">
-                <input type="hidden" name="price" th:value="${price}">
-                <button type="submit" class="btn btn-primary mt-4">결제하기</button>
-            </form>
+
         </div>
     </div>
 </div>

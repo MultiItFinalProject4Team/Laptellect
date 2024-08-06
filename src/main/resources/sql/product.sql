@@ -11,6 +11,9 @@ CREATE TABLE product (
     CONSTRAINT product_PK PRIMARY KEY(product_no),
     CONSTRAINT fk_product_type_no FOREIGN KEY (type_no) REFERENCES product_type(type_no)
 );
+-- product 테이블 제약조건
+ALTER TABLE product
+ADD CONSTRAINT unique_product_code UNIQUE (product_code);
 
 -- 상품 카테고리 테이블
 CREATE TABLE product_category (
@@ -81,7 +84,7 @@ create table review (
 );
 
 -- 프로덕트 디테일 view
-CREATE VIEW product_detail AS
+CREATE VIEW vw_product_detail AS
 SELECT
     p.product_name,
     p.product_code,
@@ -102,7 +105,30 @@ WHERE
     p.type_no = 1;
 
 
--- 데이터 삭제
+    create view vw_spec_and_value as
+    SELECT
+    s.spec_no,
+    s.product_no,
+    s.category_no,
+    s.option_value,
+    c.options
+    FROM
+    product_spec s
+    JOIN
+    product p ON s.product_no = p.product_no
+    JOIN
+    product_category c ON s.category_no = c.category_no
+
+-- view 테이블 삭제
+
+ drop view vw_spec_and_value
+ drop view vw_product_detail
+
+
+
+
+
+-- 테이블 데이터 삭제
 
 delete from images;
 delete from product ;

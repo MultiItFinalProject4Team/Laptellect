@@ -1,7 +1,6 @@
 package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.*;
-import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Pageable;
 
@@ -13,13 +12,11 @@ public interface ProductMapper {
 
     void insertProduct(ProductDTO product); //크롤링 검색 후 상품등록
 
-    int countByProductCode(String productCode); //상품코드 계수
+    int countByProductCode(int productNo); //상품코드 계수
 
     List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
     int getTotalProducts();
-
-    LaptopSpecDTO getProductByCode(String productCode);
 
     List<ProductDTO> getTypeByProduct(int typeNo);
 
@@ -27,13 +24,7 @@ public interface ProductMapper {
 
     void inputImage(ImageDTO imageDTO);
 
-    void getImage(String referenceCode);
-
     ProductCategoryDTO findByOptions(@Param("specName") String specName);
-
-   // String findCategorytNo(String options);
-
-   // String findCategoryNoBySpecName(String specName);
 
     void inputReviewDate(ReviewDTO reviewDTO);
 
@@ -52,7 +43,7 @@ public interface ProductMapper {
 
    List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
 
-    List<LaptopDetailsDTO> laptopProductDetails(String productNo);
+    List<LaptopDetailsDTO> laptopProductDetails(int productNo);
 
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")

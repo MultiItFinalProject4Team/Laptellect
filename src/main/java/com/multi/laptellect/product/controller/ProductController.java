@@ -11,12 +11,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,12 +35,10 @@ public class ProductController {
     private final ProductService productService;
 
     /**
-     * Crawl string.
+     * 크롤링을 시작합니다.
      *
-     * @param productType the product type
-     * @param model       the model
+     * @param productType 상품의 타입(노트북,키보드,마우스)
      * @return the string
-     * @throws IOException the io exception
      */
 //상품별 크롤링 검색 기능
     @PostMapping("/test")
@@ -143,6 +143,8 @@ public class ProductController {
         //페이징 처리
         List<ProductDTO> products = productService.getStoredProducts(pageNumber, pageSize);
 
+        log.info("productList 확인 = {}", products);
+
 
         Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
 
@@ -185,20 +187,23 @@ public class ProductController {
     /**
      * Product details string.
      *
-     * @param productCode the product code
+     * @param productNo the product code
      * @param model       the model
      * @return the string
      */
     @GetMapping("/laptopDetails")
-    public String productDetails(@RequestParam(name = "productCode") String productCode,
+    public String productDetails(@RequestParam(name = "productNo") int productNo,
                                  Model model) {
-        log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productCode);
+        log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
         // 제품 상세 정보 가져오기
-        List<LaptopDetailsDTO> laptopDetails = productService.getLaptopProductDetails(productCode);
+        List<LaptopDetailsDTO> laptopDetails = productService.getLaptopProductDetails(productNo);
         log.info("상세정보를 조회 = {}: ", laptopDetails);
         if (!laptopDetails.isEmpty()) {
             LaptopDetailsDTO details = laptopDetails.get(0);
 
+            log.info("details.getProductNo ={}",details.getProductNo());
+
+            model.addAttribute("productNo",details.getProductNo());
             model.addAttribute("productName", details.getProductName());
             model.addAttribute("price", details.getPrice());
             model.addAttribute("img", details.getUploadName());
@@ -217,24 +222,12 @@ public class ProductController {
             model.addAttribute("options", options);
             model.addAttribute("optionValue", optionsValue);
 
-
         }
-
 
         return "product/laptopDetails";
 
     }
 
-
-    @PostMapping("/productType")
-    public String productType(@RequestBody Map<String, Integer> request, Model model) {
-        int typeNo = request.get("typeNo");
-
-        List<ProductDTO> products = productService.getTypeByProduct(typeNo);
-        model.addAttribute("products", products);
-
-        return "productList";
-    }
 
     @GetMapping("/review")
     public void review() {

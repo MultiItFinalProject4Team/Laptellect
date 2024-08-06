@@ -70,3 +70,7 @@ ul li:active .btn-custom { background-color: #236097 !important; }
         font-size: 0.875em; /* 원하는 크기로 조정 */
         color: #666; /* 원하는 색상으로 조정 */
     }
+    .card-text {
+        font-size: 1.25em;
+        text-align: right
+    }
