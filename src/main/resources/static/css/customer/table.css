@@ -6,12 +6,9 @@
 
        /* 테이블 헤더 및 셀 스타일 */
         .fixed-table th, .fixed-table td {
-            border: 1px solid #ddd; /* 셀 경계선 */
-            padding: 8px; /* 셀 내부 여백 */
         }
 
         .fixed-table th {
-            background-color: #f2f2f2; /* 헤더 배경색 */
             text-align: center; /* 헤더 텍스트 정렬 */
         }
 

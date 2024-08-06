@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<html layout:decorate="~{common/layout}">
+<html layout:decorate="~{customer/user/layout-customer}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
@@ -29,7 +29,8 @@
 <div layout:fragment="content">
     <div class="container mt-5">
         <header>
-            <h1 align="center">고객센터</h1>
+            <h1 align="left">고객센터</h1>
+
             <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
                 <li class="nav-item">
                     <a class="nav-link cus_nav" href="/customer/user/customer_notice">공지사항</a>
@@ -42,6 +43,7 @@
                 </li>
             </ul>
         </header>
+        <hr>
         <div class="form-container">
             <form class="d-flex" role="search" th:action="${role=='user'} ? @{/customer/user/search_personalq} : @{/customer/admin/search_all_personalq}">
 
@@ -67,7 +69,7 @@
                 <button id="searchButton" class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
-
+        <hr>
         <div class="fixed-table-container">
         <table class="table table-striped fixed-table" style="text-align: center;">
             <thead>
