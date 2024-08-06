@@ -3,11 +3,11 @@ package com.multi.laptellect.product.controller;
 
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,18 +25,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
-    /**
-     * The Crawling service.
-     */
-    @Autowired
-    CrawlingService crawlingService;
-
-    /**
-     * The Product service.
-     */
-    @Autowired
-    ProductService productService;
-
+    private final CartService cartService;
+    private final CrawlingService crawlingService;
+    private final ProductService productService;
 
     /**
      * Crawl string.
@@ -196,6 +187,11 @@ public class ProductController {
         ProductDTO productDTO = new ProductDTO();
 
         crawlingService.reviewCrawler();
+    }
+
+    @GetMapping("/cart")
+    public String showCartList() {
+        return "product/productCart";
     }
 
 }

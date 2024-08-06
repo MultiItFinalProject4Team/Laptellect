@@ -172,4 +172,15 @@
             #{ pageable.offset }
     </select>
 
+    <select id="findProductByProductNo" parameterType="String" resultMap="productResultMap">
+        SELECT
+              p.*
+            , img.upload_name
+        FROM
+            product p
+        JOIN
+            images img ON img.reference_code = p.reference_code
+        WHERE
+            p.product_no = #{ productNo }
+    </select>
 </mapper>

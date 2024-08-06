@@ -1,10 +1,17 @@
 package com.multi.laptellect.product.service;
 
+import com.multi.laptellect.product.model.dto.ProductCart;
+import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Cart(장바구니) Service
@@ -18,6 +25,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService{
     private final RedisUtil redisUtil;
+    private final ProductService productService;
 
     @Override
     public int processCart(int productNo) throws Exception {
@@ -58,5 +66,58 @@ public class CartServiceImpl implements CartService{
                 return 1;
             }
         }
+    }
+
+    @Override
+    public ProductCart getCartList() throws Exception{
+        String memberName = SecurityUtil.getUserDetails().getMemberName();
+        memberName = "cart:" + memberName;
+        int sum = 0;
+
+        Map<String, String> cartList = redisUtil.getAllHashData(memberName);
+        log.info("카트 리스트 반환 = {}", cartList);
+
+        if(cartList.isEmpty()) return null;
+
+        ArrayList<ProductDTO> products = new ArrayList<>();
+
+        Set<String> productNos = cartList.keySet();
+        for(String productNo : productNos) {
+            ProductDTO product = productService.findProductByProductNo(productNo);
+            int quantity = Integer.parseInt(cartList.get(productNo));
+            product.setQuantity(quantity);
+            products.add(product);
+            sum += quantity;
+        }
+        log.info("ProductList = {}", products);
+
+        ProductCart productCart = new ProductCart();
+        productCart.setProducts(products);
+        productCart.setTotalQuantity(sum);
+
+        return productCart;
+    }
+
+    @Override
+    public void updateCartProduct(String productNo, String quantity) {
+        String memberName = SecurityUtil.getUserDetails().getMemberName();
+        memberName = "cart:" + memberName;
+        Long duration = 24L * 60L * 60L;
+
+        log.debug("장바구니 상품 수량 업데이트 시작 = {}", memberName);
+        redisUtil.updateHashDataExpire(memberName, productNo, quantity, duration);
+        log.info("장바구니 상품 수량 업데이트 성공 = {}", memberName);
+    }
+
+    @Override
+    public void deleteCartProduct(List<String> productNos) {
+        String memberName = SecurityUtil.getUserDetails().getMemberName();
+        memberName = "cart:" + memberName;
+
+        log.debug("장바구니 상품 삭제 시작 = {}", productNos);
+        for(String productNo : productNos) {
+            redisUtil.deleteHashData(memberName, productNo);
+        }
+        log.debug("장바구니 상품 삭제 성공 = {}", productNos);
     }
 }

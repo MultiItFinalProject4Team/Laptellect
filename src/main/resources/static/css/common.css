@@ -85,6 +85,15 @@ a {
     text-overflow: ellipsis;
 }
 
+.content-box {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 700px;
+    margin-top: -17px;
+}
+
 /* Footer */
 #tempaltemo_footer a { color: #dcdde1;}
 #tempaltemo_footer a:hover { color: #3498DB;}
