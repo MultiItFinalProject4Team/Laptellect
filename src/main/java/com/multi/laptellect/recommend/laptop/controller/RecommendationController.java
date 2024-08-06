@@ -1,28 +1,41 @@
 package com.multi.laptellect.recommend.laptop.controller;
 
-
-import com.multi.laptellect.recommend.laptop.model.dto.LaptopDTO;
-import com.multi.laptellect.recommend.laptop.model.dto.RecommendationRequestDTO;
-import com.multi.laptellect.recommend.laptop.service.RecommendationService;
+import com.multi.laptellect.recommend.laptop.model.dto.RecommendProductDTO;
+import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
-@RestController
-@RequestMapping("/api/recommend")
+
+@Controller
+@RequestMapping("/recommend")
 public class RecommendationController {
 
+    private static final Logger logger = LoggerFactory.getLogger(RecommendationController.class);
+
     @Autowired
-    private RecommendationService recommendationService;
+    private RecommendProductService recommendProductService;
 
     @PostMapping
-    public ResponseEntity<List<LaptopDTO>> getRecommendations(@RequestBody RecommendationRequestDTO request) {
-        List<LaptopDTO> recommendations = recommendationService.getRecommendations(request);
-        return ResponseEntity.ok(recommendations);
+    public String getRecommendations(@RequestBody Map<String, String> surveyResults, Model model) {
+        logger.info("Received survey results: {}", surveyResults);
+        try {
+            List<RecommendProductDTO> recommendations = recommendProductService.getRecommendations(surveyResults);
+            model.addAttribute("recommendations", recommendations);
+            logger.info("Found {} recommended products", recommendations.size());
+            return "recommendProductPage";
+        } catch (Exception e) {
+            logger.error("Error while processing recommendations", e);
+            model.addAttribute("error", "An error occurred while processing your request.");
+            return "errorPage";
+        }
     }
 }

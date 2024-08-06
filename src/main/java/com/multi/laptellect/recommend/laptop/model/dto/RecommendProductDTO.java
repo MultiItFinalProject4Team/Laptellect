@@ -1,17 +1,14 @@
 package com.multi.laptellect.recommend.laptop.model.dto;
 
 import lombok.Data;
+import java.util.List;
 
 @Data
-public class LaptopDTO {
-
+public class RecommendProductDTO {
     private int productNo;
-    private int typeNo;
     private String productName;
     private int price;
+    private String productCode;
     private String referenceCode;
-    private double weight;
-    private double screenSize;
-    private String brand;
-    private String series;
+    private List<String> tags;
 }
