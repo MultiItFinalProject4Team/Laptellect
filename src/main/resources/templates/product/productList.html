@@ -104,13 +104,13 @@
                 <a class="nav-link active" aria-current="page" th:href=@{/product/productList} data-toggle="tab">전체</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/laptopList} data-toggle="tab">노트북</a>
+                <a class="nav-link" th:href=@{/product/laptop/laptopList} data-toggle="tab">노트북</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/mouseList} data-toggle="tab">마우스</a>
+                <a class="nav-link" th:href=@{/product/mouse/mouseList} data-toggle="tab">마우스</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/keyboardList} data-toggle="tab">키보드</a>
+                <a class="nav-link" th:href=@{/product/keyboard/keyboardList} data-toggle="tab">키보드</a>
             </li>
         </ul>
 
@@ -128,12 +128,12 @@
                             </ul>
                         </div>
                     </div>
-                    <a th:href="@{/product/laptopDetails(productNo=${product.productNo})}">
+                    <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}">
                         <div class="card-body">
 
-                            <button type="button" class="btn btn-secondary" disabled>태그</button>
-                            <button type="button" class="btn btn-secondary" disabled>태그</button>
-                            <button type="button" class="btn btn-secondary" disabled>태그</button>
+                            <button type="button" class="btn btn-secondary" disabled>게이밍</button>
+                            <button type="button" class="btn btn-secondary" disabled>사무용</button>
+                            <button type="button" class="btn btn-secondary" disabled>학생용</button>
 
                             <h5 class="card-title product-name" th:text="${product.productName}">상품명</h5>
                             <div>
