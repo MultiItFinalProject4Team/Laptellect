@@ -99,4 +99,6 @@ public interface ProductService {
      * @throws Exception the exception
      */
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
+
+    ProductDTO findProductByProductNo(String productNo) throws Exception;
 }
