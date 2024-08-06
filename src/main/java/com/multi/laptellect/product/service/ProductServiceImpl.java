@@ -154,6 +154,11 @@ public class ProductServiceImpl implements ProductService {
         return new PageImpl<>(wishlist, pageable, total);
     }
 
+    @Override
+    public ProductDTO findProductByProductNo(String productNo) throws Exception {
+        return productMapper.findProductByProductNo(productNo);
+    }
+
     //상품 전체 조회
     @Override
     @Transactional

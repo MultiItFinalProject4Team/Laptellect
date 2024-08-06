@@ -206,6 +206,13 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public int sendTempPassword(String email, String tel, String verifyCode) {
+
+
+        return 0;
+    }
+
+    @Override
     @Transactional
     public int updateMemberAddress(AddressDTO addressDTO) {
         int userNo = SecurityUtil.getUserNo();
