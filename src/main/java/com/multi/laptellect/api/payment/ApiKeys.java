@@ -1,22 +1,21 @@
 package com.multi.laptellect.api.payment;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApiKeys {
-    // 포트원 API 키
-    private static final String IAMPORT_API_KEY = "6461077882447564";
+    @Value("${spring.iamport.api-key}")
+    private String iamportApiKey;
 
-    // 포트원 API 시크릿
-    private static final String IAMPORT_API_SECRET = "hFvR3YmO9oG0qoeTEJVkOkrqlZD5NEbyOryiunBgPXurMe0tjowr3m1Jhf9AyPTUxVjeF4w3kjgDIL08";
+    @Value("${spring.iamport.api-secret}")
+    private String iamportApiSecret;
 
-    // API 키 getter 메소드
     public String getIamportApiKey() {
-        return IAMPORT_API_KEY;
+        return iamportApiKey;
     }
 
-    // API 시크릿 getter 메소드
     public String getIamportApiSecret() {
-        return IAMPORT_API_SECRET;
+        return iamportApiSecret;
     }
 }

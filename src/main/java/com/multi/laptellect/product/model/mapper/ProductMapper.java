@@ -29,7 +29,7 @@ public interface ProductMapper {
 
     void getImage(String referenceCode);
 
-    ProductCategoryDTO findByOptions(String s);
+    ProductCategoryDTO findByOptions(@Param("specName") String specName);
 
    // String findCategorytNo(String options);
 
@@ -37,7 +37,9 @@ public interface ProductMapper {
 
     void inputReviewDate(ReviewDTO reviewDTO);
 
-    int insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options);
+    void insertProductCategory(@Param("categoryCode") String categoryCode, @Param("typeNo") int typeNo, @Param("options") String options);
+
+    int getProductByType(@Param("typeNo") int typeNo);
 
 
     List<ProductDTO> findProduct();
@@ -48,8 +50,9 @@ public interface ProductMapper {
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
 
+   List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
 
-    List<LaptopDetailsDTO> laptopProductDetails(String productCode);
+    List<LaptopDetailsDTO> laptopProductDetails(String productNo);
 
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")

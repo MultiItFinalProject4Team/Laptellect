@@ -19,7 +19,7 @@ h1 {
     margin-bottom: 20px;
 }
 .search-bar input {
-    flex-grow: 1;
+    width: 300px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px 0 0 4px;
@@ -94,7 +94,6 @@ h1 {
     font-weight: bold;
     color: #007bff;
 }
-
 
 /* 모달 스타일 */
 .modal {

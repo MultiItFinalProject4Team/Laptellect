@@ -24,7 +24,10 @@
 
     <!-- 이미지 레퍼런트 코드 업데이트 -->
     <update id="updateReferenceCode" parameterType="productDTO">
-        UPDATE product SET reference_code = #{referenceCode}, updated_at = updated_at WHERE product_no = #{productNo}
+        UPDATE product SET
+        reference_code = #{referenceCode},
+        updated_at = updated_at
+        WHERE product_no = #{productNo}
     </update>
 
     <select id="findTypeNameByNo" resultType="string" parameterType="int">
@@ -79,14 +82,22 @@
 
     <!-- 선택 제품 조회-->
     <select id="getProductByCode" parameterType="String" resultType="laptopSpecDTO">
-        SELECT * FROM product WHERE product_code = #{productCode}
+        SELECT * FROM product WHERE product_no = #{productNo}
+    </select>
+
+    
+    <select id="getProductSpec" resultType="specDTO">
+        SELECT  options , option_value
+        FROM vw_spec_and_value
+        WHERE product_no = #{productNo}
+
     </select>
 
     <!--제품 카테고리를 옵션으로 조회-->
-    <select id="findByOptions" parameterType="String" resultType="productCategoryDTO">
+    <select id="findByOptions" parameterType="map" resultType="productCategoryDTO">
         SELECT *
         FROM product_category
-        WHERE options = #{s}
+        WHERE options = #{specName}
     </select>
 
 <!--    <select id="findCategorytNo" parameterType="String">-->
@@ -97,9 +108,9 @@
 <!--    </select>-->
 
 
-    <insert id="insertProductCategory" parameterType="productCategoryDTO">
-        INSERT INTO product_category (type_no, options)
-        VALUES (#{typeNo}, #{options})
+    <insert id="insertProductCategory" parameterType="map">
+        INSERT INTO product_category (category_no, type_no, options)
+        VALUES (#{categoryCode}, #{typeNo}, #{options})
     </insert>
 
 
@@ -128,9 +139,17 @@
     <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
         SELECT *
         FROM
-        product_detail
+        vw_product_detail
         WHERE
         product_code = #{productCode}
+    </select>
+    
+    <select id="getProductByType" parameterType="int">
+        SELECT *
+        FROM
+        product
+        WHERE
+        type_no = #{typeNo}
     </select>
 
 

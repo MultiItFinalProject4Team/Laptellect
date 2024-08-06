@@ -4,6 +4,7 @@ package com.multi.laptellect.product.controller;
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.service.CartService;
+import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Product controller.
@@ -60,7 +63,10 @@ public class ProductController {
 
         try {
             List<ProductDTO> products = crawlingService.crawlProducts(typeNo);
+
+
             log.info("제품 확인 {}", products);
+
 
             productService.saveProductsToDB(products, typeNo);
 
@@ -69,7 +75,8 @@ public class ProductController {
             log.info("상품 타입 확인 = {}", typeNo);
             switch (typeNo) {
                 case 1:
-                    crawlingService.processLaptopDetails();
+                    crawlingService.processLaptopDetails(typeNo);
+                    log.info("productController = {}", typeNo);
                     break;
                 case 2:
                     // crawlingService.processMouseDetails(productDTO);
@@ -92,6 +99,35 @@ public class ProductController {
 
     }
 
+    @GetMapping("/laptopList")
+    public String LaptopList(){
+        int typeNo = 1;
+
+        productService.getProductByType(typeNo);
+
+
+        return "product/laptopList";
+
+    }
+
+    @GetMapping("/mouseList")
+    public String mouseList(){
+        int typeNo = 2;
+
+        return "product/mouseList";
+
+    }
+
+    @GetMapping("/keyboardList")
+    public String keyboardList(){
+        int typeNo = 3;
+
+
+        return "product/keyboardList";
+
+    }
+
+
 
     /**
      * Product list string.
@@ -107,6 +143,25 @@ public class ProductController {
         //페이징 처리
         List<ProductDTO> products = productService.getStoredProducts(pageNumber, pageSize);
 
+
+        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
+
+        for(ProductDTO productDTO : products){
+            List<SpecDTO> filteredSpecs = productService.filterSpecs(productDTO.getProductNo(), neededOptions);
+            productDTO.setSpecs(filteredSpecs);
+            log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs);
+
+            String specsString = filteredSpecs.stream()
+                    .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
+                    .collect(Collectors.joining(" | "));
+            productDTO.setSpecsString(specsString);
+
+
+        }
+
+        model.addAttribute("products", products);
+
+
         // 전체 제품 수
         int totalProducts = productService.getTotalProducts();
 
@@ -117,7 +172,6 @@ public class ProductController {
         int startPage = Math.max(1, pageNumber - (displayPageCount / 2));
         int endPage = Math.min(totalPages, startPage + displayPageCount - 1);
 
-        model.addAttribute("products", products);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageSize", pageSize);

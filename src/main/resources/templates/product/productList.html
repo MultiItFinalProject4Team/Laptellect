@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Product List</title>
     <link rel="stylesheet" th:href="@{/css/product.css}">
     <script>
         $(document).ready(function() {
@@ -90,7 +89,6 @@
 
 <body>
 <div class="container" layout:fragment="content">
-    <h1 class="mt-5">Product List</h1>
     <form th:action="@{/product/test}" method="post">
         <select id="productType" name="products">
             <option value="1">노트북</option>
@@ -100,11 +98,20 @@
         <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
     </form>
     <div>
-        <div class="btn-group">
-            <a href="#" onclick="sendData(1)" class="btn btn-primary">노트북</a>
-            <a href="#" onclick="sendData(2)" class="btn btn-primary">마우스</a>
-            <a href="#" onclick="sendData(3)" class="btn btn-primary">키보드</a>
-        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" th:href=@{/product/productList} data-toggle="tab">전체</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href=@{/product/laptopList} data-toggle="tab">노트북</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href=@{/product/mouseList} data-toggle="tab">마우스</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href=@{/product/keyboardList} data-toggle="tab">키보드</a>
+            </li>
+        </ul>
 
         <div class="row">
             <div class="col-md-4 mb-4" th:each="product, iterStat : ${products}">
@@ -123,21 +130,22 @@
                     <a th:href="@{/product/laptopDetails(productCode=${product.productCode})}">
                         <div class="card-body">
 
+                            <button type="button" class="btn btn-secondary" disabled>태그</button>
+                            <button type="button" class="btn btn-secondary" disabled>태그</button>
+                            <button type="button" class="btn btn-secondary" disabled>태그</button>
+
                             <h5 class="card-title product-name" th:text="${product.productName}">상품명</h5>
+                            <div>
+                                <span class="small-text" th:text="${product.specsString}"></span>
+                            </div>
+
                             <p class="card-text">
                                 <strong>가격:</strong> <span class="price" th:text="${product.price} + ' 원'">가격</span><br>
+
                             </p>
-    <!--                        <div th:switch="${product.productType}">-->
-    <!--                            <a th:href="@{/product/laptopDetails(productCode=${product.productCode})}"-->
-    <!--                               class="btn btn-primary">상세 정보</a>-->
-
-    <!--                        </div>-->
-
                         </div>
                     </a>
-<!--                    <div class="card-footer">-->
-<!--                        <small class="text-muted" th:text="'상품 No. ' + ${iterStat.index + 1}">상품 No.</small>-->
-<!--                    </div>-->
+
                 </div>
             </div>
 

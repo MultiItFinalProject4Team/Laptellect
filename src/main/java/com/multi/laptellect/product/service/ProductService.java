@@ -2,12 +2,14 @@ package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProductService {
 
@@ -34,6 +36,11 @@ public interface ProductService {
      */
     int processWishlist(List<Integer> productNo) throws Exception;
 
+    int getProductByType(int typeNo);
+
+    List<SpecDTO> getProductSpec(int productNo);
+
+    List<SpecDTO> filterSpecs(int productNo, Set<String> neededOptions);
 
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
 

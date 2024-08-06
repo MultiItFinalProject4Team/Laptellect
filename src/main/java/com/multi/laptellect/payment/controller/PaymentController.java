@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @Controller
 @RequestMapping("/payment")
 public class PaymentController {
@@ -37,6 +38,12 @@ public class PaymentController {
         this.memberService = memberService;
     }
 
+    /**
+     * 주문내역페이지 구성
+     *
+     * @param model 뷰단으로 데이터이동
+     * @return 주문내역페이지 열기
+     */
     @GetMapping("/orderlist")
     public String orderList(Model model) {
         int memberNo = SecurityUtil.getUserNo();
@@ -49,6 +56,12 @@ public class PaymentController {
         return "/payment/orderlist";
     }
 
+    /**
+     * 주문 및 결제 페이지
+     *
+     * @param model 뷰단으로 데이터 이동
+     * @return 결제페이지 열기
+     */
     @GetMapping("/payment")
     public String selectpaymentpage(Model model) {
         int memberNo = SecurityUtil.getUserNo();
@@ -64,6 +77,12 @@ public class PaymentController {
         return "/payment/payment";
     }
 
+    /**
+     * 결제검증 메서드
+     * 결제시 사용포인트 조회 및 결제내역 저장
+     * @param request 결제검증 dto
+     * @return 결제 검증 결과 전송
+     */
     @Transactional
     @PostMapping("/verifyPayment")
     public ResponseEntity<Map<String, Object>> verifyPayment(@RequestBody VerificationRequestDTO request) {
@@ -113,6 +132,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * 결제 취소 매서드
+     * 결제취소시 사용된 포인트 반환 및 실결제금액 반환
+     * @param cancelRequest 결제검증dto를 통한 결제취소 요청 데이터
+     * @return 결제취소에 대한 성공여부 반환
+     */
     @PostMapping("/cancel")
     public ResponseEntity<Map<String, Object>> cancelPayment(@RequestBody VerificationRequestDTO cancelRequest) {
         try {
@@ -160,6 +185,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * 리뷰등록 매서드
+     * 리뷰 등록 시 결제에 사용가능한 포인트 부여
+     * @param reviewDTO 리뷰dto
+     * @return 리뷰등록 성공여부 반환
+     */
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
 
