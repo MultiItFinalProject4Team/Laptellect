@@ -15,3 +15,17 @@ CREATE TABLE machine_tagkey(
     CONSTRAINT tag_FK FOREIGN KEY(tag_no) REFERENCES laptop_tag(tag_no)
 );
 
+--스팩 점수화 테이블
+CREATE TABLE laptop_data(
+    product_no INT NOT NULL AUTO_INCREMENT,
+    cpu_score INT NULL,
+    gpu_score INT NULL,
+    ram_score INT NULL,
+    storage_score INT NULL,
+    price_score INT NULL,
+    weight_score INT NULL,
+    screen_size_score INT NULL,
+    resolution_score INT NULL,
+    FOREIGN KEY (product_no) REFERENCES product(product_no)
+)
+
