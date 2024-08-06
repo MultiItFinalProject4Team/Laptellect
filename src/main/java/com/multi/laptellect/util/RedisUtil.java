@@ -149,6 +149,7 @@ public class RedisUtil { // Redis 사용 클래스
      */
     public void updateHashDataExpire(String key, String field, String value, Long duration) {
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        hashOperations.put(key, field, value);
         redisTemplate.expire(key, Duration.ofSeconds(duration));
     }
 

@@ -44,4 +44,5 @@ public interface ProductService {
 
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
 
+    ProductDTO findProductByProductNo(String productNo) throws Exception;
 }

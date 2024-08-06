@@ -20,6 +20,11 @@ public class ProductDTO {
     private String specsString;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private int quantity;
+    private int totalPrice;
 
+    public int getTotalPrice() {
+        return this.price * this.quantity;
+    }
 }
 

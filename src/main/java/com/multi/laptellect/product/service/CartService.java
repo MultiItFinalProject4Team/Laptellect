@@ -1,5 +1,9 @@
 package com.multi.laptellect.product.service;
 
+import com.multi.laptellect.product.model.dto.ProductCart;
+
+import java.util.List;
+
 /**
  * Please explain the class!!
  *
@@ -9,4 +13,10 @@ package com.multi.laptellect.product.service;
  */
 public interface CartService {
     int processCart(int productNo) throws Exception;
+
+    ProductCart getCartList() throws Exception;
+
+    void updateCartProduct(String productNo, String quantity) throws Exception;
+
+    void deleteCartProduct(List<String> productNos) throws Exception;
 }

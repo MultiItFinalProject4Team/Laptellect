@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+    <style>
+    .product-name {
+      text-decoration-line: none;
+      color: #000;
+    }
+
+    .circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        border-radius: 50%;
+        color: #333;
+        cursor: pointer;
+    }
+
+    .quantity-btn {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin: 0 5px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .quantity-value {
+        margin: 0 10px;
+        white-space: nowrap;
+    }
+  </style>
+    <script>
+  function loadCartList() {
+    $.ajax({
+        url: '/api/product/get-cartlist',
+        type: 'GET',
+        success: function(response) {
+            $('#cart-box').html(response);
+        },
+        error: function(xhr, status, error) {
+            console.error('조회 실패:', error);
+        }
+    });
+  }
+
+  $(document).ready(function() {
+     loadCartList();
+  });
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <br> <br>
+        <div class="content-box" style="height: auto;">
+            <div class="col d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">장바구니</h3>
+                <button class="btn btn-primary btn-payment">구매하기</button>
+            </div>
+            <hr>
+            <div id="cart-box"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

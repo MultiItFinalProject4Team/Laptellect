@@ -68,4 +68,6 @@ public interface ProductMapper {
 
     @Select("SELECT COUNT(*) FROM wishlist WHERE member_no = #{ memberNo }")
     int countAllWishlistByMemberNo(int memberNo);
+    
+    ProductDTO findProductByProductNo(String productNo);
 }
