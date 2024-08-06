@@ -19,13 +19,18 @@ function connect() {
     $("#conversation").show();
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        showMessage("챗봇에 오신걸 환영합니다.");
+        showMessage("챗봇에 오신걸 환영합니다.",'received');
         stompClient.subscribe('/topic/public', function (message) {
-            showMessage(message.body); //서버에 메시지 전달 후 리턴받는 메시지
+            showMessage(message.body,'received'); //서버에 메시지 전달 후 리턴받는 메시지
             var formattedMessage = message.body.replace(/\n/g, "<br>");
-            $('#prevmsg').val(formattedMessage);
+            if (!formattedMessage.startsWith("잘 이해하지 못했어요.")) {
+                // 오타 방지 - 잘못된 값 입력 시 출력되는 메시지는 활용x
+                $('#prevmsg').val(formattedMessage);
+            }
         });
+        //웰컴 메시지
         stompClient.send("/app/sendMessage", {}, JSON.stringify('시작'));
+        $("#msg").focus();
     });
 }
 
@@ -38,14 +43,16 @@ function disconnect() {
 }
 
 function sendMessage() {
-    if($('#msg').val() == "") {
+    //빈 칸일때
+    if($('#msg').val().trim() === "") {
             alert("질문을 입력하세요");
             $("#msg").focus();
             return false;
         }
+
     let message = $("#msg").val()
-    showMessage("보낸 메시지: " + message);
-    //보내기전 문자열 전처리
+    showMessage(message,'sent');
+    //이전에 보낸 메시지의 답변 저장 및 활용을 위한 전처리
     let prev = $('#prevmsg').val();
     const lines = prev.split("<br>");
     for(const line of lines){
@@ -83,13 +90,13 @@ function linkifyText(text, linkText, url) {
     var escapedText = escapeHtml(text);
 
     // 특정 텍스트를 링크로 변환
-    var linkifiedText = escapedText.replace(linkText, `<a href="${url}" target="_blank">${linkText}</a>`);
+    var linkifiedText = escapedText.replace(linkText, `<a href="${url}" target="_blank" class="link">${linkText}</a>`);
     linkifiedText=linkifiedText.split("#");
 
     return linkifiedText[0];
 }
 
-function showMessage(message) {
+function showMessage(message, type) {
     // URL을 찾기 위한 정규 표현식
     var urlPattern = /(https?:\/\/[^\s]+)/g;
 
@@ -109,14 +116,14 @@ function showMessage(message) {
 
     // 줄 바꿈 문자를 <br> 태그로 변환
     var formattedMessage = message.replace(/\n/g, "<br>");
-
-    // 최종적으로 HTML 테이블에 메시지 추가
-    $("#communicate").append("<tr><td>" + formattedMessage + "</td></tr>");
+    var messageHtml = `<div class="message ${type}">${formattedMessage}</div>`;
+    $("#communicate").append(messageHtml);
+    $("#conversation").scrollTop($("#conversation")[0].scrollHeight);
 }
 
 function resetMessage() {
-    let message = "초기화"
-    showMessage("보낸 메시지: " + message);
+    let message = "처음으로"
+    showMessage(message, 'sent');
     //보내기전 문자열 전처리
     let prev = $('#prevmsg').val();
     const lines = prev.split("<br>");
