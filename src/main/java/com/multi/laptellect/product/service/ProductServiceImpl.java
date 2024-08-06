@@ -1,7 +1,6 @@
 package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.*;
-import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * The type Product service.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -33,110 +33,76 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void saveProductsToDB(List<ProductDTO> productList, int typeNo) throws Exception {
-
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
-
+        List<ProductDTO> productDTOList = createProductDTOList(productList, typeNo);
         try {
-
-
-            for (ProductDTO ProductDTO : productList) {
-                ProductDTO productDTO = new ProductDTO();
-                productDTO.setProductName(ProductDTO.getProductName());
-                productDTO.setPrice(ProductDTO.getPrice());
-                productDTO.setProductCode(ProductDTO.getProductCode());
-                productDTO.setCreatedAt(Timestamp.valueOf(now));
-                productDTO.setTypeNo(typeNo);
-
-                productDTOList.add(productDTO);
-
-                log.info("ProductDTO Created: {}", productDTO);
-            }
-
-            // 중복 확인 및 데이터베이스 삽입
             for (ProductDTO productDTO : productDTOList) {
-
-                String image = crawlingService.getProductImageUrl(productDTO.getProductCode());
-
-                //코드 계수 확인 쿼리 count에 담아주기
-                int count = productMapper.countByProductCode(productDTO.getProductCode());
-
-                //해당 코드 가 0(없을시) 코드 실행
-                if (count == 0) {
-
-                    //크롤링데이터 저장 코드
-                    productMapper.insertProduct(productDTO);
-
-                    //자동으로 들어갈 레퍼런트코드 작성 ex P1, P2 ...
-                    String code = "P" + productDTO.getProductNo();
-
-                    //DTO에 담기
-                    productDTO.setReferenceCode(code);
-                    // 레퍼런트코드 업데이트
-                    productMapper.updateReferenceCode(productDTO);
-
-                    //이미지 처리
-                    ImageDTO imageDTO = new ImageDTO();
-                    String url = "http:" + image;
-                    String filePath = "src/main/resources/static/img/product";
-
-                    String uuid = UUID.randomUUID().toString();
-                    String uploadName = uuid + ".jpg";
-
-                    crawlingService.downloadImage(url, filePath, uploadName);
-
-                    log.info("이미지 명 확인 = {}", uploadName);
-                    log.info("url 확인 = {}", url);
-                    log.info("저장위치 확인 = {}", filePath);
-
-
-                    imageDTO.setOriginName(url);
-                    imageDTO.setReferenceCode(code);
-                    imageDTO.setUploadName(uploadName);
-
-                    productMapper.inputImage(imageDTO);
-
-
-                } else {
-                    log.info("제품코드는: " + productDTO.getProductCode() + " 입니다.");
-                }
+                processProduct(productDTO);
             }
-
         } catch (Exception e) {
             log.error("제품 저장 중 오류 발생", e);
-
         }
     }
 
+    private List<ProductDTO> createProductDTOList(List<ProductDTO> productList, int typeNo) {
+        List<ProductDTO> productDTOList = new ArrayList<>();
 
-    @Override
-    public void getImgae(String referenceCode) {
-        productMapper.getImage(referenceCode);
+        for (ProductDTO ProductDTO : productList) {
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setProductName(ProductDTO.getProductName());
+            productDTO.setPrice(ProductDTO.getPrice());
+            productDTO.setProductCode(ProductDTO.getProductCode());
+            productDTO.setTypeNo(typeNo);
+
+            productDTOList.add(productDTO);
+            log.info("ProductDTO Created: {}", productDTO);
+        }
+        return productDTOList;
     }
 
+    private void processProduct(ProductDTO productDTO) throws Exception {
+        String image = crawlingService.getProductImageUrl(productDTO.getProductCode());
+        int count = productMapper.countByProductCode(productDTO.getProductNo());
+
+        if (count == 0) {
+            productMapper.insertProduct(productDTO);
+            String code = "P" + productDTO.getProductNo();
+            productDTO.setReferenceCode(code);
+            productMapper.updateReferenceCode(productDTO);
+
+            processImage(productDTO, image);
+        } else {
+            log.info("제품코드는: " + productDTO.getProductCode() + " 입니다.");
+        }
+    }
+
+    private void processImage(ProductDTO productDTO, String image) throws Exception {
+        ImageDTO imageDTO = new ImageDTO();
+        String url = "http:" + image;
+        String filePath = "src/main/resources/static/img/product";
+        String uuid = UUID.randomUUID().toString();
+        String uploadName = uuid + ".jpg";
+
+        crawlingService.downloadImage(url, filePath, uploadName);
+
+        log.info("이미지 명 확인 = {}", uploadName);
+        log.info("url 확인 = {}", url);
+        log.info("저장위치 확인 = {}", filePath);
+
+        imageDTO.setOriginName(url);
+        imageDTO.setReferenceCode(productDTO.getReferenceCode());
+        imageDTO.setUploadName(uploadName);
+
+        productMapper.inputImage(imageDTO);
+    }
+
+
     @Override
-    public List<LaptopDetailsDTO> getLaptopProductDetails(String productNo) {
+    public List<LaptopDetailsDTO> getLaptopProductDetails(int productNo) {
 
-        List<LaptopDetailsDTO> laptopDetailsDTO = new ArrayList<>();
-
-
-        log.info("laptopDetailsDTO 12 = {} ", laptopDetailsDTO);
         log.info("프로덕트넘버값 확인 = {}", productNo);
 
-
-        for (LaptopDetailsDTO detailsDTO : laptopDetailsDTO) {
-
-            String code = "PD" + productNo;
-
-
-            log.info("detailsDTO 12 = {}", detailsDTO);
-
-        }
-
-
-        laptopDetailsDTO = productMapper.laptopProductDetails(productNo);
-        log.info("laptopDetailsDTO 12 = {} ", laptopDetailsDTO);
-
+        List<LaptopDetailsDTO> laptopDetailsDTO = productMapper.laptopProductDetails(productNo);
+        log.info("laptopDetailsDTO = {} ", laptopDetailsDTO);
 
         return laptopDetailsDTO;
     }
@@ -209,16 +175,6 @@ public class ProductServiceImpl implements ProductService {
 
 
         return productDTOList;
-    }
-
-    @Override
-    public LaptopSpecDTO getProductByCode(String pcode) {
-
-        LaptopSpecDTO laptopSpecDTO = productMapper.getProductByCode(pcode);
-
-        log.info("laptopSpecDTO {} :", laptopSpecDTO);
-
-        return laptopSpecDTO;
     }
 
     @Override

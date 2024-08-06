@@ -18,8 +18,8 @@
 
     <!-- 제품 삽입 쿼리-->
     <insert id="insertProduct" parameterType="productDTO" useGeneratedKeys="true" keyProperty="productNo">
-        INSERT INTO product(type_no, product_name, price, product_code, created_at)
-        values(#{typeNo}, #{productName}, #{price}, #{productCode}, #{createdAt})
+        INSERT INTO product(type_no, product_name, price, product_code)
+        values(#{typeNo}, #{productName}, #{price}, #{productCode})
     </insert>
 
     <!-- 이미지 레퍼런트 코드 업데이트 -->
@@ -36,7 +36,7 @@
 
     <!-- 중복 확인-->
     <select id="countByProductCode" resultType="int" parameterType="string">
-        SELECT COUNT(*) FROM product WHERE product_code = #{productCode}
+        SELECT COUNT(*) FROM product WHERE product_no = #{productNo}
     </select>
 
     <!-- 전체 제품 조회-->
@@ -68,6 +68,7 @@
         values(#{productNo}, #{rating}, #{title}, #{content})
     </insert>
 
+    <!-- 리뷰 조회 -->
     <select id="getReviewRequired" >
         SELECT product_no, product_code
         FROM product
@@ -85,7 +86,7 @@
         SELECT * FROM product WHERE product_no = #{productNo}
     </select>
 
-    
+    <!-- 상품 리스트에서 기본상세 정보 출력 -->
     <select id="getProductSpec" resultType="specDTO">
         SELECT  options , option_value
         FROM vw_spec_and_value
@@ -100,25 +101,10 @@
         WHERE options = #{specName}
     </select>
 
-<!--    <select id="findCategorytNo" parameterType="String">-->
-<!--        SELECT category_no-->
-<!--        FROM product_category-->
-<!--        WHERE options = #{options}-->
-
-<!--    </select>-->
-
-
     <insert id="insertProductCategory" parameterType="map">
         INSERT INTO product_category (category_no, type_no, options)
         VALUES (#{categoryCode}, #{typeNo}, #{options})
     </insert>
-
-
-
-<!--    <insert id="insertProductSpec" parameterType="productSpecDTO">-->
-<!--        INSERT INTO product_spec (product_no, category_no, option_value)-->
-<!--        VALUES (#{productNo}, #{categoryNo}, #{optionValue})-->
-<!--    </insert>-->
 
     <insert id="insertProductSpec">
         INSERT INTO product_spec (product_no, category_no, option_value)
@@ -141,7 +127,7 @@
         FROM
         vw_product_detail
         WHERE
-        product_code = #{productCode}
+        product_no = #{productNo}
     </select>
     
     <select id="getProductByType" parameterType="int">
