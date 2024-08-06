@@ -18,7 +18,7 @@
 
     <!-- 제품 삽입 쿼리-->
     <insert id="insertProduct" parameterType="productDTO" useGeneratedKeys="true" keyProperty="productNo">
-        INSERT INTO product(type_no, product_name, price, product_code)
+        INSERT IGNORE INTO product(type_no, product_name, price, product_code)
         values(#{typeNo}, #{productName}, #{price}, #{productCode})
     </insert>
 
@@ -35,7 +35,7 @@
     </select>
 
     <!-- 중복 확인-->
-    <select id="countByProductCode" resultType="int" parameterType="string">
+    <select id="countByProductCode" resultType="int" parameterType="int">
         SELECT COUNT(*) FROM product WHERE product_no = #{productNo}
     </select>
 
