@@ -6,7 +6,7 @@ import lombok.Data;
 public class AdminReviewDTO {
     private int payment_product_reviews_no;
     private String username;
-    private String product_name;
+    private String productName;
     private String content;
     private String rating;
     private String create_date;

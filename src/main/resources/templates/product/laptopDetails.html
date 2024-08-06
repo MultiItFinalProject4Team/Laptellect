@@ -54,7 +54,7 @@
             </table>
 
             <!-- 결제 폼 -->
-            <form th:action="@{/payment}" method="post">
+            <form th:action="@{/payment/payment}" method="post">
                 <input type="hidden" name="img" th:value="${img}">
                 <input type="hidden" name="productName" th:value="${productName}">
                 <input type="hidden" name="price" th:value="${price}">

@@ -3,6 +3,10 @@ const itemsPerPage = 12;
 let filteredOrders = [];
 let currentOrderId = null;
 
+function formatPrice(price) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원';
+}
+
 function renderTable() {
   const tableBody = document.getElementById('orderTableBody');
   const ordersToShow = filteredOrders.length > 0 ? filteredOrders : orders;
@@ -21,12 +25,11 @@ function renderTable() {
     const row = `
       <tr>
         <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
-        <td class="order-number-column">${order.payment_no}</td>
+        <td class="order-number-column"><span class="order-content" onclick="openModal(${order.payment_no})">${order.payment_no}</td>
         <td class="username-column">${order.username}</td>
-        <td class="product-name-column">${order.productname}</td>
-        <td class="product-info-column"><span class="order-content" onclick="openModal(${order.payment_no})">${order.productinfo}</span></td>
-        <td class="price-column">${order.productprice}</td>
-        <td class="purchase-price-column">${order.purchaseprice}</td>
+        <td class="product-name-column">${order.productName}</td>
+        <td class="price-column">${formatPrice(order.productPrice)}</td>
+        <td class="purchase-price-column">${formatPrice(order.purchasePrice)}</td>
         <td class="date-column">${order.date_created}</td>
         <td class="imPortId-column">${order.imPortId}</td>
         <td class="refund-column">${order.refund}</td>
@@ -119,7 +122,7 @@ function refundSelectedOrders() {
     .filter(checkbox => checkbox.checked && !checkbox.disabled)
     .map(checkbox => ({
       imPortId: checkbox.value,
-      amount: orders.find(order => order.imPortId === checkbox.value).purchaseprice
+      amount: orders.find(order => order.imPortId === checkbox.value).purchasePrice
     }));
 
   if (selectedOrders.length === 0) {
@@ -157,10 +160,9 @@ function openModal(orderId) {
   if (order) {
     document.getElementById('modalOrderNumber').textContent = order.payment_no;
     document.getElementById('modalUsername').textContent = order.username;
-    document.getElementById('modalProductName').textContent = order.productname;
-    document.getElementById('modalProductInfo').textContent = order.productinfo;
-    document.getElementById('modalProductPrice').textContent = order.productprice;
-    document.getElementById('modalPurchasePrice').textContent = order.purchaseprice;
+    document.getElementById('modalProductName').textContent = order.productName;
+    document.getElementById('modalProductPrice').textContent = formatPrice(order.productPrice);
+    document.getElementById('modalPurchasePrice').textContent = formatPrice(order.purchasePrice);
     document.getElementById('modalOrderDate').textContent = order.date_created;
     document.getElementById('modalimPortId').textContent = order.imPortId;
     document.getElementById('modalRefundStatus').textContent = order.refund;
@@ -170,7 +172,7 @@ function openModal(orderId) {
     if (order.refund === 'N') {
       modalRefundButton.style.display = 'block';
       modalRefundButton.disabled = false;
-      modalRefundButton.onclick = () => refundSingleOrder(order.imPortId, order.purchaseprice);
+      modalRefundButton.onclick = () => refundSingleOrder(order.imPortId, order.purchasePrice);
     } else {
       modalRefundButton.style.display = 'none';
     }
@@ -178,7 +180,6 @@ function openModal(orderId) {
     document.getElementById('orderModal').style.display = 'block';
   }
 }
-
 
 function refundSingleOrder(imPortId, amount) {
   if (confirm('이 주문을 환불하시겠습니까?')) {

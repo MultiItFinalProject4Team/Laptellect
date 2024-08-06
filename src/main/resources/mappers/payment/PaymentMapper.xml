@@ -4,16 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.laptellect.payment.model.dao.PaymentDAO">
 
-    <resultMap id="PaymentpageResultMap"
-               type="com.multi.laptellect.payment.model.dto.PaymentpageDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
-        <result column="username" property="username"/> <!-- 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) -->
-        <result column="productname" property="productname"/>
-        <result column="productinfo" property="productinfo"/>
-        <result column="date_created" property="date_created"/>
-        <result column="productprice" property="productprice"/>
-        <result column="im_port_id" property="imPortId"/>
+<!--    <resultMap id="PaymentpageResultMap"-->
+<!--               type="com.multi.laptellect.payment.model.dto.PaymentpageDTO"> &lt;!&ndash; db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 &ndash;&gt;-->
+<!--        <result column="username" property="username"/> &lt;!&ndash; 수정할 것. 테이블 컬럼(DB컬럼), property(dto 컬럼이름) &ndash;&gt;-->
+<!--        <result column="productname" property="productname"/>-->
+<!--        <result column="productinfo" property="productinfo"/>-->
+<!--        <result column="date_created" property="date_created"/>-->
+<!--        <result column="productprice" property="productprice"/>-->
+<!--        <result column="im_port_id" property="imPortId"/>-->
 
-    </resultMap>
+<!--    </resultMap>-->
 
     <resultMap id="PointResultMap"
                type="com.multi.laptellect.payment.model.dto.PaymentpointDTO"> <!-- db에서 받은 걸 dto로 result 값을 담아줌 dto에서 호출해서 쓰려고 -->
@@ -43,28 +43,25 @@
         <result property="modifyDate" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="selectpaymentpage" resultMap="PaymentpageResultMap">
-        SELECT * FROM paymentpage
-        WHERE username = 'jack'
-    </select>
+
+<!--    <select id="selectpaymentpage" resultMap="PaymentpageResultMap">-->
+<!--        SELECT * FROM paymentpage-->
+<!--        WHERE username = 'jack'-->
+<!--    </select>-->
 
     <insert id="insertPayment" parameterType="com.multi.laptellect.payment.model.dto.PaymentDTO">
         INSERT INTO payment (
         payment_no,
         username,
-        productname,
-        productinfo,
-        productprice,
-        purchaseprice,
+        product_name,
+        purchase_price,
         date_created,
         im_port_id
         ) VALUES (
         null,
         #{username},
-        #{productname},
-        #{productinfo},
-        #{productprice},
-        #{purchaseprice},
+        #{productName},
+        #{purchasePrice},
         NOW(),  <!-- 현재 시간을 자동으로 삽입 -->
         #{imPortId}
         )
@@ -211,4 +208,11 @@
         WHERE im_port_id = #{imPortId}
         ORDER BY payment_point_no ASC LIMIT 1
     </select>
+
+    <select id="findProduct" parameterType="com.multi.laptellect.payment.model.dto.PaymentpageDTO">
+        SELECT product_name, product_code, type_no, price, product_info, upload_name FROM view_paymentpage
+        where product_name = #{productName}
+    </select>
+
+
 </mapper>

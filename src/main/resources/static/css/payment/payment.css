@@ -1,106 +1,177 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f0f0f0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
 }
-.container {
-    display: flex;
-    flex-direction: column;
-    max-width: 1200px;
-    margin: 0 auto;
+
+.payment-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
-.main-content {
+
+.payment-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.payment-main-content {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
-.left-section {
-    width: 45%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
+
+.payment-left-section, .payment-right-section {
+    width: 48%;
 }
-.right-section {
-    width: 50%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-}
-h2 {
-    color: #333;
-    border-bottom: 1px solid #ddd;
+
+.section-title {
+    font-size: 1.4em;
+    color: #2c3e50;
+    margin-bottom: 20px;
     padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
 }
-.form-group {
-    margin-bottom: 15px;
+
+.payment-form-group {
+    margin-bottom: 20px;
 }
-label {
+
+.payment-form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #34495e;
 }
-input[type="text"], input[type="tel"] {
+
+.payment-form-group input[type="text"],
+.payment-form-group input[type="tel"] {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
     border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
 }
-.product-image {
-    width: 100%;
-    max-width: 400px;
-    display: block;
-    margin: 10px auto;
+
+.payment-form-group input[type="text"]:focus,
+.payment-form-group input[type="tel"]:focus {
+    border-color: #3498db;
+    outline: none;
 }
-.product-details {
+
+.product-info-container {
     text-align: center;
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #666;
 }
-.price-info {
-    background-color: white;
+
+.payment-product-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.product-name {
+    font-size: 1.2em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.product-details {
+    font-size: 0.9em;
+    color: #7f8c8d;
+}
+
+.payment-price-info {
+    background-color: #ecf0f1;
     padding: 20px;
     border-radius: 8px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
 }
-.price-row, .payment-row {
+
+.payment-price-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.1em;
 }
-.total-price {
+
+.payment-total-price {
     font-weight: bold;
-    font-size: 1.2em;
-    color: #e44d26;
+    font-size: 1.3em;
+    color: #e74c3c;
+    border-top: 1px solid #bdc3c7;
+    padding-top: 15px;
+    margin-top: 15px;
 }
-.payment-row input {
-    width: 60%;
-    padding: 8px;
-    border: 1px solid #ddd;
+
+.point-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+#pointInput {
+    width: 50%;
+    max-width: 130px;
+    height: 30px;
+    font-size: 14px;
+    padding: 4px;
+    border: 1px solid #bdc3c7;
     border-radius: 4px;
+    margin-right: 10px;
+    text-align: right; /* 입력 글자 오른쪽 정렬 */
 }
-.order-button {
-    background-color: #4CAF50;
+
+#pointUsageDisplay {
+    font-weight: 500;
+    color: #27ae60;
+    min-width: 60px;
+    text-align: right;
+}
+
+.payment-order-button {
+    background-color: #3498db;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     width: 100%;
     margin-top: 20px;
+    transition: background-color 0.3s;
 }
-.order-button:hover {
-    background-color: #45a049;
+
+.payment-order-button:hover {
+    background-color: #2980b9;
 }
-#pointInput {
-    width: 60%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+
+@media (max-width: 768px) {
+    .payment-main-content {
+        flex-direction: column;
+    }
+    .payment-left-section, .payment-right-section {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    .point-input-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #pointInput {
+        width: 80%;
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    #pointUsageDisplay {
+        text-align: left;
+    }
 }

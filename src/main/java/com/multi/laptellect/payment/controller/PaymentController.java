@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -62,17 +59,41 @@ public class PaymentController {
      * @param model 뷰단으로 데이터 이동
      * @return 결제페이지 열기
      */
-    @GetMapping("/payment")
-    public String selectpaymentpage(Model model) {
+//    @GetMapping("/payment")
+//    public String selectpaymentpage(Model model) {
+//        int memberNo = SecurityUtil.getUserNo();
+//        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+//
+//        PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
+//        PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
+//
+//        model.addAttribute("paymentpageDTO", paymentpageDTO);
+//        model.addAttribute("paymentpointDTO", paymentpointDTO);
+//        model.addAttribute("memberDTO", memberDTO);
+//
+//        return "/payment/payment";
+//    }
+
+    @PostMapping("/payment")
+    public String paymentpage(@RequestParam("img") String img,
+                              @RequestParam("productName") String productName,
+                              @RequestParam("price") int price,
+                              Model model) {
+        PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
+        paymentpageDTO.setImage(img);
+        paymentpageDTO.setPrice(400);
+
+
+        // 나머지 필요한 정보 설정
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-
-        PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
 
+//        model.addAttribute("paymentProductDTOList", paymentProductDTOList);
         model.addAttribute("paymentpageDTO", paymentpageDTO);
         model.addAttribute("paymentpointDTO", paymentpointDTO);
         model.addAttribute("memberDTO", memberDTO);
+
 
         return "/payment/payment";
     }
@@ -91,13 +112,14 @@ public class PaymentController {
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
             System.out.println(memberDTO);
 
-            PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
+            PaymentpageDTO paymentpageDTO = paymentService.findProduct(request.getProductName());
+
             PaymentDTO paymentDTO = new PaymentDTO();
             paymentDTO.setUsername(memberDTO.getMemberName());
-            paymentDTO.setProductinfo(paymentpageDTO.getProductinfo());
-            paymentDTO.setProductname(paymentpageDTO.getProductname());
-            paymentDTO.setProductprice(paymentpageDTO.getProductprice());
-            paymentDTO.setPurchaseprice(request.getAmount().intValue());
+//            paymentDTO.setProductinfo(paymentpageDTO.getProductInfo());
+            paymentDTO.setProductName(paymentpageDTO.getProductName());
+            paymentDTO.setProductPrice(paymentpageDTO.getPrice());
+            paymentDTO.setPurchasePrice(request.getAmount().intValue());
             paymentDTO.setImPortId(request.getImPortId());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);

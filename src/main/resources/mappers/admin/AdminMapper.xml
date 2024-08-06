@@ -19,10 +19,9 @@
                type="com.multi.laptellect.admin.model.dto.AdminOrderlistDTO">
         <result column="payment_no" property="payment_no"/>
         <result column="username" property="username"/>
-        <result column="productname" property="productname"/>
-        <result column="productinfo" property="productinfo"/>
-        <result column="productprice" property="productprice"/>
-        <result column="purchaseprice" property="purchaseprice"/>
+        <result column="product_name" property="productName"/>
+        <result column="productPrice" property="productPrice"/>
+        <result column="purchase_price" property="purchasePrice"/>
         <result column="date_created" property="date_created"/>
         <result column="im_port_id" property="imPortId"/>
         <result column="refund" property="refund"/>
@@ -49,8 +48,20 @@
     </delete>
 
     <select id="selectAllOrders" resultMap="AdminOrdersResultMap">
-        SELECT *
-        FROM payment
+        SELECT
+        p.payment_no,
+        p.username,
+        p.product_name,
+        pr.price AS productPrice,
+        p.purchase_price,
+        p.date_created,
+        p.im_port_id,
+        p.refund,
+        p.refund_date
+        FROM
+        payment p
+        LEFT JOIN
+        product pr ON p.product_name = pr.product_name
     </select>
 
     <select id="getLastSevenDaysSales" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">

@@ -3,11 +3,11 @@ package com.multi.laptellect.payment.model.dto;
 import lombok.Data;
 
 @Data
-public class PaymentpageDTO {
+public class PaymentProductDTO {
     private String productName;
     private String productCode;
     private String typeNo;
-    private int price;
-    private String productInfo;
-    private String image;
+    private String price;
+    private String optionsInfo;  // options와 option_value를 합친 정보
+    private String images;
 }

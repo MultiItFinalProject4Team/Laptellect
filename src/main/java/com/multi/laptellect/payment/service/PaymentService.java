@@ -157,6 +157,10 @@ public class PaymentService {
     }
 
 
+    public PaymentpageDTO findProduct(String productName) {
+        return paymentDAO.findProduct(productName);
+    }
+
     public PaymentpointDTO selectpoint(int memberNo) {
 
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);

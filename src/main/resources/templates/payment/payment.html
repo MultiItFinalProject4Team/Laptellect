@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+
 <head>
     <title>결제하기</title>
-    <!-- jQuery 라이브러리 로드 -->
+    <!-- 기존 스크립트 및 스타일시트 유지 -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <!-- 포트원(구 아임포트) 결제 라이브러리 로드 -->
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
@@ -14,62 +17,75 @@
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"
     ></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/payment/payment.css">
     <script src="/js/payment/payment.js"></script>
-
 </head>
 <body>
-<div class="container">
-    <div class="main-content">
-        <div class="left-section">
-            <h2>주문/결제</h2>
-            <form id="orderForm">
-                <div class="form-group">
-                    <label for="name">구매자 성함</label>
-                    <input type="text" id="name" name="name" th:value="${paymentpageDTO.username}" required>
+<div layout:fragment="content">
+    <div class="payment-container">
+        <h1 class="payment-title">주문 및 결제</h1>
+        <div class="payment-main-content">
+            <div class="payment-left-section">
+                <h2 class="section-title">주문 정보</h2>
+                <form id="orderForm">
+                    <div class="payment-form-group">
+                        <label for="name">구매자 성함</label>
+                        <input type="text" id="name" name="name" th:value="${memberDTO.memberName}" required>
+                    </div>
+                    <div class="payment-form-group">
+                        <label for="phone">연락처</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="payment-form-group">
+                        <label for="address">배송지 주소</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="payment-form-group">
+                        <label for="delivery_request">배송시 요청사항</label>
+                        <input type="text" id="delivery_request" name="delivery_request" required>
+                    </div>
+                </form>
+            </div>
+            <div class="payment-right-section">
+                <h2 class="section-title">상품 정보</h2>
+                <div class="product-info-container">
+                    <img th:src="@{'/img/product/' + ${paymentpageDTO.image}}" alt="Product Image" class="payment-product-image">
+                    <h3 class="product-name" th:text="${paymentpageDTO.productName}">상품명</h3>
+
+                    <!--            <div th:each="product : ${paymentProductDTOList}">-->
+                    <!--                <p align="center" class="payment-product-info" th:text="${product.optionsInfo}">상품 정보</p>-->
+                    <!--            </div>-->
                 </div>
-                <div class="form-group">
-                    <label for="phone">연락처</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">배송지 주소</label>
-                    <input type="text" id="address" name="address" required>
-                </div>
-                <div class="form-group">
-                    <label for="delivery_request">배송시 요청사항</label>
-                    <input type="text" id="delivery_request" name="delivery_request" required>
-                </div>
-            </form>
+            </div>
         </div>
-        <div class="right-section">
-            <h3 align="center" th:text="${paymentpageDTO.productname}">상품명</h3>
-            <img src="/img/payment/notebooktest.PNG" alt="Product Image" class="product-image">
-            <p align="center" th:text="${paymentpageDTO.productinfo}">상품 정보</p>
+        <div class="payment-price-info">
+            <div class="payment-price-row">
+                <span>판매가</span>
+                <span id="originalPrice" th:text="${#numbers.formatDecimal(paymentpageDTO.price, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+            </div>
+            <div class="payment-price-row">
+                <span>보유포인트</span>
+                <span th:text="${#numbers.formatDecimal(memberDTO.point, 0, 'COMMA', 0, 'POINT') + 'p'}"></span>
+            </div>
+            <div class="payment-price-row">
+                <span>포인트 사용</span>
+                <div class="point-input-container">
+                    <input type="text" id="pointInput" placeholder="포인트로 할인받기" onkeyup="updateTotalPrice()">
+                    <span id="pointUsageDisplay">0원</span>
+                </div>
+            </div>
+            <div class="payment-price-row payment-total-price">
+                <span>총 결제금액</span>
+                <span id="amount" th:text="${#numbers.formatDecimal(paymentpageDTO.price, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+            </div>
+            <button class="payment-order-button" onclick="mypayment()">결제하기</button>
         </div>
     </div>
-    <div class="price-info">
-        <div class="price-row">
-            <span>판매가</span>
-            <span id="originalPrice" th:text="${paymentpageDTO.productprice + '원'}">0원</span>
-        </div>
-        <div class="price-row">
-            <span>보유포인트 :</span>
-            <span th:text="${memberDTO.point + 'p'}"></span>
-            <input type="text" id="pointInput" placeholder="사용할 포인트 입력" onkeyup="updateTotalPrice()">
-            <span id="pointUsageDisplay">0원</span>
-        </div>
-        <div class="price-row total-price">
-            <span>총 결제금액</span>
-            <span id="amount" th:text="${paymentpageDTO.productprice + '원'}">0원</span>
-        </div>
-        <button class="order-button" onclick="mypayment()">결제하기</button>
-    </div>
+    <script th:inline="javascript">
+        var originalPrice = /*[[${paymentpageDTO.price}]]*/ 0;
+        var possessionPoint = /*[[${memberDTO.point}]]*/ 0;
+    </script>
 </div>
-<script th:inline="javascript">
-    // Thymeleaf 변수를 JavaScript 변수로 변환
-    var originalPrice = /*[[${paymentpageDTO.productprice}]]*/ 0;
-    var possessionPoint = /*[[${memberDTO.point}]]*/ 0;
-</script>
 </body>
 </html>

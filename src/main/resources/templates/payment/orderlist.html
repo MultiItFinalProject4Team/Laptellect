@@ -29,10 +29,9 @@
                 <img src="/img/payment/notebooktest.PNG" alt="Product Image">
                 <div class="order-details">
                     <p th:text="${order.date_created.substring(0, 10)}"></p>
-                    <h3 th:text="${order.productname}"></h3>
-                    <p th:text="${order.productinfo}"></p>
+                    <h3 th:text="${order.productName}"></h3>
                     <br><br>
-                    <p th:text="'가격: ' + ${order.purchaseprice} + '원 · 1개'"></p>
+                    <p th:text="'가격: ' + ${order.purchasePrice} + '원 · 1개'"></p>
                 </div>
             </div>
             <div class="order-actions">
@@ -40,14 +39,14 @@
                         th:classappend="${reviewedOrders.contains(order.imPortId)} ? 'disabled' : ''"
                         th:onclick="${!reviewedOrders.contains(order.imPortId)} ? 'cancelOrder(this.getAttribute(\'data-imp-uid\'), this.getAttribute(\'data-amount\'))' : 'void(0)'"
                         th:data-imp-uid="${order.imPortId}"
-                        th:data-amount="${order.purchaseprice}"
+                        th:data-amount="${order.purchasePrice}"
                         th:disabled="${reviewedOrders.contains(order.imPortId)}">
                     주문 취소하기
                 </button>
                 <button class="review-button"
                         th:classappend="${reviewedOrders.contains(order.imPortId)} ? 'reviewed' : ''"
                         th:onclick="${!reviewedOrders.contains(order.imPortId)} ? 'openReviewModal(this.getAttribute(\'data-product-name\'), this.getAttribute(\'data-username\'), this.getAttribute(\'data-imp-uid\'))' : 'void(0)'"
-                        th:data-product-name="${order.productname}"
+                        th:data-product-name="${order.productName}"
                         th:data-username="${order.username}"
                         th:data-imp-uid="${order.imPortId}"
                         th:disabled="${reviewedOrders.contains(order.imPortId)}">

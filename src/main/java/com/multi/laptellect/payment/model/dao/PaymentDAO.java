@@ -41,4 +41,6 @@ public interface PaymentDAO {
     int findReviewedPoint(String imPortId);
 
     int refundReviewdPoint(PaymentpointDTO paymentpointDTO);
+
+    PaymentpageDTO findProduct(String productName);
 }
