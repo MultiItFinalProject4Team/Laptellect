@@ -54,7 +54,11 @@ public class CartApiController {
             model.addAttribute("total", productTotal);
             model.addAttribute("Quantity", totalQuantity);
             model.addAttribute("totalPrice", productTotalPrice);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            model.addAttribute("total", 0);
+            model.addAttribute("Quantity", 0);
+            model.addAttribute("totalPrice", 0);
             log.error("장바구니 조회 실패 = ", e);
         }
 
