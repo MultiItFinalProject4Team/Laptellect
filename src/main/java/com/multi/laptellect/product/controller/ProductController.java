@@ -106,7 +106,7 @@ public class ProductController {
         productService.getProductByType(typeNo);
 
 
-        return "product/laptopList";
+        return "product/laptop/laptopList";
 
     }
 
@@ -114,7 +114,7 @@ public class ProductController {
     public String mouseList(){
         int typeNo = 2;
 
-        return "product/mouseList";
+        return "product/mouse/mouseList";
 
     }
 
@@ -123,7 +123,7 @@ public class ProductController {
         int typeNo = 3;
 
 
-        return "product/keyboardList";
+        return "product/keyboard/keyboardList";
 
     }
 
@@ -191,7 +191,7 @@ public class ProductController {
      * @param model       the model
      * @return the string
      */
-    @GetMapping("/laptopDetails")
+    @GetMapping("/laptop/laptopDetails")
     public String productDetails(@RequestParam(name = "productNo") int productNo,
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
@@ -224,7 +224,7 @@ public class ProductController {
 
         }
 
-        return "product/laptopDetails";
+        return "product/laptop/laptopDetails";
 
     }
 

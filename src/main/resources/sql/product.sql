@@ -86,6 +86,7 @@ create table review (
 -- 프로덕트 디테일 view
 CREATE VIEW vw_product_detail AS
 SELECT
+	p.product_no,
     p.product_name,
     p.product_code,
     p.type_no,
@@ -100,10 +101,7 @@ JOIN
 JOIN
     product_category c ON s.category_no = c.category_no
 JOIN
-    images i ON p.reference_code = i.reference_code
-WHERE
-    p.type_no = 1;
-
+    images i ON p.reference_code = i.reference_code;
 
     create view vw_spec_and_value as
     SELECT
