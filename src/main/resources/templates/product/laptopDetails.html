@@ -21,6 +21,7 @@
 
             // 위시리스트 추가/삭제
             $(".btn-process-wishlist").on("click", function () {
+                event.preventDefault();
                 let productNo = $(this).data('product-no');
                 console.log(productNo);
 
@@ -48,6 +49,7 @@
 
             // 장바구니 추가/삭제
             $(".btn-process-basket").on("click", function () {
+                event.preventDefault();
                 let productNo = $(this).data('product-no');
                 console.log(productNo);
 
@@ -98,8 +100,8 @@
             </table>
             <div>
 
-                <a class="btn btn-primary" href="#" role="button">장바구니</a>
-                <a class="btn btn-primary" href="#" role="button">위시리스트</a>
+                <a class="btn btn-primary btn-process-basket" th:attr="data-product-no=${productNo}" href="#" role="button">장바구니</a>
+                <a class="btn btn-primary btn-process-wishlist" th:attr="data-product-no=${productNo}" href="#" role="button">위시리스트</a>
                 <form th:action="@{/payment}" method="post">
                     <input type="hidden" name="productNo" th:value="${productNo}">
                     <input type="hidden" name="img" th:value="${img}">

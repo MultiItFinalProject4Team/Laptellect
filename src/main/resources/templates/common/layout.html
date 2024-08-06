@@ -42,7 +42,7 @@
                 </th:block>
 
                 <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                    <a href="/admin">어드민페이지</a>
+                    <a href="/admin/dashboard">어드민페이지</a>
                 </th:block>
 
                 <th:block sec:authorize="isAuthenticated()">
@@ -134,7 +134,7 @@
                 <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
                 <ul class="list-unstyled text-light footer-link-list">
                     <li><a class="text-decoration-none" href="/product/productList">노트북</a></li>
-                    <li><a class="text-decoration-none" href="/product/productList">키보드</a></li>
+                    <li><a class="text-decoration-none" href="/product/mouseList">키보드</a></li>
                     <li><a class="text-decoration-none" href="/product/productList">마우스</a></li>
                 </ul>
             </div>

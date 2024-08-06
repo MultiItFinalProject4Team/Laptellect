@@ -87,6 +87,7 @@ create table review (
 CREATE VIEW vw_product_detail AS
 SELECT
     p.product_name,
+    p.product_no,
     p.product_code,
     p.type_no,
     p.price,
