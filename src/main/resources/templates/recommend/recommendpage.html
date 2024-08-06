@@ -5,23 +5,46 @@
     <title>노트북 추천 결과</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        body { font-family: Arial, sans-serif; }
         .product-grid { display: flex; flex-wrap: wrap; }
         .product { margin: 10px; padding: 10px; border: 1px solid #ccc; width: 200px; }
         .brand-slider { display: flex; justify-content: space-around; margin-top: 20px; }
         .brand { text-align: center; }
         .promotions { display: flex; justify-content: space-around; margin-top: 20px; }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+        }
+        .button-container button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        #resultMessage {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 <div>
     <h1>추천</h1>
-    <ul>
-    </ul>
 </div>
 
 <div role="main">
     <div class="product-grid" id="recommendationResult">
-        <!-- 추천 결과 여기에다 추가 할 것 -->
+        <!-- 추천 결과가 여기에 추가됩니다 -->
     </div>
 
     <div class="brand-slider">
@@ -59,6 +82,13 @@
             <img src="promo2.jpg" alt="8월 사무용 최다 판매 제품">
         </div>
     </div>
+
+    <div class="button-container">
+        <button id="assignTagsBtn">태그 할당 시작</button>
+        <button id="toggleSchedulerBtn">스케줄러 시작</button>
+    </div>
+
+    <div id="resultMessage"></div>
 </div>
 
 <script>
@@ -69,18 +99,49 @@
         let html = '';
         recommendations.forEach(function(laptop) {
             html += `
-                    <div class="product">
-                        <img src="${laptop.imageUrl}" alt="${laptop.productName}">
-                        <h3>${laptop.productName}</h3>
-                        <p>가격: ${laptop.price}원</p>
-                        <div class="tags">
-                            ${laptop.tags.join(', ')}
-                        </div>
+                <div class="product">
+                    <img src="${laptop.imageUrl}" alt="${laptop.productName}">
+                    <h3>${laptop.productName}</h3>
+                    <p>가격: ${laptop.price}원</p>
+                    <div class="tags">
+                        ${laptop.tags.join(', ')}
                     </div>
-                `;
+                </div>
+            `;
         });
 
         $('#recommendationResult').html(html);
+
+        // 태그 할당 버튼 클릭 이벤트
+        $('#assignTagsBtn').click(function() {
+            $.ajax({
+                url: '/api/product-tags/assign',
+                method: 'POST',
+                success: function(response) {
+                    $('#resultMessage').text(response);
+                },
+                error: function(xhr, status, error) {
+                    $('#resultMessage').text('태그 할당 중 오류가 발생했습니다: ' + error);
+                }
+            });
+        });
+
+        // 스케줄러 토글 버튼 클릭 이벤트
+        let isSchedulerRunning = false;
+        $('#toggleSchedulerBtn').click(function() {
+            $.ajax({
+                url: '/api/product-tags/toggle-scheduler',
+                method: 'POST',
+                success: function(response) {
+                    isSchedulerRunning = !isSchedulerRunning;
+                    $('#toggleSchedulerBtn').text(isSchedulerRunning ? '스케줄러 중지' : '스케줄러 시작');
+                    $('#resultMessage').text(response);
+                },
+                error: function(xhr, status, error) {
+                    $('#resultMessage').text('스케줄러 토글 중 오류가 발생했습니다: ' + error);
+                }
+            });
+        });
     });
 </script>
 </body>

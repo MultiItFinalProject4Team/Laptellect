@@ -70,6 +70,8 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("laptopDTO", com.multi.laptellect.recommend.laptop.model.dto.LaptopDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("RecommendationRequestDTO", com.multi.laptellect.recommend.laptop.model.dto.RecommendationRequestDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("tagDTO", com.multi.laptellect.recommend.reviewtag.model.dto.TagDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("ProductDTO2", com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2.class);
+        configuration.getTypeAliasRegistry().registerAlias("TaggDTO", com.multi.laptellect.recommend.txttag.model.dto.TaggDTO.class);
 
 
 
