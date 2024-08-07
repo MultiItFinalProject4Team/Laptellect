@@ -326,6 +326,8 @@ public class CrawlingService {
         Elements manufacturerElements = doc.select("span#makerTxtArea");
         for (Element element : manufacturerElements) {
             String[] parts = element.text().split(": ");
+
+            log.info("parts 값 확인 합니다. = {}", parts);
             if (parts.length == 2) {
                 productDTO.setManufacturer(parts[1].trim());
             }
@@ -427,7 +429,7 @@ public class CrawlingService {
 
         categoryMap.put("LBI", Arrays.asList("운영체제(OS)", "제조사", "등록월", "무게", "두께", "스피커", "쿨링팬"));
         categoryMap.put("LR", Arrays.asList("램 타입", "램 용량", "램 슬롯", "램 대역폭", "램 교체"));
-        categoryMap.put("LC", Arrays.asList("CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS"));
+        categoryMap.put("LC", Arrays.asList( "CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS","CPU 제조사"));
         categoryMap.put("LS", Arrays.asList("저장 용량", "저장장치 종류", "저장 슬롯"));
         categoryMap.put("LD", Arrays.asList("화면 크기", "해상도", "패널 표면 처리", "주사율", "화면 밝기", "패널 종류"));
         categoryMap.put("LWC", Arrays.asList("무선랜", "USB", "USB-C", "USB-A", "블루투스", "썬더볼트4"));
@@ -487,6 +489,7 @@ public class CrawlingService {
         laptopSpecValue.add(getSpecValue(doc, "램 교체"));
 
         // 노트북 CPU (LC)
+
         laptopSpecValue.add(getSpecValue(doc, "CPU 종류"));
         laptopSpecValue.add(getSpecValue(doc, "CPU 코드명"));
         laptopSpecValue.add(getSpecValue(doc, "CPU 넘버"));
@@ -494,7 +497,7 @@ public class CrawlingService {
         laptopSpecValue.add(getSpecValue(doc, "스레드 수"));
         laptopSpecValue.add(getSpecValue(doc, "NPU 종류"));
         laptopSpecValue.add(getSpecValue(doc, "NPU TOPS"));
-
+        laptopSpecValue.add(getSpecValue(doc, "CPU 제조사"));
         // 노트북 저장관련 (LS)
         laptopSpecValue.add(getSpecValue(doc, "저장 용량"));
         laptopSpecValue.add(getSpecValue(doc, "저장장치 종류"));

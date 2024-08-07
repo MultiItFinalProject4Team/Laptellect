@@ -163,6 +163,7 @@ public class ProductServiceImpl implements ProductService {
         LaptopSpecDTO specDTO = new LaptopSpecDTO();
 
         // 상품 기본 정보 변수 설정
+        int productNo = laptopDetailsDTO.getProductNo();
         String productName = laptopDetailsDTO.getProductName();
         int price = laptopDetailsDTO.getPrice();
         String image = laptopDetailsDTO.getUploadName();
@@ -202,6 +203,7 @@ public class ProductServiceImpl implements ProductService {
                     case "LBI5" :
                         portability.setThickness(laptop.getOptionValue());
                         break;
+
                 }
 
             }
@@ -340,6 +342,7 @@ public class ProductServiceImpl implements ProductService {
         }
         log.info("상품 상세 정보 분류 완료");
 
+        specDTO.setProductNo(productNo);
         specDTO.setProductName(productName);
         specDTO.setPrice(String.valueOf(price));
         specDTO.setImage(image);
@@ -358,7 +361,6 @@ public class ProductServiceImpl implements ProductService {
 
         return specDTO;
     }
-
 
     //상품 전체 조회
     @Override
