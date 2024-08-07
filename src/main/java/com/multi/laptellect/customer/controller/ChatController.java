@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -31,9 +32,9 @@ public class ChatController {
     @Value("${spring.ncp.chatbot.url}")
     private String apiUrl;
 
-    @MessageMapping("/sendMessage")
-    @SendTo("/topic/public")
-    public String sendMessage(@Payload String chatMessage) throws IOException
+    @MessageMapping("/sendMessage/{roomId}")
+    @SendTo("/topic/public/{roomId}")
+    public String sendMessage(@DestinationVariable("roomId") String roomId, @Payload String chatMessage) throws IOException
     {
 
         URL url = new URL(apiUrl);

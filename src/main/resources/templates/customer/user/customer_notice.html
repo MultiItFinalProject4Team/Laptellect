@@ -1,48 +1,68 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{customer/layout/layout-customer}">
 <head>
     <meta charset="UTF-8">
     <title>공지사항</title>
     <link href="/css/customer/nav.css" rel="stylesheet">
+    <link href="/css/customer/table.css" rel="stylesheet">
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .form-select {
+            flex: 0 0 20%;
+        }
+        #categorySelect3 {
+            flex: 0 0 15%;
+        }
+        .form-control {
+            flex: 1;
+            width: 0;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-5">
-    <header>
-        <h1 align="center">고객센터</h1>
-        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
-            <li class="nav-item">
-                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_notice">공지사항</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link  cus_nav" href="/customer/user/customer_personalq">1:1 문의</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
-            </li>
-        </ul>
-    </header>
-
-<table class="table table-striped" style="text-align: center">
-    <thead>
-    <tr>
-        <th>No</th>
-        <th>제목</th>
-        <th>작성일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="note : ${list}" class="align-middle">
-        <td th:text="${note.No}">번호</td>
-        <td style="text-align: center;">
-            <a style="text-decoration: none;" th:href="@{/customer/user/notice_detail/{noticeNo}(noticeNo=${note.No})}" th:text="${note.No}"></a>
-        </td>
-        <td th:text="${note.createdAt}">작성일</td>
-    </tr>
-    </tbody>
-</table>
-</div>
+    <div class="container mt-5">
+        <header>
+            <h1 align="center">고객센터</h1>
+            <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_notice">공지사항</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  cus_nav" href="/customer/user/customer_personalq">1:1 문의</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
+                </li>
+            </ul>
+        </header>
+        <div class="fixed-table-container">
+        <table class="table table-striped fixed-table" style="text-align: center">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            <tr th:each="note : ${list}" class="align-middle">
+                <td th:text="${note.No}">번호</td>
+                <td style="text-align: center;">
+                    <a style="text-decoration: none;" th:href="@{/customer/user/notice_detail/{noticeNo}(noticeNo=${note.No})}" th:text="${note.No}"></a>
+                </td>
+                <td th:text="${note.createdAt}">작성일</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
     <div class="pagination-container">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
