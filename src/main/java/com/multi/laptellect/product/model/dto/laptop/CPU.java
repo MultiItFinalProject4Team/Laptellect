@@ -18,5 +18,6 @@ public class CPU {
     private String cpuNumber;
     private String cpuCore;
     private String cpuThread;
-
+    private String npu;
+    private String npuTops;
 }

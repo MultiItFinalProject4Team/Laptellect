@@ -1,6 +1,7 @@
 package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.*;
+import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -159,6 +157,207 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.findProductByProductNo(productNo);
     }
 
+    @Override
+    public LaptopSpecDTO getLaptopSpec(List<LaptopDetailsDTO> laptopDetails) {
+        LaptopDetailsDTO laptopDetailsDTO = laptopDetails.get(0);
+        LaptopSpecDTO specDTO = new LaptopSpecDTO();
+
+        // 상품 기본 정보 변수 설정
+        String productName = laptopDetailsDTO.getProductName();
+        int price = laptopDetailsDTO.getPrice();
+        String image = laptopDetailsDTO.getUploadName();
+        String productCode = laptopDetailsDTO.getProductCode();
+
+        // DTO 객체 변수 선언
+        AddOn addOn = new AddOn();
+        CPU cpu = new CPU();
+        Display display = new Display();
+        GPU gpu = new GPU();
+        Portability portability = new Portability();
+        Power power = new Power();
+        RAM ram = new RAM();
+        Storage storage = new Storage();
+
+        // 상품 정보를 LaptopSpecDTO에 넣기 위해 가공하기 위한 For문
+        log.debug("상품 상세 정보 분류 시작 = {}", laptopDetails);
+        for(LaptopDetailsDTO laptop : laptopDetails){
+            String categoryCode = laptop.getCategoryNo();
+
+            if(categoryCode.contains("LBI")){
+
+                switch (categoryCode){
+
+                    case "LBI1" :
+                        specDTO.setOs(laptop.getOptionValue());
+                        break;
+                    case "LBI2" :
+                        specDTO.setCompany(laptop.getOptionValue());
+                        break;
+                    case "LBI3" :
+                        specDTO.setRegistrationDate(laptop.getOptionValue());
+                        break;
+                    case "LBI4" :
+                        portability.setWeight(laptop.getOptionValue());
+                        break;
+                    case "LBI5" :
+                        portability.setThickness(laptop.getOptionValue());
+                        break;
+                }
+
+            }
+
+            if(categoryCode.contains("LC")) {
+                switch (categoryCode) {
+                    case "LC13":
+                        cpu.setCpuType(laptop.getOptionValue());
+                        break;
+                    case "LC14":
+                        cpu.setCpuCodeName(laptop.getOptionValue());
+                        break;
+                    case "LC15":
+                        cpu.setCpuCodeName(laptop.getOptionValue());
+                        break;
+                    case "LC16":
+                        cpu.setCpuCore(laptop.getOptionValue());
+                        break;
+                    case "LC17":
+                        cpu.setCpuThread(laptop.getOptionValue());
+                        break;
+                    case "LC18":
+                        cpu.setNpu(laptop.getOptionValue());
+                        break;
+                    case "LC19":
+                        cpu.setNpuTops(laptop.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("LD")) {
+                switch (categoryCode) {
+                    case "LD23":
+                        display.setScreenSize(laptop.getOptionValue());
+                        break;
+                    case "LD24":
+                        display.setResolution(laptop.getOptionValue());
+                        break;
+                    case "LD25":
+                        display.setPanelSurface(laptop.getOptionValue());
+                        break;
+                    case "LD26":
+                        display.setRefreshRate(laptop.getOptionValue());
+                        break;
+                    case "LD27":
+                        display.setBrightness(laptop.getOptionValue());
+                        break;
+                    case "LD28":
+                        display.setPanelType(laptop.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("LG")){
+                switch (categoryCode){
+                    case "LG35" :
+                        gpu.setGpuType(laptop.getOptionValue());
+                        break;
+                    case "LG36" :
+                        gpu.setGpuManufacturer(laptop.getOptionValue());
+                        break;
+                    case "LG37" :
+                        gpu.setGpuChipset(laptop.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("LPA")) {
+                switch (categoryCode) {
+                    case "LPA40":
+                        power.setBattery(laptop.getOptionValue());
+                        break;
+                    case "LPA41":
+                        power.setAdapter(laptop.getOptionValue());
+                        break;
+                    case "LPA42":
+                        power.setCharging(laptop.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("LR")){
+                switch (categoryCode){
+                    case "LR10" :
+                        ram.setRamSlot(laptop.getOptionValue());
+                        break;
+                    case "LR12" :
+                        ram.setRamChange(laptop.getOptionValue());
+                        break;
+                    case "LR8" :
+                       ram.setRamType(laptop.getOptionValue());
+                        break;
+                    case "LR9" :
+                       ram.setRamSize(laptop.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("LS")){
+                switch (categoryCode){
+                    case "LS20" :
+                        storage.setStorageCapacity(laptop.getOptionValue());
+                        break;
+                    case "LS21" :
+                        storage.setStorageType(laptop.getOptionValue());
+                        break;
+                    case "LS22" :
+                        storage.setStorageSlots(laptop.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("LWC")){
+                switch (categoryCode){
+                    case "LWC29" :
+                        addOn.setWirelessLan(laptop.getOptionValue());
+                        break;
+                    case "LWC30" :
+                        addOn.setUsb(laptop.getOptionValue());
+                        break;
+                    case "LWC31" :
+                        addOn.setUsbC(laptop.getOptionValue());
+                        break;
+                    case "LWC32" :
+                        addOn.setUsbA(laptop.getOptionValue());
+                        break;
+                    case "LWC33" :
+                        addOn.setBluetooth(laptop.getOptionValue());
+                        break;
+                    case "LWC34" :
+                        addOn.setThunderbolt(laptop.getOptionValue());
+                        break;
+                }
+            }
+            log.info("상품 상세 정보 분류 = {}", categoryCode);
+        }
+        log.info("상품 상세 정보 분류 완료");
+
+        specDTO.setProductName(productName);
+        specDTO.setPrice(String.valueOf(price));
+        specDTO.setImage(image);
+        specDTO.setProductCode(productCode);
+
+        specDTO.setAddOn(addOn);
+        specDTO.setCpu(cpu);
+        specDTO.setDisplay(display);
+        specDTO.setGpu(gpu);
+        specDTO.setPortability(portability);
+        specDTO.setPower(power);
+        specDTO.setRam(ram);
+        specDTO.setStorage(storage);
+
+        log.info("상품 상세 정보 분류 완료 = {}", specDTO);
+
+        return specDTO;
+    }
 
 
     //상품 전체 조회
@@ -213,5 +412,7 @@ public class ProductServiceImpl implements ProductService {
                 .filter(spec -> neededOptions.contains(spec.getOptions()))
                 .collect(Collectors.toList());
     }
+
+
 
 }

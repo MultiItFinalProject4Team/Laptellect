@@ -4,6 +4,7 @@ import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.WishlistDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -101,6 +102,8 @@ public interface ProductService {
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
 
     ProductDTO findProductByProductNo(String productNo) throws Exception;
-;
+
+    LaptopSpecDTO getLaptopSpec(List<LaptopDetailsDTO> laptopDetails);
+
 
 }
