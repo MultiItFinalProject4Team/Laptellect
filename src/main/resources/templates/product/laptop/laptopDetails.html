@@ -90,10 +90,19 @@
     <div class="row">
         <div class="col-md-4">
             <!-- 상품 이미지 -->
-            <img th:src="@{'/img/product/' + ${img}}" class="card-img-top" alt="상품 이미지" style="height: 400px; object-fit: contain;">
+            <img th:src="@{'/img/product/' + ${ laptop.image }}" class="card-img-top" alt="상품 이미지" style="height: 400px; object-fit: contain;">
             <div class="spec-box mt-3">
                 <!-- 상품 기본 정보 -->
-                <p th:utext="${details.specsString}"></p>
+                <ul class="list-unstyled">
+                    <li><strong>운영체제<span class="float-end" th:text="${ laptop.os }">Window 11</span></strong></li>
+                    <li><strong>화면 크기<span class="float-end"
+                                           th:text="${ laptop.display.screenSize }">15.6인치</span></strong></li>
+                    <li><strong>무게<span class="float-end"
+                                        th:text="${ laptop.portability.weight }">1.86kg</span></strong></li>
+                    <li><strong>해상도<span class="float-end"
+                                         th:text="${ laptop.display.resolution }">1920x1080(FHD)</span></strong></li>
+                    <li><strong>RAM<span class="float-end" th:text="${ laptop.ram.ramSize }">16GB</span></strong></li>
+                </ul>
             </div>
             <div class="mt-2">
 
@@ -104,7 +113,7 @@
             <div class="row">
                 <div class="col-12 mb-1" id="product-name">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4 th:text="${productName}"></h4>
+                        <h4 th:text="${ laptop.productName }"></h4>
                         <div class="d-flex justify-content-end align-items-center">
                             <div style="margin-left: 1rem !important;">
                                 <a class="btn-process-wishlist" href="#" th:attr="data-product-no=${productNo}">
@@ -127,7 +136,7 @@
                 <div class="col-7">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="mb-2">
-                            <span><strong>가격 : <span class="price" th:text="${ price }"></span></strong></span>
+                            <span><strong>가격 : <span class="price" th:text="${ laptop.price }"></span></strong></span>
                             <button class="btn btn-sm btn-custom-primary ms-4">구매하기</button>
                         </div>
                     </div>
@@ -179,237 +188,237 @@
             </div>
         </div>
 
-    <div class="row">
-        <div class="col-12 mt-4">
-            <h4><strong>상품 상세 정보</strong></h4>
-        </div>
-        <hr>
-
-        <div id="spec-box">
+        <div class="row">
             <div class="col-12 mt-4">
-                <h6><strong>기본사양</strong></h6>
+                <h4><strong>상품 상세 정보</strong></h4>
+            </div>
+            <hr>
+
+            <div id="spec-box">
+                <div class="col-12 mt-4">
+                    <h6><strong>기본사양</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>화면 정보</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>단자</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>부가기능</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>입력장치</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="col-12 mt-4">
+                    <h6><strong>전원</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-
             <div class="col-12 mt-4">
-                <h6><strong>화면 정보</strong></h6>
+                <h4><strong>의견/리뷰</strong></h4>
+            </div>
+            <hr>
+            <div id="customer-box">
+
             </div>
 
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
+            <div id="review-box">
 
-            <div class="col-12 mt-4">
-                <h6><strong>단자</strong></h6>
             </div>
 
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
+            <div id="crolling-box">
 
-            <div class="col-12 mt-4">
-                <h6><strong>부가기능</strong></h6>
             </div>
 
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-
             <div class="col-12 mt-4">
-                <h6><strong>입력장치</strong></h6>
+                <h4><strong>연관상품</strong></h4>
             </div>
+            <hr>
 
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="col-12 mt-4">
-                <h6><strong>전원</strong></h6>
+            <div id="recommend-box">
+
             </div>
-
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-12 mt-4">
-            <h4><strong>의견/리뷰</strong></h4>
-        </div>
-        <hr>
-        <div id="customer-box">
-
-        </div>
-
-        <div id="review-box">
-
-        </div>
-
-        <div id="crolling-box">
-
-        </div>
-
-        <div class="col-12 mt-4">
-            <h4><strong>연관상품</strong></h4>
-        </div>
-        <hr>
-
-        <div id="recommend-box">
-
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

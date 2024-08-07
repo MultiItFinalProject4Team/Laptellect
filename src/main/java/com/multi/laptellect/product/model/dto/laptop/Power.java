@@ -11,5 +11,7 @@ import lombok.Data;
  */
 @Data
 public class Power {
-    private String powerSwitch;
+    private String battery; // 배터리 용량
+    private String charging; // 전원 충전 타입 USB-PD 등
+    private String adapter; // 어댑터 W
 }
