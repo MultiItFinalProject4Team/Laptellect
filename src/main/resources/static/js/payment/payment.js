@@ -1,13 +1,21 @@
 // 전역 변수 선언
-let username, productname, productinfo, productprice;
+let userName, productName, productPrice;
+
+// 숫자 포맷팅 함수
+function formatNumber(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}
 
 // DOM이 로드된 후 실행될 함수
 document.addEventListener('DOMContentLoaded', function() {
     // Thymeleaf에서 전달된 데이터를 JavaScript 변수에 할당
-    username = document.getElementById('name').value;
-    productname = document.querySelector('h3').textContent;
-    productinfo = document.querySelector('.right-section p').textContent;
-    productprice = document.getElementById('amount').textContent;
+    userName = document.getElementById('name').value;
+    productName = document.querySelector('h3').textContent;
+    productPrice = document.getElementById('amount').textContent.replace(/[^\d]/g, '');
+
+    // 초기 가격 설정
+    document.getElementById('originalPrice').textContent = formatNumber(originalPrice) + '원';
+    document.getElementById('amount').textContent = formatNumber(originalPrice) + '원';
 
     // 초기 총 결제금액 설정
     updateTotalPrice();
@@ -18,12 +26,12 @@ function updateTotalPrice() {
     const pointUsageDisplay = document.getElementById('pointUsageDisplay');
     const amountDisplay = document.getElementById('amount');
 
-    let pointValue = parseInt(pointInput.value) || 0;
+    let pointValue = parseInt(pointInput.value.replace(/,/g, '')) || 0;
 
     // 입력된 포인트가 보유 포인트를 초과하지 않도록 제한
     if (pointValue > possessionPoint) {
         pointValue = possessionPoint;
-        pointInput.value = pointValue;
+        pointInput.value = formatNumber(pointValue);
     }
 
     let totalPrice = originalPrice - pointValue;
@@ -33,16 +41,16 @@ function updateTotalPrice() {
         alert("총 결제금액이 100원보다 작아질 수 없습니다");
         totalPrice = 100;
         pointValue = originalPrice - 100;
-        pointInput.value = pointValue;
+        pointInput.value = formatNumber(pointValue);
     }
 
-    pointUsageDisplay.textContent = pointValue + '원';
-    amountDisplay.textContent = totalPrice + '원';
+    pointUsageDisplay.textContent = formatNumber(pointValue) + '원';
+    amountDisplay.textContent = formatNumber(totalPrice) + '원';
 }
 
 function mypayment() {
-    const myAmount = Number(document.getElementById("amount").textContent.replace('원', ''));
-    const usedPoints = Number(document.getElementById("pointInput").value) || 0;
+    const myAmount = Number(document.getElementById("amount").textContent.replace(/[^\d]/g, ''));
+    const usedPoints = Number(document.getElementById("pointInput").value.replace(/,/g, '')) || 0;
     const IMP = window.IMP;
     IMP.init("imp64527455");
 
@@ -50,10 +58,10 @@ function mypayment() {
         {
             pg: "html5_inicis",
             pay_method: "card",
-            name: productname,
+            name: productName,
             amount: myAmount,
             buyer_email: "gildong@gmail.com",
-            buyer_name: username,
+            buyer_name: userName,
             buyer_tel: "010-4242-4242",
             buyer_addr: "서울특별시 강남구 신사동",
             buyer_postcode: "01181",
@@ -65,7 +73,8 @@ function mypayment() {
                     const { data } = await axios.post('/payment/verifyPayment', {
                         imPortId: rsp.imp_uid,
                         amount: myAmount,
-                        usedPoints: usedPoints
+                        usedPoints: usedPoints,
+                        productName: productName  // 추가된 부분
                     });
 
                     if (data.success) {
@@ -81,6 +90,7 @@ function mypayment() {
                     await cancelPayment(rsp.imp_uid, myAmount);
                     console.log("Sending amount to server:", myAmount);
                     console.log("Used points:", usedPoints);
+                    console.log("Product name:", productName);
                     alert("검증 실패로 인해 결제가 취소되었습니다: " + error.response.data);
                 }
             } else {

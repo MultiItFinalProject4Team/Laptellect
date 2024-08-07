@@ -49,11 +49,14 @@ public class MybatisConfig {
         // Type Aliases 설정
         configuration.getTypeAliasRegistry().registerAlias("pageable", org.springframework.data.domain.Pageable.class);
 
-        configuration.getTypeAliasRegistry().registerAlias("paymentpageDTO", PaymentpageDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("orderlistDTO", OrderlistDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("PaymentDTO", PaymentDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("paymentReviewDTO", PaymentReviewDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("paymentpointDTO", PaymentpointDTO.class);
+
+        configuration.getTypeAliasRegistry().registerAlias("paymentpageDTO", com.multi.laptellect.payment.model.dto.PaymentpageDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("orderlistDTO", com.multi.laptellect.payment.model.dto.OrderlistDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("PaymentDTO", com.multi.laptellect.payment.model.dto.PaymentDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("paymentReviewDTO", com.multi.laptellect.payment.model.dto.PaymentReviewDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("paymentpointDTO", com.multi.laptellect.payment.model.dto.PaymentpointDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("paymentProductDTO", com.multi.laptellect.payment.model.dto.PaymentProductDTO.class);
+
 
         configuration.getTypeAliasRegistry().registerAlias("adminReviewDTO", AdminReviewDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("adminOrderlistDTO", AdminOrderlistDTO.class);
