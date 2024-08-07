@@ -1,35 +1,51 @@
-        /* 테이블 스타일 */
-        .fixed-table {
-            width: 100%; /* 테이블 전체 너비 */
-            table-layout: fixed; /* 테이블 레이아웃을 고정으로 설정 */
-        }
+/* 테이블 스타일 */
+.fixed-table {
+    width: 100%; /* 테이블 전체 너비 */
+    table-layout: fixed; /* 테이블 레이아웃을 고정으로 설정 */
+    border-collapse: collapse; /* 셀 간 경계 제거 */
+}
 
-       /* 테이블 헤더 및 셀 스타일 */
-        .fixed-table th, .fixed-table td {
-        }
+/* 테이블 헤더 및 셀 스타일 */
+.fixed-table th, .fixed-table td {
+    padding: 12px; /* 셀 안쪽 여백 */
+}
 
-        .fixed-table th {
-            text-align: center; /* 헤더 텍스트 정렬 */
-        }
+/* 테이블 헤더 스타일 */
+.fixed-table th {
+    background-color: #f4f4f4; /* 헤더 배경색 */
+    color: #333; /* 헤더 텍스트 색상 */
+    text-align: center; /* 헤더 텍스트 정렬 */
+    font-weight: bold; /* 헤더 텍스트 굵게 */
+}
 
-        /* 각 셀의 고정된 너비 설정 */
-        .fixed-table th:nth-child(1), .fixed-table td:nth-child(1) {
-            width: 5%; /* No 열 너비 */
-        }
+/* 각 셀의 고정된 너비 설정 */
+.fixed-table th:nth-child(1), .fixed-table td:nth-child(1) {
+    width: 5%; /* No 열 너비 */
+}
 
-        .fixed-table th:nth-child(2), .fixed-table td:nth-child(2) {
-            width: 70%; /* 제목 열 너비 */
-        }
+.fixed-table th:nth-child(2), .fixed-table td:nth-child(2) {
+    width: 70%; /* 제목 열 너비 */
+}
 
-        .fixed-table th:nth-child(3), .fixed-table td:nth-child(3) {
-            width: 10%; /* 답변 여부 열 너비 */
-        }
+.fixed-table th:nth-child(3), .fixed-table td:nth-child(3) {
+    width: 10%; /* 답변 여부 열 너비 */
+}
 
-        .fixed-table th:nth-child(4), .fixed-table td:nth-child(4) {
-            width: 15%; /* 작성일 열 너비 */
-        }
+.fixed-table th:nth-child(4), .fixed-table td:nth-child(4) {
+    width: 15%; /* 작성일 열 너비 */
+}
 
-        .fixed-table-container {
+/* 테이블 행 스타일 */
+.fixed-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* 짝수 행 배경색 */
+}
+
+.fixed-table tr:hover {
+    background-color: #f1f1f1; /* 행 호버 시 배경색 */
+}
+
+/* 테이블 컨테이너 스타일 */
+.fixed-table-container {
             width: 100%; /* 원하는 너비로 설정 */
-            height: 470px; /* 원하는 높이로 설정 */
+            height: 550px; /* 원하는 높이로 설정 */
         }
