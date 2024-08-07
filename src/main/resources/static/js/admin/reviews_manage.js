@@ -20,14 +20,14 @@ function renderTable() {
   pageReviews.forEach(review => {
     const row = `
       <tr>
-        <td class="checkbox-column"><input type="checkbox" name="reviewCheck" value="${review.payment_product_reviews_no}"></td>
-        <td class="review-number-column">${review.payment_product_reviews_no}</td>
-        <td class="product-name-column">${review.product_name}</td>
-        <td class="author-column">${review.username}</td>
-        <td class="content-column"><span class="review-content" onclick="openModal(${review.payment_product_reviews_no})">${review.content}</span></td>
+        <td class="checkbox-column"><input type="checkbox" name="reviewCheck" value="${review.paymentProductReviewsNo}"></td>
+        <td class="review-number-column"><span class="review-content" onclick="openModal(${review.paymentProductReviewsNo})">${review.paymentProductReviewsNo}</td>
+        <td class="product-name-column">${review.productName}</td>
+        <td class="author-column">${review.memberName}</td>
+        <td class="content-column">${review.content}</span></td>
         <td class="rating-column">${review.rating}점</td>
-        <td class="date-column">${review.create_date}</td>
-        <td class="date-column">${review.modify_date != null ? review.modify_date : '수정사항없음'}</td>
+        <td class="date-column">${review.createdAt}</td>
+        <td class="date-column">${review.modifyAt != null ? review.modifyAt : '수정사항없음'}</td>
       </tr>
     `;
     tableBody.innerHTML += row;
@@ -44,25 +44,19 @@ function showNoResultsMessage() {
 }
 
 function renderPagination() {
-  const totalReviews = filteredReviews.length > 0 ? filteredReviews.length : reviews.length;
-  const totalPages = Math.ceil(totalReviews / itemsPerPage);
+  const totalPages = Math.ceil((filteredReviews.length > 0 ? filteredReviews.length : reviews.length) / itemsPerPage);
   const pageNumbers = document.getElementById('pageNumbers');
   pageNumbers.innerHTML = '';
 
-  if (totalReviews === 0) {
-    document.getElementById('prevButton').disabled = true;
-    document.getElementById('nextButton').disabled = true;
-    return;
-  }
-
   for (let i = 1; i <= totalPages; i++) {
-    const button = document.createElement('button');
-    button.textContent = i;
-    button.onclick = () => changePage(i);
+    const pageNumber = document.createElement('span');
+    pageNumber.textContent = i;
+    pageNumber.classList.add('page-number');
     if (i === currentPage) {
-      button.classList.add('active');
+      pageNumber.classList.add('active');
     }
-    pageNumbers.appendChild(button);
+    pageNumber.onclick = () => changePage(i);
+    pageNumbers.appendChild(pageNumber);
   }
 
   document.getElementById('prevButton').disabled = currentPage === 1;
@@ -70,17 +64,13 @@ function renderPagination() {
 }
 
 function changePage(page) {
-  const totalReviews = filteredReviews.length > 0 ? filteredReviews.length : reviews.length;
-  const totalPages = Math.ceil(totalReviews / itemsPerPage);
-
-  if (page === 'prev' && currentPage > 1) {
-    currentPage--;
-  } else if (page === 'next' && currentPage < totalPages) {
-    currentPage++;
-  } else if (typeof page === 'number') {
+  if (typeof page === 'number') {
     currentPage = page;
+  } else if (page === 'prev' && currentPage > 1) {
+    currentPage--;
+  } else if (page === 'next' && currentPage < Math.ceil(reviews.length / itemsPerPage)) {
+    currentPage++;
   }
-
   renderTable();
   renderPagination();
 }
@@ -104,7 +94,7 @@ function searchReviews() {
 
   if (filteredReviews.length === 0) {
     showNoResultsMessage();
-    renderPagination(); // 페이지네이션 업데이트
+    renderPagination();
   } else {
     renderTable();
     renderPagination();
@@ -133,7 +123,7 @@ function deleteSelectedReviews() {
     .then(data => {
       if (data.success) {
         alert('선택한 리뷰가 삭제되었습니다.');
-        location.reload(); // 페이지 새로고침
+        location.reload();
       } else {
         alert('리뷰 삭제 중 오류가 발생했습니다.');
       }
@@ -147,15 +137,15 @@ function deleteSelectedReviews() {
 
 function openModal(reviewId) {
   currentReviewId = reviewId;
-  const review = reviews.find(r => r.payment_product_reviews_no === reviewId);
+  const review = reviews.find(r => r.paymentProductReviewsNo === reviewId);
   if (review) {
-    document.getElementById('modalReviewNumber').textContent = review.payment_product_reviews_no;
-    document.getElementById('modalAuthor').textContent = review.username;
-    document.getElementById('modalProductName').textContent = review.product_name;
+    document.getElementById('modalReviewNumber').textContent = review.paymentProductReviewsNo;
+    document.getElementById('modalAuthor').textContent = review.memberName;
+    document.getElementById('modalProductName').textContent = review.productName;
     document.getElementById('modalRating').textContent = review.rating + '점';
     document.getElementById('modalContent').textContent = review.content;
-    document.getElementById('modalCreateDate').textContent = review.create_date;
-    document.getElementById('modalModifyDate').textContent = review.modify_date != null ? review.modify_date : '수정사항없음';
+    document.getElementById('modalCreateDate').textContent = review.createdAt;
+    document.getElementById('modalModifyDate').textContent = review.modifyAt != null ? review.modifyAt : '수정사항없음';
 
     document.getElementById('reviewModal').style.display = 'block';
   }
@@ -179,7 +169,7 @@ function deleteSingleReview() {
       if (data.success) {
         alert('리뷰가 삭제되었습니다.');
         closeModal();
-        location.reload(); // 페이지 새로고침
+        location.reload();
       } else {
         alert('리뷰 삭제 중 오류가 발생했습니다.');
       }

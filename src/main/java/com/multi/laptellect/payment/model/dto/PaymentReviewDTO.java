@@ -4,9 +4,15 @@ import lombok.Data;
 
 @Data
 public class PaymentReviewDTO {
-    private String productName;
-    private String username;
-    private String rating;
+    private int paymentProductReivewsNo;
+    private int memberNo;
+    private int productNo;
+    private char tagAnswer;
     private String content;
+    private String rating;
     private String imPortId;
+    private String createdAt;
+    private String modifyAt;
+    private String productName;
+    private String userName;
 }
