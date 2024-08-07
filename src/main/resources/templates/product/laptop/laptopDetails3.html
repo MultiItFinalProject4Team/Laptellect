@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{common/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/product/productDetail.css}">
+    <script>
+        $(document).ready(function() {
+            $('.price').each(function() {
+                let value = $(this).data('price');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).html(formattedValue + ' <span class="currency">원</span>');
+            });
+
+            // 위시리스트 추가/삭제
+            $(".btn-process-wishlist").on("click", function () {
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-wishlist",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("위시리스트 추가 완료.");
+                            break;
+                          case 2:
+                            alert("위시리스트 삭제 완료.");
+                            break;
+                          default:
+                            alert("위시리스트 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+            // 장바구니 추가/삭제
+            $(".btn-process-basket").on("click", function () {
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+        });
+    </script>
+</head>
+<body>
+
+<div class="container" layout:fragment="content">
+    <br>
+    <div class="row">
+        <div class="col-md-4">
+            <!-- 상품 이미지 -->
+            <img th:src="@{'/img/product/' + ${img}}" class="product-image" alt="상품 이미지">
+            <div>
+                <p th:utext="${details.specsString}"></p>
+            </div>
+
+        </div>
+        <div class="col-md-8">
+            <h2 th:text="${productName}">상품명</h2>
+            <div class="col-md-4">
+
+            </div>
+
+            <div class="price-btn-container">
+                <h4 class="price" th:data-price="${price}" th:text="${price + '원'}">가격</h4>
+            </div>
+            <div>
+                <a class="btn btn-primary btn-process-basket" th:attr="data-product-no=${productNo}" href="#"
+                   role="button">장바구니</a>
+                <a class="btn btn-primary btn-process-wishlist" th:attr="data-product-no=${productNo}" href="#"
+                   role="button">위시리스트</a>
+            </div>
+            <div class="price-btn-container">
+                <form th:action="@{/payment}" method="post" class="btn-container">
+                    <input type="hidden" name="productNo" th:value="${productNo}">
+                    <input type="hidden" name="img" th:value="${img}">
+                    <input type="hidden" name="productName" th:value="${productName}">
+                    <input type="hidden" name="price" th:value="${price}">
+                    <button type="submit" class="btn btn-primary btn-submit">결제하기</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="spec-details-tab" data-toggle="tab" href="#spec-details" role="tab"
+               aria-controls="spec-details" aria-selected="true">상품 상세정보</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+               aria-selected="false">리뷰</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="question-tab" data-toggle="tab" href="#question" role="tab" aria-controls="question"
+               aria-selected="false">문의</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="recommend-tab" data-toggle="tab" href="#recommend" role="tab"
+               aria-controls="recommend" aria-selected="false">추천</a>
+        </li>
+    </ul>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <table class="table-spec" id="spec-details">
+                <thead>
+                <tr>
+                    <th>스펙명</th>
+                    <th>스펙값</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="option, iter : ${options}">
+                    <td th:text="${option}">스펙명</td>
+                    <td th:text="${optionValue[iter.index]}">스펙값</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+            <div class="row review-container mt-4">
+                <div class="col-md-12">
+                    <h4>상품의견</h4>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" placeholder="여기에 의견을 입력하세요..."></textarea>
+                    <button class="btn btn-primary review-submit mt-3">제출</button>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="question" role="tabpanel" aria-labelledby="question-tab">
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <!-- 문의 섹션 내용 추가 -->
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="recommend" role="tabpanel" aria-labelledby="recommend-tab">
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <!-- 추천 섹션 내용 추가 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

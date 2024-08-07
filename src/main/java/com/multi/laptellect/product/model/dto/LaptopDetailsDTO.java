@@ -2,6 +2,8 @@ package com.multi.laptellect.product.model.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Please explain the class!!
  *
@@ -20,6 +22,7 @@ public class LaptopDetailsDTO {
     private String options;
     private String optionValue;
     private String uploadName;
+    private String specsString;
 
-
+    private List<SpecDTO> specs;
 }

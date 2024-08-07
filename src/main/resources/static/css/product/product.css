@@ -74,3 +74,10 @@ ul li:active .btn-custom { background-color: #236097 !important; }
         font-size: 1.25em;
         text-align: right
     }
+
+
+            .product-image {
+               max-width: 200px; /* 이미지 최대 너비를 200px로 설정 */
+                  height: 200px; /* 이미지 높이를 200px로 설정 */
+                  margin-right: 20px;
+            }

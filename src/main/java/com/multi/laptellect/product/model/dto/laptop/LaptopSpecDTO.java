@@ -1,6 +1,9 @@
 package com.multi.laptellect.product.model.dto.laptop;
 
+import com.multi.laptellect.product.model.dto.SpecDTO;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * Please explain the class!!
@@ -32,5 +35,7 @@ public class LaptopSpecDTO {
     private Power power;
     private Portability portability;
     private AddOn addOn;
+
+
 
 }
