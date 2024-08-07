@@ -11,4 +11,14 @@ public class RecommendProductDTO {
     private String productCode;
     private String referenceCode;
     private List<String> tags;
+    private String imageUrl;
+    private String os;
+    private String manufacturer;
+    private String ramSize;
+    private String cpuNumber;
+    private String coreCount;
+    private String storageSize;
+    private String screenSize;
+    private String resolution;
+    private String gpuType;
 }

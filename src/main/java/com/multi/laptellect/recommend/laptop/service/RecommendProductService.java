@@ -13,16 +13,12 @@ import java.util.Map;
 public class RecommendProductService {
 
     @Autowired
-    private RecommendProductDAO recommendProductDAO; // RecommendProductDAO 인터페이스를 구현한 DAO 클래스를 주입받음
-
-    @Autowired
-    public RecommendProductService(RecommendProductDAO recommendProductDAO) {
-        this.recommendProductDAO = recommendProductDAO;
-    }
+    private RecommendProductDAO recommendProductDAO;
 
     public List<RecommendProductDTO> getRecommendations(Map<String, String> surveyResults) {
-        Map<String, Object> searchCriteria = createSearchCriteria(surveyResults); // 설문 결과를 기반으로 검색 조건을 생성
-        return recommendProductDAO.getRecommendedProducts(searchCriteria); // 생성된 검색 조건을 DAO에 전달하여 추천 상품 목록을 조회
+        Map<String, Object> searchCriteria = createSearchCriteria(surveyResults);
+        System.out.println("Search Criteria: " + searchCriteria);
+        return recommendProductDAO.getRecommendedProducts(searchCriteria);
     }
 
     private Map<String, Object> createSearchCriteria(Map<String, String> surveyResults) {
@@ -31,38 +27,65 @@ public class RecommendProductService {
         String mainOption = surveyResults.get("mainOption");
         if ("게이밍".equals(mainOption)) {
             criteria.put("gpuTags", getGpuTags(surveyResults.get("game")));
-        } else {
+        } else if ("사무용".equals(mainOption)) {
             criteria.put("cpuTags", getCpuTags(surveyResults.get("purpose")));
         }
 
-        criteria.put("weightTag", getWeightTag(surveyResults.get("place"))); // 가벼운지 무거운지
+        criteria.put("weightTag", getWeightTag(surveyResults.get("place")));
         criteria.put("screenSizeTag", getScreenSizeTag(surveyResults.get("screen")));
         criteria.put("batteryTag", getBatteryTag(surveyResults.get("priority")));
         criteria.put("designTag", getDesignTag(surveyResults.get("priority")));
-        criteria.put("performanceTag", getPerformanceTag(surveyResults.get("performance"))); // 성능 우선 순위가 높을 경우 성능 태그 부여
+        criteria.put("performanceTag", getPerformanceTag(surveyResults.get("performance")));
+
 
         return criteria;
     }
-//일단 조건 해놨고 나머지는 차차 하드 코딩 예정
+
     private List<String> getGpuTags(String gameType) {
+        if (gameType == null) {
+            return List.of();
+        }
         switch (gameType) {
             case "스팀게임/FPS 게임":
-                return List.of("GeForce RTX 4090", "GeForce RTX 4080", "Radeon RX 7900M");
+                return List.of("geforce rtx 4090", "geforce rtx 4080", "radeon rx 7900m", "radeon 610m ryzen 9 7845hx",
+                        "geforce rtx 3080 ti", "geforce rtx 4070", "geforce rtx 3070 ti", "geforce rtx 4060",
+                        "radeon rx 6850m xt", "geforce rtx 3080", "rtx a5000", "geforce rtx 3070",
+                        "radeon rx 6800s", "rtx a4000", "geforce rtx 2080");
             case "온라인 게임":
-                return List.of("Radeon RX 6650M", "Radeon RX 6700S", "GeForce RTX 4050");
+                return List.of("radeon rx 6650m", "radeon rx 6700s", "quadro rtx 5000", "geforce rtx 4050",
+                        "radeon rx 7600s", "radeont rx 6850m xt", "geforce rtx 2080 super", "geforce rtx 2070 super",
+                        "radeon rx 6600m", "radeon rx 6600s", "radeon pro w6600m", "radeon rx 6700m",
+                        "geforce rtx 3060", "radeon rx 6800m", "geforce rtx 2080", "quadro rtx 4000",
+                        "rtx a3000", "geforce rtx 2070");
             case "AOS게임":
-                return List.of("Quadro P5200", "Radeon RX 6850M", "GeForce RTX 2070");
+                return List.of("quadro p5200", "radeon rx 6850m", "geforce rtx 2070", "geforce gtx 1080",
+                        "radeon rx 7600m xt", "intel arc a770m", "geforce rtx 2060", "quadro rtx 3000",
+                        "geforce gtx 1070", "geforce rtx 3050", "geforce gtx 1660 ti", "rtx a2000",
+                        "radeon rx 6550m", "radeon pro 5600m", "quadro p4000", "radeon rx 5600m");
             default:
                 return List.of();
         }
     }
 
     private List<String> getCpuTags(String purpose) {
+        if (purpose == null) {
+            return List.of();
+        }
         switch (purpose) {
             case "코딩할거에요":
-                return List.of("AMD Ryzen 9 7945HX3D", "Intel Core i9-13980HX", "AMD Ryzen 9 7845HX");
+                return List.of("amd ryzen 9 7945hx3d", "amd ryzen 9 7945hx", "amd ryzen 9 7940hx",
+                        "intel core i9-13980hx", "intel core i9-14900hx", "amd ryzen 9 7845hx",
+                        "intel core i9-13900hx", "intel core i9-13950hx", "intel core i7-14650hx",
+                        "intel core i7-13850hx", "intel core i7-14700hx", "intel core i9-12900hx",
+                        "intel core i7-13700hx", "amd ryzen 7 7745hx", "intel core i9-12950hx",
+                        "intel core i7-12800hx", "amd ryzen 9 8945h", "intel core i9-13900hk",
+                        "intel core i7-13650hx", "intel core i7-12850hx");
             case "학생이에요":
-                return List.of("Intel Core i5-12500H", "AMD Ryzen 5 5600H", "Intel Core i7-1165G7");
+                return List.of("intel core i5-12500h", "amd ryzen 5 5600h", "intel core i5-11400h",
+                        "amd ryzen 5 4600h", "intel core i5-10300h", "amd ryzen 5 4500u",
+                        "intel core i5-1135g7", "amd ryzen 5 5500u", "intel core i5-10210u",
+                        "amd ryzen 5 3500u", "intel core i7-1165g7", "amd ryzen 7 4700u",
+                        "intel core i7-10510u", "amd ryzen 7 5700u", "intel core i7-1185g7");
             default:
                 return List.of();
         }
@@ -72,26 +95,43 @@ public class RecommendProductService {
         return "가져 다닐거에요".equals(place) ? "가벼워요" : "무거워요";
     }
 
-    private String getScreenSizeTag(String screenPreference) {
-        switch (screenPreference) {
-            case "화면 넓은게 좋아요":
-                return "넓은 화면";
-            case "적당한게 좋아요":
-                return "적당한 화면";
+    private String getPerformanceTag(String performance) {
+        if (performance == null) {
+            return null;
+        }
+        switch (performance) {
+            case "성능용":
+                return "동세대 최고 성능";
+            case "가성비용":
+                return "가성비";
+            case "밸런스용":
+                return "밸런스";
             default:
-                return "작은 화면";
+                return null;
         }
     }
 
-    private String getBatteryTag(String priority) { // 배터리 용량
+    private String getBatteryTag(String priority) {
         return "무게를 우선해주세요".equals(priority) ? "짧은 배터리" : "오래 가는 배터리";
     }
 
     private String getDesignTag(String priority) {
-        return "화면을 우선해 주세요".equals(priority) ? "예쁜 디자인" : null; // 디자인 우선 순위 높을 경우 예쁜 디자인 태그 부여
+        return "화면을 우선해 주세요".equals(priority) ? "예쁜 디자인" : null;
     }
 
-    private String getPerformanceTag(String performance) {
-        return "성능용".equals(performance) ? "동세대 최고 성능" : null;
+    private String getScreenSizeTag(String screen) {
+        if (screen == null) {
+            return null;
+        }
+        switch (screen) {
+            case "화면 넓은게 좋아요":
+                return "17인치 이상";
+            case "적당한게 좋아요":
+                return "15인치";
+            case "알아서":
+                return "13인치 이하";
+            default:
+                return null;
+        }
     }
 }

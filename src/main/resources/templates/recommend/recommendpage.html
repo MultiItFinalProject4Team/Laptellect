@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
     <title>노트북 추천 결과</title>
+    <link rel="stylesheet" th:href="@{/css/product/product.css}">
     <style>
-        body { font-family: Arial, sans-serif; }
-        .product-grid { display: flex; flex-wrap: wrap; }
-        .product { margin: 10px; padding: 10px; border: 1px solid #ccc; width: 200px; }
-        .brand-slider { display: flex; justify-content: space-around; margin-top: 20px; }
-        .brand { text-align: center; }
-        .promotions { display: flex; justify-content: space-around; margin-top: 20px; }
+        .product-grid { display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .product { margin: 20px; padding: 20px; border: 1px solid #ccc; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .product-image { width: 100%; height: 200px; object-fit: contain; }
+        .product-name { font-size: 18px; font-weight: bold; margin-top: 10px; }
+        .product-specs { font-size: 14px; margin-top: 10px; }
         .button-container {
             display: flex;
             justify-content: center;
@@ -17,7 +17,6 @@
             padding: 20px;
         }
         .button-container a {
-            margin: 0 10px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
@@ -32,40 +31,42 @@
     </style>
 </head>
 <body>
-<h1>추천</h1>
+<div class="container" layout:fragment="content">
+    <h1>맞춤형 노트북 추천 결과</h1>
 
-<div role="main">
-    <div class="product-grid" id="recommendationResult">
-        <div th:each="laptop : ${recommendations}" class="product">
-            <img th:src="${laptop.imageUrl}" th:alt="${laptop.productName}">
-            <h3 th:text="${laptop.productName}"></h3>
-            <p th:text="'가격: ' + ${laptop.price} + '원'"></p>
-            <div class="tags" th:text="${#strings.listJoin(laptop.tags, ', ')}"></div>
+    <div class="product-grid">
+        <div class="product" th:each="product : ${recommendations}">
+            <img th:src="@{'/img/product/' + ${product.imageUrl}}" class="product-image" alt="노트북 이미지">
+            <div class="product-name" th:text="${product.productName}">노트북 이름</div>
+            <div class="product-specs">
+                <p><strong>가격:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span></p>
+                <p><strong>운영체제:</strong> <span th:text="${product.os}">OS</span></p>
+                <p><strong>제조사:</strong> <span th:text="${product.manufacturer}">제조사</span></p>
+                <p><strong>램 용량:</strong> <span th:text="${product.ramSize}">RAM</span></p>
+                <p><strong>CPU:</strong> <span th:text="${product.cpuNumber}">CPU</span></p>
+                <p><strong>코어 수:</strong> <span th:text="${product.coreCount}">코어 수</span></p>
+                <p><strong>저장 용량:</strong> <span th:text="${product.storageSize}">저장 용량</span></p>
+                <p><strong>화면 크기:</strong> <span th:text="${product.screenSize}">화면 크기</span></p>
+                <p><strong>해상도:</strong> <span th:text="${product.resolution}">해상도</span></p>
+                <p><strong>GPU:</strong> <span th:text="${product.gpuType}">GPU</span></p>
+            </div>
         </div>
     </div>
 
-    <div class="brand-slider">
-        <div class="brand" th:each="brand : ${{
-                'Acer': 'acer_logo.jpg',
-                'Apple': 'apple_logo.jpg',
-                'ASUS': 'asus_logo.jpg',
-                'MSI': 'msi_logo.jpg',
-                'Lenovo': 'lenovo_logo.jpg',
-                'LG': 'lg_logo.jpg'
-            }}">
-            <img th:src="${brand.value}" th:alt="${brand.key}">
-            <p th:text="${brand.key}"></p>
-        </div>
-    </div>
-
-    <div class="promotion">
-        <img src="promo2.jpg" alt="8월 사무용 최다 판매 제품">
+    <div class="button-container">
+        <a th:href="@{/recommend}" class="btn btn-primary">다시 추천받기</a>
     </div>
 </div>
 
-<div class="button-container">
-    <a th:href="@{/recommend}" class="button">다시 추천받기</a>
-</div>
-</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.price').each(function() {
+            let value = $(this).text().replace('원', '').replace(',', '');
+            let formattedValue = new Intl.NumberFormat('ko-KR').format(value);
+            $(this).text(formattedValue + '원');
+        });
+    });
+</script>
 </body>
 </html>

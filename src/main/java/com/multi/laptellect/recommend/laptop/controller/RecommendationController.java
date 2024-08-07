@@ -34,6 +34,7 @@ public class RecommendationController {
             List<RecommendProductDTO> recommendations = recommendProductService.getRecommendations(surveyResults);
             logger.info("Found {} recommended products", recommendations.size());
             model.addAttribute("recommendations", recommendations);
+            model.addAttribute("surveyResults", surveyResults);  // 추가: 설문 결과를 모델에 추가
             return "recommend/recommendpage";
         } catch (Exception e) {
             logger.error("Error while processing recommendations", e);
