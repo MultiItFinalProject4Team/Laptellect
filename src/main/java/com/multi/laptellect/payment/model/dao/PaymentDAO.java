@@ -14,7 +14,7 @@ public interface PaymentDAO {
 
     int insertPayment(PaymentDTO paymentDTO);
 
-    List<OrderlistDTO> selectOrders(String memberName);
+    List<PaymentDTO> selectOrders(String memberName);
 
     int updateRefundStatus(String imPortId);
 
@@ -43,4 +43,6 @@ public interface PaymentDAO {
     int refundReviewdPoint(PaymentpointDTO paymentpointDTO);
 
     PaymentpageDTO findProduct(String productName);
+
+    PaymentDTO findPaymentByImPortId(String imPortId);
 }

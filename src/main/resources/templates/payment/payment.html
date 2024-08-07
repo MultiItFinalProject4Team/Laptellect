@@ -52,10 +52,6 @@
                 <div class="product-info-container">
                     <img th:src="@{'/img/product/' + ${paymentpageDTO.image}}" alt="Product Image" class="payment-product-image">
                     <h3 class="product-name" th:text="${paymentpageDTO.productName}">상품명</h3>
-
-                    <!--            <div th:each="product : ${paymentProductDTOList}">-->
-                    <!--                <p align="center" class="payment-product-info" th:text="${product.optionsInfo}">상품 정보</p>-->
-                    <!--            </div>-->
                 </div>
             </div>
         </div>

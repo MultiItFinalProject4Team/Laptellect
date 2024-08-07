@@ -1,5 +1,5 @@
 // 전역 변수 선언
-let username, productName, productInfo, productPrice;
+let userName, productName, productPrice;
 
 // 숫자 포맷팅 함수
 function formatNumber(num) {
@@ -9,9 +9,8 @@ function formatNumber(num) {
 // DOM이 로드된 후 실행될 함수
 document.addEventListener('DOMContentLoaded', function() {
     // Thymeleaf에서 전달된 데이터를 JavaScript 변수에 할당
-    username = document.getElementById('name').value;
+    userName = document.getElementById('name').value;
     productName = document.querySelector('h3').textContent;
-    productInfo = document.querySelector('.right-section p').textContent;
     productPrice = document.getElementById('amount').textContent.replace(/[^\d]/g, '');
 
     // 초기 가격 설정
@@ -62,7 +61,7 @@ function mypayment() {
             name: productName,
             amount: myAmount,
             buyer_email: "gildong@gmail.com",
-            buyer_name: username,
+            buyer_name: userName,
             buyer_tel: "010-4242-4242",
             buyer_addr: "서울특별시 강남구 신사동",
             buyer_postcode: "01181",

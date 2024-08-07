@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @Controller
 @RequestMapping("/payment")
 public class PaymentController {
@@ -35,44 +34,17 @@ public class PaymentController {
         this.memberService = memberService;
     }
 
-    /**
-     * 주문내역페이지 구성
-     *
-     * @param model 뷰단으로 데이터이동
-     * @return 주문내역페이지 열기
-     */
     @GetMapping("/orderlist")
     public String orderList(Model model) {
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
-        List<OrderlistDTO> orderList = paymentService.selectOrders(memberDTO.getMemberName());
+        List<PaymentDTO> orderList = paymentService.selectOrders(memberDTO.getMemberName());
         List<String> reviewedOrders = paymentService.getReviewedOrders();
         model.addAttribute("orderList", orderList);
         model.addAttribute("reviewedOrders", reviewedOrders);
         return "/payment/orderlist";
     }
-
-    /**
-     * 주문 및 결제 페이지
-     *
-     * @param model 뷰단으로 데이터 이동
-     * @return 결제페이지 열기
-     */
-//    @GetMapping("/payment")
-//    public String selectpaymentpage(Model model) {
-//        int memberNo = SecurityUtil.getUserNo();
-//        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-//
-//        PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
-//        PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
-//
-//        model.addAttribute("paymentpageDTO", paymentpageDTO);
-//        model.addAttribute("paymentpointDTO", paymentpointDTO);
-//        model.addAttribute("memberDTO", memberDTO);
-//
-//        return "/payment/payment";
-//    }
 
     @PostMapping("/payment")
     public String paymentpage(@RequestParam("img") String img,
@@ -81,29 +53,19 @@ public class PaymentController {
                               Model model) {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-        paymentpageDTO.setPrice(400);
+//        paymentpageDTO.setPrice(400);
 
-
-        // 나머지 필요한 정보 설정
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
 
-//        model.addAttribute("paymentProductDTOList", paymentProductDTOList);
         model.addAttribute("paymentpageDTO", paymentpageDTO);
         model.addAttribute("paymentpointDTO", paymentpointDTO);
         model.addAttribute("memberDTO", memberDTO);
 
-
         return "/payment/payment";
     }
 
-    /**
-     * 결제검증 메서드
-     * 결제시 사용포인트 조회 및 결제내역 저장
-     * @param request 결제검증 dto
-     * @return 결제 검증 결과 전송
-     */
     @Transactional
     @PostMapping("/verifyPayment")
     public ResponseEntity<Map<String, Object>> verifyPayment(@RequestBody VerificationRequestDTO request) {
@@ -115,10 +77,8 @@ public class PaymentController {
             PaymentpageDTO paymentpageDTO = paymentService.findProduct(request.getProductName());
 
             PaymentDTO paymentDTO = new PaymentDTO();
-            paymentDTO.setUsername(memberDTO.getMemberName());
-//            paymentDTO.setProductinfo(paymentpageDTO.getProductInfo());
-            paymentDTO.setProductName(paymentpageDTO.getProductName());
-            paymentDTO.setProductPrice(paymentpageDTO.getPrice());
+            paymentDTO.setMemberNo(memberNo);
+            paymentDTO.setProductNo(paymentpageDTO.getProductNo());
             paymentDTO.setPurchasePrice(request.getAmount().intValue());
             paymentDTO.setImPortId(request.getImPortId());
 
@@ -215,14 +175,22 @@ public class PaymentController {
      */
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
-
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
         String username = memberDTO.getMemberName();
-        reviewDTO.setUsername(username);
-        int result = paymentService.saveReview(reviewDTO);
+        reviewDTO.setUserName(username);
+        reviewDTO.setMemberNo(memberDTO.getMemberNo());
 
+        // Fetch the product information using the imPortId
+        PaymentDTO paymentDTO = paymentService.findPaymentByImPortId(reviewDTO.getImPortId());
+        if (paymentDTO != null) {
+            reviewDTO.setProductNo(paymentDTO.getProductNo());
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "주문 정보를 찾을 수 없습니다."));
+        }
+
+        int result = paymentService.saveReview(reviewDTO);
 
         Map<String, Object> response = new HashMap<>();
         if (result > 0) {

@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class PaymentpageDTO {
+    private int productNo;
     private String productName;
     private String productCode;
-    private String typeNo;
+    private int typeNo;
     private int price;
-    private String productInfo;
     private String image;
 }

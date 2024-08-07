@@ -13,19 +13,19 @@
     <div class="search-group">
       <select id="searchCategory">
         <option value="all">전체</option>
-        <option value="username">사용자명</option>
+        <option value="userName">사용자명</option>
         <option value="productName">상품명</option>
         <option value="productPrice">상품가격</option>
         <option value="purchasePrice">구매가격</option>
-        <option value="date_created">주문일자</option>
+        <option value="createdAt">주문일자</option>
         <option value="imPortId">결제번호</option>
         <option value="refund">환불상태</option>
-        <option value="refund_date">환불일자</option>
+        <option value="refundAt">환불일자</option>
       </select>
       <input type="text" id="searchInput" placeholder="검색">
       <button class="btn" onclick="searchOrders()">검색</button>
     </div>
-    <button class="btn" onclick="refundSelectedOrders()">환불하기</button>
+    <button class="btn" onclick="refundSelectedOrders()">선택주문 환불</button>
   </div>
   <div class="table-container">
     <table>
