@@ -40,7 +40,7 @@ public interface OAuthService {
     /**
      * 구글 사용자 정보를 받아오기 위한 메서드
      *
-     * @param token 엑세스 토큰 값
+     * @param accessToken 엑세스 토큰 값
      * @return 구글에서 받아온 프로필 정보를 SocialDTO에 담아 리턴
      */
     SocialDTO getGoogleProfileInfo(String accessToken);

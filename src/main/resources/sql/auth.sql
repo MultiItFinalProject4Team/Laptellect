@@ -109,6 +109,19 @@ CREATE TABLE wishlist (
 	member_no INT NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT wishlist_PK PRIMARY KEY(wishlist_no),
-    CONSTRAINT wishlist_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no),
+    CONSTRAINT wishlist_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no), ON DELETE CASCADE
 	CONSTRAINT wishlist_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+);
+
+CREATE TABLE payment (
+	payment_no INT AUTO_INCREMENT PRIMARY KEY,
+    member_no INT,
+    product_no INT,
+    purchase_price INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    im_port_id varchar(255),
+    refund CHAR(1) DEFAULT 'N',
+    refund_date TIMESTAMP DEFAULT NULL
+    CONSTRAINT payment_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+    CONSTRAINT payment_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE
 );
