@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface TagDAO {
-    void insertTag(TagDTO tag); // 새로운 태그를 데이터베이스에 삽입
-    List<TagDTO> getAllTags();  // 모든 태그를 데이터베이스에서 조회
-
+    void insertTag(TagDTO tag);
+    List<TagDTO> getAllTags();
+    List<String> getAllReviews();
 }

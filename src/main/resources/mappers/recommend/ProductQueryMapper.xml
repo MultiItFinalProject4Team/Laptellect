@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO">
+    <select id="getRecommendedProducts" parameterType="map" resultType="com.multi.laptellect.recommend.laptop.model.dto.RecommendProductDTO">
+        SELECT DISTINCT p.*, GROUP_CONCAT(ps.option_value) as tags
+        FROM product p
+        JOIN product_spec ps ON p.product_no = ps.product_no
+        JOIN product_category pc ON ps.category_no = pc.category_no
+        WHERE 1=1
+        <if test="gpuTags != null and gpuTags.size() > 0">
+            AND EXISTS (
+            SELECT 1 FROM product_spec ps_gpu
+            WHERE ps_gpu.product_no = p.product_no
+            AND ps_gpu.option_value IN
+            <foreach item="tag" collection="gpuTags" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
+        <if test="cpuTags != null and cpuTags.size() > 0">
+            AND EXISTS (
+            SELECT 1 FROM product_spec ps_cpu
+            WHERE ps_cpu.product_no = p.product_no
+            AND ps_cpu.option_value IN
+            <foreach item="tag" collection="cpuTags" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
+        <if test="weightTag != null">
+            AND EXISTS (
+            SELECT 1 FROM product_spec ps_weight
+            WHERE ps_weight.product_no = p.product_no
+            AND ps_weight.option_value = #{weightTag}
+            )
+        </if>
+        <if test="screenSizeTag != null">
+            AND EXISTS (
+            SELECT 1 FROM product_spec ps_screen
+            WHERE ps_screen.product_no = p.product_no
+            AND ps_screen.option_value = #{screenSizeTag}
+            )
+        </if>
+        <if test="batteryTag != null">
+            AND EXISTS (
+            SELECT 1 FROM product_spec ps_battery
+            WHERE ps_battery.product_no = p.product_no
+            AND ps_battery.option_value = #{batteryTag}
+            )
+        </if>
+        <if test="designTag != null">
+            AND p.product_name IN (
+            SELECT product_name FROM product
+            WHERE product_name LIKE CONCAT('%', #{designTag}, '%')
+            )
+        </if>
+        <if test="performanceTag != null">
+            AND EXISTS (
+            SELECT 1 FROM product_spec ps_perf
+            WHERE ps_perf.product_no = p.product_no
+            AND ps_perf.option_value = #{performanceTag}
+            )
+        </if>
+        GROUP BY p.product_no
+    </select>
+</mapper>

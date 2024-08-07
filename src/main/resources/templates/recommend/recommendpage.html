@@ -100,11 +100,11 @@
         recommendations.forEach(function(laptop) {
             html += `
                 <div class="product">
-                    <img src="${laptop.imageUrl}" alt="${laptop.productName}">
+                    <img src="${laptop.imageUrl || 'default-laptop-image.jpg'}" alt="${laptop.productName}">
                     <h3>${laptop.productName}</h3>
                     <p>가격: ${laptop.price}원</p>
                     <div class="tags">
-                        ${laptop.tags.join(', ')}
+                        ${laptop.tags ? laptop.tags.join(', ') : ''}
                     </div>
                 </div>
             `;
@@ -144,5 +144,3 @@
         });
     });
 </script>
-</body>
-</html>

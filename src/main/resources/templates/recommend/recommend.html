@@ -118,76 +118,76 @@
             let additionalHTML = '';
             if (option === '게이밍') {
                 additionalHTML = `
-                        <div class="section">
-                            <h3>게임 종류</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="game">스팀게임/FPS 게임</div>
-                                <div class="option" data-category="game">온라인 게임</div>
-                                <div class="option" data-category="game">AOS게임</div>
-                            </div>
+                    <div class="section">
+                        <h3>게임 종류</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="game">스팀게임/FPS 게임</div>
+                            <div class="option" data-category="game">온라인 게임</div>
+                            <div class="option" data-category="game">AOS게임</div>
                         </div>
-                        <div class="section">
-                            <h3>사용 장소</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="place">집에만 둘거에요</div>
-                                <div class="option" data-category="place">가져 다닐거에요</div>
-                                <div class="option" data-category="place">알아서</div>
-                            </div>
+                    </div>
+                    <div class="section">
+                        <h3>사용 장소</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="place">집에만 둘거에요</div>
+                            <div class="option" data-category="place">가져 다닐거에요</div>
+                            <div class="option" data-category="place">알아서</div>
                         </div>
-                        <div class="section">
-                            <h3>화면 크기</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="screen">화면 넓은게 좋아요</div>
-                                <div class="option" data-category="screen">적당한게 좋아요</div>
-                                <div class="option" data-category="screen">알아서</div>
-                            </div>
+                    </div>
+                    <div class="section">
+                        <h3>화면 크기</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="screen">화면 넓은게 좋아요</div>
+                            <div class="option" data-category="screen">적당한게 좋아요</div>
+                            <div class="option" data-category="screen">알아서</div>
                         </div>
-                        <div class="section">
-                            <h3>우선순위</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="priority">하고 싶은 게임을 우선해 주세요</div>
-                                <div class="option" data-category="priority">화면을 우선해 주세요</div>
-                                <div class="option" data-category="priority">무게를 우선해주세요</div>
-                                <div class="option" data-category="priority">없으면 알아서 추천해주세요</div>
-                            </div>
+                    </div>
+                    <div class="section">
+                        <h3>우선순위</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="priority">하고 싶은 게임을 우선해 주세요</div>
+                            <div class="option" data-category="priority">화면을 우선해 주세요</div>
+                            <div class="option" data-category="priority">무게를 우선해주세요</div>
+                            <div class="option" data-category="priority">없으면 알아서 추천해주세요</div>
                         </div>
-                    `;
+                    </div>
+                `;
                 requiredCategories = ['mainOption', 'game', 'place', 'screen', 'priority'];
             } else if (option === '사무용') {
                 additionalHTML = `
-                        <div class="section">
-                            <h3>용도</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="purpose">코딩할거에요</div>
-                                <div class="option" data-category="purpose">학생이에요</div>
-                            </div>
+                    <div class="section">
+                        <h3>용도</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="purpose">코딩할거에요</div>
+                            <div class="option" data-category="purpose">학생이에요</div>
                         </div>
-                        <div class="section">
-                            <h3>성능</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="performance">가성비용</div>
-                                <div class="option" data-category="performance">성능용</div>
-                                <div class="option" data-category="performance">밸런스용</div>
-                                <div class="option" data-category="performance">알아서</div>
-                            </div>
+                    </div>
+                    <div class="section">
+                        <h3>성능</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="performance">가성비용</div>
+                            <div class="option" data-category="performance">성능용</div>
+                            <div class="option" data-category="performance">밸런스용</div>
+                            <div class="option" data-category="performance">알아서</div>
                         </div>
-                        <div class="section">
-                            <h3>사용 장소</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="place">집에만 둘거에요</div>
-                                <div class="option" data-category="place">가져다닐거에요</div>
-                            </div>
+                    </div>
+                    <div class="section">
+                        <h3>사용 장소</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="place">집에만 둘거에요</div>
+                            <div class="option" data-category="place">가져다닐거에요</div>
                         </div>
-                        <div class="section">
-                            <h3>우선순위</h3>
-                            <div class="option-container">
-                                <div class="option" data-category="priority">하고 싶은 작업을 우선해 주세요</div>
-                                <div class="option" data-category="priority">화면을 우선해 주세요</div>
-                                <div class="option" data-category="priority">무게를 우선해주세요</div>
-                                <div class="option" data-category="priority">없으면 알아서 추천해주세요</div>
-                            </div>
+                    </div>
+                    <div class="section">
+                        <h3>우선순위</h3>
+                        <div class="option-container">
+                            <div class="option" data-category="priority">하고 싶은 작업을 우선해 주세요</div>
+                            <div class="option" data-category="priority">화면을 우선해 주세요</div>
+                            <div class="option" data-category="priority">무게를 우선해주세요</div>
+                            <div class="option" data-category="priority">없으면 알아서 추천해주세요</div>
                         </div>
-                    `;
+                    </div>
+                `;
                 requiredCategories = ['mainOption', 'purpose', 'performance', 'place', 'priority'];
             }
             $('#additionalOptions').html(additionalHTML);
@@ -208,9 +208,22 @@
 
         $('#recommendButton').click(function() {
             console.log('선택된 옵션:', selectedOptions);
-            alert('선택하신 옵션을 바탕으로 추천 페이지로 이동합니다.');
-            // 여기에 추천 페이지로 이동하는 로직을 구현하세요.
-            // 예: window.location.href = 'recommendation.html?options=' + JSON.stringify(selectedOptions);
+
+            // AJAX 요청으로 서버에 선택된 옵션 전송
+            $.ajax({
+                url: '/recommend',  // 서버의 추천 엔드포인트 URL
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(selectedOptions),
+                success: function(recommendations) {
+                    // 추천 결과를 받아 새 페이지로 이동
+                    var encodedRecommendations = encodeURIComponent(JSON.stringify(recommendations));
+                    window.location.href = 'recommendationResult.html?recommendations=' + encodedRecommendations;
+                },
+                error: function(xhr, status, error) {
+                    alert('추천을 가져오는 중 오류가 발생했습니다: ' + error);
+                }
+            });
         });
     });
 </script>
