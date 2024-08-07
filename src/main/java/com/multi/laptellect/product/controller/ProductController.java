@@ -137,11 +137,14 @@ public class ProductController {
      */
     @GetMapping("/productList")
     public String ProductList(Model model,
+                              @RequestParam(name = "typeNo", required = false) Integer typeNo,
                               @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
                               @RequestParam(name = "pageSize", defaultValue = "12") int pageSize) {
 
         //페이징 처리
-        List<ProductDTO> products = productService.getStoredProducts(pageNumber, pageSize);
+        List<ProductDTO> products = productService.getStoredProducts(typeNo,pageNumber, pageSize);
+
+
 
         log.info("productList 확인 = {}", products);
 
@@ -198,11 +201,24 @@ public class ProductController {
         // 제품 상세 정보 가져오기
         List<LaptopDetailsDTO> laptopDetails = productService.getLaptopProductDetails(productNo);
         log.info("상세정보를 조회 = {}: ", laptopDetails);
+
+        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
+
         if (!laptopDetails.isEmpty()) {
             LaptopDetailsDTO details = laptopDetails.get(0);
 
+            List<SpecDTO> filteredSpecs = productService.filterSpecs(details.getProductNo(), neededOptions);
+            details.setSpecs(filteredSpecs);
+            log.info("필터링된 상세 Spec 값 전달 확인 ={}", filteredSpecs);
+
+            String specsString = filteredSpecs.stream()
+                    .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
+                    .collect(Collectors.joining("<br>"));
+            details.setSpecsString(specsString);
+
             log.info("details.getProductNo ={}",details.getProductNo());
 
+            model.addAttribute("details",details);
             model.addAttribute("productNo",details.getProductNo());
             model.addAttribute("productName", details.getProductName());
             model.addAttribute("price", details.getPrice());

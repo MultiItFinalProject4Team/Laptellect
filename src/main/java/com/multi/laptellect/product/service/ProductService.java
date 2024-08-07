@@ -30,7 +30,7 @@ public interface ProductService {
      * @param pageSize   페이지 크기
      * @return the stored products
      */
-    List<ProductDTO> getStoredProducts(int pageNumber, int pageSize);
+    List<ProductDTO> getStoredProducts(Integer typeNo,int pageNumber, int pageSize);
 
     /**
      * 모든 상품의 수량 확인
@@ -101,4 +101,6 @@ public interface ProductService {
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
 
     ProductDTO findProductByProductNo(String productNo) throws Exception;
+;
+
 }

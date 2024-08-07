@@ -16,6 +16,8 @@ public interface ProductMapper {
 
     List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
+    List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo, @Param("pageSize") int pageSize, @Param("offset") int offset);
+
     int getTotalProducts();
 
     List<ProductDTO> getTypeByProduct(int typeNo);

@@ -159,13 +159,19 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.findProductByProductNo(productNo);
     }
 
+
+
     //상품 전체 조회
     @Override
     @Transactional
-    public List<ProductDTO> getStoredProducts(int pageNumber, int pageSize) {
+    public List<ProductDTO> getStoredProducts(Integer typeNo,int pageNumber, int pageSize) {
 
         int offset = (pageNumber - 1) * pageSize;
-        return productMapper.getAllProducts(pageSize, offset);
+        if (typeNo == null) {
+            return productMapper.getAllProducts(pageSize, offset);
+        } else {
+            return productMapper.getProductsByType(typeNo, pageSize, offset);
+        }
     }
 
     @Override
