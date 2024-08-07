@@ -90,6 +90,7 @@ public class MybatisConfig {
 
 
 
+
         factoryBean.setConfiguration(configuration); // 팩토리 빈에 세팅
 
         return factoryBean.getObject();
