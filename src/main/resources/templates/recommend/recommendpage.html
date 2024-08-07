@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>노트북 추천 결과</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; }
         .product-grid { display: flex; flex-wrap: wrap; }
@@ -17,130 +16,56 @@
             margin-top: 20px;
             padding: 20px;
         }
-        .button-container button {
+        .button-container a {
             margin: 0 10px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
             background-color: #4CAF50;
             color: white;
-            border: none;
+            text-decoration: none;
             border-radius: 4px;
         }
-        .button-container button:hover {
+        .button-container a:hover {
             background-color: #45a049;
-        }
-        #resultMessage {
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
-<div>
-    <h1>추천</h1>
-</div>
+<h1>추천</h1>
 
 <div role="main">
     <div class="product-grid" id="recommendationResult">
-        <!-- 추천 결과가 여기에 추가됩니다 -->
+        <div th:each="laptop : ${recommendations}" class="product">
+            <img th:src="${laptop.imageUrl}" th:alt="${laptop.productName}">
+            <h3 th:text="${laptop.productName}"></h3>
+            <p th:text="'가격: ' + ${laptop.price} + '원'"></p>
+            <div class="tags" th:text="${#strings.listJoin(laptop.tags, ', ')}"></div>
+        </div>
     </div>
 
     <div class="brand-slider">
-        <div class="brand">
-            <img src="acer_logo.jpg" alt="Acer">
-            <p>Acer</p>
-        </div>
-        <div class="brand">
-            <img src="apple_logo.jpg" alt="Apple">
-            <p>Apple</p>
-        </div>
-        <div class="brand">
-            <img src="asus_logo.jpg" alt="ASUS">
-            <p>ASUS</p>
-        </div>
-        <div class="brand">
-            <img src="msi_logo.jpg" alt="MSI">
-            <p>MSI</p>
-        </div>
-        <div class="brand">
-            <img src="lenovo_logo.jpg" alt="Lenovo">
-            <p>Lenovo</p>
-        </div>
-        <div class="brand">
-            <img src="lg_logo.jpg" alt="LG">
-            <p>LG</p>
+        <div class="brand" th:each="brand : ${{
+                'Acer': 'acer_logo.jpg',
+                'Apple': 'apple_logo.jpg',
+                'ASUS': 'asus_logo.jpg',
+                'MSI': 'msi_logo.jpg',
+                'Lenovo': 'lenovo_logo.jpg',
+                'LG': 'lg_logo.jpg'
+            }}">
+            <img th:src="${brand.value}" th:alt="${brand.key}">
+            <p th:text="${brand.key}"></p>
         </div>
     </div>
 
-    <div class="promotions">
-        <div class="promotion">
-            <img src="promo1.jpg" alt="8월 게이밍용 최다 판매 제품">
-        </div>
-        <div class="promotion">
-            <img src="promo2.jpg" alt="8월 사무용 최다 판매 제품">
-        </div>
+    <div class="promotion">
+        <img src="promo2.jpg" alt="8월 사무용 최다 판매 제품">
     </div>
-
-    <div class="button-container">
-        <button id="assignTagsBtn">태그 할당 시작</button>
-        <button id="toggleSchedulerBtn">스케줄러 시작</button>
-    </div>
-
-    <div id="resultMessage"></div>
 </div>
 
-<script>
-    $(document).ready(function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const recommendations = JSON.parse(decodeURIComponent(urlParams.get('recommendations')));
-
-        let html = '';
-        recommendations.forEach(function(laptop) {
-            html += `
-                <div class="product">
-                    <img src="${laptop.imageUrl || 'default-laptop-image.jpg'}" alt="${laptop.productName}">
-                    <h3>${laptop.productName}</h3>
-                    <p>가격: ${laptop.price}원</p>
-                    <div class="tags">
-                        ${laptop.tags ? laptop.tags.join(', ') : ''}
-                    </div>
-                </div>
-            `;
-        });
-
-        $('#recommendationResult').html(html);
-
-        // 태그 할당 버튼 클릭 이벤트
-        $('#assignTagsBtn').click(function() {
-            $.ajax({
-                url: '/api/product-tags/assign',
-                method: 'POST',
-                success: function(response) {
-                    $('#resultMessage').text(response);
-                },
-                error: function(xhr, status, error) {
-                    $('#resultMessage').text('태그 할당 중 오류가 발생했습니다: ' + error);
-                }
-            });
-        });
-
-        // 스케줄러 토글 버튼 클릭 이벤트
-        let isSchedulerRunning = false;
-        $('#toggleSchedulerBtn').click(function() {
-            $.ajax({
-                url: '/api/product-tags/toggle-scheduler',
-                method: 'POST',
-                success: function(response) {
-                    isSchedulerRunning = !isSchedulerRunning;
-                    $('#toggleSchedulerBtn').text(isSchedulerRunning ? '스케줄러 중지' : '스케줄러 시작');
-                    $('#resultMessage').text(response);
-                },
-                error: function(xhr, status, error) {
-                    $('#resultMessage').text('스케줄러 토글 중 오류가 발생했습니다: ' + error);
-                }
-            });
-        });
-    });
-</script>
+<div class="button-container">
+    <a th:href="@{/recommend}" class="button">다시 추천받기</a>
+</div>
+</div>
+</body>
+</html>

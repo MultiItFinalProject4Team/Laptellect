@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,22 +85,26 @@
 <body>
 <h1>맞춤형 노트북 추천 시스템</h1>
 
-<div class="section">
-    <h3>용도 선택</h3>
-    <div class="option-container">
-        <div class="option" data-value="게이밍">게이밍</div>
-        <div class="option" data-value="사무용">사무용</div>
+<form th:action="@{/recommendpage}" method="post">
+    <div class="section">
+        <h3>용도 선택</h3>
+        <div class="option-container">
+            <div class="option" th:each="option : ${'게이밍,사무용'.split(',')}">
+                <input type="radio" name="mainOption" th:value="${option}" th:id="${'main-' + option}">
+                <label th:for="${'main-' + option}" th:text="${option}"></label>
+            </div>
+        </div>
     </div>
-</div>
 
-<div id="additionalOptions"></div>
+    <div id="additionalOptions"></div>
 
-<div class="button-container">
-    <button id="recommendButton" disabled>나에게 맞는 노트북 추천받기</button>
-</div>
+    <div class="button-container">
+        <button type="submit" id="recommendButton" disabled>나에게 맞는 노트북 추천받기</button>
+    </div>
+</form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+<script th:inline="javascript">
     $(document).ready(function() {
         let selectedOptions = {};
         let requiredCategories = ['mainOption'];
@@ -108,7 +112,7 @@
         $('.option').click(function() {
             $(this).siblings().removeClass('selected');
             $(this).addClass('selected');
-            let value = $(this).data('value');
+            let value = $(this).find('input').val();
             selectedOptions['mainOption'] = value;
             updateAdditionalOptions(value);
             checkAllOptionsSelected();
@@ -118,85 +122,85 @@
             let additionalHTML = '';
             if (option === '게이밍') {
                 additionalHTML = `
-                    <div class="section">
-                        <h3>게임 종류</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="game">스팀게임/FPS 게임</div>
-                            <div class="option" data-category="game">온라인 게임</div>
-                            <div class="option" data-category="game">AOS게임</div>
+                        <div class="section">
+                            <h3>게임 종류</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="game" value="스팀게임/FPS 게임" id="game-1"><label for="game-1">스팀게임/FPS 게임</label></div>
+                                <div class="option"><input type="radio" name="game" value="온라인 게임" id="game-2"><label for="game-2">온라인 게임</label></div>
+                                <div class="option"><input type="radio" name="game" value="AOS게임" id="game-3"><label for="game-3">AOS게임</label></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="section">
-                        <h3>사용 장소</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="place">집에만 둘거에요</div>
-                            <div class="option" data-category="place">가져 다닐거에요</div>
-                            <div class="option" data-category="place">알아서</div>
+                        <div class="section">
+                            <h3>사용 장소</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="place" value="집에만 둘거에요" id="place-1"><label for="place-1">집에만 둘거에요</label></div>
+                                <div class="option"><input type="radio" name="place" value="가져 다닐거에요" id="place-2"><label for="place-2">가져 다닐거에요</label></div>
+                                <div class="option"><input type="radio" name="place" value="알아서" id="place-3"><label for="place-3">알아서</label></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="section">
-                        <h3>화면 크기</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="screen">화면 넓은게 좋아요</div>
-                            <div class="option" data-category="screen">적당한게 좋아요</div>
-                            <div class="option" data-category="screen">알아서</div>
+                        <div class="section">
+                            <h3>화면 크기</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="screen" value="화면 넓은게 좋아요" id="screen-1"><label for="screen-1">화면 넓은게 좋아요</label></div>
+                                <div class="option"><input type="radio" name="screen" value="적당한게 좋아요" id="screen-2"><label for="screen-2">적당한게 좋아요</label></div>
+                                <div class="option"><input type="radio" name="screen" value="알아서" id="screen-3"><label for="screen-3">알아서</label></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="section">
-                        <h3>우선순위</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="priority">하고 싶은 게임을 우선해 주세요</div>
-                            <div class="option" data-category="priority">화면을 우선해 주세요</div>
-                            <div class="option" data-category="priority">무게를 우선해주세요</div>
-                            <div class="option" data-category="priority">없으면 알아서 추천해주세요</div>
+                        <div class="section">
+                            <h3>우선순위</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="priority" value="하고 싶은 게임을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 게임을 우선해 주세요</label></div>
+                                <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>
+                                <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>
+                                <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
                 requiredCategories = ['mainOption', 'game', 'place', 'screen', 'priority'];
             } else if (option === '사무용') {
                 additionalHTML = `
-                    <div class="section">
-                        <h3>용도</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="purpose">코딩할거에요</div>
-                            <div class="option" data-category="purpose">학생이에요</div>
+                        <div class="section">
+                            <h3>용도</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="purpose" value="코딩할거에요" id="purpose-1"><label for="purpose-1">코딩할거에요</label></div>
+                                <div class="option"><input type="radio" name="purpose" value="학생이에요" id="purpose-2"><label for="purpose-2">학생이에요</label></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="section">
-                        <h3>성능</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="performance">가성비용</div>
-                            <div class="option" data-category="performance">성능용</div>
-                            <div class="option" data-category="performance">밸런스용</div>
-                            <div class="option" data-category="performance">알아서</div>
+                        <div class="section">
+                            <h3>성능</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="performance" value="가성비용" id="performance-1"><label for="performance-1">가성비용</label></div>
+                                <div class="option"><input type="radio" name="performance" value="성능용" id="performance-2"><label for="performance-2">성능용</label></div>
+                                <div class="option"><input type="radio" name="performance" value="밸런스용" id="performance-3"><label for="performance-3">밸런스용</label></div>
+                                <div class="option"><input type="radio" name="performance" value="알아서" id="performance-4"><label for="performance-4">알아서</label></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="section">
-                        <h3>사용 장소</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="place">집에만 둘거에요</div>
-                            <div class="option" data-category="place">가져다닐거에요</div>
+                        <div class="section">
+                            <h3>사용 장소</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="place" value="집에만 둘거에요" id="place-1"><label for="place-1">집에만 둘거에요</label></div>
+                                <div class="option"><input type="radio" name="place" value="가져다닐거에요" id="place-2"><label for="place-2">가져다닐거에요</label></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="section">
-                        <h3>우선순위</h3>
-                        <div class="option-container">
-                            <div class="option" data-category="priority">하고 싶은 작업을 우선해 주세요</div>
-                            <div class="option" data-category="priority">화면을 우선해 주세요</div>
-                            <div class="option" data-category="priority">무게를 우선해주세요</div>
-                            <div class="option" data-category="priority">없으면 알아서 추천해주세요</div>
+                        <div class="section">
+                            <h3>우선순위</h3>
+                            <div class="option-container">
+                                <div class="option"><input type="radio" name="priority" value="하고 싶은 작업을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 작업을 우선해 주세요</label></div>
+                                <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>
+                                <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>
+                                <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
                 requiredCategories = ['mainOption', 'purpose', 'performance', 'place', 'priority'];
             }
             $('#additionalOptions').html(additionalHTML);
 
             $('#additionalOptions .option').click(function() {
-                let category = $(this).data('category');
                 $(this).siblings().removeClass('selected');
                 $(this).addClass('selected');
-                selectedOptions[category] = $(this).text();
+                let category = $(this).find('input').attr('name');
+                selectedOptions[category] = $(this).find('input').val();
                 checkAllOptionsSelected();
             });
         }
@@ -205,26 +209,6 @@
             let allSelected = requiredCategories.every(category => selectedOptions[category]);
             $('#recommendButton').prop('disabled', !allSelected);
         }
-
-        $('#recommendButton').click(function() {
-            console.log('선택된 옵션:', selectedOptions);
-
-            // AJAX 요청으로 서버에 선택된 옵션 전송
-            $.ajax({
-                url: '/recommend',  // 서버의 추천 엔드포인트 URL
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(selectedOptions),
-                success: function(recommendations) {
-                    // 추천 결과를 받아 새 페이지로 이동
-                    var encodedRecommendations = encodeURIComponent(JSON.stringify(recommendations));
-                    window.location.href = 'recommendationResult.html?recommendations=' + encodedRecommendations;
-                },
-                error: function(xhr, status, error) {
-                    alert('추천을 가져오는 중 오류가 발생했습니다: ' + error);
-                }
-            });
-        });
     });
 </script>
 </body>
