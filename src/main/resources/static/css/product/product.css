@@ -1,0 +1,83 @@
+.price {
+    color: red;
+    font-weight: bold;
+}
+
+.product-name {
+    font-weight: bold;
+}
+
+.card-img-top {
+    height: 100px;
+    object-fit: contain;
+}
+
+.product-wap .card .product-overlay {
+  background: rgba(0,0,0,0.2);
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s;
+}
+
+
+.product-wap:hover .card .product-overlay {
+  visibility: visible;
+  opacity: 1;
+}
+
+.btn-custom { background-color: #3498DB;}
+ul li:hover .btn-custom { background-color: #2c7cbf; }
+
+ul li:active .btn-custom { background-color: #236097 !important; }
+
+
+    .nav-tabs {
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid #dee2e6;
+        width: 100%;
+        justify-content: space-between;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .nav-item {
+        margin-bottom: -1px;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 0.5rem 1rem;
+        border: 1px solid transparent;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        text-decoration: none;
+        color: #495057;
+    }
+
+/*    .nav-link:hover,
+    .nav-link:focus {
+        border-color: #e9ecef #e9ecef #dee2e6;
+    }*/
+
+    .nav-link.active {
+        color: #495057;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 #fff;
+    }
+    .small-text {
+        font-size: 0.875em; /* 원하는 크기로 조정 */
+        color: #666; /* 원하는 색상으로 조정 */
+    }
+    .card-text {
+        font-size: 1.25em;
+        text-align: right
+    }
+
+
+            .product-image {
+               max-width: 200px; /* 이미지 최대 너비를 200px로 설정 */
+                  height: 200px; /* 이미지 높이를 200px로 설정 */
+                  margin-right: 20px;
+            }

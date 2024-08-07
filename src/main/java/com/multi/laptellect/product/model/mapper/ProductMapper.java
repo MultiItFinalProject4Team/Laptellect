@@ -1,13 +1,10 @@
 package com.multi.laptellect.product.model.mapper;
 
-import com.multi.laptellect.product.model.dto.ImageDTO;
-import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
-import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
-import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.multi.laptellect.product.model.dto.*;
+import org.apache.ibatis.annotations.*;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -15,13 +12,13 @@ public interface ProductMapper {
 
     void insertProduct(ProductDTO product); //크롤링 검색 후 상품등록
 
-    int countByProductCode(String productCode); //상품코드 계수
+    int countByProductCode(int productNo); //상품코드 계수
 
     List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    int getTotalProducts();
+    List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo, @Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    LaptopSpecDTO getProductByCode(String productCode);
+    int getTotalProducts();
 
     List<ProductDTO> getTypeByProduct(int typeNo);
 
@@ -29,23 +26,41 @@ public interface ProductMapper {
 
     void inputImage(ImageDTO imageDTO);
 
-    void getImage(String referenceCode);
+    ProductCategoryDTO findByOptions(@Param("specName") String specName);
 
-    ProductCategoryDTO findByOptions(String s);
+    void inputReviewDate(ReviewDTO reviewDTO);
 
-    String findCategorytNo(String options);
+    void insertProductCategory(@Param("categoryCode") String categoryCode, @Param("typeNo") int typeNo, @Param("options") String options);
 
+    int getProductByType(@Param("typeNo") int typeNo);
 
-    int insertProductCategory(@Param("typeNo") int typeNo, @Param("options") String options);
-
-    int insertProductSpec(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("optionValue") String optionValue);
 
     List<ProductDTO> findProduct();
 
-    int checkSpecExists(@Param("productNo") int productNo, @Param("categoryNo") int categoryNo, @Param("options") String options);
+    @Select("SELECT COUNT(*) FROM product_spec WHERE product_no = #{ productNo } AND option_value = #{ specValue }")
+    int checkSpecExists(@Param("productNo") int productNo, @Param("specValue") String specValue);
 
-    List<LaptopDetailsDTO> laptopProductDetails(String productCode);
+    void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
 
+   List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
 
+    List<LaptopDetailsDTO> laptopProductDetails(int productNo);
+
+
+    @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")
+    int insertWishlist(WishlistDTO wishListDTO);
+
+    @Select("SELECT * FROM wishlist WHERE product_no = #{ productNo } AND member_no = #{ memberNo }")
+    WishlistDTO findWishlist(WishlistDTO wishListDTO);
+
+    @Delete("DELETE FROM wishlist WHERE wishlist_no = #{ wishlistNo }")
+    int deleteWishlist(int wishlistNo);
+
+    ArrayList<WishlistDTO> findAllWishlistByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
+
+    @Select("SELECT COUNT(*) FROM wishlist WHERE member_no = #{ memberNo }")
+    int countAllWishlistByMemberNo(int memberNo);
+    
+    ProductDTO findProductByProductNo(String productNo);
 }

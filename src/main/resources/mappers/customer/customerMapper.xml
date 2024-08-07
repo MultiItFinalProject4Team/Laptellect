@@ -223,7 +223,7 @@
         where productq_no=#{productqNo}
     </delete>
 
-    <select id="getPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+    <select id="getPersonalqSearchList" parameterType="com.multi.laptellect.customer.dto.PersonalqSearchDto" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
         select
         personalq_no,
         member_no,
@@ -232,11 +232,19 @@
         created_at
         from personal_question
         where member_no=#{memberNo}
-        AND title LIKE CONCAT('%', #{keyword}, '%')
+        and title LIKE CONCAT('%', #{keyword}, '%')
         <if test="category != 'personalq_all'">
             AND personalq_categorycode LIKE #{category}
         </if>
-        order by personalq_no desc
+        <if test='answer != "A"'>
+            AND answer LIKE #{answer}
+        </if>
+        <if test="date == 'old'">
+            order by created_at asc
+        </if>
+        <if test="date == 'recent'">
+            order by created_at desc
+        </if>
     </select>
 
     <select id="getAllPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
@@ -259,7 +267,15 @@
         <if test="category != 'productq_all'">
             AND productq_categorycode LIKE #{category}
         </if>
-        order by productq_no desc
+        <if test='answer != "A"'>
+            AND answer LIKE #{answer}
+        </if>
+        <if test="date == 'old'">
+            order by created_at asc
+        </if>
+        <if test="date == 'recent'">
+            order by created_at desc
+        </if>
     </select>
 
     <select id="getMyProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
@@ -271,10 +287,18 @@
         <if test="category != 'productq_all'">
             AND productq_categorycode LIKE #{category}
         </if>
-        order by productq_no desc
+        <if test='answer != "A"'>
+            AND answer LIKE #{answer}
+        </if>
+        <if test="date == 'old'">
+            order by created_at asc
+        </if>
+        <if test="date == 'recent'">
+            order by created_at desc
+        </if>
     </select>
 
-    <select id="getAllPersonalqSearchList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
+    <select id="getAllPersonalqSearchList" parameterType="com.multi.laptellect.customer.dto.PersonalqSearchDto" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
         select
         personalq_no,
         member_no,
@@ -286,7 +310,16 @@
         <if test="category != 'personalq_all'">
             AND personalq_categorycode LIKE #{category}
         </if>
-        order by personalq_no desc
+        <if test='answer != "A"'>
+            AND answer LIKE #{answer}
+        </if>
+        <if test="date == 'old'">
+            order by created_at asc
+        </if>
+        <if test="date == 'recent'">
+            order by created_at desc
+        </if>
+
     </select>
 
     <update id="setImage" parameterType="string">

@@ -2,7 +2,8 @@ package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.laptop.*;
+import com.multi.laptellect.product.model.dto.ReviewDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * The type Crawling service.
@@ -40,7 +41,6 @@ public class CrawlingService {
     private final String PRODUCT_LIST_URL = "https://prod.danawa.com/list/ajax/getProductList.ajax.php";
     private final String PRODUCT_DETAILS_URL = "https://prod.danawa.com/info/ajax/getProductDescription.ajax.php";
 
-
     /**
      * 지정된 타입의 제품을 크롤링하는 메서드
      *
@@ -51,7 +51,7 @@ public class CrawlingService {
     public List<ProductDTO> crawlProducts(int typeNo) throws IOException {
         List<ProductDTO> productList = new ArrayList<>();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            for (int page = 1; page <= 12; page++) {
+            for (int page = 1; page <= 5; page++) {
                 String responseString = sendPostRequest(httpClient, page, typeNo);
                 parseHtml(responseString, productList);
                 log.info("productList확인{}", productList);
@@ -60,7 +60,6 @@ public class CrawlingService {
         }
         return productList;
     }
-
 
     /**
      * HTTP POST 요청을 보내는 메서드
@@ -86,9 +85,10 @@ public class CrawlingService {
                         "&physicsCate2=869" +
                         "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
-                        "&listCount=90");
+                        "&listCount=10");
                 log.info("laptopType {}", productType);
                 break;
+
             case 2:
                 referer = "https://prod.danawa.com/list/?cate=112787";
                 params = new StringEntity("page=" + page +
@@ -138,7 +138,6 @@ public class CrawlingService {
         return "";
     }
 
-
     /**
      * HTML을 파싱하여 제품 정보를 추출하는 메서드
      *
@@ -174,157 +173,79 @@ public class CrawlingService {
         String productName = product.select(".prod_name a").text().trim();
         String price = product.select(".price_sect strong").text().trim().replace(",", "");
         String productCode = product.attr("id").replace("productItem", "");
-        String imageUrl = product.select(".thumb_image img").attr("data-original");
 
-        Elements specElements = product.select(".spec_list a");
-//        String cate1 = specElements.size() > 2 ? specElements.get(0).text().trim() : "";
-//        String cate2 = specElements.size() > 2 ? specElements.get(1).text().trim() : "";
-//        String cate3 = specElements.size() > 2 ? specElements.get(2).text().trim() : "";
+        // String imageUrl = product.select(".thumb_image img").attr("data-original");
 
-//        log.info("speccate1{}:", cate1);
-//        log.info("speccate2{}:", cate2);
-//        log.info("speccate3{}:", cate3);
-
-
-        if (imageUrl == null || imageUrl.isEmpty()) { // 이미지 URL이 없을 경우 대체 URL 사용
-            imageUrl = product.select(".thumb_image img").attr("src");
-        }
-
+//        if (imageUrl == null || imageUrl.isEmpty()) { // 이미지 URL이 없을 경우 대체 URL 사용
+//            imageUrl = product.select(".thumb_image img").attr("src");
+//        }
 
         if (productName.isEmpty() || price.isEmpty() || productCode.isEmpty()) {
             return null;
         }
 
-        String firstPrice = price.split(" ")[0];
+        int firstPrice = Integer.parseInt(price.split(" ")[0]);
+
+        log.info("가격 데이터 확인 = {}", firstPrice);
 
         ProductDTO ProductDTO = new ProductDTO();
         ProductDTO.setProductCode(productCode);
         ProductDTO.setProductName(productName);
-        ProductDTO.setPrice(Integer.parseInt(firstPrice));
+        ProductDTO.setPrice(firstPrice);
 
-        ProductDTO.setImage(imageUrl);
-
+        //   ProductDTO.setImage(imageUrl);
 
         log.info("데이터확인: {}" + ProductDTO);
 
         return ProductDTO;
     }
 
-    public void processLaptopDetails() {
+    public void processLaptopDetails(int productType) {
         //제품 번호의 리스트 가져옴
-        List<ProductDTO> productNos = productMapper.findProduct();
-
-        log.info("productNos리스트 {}", productNos);
-
-        //각 제품에 대한 처리
-        for (ProductDTO productDTO : productNos) {
-            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
-            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
-
-            int productNo = productDTO.getProductNo();
-            String productCode = productDTO.getProductCode();
-
-            getLaptopDetails(productNo, productCode);
+        List<ProductDTO> products = productMapper.findProduct();
+        for (ProductDTO product : products) {
+            int productNo = product.getProductNo();
+            String productCode = product.getProductCode();
+            log.info("processLaptopDetails = {}", productType);
+            getLaptopDetails(productNo, productCode, productType);
         }
     }
 
-    public void processMouseDetails() {
-        //제품 번호의 리스트 가져옴
-        List<ProductDTO> productNos = productMapper.findProduct();
-
-        log.info("productNos리스트 {}", productNos);
-
-        //각 제품에 대한 처리
-        for (ProductDTO productDTO : productNos) {
-            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
-            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
-
-            int productNo = productDTO.getProductNo();
-            String productCode = productDTO.getProductCode();
-
-            getLaptopDetails(productNo, productCode);
-        }
-    }
-
-    public void processKeyboardDetails() {
-        //제품 번호의 리스트 가져옴
-        List<ProductDTO> productNos = productMapper.findProduct();
-
-        log.info("productNos리스트 {}", productNos);
-
-        //각 제품에 대한 처리
-        for (ProductDTO productDTO : productNos) {
-            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
-            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
-
-            int productNo = productDTO.getProductNo();
-            String productCode = productDTO.getProductCode();
-
-            getLaptopDetails(productNo, productCode);
-        }
-    }
-
-    public static void reviewCrawler(ProductDTO productDTO) {
-        int totalPages = 1;
-        String url =
-                    "https://prod.danawa.com/info/dpg/ajax/companyProductReview.ajax.php?" +
-                            "t=0.8990118455164167" +
-                            "&prodCode=3798967" +
-                            "&cate1Code=861" +
-                            "&page=" + totalPages +
-                            "&limit=100" +
-                            "&score=0" +
-                            "&sortType=" +
-                            "&onlyPhotoReview=" +
-                            "&usefullScore=Y" +
-                            "&innerKeyword=" +
-                            "&subjectWord=0" +
-                            "&subjectWordString=" +
-                            "&subjectSimilarWordString=" +
-                            "&_=1722562970811";
-        try {
-
-
-            Document doc = Jsoup.connect(url).get();
-            Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
-
-
-            Elements paginationElements = doc.select(".page_nav_area .page_num");
-            if (!paginationElements.isEmpty()) {
-                // 마지막 페이지 번호를 추출
-                totalPages = Integer.parseInt(paginationElements.last().text());
-            }
-            log.info("페이지 = {}",paginationElements);
-
-            for(int pageNum =1; pageNum <= totalPages; pageNum++){
-
-                Document doc1 = Jsoup.connect(url + pageNum).get();
-
-                Elements review1 = doc1.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
-                int reviewCount = 0;
-
-                for(Element review : reviews){
-                    String ratingStyle = review.select(".star_mask").attr("style");
-                    String rating = ratingStyle.replace("width:","").replace("%","").trim();
-
-                    String title = review.select(".tit_W .tit").text();
-
-                    String content = review.select(".atc").text();
-
-                    reviewCount++;
-
-                    log.info("상품 별점 = {}, 상품 리뷰 제목 = {}, 상품 리뷰 내용 = {}", rating, title, content);
-                }
-                log.info("조회된 리뷰 계수  = {}", reviewCount);
-
-            }
-
-        } catch (Exception e){
-
-        }
-
-
-    }
+//    public void processMouseDetails() {
+//        //제품 번호의 리스트 가져옴
+//        List<ProductDTO> productNos = productMapper.findProduct();
+//
+//        log.info("productNos리스트 {}", productNos);
+//
+//        //각 제품에 대한 처리
+//        for (ProductDTO productDTO : productNos) {
+//            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
+//            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
+//
+//            int productNo = productDTO.getProductNo();
+//            String productCode = productDTO.getProductCode();
+//
+//            getLaptopDetails(productNo, productCode);
+//        }
+//    }
+//
+//    public void processKeyboardDetails() {
+//        //제품 번호의 리스트 가져옴
+//        List<ProductDTO> productNos = productMapper.findProduct();
+//
+//        log.info("productNos리스트 {}", productNos);
+//
+//        //각 제품에 대한 처리
+//        for (ProductDTO productDTO : productNos) {
+//            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
+//            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
+//
+//            int productNo = productDTO.getProductNo();
+//            String productCode = productDTO.getProductCode();
+//
+//            getLaptopDetails(productNo, productCode);
+//        }
+//    }
 
 
     /**
@@ -334,167 +255,88 @@ public class CrawlingService {
      * @param productNo   제품의 번호
      * @return 제품 세부 정보가 담긴 LaptopSpecDTO 객체
      */
-    public LaptopSpecDTO getLaptopDetails(int productNo, String productCode) {
+    public LaptopSpecDTO getLaptopDetails(int productNo, String productCode, int productType) {
         log.info("크롤링 사전 준비 제품 번호 = {} ", productNo);
         log.info("크롤링 사전 준비 제품 코드 = {} ", productCode);
         LaptopSpecDTO laptopSpecDTO = new LaptopSpecDTO();
 
         try {
-
-
             String referer = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=112758";
             String bodyData = "pcode=" + productCode +
                     "&cate1=860" +
                     "&cate2=869";
 
             String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
+            log.info("responseHtml = {}", responseHtml);
+
             Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
 
+            log.info("doc 확인 = {}", doc);
 
-            ArrayList<String> laptopSpecValue = new ArrayList<>();
-
-
-            laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
-
-            laptopSpecValue.add(getSpecValue(doc, "CPU 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "CPU 코드명"));
-            laptopSpecValue.add(getSpecValue(doc, "CPU 넘버"));
-            laptopSpecValue.add(getSpecValue(doc, "코어 수"));
-            laptopSpecValue.add(getSpecValue(doc, "스레드 수"));
-
-            laptopSpecValue.add(getSpecValue(doc, "GPU 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 제조사"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 칩셋"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 코어"));
-            laptopSpecValue.add(getSpecValue(doc, "GPU 클럭"));
-
-            laptopSpecValue.add(getSpecValue(doc, "램 타입"));
-            laptopSpecValue.add(getSpecValue(doc, "램 용량"));
-            laptopSpecValue.add(getSpecValue(doc, "램 슬롯"));
-            laptopSpecValue.add(getSpecValue(doc, "램 대역폭"));
-            laptopSpecValue.add(getSpecValue(doc, "램 교체"));
-
-            laptopSpecValue.add(getSpecValue(doc, "화면 크기"));
-            laptopSpecValue.add(getSpecValue(doc, "해상도"));
-
-            laptopSpecValue.add(getSpecValue(doc, "저장 용량"));
-            laptopSpecValue.add(getSpecValue(doc, "저장장치 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "저장 슬롯"));
-            laptopSpecValue.add(getSpecValue(doc, "패널 표면 처리"));
-            laptopSpecValue.add(getSpecValue(doc, "무게"));
-
-            laptopSpecValue.add(getSpecValue(doc, "NPU 종류"));
-            laptopSpecValue.add(getSpecValue(doc, "NPU TOPS"));
-            laptopSpecValue.add(getSpecValue(doc, "SoC"));
-
-            laptopSpecValue.add(getSpecValue(doc, "무선랜"));
-            laptopSpecValue.add(getSpecValue(doc, "USB"));
-            laptopSpecValue.add(getSpecValue(doc, "USB-C"));
-            laptopSpecValue.add(getSpecValue(doc, "USB-A"));
-            laptopSpecValue.add(getSpecValue(doc, "배터리"));
-            laptopSpecValue.add(getSpecValue(doc, "어댑터"));
-            laptopSpecValue.add(getSpecValue(doc, "전원"));
-            laptopSpecValue.add(getSpecValue(doc, "두께"));
-            laptopSpecValue.add(getSpecValue(doc, "쿨링팬"));
-            laptopSpecValue.add(getSpecValue(doc, "스피커"));
-
-            log.info("전원 = {}", getSpecValue(doc, "전원"));
+            Map<String, List<String>> categoryMap = createLaptopCategory(productType);
+            log.info("getLaptopDetails = {}", productType);
 
 
-            ArrayList<String> laptopSpecName = new ArrayList<>();
-
-            laptopSpecName.add("운영체제(OS)");
-
-            laptopSpecName.add("CPU 종류");
-            laptopSpecName.add("CPU 코드명");
-            laptopSpecName.add("CPU 넘버");
-            laptopSpecName.add("코어 수");
-            laptopSpecName.add("스레드 수");
-
-            laptopSpecName.add("GPU 종류");
-            laptopSpecName.add("GPU 제조사");
-            laptopSpecName.add("GPU 칩셋");
-            laptopSpecName.add("GPU 코어");
-            laptopSpecName.add("GPU 클럭");
-
-            laptopSpecName.add("램 타입");
-            laptopSpecName.add("램 용량");
-            laptopSpecName.add("램 슬롯");
-            laptopSpecName.add("램 대역폭");
-            laptopSpecName.add("램 교체");
-
-            laptopSpecName.add("화면 크기");
-            laptopSpecName.add("해상도");
-
-            laptopSpecName.add("저장 용량");
-            laptopSpecName.add("저장장치 종류");
-            laptopSpecName.add("저장 슬롯");
-            laptopSpecName.add("패널 표면 처리");
-            laptopSpecName.add("무게");
-
-            laptopSpecName.add("NPU 종류");
-            laptopSpecName.add("NPU TOPS");
-            laptopSpecName.add("SoC");
-
-            laptopSpecName.add("무선랜");
-            laptopSpecName.add("USB");
-            laptopSpecName.add("USB-C");
-            laptopSpecName.add("USB-A");
-            laptopSpecName.add("배터리");
-            laptopSpecName.add("어댑터");
-            laptopSpecName.add("전원");
-            laptopSpecName.add("두께");
-            laptopSpecName.add("쿨링팬");
-            laptopSpecName.add("스피커");
-
-            log.debug("카테고리 추가 시작 = {}", laptopSpecName);
-            int insertCount = 0;
-            for (int i = 0; i < laptopSpecName.size(); i++) { // 카테고리 추가를 위한 For문
-                ProductCategoryDTO specname = productMapper.findByOptions(laptopSpecName.get(i));
+            ProductDTO productDTO = getProductDetails1(productCode);
+            log.info("ProductDTO 확인 = {}", productDTO);
 
 
-                log.info("specname {}:", specname);
-                log.info("laptopSpecName {}:", laptopSpecValue.get(i));
-
-                if (specname == null) { // 카테고리가 DB에 존재하지 않을 시 Insert
-                    int o = productMapper.insertProductCategory(1, laptopSpecName.get(i));
-                    log.info("상품 카테고리 Insert 완료 = {}", o);
-                }
-
-            }
-            log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
-            for (int i = 0; i < laptopSpecValue.size(); i++) { // 상품 스펙을 Insert 하기 위한 For문
-
-                String specName = laptopSpecName.get(i); // 옵션 이름
-                String specValue = laptopSpecValue.get(i); // 옵션 값
-                int options = Integer.parseInt((productMapper.findCategorytNo(specName))); // 옵션의 PK 키 조회
-
-
-                if (specValue.equals("정보 없음")) {
-                    log.info("옵션 정보 없음 = {}", specValue);
-                } else {
-                    log.info("옵션 키값 = {}, 옵션 이름 = {}, 옵션 값 = {}", options, specName, specValue);
-
-                    //중복 확인 쿼리
-                    int exists = productMapper.checkSpecExists(productNo, options, specValue);
-                    if (exists == 0) {
-                        productMapper.insertProductSpec(productNo, options, specValue);
-                        insertCount++;
-                        log.info("ProductSpec Insert 완료 (현재 횟수: {})", insertCount);
-                    }
-
-
-                    log.info("ProductSpec Insert 완료");
-                }
-            }
-
-            log.info("ProductSpec Insert 실행횟수 확인 = {}", insertCount);
+            createLaptopSpec(productNo, categoryMap, doc,productDTO);
         } catch (IOException e) {
             log.error("Error while getting product details", e);
         }
         return laptopSpecDTO;
 
     }
+
+    /**
+     *
+     * @param productCode 제품의 코드
+     * @return 조건이 아닐시 반환
+     * @throws IOException 예외처리
+     */
+    public String getProductImageUrl(String productCode) throws IOException {
+
+
+        String url = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=112758";
+        Document doc = Jsoup.connect(url).get();
+
+        Elements imageElements = doc.select("div.photo_w img#baseImage");
+        return !imageElements.isEmpty() ? imageElements.first().attr("src") : "이미지 URL을 찾을 수 없습니다.";
+    }
+
+
+
+    public ProductDTO getProductDetails1(String productCode) throws IOException {
+        ProductDTO productDTO = new ProductDTO();
+        String url = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=112758";
+        Document doc = Jsoup.connect(url).get();
+
+        Elements registrationMonthElements = doc.select("span.txt");
+        for (Element element : registrationMonthElements) {
+            if (element.text().contains("등록월")) {
+                String[] parts = element.text().split(": ");
+                if (parts.length == 2) {
+                    productDTO.setRegistrationMonth(parts[1].trim());
+                }
+                break;
+            }
+        }
+
+        Elements manufacturerElements = doc.select("span#makerTxtArea");
+        for (Element element : manufacturerElements) {
+            String[] parts = element.text().split(": ");
+            if (parts.length == 2) {
+                productDTO.setManufacturer(parts[1].trim());
+            }
+            break;
+        }
+
+        return productDTO;
+    }
+
+
+
 
     /**
      * HTTP POST 요청을 보내는 정적 메서드
@@ -513,7 +355,7 @@ public class CrawlingService {
             log.info("리퍼러 확인 {} =", referer);
             post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            StringEntity entity = new StringEntity(bodyData);
+            StringEntity entity = new StringEntity(bodyData, StandardCharsets.UTF_8);
             post.setEntity(entity);
 
 
@@ -523,6 +365,7 @@ public class CrawlingService {
             }
         }
     }
+
 
     /**
      * HTML 문서에서 특정 스펙의 값을 추출하는 메서드
@@ -577,5 +420,232 @@ public class CrawlingService {
             System.out.println("Error downloading image: " + e.getMessage());
         }
     }
+
+    public Map<String, List<String>> createLaptopCategory(int productType) {
+        ArrayList<String> laptopSpecNames = new ArrayList<>();
+        Map<String, List<String>> categoryMap = new LinkedHashMap<>();
+
+        categoryMap.put("LBI", Arrays.asList("운영체제(OS)", "제조사", "등록월", "무게", "두께", "스피커", "쿨링팬"));
+        categoryMap.put("LR", Arrays.asList("램 타입", "램 용량", "램 슬롯", "램 대역폭", "램 교체"));
+        categoryMap.put("LC", Arrays.asList("CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS"));
+        categoryMap.put("LS", Arrays.asList("저장 용량", "저장장치 종류", "저장 슬롯"));
+        categoryMap.put("LD", Arrays.asList("화면 크기", "해상도", "패널 표면 처리", "주사율", "화면 밝기", "패널 종류"));
+        categoryMap.put("LWC", Arrays.asList("무선랜", "USB", "USB-C", "USB-A", "블루투스", "썬더볼트4"));
+        categoryMap.put("LG", Arrays.asList("GPU 종류", "GPU 제조사", "GPU 칩셋", "GPU 코어", "GPU 클럭"));
+        categoryMap.put("LPA", Arrays.asList("배터리", "어댑터", "전원"));
+
+        int categoryCount = 0;
+
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            String categoryPrefix = entry.getKey();
+            List<String> specs = entry.getValue();
+
+            log.info("categoryPrefix 데이터 확인 = {}", categoryPrefix);
+            log.info("specs 데이터 확인 = {}", specs);
+            log.info("createLaptopCategory = {}", productType);
+
+
+            for (String specName : specs) {
+
+                categoryCount++;
+                String categoryNo = categoryPrefix + categoryCount;
+
+                ProductCategoryDTO spec = productMapper.findByOptions(specName);
+                log.info("specname {}:", specName);
+                if (spec == null) {
+
+                    productMapper.insertProductCategory(categoryNo, productType, specName);
+
+
+                }
+            }
+        }
+
+        return categoryMap;
+    }
+
+
+
+
+    public void createLaptopSpec(int productNo, Map<String, List<String>> categoryMap, Document doc,ProductDTO productDTO) {
+        ArrayList<String> laptopSpecValue = new ArrayList<>();
+
+        // 노트북 기본 정보 (LBI)
+        laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
+        laptopSpecValue.add(productDTO.getManufacturer()); //제조사
+        laptopSpecValue.add(productDTO.getRegistrationMonth()); //등록월
+        laptopSpecValue.add(getSpecValue(doc, "무게"));
+        laptopSpecValue.add(getSpecValue(doc, "두께"));
+        laptopSpecValue.add(getSpecValue(doc, "스피커"));
+        laptopSpecValue.add(getSpecValue(doc, "쿨링팬"));
+
+        // 노트북 RAM (LR)
+        laptopSpecValue.add(getSpecValue(doc, "램 타입"));
+        laptopSpecValue.add(getSpecValue(doc, "램 용량"));
+        laptopSpecValue.add(getSpecValue(doc, "램 슬롯"));
+        laptopSpecValue.add(getSpecValue(doc, "램 대역폭"));
+        laptopSpecValue.add(getSpecValue(doc, "램 교체"));
+
+        // 노트북 CPU (LC)
+        laptopSpecValue.add(getSpecValue(doc, "CPU 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "CPU 코드명"));
+        laptopSpecValue.add(getSpecValue(doc, "CPU 넘버"));
+        laptopSpecValue.add(getSpecValue(doc, "코어 수"));
+        laptopSpecValue.add(getSpecValue(doc, "스레드 수"));
+        laptopSpecValue.add(getSpecValue(doc, "NPU 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "NPU TOPS"));
+
+        // 노트북 저장관련 (LS)
+        laptopSpecValue.add(getSpecValue(doc, "저장 용량"));
+        laptopSpecValue.add(getSpecValue(doc, "저장장치 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "저장 슬롯"));
+
+        // 노트북 디스플레이 (LD)
+        laptopSpecValue.add(getSpecValue(doc, "화면 크기"));
+        laptopSpecValue.add(getSpecValue(doc, "해상도"));
+        laptopSpecValue.add(getSpecValue(doc, "패널 표면 처리"));
+        laptopSpecValue.add(getSpecValue(doc, "주사율"));
+        laptopSpecValue.add(getSpecValue(doc, "화면 밝기"));
+        laptopSpecValue.add(getSpecValue(doc, "패널 종류"));
+
+        // 무선랜 및 연결 장치 (LWC)
+        laptopSpecValue.add(getSpecValue(doc, "무선랜"));
+        laptopSpecValue.add(getSpecValue(doc, "USB"));
+        laptopSpecValue.add(getSpecValue(doc, "USB-C"));
+        laptopSpecValue.add(getSpecValue(doc, "USB-A"));
+        laptopSpecValue.add(getSpecValue(doc, "블루투스"));
+        laptopSpecValue.add(getSpecValue(doc, "썬더볼트4"));
+
+        // 노트북 GPU (LG)
+        laptopSpecValue.add(getSpecValue(doc, "GPU 종류"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 제조사"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 칩셋"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 코어"));
+        laptopSpecValue.add(getSpecValue(doc, "GPU 클럭"));
+
+        // 노트북 전원 (LPA)
+        laptopSpecValue.add(getSpecValue(doc, "배터리"));
+        laptopSpecValue.add(getSpecValue(doc, "어댑터"));
+        laptopSpecValue.add(getSpecValue(doc, "전원"));
+
+
+        log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
+
+        int index = 0;
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            List<String> specs = entry.getValue();
+
+            for (String specName : specs) {
+                if (index >= laptopSpecValue.size()) {
+                    log.error("Index out of bounds: index = {}, size = {}", index, laptopSpecValue.size());
+                    return; // 인덱스가 리스트 크기를 벗어날 때 메서드 종료
+                }
+
+                String specValue = laptopSpecValue.get(index);
+
+                if (specValue == null || specValue.equals("정보 없음")) {
+                    log.info("옵션 정보 없음 = {}", specValue);
+                } else {
+                    log.info("Insert 값 = {} : {}", specName, specValue);
+
+                    // 중복 확인 쿼리
+                    int exists = productMapper.checkSpecExists(productNo, specValue);
+                    if (exists == 0) {
+                        log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
+                        productMapper.insertProductSpec(productNo, specName, specValue);
+
+                        log.info("ProductSpec Insert 완료 = {}", productNo);
+                    }
+
+                    log.info("ProductSpec Insert 완료");
+                }
+                index++;
+            }
+        }
+
+    }
+
+    public void reviewCrawler() {
+
+        List<ProductDTO> productNos = productMapper.findProduct();
+        int emptyReviewData = 0;
+
+
+        for (ProductDTO productDTO : productNos) {
+
+            int productNo = productDTO.getProductNo();
+            String productCode = productDTO.getProductCode();
+
+            try {
+                for (int totalPages = 1; totalPages <= 1000; totalPages++) {
+                    String url =
+                            "https://prod.danawa.com/info/dpg/ajax/companyProductReview.ajax.php?" +
+                                    "t=0.8990118455164167" +
+                                    "&prodCode=" + productCode +
+                                    "&cate1Code=861" +
+                                    "&page=" + totalPages +
+                                    "&limit=100" +
+                                    "&score=0" +
+                                    "&sortType=" +
+                                    "&onlyPhotoReview=" +
+                                    "&usefullScore=Y" +
+                                    "&innerKeyword=" +
+                                    "&subjectWord=0" +
+                                    "&subjectWordString=" +
+                                    "&subjectSimilarWordString=" +
+                                    "&_=1722562970811";
+
+                    Document doc = Jsoup.connect(url).get();
+                    Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
+
+                    if (reviews.isEmpty()) {
+                        emptyReviewData++;
+                        log.info("조회된 리뷰가 없습니다. 페이지: {}", totalPages);
+                        if (emptyReviewData >= 3) {
+                            log.info("데이터 조회를 끝마쳤습니다 크롤링을 종료합니다.");
+                            break;
+                        }
+                        continue;
+                    }
+
+                    int reviewCount = 0;
+                    for (Element review : reviews) {
+                        String ratingStyle = review.select(".star_mask").attr("style");
+                        String rating = ratingStyle.replace("width:", "").replace("%", "").trim();
+
+                        int starRating = convertRatingToStars(Integer.parseInt(rating));
+
+                        String title = review.select(".tit_W .tit").text();
+                        String content = review.select(".atc").text();
+
+                        reviewCount++;
+
+                        log.info("상품 별점 = {}, 상품 리뷰 제목 = {}, 상품 리뷰 내용 = {}", starRating, title, content);
+
+
+                        ReviewDTO reviewDTO = new ReviewDTO();
+                        reviewDTO.setProductNo(productNo);
+                        reviewDTO.setRating(starRating);
+                        reviewDTO.setTitle(title);
+                        reviewDTO.setContent(content);
+
+                        productMapper.inputReviewDate(reviewDTO);
+
+
+                    }
+                    log.info("페이지 {}에서 조회된 리뷰 계수 = {}", totalPages, reviewCount);
+                }
+            } catch (Exception e) {
+                log.error("Error during crawling reviews", e);
+            }
+        }
+
+
+    }
+
+    private static int convertRatingToStars(int rating) {
+        return rating / 20;
+    }
+
 
 }

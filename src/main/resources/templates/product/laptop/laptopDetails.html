@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{common/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품 정보</title>
+    <style>
+
+        .review-stars {
+            color: gold;
+            font-size: 1.5rem;
+        }
+
+        .spec-table th { background-color: #f8f9fa;
+                         width: 15%; }
+        #spec-box { width: 85%; margin: 0 auto;}
+
+        body { font-family: 'Noto Sans KR', sans-serif; }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
+            });
+
+            // 위시리스트 추가/삭제
+            $(".btn-process-wishlist").on("click", function () {
+                event.preventDefault();
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-wishlist",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("위시리스트 추가 완료.");
+                            break;
+                          case 2:
+                            alert("위시리스트 삭제 완료.");
+                            break;
+                          default:
+                            alert("위시리스트 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+            // 장바구니 추가/삭제
+            $(".btn-process-cart").on("click", function () {
+                event.preventDefault();
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+        });
+    </script>
+</head>
+<body>
+<div class="container mt-5" layout:fragment="content">
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <!-- 상품 이미지 -->
+            <img th:src="@{'/img/product/' + ${ laptop.image }}" class="card-img-top" alt="상품 이미지" style="height: 400px; object-fit: contain;">
+            <div class="spec-box mt-3">
+                <!-- 상품 기본 정보 -->
+                <ul class="list-unstyled">
+                    <li><strong>운영체제<span class="float-end" th:text="${ laptop.os }">Window 11</span></strong></li>
+                    <li><strong>화면 크기<span class="float-end"
+                                           th:text="${ laptop.display.screenSize }">15.6인치</span></strong></li>
+                    <li><strong>무게<span class="float-end"
+                                        th:text="${ laptop.portability.weight }">1.86kg</span></strong></li>
+                    <li><strong>해상도<span class="float-end"
+                                         th:text="${ laptop.display.resolution }">1920x1080(FHD)</span></strong></li>
+                    <li><strong>RAM<span class="float-end" th:text="${ laptop.ram.ramSize }">16GB</span></strong></li>
+                </ul>
+            </div>
+            <div class="mt-2">
+
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-12 mb-1" id="product-name">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 th:text="${ laptop.productName }"></h4>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <div style="margin-left: 1rem !important;">
+                                <a class="btn-process-wishlist" href="#" th:attr="data-product-no=${productNo}">
+                                    <span><i class="fa-solid fa-heart fa-1.5x"></i></span>
+                                    <span>위시리스트</span>
+                                </a>
+                            </div>
+                            <div style="margin-left: 1rem !important;">
+                                <a class="btn-process-cart" href="#" th:attr="data-product-no=${productNo}">
+                                    <span><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
+                                    <span>장바구니</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row mt-2">
+                <div class="col-7">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="mb-2">
+                            <span><strong>가격 : <span class="price" th:text="${laptop.price}"></span></strong></span>
+                            <form th:action="@{/payment/payment}" method="post">
+                                <input type="hidden" name="productName" th:value="${laptop.productName}">
+                                <input type="hidden" name="imageUrl" th:value="${laptop.image}">
+                                <input type="hidden" name="price" th:value="${laptop.price}">
+                                <button type="submit" class="btn btn-sm btn-custom-primary ms-4">구매하기</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <ul id="list-simple-spec">
+                        <li><strong>제조사 :</strong> 삼성전자</li>
+                        <li><strong>등록월 :</strong> 갤럭시북</li>
+                        <li><strong>GPU :</strong> 내장그래픽</li>
+                        <li><strong>CPU :</strong> 코어i7 13세대</li>
+                        <li><strong>코어개수 :</strong> 10코어(2P+8E)</li>
+                    </ul>
+                </div>
+                <div class="col-md-5">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center"><h5>상품평(614건)</h5> <a href="#">더보기</a></div>
+
+                        <div class="d-flex justify-content align-items-center"><span class="review-stars">★★★★☆</span> <span class="text-dark">4.9점</span></div>
+
+
+                        <div class="review-group">
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">대학생 필수 노트북? 추천 각!...</h6>
+                                    <small>2024.05.25</small>
+                                </div>
+                                <p class="mb-1">기존에 쓰던 노트북이 고장나서 급하게 구매하게 되었습니다...</p>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">삼성 덕분입니다. 저는 주로 인터넷...</h6>
+                                    <small>2024.05.27</small>
+                                </div>
+                                <p class="mb-1">삼성 제품이라 믿고 구매했어요...</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <!--      숫자 형태로 넣어주고 Js로 동적 생성 or 타임리프 if문 걸어주고 별 생성     -->
+                    <span class="review-stars">★★★★☆</span>
+                    <span class="ms-2"> / </span>
+                    <a href="#" class="text-decoration-none ms-2">리뷰 보러가기</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mt-4">
+                <h4><strong>상품 상세 정보</strong></h4>
+            </div>
+            <hr>
+
+            <div id="spec-box">
+                <div class="col-12 mt-4">
+                    <h6><strong>기본사양</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>화면 정보</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>단자</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>부가기능</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>입력장치</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="col-12 mt-4">
+                    <h6><strong>전원</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>운영체제</th>
+                        <td>테스트</td>
+                        <th>화면 크기</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>종류</th>
+                        <td>테스트</td>
+                        <th>속도</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>코어개수</th>
+                        <td>테스트</td>
+                        <th>내장그래픽</th>
+                        <td>테스트</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td>테스트</td>
+                        <th>무게</th>
+                        <td>테스트</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-12 mt-4">
+                <h4><strong>의견/리뷰</strong></h4>
+            </div>
+            <hr>
+            <div id="customer-box">
+
+            </div>
+
+            <div id="review-box">
+
+            </div>
+
+            <div id="crolling-box">
+
+            </div>
+
+            <div class="col-12 mt-4">
+                <h4><strong>연관상품</strong></h4>
+            </div>
+            <hr>
+
+            <div id="recommend-box">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

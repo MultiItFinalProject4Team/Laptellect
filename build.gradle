@@ -50,6 +50,7 @@ dependencies {
 
 	implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16' // log4j DB
 	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.3.0' // thymeleaf-layout-dialect
+	implementation 'org.springframework.data:spring-data-commons:3.3.1' // Pageable
 	implementation 'com.google.code.gson:gson:2.8.9' // gson
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // smtp
 	implementation 'org.springframework.boot:spring-boot-starter-aop' // aop
@@ -74,6 +75,9 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.180' // aws
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
 
 }

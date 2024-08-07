@@ -1,0 +1,194 @@
+<script>
+    $(document).ready(function() {
+     $('.price').each(function() {
+       let value = $(this).text().replace(' 원', '');
+       let formattedValue = new Intl.NumberFormat().format(value);
+       $(this).text(formattedValue + ' 원');
+    });
+
+    $('#selectAll').change(function() {
+       const isChecked = $(this).prop('checked');
+       $('.form-check-input').prop('checked', isChecked);
+    });
+
+    $('.btn-delete').click(function() {
+        let productNo = $(this).data('product-no');
+
+        $.ajax({
+            url: '/api/product/delete-cart-product',
+            type: 'POST',
+            data: { productNo: productNo },
+            success: function(response) {
+                if(response === true) {
+                    alert('상품 삭제 완료');
+                    loadCartList();
+                } else {
+                    console.log('삭제에 실패하였습니다.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('삭제 실패:', error);
+            }
+        });
+    });
+
+    $('.btn-check-delete').click(function() {
+        let selectedProducts = [];
+        $('.cartlist-checkbox:checked').each(function() {
+            selectedProducts.push($(this).data('product-no'));
+        });
+
+        if (selectedProducts.length === 0) {
+            alert('삭제할 상품을 선택해주세요.');
+            return;
+        }
+
+        $.ajax({
+            url: '/api/product/delete-cart-product',
+            type: 'POST',
+            traditional: true,
+            data: {
+                productNo: selectedProducts
+            },
+            success: function(response) {
+                if(response === true) {
+                    alert('상품 삭제 완료');
+                    loadCartList();
+                } else {
+                    console.log('삭제에 실패하였습니다.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('삭제 실패:', error);
+            }
+        });
+    });
+
+
+    $('.quantity-minus').on('click', function(event) {
+        event.preventDefault();
+        let productNo = $(this).data('product-no');
+        let quantity = $(this).data('product-quantity');
+
+        console.log(productNo, quantity)
+        
+        if(!quantity <= 0) {
+            $.ajax({
+                url: '/api/product/update-cart-product',
+                type: 'POST',
+                data: {
+                    productNo: productNo,
+                    quantity: quantity,
+                },
+                success: function(response) {
+                    if(response === true) {
+                        console.log('업데이트 성공');
+                        loadCartList();
+                    } else {
+                        console.error('업데이트 실패:', error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('업데이트 실패:', error);
+                }
+            });
+        }
+    });
+
+    $('.quantity-plus').on('click', function(event) {
+        event.preventDefault();
+        let productNo = $(this).data('product-no');
+        let quantity = $(this).data('product-quantity');
+
+        console.log(productNo, quantity)
+        
+        if(!quantity <= 0) {
+            $.ajax({
+                url: '/api/product/update-cart-product',
+                type: 'POST',
+                data: {
+                    productNo: productNo,
+                    quantity: quantity,
+                },
+                success: function(response) {
+                    if(response === true) {
+                        console.log('업데이트 성공');
+                        loadCartList();
+                    } else {
+                        console.error('업데이트 실패:', error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('업데이트 실패:', error);
+                }
+            });
+        }
+    });
+  });
+</script>
+
+<div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <input type="checkbox" id="selectAll" class="form-check-input">
+            <label for="selectAll" class="form-check-label">전체선택</label>
+            <button class="btn btn-sm btn-secondary btn-check-delete ms-2">선택삭제</button>
+        </div>
+        <div>
+            <div class="text-end">
+                <span>01 장바구니</span> &gt;
+                <span>02 주문서작성/결제</span> &gt;
+                <span>03 주문완료</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div th:if="${cartList == null or cartList.isEmpty()}">
+            <p class="text-center">장바구니에 담겨있는 상품이 없습니다.</p>
+        </div>
+        <div class="card mb-3" th:each="product : ${ cartList }">
+            <div class="row g-0 align-items-center">
+                <div class="col-auto align-self-start" style="width: 15px; margin-left: 5px; margin-right: 5px;;">
+                    <input type="checkbox" class="form-check-input cartlist-checkbox" th:attr="data-product-no=${product.productNo}">
+                </div>
+                <div class="col-md-2">
+                    <a th:href="@{/product/laptopDetails(productCode=${product.productNo})}">
+                        <img th:src="@{'/img/product/' + ${product.image}}" class="img-fluid rounded-start" alt="Product Image">
+                    </a>
+                </div>
+                <div class="col-md-7">
+                    <div class="card-body">
+                        <a th:href="@{/product/laptopDetails(productCode=${product.productNo})}" class="product-name"><h6 class="card-title" th:text="${product.productName}"></h6></a>
+                        <p class="card-text text-danger price" th:text="${product.price} + ' 원'"></p>
+                    </div>
+                </div>
+                <div class="col-md-1 text-end d-flex flex-row align-items-center justify-content-center quantity-selector">
+                    <a href="#" class="circle quantity-minus"
+                       th:data-product-quantity="${product.quantity - 1}"
+                       th:data-product-no="${product.productNo}"><i class="fas fa-minus"></i></a>
+                    <span class="quantity-value mx-2">
+                        <span th:text="${ product.quantity }">0</span>
+                        <span> 개</span>
+                    </span>
+                    <a class="circle quantity-plus"
+                       th:data-product-quantity="${product.quantity + 1}"
+                       th:data-product-no="${product.productNo}"><i class="fas fa-plus"></i></a>
+                </div>
+                <div class="col-md-1 ms-3 text-end d-flex flex-column justify-content-center btn-cartlist">
+                    <button class="btn btn-outline-secondary btn-delete" th:attr="data-product-no=${product.productNo}">삭제</button>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">총 <span th:text="${ Quantity + '개' }" class="fw-bold">0</span>의 상품금액</div>
+                    <div class="col text-end text-danger price" th:text="${ totalPrice }">0원</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

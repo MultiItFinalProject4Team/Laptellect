@@ -37,83 +37,182 @@
     />
 
     <!-- css + js 파일 Load-->
-    <link rel="stylesheet" th:href="@{/css/common.css}" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- 경고 메시지 -->
-    <script th:inline="javascript">
-      /*<![CDATA[*/
-      let msg = [[${msg}]];
-      if (msg != null) {
-          alert(msg);
-          fetch('/clearMessage', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded'
-              }
-          });
-      }
-      /*]]>*/
-    </script>
-  </head>
-  <body>
-    <div id="wrapper">
-      <!-- Header -->
-      <nav class="navbar navbar-expand-lg navbar-light shadow">
-        <div
-          class="container d-flex justify-content-between align-items-center"
-        >
-          <a class="navbar-brand logo h1 align-self-center" href="/">
-            <strong>Laptellect</strong>
-          </a>
-
-          <div
-            class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between"
-            id="templatemo_main_nav"
-          >
-            <div class="flex-fill">
-              <ul
-                class="nav navbar-nav d-flex justify-content-between mx-lg-auto"
-              >
-                <li class="nav-item">
-                  <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/recommended">추천</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/product/productList?pages=1"
-                    >스토어</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/customer/user">고객센터</a>
-                </li>
-                <th:block sec:authorize="hasAnyAuthority('ROLE_SELLER')">
-                  <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/product/productList?pages=1"
-                      >스토어</a
-                    >
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">대시보드</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">상품관리</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">주문관리</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/customer/user">고객센터</a>
-                  </li>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="wrapper">
+    <div class="top-bar">
+        <div class="container">
+            <div class="right-content">
+                <th:block sec:authorize="isAnonymous()">
+                    <a href="/signin">로그인</a>
+                    <a href="#" data-bs-toggle="modal"
+                       data-bs-target="#loginModal">회원가입
+                    </a>
                 </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
+                    <a href="/profile">마이페이지</a>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <a href="/admin/dashboard">어드민페이지</a>
+                </th:block>
+
+                <th:block sec:authorize="isAuthenticated()">
+                    <a href="/signout">로그아웃</a>
+                </th:block>
+            </div>
+        </div>
+    </div>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand logo h1 align-self-center" href="/">
+                <strong>Laptellect</strong>
+            </a>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/recommended">추천</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product/productList?pages=1">스토어</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/customer/user">고객센터</a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="/product/cart" class="nav-link d-flex align-items-center" style="position: relative;">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span class="ms-1">장바구니</span>
+                            </a>
+                            <span class="separator">|</span>
+                            <a href="/profile/wishlist" class="nav-link d-flex align-items-center" style="position: relative;">
+                                <i class="fa-regular fa-heart"></i>
+                                <span class="ms-1">관심상품</span>
+                            </a>
+                        </li>
+                        <th:block sec:authorize="hasAnyAuthority('ROLE_SELLER')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/product/productList?pages=1">스토어</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">대시보드</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">상품관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">주문관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/customer/user">고객센터</a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Close Header -->
+    <div class="content" layout:fragment="content"></div>
+</div>
+
+<!-- Start Footer -->
+<footer class="bg-dark" id="tempaltemo_footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 border-bottom pb-3 border-light logo">Laptsellet</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li>
+                        팀원: 이강석, 안진원, 박재민, 이우석, 윤상현
+                    </li>
+                    <li>
+                        <a class="text-decoration-none" href="https://github.com/MultiItFinalProject4Team/Laptellect">GitHub | Laptellect</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" href="/product/productList">노트북</a></li>
+                    <li><a class="text-decoration-none" href="/product/mouseList">키보드</a></li>
+                    <li><a class="text-decoration-none" href="/product/productList">마우스</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">Link</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" href="/">Home</a></li>
+                    <li><a class="text-decoration-none" href="/recommended">Recommended</a></li>
+                    <li><a class="text-decoration-none" href="/product/productList?pages=1">Store</a></li>
+                    <li><a class="text-decoration-none" href="/customer/user">Customer</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="w-100 bg-black py-3">
+        <div class="container">
+            <div class="row pt-2">
+                <div class="col-12">
+                    <p class="text-left text-light">
+                        &copy; 2024 프로젝트 실패하면 중장비 타러감
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</footer>
+<!-- End Footer -->
+
+<!-- 회원가입 모달 -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <h3 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #3498DB;">Laptellect</h3>
+                <br> <br>
+                <div class="image-container">
+                    <a href="/signin/kakao">
+                        <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
+                        <div>카카오</div>
+                    </a>
+                </div>
+                <div class="image-container">
+                    <a href="/signin/google">
+                        <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
+                        <div>구글</div>
+                    </a>
+                </div>
+                <div class="image-container">
+                    <a href="/signup">
+                        <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
+                        <div>일반회원</div>
+                    </a>
+                </div>
+
+                <br> <br>
                 <div>
                   <th:block sec:authorize="isAnonymous()">
                     <button
@@ -171,146 +270,7 @@
       <!-- Close Header -->
       <div class="content" layout:fragment="content"></div>
     </div>
-
-    <!-- Start Footer -->
-    <footer class="bg-dark" id="tempaltemo_footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4 pt-5">
-            <h2 class="h2 border-bottom pb-3 border-light logo">Laptsellet</h2>
-            <ul class="list-unstyled text-light footer-link-list">
-              <li>팀원: 이강석, 안진원, 박재민, 이우석, 윤상현</li>
-              <li>
-                <a
-                  class="text-decoration-none"
-                  href="https://github.com/MultiItFinalProject4Team/Laptellect"
-                  >GitHub | Laptellect</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <div class="col-md-4 pt-5">
-            <h2 class="h2 text-light border-bottom pb-3 border-light">
-              Products
-            </h2>
-            <ul class="list-unstyled text-light footer-link-list">
-              <li><a class="text-decoration-none" href="#">노트북</a></li>
-              <li><a class="text-decoration-none" href="#">키보드</a></li>
-              <li><a class="text-decoration-none" href="#">마우스</a></li>
-            </ul>
-          </div>
-
-          <div class="col-md-4 pt-5">
-            <h2 class="h2 text-light border-bottom pb-3 border-light">Link</h2>
-            <ul class="list-unstyled text-light footer-link-list">
-              <li><a class="text-decoration-none" href="/">Home</a></li>
-              <li>
-                <a class="text-decoration-none" href="/recommended"
-                  >Recommended</a
-                >
-              </li>
-              <li>
-                <a
-                  class="text-decoration-none"
-                  href="/product/productList?pages=1"
-                  >Store</a
-                >
-              </li>
-              <li>
-                <a class="text-decoration-none" href="/customer/user"
-                  >Customer</a
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-100 bg-black py-3">
-        <div class="container">
-          <div class="row pt-2">
-            <div class="col-12">
-              <p class="text-left text-light">
-                &copy; 2024 프로젝트 실패하면 중장비 타러감
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!-- End Footer -->
-
-    <!-- 회원가입 모달 -->
-    <div
-      class="modal fade"
-      id="loginModal"
-      tabindex="-1"
-      aria-labelledby="loginModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-md">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-
-          <div class="modal-body text-center">
-            <h4
-              class="modal-title w-100 text-center"
-              id="loginModalLabel"
-              style="color: #6c5ce7"
-            >
-              Laptellect
-            </h4>
-            <br />
-            <br />
-            <div class="image-container">
-              <a href="/signin/kakao">
-                <img
-                  th:src="@{/img/common/kakao-talk-icon.png}"
-                  alt="Image 1"
-                  class="img-fluid mb-2 modal-img"
-                />
-                <div>카카오</div>
-              </a>
-            </div>
-            <div class="image-container">
-              <a href="/signin/google">
-                <img
-                  th:src="@{/img/common/google-icon.png}"
-                  alt="Image 2"
-                  class="img-fluid mb-2 modal-img"
-                />
-                <div>구글</div>
-              </a>
-            </div>
-            <div class="image-container">
-              <a href="/signup">
-                <img
-                  th:src="@{/img/common/default-icon.png}"
-                  alt="Image 3"
-                  class="img-fluid mb-2 modal-img"
-                />
-                <div>일반회원</div>
-              </a>
-            </div>
-
-            <br />
-            <br />
-            <div>
-              <button type="button" class="btn btn-primary w-100">
-                판매자 회원 가입
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
+</div>
+<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+</body>
 </html>

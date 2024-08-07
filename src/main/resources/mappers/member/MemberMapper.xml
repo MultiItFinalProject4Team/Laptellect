@@ -104,4 +104,27 @@
 		</set>
 		WHERE address_id = #{ addressId }
 	</update>
+
+
+	<update id="updatePoint" parameterType="memberDTO">
+		UPDATE mem_member
+		SET point = #{point}
+		WHERE member_no = #{memberNo}
+	</update>
+
+	<select id="countAllPointLogByMemberNo">
+		SELECT
+			COUNT(*)
+		FROM
+			payment_point
+		WHERE
+			member_no = #{memberNo}
+		<if test="type == 'use'">
+			AND payment_point_change <![CDATA[< 0]]>
+		</if>
+		<if test="type == 'save'">
+			AND payment_point_change > 0
+		</if>
+	</select>
+
 </mapper>

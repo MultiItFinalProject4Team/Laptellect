@@ -1,4 +1,4 @@
-package com.multi.laptellect.laptellect;
+package com.multi.laptellect.config;
 
 import com.multi.laptellect.config.LaptellectApplication;
 import org.junit.jupiter.api.Test;

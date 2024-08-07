@@ -1,0 +1,70 @@
+<table class="table table-striped text-center">
+  <thead>
+  <tr>
+    <th scope="col" style="width: 5%;">번호</th>
+    <th scope="col" style="width: 30%;">포인트 변화</th>
+    <th scope="col" style="width: 40%;">변동 사유</th>
+    <th scope="col" style="width: 25%;">날짜</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${pointList == null or pointList.isEmpty()}">
+    <td colspan="4" class="text-center">조회 정보가 없습니다</td>
+  </tr>
+
+  <tr th:each="point, loop : ${pointList}">
+    <th th:text="${page * size + loop.index + 1}" scope="row"></th>
+    <td th:text="${ point.paymentPointChange }"></td>
+    <td th:text="${ point.paymentPointInfo }"></td>
+    <td th:text="${ point.getFormatCreatedAt() }"></td>
+  </tr>
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+  <div th:if="${!pointList.isEmpty()}">
+    <ul class="pagination justify-content-center all-point">
+      <li class="page-item" th:classappend="${!pointList.hasPrevious} ? 'disabled'">
+        <a class="page-link" href="#" th:data-page="${page - 1}" tabindex="-1">이전</a>
+      </li>
+
+      <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
+          th:classappend="${page == pointList.number} ? 'active'"
+          class="page-item">
+        <a th:text="${page + 1}" class="page-link" href="#" th:data-page="${page}"></a>
+      </li>
+
+      <li class="page-item" th:classappend="${!pointList.hasNext} ? 'disabled'">
+        <a class="page-link" href="#" th:data-page="${page + 1}">다음</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+$(document).ready(function() {
+    $('.all-point').on('click', 'a.page-link', function(event) {
+        event.preventDefault();
+
+        let page = $(this).data('page');
+
+        if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
+            return;
+        }
+
+        $.ajax({
+            url: '/api/member/all-point-list',
+            type: 'GET',
+            data: {
+                page: page,
+            },
+            success: function(response) {
+                $('#all-point').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('조회 실패:', error);
+            }
+        });
+    });
+});
+</script>

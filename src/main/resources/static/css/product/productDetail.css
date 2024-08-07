@@ -1,0 +1,52 @@
+        .table-container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+           .price-btn-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 20px;
+                }
+
+        .price {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .btn-process-basket, .btn-process-wishlist {
+            font-size: 1.2em;
+        }
+
+        .btn-submit {
+            padding: 20px 30px; /* 버튼의 크기를 키움 */
+            font-size: 1.5em; /* 폰트 크기를 키움 */
+
+        }
+
+        .currency {
+            font-size: 0.7em;
+        }
+
+        .spec-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .spec-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .spec-list .spec-name {
+            font-weight: bold;
+        }
+
+        .spec-list .spec-value {
+            margin-left: 10px;
+        }
+        .table-spec{
+             margin: 0 auto;
+
+        }

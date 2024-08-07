@@ -147,7 +147,7 @@ public class CustomerService {
         List<PersonalqCategoryDto> category = customDao.getPersonalqCategory();
         PersonalqCategoryDto category_all  = new PersonalqCategoryDto();
         category_all.setPersonalqCategorycode("personalq_all");
-        category_all.setPersonalqCategoryname("전체");
+        category_all.setPersonalqCategoryname("카테고리");
         category.add(0,category_all);
         return category;
     }
@@ -351,24 +351,24 @@ public class CustomerService {
         customDao.deleteProducta(productqNo);
     }
 
-    public List<PersonalqListDto> getPersonalqSearchList(int memberNo, String keyword, String category) {
-        return customDao.getPersonalqSearchList(memberNo, keyword, category);
+    public List<PersonalqListDto> getPersonalqSearchList(PersonalqSearchDto searchDto) {
+        return customDao.getPersonalqSearchList(searchDto);
     }
 
     public List<PersonalqListDto> getAllPersonalqList() {
         return customDao.getAllPersonalqList();
     }
 
-    public List<ProuductqListDto> getProudctqSearchList(int productNo, String keyword, String category) {
-        return customDao.getProudctqSearchList(productNo, keyword, category);
+    public List<ProuductqListDto> getProudctqSearchList(ProductSearchDto searchDto) {
+        return customDao.getProudctqSearchList(searchDto);
     }
 
-    public List<ProuductqListDto> getMyProudctqSearchList(int productNo, int memberNo, String keyword, String category) {
-        return customDao.getMyProudctqSearchList(productNo, memberNo, keyword, category);
+    public List<ProuductqListDto> getMyProudctqSearchList(ProductSearchDto searchDto) {
+        return customDao.getMyProudctqSearchList(searchDto);
     }
 
-    public List<PersonalqListDto> getAllPersonalqSearchList(String category, String keyword) {
-        return customDao.getAllPersonalqSearchList(category, keyword);
+    public List<PersonalqListDto> getAllPersonalqSearchList(PersonalqSearchDto searchDto) {
+        return customDao.getAllPersonalqSearchList(searchDto);
     }
     public int inputImage(String originName, String fileName) {
         ImageDto imageDto=ImageDto.builder()

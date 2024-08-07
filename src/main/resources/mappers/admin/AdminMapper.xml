@@ -6,38 +6,53 @@
 
     <resultMap id="AdminReviewResultMap"
                type="com.multi.laptellect.admin.model.dto.AdminReviewDTO">
-        <result column="payment_product_reviews_no" property="payment_product_reviews_no"/>
-        <result column="username" property="username"/>
-        <result column="product_name" property="product_name"/>
+        <result column="payment_product_reviews_no" property="paymentProductReviewsNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="product_no" property="productNo"/>
+        <result column="tag_answer" property="tagAnswer"/>
         <result column="content" property="content"/>
         <result column="rating" property="rating"/>
-        <result column="create_date" property="create_date"/>
-        <result column="modify_date" property="modify_date"/>
+        <result column="member_name" property="memberName"/>
+        <result column="im_port_id" property="imPortId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="modify_at" property="modifyAt"/>
+        <result column="product_name" property="productName"/>
     </resultMap>
 
     <resultMap id="AdminOrdersResultMap"
                type="com.multi.laptellect.admin.model.dto.AdminOrderlistDTO">
-        <result column="payment_no" property="payment_no"/>
-        <result column="username" property="username"/>
-        <result column="productname" property="productname"/>
-        <result column="productinfo" property="productinfo"/>
-        <result column="productprice" property="productprice"/>
-        <result column="purchaseprice" property="purchaseprice"/>
-        <result column="date_created" property="date_created"/>
-        <result column="imd" property="imd"/>
+        <result column="payment_no" property="paymentNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="product_no" property="productNo"/>
+        <result column="member_name" property="memberName"/>
+        <result column="product_name" property="productName"/>
+        <result column="price" property="productPrice"/>
+        <result column="purchase_price" property="purchasePrice"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="im_port_id" property="imPortId"/>
         <result column="refund" property="refund"/>
-        <result column="refund_date" property="refund_date"/>
+        <result column="refund_at" property="refundAt"/>
     </resultMap>
 
     <select id="selectAllReviews" resultMap="AdminReviewResultMap">
-        SELECT payment_product_reviews_no,
-        username,
-        product_name,
-        content,
-        rating,
-        create_date,
-        modify_date
-        FROM payment_product_reviews
+        SELECT
+        pr.payment_product_reviews_no,
+        pr.member_no,
+        pr.product_no,
+        pr.tag_answer,
+        pr.content,
+        pr.rating,
+        m.member_name,
+        pr.im_port_id,
+        pr.created_at,
+        pr.modify_at,
+        p.product_name
+        FROM
+        payment_product_reviews pr
+        JOIN
+        mem_member m ON pr.member_no = m.member_no
+        JOIN
+        product p ON pr.product_no = p.product_no
     </select>
 
     <delete id="deleteReviews" parameterType="list">
@@ -49,20 +64,36 @@
     </delete>
 
     <select id="selectAllOrders" resultMap="AdminOrdersResultMap">
-        SELECT *
-        FROM payment
+        SELECT
+        p.payment_no,
+        p.member_no,
+        p.product_no,
+        m.member_name AS username,
+        pr.product_name,
+        pr.price,
+        p.purchase_price,
+        p.created_at,
+        p.im_port_id,
+        p.refund,
+        p.refund_at
+        FROM
+        payment p
+        JOIN
+        mem_member m ON p.member_no = m.member_no
+        JOIN
+        product pr ON p.product_no = pr.product_no
     </select>
 
     <select id="getLastSevenDaysSales" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
         SELECT
-        DATE(date_created) as date,
+        DATE(created_at) as date,
         COUNT(*) as saleCount
         FROM
         payment
         WHERE
-        date_created >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        created_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
         GROUP BY
-        DATE(date_created)
+        DATE(created_at)
         ORDER BY
         date ASC
     </select>

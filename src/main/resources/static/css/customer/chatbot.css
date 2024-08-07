@@ -1,0 +1,95 @@
+/* chatbot.css */
+
+.chat-container {
+    max-width: 80%;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: #fafafa;
+    padding: 15px;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 12px;
+    line-height: 1.6;
+    word-wrap: break-word;
+    clear: both;
+}
+
+.sent {
+    max-width: 65%;
+    align-self: flex-end;
+    background-color: #4caf50; /* Green color */
+    color: #ffffff;
+}
+
+.received {
+    max-width: 65%;
+    align-self: flex-start;
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #e0e0e0;
+}
+
+.form-container {
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin: 20px;
+}
+
+.form-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#msg {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #333333;
+}
+
+#send, #reset {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2196f3; /* Blue color */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#send:hover, #reset:hover {
+    background-color: #1976d2; /* Darker blue color */
+}
+
+.link {
+    color: #007bff; /* 파란색 */
+    text-decoration: none; /* 밑줄 제거 */
+    font-weight: bold;
+}
+
+.link:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 추가 */
+}

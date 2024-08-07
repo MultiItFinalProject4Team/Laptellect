@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.w3.org/1999/xhtml"
+>
+  <html layout:decorate="~{common/layout}">
+    <head>
+      <title>SingUp Page</title>
+          <link rel="stylesheet" th:href="@{/css/auth/signup.css}">
+          <script type="text/javascript" th:src="@{/js/auth/signup.js}"></script>
+    </head>
+    <body>
+      <div layout:fragment="content">
+        <br> <br>
+        <div id="container">
+          <div id="loginBox">
+            <div class="logo">
+              <h1 id="signupTitle">Laptellect</h1>
+            </div>
+            <div id="inputBox">
+                <div class="form-floating id-form">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="id"
+                        placeholder="id"
+                        value=""
+                />
+                <label for="id">아이디</label>
+              </div>
+              <div class="error-message" id="idError" style="color: red">
+                중복된 아이디 입니다.
+              </div>
+              <br />
+
+              <div class="form-floating password-form">
+                <input
+                        type="password"
+                        class="form-control"
+                        id="pass"
+                        placeholder="pass"
+                        value=""
+                />
+                <label for="pass">비밀번호</label>
+                <br />
+              </div>
+
+              <div class="form-floating password-form">
+                <input
+                        type="password"
+                        class="form-control"
+                        id="pass2"
+                        placeholder="pass2"
+                        value=""
+                        style="pointer-events: none;
+                       user-select: none;"
+                />
+                <label for="pass2">비밀번호 확인</label>
+
+              </div>
+              <div class="error-message" id="passwordError" style="color: red;">비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.</div>
+              <div class="error-message" id="passwordError2" style="color: red;">비밀번호가 일치하지 않습니다.</div>
+              <br />
+
+              <div class="input-group mb-3">
+                <div class="form-floating flex-grow-1">
+                  <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
+                  <label for="emailInput">이메일을 입력해주세요.</label>
+                </div>
+                <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
+              </div>
+              <div class="error-message" id="emailError" style="color: red;">중복된 이메일 입니다.</div>
+              <br />
+
+              <div class="form-floating emailVer-form">
+                <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
+                <label for="emailVer">인증번호를 입력해주세요.</label>
+              </div>
+              <div class="error-message" id="emailError2" style="color: red;">틀린 인증번호 입니다.</div>
+              <br />
+
+              <button type="submit" class="btn btn-primary w-100 nextBtn" id="insertBtn">
+                회원가입
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+</html>

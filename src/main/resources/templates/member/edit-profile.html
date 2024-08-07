@@ -24,42 +24,46 @@
 </head>
 <body>
 <div layout:fragment="content">
-  <div class="profile-box">
+  <div class="profile-box" id="edit-box" style="height: auto; width: auto;">
     <h2>회원 정보 수정</h2>
     <hr> <br>
 
     <form th:object="${userInfo}" method="post" action="/changeMemberInfo">
       <div class="form-group">
-        <label for="member_name"><i class="fa fa-envelope-o"></i> 아이디</label>
+        <label for="member_name"><i class="fa-regular fa-user"></i> 아이디</label>
         <input type="text" class="form-control" id="member_name" th:field="*{memberName}" readonly>
         <br> <br>
       </div>
       <div class="form-group">
-        <label for="nickName"><i class="fa fa-envelope-o"></i> 닉네임</label>
+        <label for="nickName"><i class="fa-solid fa-signature"></i> 닉네임</label>
         <div class="input-group">
           <input type="text" class="form-control" id="nickName" th:field="*{nickName}" readonly>
           <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#nickNameModal">변경</button>
         </div>
         <br> <br>
       </div>
-      <div class="form-group">
-        <label for="email"><i class="fas fa-lock"></i> 이메일</label>
-        <div class="input-group">
-          <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
-          <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#emailModal">변경</button>
+
+
+      <th:block th:if="${#authentication.principal.loginType == 'local'}">
+        <div class="form-group">
+          <label for="email"><i class="fa fa-envelope-o"></i> 이메일</label>
+          <div class="input-group">
+            <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
+            <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#emailModal">변경</button>
+          </div>
+          <br> <br>
         </div>
-        <br> <br>
-      </div>
-      <div class="form-group">
-        <label for="password"><i class="fas fa-lock"></i> 비밀번호</label>
-        <div class="input-group">
-          <input type="password" class="form-control" id="password" th:field="*{password}" readonly>
-          <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#passwordModal">변경</button>
+        <div class="form-group">
+          <label for="password"><i class="fas fa-lock"></i> 비밀번호</label>
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" th:field="*{password}" readonly>
+            <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#passwordModal">변경</button>
+          </div>
+          <br> <br>
         </div>
-        <br> <br>
-      </div>
+      </th:block>
       <div class="form-group">
-        <label for="phoneNumber"><i class="fas fa-lock"></i> 휴대폰 번호</label>
+        <label for="phoneNumber"><i class="fa-solid fa-phone"></i> 휴대폰 번호</label>
         <div class="input-group">
           <input type="tel" class="form-control" id="phoneNumber" th:field="*{tel}" required>
           <button type="button" class="btn btn-success changeButton" data-bs-toggle="modal" data-bs-target="#phoneModal">변경</button>
@@ -96,89 +100,91 @@
     </div>
   </div>
 
-  <!-- 이메일 변경 모달 -->
-  <div class="modal fade" id="emailModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">이메일 변경</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <div class="form-floating flex-grow-1">
-              <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
-              <label for="emailInput">이메일을 입력해주세요.</label>
+  <th:block th:if="${#authentication.principal.loginType == 'local'}">
+    <!-- 이메일 변경 모달 -->
+    <div class="modal fade" id="emailModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">이메일 변경</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group mb-3">
+              <div class="form-floating flex-grow-1">
+                <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
+                <label for="emailInput">이메일을 입력해주세요.</label>
+              </div>
+              <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
             </div>
-            <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
-          </div>
-          <div class="error-message" id="emailError" style="color: red">
-            중복된 이메일 입니다.
-          </div>
+            <div class="error-message" id="emailError" style="color: red">
+              중복된 이메일 입니다.
+            </div>
 
 
-          <div class="form-floating">
-            <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
-            <label for="emailVer">인증번호를 입력해주세요.</label>
-            <div class="error-message" id="emailError2" style="color: red">
-              인증번호가 틀렸습니다.
+            <div class="form-floating">
+              <input type="text" class="form-control" id="emailVer" placeholder="emailVer" value="">
+              <label for="emailVer">인증번호를 입력해주세요.</label>
+              <div class="error-message" id="emailError2" style="color: red">
+                인증번호가 틀렸습니다.
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary changeBtn" id="emailChangeBtn">확인</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <button type="button" class="btn btn-primary changeBtn" id="emailChangeBtn">확인</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 비밀번호 변경 모달 -->
-  <div class="modal fade" id="passwordModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">비밀번호 변경</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="form-floating">
-              <input type="password" class="form-control" id="beforePassword" placeholder="password" value="">
-              <label for="beforePassword">변경 전 비밀번호를 입력해주세요.</label>
-              <div class="error-message" id="passwordError" style="color: red">
-                비밀번호가 틀렸습니다.
+    <!-- 비밀번호 변경 모달 -->
+    <div class="modal fade" id="passwordModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">비밀번호 변경</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="form-floating">
+                <input type="password" class="form-control" id="beforePassword" placeholder="password" value="">
+                <label for="beforePassword">변경 전 비밀번호를 입력해주세요.</label>
+                <div class="error-message" id="passwordError" style="color: red">
+                  비밀번호가 틀렸습니다.
+                </div>
               </div>
-            </div>
-            <br>
+              <br>
 
-            <div class="form-floating">
-              <input type="password" class="form-control" id="afterPassword" placeholder="password" value="" readonly>
-              <label for="afterPassword">변경 할 비밀번호를 입력해주세요.</label>
-              <div class="error-message" id="passwordError2" style="color: red">
-                비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.
+              <div class="form-floating">
+                <input type="password" class="form-control" id="afterPassword" placeholder="password" value="" readonly>
+                <label for="afterPassword">변경 할 비밀번호를 입력해주세요.</label>
+                <div class="error-message" id="passwordError2" style="color: red">
+                  비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.
+                </div>
+                <div class="error-message" id="passwordError3" style="color: red">
+                  변경 전 비밀번호와 동일합니다. 다른 비밀번호를 입력해주세요.
+                </div>
               </div>
-              <div class="error-message" id="passwordError3" style="color: red">
-                변경 전 비밀번호와 동일합니다. 다른 비밀번호를 입력해주세요.
-              </div>
-            </div>
-            <br>
+              <br>
 
-            <div class="form-floating">
-              <input type="password" class="form-control" id="afterPassword2" placeholder="password" value="" readonly>
-              <label for="afterPassword2">한 번 더 입력해주세요.</label>
-              <div class="error-message" id="passwordError4" style="color: red">
-                비밀번호가 일치하지 않습니다.
+              <div class="form-floating">
+                <input type="password" class="form-control" id="afterPassword2" placeholder="password" value="" readonly>
+                <label for="afterPassword2">한 번 더 입력해주세요.</label>
+                <div class="error-message" id="passwordError4" style="color: red">
+                  비밀번호가 일치하지 않습니다.
+                </div>
               </div>
-            </div>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary changeBtn" id="passwordChangeBtn">확인</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <button type="button" class="btn btn-primary changeBtn" id="passwordChangeBtn">확인</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </th:block>
 
   <!-- 휴대폰 번호 변경 모달 -->
   <div class="modal fade" id="phoneModal" tabindex="-1">

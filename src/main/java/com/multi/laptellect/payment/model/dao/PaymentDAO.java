@@ -14,22 +14,35 @@ public interface PaymentDAO {
 
     int insertPayment(PaymentDTO paymentDTO);
 
-    List<OrderlistDTO> selectOrders();
+    List<PaymentDTO> selectOrders(String memberName);
 
-    int updateRefundStatus(String ImpUid);
+    int updateRefundStatus(String imPortId);
 
     int saveReview(PaymentReviewDTO paymentReviewDTO);
 
     List<String> getReviewedOrders();
 
-    PaymentpointDTO selectpoint(String username);
+    PaymentpointDTO selectpoint(int memberNO);
 
     int usepoint(PaymentpointDTO paymentpointDTO);
 
     int givepoint(PaymentpointDTO paymentpointDTO);
 
-    PaymentpointDTO select_refundpoint(String impUid);
+
+    PaymentpointDTO select_refundpoint(String imPortId);
+
 
     int refundpoint(PaymentpointDTO paymentpointDTO);
 
+    int newMemberPoint(PaymentpointDTO paymentpointDTO);
+
+    boolean findReview(String imPortId);
+
+    int findReviewedPoint(String imPortId);
+
+    int refundReviewdPoint(PaymentpointDTO paymentpointDTO);
+
+    PaymentpageDTO findProduct(String productName);
+
+    PaymentDTO findPaymentByImPortId(String imPortId);
 }

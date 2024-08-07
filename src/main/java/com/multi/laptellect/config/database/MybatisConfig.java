@@ -1,6 +1,15 @@
 package com.multi.laptellect.config.database;
 
+import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
+import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
+import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
+import com.multi.laptellect.member.model.dto.AddressDTO;
+import com.multi.laptellect.member.model.dto.MemberDTO;
+import com.multi.laptellect.member.model.dto.PointLogDTO;
 import com.multi.laptellect.member.model.dto.SocialDTO;
+import com.multi.laptellect.payment.model.dto.*;
+import com.multi.laptellect.product.model.dto.*;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
@@ -38,8 +47,7 @@ public class MybatisConfig {
         configuration.setMapUnderscoreToCamelCase(true); // 카멜 케이스 자동 변환
 
         // Type Aliases 설정
-//        configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.mini.member.model.dto.MemberDTO.class);
-//        configuration.getTypeAliasRegistry().registerAlias("boardDTO", com.multi.mini.community.model.dto.BoardDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("pageable", org.springframework.data.domain.Pageable.class);
 
 
         configuration.getTypeAliasRegistry().registerAlias("paymentpageDTO", com.multi.laptellect.payment.model.dto.PaymentpageDTO.class);
@@ -47,22 +55,30 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("PaymentDTO", com.multi.laptellect.payment.model.dto.PaymentDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("paymentReviewDTO", com.multi.laptellect.payment.model.dto.PaymentReviewDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("paymentpointDTO", com.multi.laptellect.payment.model.dto.PaymentpointDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("paymentProductDTO", com.multi.laptellect.payment.model.dto.PaymentProductDTO.class);
 
-        configuration.getTypeAliasRegistry().registerAlias("adminReviewDTO", com.multi.laptellect.admin.model.dto.AdminReviewDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("adminOrderlistDTO", com.multi.laptellect.admin.model.dto.AdminOrderlistDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("adminDashboardDTO", com.multi.laptellect.admin.model.dto.AdminDashboardDTO.class);
 
-        configuration.getTypeAliasRegistry().registerAlias("memberDTO", com.multi.laptellect.member.model.dto.MemberDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("addressDTO", com.multi.laptellect.member.model.dto.AddressDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("productDTO", com.multi.laptellect.product.model.dto.ProductDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("productCategoryDTO", com.multi.laptellect.product.model.dto.ProductCategoryDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("imageDTO", com.multi.laptellect.product.model.dto.ImageDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("laptopSpecDTO", com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("productSpecDTO", com.multi.laptellect.product.model.dto.ProductSpecDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("laptopDetailsDTO", com.multi.laptellect.product.model.dto.LaptopDetailsDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("adminReviewDTO", AdminReviewDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("adminOrderlistDTO", AdminOrderlistDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("adminDashboardDTO", AdminDashboardDTO.class);
+
+        configuration.getTypeAliasRegistry().registerAlias("memberDTO", MemberDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("pointLogDTO", PointLogDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("addressDTO", AddressDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("productDTO", ProductDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("productCategoryDTO", ProductCategoryDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("productSpecDTO", ProductSpecDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("imageDTO", ImageDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("laptopSpecDTO", LaptopSpecDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("productSpecDTO", ProductSpecDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("laptopDetailsDTO", LaptopDetailsDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("reviewDTO", ReviewDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("specDTO", SpecDTO.class);
 
 
         configuration.getTypeAliasRegistry().registerAlias("socialDTO", SocialDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("wishlistDTO", WishlistDTO.class);
+
 
 
 
