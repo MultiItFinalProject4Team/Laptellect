@@ -23,7 +23,11 @@
 
     <!-- css + js 파일 Load-->
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/member/profile.css}"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+
+    </style>
 </head>
 <body>
 <div id="wrapper">
@@ -42,7 +46,7 @@
                 </th:block>
 
                 <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                    <a href="/admin/dashboard">어드민페이지</a>
+                    <a href="/admin">어드민페이지</a>
                 </th:block>
 
                 <th:block sec:authorize="isAuthenticated()">
@@ -73,17 +77,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/customer/user">고객센터</a>
                         </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="/product/cart" class="nav-link d-flex align-items-center" style="position: relative;">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                                <span class="ms-1">장바구니</span>
-                            </a>
-                            <span class="separator">|</span>
-                            <a href="/profile/wishlist" class="nav-link d-flex align-items-center" style="position: relative;">
-                                <i class="fa-regular fa-heart"></i>
-                                <span class="ms-1">관심상품</span>
-                            </a>
-                        </li>
                         <th:block sec:authorize="hasAnyAuthority('ROLE_SELLER')">
                             <li class="nav-item">
                                 <a class="nav-link" href="/">Home</a>
@@ -110,7 +103,83 @@
         </div>
     </nav>
     <!-- Close Header -->
-    <div class="content" layout:fragment="content"></div>
+    <br>
+
+    <div class="d-flex">
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-dark bg-white sidebar">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"></a>
+            <hr>
+            <div class="profile">
+                <p class="text-dark" style="font-size:30px">고객센터</p>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <!--        <li class="nav-item">-->
+                <!--          <a th:href="@{/admin}" class="nav-link text-white">대시보드</a>-->
+                <!--        </li>-->
+                <hr>
+                <li class="nav-item">
+                    <a href="/customer/user/customer_notice" class="nav-link text-dark purchase-tap">공지 사항</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/customer/user/customer_personalq" class="nav-link text-dark purchase-tap">1:1 문의 내역</a>
+                </li>
+                <li class="nav-item">
+                  <a href="/customer/user/product" class="nav-link text-dark purchase-tap">상품문의 내역</a> <!--  상품id랑 엮어서 상품명+문의내역으로 표시-->
+                </li>
+                <li class="nav-item">
+                    <a href="/customer/user/customer_chatbot" class="nav-link text-dark purchase-tap">챗 봇</a>
+                </li>
+                <hr>
+                <li class="nav-item">
+                    <a href="/customer/user/personalq_app" class="nav-link text-dark purchase-tap">1:1 문의하기</a>
+                </li>
+                <hr>
+            </ul>
+        </div>
+
+        <div class="flex-grow-1 p-3">
+            <div layout:fragment="content"></div>
+        </div>
+    </div>
+
+<!-- 회원가입 모달 -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <h4 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #6c5ce7;">Laptellect</h4>
+                    <br> <br>
+                    <div class="image-container">
+                        <a href="/signin/kakao">
+                            <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
+                            <div>카카오</div>
+                        </a>
+                    </div>
+                    <div class="image-container">
+                        <a href="/signin/google">
+                            <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
+                            <div>구글</div>
+                        </a>
+                    </div>
+                    <div class="image-container">
+                        <a href="/signup">
+                            <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
+                            <div>일반회원</div>
+                        </a>
+                    </div>
+
+                    <br> <br>
+                    <div>
+                        <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Start Footer -->
@@ -134,7 +203,7 @@
                 <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
                 <ul class="list-unstyled text-light footer-link-list">
                     <li><a class="text-decoration-none" href="/product/productList">노트북</a></li>
-                    <li><a class="text-decoration-none" href="/product/mouseList">키보드</a></li>
+                    <li><a class="text-decoration-none" href="/product/productList">키보드</a></li>
                     <li><a class="text-decoration-none" href="/product/productList">마우스</a></li>
                 </ul>
             </div>
@@ -163,48 +232,7 @@
             </div>
         </div>
     </div>
-
 </footer>
 <!-- End Footer -->
-
-<!-- 회원가입 모달 -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body text-center">
-                <h3 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #3498DB;">Laptellect</h3>
-                <br> <br>
-                <div class="image-container">
-                    <a href="/signin/kakao">
-                        <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
-                        <div>카카오</div>
-                    </a>
-                </div>
-                <div class="image-container">
-                    <a href="/signin/google">
-                        <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
-                        <div>구글</div>
-                    </a>
-                </div>
-                <div class="image-container">
-                    <a href="/signup">
-                        <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
-                        <div>일반회원</div>
-                    </a>
-                </div>
-
-                <br> <br>
-                <div>
-                    <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
 </body>
 </html>

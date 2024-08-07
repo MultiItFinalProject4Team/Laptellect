@@ -56,10 +56,10 @@ ul li:active .btn-custom { background-color: #236097 !important; }
         color: #495057;
     }
 
-    .nav-link:hover,
+/*    .nav-link:hover,
     .nav-link:focus {
         border-color: #e9ecef #e9ecef #dee2e6;
-    }
+    }*/
 
     .nav-link.active {
         color: #495057;
