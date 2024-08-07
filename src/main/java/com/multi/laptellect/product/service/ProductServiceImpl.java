@@ -217,7 +217,7 @@ public class ProductServiceImpl implements ProductService {
                         cpu.setCpuCodeName(laptop.getOptionValue());
                         break;
                     case "LC15":
-                        cpu.setCpuCodeName(laptop.getOptionValue());
+                        cpu.setCpuNumber(laptop.getOptionValue());
                         break;
                     case "LC16":
                         cpu.setCpuCore(laptop.getOptionValue());
@@ -230,6 +230,9 @@ public class ProductServiceImpl implements ProductService {
                         break;
                     case "LC19":
                         cpu.setNpuTops(laptop.getOptionValue());
+                        break;
+                    case "LC20":
+                        cpu.setCpuManufacturer(laptop.getOptionValue());
                         break;
                 }
             }
@@ -365,14 +368,10 @@ public class ProductServiceImpl implements ProductService {
     //상품 전체 조회
     @Override
     @Transactional
-    public List<ProductDTO> getStoredProducts(Integer typeNo,int pageNumber, int pageSize) {
+    public List<ProductDTO> getStoredProducts(Integer typeNo) {
 
-        int offset = (pageNumber - 1) * pageSize;
-        if (typeNo == null) {
-            return productMapper.getAllProducts(pageSize, offset);
-        } else {
-            return productMapper.getProductsByType(typeNo, pageSize, offset);
-        }
+
+        return productMapper.getProductsByType(typeNo);
     }
 
     @Override

@@ -136,16 +136,12 @@ public class ProductController {
      */
     @GetMapping("/productList")
     public String ProductList(Model model,
-                              @RequestParam(name = "typeNo", required = false) Integer typeNo,
-                              @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-                              @RequestParam(name = "pageSize", defaultValue = "12") int pageSize) {
+                              @RequestParam(name = "typeNo", required = false) Integer typeNo) {
 
-        //페이징 처리
-        List<ProductDTO> products = productService.getStoredProducts(typeNo, pageNumber, pageSize);
 
+        List<ProductDTO> products = productService.getStoredProducts(typeNo);
 
         log.info("productList 확인 = {}", products);
-
 
         Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
 
@@ -159,27 +155,11 @@ public class ProductController {
                     .collect(Collectors.joining(" | "));
             productDTO.setSpecsString(specsString);
 
-
         }
 
         model.addAttribute("products", products);
 
 
-        // 전체 제품 수
-        int totalProducts = productService.getTotalProducts();
-
-        // 총 페이지 계산
-        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
-
-        int displayPageCount = 10;
-        int startPage = Math.max(1, pageNumber - (displayPageCount / 2));
-        int endPage = Math.min(totalPages, startPage + displayPageCount - 1);
-
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
 
         return "product/productList";
     }
