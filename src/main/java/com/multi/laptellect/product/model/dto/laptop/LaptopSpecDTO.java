@@ -12,16 +12,16 @@ import lombok.Data;
 @Data
 public class LaptopSpecDTO {
     // 상품 기본 정보
-    private String productName;
-    private String price;
-    private String image;
-    private String productCode;
-    private String os;
+    private String productName; // 상품 명
+    private String price; // 가격
+    private String image; // 이미지
+    private String productCode; // 다나와 코드
+    private String registrationDate; // 등록 년월
 
-    // NPU
-    private String npu;
-    private String nputops;
-    private String soc;
+    // 부가 정보
+
+    private String os; // 운영체제
+    private String company; // 제조사
 
     // 제품 스펙
     private CPU cpu;
@@ -32,5 +32,7 @@ public class LaptopSpecDTO {
     private Power power;
     private Portability portability;
     private AddOn addOn;
+
+
 
 }

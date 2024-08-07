@@ -1,7 +1,6 @@
 package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.*;
-import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Pageable;
 
@@ -13,13 +12,13 @@ public interface ProductMapper {
 
     void insertProduct(ProductDTO product); //크롤링 검색 후 상품등록
 
-    int countByProductCode(String productCode); //상품코드 계수
+    int countByProductCode(int productNo); //상품코드 계수
 
     List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    int getTotalProducts();
+    List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo, @Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    LaptopSpecDTO getProductByCode(String productCode);
+    int getTotalProducts();
 
     List<ProductDTO> getTypeByProduct(int typeNo);
 
@@ -27,13 +26,7 @@ public interface ProductMapper {
 
     void inputImage(ImageDTO imageDTO);
 
-    void getImage(String referenceCode);
-
     ProductCategoryDTO findByOptions(@Param("specName") String specName);
-
-   // String findCategorytNo(String options);
-
-   // String findCategoryNoBySpecName(String specName);
 
     void inputReviewDate(ReviewDTO reviewDTO);
 
@@ -50,8 +43,9 @@ public interface ProductMapper {
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
 
+   List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
 
-    List<LaptopDetailsDTO> laptopProductDetails(String productCode);
+    List<LaptopDetailsDTO> laptopProductDetails(int productNo);
 
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")
@@ -67,4 +61,6 @@ public interface ProductMapper {
 
     @Select("SELECT COUNT(*) FROM wishlist WHERE member_no = #{ memberNo }")
     int countAllWishlistByMemberNo(int memberNo);
+    
+    ProductDTO findProductByProductNo(String productNo);
 }

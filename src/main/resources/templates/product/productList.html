@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Product List</title>
-    <link rel="stylesheet" th:href="@{/css/product.css}">
+    <link rel="stylesheet" th:href="@{/css/product/product.css}">
     <script>
         $(document).ready(function() {
+
             $('.price').each(function() {
                 let value = $(this).text().replace(' 원', '');
                 let formattedValue = new Intl.NumberFormat().format(value);
                 $(this).text(formattedValue + ' 원');
             });
 
+            // 위시리스트 추가/삭제
             $(".btn-process-wishlist").on("click", function () {
                 let productNo = $(this).data('product-no');
                 console.log(productNo);
@@ -37,30 +39,67 @@
                     },
                 });
             })
-        });
-    </script>
-    <script>
-        function sendData(typeNo) {
-            $.ajax({
-                url: "/product/productType",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ typeNo: typeNo }),
-                success: function(response) {
-                    console.log("데이터 확인", response);
 
-                },
-                error: function(xhr, status, error) {
-                        // 에러가 발생한 경우 실행할 코드
-                        console.error("Error:", error);
+            // 장바구니 추가/삭제
+            $(".btn-process-basket").on("click", function () {
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("장바구니 Ajax Error");
+                    },
+                });
+            })
+
+
+            // 탭 클릭 시 Ajax로 데이터 로드
+            $(".nav-link").on("click", function(e) {
+                e.preventDefault();
+                let typeNo = $(this).data('type-no'); // typeNo 변수 이름 수정
+
+                if (typeNo === "") {
+                    typeNo = null;
+                }
+
+                $.ajax({
+                    url: "/product/productList",
+                    type: "GET",
+                    data: { typeNo: typeNo, pageSize: 10, offset: 0 },
+                    success: function(data) {
+                        $("#product-list").html(data);
+                        formatPrices(); // 가격 포맷팅 다시 적용
+                    },
+                    error: function() {
+                        console.log("상품 로딩 Ajax Error");
                     }
+                });
             });
-        }
+
+            // 페이지 로드 시 전체 상품 로드
+            $(".nav-link[data-type-no='0']").click(); // 전체 상품 로드 시 '0'을 사용
+        });
     </script>
 </head>
 
 <body>
 <div class="container" layout:fragment="content">
+
     <form th:action="@{/product/test}" method="post">
         <select id="productType" name="products">
             <option value="1">노트북</option>
@@ -72,95 +111,109 @@
     <div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" th:href=@{/product/productList} data-toggle="tab">전체</a>
+                <a class="nav-link" data-type-no="" href="#">전체</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/laptopList} data-toggle="tab">노트북</a>
+                <a class="nav-link" data-type-no="1" href="#">노트북</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/mouseList} data-toggle="tab">마우스</a>
+                <a class="nav-link" data-type-no="2" href="#">마우스</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href=@{/product/keyboardList} data-toggle="tab">키보드</a>
+                <a class="nav-link" data-type-no="3" href="#">키보드</a>
             </li>
         </ul>
 
-        <div class="row">
+        <div class="row" id="product-list">
             <div class="col-md-4 mb-4" th:each="product, iterStat : ${products}">
                 <div class="card h-100 product-wap rounded-0">
                     <div class="card rounded-0">
-                        <img th:src="@{'/img/product/' + ${product.image}}" class="card-img-top card-img rounded-0 img-fluid" alt="상품 이미지"
+                        <img th:src="@{'/img/product/' + ${product.image}}"
+                             class="card-img-top card-img rounded-0 img-fluid" alt="상품 이미지"
                              style="height: 200px; object-fit: contain;">
                         <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                             <ul class="list-unstyled">
                                 <li><a class="btn btn-custom text-white btn-process-wishlist" th:attr="data-product-no=${product.productNo}"><i class="far fa-heart"></i></a></li>
-                                <li><a class="btn btn-custom text-white mt-2" th:href="@{/product/laptopDetails(productCode=${product.productCode})}"><i class="far fa-eye"></i></a></li>
-                                <li><a class="btn btn-custom text-white mt-2"><i class="fas fa-cart-plus"></i></a></li>
+                                <li><a class="btn btn-custom text-white mt-2" th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}"><i class="far fa-eye"></i></a></li>
+                                <li><a class="btn btn-custom text-white mt-2 btn-process-basket" th:attr="data-product-no=${product.productNo}"><i class="fas fa-cart-plus"></i></a></li>
                             </ul>
                         </div>
                     </div>
-                    <a th:href="@{/product/laptopDetails(productCode=${product.productCode})}">
+                    <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}">
                         <div class="card-body">
 
+                            <button type="button" class="btn btn-secondary" disabled>게이밍</button>
+                            <button type="button" class="btn btn-secondary" disabled>사무용</button>
+                            <button type="button" class="btn btn-secondary" disabled>학생용</button>
+
                             <h5 class="card-title product-name" th:text="${product.productName}">상품명</h5>
+                            <div>
+                                <span class="small-text" th:text="${product.specsString}"></span>
+                            </div>
+
                             <p class="card-text">
-                                <strong>가격:</strong> <span class="price" th:text="${product.price} + ' 원'">가격</span><br>
+                                <strong></strong> <span class="price" th:text="${product.price} + ' 원'">가격</span><br>
+
                             </p>
-    <!--                        <div th:switch="${product.productType}">-->
-    <!--                            <a th:href="@{/product/laptopDetails(productCode=${product.productCode})}"-->
-    <!--                               class="btn btn-primary">상세 정보</a>-->
-
-    <!--                        </div>-->
-
                         </div>
                     </a>
-<!--                    <div class="card-footer">-->
-<!--                        <small class="text-muted" th:text="'상품 No. ' + ${iterStat.index + 1}">상품 No.</small>-->
-<!--                    </div>-->
+
                 </div>
             </div>
 
-    </div>
-    <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <nav aria-label="Product list pagination">
-                <ul class="pagination">
-                    <!-- 첫 페이지로 이동 -->
-                    <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
-                        <a class="page-link" th:href="@{/product/productList(pageNumber=1, pageSize=${pageSize})}" aria-label="First">
-                            <span aria-hidden="true">&laquo;&laquo;</span>
-                        </a>
-                    </li>
-
-                    <!-- 이전 페이지 -->
-                    <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
-                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber - 1}, pageSize=${pageSize})}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-
-                    <!-- 페이지 번호 -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == (pageNumber == null ? 1 : pageNumber)} ? 'active'">
-                        <a class="page-link" th:href="@{/product/productList(pageNumber=${i}, pageSize=${pageSize})}" th:text="${i}"></a>
-                    </li>
-
-                    <!-- 다음 페이지 -->
-                    <li class="page-item" th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
-                        <a class="page-link" th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber + 1}, pageSize=${pageSize})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-
-                    <!-- 마지막 페이지로 이동 -->
-                    <li class="page-item" th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
-                        <a class="page-link" th:href="@{/product/productList(pageNumber=${totalPages}, pageSize=${pageSize})}" aria-label="Last">
-                            <span aria-hidden="true">&raquo;&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <nav aria-label="Product list pagination">
+                    <ul class="pagination">
+                        <!-- 첫 페이지로 이동 -->
+                        <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/product/productList(pageNumber=1, pageSize=${pageSize})}"
+                               aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- 이전 페이지 -->
+                        <li class="page-item" th:classappend="${ageNumber == null || pageNumber == 1} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber - 1}, pageSize=${pageSize})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- 페이지 번호 -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                            th:classappend="${i == (pageNumber == null ? 1 : pageNumber)} ? 'active'">
+                            <a class="page-link"
+                               th:href="@{/product/productList(pageNumber=${i}, pageSize=${pageSize})}"
+                               th:text="${i}"></a>
+                        </li>
+
+                        <!-- 다음 페이지 -->
+                        <li class="page-item"
+                            th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/product/productList(pageNumber=${pageNumber == null ? 1 : pageNumber + 1}, pageSize=${pageSize})}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- 마지막 페이지로 이동 -->
+                        <li class="page-item"
+                            th:classappend="${pageNumber == null || pageNumber == totalPages} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/product/productList(pageNumber=${totalPages}, pageSize=${pageSize})}"
+                               aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>
 

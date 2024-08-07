@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class Storage {
 
-    private String storageCapacity;
-    private String storageType;
-    private String storageSlots;
+    private String storageCapacity; // 저장 용량
+    private String storageType; // SSD, HDD, M2 등
+    private String storageSlots; // 슬롯 개수
 }
