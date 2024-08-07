@@ -222,22 +222,38 @@ public class CustomerController {
      * @param appDto the ProductqAppDto
      * @return the String
      */
+//    @PostMapping("/productq_app")
+//    public String productq_app(ProductqAppDto appDto,@RequestParam("productNo") int productNo){
+//        int memberNo;
+//        try {
+//            memberNo=SecurityUtil.getUserNo();
+//        }catch (Exception e){
+//            return "/auth/auth-sign-in";
+//        }
+//        appDto.setMemberNo(memberNo);
+//        System.out.println(appDto);
+//        int text_result=customerService.productqApp(appDto);
+//        String code="productq"+appDto.getProductqNo();
+//        customerService.setProductqCode(appDto.getProductqNo(),code);
+//        System.out.println(code);
+//        return "redirect:/product/laptop/laptopDetails?productNo="+appDto.getProductNo();
+//    }
     @PostMapping("/productq_app")
-    public String productq_app(ProductqAppDto appDto){
+    @ResponseBody // JSON 응답을 반환하기 위해 추가
+    public int productq_app(ProductqAppDto appDto, @RequestParam("productNo") int productNo) {
         int memberNo;
         try {
-            memberNo=SecurityUtil.getUserNo();
-        }catch (Exception e){
-            return "/auth/auth-sign-in";
+            memberNo = SecurityUtil.getUserNo();
+        } catch (Exception e) {
+            return 0;
         }
         appDto.setMemberNo(memberNo);
         System.out.println(appDto);
-        int text_result=customerService.productqApp(appDto);
-        String code="productq"+appDto.getProductqNo();
-        customerService.setProductqCode(appDto.getProductqNo(),code);
+        int text_result = customerService.productqApp(appDto);
+        String code = "productq" + appDto.getProductqNo();
+        customerService.setProductqCode(appDto.getProductqNo(), code);
         System.out.println(code);
-        String redirectUrl = String.format("/customer/user/customer_productq/%s", appDto.getProductNo());
-        return "redirect:"+redirectUrl;
+        return 1;
     }
 
     /**

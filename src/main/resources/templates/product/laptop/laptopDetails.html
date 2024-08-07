@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{common/layout.html}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>제품 정보</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
     <style>
 
         .review-stars {
@@ -80,6 +85,45 @@
                     },
                 });
             })
+            //상품문의 등록
+            $('#productqForm').on('submit', function(event) {
+            event.preventDefault(); // 폼의 기본 제출 동작을 방지
+
+            var formData = new FormData(this);
+            var title = formData.get('title');
+            var category = formData.get('productqCategorycode');
+            var content = formData.get('content');
+            var secret = formData.get('secret');
+            var productNo = formData.get('productNo');
+            $.ajax({
+                url: "/customer/user/productq_app", // 서버의 URL
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response==1) {
+                        alert("상품 문의 등록"); // 성공 메시지 표시
+                        $('#productqForm')[0].reset(); // 폼 필드 초기화
+                        $('#productModal').modal('hide'); // 모달 닫기
+                        var newListItem = `
+                        <div class="customer-list">
+                            <a>${title}</a>
+                            <hr>
+                        </div>
+                        `;
+                        console.log(newListItem)
+                        $('#customer-box').prepend(newListItem);
+                    } else {
+                        alert('문의 제출에 실패했습니다: ' + response.message);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                    alert('문제 발생! 다시 시도해 주세요.');
+                }
+            });
+        });
 
         });
     </script>
@@ -385,11 +429,17 @@
         </div>
 
         <div class="col-12 mt-4">
-            <h4><strong>의견/리뷰</strong></h4>
+            <h4><strong>문의/리뷰</strong></h4>
         </div>
         <hr>
+<!--        10개의 최신 문의를 띄우고 전체 문의 보기로 해당 제품의 전체 문의 진입-->
         <div id="customer-box">
-
+            <div th:each="each : ${productqList}" class="customer-list">
+                <a th:text="${each.title}"></a>
+                <hr>
+            </div>
+            <a class="btn btn-secondary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>
+            <a th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}">전체문의 보기</a>
         </div>
 
         <div id="review-box">
@@ -410,6 +460,54 @@
         </div>
     </div>
 </div>
+    <!--상품 문의 등록 모달-->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">상품 문의 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productqForm" method="post" enctype="multipart/form-data">
+                        <!-- 제목과 카테고리 입력 -->
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="title" class="form-label">제목:</label>
+                                <input type="text" class="form-control" id="title" name="title" required style="width: 100%;">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="inputGroupSelect01" class="form-label">카테고리</label>
+                                <select class="form-select" id="inputGroupSelect01" name="productqCategorycode">
+                                    <option value="productq_opinion">의견</option>
+                                    <option value="productq_question">문의</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 내용 입력 -->
+                        <div class="mb-3">
+                            <label for="content" class="form-label">내용:</label>
+                            <textarea class="form-control editor-container__editor" id="content" name="content"></textarea>
+                        </div>
+                        <!-- 비밀글 설정 -->
+                        <div class="mb-3">
+                            <label>비밀글: </label>
+                            <div>
+                                <label class="me-2">
+                                    <input type="radio" name="secret" value="Y"> Yes
+                                </label>
+                                <label>
+                                    <input type="radio" name="secret" value="N" checked> No
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

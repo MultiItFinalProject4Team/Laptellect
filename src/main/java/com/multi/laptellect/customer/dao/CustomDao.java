@@ -88,4 +88,6 @@ public interface CustomDao {
     List<PersonalqListDto> getAllPersonalqSearchList(PersonalqSearchDto searchDto);
 
     void setImage(String code);
+
+    List<ProductqList> getProductqList(int productNo);
 }

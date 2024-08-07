@@ -1,10 +1,12 @@
 package com.multi.laptellect.product.controller;
 
 
+import com.multi.laptellect.customer.dto.ProductqList;
+import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.model.dto.SpecDTO;
+import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class ProductController {
     private final CartService cartService;
     private final CrawlingService crawlingService;
     private final ProductService productService;
+    private final CustomerService customerService;
 
     /**
      * 크롤링을 시작합니다.
@@ -234,6 +237,9 @@ public class ProductController {
                 optionsValue.add(detail.getOptionValue());
             }
 
+            //customer 문의 부분
+            List<ProductqList> productqList = customerService.getProductqList(details.getProductNo());
+            model.addAttribute("productqList",productqList);
 
             model.addAttribute("options", options);
             model.addAttribute("optionValue", optionsValue);
