@@ -27,3 +27,4 @@ public class GlobalExceptionHandler {
         response.sendRedirect("/signin");
     }
 }
+

@@ -3,6 +3,10 @@ const itemsPerPage = 12;
 let filteredOrders = [];
 let currentOrderId = null;
 
+function formatPrice(price) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원';
+}
+
 function renderTable() {
   const tableBody = document.getElementById('orderTableBody');
   const ordersToShow = filteredOrders.length > 0 ? filteredOrders : orders;
@@ -20,17 +24,16 @@ function renderTable() {
   pageOrders.forEach(order => {
     const row = `
       <tr>
-        <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
-        <td class="order-number-column">${order.payment_no}</td>
-        <td class="username-column">${order.username}</td>
-        <td class="product-name-column">${order.productname}</td>
-        <td class="product-info-column"><span class="order-content" onclick="openModal(${order.payment_no})">${order.productinfo}</span></td>
-        <td class="price-column">${order.productprice}</td>
-        <td class="purchase-price-column">${order.purchaseprice}</td>
-        <td class="date-column">${order.date_created}</td>
+        <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" data-amount="${order.purchasePrice}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
+        <td class="order-number-column"><span class="order-content" onclick="openModal(${order.paymentNo})">${order.paymentNo}</span></td>
+        <td class="username-column">${order.userName}</td>
+        <td class="product-name-column">${order.productName}</td>
+        <td class="price-column">${formatPrice(order.productPrice)}</td>
+        <td class="purchase-price-column">${formatPrice(order.purchasePrice)}</td>
+        <td class="date-column">${order.createdAt}</td>
         <td class="imPortId-column">${order.imPortId}</td>
         <td class="refund-column">${order.refund}</td>
-        <td class="refund-date-column">${order.refund_date || '환불되지 않음'}</td>
+        <td class="refund-date-column">${order.refundAt || '환불되지 않음'}</td>
       </tr>
     `;
     tableBody.innerHTML += row;
@@ -47,25 +50,18 @@ function showNoResultsMessage() {
 }
 
 function renderPagination() {
-  const totalOrders = filteredOrders.length > 0 ? filteredOrders.length : orders.length;
-  const totalPages = Math.ceil(totalOrders / itemsPerPage);
+  const totalPages = Math.ceil((filteredOrders.length > 0 ? filteredOrders.length : orders.length) / itemsPerPage);
   const pageNumbers = document.getElementById('pageNumbers');
   pageNumbers.innerHTML = '';
 
-  if (totalOrders === 0) {
-    document.getElementById('prevButton').disabled = true;
-    document.getElementById('nextButton').disabled = true;
-    return;
-  }
-
   for (let i = 1; i <= totalPages; i++) {
-    const button = document.createElement('button');
-    button.textContent = i;
-    button.onclick = () => changePage(i);
+    const pageNumber = document.createElement('button');
+    pageNumber.textContent = i;
+    pageNumber.onclick = () => changePage(i);
     if (i === currentPage) {
-      button.classList.add('active');
+      pageNumber.classList.add('active');
     }
-    pageNumbers.appendChild(button);
+    pageNumbers.appendChild(pageNumber);
   }
 
   document.getElementById('prevButton').disabled = currentPage === 1;
@@ -73,17 +69,13 @@ function renderPagination() {
 }
 
 function changePage(page) {
-  const totalOrders = filteredOrders.length > 0 ? filteredOrders.length : orders.length;
-  const totalPages = Math.ceil(totalOrders / itemsPerPage);
-
-  if (page === 'prev' && currentPage > 1) {
-    currentPage--;
-  } else if (page === 'next' && currentPage < totalPages) {
-    currentPage++;
-  } else if (typeof page === 'number') {
+  if (typeof page === 'number') {
     currentPage = page;
+  } else if (page === 'prev' && currentPage > 1) {
+    currentPage--;
+  } else if (page === 'next' && currentPage < Math.ceil((filteredOrders.length > 0 ? filteredOrders.length : orders.length) / itemsPerPage)) {
+    currentPage++;
   }
-
   renderTable();
   renderPagination();
 }
@@ -115,11 +107,10 @@ function searchOrders() {
 }
 
 function refundSelectedOrders() {
-  const selectedOrders = Array.from(document.getElementsByName('orderCheck'))
-    .filter(checkbox => checkbox.checked && !checkbox.disabled)
+  const selectedOrders = Array.from(document.querySelectorAll('input[name="orderCheck"]:checked'))
     .map(checkbox => ({
       imPortId: checkbox.value,
-      amount: orders.find(order => order.imPortId === checkbox.value).purchaseprice
+      amount: parseFloat(checkbox.getAttribute('data-amount'))
     }));
 
   if (selectedOrders.length === 0) {
@@ -127,50 +118,45 @@ function refundSelectedOrders() {
     return;
   }
 
-  if (confirm('선택한 주문을 환불하시겠습니까?')) {
-    Promise.all(selectedOrders.map(order =>
-      fetch('/payment/cancel', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(order),
-      }).then(response => response.json())
-    ))
-    .then(results => {
-      const successCount = results.filter(result => result.success).length;
-      const failCount = results.length - successCount;
+  if (confirm(`선택한 ${selectedOrders.length}개의 주문을 환불하시겠습니까?`)) {
+    Promise.all(selectedOrders.map(order => refundOrder(order.imPortId, order.amount)))
+      .then(results => {
+        const successCount = results.filter(result => result.success).length;
+        const failCount = results.length - successCount;
 
-      alert(`환불 처리 완료:\n성공: ${successCount}건\n실패: ${failCount}건`);
-      location.reload();
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('주문 환불 중 오류가 발생했습니다.');
-    });
+        if (successCount > 0) {
+          alert(`${successCount}개의 주문이 성공적으로 환불되었습니다.${failCount > 0 ? `\n${failCount}개의 주문 환불에 실패했습니다.` : ''}`);
+          location.reload(); // 페이지 새로고침
+        } else {
+          alert('환불 처리 중 오류가 발생했습니다.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('환불 처리 중 오류가 발생했습니다.');
+      });
   }
 }
 
 function openModal(orderId) {
   currentOrderId = orderId;
-  const order = orders.find(o => o.payment_no === orderId);
+  const order = orders.find(o => o.paymentNo === orderId);
   if (order) {
-    document.getElementById('modalOrderNumber').textContent = order.payment_no;
-    document.getElementById('modalUsername').textContent = order.username;
-    document.getElementById('modalProductName').textContent = order.productname;
-    document.getElementById('modalProductInfo').textContent = order.productinfo;
-    document.getElementById('modalProductPrice').textContent = order.productprice;
-    document.getElementById('modalPurchasePrice').textContent = order.purchaseprice;
-    document.getElementById('modalOrderDate').textContent = order.date_created;
+    document.getElementById('modalOrderNumber').textContent = order.paymentNo;
+    document.getElementById('modalUsername').textContent = order.userName;
+    document.getElementById('modalProductName').textContent = order.productName;
+    document.getElementById('modalProductPrice').textContent = formatPrice(order.productPrice);
+    document.getElementById('modalPurchasePrice').textContent = formatPrice(order.purchasePrice);
+    document.getElementById('modalOrderDate').textContent = order.createdAt;
     document.getElementById('modalimPortId').textContent = order.imPortId;
     document.getElementById('modalRefundStatus').textContent = order.refund;
-    document.getElementById('modalRefundDate').textContent = order.refund_date || '환불되지 않음';
+    document.getElementById('modalRefundDate').textContent = order.refundAt || '환불되지 않음';
 
     const modalRefundButton = document.getElementById('modalRefundButton');
     if (order.refund === 'N') {
       modalRefundButton.style.display = 'block';
       modalRefundButton.disabled = false;
-      modalRefundButton.onclick = () => refundSingleOrder(order.imPortId, order.purchaseprice);
+      modalRefundButton.onclick = () => refundSingleOrder(order.imPortId, order.purchasePrice);
     } else {
       modalRefundButton.style.display = 'none';
     }
@@ -179,30 +165,47 @@ function openModal(orderId) {
   }
 }
 
-
 function refundSingleOrder(imPortId, amount) {
   if (confirm('이 주문을 환불하시겠습니까?')) {
-    fetch('/payment/cancel', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imPortId, amount }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('주문이 성공적으로 환불되었습니다.');
-        location.reload();
-      } else {
-        alert('주문 환불 중 오류가 발생했습니다: ' + data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('주문 환불 중 오류가 발생했습니다.');
-    });
+    refundOrder(imPortId, amount)
+      .then(result => {
+        if (result.success) {
+          alert('주문이 성공적으로 환불되었습니다.');
+          location.reload(); // 페이지 새로고침
+        } else {
+          alert('환불 처리 중 오류가 발생했습니다: ' + result.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('환불 처리 중 오류가 발생했습니다.');
+      });
   }
+}
+
+function refundOrder(imPortId, amount) {
+  return fetch('/payment/cancel', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      imPortId: imPortId,
+      amount: amount
+    }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      return { success: true };
+    } else {
+      return { success: false, message: data.message };
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    return { success: false, message: '환불 처리 중 오류가 발생했습니다.' };
+  });
 }
 
 function closeModal() {
@@ -229,5 +232,13 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.checked = this.checked;
       }
     });
+  });
+
+  // 환불 버튼 활성화 여부 체크
+  document.addEventListener('change', function(event) {
+    if (event.target.name === 'orderCheck' || event.target.id === 'selectAll') {
+      const checkedOrders = document.querySelectorAll('input[name="orderCheck"]:checked:not(:disabled)');
+      document.getElementById('refundSelectedButton').disabled = checkedOrders.length === 0;
+    }
   });
 });

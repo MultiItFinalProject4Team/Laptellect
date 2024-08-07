@@ -62,7 +62,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public List<OrderlistDTO> selectOrders(String memberName) {
+    public List<PaymentDTO> selectOrders(String memberName) {
         return paymentDAO.selectOrders(memberName);
     }
 
@@ -157,6 +157,10 @@ public class PaymentService {
     }
 
 
+    public PaymentpageDTO findProduct(String productName) {
+        return paymentDAO.findProduct(productName);
+    }
+
     public PaymentpointDTO selectpoint(int memberNo) {
 
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -176,6 +180,10 @@ public class PaymentService {
 
     public boolean findReview(String imPortId) {
         return paymentDAO.findReview(imPortId);
+    }
+
+    public PaymentDTO findPaymentByImPortId(String imPortId) {
+        return paymentDAO.findPaymentByImPortId(imPortId);
     }
 
 }
