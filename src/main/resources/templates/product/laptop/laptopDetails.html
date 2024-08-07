@@ -136,8 +136,13 @@
                 <div class="col-7">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="mb-2">
-                            <span><strong>가격 : <span class="price" th:text="${ laptop.price }"></span></strong></span>
-                            <button class="btn btn-sm btn-custom-primary ms-4">구매하기</button>
+                            <span><strong>가격 : <span class="price" th:text="${laptop.price}"></span></strong></span>
+                            <form th:action="@{/payment/payment}" method="post">
+                                <input type="hidden" name="productName" th:value="${laptop.productName}">
+                                <input type="hidden" name="imageUrl" th:value="${laptop.image}">
+                                <input type="hidden" name="price" th:value="${laptop.price}">
+                                <button type="submit" class="btn btn-sm btn-custom-primary ms-4">구매하기</button>
+                            </form>
                         </div>
                     </div>
 

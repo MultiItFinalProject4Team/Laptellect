@@ -192,7 +192,7 @@
 
     <select id="findProduct" parameterType="string" resultType="com.multi.laptellect.payment.model.dto.PaymentpageDTO">
         SELECT product_no, product_name, product_code, type_no, price, upload_name
-        FROM view_paymentpage
+        FROM vw_paymentpage
         WHERE product_name = #{productName}
     </select>
 

@@ -53,7 +53,7 @@ SELECT * FROM payment_product_reviews;
 
 SELECT * FROM ;
 
-CREATE OR REPLACE VIEW view_paymentpage AS
+CREATE OR REPLACE VIEW vw_paymentpage AS
 SELECT
     p.product_no,
     pd.product_name,
