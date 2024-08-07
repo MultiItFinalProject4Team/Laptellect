@@ -31,7 +31,7 @@ public interface ProductService {
      * @param pageSize   페이지 크기
      * @return the stored products
      */
-    List<ProductDTO> getStoredProducts(Integer typeNo,int pageNumber, int pageSize);
+    List<ProductDTO> getStoredProducts(Integer typeNo);
 
     /**
      * 모든 상품의 수량 확인

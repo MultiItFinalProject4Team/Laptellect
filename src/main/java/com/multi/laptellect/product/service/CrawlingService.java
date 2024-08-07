@@ -323,6 +323,8 @@ public class CrawlingService {
             }
         }
 
+        boolean manufacturerFound = false;
+
         Elements manufacturerElements = doc.select("span#makerTxtArea");
         for (Element element : manufacturerElements) {
             String[] parts = element.text().split(": ");
@@ -330,8 +332,32 @@ public class CrawlingService {
             log.info("parts 값 확인 합니다. = {}", parts);
             if (parts.length == 2) {
                 productDTO.setManufacturer(parts[1].trim());
+                manufacturerFound = true;
+                break;
             }
-            break;
+
+        }
+        if (!manufacturerFound) {
+            Elements alternativeManufacturerElements = doc.select("span#alternativeMakerTxtArea");
+            for (Element element : alternativeManufacturerElements) {
+                String[] parts = element.text().split(": ");
+
+                log.info("parts 값 확인 합니다. = {}", parts);
+                if (parts.length == 2) {
+                    productDTO.setManufacturer(parts[1].trim());
+                    break;
+                }
+            }
+        }
+        // id가 imageFrom인 span 요소를 선택하고 텍스트를 가져옴
+        Elements imageFromElements = doc.select("span#imageFrom");
+        for (Element element : imageFromElements) {
+            String text = element.text();
+            if (text.contains("이미지출처:")) {
+                String imageSource = text.split("이미지출처:")[1].trim();
+                productDTO.setManufacturer(imageSource);
+                break;
+            }
         }
 
         return productDTO;

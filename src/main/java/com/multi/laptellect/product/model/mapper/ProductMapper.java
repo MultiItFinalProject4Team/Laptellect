@@ -14,9 +14,8 @@ public interface ProductMapper {
 
     int countByProductCode(int productNo); //상품코드 계수
 
-    List<ProductDTO> getAllProducts(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo, @Param("pageSize") int pageSize, @Param("offset") int offset);
+    List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo);
 
     int getTotalProducts();
 
@@ -33,7 +32,6 @@ public interface ProductMapper {
     void insertProductCategory(@Param("categoryCode") String categoryCode, @Param("typeNo") int typeNo, @Param("options") String options);
 
     int getProductByType(@Param("typeNo") int typeNo);
-
 
     List<ProductDTO> findProduct();
 

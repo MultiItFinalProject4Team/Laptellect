@@ -58,7 +58,6 @@
         on
             i.reference_code = p.reference_code
         ORDER BY p.product_no
-        LIMIT #{pageSize} OFFSET #{offset}
 
     </select>
 
@@ -81,7 +80,6 @@
         i.reference_code = p.reference_code
         WHERE p.type_no = #{typeNo}
         ORDER BY p.product_no
-        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <!--리뷰 저장-->
