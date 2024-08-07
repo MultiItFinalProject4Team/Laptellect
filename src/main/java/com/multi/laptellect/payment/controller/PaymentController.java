@@ -47,7 +47,7 @@ public class PaymentController {
     }
 
     @PostMapping("/payment")
-    public String paymentpage(@RequestParam("img") String img,
+    public String paymentpage(@RequestParam("imageUrl") String img,
                               @RequestParam("productName") String productName,
                               @RequestParam("price") int price,
                               Model model) {
