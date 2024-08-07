@@ -169,7 +169,7 @@ public class CustomerController {
     }
 
     //임시 상품(1)
-    @GetMapping("/product")
+    @GetMapping("/my_productqList")
     public void product(Model model){
         List<Integer> plist = new ArrayList<>();
         for(int i=1; i<=5; i++){

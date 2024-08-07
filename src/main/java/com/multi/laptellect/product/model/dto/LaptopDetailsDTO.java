@@ -17,6 +17,7 @@ public class LaptopDetailsDTO {
     private int productNo;
     private String productName;
     private String productCode;
+    private String categoryNo;
     private int typeNo;
     private int price;
     private String options;

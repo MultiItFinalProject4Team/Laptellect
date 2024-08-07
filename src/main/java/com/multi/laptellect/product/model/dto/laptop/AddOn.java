@@ -11,13 +11,12 @@ import lombok.Data;
  */
 @Data
 public class AddOn {
-
-    private String wirelessLan;
-    private String usb;
-    private String usbC;
-    private String usbA;
-    private String battery;
-    private String adapter;
-    private String coolingfan;
-    private String speaker;
+    private String os; // OS
+    private String wirelessLan; // 무선랜
+    private String usb; // USB 개수
+    private String usbC; // USB C 개수
+    private String usbA; // USB A 개수
+    private String coolingfan; // 쿨링팬 유무
+    private String bluetooth; // 블루투스
+    private String thunderbolt; // 썬더볼트 단자
 }
