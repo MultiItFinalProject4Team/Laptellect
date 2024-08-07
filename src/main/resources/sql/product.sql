@@ -88,10 +88,10 @@ CREATE VIEW vw_product_detail AS
 SELECT
 	p.product_no,
     p.product_name,
-    p.product_no,
     p.product_code,
     p.type_no,
     p.price,
+    c.category_no,
     c.options,
     s.option_value,
     i.upload_name
