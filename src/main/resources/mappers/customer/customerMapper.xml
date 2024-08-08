@@ -329,7 +329,7 @@
         where reference_code is null
     </update>
 
-    <select id="getProductqList" parameterType="com.multi.laptellect.customer.dto.ProductqList">
+    <select id="getAllProductqList" parameterType="com.multi.laptellect.customer.dto.ProductqList">
         SELECT a.*, b.member_name
         FROM product_question a
         JOIN mem_member b ON a.member_no = b.member_no

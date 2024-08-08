@@ -89,5 +89,5 @@ public interface CustomDao {
 
     void setImage(String code);
 
-    List<ProductqList> getProductqList(int productNo);
+    List<ProductqList> getAllProductqList(int productNo);
 }

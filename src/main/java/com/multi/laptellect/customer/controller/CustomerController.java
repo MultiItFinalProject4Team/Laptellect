@@ -520,4 +520,15 @@ public class CustomerController {
     //            @RequestPart(value = "files") List<MultipartFile> multipartFiles) {
     //        FileService.uploadFiles(multipartFiles, "customer");
     //    }
+
+    @GetMapping("/get_AllproductqList")
+    public ResponseEntity<List<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo) {
+        try {
+            List<ProductqList> productqList = customerService.getAllProductqList(productNo);
+            return ResponseEntity.ok(productqList);
+        } catch (Exception e) {
+            // 예외 처리 로직 추가
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

@@ -9,6 +9,9 @@
     <title>제품 정보</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <link href="/css/product/product_question.css" rel="stylesheet">
+    <script src="/js/product/product_question.js"></script>
+    <script src="/js/product/question-review-tab.js"></script>
     <style>
 
         .review-stars {
@@ -85,46 +88,6 @@
                     },
                 });
             })
-            //상품문의 등록
-            $('#productqForm').on('submit', function(event) {
-            event.preventDefault(); // 폼의 기본 제출 동작을 방지
-
-            var formData = new FormData(this);
-            var title = formData.get('title');
-            var category = formData.get('productqCategorycode');
-            var content = formData.get('content');
-            var secret = formData.get('secret');
-            var productNo = formData.get('productNo');
-            $.ajax({
-                url: "/customer/user/productq_app", // 서버의 URL
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response==1) {
-                        alert("상품 문의 등록"); // 성공 메시지 표시
-                        $('#productqForm')[0].reset(); // 폼 필드 초기화
-                        $('#productModal').modal('hide'); // 모달 닫기
-                        var newListItem = `
-                        <div class="customer-list">
-                            <a>${title}</a>
-                            <hr>
-                        </div>
-                        `;
-                        console.log(newListItem)
-                        $('#customer-box').prepend(newListItem);
-                    } else {
-                        alert('문의 제출에 실패했습니다: ' + response.message);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error:', textStatus, errorThrown);
-                    alert('문제 발생! 다시 시도해 주세요.');
-                }
-            });
-        });
-
         });
     </script>
 </head>
@@ -430,19 +393,41 @@
 
         <div class="col-12 mt-4">
             <h4><strong>문의/리뷰</strong></h4>
+            <div class="tab-nav">
+                <button class="tab-button active" onclick="showTab('customer-box')">Home</button>
+                <button class="tab-button" onclick="showTab('review-box')">About</button>
+            </div>
         </div>
         <hr>
 <!--        10개의 최신 문의를 띄우고 전체 문의 보기로 해당 제품의 전체 문의 진입-->
-        <div id="customer-box">
-            <div th:each="each : ${productqList}" class="customer-list">
-                <a th:text="${each.title}"></a>
-                <hr>
+        <div id="customer-box" class="tab-content active">
+            <div id="customer-list">
+                <div th:each="each : ${productqList}" class="question">
+                    <div class="question-header">
+                        <div class="question-author">
+                            <span class="author-name" th:text="${each.memberName}"></span>
+                            <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
+                        </div>
+                    </div>
+                    <div class="question-body">
+                        <div class="question-bodytop">
+                            <p class="question-category" th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"></p>
+                            <h4 class="question-title" th:text="${each.title}"></h4>
+                        </div>
+                        <div class="question-content">
+                            <p class="question-content" th:text="${each.content}"></p>
+                        </div>
+                    </div>
+                    <hr class="question-hr">
+                </div>
             </div>
-            <a class="btn btn-secondary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>
-            <a th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}">전체문의 보기</a>
+            <div>
+                <a class="btn btn-secondary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>
+                <a th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}">전체문의 보기</a>
+            </div>
         </div>
 
-        <div id="review-box">
+        <div id="review-box" class="tab-content">
 
         </div>
 
@@ -509,5 +494,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

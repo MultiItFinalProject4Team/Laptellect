@@ -383,7 +383,7 @@ public class CustomerService {
         customDao.setImage(code);
     }
 
-    public List<ProductqList> getProductqList(int productNo) {
-        return customDao.getProductqList(productNo);
+    public List<ProductqList> getAllProductqList(int productNo) {
+        return customDao.getAllProductqList(productNo);
     }
 }

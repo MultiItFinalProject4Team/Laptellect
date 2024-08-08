@@ -238,7 +238,7 @@ public class ProductController {
             }
 
             //customer 문의 부분
-            List<ProductqList> productqList = customerService.getProductqList(details.getProductNo());
+            List<ProductqList> productqList = customerService.getAllProductqList(details.getProductNo());
             model.addAttribute("productqList",productqList);
 
             model.addAttribute("options", options);
