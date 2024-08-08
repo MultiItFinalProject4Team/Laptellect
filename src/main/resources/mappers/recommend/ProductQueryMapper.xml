@@ -22,6 +22,7 @@
         JOIN product_category pc ON ps.category_no = pc.category_no
         LEFT JOIN images i ON p.reference_code = i.reference_code
         WHERE 1=1
+        <!-- GPU 태그 필터링 -->
         <if test="gpuTags != null and gpuTags.size() > 0">
             AND EXISTS (
             SELECT 1 FROM product_spec ps_gpu
@@ -34,6 +35,7 @@
             )
             )
         </if>
+        <!--사무용-->
         <if test="cpuTags != null and cpuTags.size() > 0">
             AND EXISTS (
             SELECT 1 FROM product_spec ps_cpu
@@ -78,6 +80,14 @@
 <!--            AND LOWER(ps_perf.option_value) LIKE CONCAT('%', LOWER(#{performanceTag}), '%')-->
 <!--            )-->
 <!--        </if>-->
+
+        <!-- GPU와 CPU 태그 모두 없는 경우 결과가 없도록 설정 -->
+        <if test="gpuTags == null or gpuTags.size() == 0">
+            <if test="cpuTags == null or cpuTags.size() == 0">
+                AND 1 = 0 <!-- 필터링 조건이 없는 경우 결과가 없도록 함 -->
+            </if>
+        </if>
         GROUP BY p.product_no, p.product_name, p.price, p.product_code
+
     </select>
 </mapper>
