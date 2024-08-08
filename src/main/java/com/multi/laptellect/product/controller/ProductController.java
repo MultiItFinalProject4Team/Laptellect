@@ -156,12 +156,9 @@ public class ProductController {
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
-
-
         //customer 문의 부분
         List<ProductqList> productqList = customerService.getAllProductqList(productNo);
         model.addAttribute("productqList",productqList);
-
 
         // 제품 상세 정보 가져오기
         LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);

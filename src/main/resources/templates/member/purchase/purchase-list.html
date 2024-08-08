@@ -1,5 +1,8 @@
 <table class="table table-striped text-center">
   <thead>
+  <tr th:if="${orders == null or #lists.isEmpty(orders)}">
+    <td colspan="6" class="text-center">조회 정보가 없습니다</td>
+  </tr>
   <tr>
     <th scope="col" style="width: 5%;">번호</th>
     <th scope="col" style="width: 10%;">주문번호</th>
@@ -33,9 +36,6 @@
   </tr>
   </tbody>
 </table>
-<div th:if="${orders == null or orders.isEmpty()}">
-  <p>No orders available.</p>
-</div>
 
 <nav aria-label="Page navigation">
   <div th:if="${!orders.isEmpty()}">
