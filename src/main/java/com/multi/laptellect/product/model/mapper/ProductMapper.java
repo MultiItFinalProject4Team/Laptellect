@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface ProductMapper {
@@ -61,4 +62,6 @@ public interface ProductMapper {
     int countAllWishlistByMemberNo(int memberNo);
     
     ProductDTO findProductByProductNo(String productNo);
+
+    List<SpecDTO> findProductSpecByProductNo(@Param("productNo") int productNo, @Param("neededOptions") Set<String> neededOptions);
 }

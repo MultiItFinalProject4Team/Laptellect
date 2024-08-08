@@ -3,17 +3,21 @@ package com.multi.laptellect.product.service;
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
+import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * The type Product service.
@@ -22,11 +26,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-
     private final ProductMapper productMapper;
-
-
     private final CrawlingService crawlingService;
+    private final RedisUtil redisUtil;
+    private final static String CACHE_KEY_PRODUCT = "product:";
 
     @Override
     @Transactional
@@ -95,21 +98,33 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<LaptopDetailsDTO> getLaptopProductDetails(int productNo) {
-
+    @Cacheable(value = "product", key = "#p0", cacheManager = "productCacheManager")
+    public LaptopSpecDTO getLaptopProductDetails(int productNo) {
         log.info("프로덕트넘버값 확인 = {}", productNo);
 
-        List<LaptopDetailsDTO> laptopDetailsDTO = productMapper.laptopProductDetails(productNo);
-        log.info("laptopDetailsDTO = {} ", laptopDetailsDTO);
+        LaptopSpecDTO laptop = new LaptopSpecDTO();
 
-        return laptopDetailsDTO;
+        List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo);
+        log.info("상품 스펙 조회 = {}", laptopDetails);
+
+        if (!laptopDetails.isEmpty()) {
+            laptop = getLaptopSpec(productNo, laptopDetails);
+        } else {
+            return null;
+        }
+
+        return laptop;
     }
 
     @Override
     @Transactional
     public int processWishlist(List<Integer> productNoList) throws Exception {
+        // 로그인 한 사용자인지 검증 로그인 하지 않았을 시 3 반환
+        if(!SecurityUtil.isAuthenticated()) return 3;
+        
         WishlistDTO wishListDTO = new WishlistDTO();
         int memberNo = SecurityUtil.getUserNo();
+
         int result = 0;
         wishListDTO.setMemberNo(memberNo);
 
@@ -158,12 +173,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public LaptopSpecDTO getLaptopSpec(List<LaptopDetailsDTO> laptopDetails) {
+
+    public LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails) {
         LaptopDetailsDTO laptopDetailsDTO = laptopDetails.get(0);
         LaptopSpecDTO specDTO = new LaptopSpecDTO();
 
+
         // 상품 기본 정보 변수 설정
-        int productNo = laptopDetailsDTO.getProductNo();
+//        int productNo = laptopDetailsDTO.getProductNo();
         String productName = laptopDetailsDTO.getProductName();
         int price = laptopDetailsDTO.getPrice();
         String image = laptopDetailsDTO.getUploadName();
@@ -365,6 +382,8 @@ public class ProductServiceImpl implements ProductService {
         return specDTO;
     }
 
+
+
     //상품 전체 조회
     @Override
     @Transactional
@@ -395,6 +414,8 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+
+
     @Override
     public List<SpecDTO> getProductSpec(int productNo) {
 
@@ -408,12 +429,9 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<SpecDTO> filterSpecs(int productNo, Set<String> neededOptions) {
-        List<SpecDTO> specs = getProductSpec(productNo);
-        return specs.stream()
-                .filter(spec -> neededOptions.contains(spec.getOptions()))
-                .collect(Collectors.toList());
+        log.info("노트북 스펙 set = {}", neededOptions);
+        return productMapper.findProductSpecByProductNo(productNo, neededOptions);
     }
-
 
 
 }

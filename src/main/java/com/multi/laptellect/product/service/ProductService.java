@@ -55,7 +55,7 @@ public interface ProductService {
      * @param productNo the product code
      * @return the laptop product details
      */
-    List<LaptopDetailsDTO> getLaptopProductDetails(int productNo);
+    LaptopSpecDTO getLaptopProductDetails(int productNo);
 
 
     /**
@@ -103,7 +103,7 @@ public interface ProductService {
 
     ProductDTO findProductByProductNo(String productNo) throws Exception;
 
-    LaptopSpecDTO getLaptopSpec(List<LaptopDetailsDTO> laptopDetails);
+    LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
 
 
 }

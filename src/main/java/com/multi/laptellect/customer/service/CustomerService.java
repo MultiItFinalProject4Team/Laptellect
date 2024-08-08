@@ -382,4 +382,8 @@ public class CustomerService {
     public void setImage(String code) {
         customDao.setImage(code);
     }
+
+    public List<ProductqList> getAllProductqList(int productNo) {
+        return customDao.getAllProductqList(productNo);
+    }
 }

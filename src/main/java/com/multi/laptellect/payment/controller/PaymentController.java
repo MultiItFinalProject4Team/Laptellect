@@ -59,7 +59,7 @@ public class PaymentController {
                               Model model) {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-//        paymentpageDTO.setPrice(400);
+        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);

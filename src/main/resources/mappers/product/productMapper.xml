@@ -209,4 +209,17 @@
         WHERE
             p.product_no = #{ productNo }
     </select>
+
+    <select id="findProductSpecByProductNo">
+        SELECT
+              options
+            , option_value
+        FROM
+            vw_spec_and_value
+        WHERE
+            product_no = #{productNo} AND options IN
+        <foreach collection="neededOptions" item="options" open="(" separator="," close=")">
+            #{ options }
+        </foreach>
+    </select>
 </mapper>
