@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * The type Product service.
@@ -383,6 +382,8 @@ public class ProductServiceImpl implements ProductService {
         return specDTO;
     }
 
+
+
     //상품 전체 조회
     @Override
     @Transactional
@@ -413,6 +414,8 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+
+
     @Override
     public List<SpecDTO> getProductSpec(int productNo) {
 
@@ -426,12 +429,9 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<SpecDTO> filterSpecs(int productNo, Set<String> neededOptions) {
-        List<SpecDTO> specs = getProductSpec(productNo);
-        return specs.stream()
-                .filter(spec -> neededOptions.contains(spec.getOptions()))
-                .collect(Collectors.toList());
+        log.info("노트북 스펙 set = {}", neededOptions);
+        return productMapper.findProductSpecByProductNo(productNo, neededOptions);
     }
-
 
 
 }

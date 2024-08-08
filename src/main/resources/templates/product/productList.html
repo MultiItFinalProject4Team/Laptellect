@@ -4,133 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/product/product.css}">
-    <script>
-        $(document).ready(function() {
+    <script th:inline="javascript">
+    $(document).ready(function() {
+        let typeNo = [[${ typeNo }]];
+
+        $('#default-tab').addClass("active");
 
         function formatPrices() {
-                $('.price').each(function() {
-                    let value = $(this).text().replace(' 원', '').replace(/,/g, '');
-                    let formattedValue = new Intl.NumberFormat().format(value);
-                    $(this).text(formattedValue + ' 원');
-                });
-            }
-
-
-            function loadInitialProducts() {
-                $.ajax({
-                    url: "/product/productList",
-                    type: "GET",
-                    data: { typeNo: 1 },
-                    success: function (response) {
-                        console.log(response);
-                        // 응답에서 필요한 부분만 추출하여 업데이트
-                        let html = $(response).find("#product-list").html();
-                        $('#product-list').html(html);
-                        formatPrices()
-                        attachEventHandlers
-
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-                });
-            }
-
-            loadInitialProducts();
-
-
-
-
-            // 위시리스트 추가/삭제
-            $(".btn-process-wishlist").on("click", function () {
-                let productNo = $(this).data('product-no');
-                console.log(productNo);
-
-                $.ajax({
-                    url: "/api/product/process-wishlist",
-                    type: "POST",
-                    data: { productNo: productNo },
-                    success: function (response) {
-                        switch (response) {
-                          case 1:
-                            alert("위시리스트 추가 완료.");
-                            break;
-                          case 2:
-                            alert("위시리스트 삭제 완료.");
-                            break;
-                          case 3:
-                            alert("로그인이 필요합니다.");
-                            break;
-                          default:
-                            alert("위시리스트 Ajax Error");
-                        }
-                    },
-                    error: function () {
-                        console.log("위시리스트 Ajax Error");
-                    },
-                });
-            })
-
-            // 장바구니 추가/삭제
-            $(".btn-process-basket").on("click", function () {
-                let productNo = $(this).data('product-no');
-                console.log(productNo);
-
-                $.ajax({
-                    url: "/api/product/process-cart",
-                    type: "POST",
-                    data: { productNo: productNo },
-                    success: function (response) {
-                        switch (response) {
-                          case 1:
-                            alert("장바구니 추가 완료.");
-                            break;
-                          case 2:
-                            alert("장바구니 삭제 완료.");
-                            break;
-                          case 3:
-                            alert("로그인이 필요합니다.");
-                            break;
-                          default:
-                            alert("장바구니 Ajax Error");
-                        }
-                    },
-                    error: function () {
-                        console.log("장바구니 Ajax Error");
-                    },
-                });
-            })
-
-
-            $(".nav-link").on("click", function (e) {
-               e.preventDefault();
-                let typeNo = $(this).data('type-no');
-                console.log(typeNo);
-
-                  // 모든 탭에서 active 클래스 제거
-                 $(".nav-link").removeClass("active");
-                  // 클릭된 탭에 active 클래스 추가
-                 $(this).addClass("active");
-
-                $.ajax({
-                    url: "/product/productList",
-                    type: "GET",
-                    data: { typeNo : typeNo },
-                    success: function (response) {
-                        console.log(response);
-                         let html = $(response).find("#product-list").html();
-                         $('#product-list').html(html);
-                         formatPrices();
-                         attachEventHandlers
-                    },
-                    error: function (error){
-                        console.log(error);
-                    }
-                });
-             });
-
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '').replace(/,/g, '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
             });
-    </script>
+        }
+
+        function loadInitialProducts() {
+            $.ajax({
+                url: "/api/product/product-list",
+                type: "GET",
+                data: { typeNo : typeNo },
+                success: function (response) {
+                    $('#product-list').html(response);
+                    formatPrices();
+                },
+                error: function (error){
+                    console.log(error);
+                }
+            });
+        }
+
+        loadInitialProducts();
+
+        $(".product-link").on("click", function (e) {
+           e.preventDefault();
+            let typeNo = $(this).data('type-no');
+            console.log(typeNo);
+
+              // 모든 탭에서 active 클래스 제거
+             $(".product-link").removeClass("active");
+              // 클릭된 탭에 active 클래스 추가
+             $(this).addClass("active");
+
+            $.ajax({
+                url: "/api/product/product-list",
+                type: "GET",
+                data: { typeNo: typeNo },
+                success: function (response) {
+                    $('#product-list').html(response);
+                    formatPrices();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+         });
+    });
+</script>
 </head>
 
 <body>
@@ -155,67 +84,18 @@
         </div>
     </div>
     <div>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" data-type-no="1" href="#">노트북</a>
+        <ul class="nav nav-tab product-taps">
+            <li class="nav-item product-item">
+                <a class="nav-link product-link" id="default-tab" data-type-no="1" href="#">노트북</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-type-no="2" href="#">마우스</a>
+            <li class="nav-item product-item">
+                <a class="nav-link product-link" data-type-no="2" href="#">마우스</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-type-no="3" href="#">키보드</a>
+            <li class="nav-item product-item">
+                <a class="nav-link product-link" data-type-no="3" href="#">키보드</a>
             </li>
         </ul>
-
-        <div class="row" id="product-list">
-            <div class="col-md-4 mb-4" th:each="product : ${products}">
-                <div class="card h-100 product-wap rounded-0">
-                    <div class="card rounded-0">
-                        <img th:src="@{'/img/product/' + ${product.image}}"
-                             class="card-img-top card-img rounded-0 img-fluid" alt="상품 이미지"
-                             style="height: 200px; object-fit: contain;">
-                        <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                            <ul class="list-unstyled">
-                                <li><a class="btn btn-custom text-white btn-process-wishlist"
-                                       th:attr="data-product-no=${product.productNo}"><i
-                                        class="far fa-heart"></i></a>
-                                </li>
-                                <li><a class="btn btn-custom text-white mt-2"
-                                       th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}"><i
-                                        class="far fa-eye"></i></a></li>
-                                <li><a class="btn btn-custom text-white mt-2 btn-process-basket"
-                                       th:attr="data-product-no=${product.productNo}"><i
-                                        class="fas fa-cart-plus"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}">
-                        <div class="card-body">
-                            <div class="tags mb-2">
-                                <button type="button" class="btn btn-secondary" disabled>게이밍</button>
-                                <button type="button" class="btn btn-secondary" disabled>사무용</button>
-                                <button type="button" class="btn btn-secondary" disabled>학생용</button>
-                            </div>
-                            <div class="product-name mb-2">
-                                <h5 class="card-title"><span th:text="${product.productName}">상품명</span></h5>
-                            </div>
-                            <div class="product-specs mb-2">
-                                <span class="small-text" th:text="${product.specsString}"></span>
-                            </div>
-                            <div class="product-price">
-                                <p class="card-text">
-                                    <strong></strong> <span class="price"
-                                                            th:text="${product.price} + ' 원'">가격</span><br>
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-
-        </div>
-
+        <div class="row" id="product-list"></div>
     </div>
 </div>
 

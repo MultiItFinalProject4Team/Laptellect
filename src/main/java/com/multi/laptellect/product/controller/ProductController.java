@@ -2,7 +2,6 @@ package com.multi.laptellect.product.controller;
 
 
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Product controller.
@@ -135,33 +132,12 @@ public class ProductController {
      */
     @GetMapping("/productList")
     public String ProductList(Model model,
-                              @RequestParam(name = "typeNo", required = false) Integer typeNo) {
-
-
-        List<ProductDTO> products = productService.getStoredProducts(typeNo);
-
-        log.info("productList 확인 = {}", products);
-
-        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
-
-        for (ProductDTO productDTO : products) {
-            List<SpecDTO> filteredSpecs = productService.filterSpecs(productDTO.getProductNo(), neededOptions);
-            productDTO.setSpecs(filteredSpecs);
-            log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs);
-
-            String specsString = filteredSpecs.stream()
-                    .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
-                    .collect(Collectors.joining(" | "));
-            productDTO.setSpecsString(specsString);
-
-        }
-
-        model.addAttribute("products", products);
-
-
-
+                              @RequestParam(name = "typeNo", defaultValue = "1") int typeNo) {
+        model.addAttribute("typeNo", typeNo);
         return "product/productList";
     }
+
+
 
 
     /**
