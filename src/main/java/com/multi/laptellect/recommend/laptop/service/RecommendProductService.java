@@ -31,11 +31,11 @@ public class RecommendProductService {
             criteria.put("cpuTags", getCpuTags(surveyResults.get("purpose")));
         }
 
-        criteria.put("weightTag", getWeightTag(surveyResults.get("place")));
-        criteria.put("screenSizeTag", getScreenSizeTag(surveyResults.get("screen")));
-        criteria.put("batteryTag", getBatteryTag(surveyResults.get("priority")));
-        criteria.put("designTag", getDesignTag(surveyResults.get("priority")));
-        criteria.put("performanceTag", getPerformanceTag(surveyResults.get("performance")));
+//        criteria.put("weightTag", getWeightTag(surveyResults.get("place")));
+//        criteria.put("screenSizeTag", getScreenSizeTag(surveyResults.get("screen")));
+//        criteria.put("batteryTag", getBatteryTag(surveyResults.get("priority")));
+//        criteria.put("designTag", getDesignTag(surveyResults.get("priority")));
+//        criteria.put("performanceTag", getPerformanceTag(surveyResults.get("performance")));
 
 
         return criteria;
@@ -91,47 +91,47 @@ public class RecommendProductService {
         }
     }
 
-    private String getWeightTag(String place) {
-        return "가져 다닐거에요".equals(place) ? "가벼워요" : "무거워요";
-    }
-
-    private String getPerformanceTag(String performance) {
-        if (performance == null) {
-            return null;
-        }
-        switch (performance) {
-            case "성능용":
-                return "동세대 최고 성능";
-            case "가성비용":
-                return "가성비";
-            case "밸런스용":
-                return "밸런스";
-            default:
-                return null;
-        }
-    }
-
-    private String getBatteryTag(String priority) {
-        return "무게를 우선해주세요".equals(priority) ? "짧은 배터리" : "오래 가는 배터리";
-    }
-
-    private String getDesignTag(String priority) {
-        return "화면을 우선해 주세요".equals(priority) ? "예쁜 디자인" : null;
-    }
-
-    private String getScreenSizeTag(String screen) {
-        if (screen == null) {
-            return null;
-        }
-        switch (screen) {
-            case "화면 넓은게 좋아요":
-                return "17인치 이상";
-            case "적당한게 좋아요":
-                return "15인치";
-            case "알아서":
-                return "13인치 이하";
-            default:
-                return null;
-        }
-    }
+//    private String getWeightTag(String place) {
+//        return "가져 다닐거에요".equals(place) ? "가벼워요" : "무거워요";
+//    }
+//
+//    private String getPerformanceTag(String performance) {
+//        if (performance == null) {
+//            return null;
+//        }
+//        switch (performance) {
+//            case "성능용":
+//                return "동세대 최고 성능";
+//            case "가성비용":
+//                return "가성비";
+//            case "밸런스용":
+//                return "밸런스";
+//            default:
+//                return null;
+//        }
+//    }
+//
+//    private String getBatteryTag(String priority) {
+//        return "무게를 우선해주세요".equals(priority) ? "짧은 배터리" : "오래 가는 배터리";
+//    }
+//
+//    private String getDesignTag(String priority) {
+//        return "화면을 우선해 주세요".equals(priority) ? "예쁜 디자인" : null;
+//    }
+//
+//    private String getScreenSizeTag(String screen) {
+//        if (screen == null) {
+//            return null;
+//        }
+//        switch (screen) {
+//            case "화면 넓은게 좋아요":
+//                return "17인치 이상";
+//            case "적당한게 좋아요":
+//                return "15인치";
+//            case "알아서":
+//                return "13인치 이하";
+//            default:
+//                return null;
+//        }
+//    }
 }

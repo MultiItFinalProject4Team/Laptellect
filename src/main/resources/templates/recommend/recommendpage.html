@@ -36,19 +36,19 @@
 
     <div class="product-grid">
         <div class="product" th:each="product : ${recommendations}">
-            <img th:src="@{'/img/product/' + ${product.imageUrl}}" class="product-image" alt="노트북 이미지">
+            <img th:if="${product.imageUrl}" th:src="@{'/img/product/' + ${product.imageUrl}}" class="product-image" alt="노트북 이미지">
             <div class="product-name" th:text="${product.productName}">노트북 이름</div>
             <div class="product-specs">
                 <p><strong>가격:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span></p>
-                <p><strong>운영체제:</strong> <span th:text="${product.os}">OS</span></p>
-                <p><strong>제조사:</strong> <span th:text="${product.manufacturer}">제조사</span></p>
-                <p><strong>램 용량:</strong> <span th:text="${product.ramSize}">RAM</span></p>
-                <p><strong>CPU:</strong> <span th:text="${product.cpuNumber}">CPU</span></p>
-                <p><strong>코어 수:</strong> <span th:text="${product.coreCount}">코어 수</span></p>
-                <p><strong>저장 용량:</strong> <span th:text="${product.storageSize}">저장 용량</span></p>
-                <p><strong>화면 크기:</strong> <span th:text="${product.screenSize}">화면 크기</span></p>
-                <p><strong>해상도:</strong> <span th:text="${product.resolution}">해상도</span></p>
-                <p><strong>GPU:</strong> <span th:text="${product.gpuType}">GPU</span></p>
+                <p th:if="${product.os}"><strong>운영체제:</strong> <span th:text="${product.os}">OS</span></p>
+                <p th:if="${product.manufacturer}"><strong>제조사:</strong> <span th:text="${product.manufacturer}">제조사</span></p>
+                <p th:if="${product.ramSize}"><strong>램 용량:</strong> <span th:text="${product.ramSize}">RAM</span></p>
+                <p th:if="${product.cpuNumber}"><strong>CPU:</strong> <span th:text="${product.cpuNumber}">CPU</span></p>
+                <p th:if="${product.coreCount}"><strong>코어 수:</strong> <span th:text="${product.coreCount}">코어 수</span></p>
+                <p th:if="${product.storageSize}"><strong>저장 용량:</strong> <span th:text="${product.storageSize}">저장 용량</span></p>
+                <p th:if="${product.screenSize}"><strong>화면 크기:</strong> <span th:text="${product.screenSize}">화면 크기</span></p>
+                <p th:if="${product.resolution}"><strong>해상도:</strong> <span th:text="${product.resolution}">해상도</span></p>
+                <p th:if="${product.gpuType}"><strong>GPU:</strong> <span th:text="${product.gpuType}">GPU</span></p>
             </div>
         </div>
     </div>

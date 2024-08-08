@@ -46,38 +46,38 @@
             )
             )
         </if>
-        <if test="weightTag != null">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_weight
-            WHERE ps_weight.product_no = p.product_no
-            AND ps_weight.category_no = (SELECT category_no FROM product_category WHERE options = '무게')
-            AND LOWER(ps_weight.option_value) LIKE CONCAT('%', LOWER(#{weightTag}), '%')
-            )
-        </if>
-        <if test="screenSizeTag != null">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_screen
-            WHERE ps_screen.product_no = p.product_no
-            AND ps_screen.category_no = (SELECT category_no FROM product_category WHERE options = '화면 크기')
-            AND LOWER(ps_screen.option_value) LIKE CONCAT('%', LOWER(#{screenSizeTag}), '%')
-            )
-        </if>
-        <if test="batteryTag != null">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_battery
-            WHERE ps_battery.product_no = p.product_no
-            AND ps_battery.category_no = (SELECT category_no FROM product_category WHERE options = '배터리')
-            AND LOWER(ps_battery.option_value) LIKE CONCAT('%', LOWER(#{batteryTag}), '%')
-            )
-        </if>
-        <if test="performanceTag != null">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_perf
-            WHERE ps_perf.product_no = p.product_no
-            AND ps_perf.category_no IN (SELECT category_no FROM product_category WHERE options IN ('CPU 종류', 'GPU 종류'))
-            AND LOWER(ps_perf.option_value) LIKE CONCAT('%', LOWER(#{performanceTag}), '%')
-            )
-        </if>
+<!--        <if test="weightTag != null">-->
+<!--            AND EXISTS (-->
+<!--            SELECT 1 FROM product_spec ps_weight-->
+<!--            WHERE ps_weight.product_no = p.product_no-->
+<!--            AND ps_weight.category_no = (SELECT category_no FROM product_category WHERE options = '무게')-->
+<!--            AND LOWER(ps_weight.option_value) LIKE CONCAT('%', LOWER(#{weightTag}), '%')-->
+<!--            )-->
+<!--        </if>-->
+<!--        <if test="screenSizeTag != null">-->
+<!--            AND EXISTS (-->
+<!--            SELECT 1 FROM product_spec ps_screen-->
+<!--            WHERE ps_screen.product_no = p.product_no-->
+<!--            AND ps_screen.category_no = (SELECT category_no FROM product_category WHERE options = '화면 크기')-->
+<!--            AND LOWER(ps_screen.option_value) LIKE CONCAT('%', LOWER(#{screenSizeTag}), '%')-->
+<!--            )-->
+<!--        </if>-->
+<!--        <if test="batteryTag != null">-->
+<!--            AND EXISTS (-->
+<!--            SELECT 1 FROM product_spec ps_battery-->
+<!--            WHERE ps_battery.product_no = p.product_no-->
+<!--            AND ps_battery.category_no = (SELECT category_no FROM product_category WHERE options = '배터리')-->
+<!--            AND LOWER(ps_battery.option_value) LIKE CONCAT('%', LOWER(#{batteryTag}), '%')-->
+<!--            )-->
+<!--        </if>-->
+<!--        <if test="performanceTag != null">-->
+<!--            AND EXISTS (-->
+<!--            SELECT 1 FROM product_spec ps_perf-->
+<!--            WHERE ps_perf.product_no = p.product_no-->
+<!--            AND ps_perf.category_no IN (SELECT category_no FROM product_category WHERE options IN ('CPU 종류', 'GPU 종류'))-->
+<!--            AND LOWER(ps_perf.option_value) LIKE CONCAT('%', LOWER(#{performanceTag}), '%')-->
+<!--            )-->
+<!--        </if>-->
         GROUP BY p.product_no, p.product_name, p.price, p.product_code
     </select>
 </mapper>
