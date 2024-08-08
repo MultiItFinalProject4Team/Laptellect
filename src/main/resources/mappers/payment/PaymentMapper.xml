@@ -27,7 +27,6 @@
         <result column="created_at" property="createdAt"/>
     </resultMap>
 
-
     <insert id="insertPayment" parameterType="com.multi.laptellect.payment.model.dto.PaymentDTO">
         INSERT INTO payment (
         member_no,

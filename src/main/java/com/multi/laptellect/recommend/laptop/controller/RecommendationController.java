@@ -4,8 +4,6 @@ import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +17,6 @@ import java.util.Map;
 @Controller
 public class RecommendationController {
 
-    private static final Logger log = LoggerFactory.getLogger(RecommendationController.class);
-
-
     private final RecommendProductService recommendProductService;
 
     @GetMapping("/recommend")
@@ -33,6 +28,7 @@ public class RecommendationController {
     public String getRecommendations(@RequestParam Map<String, String> surveyResults, Model model) {
         log.info("사용자 선택지 값 = ()", surveyResults);
         try {
+
             ArrayList<LaptopSpecDTO> recommendations = recommendProductService.getRecommendations(surveyResults);
 
             model.addAttribute("recommendations", recommendations);

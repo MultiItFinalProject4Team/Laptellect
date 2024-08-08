@@ -99,7 +99,7 @@
         ORDER BY p.product_no DESC LIMIT 10 <!-- 추천 상품 10개만  -->
     </select>
 
-    <select id="findLaptopDetailByCriteria" resultType="YourResultType">
+    <select id="findLaptopDetailByCriteria">
         SELECT
         *
         FROM
