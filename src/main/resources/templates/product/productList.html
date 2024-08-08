@@ -27,6 +27,7 @@
                         let html = $(response).find("#product-list").html();
                         $('#product-list').html(html);
                         formatPrices()
+                        attachEventHandlers
 
                     },
                     error: function (error) {
@@ -114,6 +115,7 @@
                          let html = $(response).find("#product-list").html();
                          $('#product-list').html(html);
                          formatPrices();
+                         attachEventHandlers
                     },
                     error: function (error){
                         console.log(error);
@@ -136,6 +138,16 @@
         </select>
         <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
     </form>
+    <div class="d-flex justify-content-end">
+        <div class="input-group">
+            <div class="form-outline" data-mdb-input-init>
+                <input type="search" id="form1" class="form-control"/>
+            </div>
+            <button type="button" class="btn btn-primary-input" data-mdb-ripple-init>
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
     <div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
