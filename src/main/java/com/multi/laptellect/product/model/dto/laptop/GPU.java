@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class GPU {
-    private String gpuType;
-    private String gpuManufacturer;
-    private String gpuChipset;
-    private String gpuCore;
-    private String gpuClock;
+    private String gpuType; //GPU 종류
+    private String gpuManufacturer; //GPU 제조사
+    private String gpuChipset; // GPU 칩셋
+    private String gpuCore; // GPU 코어
+    private String gpuClock; //GPU 클럭
 }
