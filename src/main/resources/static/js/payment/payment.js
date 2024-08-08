@@ -1,5 +1,5 @@
 // 전역 변수 선언
-let userName, productName, productPrice;
+let userName, productName, productPrice, originalPrice, possessionPoint;
 
 // 숫자 포맷팅 함수
 function formatNumber(num) {
@@ -10,8 +10,9 @@ function formatNumber(num) {
 document.addEventListener('DOMContentLoaded', function() {
     // Thymeleaf에서 전달된 데이터를 JavaScript 변수에 할당
     userName = document.getElementById('name').value;
-    productName = document.querySelector('h3').textContent;
-    productPrice = document.getElementById('amount').textContent.replace(/[^\d]/g, '');
+    productName = document.querySelector('.product-info-table tbody tr td:nth-child(2)').textContent;
+    originalPrice = parseInt(document.querySelector('.price').textContent.replace(/[^\d]/g, ''));
+    possessionPoint = parseInt(document.querySelector('.payment-price-row:nth-child(2) span:last-child').textContent.replace(/[^\d]/g, ''));
 
     // 초기 가격 설정
     document.getElementById('originalPrice').textContent = formatNumber(originalPrice) + '원';
@@ -19,13 +20,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 초기 총 결제금액 설정
     updateTotalPrice();
+
+    // 이벤트 리스너 추가
+    document.querySelector('.quantity-minus').addEventListener('click', decreaseQuantity);
+    document.querySelector('.quantity-plus').addEventListener('click', increaseQuantity);
+    document.getElementById('pointInput').addEventListener('keyup', updateTotalPrice);
 });
+
+function decreaseQuantity(event) {
+    event.preventDefault();
+    let quantity = parseInt(document.getElementById('productQuantity').textContent);
+    if (quantity > 1) {
+        document.getElementById('productQuantity').textContent = quantity - 1;
+        updatePriceDisplay();
+        updateTotalPrice();
+    }
+}
+
+function increaseQuantity(event) {
+    event.preventDefault();
+    let quantity = parseInt(document.getElementById('productQuantity').textContent);
+    document.getElementById('productQuantity').textContent = quantity + 1;
+    updatePriceDisplay();
+    updateTotalPrice();
+}
+
+function updatePriceDisplay() {
+    let quantity = parseInt(document.getElementById('productQuantity').textContent);
+    let totalPrice = originalPrice * quantity;
+    document.querySelector('.price').textContent = formatNumber(totalPrice) + '원';
+}
 
 function updateTotalPrice() {
     const pointInput = document.getElementById('pointInput');
     const pointUsageDisplay = document.getElementById('pointUsageDisplay');
     const amountDisplay = document.getElementById('amount');
 
+    let quantity = parseInt(document.getElementById('productQuantity').textContent);
     let pointValue = parseInt(pointInput.value.replace(/,/g, '')) || 0;
 
     // 입력된 포인트가 보유 포인트를 초과하지 않도록 제한
@@ -34,13 +65,13 @@ function updateTotalPrice() {
         pointInput.value = formatNumber(pointValue);
     }
 
-    let totalPrice = originalPrice - pointValue;
+    let totalPrice = originalPrice * quantity - pointValue;
 
     // 총 결제금액이 100원 미만이 되지 않도록 제한
     if (totalPrice < 100) {
         alert("총 결제금액이 100원보다 작아질 수 없습니다");
         totalPrice = 100;
-        pointValue = originalPrice - 100;
+        pointValue = originalPrice * quantity - 100;
         pointInput.value = formatNumber(pointValue);
     }
 
@@ -74,7 +105,7 @@ function mypayment() {
                         imPortId: rsp.imp_uid,
                         amount: myAmount,
                         usedPoints: usedPoints,
-                        productName: productName  // 추가된 부분
+                        productName: productName
                     });
 
                     if (data.success) {
@@ -110,4 +141,22 @@ async function cancelPayment(imPortId, amount) {
     } catch (error) {
         console.error("결제 취소 실패:", error);
     }
+}
+
+function decreaseQuantity(event) {
+    event.preventDefault();
+    let quantity = parseInt(document.getElementById('productQuantity').textContent);
+    if (quantity > 1) {
+        document.getElementById('productQuantity').textContent = quantity - 1;
+        updatePriceDisplay();
+        updateTotalPrice();
+    }
+}
+
+function increaseQuantity(event) {
+    event.preventDefault();
+    let quantity = parseInt(document.getElementById('productQuantity').textContent);
+    document.getElementById('productQuantity').textContent = quantity + 1;
+    updatePriceDisplay();
+    updateTotalPrice();
 }
