@@ -154,6 +154,71 @@ body {
     background-color: #2980b9;
 }
 
+.product-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.product-info-table th,
+.product-info-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.product-info-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    text-align: center; /* 테이블 헤더 텍스트 가운데 정렬 */
+}
+
+.product-info-table td {
+    text-align: center; /* 테이블 데이터는 왼쪽 정렬 유지 */
+}
+
+.payment-product-image {
+    max-width: 100px;
+    height: auto;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    margin: 0 5px;
+    line-height: 1; /* 추가: 아이콘 수직 정렬을 위해 */
+}
+
+.circle:hover {
+    background-color: #e0e0e0;
+}
+
+.quantity-value {
+    font-size: 14px;
+    margin: 0 10px;
+    display: inline-flex; /* 변경: inline-block에서 inline-flex로 */
+    align-items: center; /* 추가: 수직 정렬을 위해 */
+    height: 24px; /* 추가: 버튼과 동일한 높이 */
+}
+
+#productQuantity {
+    min-width: 20px; /* 추가: 숫자가 변경되어도 너비 유지 */
+    text-align: center; /* 추가: 숫자 중앙 정렬 */
+}
+
 @media (max-width: 768px) {
     .payment-main-content {
         flex-direction: column;
