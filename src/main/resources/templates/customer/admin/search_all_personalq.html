@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<html layout:decorate="~{common/layout}">
+<html layout:decorate="~{customer/layout/layout-customer}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
@@ -29,19 +29,9 @@
 <div layout:fragment="content">
     <div class="container mt-5">
         <header>
-            <h1 align="center">고객센터</h1>
-            <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
-                <li class="nav-item">
-                    <a class="nav-link cus_nav" href="/customer/user/customer_notice">공지사항</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
-                </li>
-            </ul>
+            <h1 align="left"style="font-size:40px">1:1 문의</h1>
         </header>
+        <hr>
         <div class="form-container">
             <form class="d-flex" role="search" action="/customer/admin/search_all_personalq">
 
@@ -59,7 +49,7 @@
                         </option>
                     </select>
 
-                <input class="form-control me-2" type="search" placeholder="제목" aria-label="Search" style="width: 300px;" name="keyword" th:value="${page_keyword}">
+                <input class="form-control me-2" type="search" id="title" placeholder="제목" aria-label="Search" style="width: 300px;" name="keyword" th:value="${page_keyword}">
 
                 <select class="form-select" id="categorySelect3" name="date">
                     <option value="recent" th:selected="${date == 'recent'}">최신순</option>
@@ -92,10 +82,20 @@
             </table>
         </div>
         <div class="text-end">
-            <a class="btn btn-secondary btn-sm" sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/personalq_app" role="button">문의 등록</a>
-            <a class="btn btn-secondary btn-sm" href="/customer/user/product" role="button">상품 문의(임시)</a>
-            <a class="btn btn-secondary btn-sm" href="/customer/admin/all_personal_question" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" role="button">전체 문의(관리자)</a>
+            <a class="btn btn-custom-primary btn-sm" sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/personalq_app" role="button">문의 등록</a>
+            <a class="btn btn-custom-primary btn-sm" href="/customer/user/product" role="button">상품 문의(임시)</a>
+            <a class="btn btn-custom-primary btn-sm" href="/customer/admin/all_personal_question" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" role="button">전체 문의(관리자)</a>
         </div>
+        <script>
+            document.getElementById('title').addEventListener('input', function() {
+            const titleInput = document.getElementById('title');
+            var maxLength = 100;
+            if (titleInput.value.length > maxLength) {
+                alert('최대 100자까지 입력 가능합니다.');
+                $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
+            }
+        });
+        </script>
     </div>
     <div class="pagination-container">
         <nav aria-label="Page navigation example">

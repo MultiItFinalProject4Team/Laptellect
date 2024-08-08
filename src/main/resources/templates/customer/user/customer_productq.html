@@ -105,59 +105,10 @@
     <div class="text-end">
 <!--        <a class="btn btn-secondary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal"-->
 <!--           data-bs-target="#productModal">상품 문의 등록</a>-->
-        <a class="btn btn-secondary btn-sm" th:if="${state=='all'}" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
-        <a class="btn btn-secondary btn-sm" th:if="${state=='my'}" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}" role="button">전체 문의 보기</a>
+        <a class="btn btn-custom-primary btn-sm" th:if="${state=='all'}" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
+        <a class="btn btn-custom-primary btn-sm" th:if="${state=='my'}" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}" role="button">전체 문의 보기</a>
     </div>
 </div>
-<!--    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">-->
-<!--        <div class="modal-dialog modal-lg">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title" id="productModalLabel">상품 문의 등록</h5>-->
-<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                    <form action="/customer/user/productq_app" method="post" enctype="multipart/form-data">-->
-<!--                        &lt;!&ndash; 제목과 카테고리 입력 &ndash;&gt;-->
-<!--                        <div class="row mb-3">-->
-<!--                            <div class="col-md-8">-->
-<!--                                <label for="title" class="form-label">제목:</label>-->
-<!--                                <input type="text" class="form-control" id="title" name="title" required style="width: 100%;">-->
-<!--                            </div>-->
-<!--                            <div class="col-md-4">-->
-<!--                                <label for="inputGroupSelect01" class="form-label">카테고리</label>-->
-<!--                                <select class="form-select" id="inputGroupSelect01" name="productqCategorycode">-->
-<!--                                    <option th:each="categories : ${category}"-->
-<!--                                            th:value="${categories.productqCategorycode}"-->
-<!--                                            th:text="${categories.productqCategoryname}">-->
-<!--                                    </option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; 내용 입력 &ndash;&gt;-->
-<!--                        <div class="mb-3">-->
-<!--                            <label for="content" class="form-label">내용:</label>-->
-<!--                            <textarea class="form-control editor-container__editor" id="content" name="content"></textarea>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; 비밀글 설정 &ndash;&gt;-->
-<!--                        <div class="mb-3">-->
-<!--                            <label>비밀글: </label>-->
-<!--                            <div>-->
-<!--                                <label class="me-2">-->
-<!--                                    <input type="radio" name="secret" value="Y"> Yes-->
-<!--                                </label>-->
-<!--                                <label>-->
-<!--                                    <input type="radio" name="secret" value="N" checked> No-->
-<!--                                </label>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">-->
-<!--                        <button type="submit" class="btn btn-primary">등록</button>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
     <div class="pagination-container">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">

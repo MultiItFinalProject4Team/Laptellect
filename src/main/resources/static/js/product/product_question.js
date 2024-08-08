@@ -66,7 +66,11 @@
                                 }
                             });
 
-                        } else {
+                        } else if(response==0){
+                            alert('로그인후 이용가능합니다.');
+                            window.location.href = '/signin';
+                        }
+                        else {
                             alert('문의 제출에 실패했습니다: ' + response.message);
                         }
                     },

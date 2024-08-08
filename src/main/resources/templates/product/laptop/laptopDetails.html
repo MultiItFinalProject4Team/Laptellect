@@ -11,7 +11,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
     <link href="/css/product/product_question.css" rel="stylesheet">
     <script src="/js/product/product_question.js"></script>
-    <script src="/js/product/question-review-tab.js"></script>
     <style>
 
         .review-stars {
@@ -461,41 +460,51 @@
 
         <div class="col-12 mt-4">
             <h4><strong>문의/리뷰</strong></h4>
-            <div class="tab-nav">
-                <button class="tab-button active" onclick="showTab('customer-box')">Home</button>
-                <button class="tab-button" onclick="showTab('review-box')">About</button>
-            </div>
-        </div>
-        <hr>
-<!--        10개의 최신 문의를 띄우고 전체 문의 보기로 해당 제품의 전체 문의 진입-->
-        <div id="customer-box" class="tab-content active">
-            <div id="customer-list">
-                <div th:each="each : ${productqList}" class="question">
-                    <div class="question-header">
-                        <div class="question-author">
-                            <span class="author-name" th:text="${each.memberName}"></span>
-                            <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">상품 문의</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="review-tab" data-bs-toggle="tab" href="#review-box" role="tab" aria-controls="review-box" aria-selected="false">리뷰</a>
+                </li>
+            </ul>
+            <!-- Tab content -->
+            <div class="tab-content mt-3" id="myTabContent">
+                <!-- Customer Box -->
+                <!--상품 문의/의견 관련 탭-->
+                <div class="tab-pane fade show active" id="customer-box" role="tabpanel" aria-labelledby="customer-tab">
+                    <div id="customer-list">
+                        <div th:each="each : ${productqList}" class="question">
+                            <div class="question-header">
+                                <div class="question-author">
+                                    <span class="author-name" th:text="${each.memberName}"></span>
+                                    <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
+                                </div>
+                            </div>
+                            <div class="question-body">
+                                <div class="question-bodytop">
+                                    <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
+                                       th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
+                                    </p>
+                                    <h4 class="question-title" th:text="${each.title}"></h4>
+                                </div>
+                                <div class="question-content">
+                                    <p class="question-content" th:text="${each.content}"></p>
+                                </div>
+                            </div>
+                            <hr class="question-hr">
                         </div>
                     </div>
-                    <div class="question-body">
-                        <div class="question-bodytop">
-                            <p class="question-category" th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"></p>
-                            <h4 class="question-title" th:text="${each.title}"></h4>
-                        </div>
-                        <div class="question-content">
-                            <p class="question-content" th:text="${each.content}"></p>
-                        </div>
+                    <div>
+                        <a class="btn btn-custom-primary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>
                     </div>
-                    <hr class="question-hr">
                 </div>
-            </div>
-            <div>
-                <a class="btn btn-secondary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>
-            </div>
-        </div>
 
-        <div id="review-box" class="tab-content">
-
+                <!-- Review Box -->
+                <!-- 리뷰관련 내용 작성 탭-->
+                <div class="tab-pane fade" id="review-box" role="tabpanel" aria-labelledby="review-tab">
+                    <p>리뷰탭</p>
+                </div>
             </div>
 
             <div id="crolling-box">
@@ -530,7 +539,7 @@
                                 <input type="text" class="form-control" id="title" name="title" required style="width: 100%;">
                             </div>
                             <div class="col-md-4">
-                                <label for="inputGroupSelect01" class="form-label">카테고리</label>
+                                <label for="inputGroupSelect01" class="form-label">카테고리:</label>
                                 <select class="form-select" id="inputGroupSelect01" name="productqCategorycode">
                                     <option value="productq_opinion">의견</option>
                                     <option value="productq_question">문의</option>
