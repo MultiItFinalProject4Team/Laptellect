@@ -1,32 +1,63 @@
 package com.multi.laptellect.recommend.laptop.service;
 
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
+import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
-import com.multi.laptellect.recommend.laptop.model.dto.RecommendProductDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RecommendProductService {
 
 
-    private final RecommendProductDAO recommendProductDAO; //private final 자동적 생성자 주입
 
-    public List<RecommendProductDTO> getRecommendations(Map<String, String> surveyResults) {
+    private final RecommendProductDAO recommendProductDAO; //private final 자동적 생성자 주입
+    private final ProductService productService; // 생성자 주입시 final
+
+
+    public ArrayList<LaptopSpecDTO> getRecommendations(Map<String, String> surveyResults) {
+        //surveyResults는 사용자가 선택한 설문 결과를 담고 있는 맵
         Map<String, Object> searchCriteria = createSearchCriteria(surveyResults);
-        System.out.println("Search Criteria: " + searchCriteria);
-        return recommendProductDAO.getRecommendedProducts(searchCriteria);
+        log.info("큐레이션 조건 반환 = {} " + searchCriteria);
+
+        ArrayList<LaptopDetailsDTO> laptopDetails = recommendProductDAO.findLaptopDetailByCriteria(searchCriteria); //설문 결과에 따라 추천 제품을 찾음
+
+        log.info("모든 노트북 상세정보 = {} " + laptopDetails); //이게 주석 대신할 로그 림복 어노테이션이랑 연결 됨
+
+
+//
+//        ArrayList<LaptopSpecDTO> laptopSpecList = new ArrayList<>(); // 상세 정보 정리된 DTO 리스트
+//
+//
+//        List<Integer> productNos = recommendProductDAO.findAllProductNo();
+//        log.info("노트북 넘버 = {} ", productNos);
+//
+//
+//        for (int i = 0; i < productNos.size(); i++) {
+//            int productNo = productNos.get(i);
+//            laptopSpecList.add(productService.getLaptopSpec(productNo, laptopDetails));
+//            log.info("LaptopSpecDTO 반환 성공");
+//        }
+//        log.info("반환 완료 = {}", laptopSpecList);
+
+        return null;
     }
+
 
     private Map<String, Object> createSearchCriteria(Map<String, String> surveyResults) {
         Map<String, Object> criteria = new HashMap<>();
 
 
-
+        log.debug("큐레이션 조건 반환 시작 = {}", surveyResults);
         if (surveyResults.containsKey("game")) {
             criteria.put("gpuTags", getGpuTags(surveyResults.get("game")));
         } else if (surveyResults.containsKey("purpose")) {
@@ -44,15 +75,17 @@ public class RecommendProductService {
     }
 
     private List<String> getGpuTags(String gameType) {
+        //게임 타입이 null이면 빈 리스트 반환
         if (gameType == null) {
             return List.of();
         }
+        //게임 타입에 따라 GPU 태그를 반환
         switch (gameType) {
             case "스팀게임/FPS 게임":
-                return List.of("geforce rtx 4090", "geforce rtx 4080", "radeon rx 7900m", "radeon 610m ryzen 9 7845hx",
+                return List.of("RTX4080", "geforce rtx 4080", "radeon rx 7900m", "radeon 610m ryzen 9 7845hx",
                         "geforce rtx 3080 ti", "geforce rtx 4070", "geforce rtx 3070 ti", "geforce rtx 4060",
                         "radeon rx 6850m xt", "geforce rtx 3080", "rtx a5000", "geforce rtx 3070",
-                        "radeon rx 6800s", "rtx a4000", "geforce rtx 2080, radeon rx 6700m, ");
+                        "radeon rx 6800s", "rtx a4000", "geforce rtx 2080, radeon rx 6700m");
             case "온라인 게임":
                 return List.of("radeon rx 6650m", "radeon rx 6700s", "quadro rtx 5000", "geforce rtx 4050",
                         "radeon rx 7600s", "radeont rx 6850m xt", "geforce rtx 2080 super", "geforce rtx 2070 super",
@@ -70,18 +103,17 @@ public class RecommendProductService {
     }
 
     private List<String> getCpuTags(String purpose) {
+        //사용 목적이 null이면 빈 리스트 반환
         if (purpose == null) {
             return List.of();
         }
+        //사용 목적에 따라 CPU 태그를 반환
         switch (purpose) { //
             case "코딩할거에요":
-                return List.of("amd ryzen 9 7945hx3d", "amd ryzen 9 7945hx", "amd ryzen 9 7940hx",
-                        "intel core i9-13980hx", "intel core i9-14900hx", "amd ryzen 9 7845hx",
-                        "intel core i9-13900hx", "intel core i9-13950hx", "intel core i7-14650hx",
-                        "intel core i7-13850hx", "intel core i7-14700hx", "intel core i9-12900hx",
-                        "intel core i7-13700hx", "amd ryzen 7 7745hx", "intel core i9-12950hx",
-                        "intel core i7-12800hx", "amd ryzen 9 8945h", "intel core i9-13900hk",
-                        "intel core i7-13650hx", "intel core i7-12850hx , intel core i5-1340p");
+                return List.of("AMD RYZEN 9 7945HX3D", "AMD RYZEN 9 7945HX", "AMD RYZEN 9 7940HX", "I9-13980HX",
+                        "I9-14900HX", "AMD RYZEN 9 7845HX",
+                        "I9-13900HX", "I9-13950HX", "I7-14650HX", "I7-13850HX", "I7-14700HX", "I9-12900HX", "I7-13700HX",
+                        "AMD RYZEN 7 7745HX", "I9-12950HX", "I7-12800HX", "AMD 8945H", "I9-13900HK", "I7-13650HX", "I7-12850HX , I5-1340P");
             case "학생이에요":
                 return List.of("intel core i5-12500h", "amd ryzen 5 5600h", "intel core i5-11400h",
                         "amd ryzen 5 4600h", "intel core i5-10300h", "amd ryzen 5 4500u",

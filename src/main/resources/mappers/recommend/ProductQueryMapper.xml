@@ -97,7 +97,18 @@
         </if>
         GROUP BY p.product_no, p.product_name, p.price, p.product_code <!-- product 테이블에서 직접 product_name을 가져옴-->
         ORDER BY p.product_no DESC LIMIT 10 <!-- 추천 상품 10개만  -->
+    </select>
 
-
+    <select id="findLaptopDetailByCriteria" resultType="YourResultType">
+        SELECT
+        *
+        FROM
+        vw_product_detail
+        WHERE
+        <if test="gpuTags != null and gpuTags.size() > 0">
+            <foreach collection="gpuTags" item="tag" open="(" separator="OR" close=")">
+                option_value LIKE CONCAT('%', #{tag}, '%')
+            </foreach>
+        </if>
     </select>
 </mapper>

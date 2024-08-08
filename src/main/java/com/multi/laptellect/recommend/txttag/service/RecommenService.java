@@ -34,15 +34,15 @@ public class RecommenService {
                 for (Integer tagNo : assignedTags) {
                     productTagMapper.insertProductTag(product.getProductNo(), tagNo);
                 }
-                log.info("Tags assigned to product {}: {}", product.getProductNo(), assignedTags); // 제품에 태그 할당
+                log.info("Tags assigned to product {}: {}", product.getProductNo(), assignedTags);
             } catch (Exception e) {
-                log.error("Error assigning tags to product {}: {}", product.getProductNo(), e.getMessage()); // 제품에 태그 할당 중 오류 발생
+                log.error("Error assigning tags to product {}: {}", product.getProductNo(), e.getMessage());
             }
         }
     }
 
     private List<Integer> determineTagsForProduct(ProductDTO2 product, List<TaggDTO> tags) {
-        List<Integer> assignedTags = new ArrayList<>(); // 태그 번호 목록
+        List<Integer> assignedTags = new ArrayList<>();
 
         String gpu = product.getGpu().toLowerCase();
         if (isGpuSuitableForSteamOrFPS(gpu)) {
@@ -66,7 +66,7 @@ public class RecommenService {
             assignedTags.add(findTagByData(tags, "학생용/인강용"));
         }
 
-        double weight = Double.parseDouble(product.getWeight().replace("kg", "")); // 무게
+        double weight = Double.parseDouble(product.getWeight().replace("kg", ""));
         if (weight <= 1.5) {
             assignedTags.add(findTagByData(tags, "가벼워요"));
         } else if (weight >= 2.5) {
@@ -83,7 +83,7 @@ public class RecommenService {
         }
 
         int batteryCapacity = Integer.parseInt(product.getBatteryCapacity().replace("Wh", ""));
-        if (batteryCapacity >= 70) { // 배터리 용량
+        if (batteryCapacity >= 70) {
             assignedTags.add(findTagByData(tags, "오래 가는 배터리"));
         } else {
             assignedTags.add(findTagByData(tags, "짧은 배터리"));
@@ -107,7 +107,12 @@ public class RecommenService {
                 "radeon rx 6850m xt", "geforce rtx 3080", "rtx a5000", "geforce rtx 3070",
                 "radeon rx 6800s", "rtx a4000", "geforce rtx 2080"
         );
-        return suitableGpus.stream().anyMatch(gpu::contains);
+        for (String suitableGpu : suitableGpus) {
+            if (gpu.contains(suitableGpu)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isGpuSuitableForOnlineGames(String gpu) {
@@ -118,7 +123,12 @@ public class RecommenService {
                 "geforce rtx 3060", "radeon rx 6800m", "geforce rtx 2080", "quadro rtx 4000",
                 "rtx a3000", "geforce rtx 2070"
         );
-        return suitableGpus.stream().anyMatch(gpu::contains);
+        for (String suitableGpu : suitableGpus) {
+            if (gpu.contains(suitableGpu)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isGpuSuitableForAOSGames(String gpu) {
@@ -126,9 +136,14 @@ public class RecommenService {
                 "quadro p5200", "radeon rx 6850m", "geforce rtx 2070", "geforce gtx 1080",
                 "radeon rx 7600m xt", "intel arc a770m", "geforce rtx 2060", "quadro rtx 3000",
                 "geforce gtx 1070", "geforce rtx 3050", "geforce gtx 1660 ti", "rtx a2000",
-                "radeon rx 6550m", "radeon pro 5600m", "quadro p4000", "radeon rx 5600m"
+                "radeon rx 6550m", "radeon pro 5600m", "radeon rx 5600m"
         );
-        return suitableGpus.stream().anyMatch(gpu::contains);
+        for (String suitableGpu : suitableGpus) {
+            if (gpu.contains(suitableGpu)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isCpuSuitableForCoding(String cpu) {
@@ -141,7 +156,12 @@ public class RecommenService {
                 "intel core i7-12800hx", "amd ryzen 9 8945h", "intel core i9-13900hk",
                 "intel core i7-13650hx", "intel core i7-12850hx"
         );
-        return suitableCpus.stream().anyMatch(cpu::contains);
+        for (String suitableCpu : suitableCpus) {
+            if (cpu.contains(suitableCpu)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isCpuSuitableForDocuments(String cpu) {
@@ -152,7 +172,12 @@ public class RecommenService {
                 "intel pentium gold 6405u", "intel core i3-8145u", "amd athlon gold 3150u",
                 "intel celeron 6305", "amd athlon silver 3050u", "intel pentium 6805"
         );
-        return suitableCpus.stream().anyMatch(cpu::contains);
+        for (String suitableCpu : suitableCpus) {
+            if (cpu.contains(suitableCpu)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isCpuSuitableForStudents(String cpu) {
@@ -163,7 +188,12 @@ public class RecommenService {
                 "amd ryzen 5 3500u", "intel core i7-1165g7", "amd ryzen 7 4700u",
                 "intel core i7-10510u", "amd ryzen 7 5700u", "intel core i7-1185g7"
         );
-        return suitableCpus.stream().anyMatch(cpu::contains);
+        for (String suitableCpu : suitableCpus) {
+            if (cpu.contains(suitableCpu)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isDesignBeautiful(String model) {
@@ -174,7 +204,12 @@ public class RecommenService {
                 "lg gram 2-in-1 14 (14t90p)", "lg gram 2-in-1 16 (16t90p)", "lg gram superslim (15z90rt)",
                 "lg gram style (16z90rs)"
         );
-        return beautifulModels.stream().anyMatch(model.toLowerCase()::contains);
+        for (String beautifulModel : beautifulModels) {
+            if (model.toLowerCase().contains(beautifulModel)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isHighPerformance(String cpu, String gpu) {
@@ -190,14 +225,20 @@ public class RecommenService {
                 "apple m3 max"
         );
         String combo = (cpu + " " + gpu).toLowerCase();
-        return highPerformanceCombos.stream().anyMatch(combo::contains);
+        for (String highPerformanceCombo : highPerformanceCombos) {
+            if (combo.contains(highPerformanceCombo)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    private int findTagByData(List<TaggDTO> tags, String tagData) { // 태그 데이터로 태그 번호 찾기
-        return tags.stream()
-                .filter(tag -> tag.getTagData().equals(tagData)) // 태그 데이터가 일치하는 태그 찾기
-                .findFirst()
-                .map(TaggDTO::getTagNo)
-                .orElse(-1); // 태그가 없으면 -1
+    private int findTagByData(List<TaggDTO> tags, String tagData) {
+        for (TaggDTO tag : tags) {
+            if (tag.getTagData().equals(tagData)) {
+                return tag.getTagNo();
+            }
+        }
+        return -1;
     }
 }
