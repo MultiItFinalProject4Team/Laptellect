@@ -11,9 +11,6 @@
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <link href="/css/customer/nav.css" rel="stylesheet">
     <style>
-        .file-input-wrapper {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
@@ -38,10 +35,14 @@
         </div>
 
         <div class="editor-container editor-container_classic-editor" id="editor-container">
-            <div class="editor-container__editor" aria-required="true"><textarea id="content" name="content"></textarea></div>
+            <div class="editor-container__editor" aria-required="true">
+                <textarea id="content" name="content"></textarea>
+            </div>
         </div>
 
-        <button type="submit">등록</button>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-custom-primary">등록</button>
+        </div>
     </form>
     <script type="importmap">
         {
