@@ -2,8 +2,9 @@ package com.multi.laptellect.payment.model.dto;
 
 import lombok.Data;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.time.LocalDateTime;
+
 
 @Data
 public class PaymentDTO {
@@ -11,12 +12,12 @@ public class PaymentDTO {
     private int memberNo;
     private int productNo;
     private int purchasePrice;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private String imPortId;
     private String confirm;
     private String confirmAt;
     private String refund;
-    private String refundAt;
+    private LocalDateTime refundAt;
 
     // 조인 결과를 위한 필드
     private String userName;

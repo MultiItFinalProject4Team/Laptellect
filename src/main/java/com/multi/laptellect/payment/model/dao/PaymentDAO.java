@@ -55,6 +55,11 @@ public interface PaymentDAO {
 
     PaymentDTO findPaymentByImPortId(String imPortId);
 
+
+    List<PaymentDTO> selectOrderItems(int memberNo);
+
+    List<PaymentDTO> findPaymentsByImPortId(String imPortId);
+
     ArrayList<PaymentDTO> findAllPaymentByMemberNo(@Param("pageable") Pageable pageable,  @Param("paginationDTO") PaginationDTO paginationDTO, @Param("memberNo") int memberNo);
 
     int countPaymentByMemberNo(@Param("paginationDTO") PaginationDTO paginationDTO, @Param("memberNo")  int memberNo);
@@ -64,4 +69,5 @@ public interface PaymentDAO {
 
     @Update("UPDATE payment SET confirm = 'Y', confirm_at = now() WHERE payment_no = #{ paymentNo }")
     int checkConfirm(int paymentNo);
+
 }

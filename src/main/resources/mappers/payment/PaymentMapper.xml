@@ -9,10 +9,10 @@
         <result column="member_no" property="memberNo"/>
         <result column="product_no" property="productNo"/>
         <result column="purchase_price" property="purchasePrice"/>
-        <result column="created_at" property="createdAt"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
         <result column="im_port_id" property="imPortId"/>
         <result column="refund" property="refund"/>
-        <result column="refund_at" property="refundAt"/>
+        <result column="refund_at" property="refundAt" jdbcType="TIMESTAMP"/>
         <result column="member_name" property="userName"/>
         <result column="product_name" property="productName"/>
         <result column="price" property="productPrice"/>
@@ -200,6 +200,20 @@
         SELECT * FROM payment WHERE im_port_id = #{imPortId}
     </select>
 
+
+    <select id="selectOrderItems" resultMap="PaymentResultMap">
+        SELECT p.*, m.member_name, pr.product_name, pr.price
+        FROM payment p
+        JOIN mem_member m ON p.member_no = m.member_no
+        JOIN product pr ON p.product_no = pr.product_no
+        WHERE p.refund = 'N'
+        AND m.member_no = #{memberNo}
+        ORDER BY p.created_at DESC, p.payment_no ASC
+    </select>
+
+    <select id="findPaymentsByImPortId" resultMap="PaymentResultMap">
+        SELECT * FROM payment WHERE im_port_id = #{imPortId}
+
     <select id="findAllPaymentByMemberNo" resultMap="PaymentResultMap">
         SELECT
               pay.*
@@ -308,6 +322,7 @@
                 </if>
             </when>
         </choose>
+
     </select>
 
 </mapper>
