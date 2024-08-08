@@ -1,10 +1,14 @@
 .price {
     color: red;
     font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .product-name {
     font-weight: bold;
+    text-align: center;
+
+     min-height: 3em;
 }
 
 .card-img-top {
@@ -31,7 +35,7 @@ ul li:hover .btn-custom { background-color: #2c7cbf; }
 ul li:active .btn-custom { background-color: #236097 !important; }
 
 
-    .nav-tabs {
+    .product-taps {
         display: flex;
         flex-direction: row;
         border-bottom: 1px solid #dee2e6;
@@ -42,11 +46,11 @@ ul li:active .btn-custom { background-color: #236097 !important; }
         list-style: none;
     }
 
-    .nav-item {
+    .product-item {
         margin-bottom: -1px;
     }
 
-    .nav-link {
+    .product-link {
         display: block;
         padding: 0.5rem 1rem;
         border: 1px solid transparent;
@@ -61,7 +65,7 @@ ul li:active .btn-custom { background-color: #236097 !important; }
         border-color: #e9ecef #e9ecef #dee2e6;
     }*/
 
-    .nav-link.active {
+    .product-link.active {
         color: #495057;
         background-color: #fff;
         border-color: #dee2e6 #dee2e6 #fff;
@@ -69,15 +73,28 @@ ul li:active .btn-custom { background-color: #236097 !important; }
     .small-text {
         font-size: 0.875em; /* 원하는 크기로 조정 */
         color: #666; /* 원하는 색상으로 조정 */
+        min-height: 6em;
+        display: flex;
+        align-items: center;
     }
     .card-text {
         font-size: 1.25em;
         text-align: right
     }
 
+    .card-body .tags {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 2em;
+    }
 
-            .product-image {
-               max-width: 200px; /* 이미지 최대 너비를 200px로 설정 */
-                  height: 200px; /* 이미지 높이를 200px로 설정 */
-                  margin-right: 20px;
-            }
+
+    .product-image {
+        max-width: 200px; /* 이미지 최대 너비를 200px로 설정 */
+        height: 200px; /* 이미지 높이를 200px로 설정 */
+        margin-right: 20px;
+    }
+    .input-group{
+         text-align: right;
+    }

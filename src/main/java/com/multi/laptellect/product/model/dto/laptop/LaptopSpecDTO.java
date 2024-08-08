@@ -1,9 +1,6 @@
 package com.multi.laptellect.product.model.dto.laptop;
 
-import com.multi.laptellect.product.model.dto.SpecDTO;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * Please explain the class!!
@@ -15,16 +12,17 @@ import java.util.List;
 @Data
 public class LaptopSpecDTO {
     // 상품 기본 정보
-    private String productName;
-    private String price;
-    private String image;
-    private String productCode;
-    private String os;
+    private int productNo;
+    private String productName; // 상품 명
+    private String price; // 가격
+    private String image; // 이미지
+    private String productCode; // 다나와 코드
+    private String registrationDate; // 등록 년월
 
-    // NPU
-    private String npu;
-    private String nputops;
-    private String soc;
+    // 부가 정보
+
+    private String os; // 운영체제
+    private String company; // 제조사
 
     // 제품 스펙
     private CPU cpu;

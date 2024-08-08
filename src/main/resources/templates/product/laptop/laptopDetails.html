@@ -21,6 +21,8 @@
 
         .spec-table th { background-color: #f8f9fa;
                          width: 15%; }
+        .spec-table td { width: 30%; }
+        
         #spec-box { width: 85%; margin: 0 auto;}
 
         body { font-family: 'Noto Sans KR', sans-serif; }
@@ -51,6 +53,9 @@
                           case 2:
                             alert("위시리스트 삭제 완료.");
                             break;
+                          case 3:
+                            alert("로그인이 필요합니다.");
+                            break;
                           default:
                             alert("위시리스트 Ajax Error");
                         }
@@ -79,6 +84,39 @@
                           case 2:
                             alert("장바구니 삭제 완료.");
                             break;
+                          case 3:
+                            alert("로그인이 필요합니다.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+            $(".btn-payment").on("click", function () {
+                event.preventDefault();
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          case 3:
+                            alert("장바구니 삭제 완료.");
+                            break;
                           default:
                             alert("장바구니 Ajax Error");
                         }
@@ -97,10 +135,20 @@
     <div class="row">
         <div class="col-md-4">
             <!-- 상품 이미지 -->
-            <img th:src="@{'/img/product/' + ${img}}" class="card-img-top" alt="상품 이미지" style="height: 400px; object-fit: contain;">
+            <img th:src="@{'/img/product/' + ${ laptop.image }}" class="card-img-top" alt="상품 이미지"
+                 style="height: 400px; object-fit: contain;">
             <div class="spec-box mt-3">
                 <!-- 상품 기본 정보 -->
-                <p th:utext="${details.specsString}"></p>
+                <ul class="list-unstyled">
+                    <li><strong>운영체제<span class="float-end" th:text="${ laptop.os }">Window 11</span></strong></li>
+                    <li><strong>화면 크기<span class="float-end"
+                                           th:text="${ laptop.display.screenSize }">15.6인치</span></strong></li>
+                    <li><strong>무게<span class="float-end"
+                                        th:text="${ laptop.portability.weight }">1.86kg</span></strong></li>
+                    <li><strong>해상도<span class="float-end"
+                                         th:text="${ laptop.display.resolution }">1920x1080(FHD)</span></strong></li>
+                    <li><strong>RAM<span class="float-end" th:text="${ laptop.ram.ramSize }">16GB</span></strong></li>
+                </ul>
             </div>
             <div class="mt-2">
 
@@ -111,7 +159,7 @@
             <div class="row">
                 <div class="col-12 mb-1" id="product-name">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4 th:text="${productName}"></h4>
+                        <h4 th:text="${ laptop.productName }"></h4>
                         <div class="d-flex justify-content-end align-items-center">
                             <div style="margin-left: 1rem !important;">
                                 <a class="btn-process-wishlist" href="#" th:attr="data-product-no=${productNo}">
@@ -132,21 +180,26 @@
             </div>
             <div class="row mt-2">
                 <div class="col-7">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="mb-2">
-                            <span><strong>가격 : <span class="price" th:text="${ price }"></span></strong></span>
-                            <button class="btn btn-sm btn-custom-primary ms-4">구매하기</button>
-                        </div>
-                    </div>
-
+                    <br>
                     <ul id="list-simple-spec">
-                        <li><strong>제조사 :</strong> 삼성전자</li>
-                        <li><strong>브랜드 :</strong> 갤럭시북</li>
-                        <li><strong>GPU :</strong> 내장그래픽</li>
-                        <li><strong>CPU :</strong> 코어i7 13세대</li>
-                        <li><strong>코어개수 :</strong> 10코어(2P+8E)</li>
+                        <li><strong>제조사 : </strong><span class="spec" th:text="${ laptop.company }"> 삼성전자</span></li>
+                        <li><strong>등록월 : </strong><span class="spec" th:text="${ laptop.registrationDate }"> 0000.00</span></li>
+                        <li><strong>GPU : </strong><span class="spec" th:text="${ laptop.gpu.gpuChipset }"> GPU</span></li>
+                        <li><strong>CPU : </strong><span class="spec" th:text="${ laptop.cpu.cpuType }"> CPU</span></li>
+                        <li><strong>코어개수 : </strong><span class="spec" th:text="${ laptop.cpu.cpuCore }"> CPU</span></li>
                     </ul>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><strong>가격 : <span class="price" th:text="${laptop.price}"></span></strong></span>
+                        <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
+                            <input type="hidden" name="productName" th:value="${laptop.productName}">
+                            <input type="hidden" name="imageUrl" th:value="${laptop.image}">
+                            <input type="hidden" name="price" th:value="${laptop.price}">
+                            <button type="submit" class="btn btn-custom-primary ms-4">구매하기</button>
+                        </form>
+                    </div>
                 </div>
+
                 <div class="col-md-5">
                     <div class="mb-3">
                         <div class="d-flex justify-content-between align-items-center"><h5>상품평(614건)</h5> <a href="#">더보기</a></div>
@@ -186,180 +239,231 @@
             </div>
         </div>
 
-    <div class="row">
-        <div class="col-12 mt-4">
-            <h4><strong>상품 상세 정보</strong></h4>
-        </div>
-        <hr>
-
-        <div id="spec-box">
+        <div class="row">
             <div class="col-12 mt-4">
-                <h6><strong>기본사양</strong></h6>
+                <h4><strong>상품 상세 정보</strong></h4>
+            </div>
+            <hr>
+
+            <div id="spec-box">
+                <div class="col-12 mt-4">
+                    <h6><strong>기본사양</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>제조사</th>
+                        <td th:text="${ laptop.company != null ? laptop.company : 'X' }">제조사</td>
+                        <th>등록월</th>
+                        <td th:text="${ laptop.registrationDate != null ? laptop.registrationDate : 'X' }">등록월</td>
+                    </tr>
+                    <tr>
+                        <th>운영체제</th>
+                        <td th:text="${ laptop.os != null ? laptop.os : 'X' }">Window 11</td>
+                        <th>화면 크기</th>
+                        <td th:text="${ laptop.display.screenSize != null ? laptop.display.screenSize : 'X'  }">화면 크기</td>
+                    </tr>
+                    <tr>
+                        <th>램</th>
+                        <td th:text="${ laptop.ram.ramSize != null ? laptop.ram.ramSize : 'X'  }">램</td>
+                        <th>내장 그래픽</th>
+                        <td th:text="${ laptop.gpu.gpuType == '내장 그래픽' || laptop.gpu.gpuType == '내장그래픽'  ? 'O' : 'X' }">내장 그래픽</td>
+                    </tr>
+                    <tr>
+                        <th>무게</th>
+                        <td th:text="${ laptop.portability.weight != null ? laptop.portability.weight : 'X' }">무게</td>
+                        <th>두께</th>
+                        <td th:text="${ laptop.portability.thickness != null ? laptop.portability.thickness : 'X' }">두께</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>화면 정보</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>해상도</th>
+                        <td th:text="${ laptop.display.resolution != null ? laptop.display.resolution : 'X' }">해상도</td>
+                        <th>화면 밝기</th>
+                        <td th:text="${ laptop.display.brightness != null ? laptop.display.brightness : 'X' }">화면 밝기</td>
+                    </tr>
+                    <tr>
+                        <th>패널 종류</th>
+                        <td th:text="${ laptop.display.panelType != null ? laptop.display.panelType : 'X' }">패널 종류</td>
+                        <th>패널 표면 처리</th>
+                        <td th:text="${ laptop.display.panelSurface != null ? laptop.display.panelSurface : 'X' }">패널 표면 처리</td>
+                    </tr>
+                    <tr>
+                        <th>주사율</th>
+                        <td th:text="${ laptop.display.refreshRate != null ? laptop.display.refreshRate : 'X' }">주사율</td>
+                        <th>화면 크기</th>
+                        <td th:text="${ laptop.display.screenSize != null ? laptop.display.screenSize : 'X' }">화면 크기</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="col-12 mt-4">
+                    <h6><strong>CPU</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>CPU 제조사</th>
+                        <td th:text="${ laptop.cpu.cpuManufacturer != null ? laptop.cpu.cpuManufacturer : 'X' }">CPU 종류</td>
+                        <th>CPU 종류</th>
+                        <td th:text="${ laptop.cpu.cpuType != null ? laptop.cpu.cpuType : 'X' }">CPU 종류</td>
+                    </tr>
+                    <tr>
+                        <th>CPU 넘버</th>
+                        <td th:text="${ laptop.cpu.cpuNumber != null ? laptop.cpu.cpuNumber : 'X' }">CPU 넘버</td>
+                        <th>CPU 코드명</th>
+                        <td th:text="${ laptop.cpu.cpuCodeName != null ? laptop.cpu.cpuCodeName : 'X' }">CPU 코드명</td>
+                    </tr>
+                    <tr>
+                        <th>스레드 수</th>
+                        <td th:text="${ laptop.cpu.cpuThread != null ? laptop.cpu.cpuThread : 'X' }">화면 크기</td>
+                        <th>코어 수</th>
+                        <td th:text="${ laptop.cpu.cpuCore != null ? laptop.cpu.cpuCore : 'X' }">코어 수</td>
+                    </tr>
+                    <tr>
+                        <th>NPU TOPS</th>
+                        <td th:text="${ laptop.cpu.npuTops != null ? laptop.cpu.npuTops : 'X' }">화면 크기</td>
+                        <th>NPU 종류</th>
+                        <td th:text="${ laptop.cpu.npu != null ? laptop.cpu.npu : 'X' }">화면 크기</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>GPU</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>GPU 종류</th>
+                        <td th:text="${ laptop.gpu.gpuType != null ? laptop.gpu.gpuType : 'X' }">GPU 종류</td>
+                        <th>GPU 제조사</th>
+                        <td th:text="${ laptop.gpu.gpuManufacturer != null ? laptop.gpu.gpuManufacturer : 'X' }">GPU 제조사</td>
+                    </tr>
+                    <tr>
+                        <th>GPU 칩셋</th>
+                        <td th:text="${ laptop.gpu.gpuChipset != null ? laptop.gpu.gpuChipset : 'X' }">GPU 칩셋</td>
+                        <th>GPU 코어</th>
+                        <td th:text="${ laptop.gpu.gpuCore != null ? laptop.gpu.gpuCore : 'X' }">GPU 코어</td>
+                    </tr>
+                    <tr>
+                        <th>GPU 클럭</th>
+                        <td th:text="${ laptop.gpu.gpuClock != null ? laptop.gpu.gpuClock : 'X' }">GPU 클럭</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>RAM</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>램 슬롯</th>
+                        <td th:text="${ laptop.ram.ramSlot != null ? laptop.ram.ramSlot : 'X' }">램 슬롯</td>
+                        <th>램 대역폭</th>
+                        <td th:text="${ laptop.ram.ramBandwidth != null ? laptop.ram.ramBandwidth : 'X' }">램 슬롯</td>
+                    </tr>
+                    <tr>
+                        <th>램 교체</th>
+                        <td th:text="${ laptop.ram.ramChange != null ? laptop.ram.ramChange : 'X' }">램 교체</td>
+                        <th>램 타입</th>
+                        <td th:text="${ laptop.ram.ramType != null ? laptop.ram.ramType : 'X' }">램 타입</td>
+                    </tr>
+                    <tr>
+                        <th>램 용량</th>
+                        <td th:text="${ laptop.ram.ramSize != null ? laptop.ram.ramSize : 'X' }">램 용량</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="col-12 mt-4">
+                    <h6><strong>저장 관련</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>저장 용량</th>
+                        <td th:text="${ laptop.storage.storageCapacity != null ? laptop.storage.storageCapacity : 'X' }">저장 용량</td>
+                        <th>저장장치 종류</th>
+                        <td th:text="${ laptop.storage.storageType != null ? laptop.storage.storageType : 'X' }">저장장치 종류</td>
+                    </tr>
+                    <tr>
+                        <th>저장 슬롯</th>
+                        <td th:text="${ laptop.storage.storageSlots != null ? laptop.storage.storageSlots : 'X' }">저장 슬롯</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>전원</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>배터리</th>
+                        <td th:text="${ laptop.power.battery != null ? laptop.power.battery : 'X' }">배터리</td>
+                        <th>어댑터</th>
+                        <td th:text="${ laptop.power.adapter != null ? laptop.power.adapter : 'X' }">어댑터</td>
+
+                    </tr>
+                    <tr>
+                        <th>전원 충전</th>
+                        <td th:text="${ laptop.power.charging != null ? laptop.power.charging : 'X' }">전원 충전</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>부가기능</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>무선랜</th>
+                        <td th:text="${ laptop.addOn.wirelessLan != null ? laptop.addOn.wirelessLan : 'X' }">무선랜</td>
+                        <th>USB</th>
+                        <td th:text="${ laptop.addOn.usb != null ? laptop.addOn.usb : 'X' }">USB</td>
+                    </tr>
+                    <tr>
+                        <th>USB-C</th>
+                        <td th:text="${ laptop.addOn.usbC != null ? laptop.addOn.usbC : 'X' }">USB-C</td>
+                        <th>USB-A</th>
+                        <td th:text="${ laptop.addOn.usbA != null ? laptop.addOn.usbA : 'X' }">USB-A</td>
+                    </tr>
+                    <tr>
+                        <th>쿨링팬</th>
+                        <td th:text="${ laptop.addOn.coolingfan != null ? laptop.addOn.coolingfan : 'X' }">쿨링팬</td>
+                        <th>블루투스</th>
+                        <td th:text="${ laptop.addOn.bluetooth != null ? laptop.addOn.bluetooth : 'X' }">블루투스</td>
+                    </tr>
+                    <tr>
+                        <th>썬더볼트</th>
+                        <td th:text="${ laptop.addOn.thunderbolt != null ? laptop.addOn.thunderbolt : 'X' }">썬더볼트</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-
             <div class="col-12 mt-4">
-                <h6><strong>화면 정보</strong></h6>
+                <h4><strong>의견/리뷰</strong></h4>
             </div>
-
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div class="col-12 mt-4">
-                <h6><strong>단자</strong></h6>
-            </div>
-
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div class="col-12 mt-4">
-                <h6><strong>부가기능</strong></h6>
-            </div>
-
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div class="col-12 mt-4">
-                <h6><strong>입력장치</strong></h6>
-            </div>
-
-            <table class="table table-bordered spec-table">
-                <tbody>
-                <tr>
-                    <th>운영체제</th>
-                    <td>테스트</td>
-                    <th>화면 크기</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>종류</th>
-                    <td>테스트</td>
-                    <th>속도</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>코어개수</th>
-                    <td>테스트</td>
-                    <th>내장그래픽</th>
-                    <td>테스트</td>
-                </tr>
-                <tr>
-                    <th>램</th>
-                    <td>테스트</td>
-                    <th>무게</th>
-                    <td>테스트</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="col-12 mt-4">
-                <h6><strong>전원</strong></h6>
-            </div>
+            <hr>
+            <div id="customer-box">
 
             <table class="table table-bordered spec-table">
                 <tbody>
@@ -429,22 +533,24 @@
 
         <div id="review-box" class="tab-content">
 
-        </div>
+            </div>
 
-        <div id="crolling-box">
+            <div id="crolling-box">
 
-        </div>
+            </div>
 
-        <div class="col-12 mt-4">
-            <h4><strong>연관상품</strong></h4>
-        </div>
-        <hr>
+            <div class="col-12 mt-4">
+                <h4><strong>연관상품</strong></h4>
+            </div>
+            <hr>
 
-        <div id="recommend-box">
+            <div id="recommend-box">
 
+            </div>
         </div>
     </div>
 </div>
+  
     <!--상품 문의 등록 모달-->
     <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true" >
         <div class="modal-dialog modal-lg">

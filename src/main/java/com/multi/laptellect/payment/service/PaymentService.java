@@ -1,26 +1,34 @@
 package com.multi.laptellect.payment.service;
 
 import com.multi.laptellect.api.payment.ApiKeys;
+import com.multi.laptellect.common.model.PaginationDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.payment.model.dao.PaymentDAO;
 import com.multi.laptellect.payment.model.dto.*;
+import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
 
 @Service
+@Slf4j
 public class PaymentService {
 
     private final ApiKeys apiKeys;
@@ -62,7 +70,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public List<OrderlistDTO> selectOrders(String memberName) {
+    public List<PaymentDTO> selectOrders(String memberName) {
         return paymentDAO.selectOrders(memberName);
     }
 
@@ -157,6 +165,10 @@ public class PaymentService {
     }
 
 
+    public PaymentpageDTO findProduct(String productName) {
+        return paymentDAO.findProduct(productName);
+    }
+
     public PaymentpointDTO selectpoint(int memberNo) {
 
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -178,4 +190,36 @@ public class PaymentService {
         return paymentDAO.findReview(imPortId);
     }
 
+    public PaymentDTO findPaymentByImPortId(String imPortId) {
+        return paymentDAO.findPaymentByImPortId(imPortId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentDTO> getOrderList(Pageable pageable, PaginationDTO paginationDTO) {
+        int memberNo = SecurityUtil.getUserNo();
+
+        ArrayList<PaymentDTO> orders = paymentDAO.findAllPaymentByMemberNo(pageable, paginationDTO, memberNo);
+        log.info("주문 목록 조회 성공 = {}", orders);
+
+        int total = paymentDAO.countPaymentByMemberNo(paginationDTO, memberNo);
+        log.info("주문 목록 Total 조회 성공 = {}", orders);
+
+        return new PageImpl<>(orders, pageable, total);
+    }
+
+    @Transactional
+    public int checkConfirm(int paymentNo) {
+        int memberNo = SecurityUtil.getUserNo();
+
+        // 사용자와 상품을 구매한 사용자가 동일한지 검증
+        PaymentDTO paymentInfo = paymentDAO.findPaymentByPaymentNo(paymentNo, memberNo);
+        if(paymentInfo.getMemberNo() != memberNo) return 2;
+        if(paymentInfo.getConfirm().equals("Y")) return 3;
+
+        // 구매 확정 confirm 컬럼 업데이트
+        int result = paymentDAO.checkConfirm(paymentNo);
+        log.info("구매 확정 완료 = {}", result);
+
+        return result;
+    }
 }

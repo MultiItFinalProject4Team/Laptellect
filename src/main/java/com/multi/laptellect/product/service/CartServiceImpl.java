@@ -29,7 +29,11 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public int processCart(int productNo) throws Exception {
+        // 로그인 하지 않은 사용자는 사용이 불가능 하므로 로그인 여부를 의미하는 3 반환
+        if(!SecurityUtil.isAuthenticated()) return 3;
+
         String memberName = SecurityUtil.getUserDetails().getMemberName();
+
         memberName = "cart:" + memberName;
         Long duration = 24L * 60L * 60L;
         String productNoString = String.valueOf(productNo);

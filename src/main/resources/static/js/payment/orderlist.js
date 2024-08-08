@@ -117,10 +117,10 @@ function updatePagination() {
     paginationElement.appendChild(nextButton);
 }
 
-function openReviewModal(productName, username, imPortId) {
+function openReviewModal(productName, userName, imPortId) {
     document.getElementById('reviewModal').style.display = 'block';
     document.getElementById('reviewProductName').textContent = productName;
-    document.getElementById('reviewUsername').textContent = username;
+    document.getElementById('reviewUsername').textContent = userName;
     document.getElementById('reviewModal').dataset.imPortId = imPortId;
 
     // 리뷰 내용 입력 필드와 제출 버튼 초기화
@@ -149,7 +149,7 @@ function closeReviewModal() {
 function submitReview() {
     if (confirm("리뷰를 작성하게 되면 주문 취소가 불가능해집니다. \n리뷰를 등록하시겠습니까?")) {
         const productName = document.getElementById('reviewProductName').textContent;
-        const username = document.getElementById('reviewUsername').textContent;
+        const userName = document.getElementById('reviewUsername').textContent;
         const rating = document.getElementById('reviewRating').value;
         const content = document.getElementById('reviewContent').value;
         const imPortId = document.getElementById('reviewModal').dataset.imPortId;
@@ -161,7 +161,7 @@ function submitReview() {
             },
             body: JSON.stringify({
                 productName: productName,
-                username: username,
+                userName: userName,
                 rating: rating,
                 content: content,
                 imPortId: imPortId

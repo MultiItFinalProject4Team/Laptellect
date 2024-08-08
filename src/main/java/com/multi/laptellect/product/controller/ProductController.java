@@ -1,11 +1,8 @@
 package com.multi.laptellect.product.controller;
 
 
-import com.multi.laptellect.customer.dto.ProductqList;
-import com.multi.laptellect.customer.service.CustomerService;
-import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.SpecDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
@@ -19,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Product controller.
@@ -103,7 +97,7 @@ public class ProductController {
     }
 
     @GetMapping("/laptopList")
-    public String LaptopList(){
+    public String LaptopList() {
         int typeNo = 1;
 
         productService.getProductByType(typeNo);
@@ -114,7 +108,7 @@ public class ProductController {
     }
 
     @GetMapping("/mouseList")
-    public String mouseList(){
+    public String mouseList() {
         int typeNo = 2;
 
         return "product/mouse/mouseList";
@@ -122,14 +116,13 @@ public class ProductController {
     }
 
     @GetMapping("/keyboardList")
-    public String keyboardList(){
+    public String keyboardList() {
         int typeNo = 3;
 
 
         return "product/keyboard/keyboardList";
 
     }
-
 
 
     /**
@@ -140,114 +133,42 @@ public class ProductController {
      */
     @GetMapping("/productList")
     public String ProductList(Model model,
-                              @RequestParam(name = "typeNo", required = false) Integer typeNo,
-                              @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-                              @RequestParam(name = "pageSize", defaultValue = "12") int pageSize) {
-
-        //페이징 처리
-        List<ProductDTO> products = productService.getStoredProducts(typeNo,pageNumber, pageSize);
-
-
-
-        log.info("productList 확인 = {}", products);
-
-
-        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
-
-        for(ProductDTO productDTO : products){
-            List<SpecDTO> filteredSpecs = productService.filterSpecs(productDTO.getProductNo(), neededOptions);
-            productDTO.setSpecs(filteredSpecs);
-            log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs);
-
-            String specsString = filteredSpecs.stream()
-                    .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
-                    .collect(Collectors.joining(" | "));
-            productDTO.setSpecsString(specsString);
-
-
-        }
-
-        model.addAttribute("products", products);
-
-
-        // 전체 제품 수
-        int totalProducts = productService.getTotalProducts();
-
-        // 총 페이지 계산
-        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
-
-        int displayPageCount = 10;
-        int startPage = Math.max(1, pageNumber - (displayPageCount / 2));
-        int endPage = Math.min(totalPages, startPage + displayPageCount - 1);
-
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-
+                              @RequestParam(name = "typeNo", defaultValue = "1") int typeNo) {
+        model.addAttribute("typeNo", typeNo);
         return "product/productList";
     }
+
+
 
 
     /**
      * Product details string.
      *
      * @param productNo the product code
-     * @param model       the model
+     * @param model     the model
      * @return the string
      */
     @GetMapping("/laptop/laptopDetails")
     public String productDetails(@RequestParam(name = "productNo") int productNo,
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
+
+
+
+        //customer 문의 부분
+        List<ProductqList> productqList = customerService.getAllProductqList(details.getProductNo());
+        model.addAttribute("productqList",productqList);
+
+        model.addAttribute("options", options);
+        model.addAttribute("optionValue", optionsValue);
+=
         // 제품 상세 정보 가져오기
-        List<LaptopDetailsDTO> laptopDetails = productService.getLaptopProductDetails(productNo);
-        log.info("상세정보를 조회 = {}: ", laptopDetails);
+        LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
 
-        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
-
-        if (!laptopDetails.isEmpty()) {
-            LaptopDetailsDTO details = laptopDetails.get(0);
-
-            List<SpecDTO> filteredSpecs = productService.filterSpecs(details.getProductNo(), neededOptions);
-            details.setSpecs(filteredSpecs);
-            log.info("필터링된 상세 Spec 값 전달 확인 ={}", filteredSpecs);
-
-            String specsString = filteredSpecs.stream()
-                    .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
-                    .collect(Collectors.joining("<br>"));
-            details.setSpecsString(specsString);
-
-            log.info("details.getProductNo ={}",details.getProductNo());
-
-            model.addAttribute("details",details);
-            model.addAttribute("productNo",details.getProductNo());
-            model.addAttribute("productName", details.getProductName());
-            model.addAttribute("price", details.getPrice());
-            model.addAttribute("img", details.getUploadName());
-
-            log.info("details 확인작업 = {}", details);
-
-            List<String> options = new ArrayList<>();
-            List<String> optionsValue = new ArrayList<>();
-
-            for (LaptopDetailsDTO detail : laptopDetails) {
-                options.add(detail.getOptions());
-                optionsValue.add(detail.getOptionValue());
-            }
-
-            //customer 문의 부분
-            List<ProductqList> productqList = customerService.getAllProductqList(details.getProductNo());
-            model.addAttribute("productqList",productqList);
-
-            model.addAttribute("options", options);
-            model.addAttribute("optionValue", optionsValue);
-
-        }
+        model.addAttribute("productNo",laptop.getProductNo());
+        model.addAttribute("laptop", laptop);
 
         return "product/laptop/laptopDetails";
-
     }
 
 

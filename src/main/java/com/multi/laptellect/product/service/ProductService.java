@@ -4,6 +4,7 @@ import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.WishlistDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,7 +31,7 @@ public interface ProductService {
      * @param pageSize   페이지 크기
      * @return the stored products
      */
-    List<ProductDTO> getStoredProducts(Integer typeNo,int pageNumber, int pageSize);
+    List<ProductDTO> getStoredProducts(Integer typeNo);
 
     /**
      * 모든 상품의 수량 확인
@@ -54,7 +55,7 @@ public interface ProductService {
      * @param productNo the product code
      * @return the laptop product details
      */
-    List<LaptopDetailsDTO> getLaptopProductDetails(int productNo);
+    LaptopSpecDTO getLaptopProductDetails(int productNo);
 
 
     /**
@@ -101,6 +102,8 @@ public interface ProductService {
     Page<WishlistDTO> getWishlist(Pageable pageable) throws Exception;
 
     ProductDTO findProductByProductNo(String productNo) throws Exception;
-;
+
+    LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
+
 
 }

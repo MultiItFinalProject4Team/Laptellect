@@ -55,9 +55,26 @@
     color: white;
 }
 
+.btn-custom-primary:disabled,
+.btn-custom-primary.disabled {
+    background-color: #3498DB;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .btn-custom-primary:hover {
     background-color: #2980B9;
     color: white;
+}
+
+
+.btn-custom-primary:active {
+    background-color: #1C6A9E !important;
+    color: white !important;
+    outline: none !important;
+    box-shadow: none !important;
+    pointer-events: auto !important;
 }
 
 /* modal */

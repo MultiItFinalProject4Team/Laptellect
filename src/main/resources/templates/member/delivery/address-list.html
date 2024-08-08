@@ -166,11 +166,11 @@ $("#address-name2").on("blur", function () {
     console.log(addressName);
 
     if(addressName !== "") {
-    $(".addAddressBtn").prop("disabled", false);
-    $("#addressError").hide();
+        $(".addAddressBtn").prop("disabled", false);
+        $("#addressError").hide();
     } else {
-    $(".addAddressBtn").prop("disabled", true);
-    $("#addressError").show();
+        $(".addAddressBtn").prop("disabled", true);
+        $("#addressError").show();
     }
     // 배송지 이름 빈칸 검증
 });

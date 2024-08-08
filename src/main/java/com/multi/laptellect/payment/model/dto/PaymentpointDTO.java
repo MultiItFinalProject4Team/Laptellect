@@ -9,5 +9,7 @@ public class PaymentpointDTO {
     private String imPortId;
     private String paymentPointChange;
     private String paymentPointInfo;
+    private String createdAt;
+
     private String usedPoints;
 }

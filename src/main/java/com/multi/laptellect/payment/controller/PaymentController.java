@@ -5,6 +5,9 @@ import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.member.service.MemberService;
 import com.multi.laptellect.payment.model.dto.*;
 import com.multi.laptellect.payment.service.PaymentService;
+import com.multi.laptellect.product.model.dto.ProductCart;
+import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -13,16 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 @Controller
 @RequestMapping("/payment")
@@ -31,43 +31,38 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final MemberMapper memberMapper;
     private final MemberService memberService;
+    private final CartService cartService;
 
-    public PaymentController(PaymentService paymentService, MemberMapper memberMapper, MemberService memberService) {
+    public PaymentController(PaymentService paymentService, MemberMapper memberMapper, MemberService memberService, CartService cartService) {
         this.paymentService = paymentService;
         this.memberMapper = memberMapper;
         this.memberService = memberService;
+        this.cartService = cartService;
     }
 
-    /**
-     * 주문내역페이지 구성
-     *
-     * @param model 뷰단으로 데이터이동
-     * @return 주문내역페이지 열기
-     */
     @GetMapping("/orderlist")
     public String orderList(Model model) {
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
-        List<OrderlistDTO> orderList = paymentService.selectOrders(memberDTO.getMemberName());
+        List<PaymentDTO> orderList = paymentService.selectOrders(memberDTO.getMemberName());
         List<String> reviewedOrders = paymentService.getReviewedOrders();
         model.addAttribute("orderList", orderList);
         model.addAttribute("reviewedOrders", reviewedOrders);
         return "/payment/orderlist";
     }
 
-    /**
-     * 주문 및 결제 페이지
-     *
-     * @param model 뷰단으로 데이터 이동
-     * @return 결제페이지 열기
-     */
-    @GetMapping("/payment")
-    public String selectpaymentpage(Model model) {
+    @PostMapping("/payment")
+    public String paymentpage(@RequestParam("imageUrl") String img,
+                              @RequestParam("productName") String productName,
+                              @RequestParam("price") int price,
+                              Model model) {
+        PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
+        paymentpageDTO.setImage(img);
+        paymentpageDTO.setPrice(400);
+
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-
-        PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
 
         model.addAttribute("paymentpageDTO", paymentpageDTO);
@@ -77,12 +72,42 @@ public class PaymentController {
         return "/payment/payment";
     }
 
-    /**
-     * 결제검증 메서드
-     * 결제시 사용포인트 조회 및 결제내역 저장
-     * @param request 결제검증 dto
-     * @return 결제 검증 결과 전송
-     */
+    @GetMapping("/cart-payment")
+    public String cartPayment(Model model) {
+        try {
+            ProductCart productCart = cartService.getCartList();
+            ArrayList<ProductDTO> cartList = productCart.getProducts();
+            int totalQuantity = productCart.getTotalQuantity();
+
+            int productTotal = cartList.size();
+            int productTotalPrice = 0;
+
+//            for(int i = 0; i < cartList.size(); i++) {
+//                cartList.get(i).setPrice(300+i);
+//            }
+
+            for(int i = 0; i < cartList.size(); i++) {
+                productTotalPrice += cartList.get(i).getTotalPrice();
+            }
+
+            int memberNo = SecurityUtil.getUserNo();
+            MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+
+            model.addAttribute("cartList", cartList);
+            model.addAttribute("total", productTotal);
+            model.addAttribute("Quantity", totalQuantity);
+            model.addAttribute("totalPrice", productTotalPrice);
+            model.addAttribute("memberDTO", memberDTO);
+        }
+        catch (Exception e) {
+            model.addAttribute("total", 0);
+            model.addAttribute("Quantity", 0);
+            model.addAttribute("totalPrice", 0);
+
+        }
+        return "payment/cart-payment";
+    }
+
     @Transactional
     @PostMapping("/verifyPayment")
     public ResponseEntity<Map<String, Object>> verifyPayment(@RequestBody VerificationRequestDTO request) {
@@ -91,13 +116,12 @@ public class PaymentController {
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
             System.out.println(memberDTO);
 
-            PaymentpageDTO paymentpageDTO = paymentService.selectpaymentpage();
+            PaymentpageDTO paymentpageDTO = paymentService.findProduct(request.getProductName());
+
             PaymentDTO paymentDTO = new PaymentDTO();
-            paymentDTO.setUsername(memberDTO.getMemberName());
-            paymentDTO.setProductinfo(paymentpageDTO.getProductinfo());
-            paymentDTO.setProductname(paymentpageDTO.getProductname());
-            paymentDTO.setProductprice(paymentpageDTO.getProductprice());
-            paymentDTO.setPurchaseprice(request.getAmount().intValue());
+            paymentDTO.setMemberNo(memberNo);
+            paymentDTO.setProductNo(paymentpageDTO.getProductNo());
+            paymentDTO.setPurchasePrice(request.getAmount().intValue());
             paymentDTO.setImPortId(request.getImPortId());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
@@ -193,14 +217,22 @@ public class PaymentController {
      */
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
-
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
         String username = memberDTO.getMemberName();
-        reviewDTO.setUsername(username);
-        int result = paymentService.saveReview(reviewDTO);
+        reviewDTO.setUserName(username);
+        reviewDTO.setMemberNo(memberDTO.getMemberNo());
 
+        // Fetch the product information using the imPortId
+        PaymentDTO paymentDTO = paymentService.findPaymentByImPortId(reviewDTO.getImPortId());
+        if (paymentDTO != null) {
+            reviewDTO.setProductNo(paymentDTO.getProductNo());
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "주문 정보를 찾을 수 없습니다."));
+        }
+
+        int result = paymentService.saveReview(reviewDTO);
 
         Map<String, Object> response = new HashMap<>();
         if (result > 0) {
