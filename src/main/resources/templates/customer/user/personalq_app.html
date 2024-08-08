@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{customer/layout/layout-customer}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
@@ -16,21 +18,11 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-5">
+<div class="container mt-2">
     <header>
-        <h1 align="center">고객센터</h1>
-        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_notice">공지사항</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
-            </li>
-        </ul>
+        <h1 align="left"style="font-size:40px">1:1 문의하기</h1>
     </header>
+    <hr>
     <form action="/customer/user/personalq_app" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">
             <label class="input-group-text" for="title">제목:</label>

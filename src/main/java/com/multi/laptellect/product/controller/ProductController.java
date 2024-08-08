@@ -29,6 +29,7 @@ public class ProductController {
     private final CartService cartService;
     private final CrawlingService crawlingService;
     private final ProductService productService;
+    private final CustomerService customerService;
 
     /**
      * 크롤링을 시작합니다.
@@ -152,6 +153,15 @@ public class ProductController {
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
+
+
+        //customer 문의 부분
+        List<ProductqList> productqList = customerService.getAllProductqList(details.getProductNo());
+        model.addAttribute("productqList",productqList);
+
+        model.addAttribute("options", options);
+        model.addAttribute("optionValue", optionsValue);
+=
         // 제품 상세 정보 가져오기
         LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
 
