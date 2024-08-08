@@ -174,6 +174,7 @@ public class ProductController {
      */
     @GetMapping("/laptop/laptopDetails")
     public String productDetails(@RequestParam(name = "productNo") int productNo,
+                                 @RequestParam(required = false, name = "keyWord") String key,
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
         // 제품 상세 정보 가져오기

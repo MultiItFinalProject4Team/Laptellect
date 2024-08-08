@@ -42,6 +42,7 @@
 
 
             // 위시리스트 추가/삭제
+
             $(".btn-process-wishlist").on("click", function () {
                 let productNo = $(this).data('product-no');
                 console.log(productNo);
@@ -138,16 +139,17 @@
         </select>
         <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
     </form>
-    <div class="d-flex justify-content-end">
-        <div class="input-group">
+
+    <form th:action="@{/product/search}" method="get" id="searchFoam" name="search-form">
+        <div class="product-search">
             <div class="form-outline" data-mdb-input-init>
-                <input type="search" id="form1" class="form-control"/>
+                <input type="search" id="form1" class="form-control search-input" placeholder="검색어를 입력하세요." name="keyWord" />
             </div>
             <button type="button" class="btn btn-primary-input" data-mdb-ripple-init>
                 <i class="fas fa-search"></i>
             </button>
         </div>
-    </div>
+    </form>
     <div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
