@@ -1,6 +1,8 @@
 package com.multi.laptellect.product.controller;
 
 
+import com.multi.laptellect.customer.dto.ProductqList;
+import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.service.CartService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.List;
+
 
 /**
  * The type Product controller.
@@ -156,12 +159,10 @@ public class ProductController {
 
 
         //customer 문의 부분
-        List<ProductqList> productqList = customerService.getAllProductqList(details.getProductNo());
+        List<ProductqList> productqList = customerService.getAllProductqList(productNo);
         model.addAttribute("productqList",productqList);
 
-        model.addAttribute("options", options);
-        model.addAttribute("optionValue", optionsValue);
-=
+
         // 제품 상세 정보 가져오기
         LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
 
