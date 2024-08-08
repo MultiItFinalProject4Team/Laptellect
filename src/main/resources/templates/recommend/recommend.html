@@ -150,6 +150,7 @@
                         </div>
                     `;
                     requiredCategories = ['mainOption', 'game', 'place', 'screen', 'priority'];
+                    console.log(requiredCategories);
                 } else if (option === '사무용') {
                     additionalHTML = `
                         <div class="section">
@@ -186,6 +187,8 @@
                         </div>
                     `;
                     requiredCategories = ['mainOption', 'purpose', 'performance', 'place', 'priority'];
+
+                    console.log(requiredCategories);
                 }
                 $('#additionalOptions').html(additionalHTML);
 
@@ -194,13 +197,19 @@
                     $(this).addClass('selected');
                     let category = $(this).find('input').attr('name');
                     selectedOptions[category] = $(this).find('input').val();
+
                     checkAllOptionsSelected();
+
                 });
             }
 
+
             function checkAllOptionsSelected() {
+
                 let allSelected = requiredCategories.every(category => selectedOptions[category]);
                 $('#recommendButton').prop('disabled', !allSelected);
+
+                console.log(allSelected);
             }
         });
     </script>

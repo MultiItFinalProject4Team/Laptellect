@@ -27,28 +27,36 @@
             AND EXISTS (
             SELECT 1 FROM product_spec ps_gpu
             WHERE ps_gpu.product_no = p.product_no
-            AND ps_gpu.category_no IN (SELECT category_no FROM product_category WHERE options IN ('GPU 종류', 'GPU 제조사', 'GPU 칩셋'))
-            AND (
+            AND ps_gpu.category_no IN (
+            SELECT category_no FROM product_category
+            WHERE options IN ('GPU 종류', 'GPU 제조사', 'GPU 칩셋')
+            )
+            AND ( <!--and 우선 순위가 or 보다 높다-->
             <foreach item="tag" collection="gpuTags" separator=" OR ">
-                LOWER(ps_gpu.option_value) LIKE CONCAT('%', LOWER(#{tag}), '%')
+                LOWER(ps_gpu.option_value) LIKE CONCAT('%', (#{tag}), '%')
             </foreach>
             )
             )
         </if>
+
         <!--사무용-->
         <if test="cpuTags != null and cpuTags.size() > 0">
             AND EXISTS (
             SELECT 1 FROM product_spec ps_cpu
             WHERE ps_cpu.product_no = p.product_no
-            AND ps_cpu.category_no IN (SELECT category_no FROM product_category WHERE options IN ('CPU 종류', 'CPU 넘버'))
+            AND ps_cpu.category_no IN (
+            SELECT category_no FROM product_category
+            WHERE options IN ('CPU 종류', 'CPU 넘버')
+            )
             AND (
             <foreach item="tag" collection="cpuTags" separator=" OR ">
-                LOWER(ps_cpu.option_value) LIKE CONCAT('%', LOWER(#{tag}), '%')
+                LOWER(ps_cpu.option_value) LIKE CONCAT('%', (#{tag}), '%')
             </foreach>
             )
             )
         </if>
-<!--        <if test="weightTag != null">-->
+<!--이하 필터링 조건은 일단 사용하지 않음-->
+        <!--        <if test="weightTag != null">-->
 <!--            AND EXISTS (-->
 <!--            SELECT 1 FROM product_spec ps_weight-->
 <!--            WHERE ps_weight.product_no = p.product_no-->
@@ -81,13 +89,15 @@
 <!--            )-->
 <!--        </if>-->
 
-        <!-- GPU와 CPU 태그 모두 없는 경우 결과가 없도록 설정 -->
+        <!-- GPU와 CPU 태그 모두 없는 경우 결과가 없도록 -->
         <if test="gpuTags == null or gpuTags.size() == 0">
             <if test="cpuTags == null or cpuTags.size() == 0">
-                AND 1 = 0 <!-- 필터링 조건이 없는 경우 결과가 없도록 함 -->
+                AND 1 = 0 <!-- 필터링 조건 없는 경우에 쓰임 -->
             </if>
         </if>
-        GROUP BY p.product_no, p.product_name, p.price, p.product_code
+        GROUP BY p.product_no, p.product_name, p.price, p.product_code <!-- product 테이블에서 직접 product_name을 가져옴-->
+        ORDER BY p.product_no DESC LIMIT 10 <!-- 추천 상품 10개만  -->
+
 
     </select>
 </mapper>

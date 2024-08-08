@@ -2,18 +2,19 @@ package com.multi.laptellect.recommend.laptop.service;
 
 import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
 import com.multi.laptellect.recommend.laptop.model.dto.RecommendProductDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class RecommendProductService {
 
-    @Autowired
-    private RecommendProductDAO recommendProductDAO;
+
+    private final RecommendProductDAO recommendProductDAO; //private final 자동적 생성자 주입
 
     public List<RecommendProductDTO> getRecommendations(Map<String, String> surveyResults) {
         Map<String, Object> searchCriteria = createSearchCriteria(surveyResults);
@@ -24,10 +25,11 @@ public class RecommendProductService {
     private Map<String, Object> createSearchCriteria(Map<String, String> surveyResults) {
         Map<String, Object> criteria = new HashMap<>();
 
-        String mainOption = surveyResults.get("mainOption");
-        if ("게이밍".equals(mainOption)) {
+
+
+        if (surveyResults.containsKey("game")) {
             criteria.put("gpuTags", getGpuTags(surveyResults.get("game")));
-        } else if ("사무용".equals(mainOption)) {
+        } else if (surveyResults.containsKey("purpose")) {
             criteria.put("cpuTags", getCpuTags(surveyResults.get("purpose")));
         }
 
@@ -50,7 +52,7 @@ public class RecommendProductService {
                 return List.of("geforce rtx 4090", "geforce rtx 4080", "radeon rx 7900m", "radeon 610m ryzen 9 7845hx",
                         "geforce rtx 3080 ti", "geforce rtx 4070", "geforce rtx 3070 ti", "geforce rtx 4060",
                         "radeon rx 6850m xt", "geforce rtx 3080", "rtx a5000", "geforce rtx 3070",
-                        "radeon rx 6800s", "rtx a4000", "geforce rtx 2080");
+                        "radeon rx 6800s", "rtx a4000", "geforce rtx 2080, radeon rx 6700m, ");
             case "온라인 게임":
                 return List.of("radeon rx 6650m", "radeon rx 6700s", "quadro rtx 5000", "geforce rtx 4050",
                         "radeon rx 7600s", "radeont rx 6850m xt", "geforce rtx 2080 super", "geforce rtx 2070 super",
@@ -71,7 +73,7 @@ public class RecommendProductService {
         if (purpose == null) {
             return List.of();
         }
-        switch (purpose) {
+        switch (purpose) { //
             case "코딩할거에요":
                 return List.of("amd ryzen 9 7945hx3d", "amd ryzen 9 7945hx", "amd ryzen 9 7940hx",
                         "intel core i9-13980hx", "intel core i9-14900hx", "amd ryzen 9 7845hx",
@@ -79,13 +81,13 @@ public class RecommendProductService {
                         "intel core i7-13850hx", "intel core i7-14700hx", "intel core i9-12900hx",
                         "intel core i7-13700hx", "amd ryzen 7 7745hx", "intel core i9-12950hx",
                         "intel core i7-12800hx", "amd ryzen 9 8945h", "intel core i9-13900hk",
-                        "intel core i7-13650hx", "intel core i7-12850hx");
+                        "intel core i7-13650hx", "intel core i7-12850hx , intel core i5-1340p");
             case "학생이에요":
                 return List.of("intel core i5-12500h", "amd ryzen 5 5600h", "intel core i5-11400h",
                         "amd ryzen 5 4600h", "intel core i5-10300h", "amd ryzen 5 4500u",
                         "intel core i5-1135g7", "amd ryzen 5 5500u", "intel core i5-10210u",
                         "amd ryzen 5 3500u", "intel core i7-1165g7", "amd ryzen 7 4700u",
-                        "intel core i7-10510u", "amd ryzen 7 5700u", "intel core i7-1185g7");
+                        "intel core i7-10510u", "amd ryzen 7 5700u", "intel core i7-1185g7, intel core i5-1340p");
             default:
                 return List.of();
         }
