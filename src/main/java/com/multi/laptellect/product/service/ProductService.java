@@ -31,7 +31,7 @@ public interface ProductService {
      * @param pageSize   페이지 크기
      * @return the stored products
      */
-    List<ProductDTO> getStoredProducts(Integer typeNo,int pageNumber, int pageSize);
+    List<ProductDTO> getStoredProducts(Integer typeNo);
 
     /**
      * 모든 상품의 수량 확인
@@ -55,7 +55,7 @@ public interface ProductService {
      * @param productNo the product code
      * @return the laptop product details
      */
-    List<LaptopDetailsDTO> getLaptopProductDetails(int productNo);
+    LaptopSpecDTO getLaptopProductDetails(int productNo);
 
 
     /**
@@ -103,7 +103,7 @@ public interface ProductService {
 
     ProductDTO findProductByProductNo(String productNo) throws Exception;
 
-    LaptopSpecDTO getLaptopSpec(List<LaptopDetailsDTO> laptopDetails);
+    LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
 
 
 }

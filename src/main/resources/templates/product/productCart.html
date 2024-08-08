@@ -1,59 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
     <style>
-    .product-name {
-      text-decoration-line: none;
-      color: #000;
-    }
-
-    .circle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 20px;
-        border: 2px solid #ccc;
-        border-radius: 50%;
-        color: #333;
-        cursor: pointer;
-    }
-
-    .quantity-btn {
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        margin: 0 5px;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .quantity-value {
-        margin: 0 10px;
-        white-space: nowrap;
-    }
-  </style>
-    <script>
-  function loadCartList() {
-    $.ajax({
-        url: '/api/product/get-cartlist',
-        type: 'GET',
-        success: function(response) {
-            $('#cart-box').html(response);
-        },
-        error: function(xhr, status, error) {
-            console.error('조회 실패:', error);
+        .product-name {
+          text-decoration-line: none;
+          color: #000;
         }
-    });
-  }
 
-  $(document).ready(function() {
-     loadCartList();
-  });
-</script>
+        .circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .quantity-btn {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin: 0 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .quantity-value {
+            margin: 0 10px;
+            white-space: nowrap;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function loadCartList() {
+          $.ajax({
+              url: '/api/product/get-cartlist',
+              type: 'GET',
+              success: function(response) {
+                  $('#cart-box').html(response);
+              },
+              error: function(xhr, status, error) {
+                  console.error('조회 실패:', error);
+              }
+          });
+        }
+
+        $(document).ready(function() {
+           loadCartList();
+
+           // 구매하기 버튼 클릭 이벤트
+           $(document).on('click', '.btn-payment', function() {
+               window.location.href = '/payment/cart-payment';
+           });
+        });
+    </script>
 </head>
 <body>
 <div layout:fragment="content">

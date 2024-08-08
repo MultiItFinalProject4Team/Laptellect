@@ -5,6 +5,9 @@ import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.member.service.MemberService;
 import com.multi.laptellect.payment.model.dto.*;
 import com.multi.laptellect.payment.service.PaymentService;
+import com.multi.laptellect.product.model.dto.ProductCart;
+import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -16,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,11 +31,13 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final MemberMapper memberMapper;
     private final MemberService memberService;
+    private final CartService cartService;
 
-    public PaymentController(PaymentService paymentService, MemberMapper memberMapper, MemberService memberService) {
+    public PaymentController(PaymentService paymentService, MemberMapper memberMapper, MemberService memberService, CartService cartService) {
         this.paymentService = paymentService;
         this.memberMapper = memberMapper;
         this.memberService = memberService;
+        this.cartService = cartService;
     }
 
     @GetMapping("/orderlist")
@@ -39,9 +45,10 @@ public class PaymentController {
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
-        List<PaymentDTO> orderList = paymentService.selectOrders(memberDTO.getMemberName());
+        List<PaymentDTO> orderItems = paymentService.selectOrderItems(memberDTO.getMemberNo());
         List<String> reviewedOrders = paymentService.getReviewedOrders();
-        model.addAttribute("orderList", orderList);
+
+        model.addAttribute("orderItems", orderItems);
         model.addAttribute("reviewedOrders", reviewedOrders);
         return "/payment/orderlist";
     }
@@ -53,7 +60,7 @@ public class PaymentController {
                               Model model) {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-//        paymentpageDTO.setPrice(400);
+        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -64,6 +71,43 @@ public class PaymentController {
         model.addAttribute("memberDTO", memberDTO);
 
         return "/payment/payment";
+    }
+
+    @GetMapping("/cart-payment")
+    public String cartPayment(Model model) {
+        try {
+            ProductCart productCart = cartService.getCartList();
+            ArrayList<ProductDTO> cartList = productCart.getProducts();
+            int totalQuantity = productCart.getTotalQuantity();
+
+            int productTotal = cartList.size();
+            int productTotalPrice = 0;
+
+            for(int i = 0; i < cartList.size(); i++) {
+                cartList.get(i).setPrice(300+i);
+            }
+
+            for(int i = 0; i < cartList.size(); i++) {
+                productTotalPrice += cartList.get(i).getTotalPrice();
+            }
+
+            int memberNo = SecurityUtil.getUserNo();
+            MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+            System.out.println("ssd  " + cartList );
+
+            model.addAttribute("cartList", cartList);
+            model.addAttribute("total", productTotal);
+            model.addAttribute("Quantity", totalQuantity);
+            model.addAttribute("totalPrice", productTotalPrice);
+            model.addAttribute("memberDTO", memberDTO);
+        }
+        catch (Exception e) {
+            model.addAttribute("total", 0);
+            model.addAttribute("Quantity", 0);
+            model.addAttribute("totalPrice", 0);
+
+        }
+        return "payment/cart-payment";
     }
 
     @Transactional
@@ -114,6 +158,51 @@ public class PaymentController {
         }
     }
 
+    @Transactional
+    @PostMapping("/verifyCartPayment")
+    public ResponseEntity<Map<String, Object>> verifyCartPayment(@RequestBody CartPaymentDTO request) {
+        try {
+            int memberNo = SecurityUtil.getUserNo();
+            MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+
+            // 포인트 사용 처리
+            int usedPoints = Integer.parseInt(request.getUsedPoints());
+            if (usedPoints > 0) {
+                int newPoint = memberDTO.getPoint() - usedPoints;
+                if (newPoint >= 0) {
+                    memberDTO.setPoint(newPoint);
+                    memberService.updatePoint(memberDTO);
+                } else {
+                    return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Insufficient points"));
+                }
+            }
+
+            // 결제 검증
+            boolean verified = paymentService.verifyCartPayment(request);
+
+            if (verified) {
+                // 포인트 사용 기록
+                if (usedPoints > 0) {
+                    PaymentpointDTO paymentpointDTO = new PaymentpointDTO();
+                    paymentpointDTO.setMemberNo(memberNo);
+                    paymentpointDTO.setImPortId(request.getImPortId());
+                    paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
+                    paymentService.usepoint(paymentpointDTO);
+                }
+
+                // 장바구니 비우기
+                cartService.deleteCartProduct(request.getProducts().stream().map(p -> String.valueOf(p.getProductNo())).toList());
+
+                return ResponseEntity.ok(Map.of("success", true, "message", "Cart payment verified successfully"));
+            } else {
+                throw new IllegalStateException("Payment amount mismatch");
+            }
+        } catch (Exception e) {
+            // 롤백 처리
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Cart payment verification failed: " + e.getMessage()));
+        }
+    }
+
     /**
      * 결제 취소 매서드
      * 결제취소시 사용된 포인트 반환 및 실결제금액 반환
@@ -159,8 +248,6 @@ public class PaymentController {
                 }
             }
 
-
-
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "취소 실패: " + e.getMessage()));
@@ -173,6 +260,7 @@ public class PaymentController {
      * @param reviewDTO 리뷰dto
      * @return 리뷰등록 성공여부 반환
      */
+    @Transactional
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
         int memberNo = SecurityUtil.getUserNo();

@@ -9,10 +9,10 @@
         <result column="member_no" property="memberNo"/>
         <result column="product_no" property="productNo"/>
         <result column="purchase_price" property="purchasePrice"/>
-        <result column="created_at" property="createdAt"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
         <result column="im_port_id" property="imPortId"/>
         <result column="refund" property="refund"/>
-        <result column="refund_at" property="refundAt"/>
+        <result column="refund_at" property="refundAt" jdbcType="TIMESTAMP"/>
         <result column="member_name" property="userName"/>
         <result column="product_name" property="productName"/>
         <result column="price" property="productPrice"/>
@@ -198,6 +198,131 @@
 
     <select id="findPaymentByImPortId" resultType="com.multi.laptellect.payment.model.dto.PaymentDTO">
         SELECT * FROM payment WHERE im_port_id = #{imPortId}
+    </select>
+
+
+    <select id="selectOrderItems" resultMap="PaymentResultMap">
+        SELECT p.*, m.member_name, pr.product_name, pr.price
+        FROM payment p
+        JOIN mem_member m ON p.member_no = m.member_no
+        JOIN product pr ON p.product_no = pr.product_no
+        WHERE p.refund = 'N'
+        AND m.member_no = #{memberNo}
+        ORDER BY p.created_at DESC, p.payment_no ASC
+    </select>
+
+    <select id="findPaymentsByImPortId" resultMap="PaymentResultMap">
+        SELECT * FROM payment WHERE im_port_id = #{imPortId}
+    </select>
+
+    <select id="findAllPaymentByMemberNo" resultMap="PaymentResultMap">
+        SELECT
+              pay.*
+            , m.member_name
+            , prod.product_name
+            , prod.price
+        FROM
+            payment pay
+        JOIN
+            mem_member m ON m.member_no = pay.member_no
+        JOIN
+            product prod ON prod.product_no = pay.product_no
+        WHERE
+            pay.member_no = #{ memberNo }
+        <choose>
+            <when test="paginationDTO.startDate != null and paginationDTO.endDate != null">
+                AND pay.created_at BETWEEN #{ paginationDTO.startDate }
+                AND DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+            </when>
+            <when test="paginationDTO.startDate != null">
+                AND pay.created_at >= #{ paginationDTO.startDate }
+            </when>
+            <when test="paginationDTO.endDate != null">
+                AND pay.created_at &lt; DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY)
+            </when>
+        </choose>
+
+        <choose>
+            <when test="paginationDTO.selectType == 'orderNumber'">
+                <if test="paginationDTO.keyword != null">
+                    AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'productName'">
+                <if test="paginationDTO.keyword != null">
+                    AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'all'">
+                <if test="paginationDTO.keyword != null">
+                    AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                    OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+        </choose>
+        ORDER BY
+            pay.payment_no DESC
+        LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }
+    </select>
+
+    <select id="countPaymentByMemberNo">
+        SELECT
+            COUNT(*)
+        FROM
+            payment pay
+        JOIN
+            product prod ON prod.product_no = pay.product_no
+        WHERE
+            pay.member_no = #{ memberNo }
+        <choose>
+            <when test="paginationDTO.startDate != null and paginationDTO.endDate != null">
+                AND pay.created_at BETWEEN #{ paginationDTO.startDate }
+                AND DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+            </when>
+            <when test="paginationDTO.startDate != null">
+                AND pay.created_at >= #{ paginationDTO.startDate }
+            </when>
+            <when test="paginationDTO.endDate != null">
+                AND pay.created_at &lt; DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY)
+            </when>
+        </choose>
+
+        <choose>
+            <when test="paginationDTO.selectType == 'orderNumber'">
+                <if test="paginationDTO.keyword != null">
+                    AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'productName'">
+                <if test="paginationDTO.keyword != null">
+                    AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'all'">
+                <if test="paginationDTO.keyword != null">
+                    AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                    OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+        </choose>
     </select>
 
 </mapper>

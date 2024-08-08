@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class LaptopSpecDTO {
     // 상품 기본 정보
+    private int productNo;
     private String productName; // 상품 명
     private String price; // 가격
     private String image; // 이미지

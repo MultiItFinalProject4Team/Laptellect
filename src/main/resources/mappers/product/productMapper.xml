@@ -58,7 +58,6 @@
         on
             i.reference_code = p.reference_code
         ORDER BY p.product_no
-        LIMIT #{pageSize} OFFSET #{offset}
 
     </select>
 
@@ -81,7 +80,6 @@
         i.reference_code = p.reference_code
         WHERE p.type_no = #{typeNo}
         ORDER BY p.product_no
-        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <!--리뷰 저장-->
@@ -210,5 +208,18 @@
             images img ON img.reference_code = p.reference_code
         WHERE
             p.product_no = #{ productNo }
+    </select>
+
+    <select id="findProductSpecByProductNo">
+        SELECT
+              options
+            , option_value
+        FROM
+            vw_spec_and_value
+        WHERE
+            product_no = #{productNo} AND options IN
+        <foreach collection="neededOptions" item="options" open="(" separator="," close=")">
+            #{ options }
+        </foreach>
     </select>
 </mapper>

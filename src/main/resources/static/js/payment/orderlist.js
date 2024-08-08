@@ -128,7 +128,7 @@ function openReviewModal(productName, userName, imPortId) {
     const submitReviewButton = document.getElementById('submitReviewButton');
     reviewContent.value = '';
     submitReviewButton.disabled = true;
-    submitReviewButton.classList.add('disabled');  // 클래스 추가
+    submitReviewButton.classList.add('disabled');
 
     // 리뷰 내용 입력 이벤트 리스너 추가
     reviewContent.addEventListener('input', function() {
