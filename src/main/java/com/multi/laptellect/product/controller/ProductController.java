@@ -1,7 +1,6 @@
 package com.multi.laptellect.product.controller;
 
 
-import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
@@ -196,24 +195,14 @@ public class ProductController {
     public String productDetails(@RequestParam(name = "productNo") int productNo,
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
+
         // 제품 상세 정보 가져오기
-        List<LaptopDetailsDTO> laptopDetails = productService.getLaptopProductDetails(productNo);
-        log.info("상세정보를 조회 = {}: ", laptopDetails);
+        LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
 
-
-        if (!laptopDetails.isEmpty()) {
-            LaptopSpecDTO laptop = productService.getLaptopSpec(laptopDetails);
-
-            log.info("laptop 스펙확인 = {}", laptop);
-
-
-            model.addAttribute("productNo", laptopDetails.get(0).getProductNo());
-            model.addAttribute("laptop", laptop);
-
-        }
+        model.addAttribute("productNo",laptop.getProductNo());
+        model.addAttribute("laptop", laptop);
 
         return "product/laptop/laptopDetails";
-
     }
 
 

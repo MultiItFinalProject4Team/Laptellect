@@ -67,4 +67,19 @@ public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 �
             log.info("Session updated with new authentication details");
         }
     }
+
+    public static boolean isAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+
+        if (authentication.getPrincipal() instanceof String
+                && authentication.getPrincipal().equals("anonymousUser")) {
+            return false;
+        }
+
+        return true;
+    }
 }

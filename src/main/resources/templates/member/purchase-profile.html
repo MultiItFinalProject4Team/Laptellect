@@ -9,13 +9,71 @@
       background-color: #3498DB;
       color: white !important;
     }
+</style>
   </style>
+  <script th:inline="javascript">
+    $(document).ready(function() {
+        function convertEmptyToNull(value) {
+                  return value.trim() === "" ? null : value;
+          }
+
+        function loadOrderList() {
+            $.ajax({
+                url: '/api/member/order-list',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    page: 0
+                }),
+                success: function(response) {
+                    $('#purchase-box').html(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('조회 실패:', error);
+                }
+            });
+        }
+
+        loadOrderList();
+
+        $('#btn-search').on('click', function() {
+            let startDate = convertEmptyToNull($('#startDate').val());
+            let endDate = convertEmptyToNull($('#endDate').val());
+            let selectType = convertEmptyToNull($('#select').val());
+            let keyword = convertEmptyToNull($('#keyword').val());
+
+            console.log('Start Date:', startDate);
+            console.log('End Date:', endDate);
+            console.log('Select Type:', selectType);
+            console.log('Keyword:', keyword);
+
+            $.ajax({
+                url: '/api/member/order-list',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    page: 0,
+                    startDate: startDate,
+                    endDate: endDate,
+                    selectType: selectType,
+                    keyword: keyword
+                }),
+                success: function(response) {
+                    $('#purchase-box').html(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('조회 실패:', error);
+                }
+            });
+        });
+
+    });
+</script>
 </head>
 <body>
 <div layout:fragment="content">
-  <div class="profile-box" id="purchase-box" style="height: auto; width: auto">
+  <div class="profile-box" style="height: auto; width: auto">
     <h2>주문목록</h2>
-<!--    <h2>주문목록 / 배송 조회</h2>-->
     <div class="input-group mb-3 d-flex align-items-center">
       <input type="date" id="startDate" class="form-control" placeholder="시작 날짜" aria-label="Start date" style="flex: 0.5; margin-right: 8px;">
 
@@ -23,122 +81,43 @@
 
       <input type="date" id="endDate" class="form-control" placeholder="종료 날짜" aria-label="End date" style="flex: 0.5; margin-right: 12px;">
 
-      <select class="form-control" id="filterSelect" style="flex: 0.8; margin-right: 12px;">
+      <select class="form-control" id="select" style="flex: 0.8; margin-right: 12px;">
         <option value="all">All</option>
         <option value="orderNumber">주문번호</option>
         <option value="productName">상품명</option>
       </select>
 
-      <input type="text" class="form-control" placeholder="주문번호 또는 상품명 검색" aria-label="Search" style="flex: 2; margin-right: 12px;">
+      <input type="text" id="keyword" class="form-control" placeholder="주문번호 또는 상품명 검색" aria-label="Search" style="flex: 2; margin-right: 12px;">
 
       <div class="input-group-append">
-        <button class="btn btn-primary" type="button" onclick="filterByDateRange()">검색</button>
+        <button id="btn-search" class="btn btn-primary" type="button">검색</button>
       </div>
     </div>
     <hr> <br>
-    <table class="table table-striped text-center">
-      <thead>
-        <tr>
-          <th scope="col" style="width: 5%;">번호</th>
-          <th scope="col" style="width: 20%;">주문번호</th>
-          <th scope="col" style="width: 30%;">상품명</th>
-          <th scope="col" style="width: 10%;">금액</th>
-          <th scope="col" style="width: 10%;">주문상태</th>
-          <th scope="col" style="width: 15%;">날짜</th>
-          <th scope="col" style="width: 10%;">구매확정</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn  btn-sm border border-light btn-custom-primary">구매확정</div></td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn btn-primary btn-sm" style="background-color:#0322AB;">구매확정</div></td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn btn-primary btn-sm">구매확정</div></td>
-        </tr>
-        <tr>
-          <th scope="row">4</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn btn-primary">구매확정</div></td>
-        </tr>
-        <tr>
-          <th scope="row">5</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn btn-primary">구매확정</div></td>
-        </tr>
-        <tr>
-          <th scope="row">6</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn btn-primary">구매확정</div></td>
-        </tr>
-        <tr>
-          <th scope="row">7</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn btn-primary">구매확정</div></td>
-        </tr>
-        <tr>
-          <th scope="row">8</th>
-          <td><a href="#" style="color: blue;">12345678</a></td>
-          <td><a href="#" style="color: blue;">삼성전자 노트북 플러스2 NT550XDA-K14A</a></td>
-          <td>588990 원</td>
-          <td>결제완료</td>
-          <td>2024.07.31</td>
-          <td><div class="btn btn-primary">구매확정</div></td>
-        </tr>
-      </tbody>
-    </table>
+    <div id="purchase-box"></div>
+  </div>
 
-    <nav aria-label="...">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-          <span class="page-link">이전</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active" aria-current="page">
-          <span class="page-link">2</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">다음</a>
-        </li>
-      </ul>
-    </nav>
+  <!-- 구매 확정 모달 -->
+  <div class="modal fade" id="confirm-modal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 425px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title w-100 text-center" id="confirmModalLabel">구매를 확정하시겠습니까?</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            <li><strong>반품 및 교환 불가:</strong> 구매 확정 후에는 반품이나 교환이 불가능합니다.</li>
+            <li><strong>거래 완료:</strong> 해당 거래가 최종 완료되며, 이후에는 추가적인 조치가 불가능합니다.</li>
+            <li><strong>포인트 지급:</strong> 구매 확정 시, 적립 포인트가 지급됩니다.</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" class="btn btn-primary btn-confirmed">확인</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

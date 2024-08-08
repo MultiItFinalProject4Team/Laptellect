@@ -200,4 +200,114 @@
         SELECT * FROM payment WHERE im_port_id = #{imPortId}
     </select>
 
+    <select id="findAllPaymentByMemberNo" resultMap="PaymentResultMap">
+        SELECT
+              pay.*
+            , m.member_name
+            , prod.product_name
+            , prod.price
+        FROM
+            payment pay
+        JOIN
+            mem_member m ON m.member_no = pay.member_no
+        JOIN
+            product prod ON prod.product_no = pay.product_no
+        WHERE
+            pay.member_no = #{ memberNo }
+        <choose>
+            <when test="paginationDTO.startDate != null and paginationDTO.endDate != null">
+                AND pay.created_at BETWEEN #{ paginationDTO.startDate }
+                AND DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+            </when>
+            <when test="paginationDTO.startDate != null">
+                AND pay.created_at >= #{ paginationDTO.startDate }
+            </when>
+            <when test="paginationDTO.endDate != null">
+                AND pay.created_at &lt; DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY)
+            </when>
+        </choose>
+
+        <choose>
+            <when test="paginationDTO.selectType == 'orderNumber'">
+                <if test="paginationDTO.keyword != null">
+                    AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'productName'">
+                <if test="paginationDTO.keyword != null">
+                    AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'all'">
+                <if test="paginationDTO.keyword != null">
+                    AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                    OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+        </choose>
+        ORDER BY
+            pay.payment_no DESC
+        LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }
+    </select>
+
+    <select id="countPaymentByMemberNo">
+        SELECT
+            COUNT(*)
+        FROM
+            payment pay
+        JOIN
+            product prod ON prod.product_no = pay.product_no
+        WHERE
+            pay.member_no = #{ memberNo }
+        <choose>
+            <when test="paginationDTO.startDate != null and paginationDTO.endDate != null">
+                AND pay.created_at BETWEEN #{ paginationDTO.startDate }
+                AND DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+            </when>
+            <when test="paginationDTO.startDate != null">
+                AND pay.created_at >= #{ paginationDTO.startDate }
+            </when>
+            <when test="paginationDTO.endDate != null">
+                AND pay.created_at &lt; DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY)
+            </when>
+        </choose>
+
+        <choose>
+            <when test="paginationDTO.selectType == 'orderNumber'">
+                <if test="paginationDTO.keyword != null">
+                    AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'productName'">
+                <if test="paginationDTO.keyword != null">
+                    AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'all'">
+                <if test="paginationDTO.keyword != null">
+                    AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                    OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+        </choose>
+    </select>
+
 </mapper>

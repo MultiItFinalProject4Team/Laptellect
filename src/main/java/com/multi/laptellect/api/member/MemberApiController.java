@@ -1,12 +1,16 @@
 package com.multi.laptellect.api.member;
 
+import com.multi.laptellect.common.model.PaginationDTO;
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.PointLogDTO;
 import com.multi.laptellect.member.service.MemberService;
+import com.multi.laptellect.payment.model.dto.PaymentDTO;
+import com.multi.laptellect.payment.service.PaymentService;
 import com.multi.laptellect.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 @RequestMapping("/api/member")
 public class MemberApiController {
     private final MemberService memberService;
+    private final PaymentService paymentService;
 
     /**
      * 회원 배송지 Insert
@@ -231,6 +236,31 @@ public class MemberApiController {
         return "/member/point/use-point-tab";
     }
 
+    @PostMapping("/order-list")
+    public String getOrderList(Model model, @RequestBody PaginationDTO paginationDTO) {
+        Pageable pageable = PageRequest.of(paginationDTO.getPage(), 10);
 
+        try {
+            log.debug("구매 내역 전체 조회 시작");
+            Page<PaymentDTO> orders = paymentService.getOrderList(pageable, paginationDTO);
+            log.info("구매 내역 조회 성공 = {}", orders.getContent());
+
+            int page = pageable.getPageNumber();
+            int size = pageable.getPageSize();
+
+            int startPage = PaginationUtil.getStartPage(orders, 10);
+            int endPage = PaginationUtil.getEndPage(orders, 10);
+
+            model.addAttribute("orders", orders);
+            model.addAttribute("page", page);
+            model.addAttribute("size", size);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+            model.addAttribute("pagination", paginationDTO);
+        } catch (Exception e) {
+            log.error("포인트 조회 실패 = ", e);
+        }
+        return "/member/purchase/purchase-list";
+    }
 
 }
