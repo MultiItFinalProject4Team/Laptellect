@@ -174,6 +174,11 @@ public class CrawlingService {
         String price = product.select(".price_sect strong").text().trim().replace(",", "");
         String productCode = product.attr("id").replace("productItem", "");
 
+        if (price.equals("가격비교예정")) {
+            log.info("가격이 '가격비교예정'이라서 제품 정보를 가져오지 않음.");
+            return null;
+        }
+
         // String imageUrl = product.select(".thumb_image img").attr("data-original");
 
 //        if (imageUrl == null || imageUrl.isEmpty()) { // 이미지 URL이 없을 경우 대체 URL 사용
@@ -323,6 +328,8 @@ public class CrawlingService {
             }
         }
 
+        boolean manufacturerFound = false;
+
         Elements manufacturerElements = doc.select("span#makerTxtArea");
         for (Element element : manufacturerElements) {
             String[] parts = element.text().split(": ");
@@ -330,8 +337,36 @@ public class CrawlingService {
             log.info("parts 값 확인 합니다. = {}", parts);
             if (parts.length == 2) {
                 productDTO.setManufacturer(parts[1].trim());
+                manufacturerFound = true;
+                break;
             }
-            break;
+
+        }
+        if (!manufacturerFound) {
+            Elements alternativeManufacturerElements = doc.select("span#alternativeMakerTxtArea");
+            for (Element element : alternativeManufacturerElements) {
+                String[] parts = element.text().split(": ");
+
+                log.info("parts 값 확인 합니다. = {}", parts);
+                if (parts.length == 2) {
+                    productDTO.setManufacturer(parts[1].trim());
+                    manufacturerFound = true;
+                    break;
+                }
+            }
+        }
+        // id가 imageFrom인 span 요소를 선택하고 텍스트를 가져옴
+        Elements imageFromElements = doc.select("span#imageFrom");
+        for (Element element : imageFromElements) {
+            String text = element.text();
+            if (text.contains("이미지출처:")) {
+                String imageSource = text.split("이미지출처:")[1].trim();
+                // 제조사 값이 아직 설정되지 않았을 때만 이미지 출처를 제조사로 설정
+                if (!manufacturerFound) {
+                    productDTO.setManufacturer(imageSource);
+                }
+                break;
+            }
         }
 
         return productDTO;

@@ -4,7 +4,7 @@
       layout:decorate="~{common/layout}">
 
 <head>
-    <title>결제하기</title>
+    <title>장바구니 결제하기</title>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -16,7 +16,7 @@
 <body>
 <div layout:fragment="content">
     <div class="payment-container">
-        <h1 class="payment-title">주문 및 결제</h1>
+        <h1 class="payment-title">장바구니 주문 및 결제</h1>
 
         <!-- 상품 정보 섹션 (테이블 형식 유지) -->
         <div class="product-info-section">
@@ -31,23 +31,21 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="product : ${cartList}">
                     <td>
-                        <img th:src="@{'/img/product/' + ${paymentpageDTO.image}}" alt="Product Image" class="payment-product-image">
+                        <img th:src="@{'/img/product/' + ${product.image}}" alt="Product Image" class="payment-product-image">
                     </td>
-                    <td th:text="${paymentpageDTO.productName}">상품명</td>
+                    <td th:text="${product.productName}">상품명</td>
                     <td>
                         <div class="quantity-selector">
-                            <a href="#" class="circle quantity-minus"><i class="fas fa-minus"></i></a>
                             <span class="quantity-value mx-2">
-                                <span id="productQuantity">1</span>
+                                <span th:text="${product.quantity}">1</span>
                                 <span> 개</span>
                             </span>
-                            <a href="#" class="circle quantity-plus"><i class="fas fa-plus"></i></a>
                         </div>
                     </td>
                     <td>
-                        <span class="price" th:text="${#numbers.formatDecimal(paymentpageDTO.price, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+                        <span class="price" th:text="${#numbers.formatDecimal(product.totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
                     </td>
                 </tr>
                 </tbody>
@@ -80,8 +78,8 @@
         <!-- 결제 정보 섹션 -->
         <div class="payment-price-info">
             <div class="payment-price-row">
-                <span>판매가</span>
-                <span id="originalPrice" th:text="${#numbers.formatDecimal(paymentpageDTO.price, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+                <span>총 판매가</span>
+                <span id="originalPrice" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
             </div>
             <div class="payment-price-row">
                 <span>보유포인트</span>
@@ -96,7 +94,7 @@
             </div>
             <div class="payment-price-row payment-total-price">
                 <span>총 결제금액</span>
-                <span id="amount" th:text="${#numbers.formatDecimal(paymentpageDTO.price, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+                <span id="amount" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
             </div>
             <button class="payment-order-button" onclick="mypayment()">결제하기</button>
         </div>

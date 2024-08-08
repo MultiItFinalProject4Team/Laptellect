@@ -5,6 +5,9 @@ import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.member.service.MemberService;
 import com.multi.laptellect.payment.model.dto.*;
 import com.multi.laptellect.payment.service.PaymentService;
+import com.multi.laptellect.product.model.dto.ProductCart;
+import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -16,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,11 +31,13 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final MemberMapper memberMapper;
     private final MemberService memberService;
+    private final CartService cartService;
 
-    public PaymentController(PaymentService paymentService, MemberMapper memberMapper, MemberService memberService) {
+    public PaymentController(PaymentService paymentService, MemberMapper memberMapper, MemberService memberService, CartService cartService) {
         this.paymentService = paymentService;
         this.memberMapper = memberMapper;
         this.memberService = memberService;
+        this.cartService = cartService;
     }
 
     @GetMapping("/orderlist")
@@ -64,6 +70,42 @@ public class PaymentController {
         model.addAttribute("memberDTO", memberDTO);
 
         return "/payment/payment";
+    }
+
+    @GetMapping("/cart-payment")
+    public String cartPayment(Model model) {
+        try {
+            ProductCart productCart = cartService.getCartList();
+            ArrayList<ProductDTO> cartList = productCart.getProducts();
+            int totalQuantity = productCart.getTotalQuantity();
+
+            int productTotal = cartList.size();
+            int productTotalPrice = 0;
+
+//            for(int i = 0; i < cartList.size(); i++) {
+//                cartList.get(i).setPrice(300+i);
+//            }
+
+            for(int i = 0; i < cartList.size(); i++) {
+                productTotalPrice += cartList.get(i).getTotalPrice();
+            }
+
+            int memberNo = SecurityUtil.getUserNo();
+            MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+
+            model.addAttribute("cartList", cartList);
+            model.addAttribute("total", productTotal);
+            model.addAttribute("Quantity", totalQuantity);
+            model.addAttribute("totalPrice", productTotalPrice);
+            model.addAttribute("memberDTO", memberDTO);
+        }
+        catch (Exception e) {
+            model.addAttribute("total", 0);
+            model.addAttribute("Quantity", 0);
+            model.addAttribute("totalPrice", 0);
+
+        }
+        return "payment/cart-payment";
     }
 
     @Transactional

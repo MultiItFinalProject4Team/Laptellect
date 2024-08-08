@@ -7,6 +7,8 @@ CREATE TABLE payment (
     purchase_price INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     im_port_id varchar(255),
+    confirm char(1) DEFAULT 'N',
+    confirm_at TIMESTAMP DEFAULT NULL,
     refund CHAR(1) DEFAULT 'N',
     refund_at TIMESTAMP DEFAULT NULL,
     CONSTRAINT payment_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE,
@@ -69,3 +71,16 @@ GROUP BY
     p.product_no, pd.product_name, pd.product_code, pd.type_no, pd.price;
 SELECT * FROM view_paymentpage;
 DROP VIEW view_paymentpage;
+
+
+
+CREATE TRIGGER update_payment_on_review_insert
+AFTER INSERT ON payment_product_reviews
+FOR EACH ROW
+BEGIN
+    UPDATE payment
+    SET confirm = 'Y',
+        confirm_at = CURRENT_TIMESTAMP
+    WHERE im_port_id = NEW.im_port_id
+    AND confirm = 'N';
+END;

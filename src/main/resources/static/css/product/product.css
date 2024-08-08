@@ -1,10 +1,14 @@
 .price {
     color: red;
     font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .product-name {
     font-weight: bold;
+    text-align: center;
+
+     min-height: 3em;
 }
 
 .card-img-top {
@@ -69,15 +73,28 @@ ul li:active .btn-custom { background-color: #236097 !important; }
     .small-text {
         font-size: 0.875em; /* 원하는 크기로 조정 */
         color: #666; /* 원하는 색상으로 조정 */
+        min-height: 6em;
+        display: flex;
+        align-items: center;
     }
     .card-text {
         font-size: 1.25em;
         text-align: right
     }
 
+    .card-body .tags {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 2em;
+    }
 
-            .product-image {
-               max-width: 200px; /* 이미지 최대 너비를 200px로 설정 */
-                  height: 200px; /* 이미지 높이를 200px로 설정 */
-                  margin-right: 20px;
-            }
+
+    .product-image {
+        max-width: 200px; /* 이미지 최대 너비를 200px로 설정 */
+        height: 200px; /* 이미지 높이를 200px로 설정 */
+        margin-right: 20px;
+    }
+    .input-group{
+         text-align: right;
+    }

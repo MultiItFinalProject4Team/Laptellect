@@ -305,20 +305,26 @@
                 <table class="table table-bordered spec-table">
                     <tbody>
                     <tr>
+                        <th>CPU 제조사</th>
+                        <td th:text="${ laptop.cpu.cpuManufacturer != null ? laptop.cpu.cpuManufacturer : 'X' }">CPU 종류</td>
                         <th>CPU 종류</th>
                         <td th:text="${ laptop.cpu.cpuType != null ? laptop.cpu.cpuType : 'X' }">CPU 종류</td>
-                        <th>CPU 코드명</th>
-                        <td th:text="${ laptop.cpu.cpuCodeName != null ? laptop.cpu.cpuCodeName : 'X' }">CPU 코드명</td>
                     </tr>
                     <tr>
                         <th>CPU 넘버</th>
                         <td th:text="${ laptop.cpu.cpuNumber != null ? laptop.cpu.cpuNumber : 'X' }">CPU 넘버</td>
-                        <th>코어 수</th>
-                        <td th:text="${ laptop.cpu.cpuCore != null ? laptop.cpu.cpuCore : 'X' }">코어 수</td>
+                        <th>CPU 코드명</th>
+                        <td th:text="${ laptop.cpu.cpuCodeName != null ? laptop.cpu.cpuCodeName : 'X' }">CPU 코드명</td>
                     </tr>
                     <tr>
                         <th>스레드 수</th>
                         <td th:text="${ laptop.cpu.cpuThread != null ? laptop.cpu.cpuThread : 'X' }">화면 크기</td>
+                        <th>코어 수</th>
+                        <td th:text="${ laptop.cpu.cpuCore != null ? laptop.cpu.cpuCore : 'X' }">코어 수</td>
+                    </tr>
+                    <tr>
+                        <th>NPU TOPS</th>
+                        <td th:text="${ laptop.cpu.npuTops != null ? laptop.cpu.npuTops : 'X' }">화면 크기</td>
                         <th>NPU 종류</th>
                         <td th:text="${ laptop.cpu.npu != null ? laptop.cpu.npu : 'X' }">화면 크기</td>
                     </tr>
