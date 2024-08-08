@@ -7,9 +7,9 @@ import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.dto.PointLogDTO;
 import com.multi.laptellect.member.model.dto.SocialDTO;
-import com.multi.laptellect.payment.model.dto.*;
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
+import com.multi.laptellect.recommend.laptop.model.dto.ProductFilterDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
@@ -87,6 +87,7 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("DTO", com.multi.laptellect.recommend.reviewtag.model.dto.TagDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("ProductDTO2", com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2.class);
         configuration.getTypeAliasRegistry().registerAlias("TaggDTO", com.multi.laptellect.recommend.txttag.model.dto.TaggDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("productFilterDTO", ProductFilterDTO.class);
 
 
 

@@ -99,15 +99,21 @@
         ORDER BY p.product_no DESC LIMIT 10 <!-- 추천 상품 10개만  -->
     </select>
 
-    <select id="findLaptopDetailByCriteria">
+    <select id="findLaptopDetailByFilter" parameterType="productFilterDTO">
         SELECT
-        *
+            product_no
         FROM
-        vw_product_detail
+            vw_product_detail
         WHERE
-        <if test="gpuTags != null and gpuTags.size() > 0">
-            <foreach collection="gpuTags" item="tag" open="(" separator="OR" close=")">
-                option_value LIKE CONCAT('%', #{tag}, '%')
+            type_no = 1
+        <if test="gpu != null and gpu.size() > 0">
+            <foreach item="item" index="index" collection="gpu" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
+            </foreach>
+        </if>
+        <if test="cpu != null and cpu.size() > 0">
+            <foreach item="item" index="index" collection="cpu" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
             </foreach>
         </if>
     </select>
