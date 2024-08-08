@@ -45,4 +45,8 @@ public interface PaymentDAO {
     PaymentpageDTO findProduct(String productName);
 
     PaymentDTO findPaymentByImPortId(String imPortId);
+
+    List<PaymentDTO> selectOrderItems(int memberNo);
+
+    List<PaymentDTO> findPaymentsByImPortId(String imPortId);
 }

@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/css/payment/payment.css">
-    <script src="/js/payment/payment.js"></script>
+    <script src="/js/payment/cart-payment.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -31,9 +31,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="product : ${cartList}">
+                <tr th:each="product : ${cartList}" th:attr="data-product-no=${product.productNo}">
                     <td>
-                        <img th:src="@{'/img/product/' + ${product.image}}" alt="Product Image" class="payment-product-image">
+                        <img th:src="@{'/img/product/' + ${product.image}}" alt="Product Image"
+                             class="payment-product-image">
                     </td>
                     <td th:text="${product.productName}">상품명</td>
                     <td>
@@ -45,7 +46,8 @@
                         </div>
                     </td>
                     <td>
-                        <span class="price" th:text="${#numbers.formatDecimal(product.totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+                        <span class="price"
+                              th:text="${#numbers.formatDecimal(product.totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
                     </td>
                 </tr>
                 </tbody>
@@ -83,7 +85,8 @@
             </div>
             <div class="payment-price-row">
                 <span>보유포인트</span>
-                <span th:text="${#numbers.formatDecimal(memberDTO.point, 0, 'COMMA', 0, 'POINT') + 'p'}"></span>
+                <span id="possessionPoint"
+                      th:text="${#numbers.formatDecimal(memberDTO.point, 0, 'COMMA', 0, 'POINT') + 'p'}"></span>
             </div>
             <div class="payment-price-row">
                 <span>포인트 사용</span>
@@ -94,7 +97,8 @@
             </div>
             <div class="payment-price-row payment-total-price">
                 <span>총 결제금액</span>
-                <span id="amount" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+                <span id="amount"
+                      th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
             </div>
             <button class="payment-order-button" onclick="mypayment()">결제하기</button>
         </div>

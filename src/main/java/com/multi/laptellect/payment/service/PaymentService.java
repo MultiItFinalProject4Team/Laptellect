@@ -5,6 +5,8 @@ import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.payment.model.dao.PaymentDAO;
 import com.multi.laptellect.payment.model.dto.*;
+import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
@@ -13,6 +15,7 @@ import com.siot.IamportRestClient.response.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -78,6 +81,15 @@ public class PaymentService {
     }
 
     @Transactional
+    public List<PaymentDTO> selectOrderItems(int memberNo) {
+        return paymentDAO.selectOrderItems(memberNo);
+    }
+
+    public List<PaymentDTO> findPaymentsByImPortId(String imPortId) {
+        return paymentDAO.findPaymentsByImPortId(imPortId);
+    }
+
+    @Transactional
     public int refundpoint(String imPortId) {
         PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(imPortId);
         if (paymentpointDTO != null && paymentpointDTO.getPaymentPointChange() != null) {
@@ -119,6 +131,39 @@ public class PaymentService {
 
         if (actualAmount.compareTo(requestedAmount) == 0) {
             insertPayment(paymentDTO);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public boolean verifyCartPayment(CartPaymentDTO request) throws IamportResponseException, IOException {
+        IamportClient client = new IamportClient(apiKeys.getIamportApiKey(), apiKeys.getIamportApiSecret());
+        IamportResponse<Payment> payment = client.paymentByImpUid(request.getImPortId());
+
+        BigDecimal actualAmount = payment.getResponse().getAmount();
+        BigDecimal requestedAmount = request.getTotalAmount();
+
+        if (actualAmount.compareTo(requestedAmount) == 0) {
+            // 각 상품에 대해 결제 정보 저장
+            for (ProductDTO product : request.getProducts()) {
+                PaymentDTO paymentDTO = new PaymentDTO();
+                paymentDTO.setMemberNo(SecurityUtil.getUserNo());
+                paymentDTO.setProductNo(product.getProductNo());
+                paymentDTO.setPurchasePrice(product.getTotalPrice());
+                paymentDTO.setImPortId(request.getImPortId());
+
+                try {
+                    if (product.getProductNo() == 0) {
+                        throw new IllegalArgumentException("Invalid product number: " + product.getProductName());
+                    }
+                    insertPayment(paymentDTO);
+                } catch (Exception e) {
+                    // 로그 기록 및 예외 처리
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    throw new RuntimeException("Failed to insert payment for product: " + product.getProductName(), e);
+                }
+            }
             return true;
         }
         return false;
