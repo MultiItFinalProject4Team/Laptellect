@@ -213,6 +213,7 @@
 
     <select id="findPaymentsByImPortId" resultMap="PaymentResultMap">
         SELECT * FROM payment WHERE im_port_id = #{imPortId}
+    </select>
 
     <select id="findAllPaymentByMemberNo" resultMap="PaymentResultMap">
         SELECT
@@ -322,7 +323,6 @@
                 </if>
             </when>
         </choose>
-
     </select>
 
 </mapper>
