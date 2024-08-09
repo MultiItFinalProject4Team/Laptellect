@@ -68,11 +68,31 @@ public class RecommendProductService {
             productFilterDTO.setGpu(cpuValues);
         }
 
-//        criteria.put("weightTag", getWeightTag(surveyResults.get("place")));
-//        criteria.put("screenSizeTag", getScreenSizeTag(surveyResults.get("screen")));
+      String place = curationDTO.getPlace();
+        List<String> placeValues = getPlace(place);
+        productFilterDTO.setPlace(placeValues);
+
+        String performance = curationDTO.getPerformance();
+        int[] priceRange = getPriceRange(performance);
+        productFilterDTO.setMinPrice(priceRange[0]);
+        productFilterDTO.setMaxPrice(priceRange[1]);
+
+        String screen = curationDTO.getScreen();
+        List<String> screenValues = getScreenSizeTags(screen);
+        productFilterDTO.setScreen(screenValues);
+
+        String battery = curationDTO.getBattery();
+        List<String> batteryValues = getBatteryTag(battery);
+        productFilterDTO.setBattery(batteryValues);
+
 //        criteria.put("batteryTag", getBatteryTag(surveyResults.get("priority")));
 //        criteria.put("designTag", getDesignTag(surveyResults.get("priority")));
 //        criteria.put("performanceTag", getPerformanceTag(surveyResults.get("performance")));
+
+        String gameperformance = curationDTO.getGameperformance();
+        int[] gamepriceRange = getGameperformance(gameperformance);
+        productFilterDTO.setMinGamePrice(gamepriceRange[0]);
+        productFilterDTO.setMaxGamePrice(gamepriceRange[1]);
 
         return productFilterDTO;
     }
@@ -135,25 +155,107 @@ public class RecommendProductService {
         }
     }
 
-//    private String getWeightTag(String place) {
-//        return "가져 다닐거에요".equals(place) ? "가벼워요" : "무거워요";
-//    }
-//
-//    private String getPerformanceTag(String performance) {
-//        if (performance == null) {
-//            return null;
-//        }
-//        switch (performance) {
-//            case "성능용":
-//                return "동세대 최고 성능";
-//            case "가성비용":
-//                return "가성비";
-//            case "밸런스용":
-//                return "밸런스";
-//            default:
-//                return null;
-//        }
-//    }
+    private List<String> getPlace(String place) {
+
+        if (place == null) {
+            return List.of();
+        }
+        switch (place) {
+            case "가지고 다닐거에요":
+                return List.of("1.18", "1.21kg", "1.25kg", "1.3kg", "1.35kg", "1.4kg", "1.45kg",
+                        "1.5kg", "1.55kg", "1.6kg", "1.65kg", "1.7kg", "1.75kg", "1.8kg", "1.85kg", "1.9kg", "1.95kg", "2kg");
+
+            case "집에서 사용할거에요":
+                return List.of("2.05kg", "2.1kg", "2.15kg", "2.2kg", "2.25kg",
+                        "2.3kg", "2.35kg", "2.4kg", "2.45kg", "2.5kg", "2.55kg", "2.6kg", "2.65kg",
+                        "2.7kg", "2.75kg", "2.8kg", "2.85kg", "2.9kg", "2.95kg", "3kg");
+            default:
+                return List.of();
+        }
+
+
+    }
+
+
+    private int[] getPriceRange(String performance) {
+        if (performance == null) {
+            return new int[]{0, Integer.MAX_VALUE};
+        }
+        switch (performance) {
+            case "성능용":
+                return new int[]{1500000, Integer.MAX_VALUE};  // 150만원 이상
+            case "타협":
+                return new int[]{700000, 1500000};  // 70만원 ~ 150만원
+            case "밸런스용":
+                return new int[]{1000000, 2000000};  // 100만원 ~ 200만원
+            default:
+                return new int[]{0, Integer.MAX_VALUE};
+        }
+        }
+
+    private int[] getGameperformance(String gameperformance) {
+        if (gameperformance == null) {
+            return new int[]{0, Integer.MAX_VALUE};
+        }
+        switch (gameperformance) {
+            case "성능용":
+                return new int[]{2000000, Integer.MAX_VALUE};  // 150만원 이상
+            case "타협":
+                return new int[]{1000000, 1400000};  // 70만원 ~ 150만원
+            case "밸런스용":
+                return new int[]{1500000, 2500000};  // 150만원 ~ 250만원
+            default:
+                return new int[]{0, Integer.MAX_VALUE};
+        }
+    }
+
+
+        private List<String> getScreenSizeTags(String screen) {
+
+            if (screen == null) {
+                return List.of();
+            }
+
+            switch (screen) {
+                case "화면 넓은게 좋아요":
+                    return List.of("45.72cm(18인치)", "43.1cm(17인치)", "43.9cm(17.3인치)");
+
+                case "적당한게 좋아요":
+                    return List.of("39.62cm(15.6인치)", "39.6cm(15.6인치)", "40.8cm(16인치)", "38.1cm(15인치)", "40.6cm(16인치)");
+
+                case "작은 화면이 좋아요":
+                    return List.of("33.78cm(13.3인치)", "35.5cm(14인치)", "35.6cm(14인치)");
+                default:
+                    return List.of();
+            }
+
+
+        }
+    private List<String> getBatteryTag(String batteryTag) {
+        if (batteryTag == null) {
+            return List.of();
+        }
+
+        // "WH" 제거 및 소문자 "wh" 고려
+        String numericPart = batteryTag.replaceAll("(?i)Wh$", "").trim();
+
+        try {
+            double batteryCapacity = Double.parseDouble(numericPart);
+
+            if (batteryCapacity >= 70.0 && batteryCapacity <= 99.9) {
+                return List.of("70Wh~99.9Wh");
+            } else if (batteryCapacity >= 30.0 && batteryCapacity <= 68.0) {
+                return List.of("30Wh~68Wh");
+            } else {
+                return List.of();
+            }
+        } catch (NumberFormatException e) {
+            // 숫자로 변환할 수 없는 경우 처리
+            return List.of();
+        }
+    }
+    }
+//}
 //
 //    private String getBatteryTag(String priority) {
 //        return "무게를 우선해주세요".equals(priority) ? "짧은 배터리" : "오래 가는 배터리";
@@ -177,5 +279,5 @@ public class RecommendProductService {
 //            default:
 //                return null;
 //        }
-//    }
-}
+
+//}

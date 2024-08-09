@@ -15,4 +15,12 @@ import java.util.List;
 public class ProductFilterDTO {
     private List<String> gpu;
     private List<String> cpu;
+    private List<String> place;
+    private int minPrice;
+    private int maxPrice; //
+    private int minGamePrice;
+    private int maxGamePrice; //
+    private List<String> screen;
+    private List<String> battery;
+
 }

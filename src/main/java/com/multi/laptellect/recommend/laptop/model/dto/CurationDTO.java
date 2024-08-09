@@ -19,8 +19,16 @@ public class CurationDTO {
     // 게이밍
     private String game; // 주로 하는 게임
     private String screen; // 화면
+    private String gameperformance; // 게이밍 가격
 
     //사무용
     private String purpose; // 사용목적
-    private String performance; // 성능
+    private String performance; // 가격
+    private String battery; // 배터리
+
+    //
+    private String macbook;
+    private String macseries; //데이터 처리
+    private String macram;
+
 }
