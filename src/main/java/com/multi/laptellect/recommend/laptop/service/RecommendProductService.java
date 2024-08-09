@@ -58,18 +58,22 @@ public class RecommendProductService {
         log.debug("큐레이션 조건 반환 시작 = {}", curationDTO);
         String mainOption = curationDTO.getMainOption();
 
-        if (mainOption.equals("게이밍")) { // Key 값이 게임일 시 Gpu 중심
+        if (mainOption.equals("게임 할거에요")) { // Key 값이 게임일 시 Gpu 중심
             String game = curationDTO.getGame();
             List<String> gpuValues = getGpuTags(game);
             productFilterDTO.setGpu(gpuValues);
-        } else if (mainOption.equals("사무용")) { // key 값이 사무용일 시 CPU 중심
+        } else if (mainOption.equals("코드 작성할꺼에요")) { // key 값이 사무용일 시 CPU 중심
             String purpose = curationDTO.getPurpose();
             List<String> cpuValues = getCpuTags(purpose);
             productFilterDTO.setGpu(cpuValues);
+        }else if (mainOption.equals("문서나 인강 볼거에요")){
+            String internet = curationDTO.getInternet();
+            List<String> internetValues = getInternetTag(internet);
+            productFilterDTO.setInternet(internetValues);
         }
 
-      String place = curationDTO.getPlace();
-        List<String> placeValues = getPlace(place);
+      String place = curationDTO.getPlace(); // key 값이 장소일 시 무게 중심
+        List<String> placeValues = getPlace(place); // 장소에 따른 무게 태그 반환
         productFilterDTO.setPlace(placeValues);
 
         String performance = curationDTO.getPerformance();
@@ -84,6 +88,8 @@ public class RecommendProductService {
         String battery = curationDTO.getBattery();
         List<String> batteryValues = getBatteryTag(battery);
         productFilterDTO.setBattery(batteryValues);
+
+
 
 //        criteria.put("batteryTag", getBatteryTag(surveyResults.get("priority")));
 //        criteria.put("designTag", getDesignTag(surveyResults.get("priority")));
@@ -138,18 +144,45 @@ public class RecommendProductService {
         }
         //사용 목적에 따라 CPU 태그를 반환
         switch (purpose) { //
-            case "코딩할거에요":
+            case "코드 작업 할거에요": //맥북 시리즈 추가 예정
                 return List.of("7945HX", "7940HX", "I9-13980HX",
                         "I9-14900HX", "7845HX", "I9-13900HX", "I9-13950HX",
                         "I7-14650HX", "I7-13850HX", "I7-14700HX", "I9-12900HX", "I7-13700HX",
                         "7745HX", "I9-12950HX", "I7-12800HX", "8945HS",
                         "I9-13900HK", "I7-13650HX", "I7-12850HX", "I5-1340P");
-            case "학생이에요":
+            case "AI 작업 할거에요": //테스트를 위해 임시 Intel Xeon 라인 및 엔디비아 Quadro 라인 추가 될 예정
                 return List.of("I5-12500H", "5600H", "I5-11400H",
                         "4600H", "I5-10300H", "4500U",
                         "I5-1135G7", "5500U", "I5-10210U",
                         "3500U", "I7-1165G7", "4700U",
                         "I7-10510U", "5700U", "I7-1185G7", "I5-1340P");
+            default:
+                return List.of();
+        }
+    }
+
+
+    private List<String> getInternetTag(String internet){
+
+        if (internet == null) {
+            return List.of();
+        }
+
+        switch (internet) {
+
+            case "인터넷 강의 볼거에요":
+                return List.of("i3-1115G4", "i3-1125G4", "i5-10210U", "i5-10300H", "i5-1135G7", "i5-11300H", "i5-11320H",
+                        "i5-11400H", "i5-1155G7", "i5-12450H", "i5-12500H", "i7-10510U", "i7-10750H", "i7-1165G7", "i7-11370H", "i7-11390H",
+                        "i7-11600H", "i7-1185G7", "i7-12650H", "i7-12700H", "i9-11900H", "i9-12900H",  "4300U", "5300U", "4500U", "4600H", "5500U",
+                        "5600H", "5600U", "6600H", "6600U", "4700U", "4800H", "5700U", "5800H", "5800U", "6800H", "6800U", "5900HX", "5980HS", "6900HX");//cpu 중간
+
+            case "문서 작업 할거에요": //cpu 최하위군 펜티엄
+                return List.of("i3-10110U", "i3-1005G1", "i3-1115G4", "i3-1125G4", "i3-1215U", "i5-10210U",
+                        "i5-1035G1", "i5-1135G7", "i5-1155G7", "i5-1235U", "i5-1240P", "i5-11300H", "i5-11320H", "i5-12450H",
+                        "i5-1340P", "i7-10510U", "i7-1065G7", "i7-1165G7", "i7-1185G7", "i7-1195G7", "i7-1255U", "i7-1260P", "i7-11370H", "i7-11390H",
+                        "i7-12650H", "Pentium Gold 6405U", "Pentium Gold 7505", "Pentium Gold 7505T", "Pentium Gold 7505U", "Pentium Silver N5030","Celeron N4020",
+                        "Celeron N4500", "Celeron N5100");
+
             default:
                 return List.of();
         }
@@ -162,13 +195,13 @@ public class RecommendProductService {
         }
         switch (place) {
             case "가지고 다닐거에요":
-                return List.of("1.18", "1.21kg", "1.25kg", "1.3kg", "1.35kg", "1.4kg", "1.45kg",
-                        "1.5kg", "1.55kg", "1.6kg", "1.65kg", "1.7kg", "1.75kg", "1.8kg", "1.85kg", "1.9kg", "1.95kg", "2kg");
+                return List.of("1.1kg", "1.12kg", "1.14kg", "1.18", "1.199kg", "1.21kg", "1.25kg", "1.299kg", "1.3kg", "1.36kg", "1.39kg", "1.35kg", "1.4kg", "1.45kg",
+                        "1.5kg", "1.55kg", "1.57kg", "1.6kg", "1.65kg", "1.7kg", "1.74kg", "1.75kg", "1.8kg", "1.85kg", "1.9kg", "1.95kg", "2kg");
 
             case "집에서 사용할거에요":
-                return List.of("2.05kg", "2.1kg", "2.15kg", "2.2kg", "2.25kg",
-                        "2.3kg", "2.35kg", "2.4kg", "2.45kg", "2.5kg", "2.55kg", "2.6kg", "2.65kg",
-                        "2.7kg", "2.75kg", "2.8kg", "2.85kg", "2.9kg", "2.95kg", "3kg");
+                return List.of("2.05kg", "2.08kg", "2.1kg", "2.15kg", "2.2kg", "2.25kg",
+                        "2.3kg", "2.35kg","2.38kg", "2.4kg", "2.45kg", "2.5kg", "2.55kg", "2.6kg", "2.65kg",
+                        "2.7kg", "2.75kg", "2.8kg", "2.85kg", "2.9kg", "2.95kg","2.99kg", "3kg");
             default:
                 return List.of();
         }

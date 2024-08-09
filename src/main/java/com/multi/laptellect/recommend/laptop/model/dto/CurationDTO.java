@@ -27,7 +27,7 @@ public class CurationDTO {
     private String battery; // 배터리
 
     //
-    private String macbook;
+    private String internet; // 인터넷
     private String macseries; //데이터 처리
     private String macram;
 

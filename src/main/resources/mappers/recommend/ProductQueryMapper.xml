@@ -56,21 +56,20 @@
             )
         </if>
 <!--이하 필터링 조건은 일단 사용하지 않음-->
-                <if test="weightTag != null">
+        <if test="place != null and place.size() > 0">
             AND EXISTS (
             SELECT 1 FROM product_spec ps_weight
             WHERE ps_weight.product_no = p.product_no
-            AND ps_weight.category_no
+            AND ps_weight.category_no = (
             SELECT category_no FROM product_category
-            WHERE options IN ('무게')
-
+            WHERE options = '무게'
             )
-             AND (
-             <foreach item="tag" collection="Place" separator=" OR ">
-              LOWER(ps_cpu.option_value) LIKE CONCAT('%', (#{tag}), '%')
-             </foreach>
-                    )
-                    )
+            AND (
+            <foreach item="weight" collection="place" separator=" OR ">
+                LOWER(ps_weight.option_value) LIKE CONCAT('%', LOWER(#{weight}), '%')
+            </foreach>
+            )
+            )
         </if>
         <if test="screenSizeTag != null">
             AND EXISTS (

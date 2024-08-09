@@ -22,5 +22,6 @@ public class ProductFilterDTO {
     private int maxGamePrice; //
     private List<String> screen;
     private List<String> battery;
+    private List<String> internet;
 
 }
