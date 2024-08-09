@@ -82,7 +82,7 @@
         <div class="section">
             <h3>용도 선택</h3>
             <div class="option-container">
-                <div class="option" th:each="option : ${'게이밍,사무용'.split(',')}">
+                <div class="option" th:each="option : ${'게임 할거에요,작업 할거에요'.split(',')}">
                     <input type="radio" name="mainOption" th:value="${option}" th:id="${'main-' + option}">
                     <label th:for="${'main-' + option}" th:text="${option}"></label>
                 </div>
@@ -119,10 +119,10 @@ $(document).ready(function() {
 
     function updateAdditionalOptions(option) {
         let additionalHTML = '';
-        if (option === '게이밍') {
+        if (option === '게임 할거에요') {
             additionalHTML = generateGamingOptions();
             requiredCategories = ['mainOption', 'game', 'place', 'screen', 'priority'];
-        } else if (option === '사무용') {
+        } else if (option === '작업 할거에요') {
             additionalHTML = generateOfficeOptions();
             requiredCategories = ['mainOption', 'purpose', 'performance', 'place', 'priority'];
         } else if (option)

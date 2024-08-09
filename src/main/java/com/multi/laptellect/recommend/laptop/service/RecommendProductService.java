@@ -62,7 +62,7 @@ public class RecommendProductService {
             String game = curationDTO.getGame();
             List<String> gpuValues = getGpuTags(game);
             productFilterDTO.setGpu(gpuValues);
-        } else if (mainOption.equals("코드 작성할꺼에요")) { // key 값이 사무용일 시 CPU 중심
+        } else if (mainOption.equals("작업 할거에요")) { // key 값이 사무용일 시 CPU 중심
             String purpose = curationDTO.getPurpose();
             List<String> cpuValues = getCpuTags(purpose);
             productFilterDTO.setGpu(cpuValues);
