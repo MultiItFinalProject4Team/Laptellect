@@ -90,4 +90,10 @@ public interface CustomDao {
     void setImage(String code);
 
     List<ProductqList> getAllProductqList(int productNo);
+
+    List<ProductqList> getProductQuestionList(int productNo);
+
+    List<ProductqList> getProductOpinionList(int productNo);
+
+    List<ProductqList> getProductSearchList(ProductSearchDto searchDto);
 }
