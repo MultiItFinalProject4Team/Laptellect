@@ -113,6 +113,11 @@
             vw_product_detail
         WHERE
             type_no = 1
+
+        <if test="minPrice != 0 and maxPrice != 2147483647">
+            AND price BETWEEN #{minPrice} AND #{maxPrice}
+        </if>
+
         <if test="gpu != null and gpu.size() > 0">
             <foreach item="item" index="index" collection="gpu" open="AND (" separator=" OR " close=")">
                 option_value LIKE CONCAT('%', #{ item }, '%')
@@ -123,5 +128,11 @@
                 option_value LIKE CONCAT('%', #{ item }, '%')
             </foreach>
         </if>
+        <if test="place != null and place.size() > 0">
+            <foreach item="item" index="index" collection="place" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
+            </foreach>
+        </if>
+
     </select>
 </mapper>

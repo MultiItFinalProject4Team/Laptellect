@@ -60,33 +60,32 @@
                         </div>
                         <div class="col-md-1 text-end btn-wishlist">
                             <button class="btn btn btn-outline-primary mb-2 btn-process-cart" th:attr="data-product-no=${product.productNo}">장바구니 담기</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="product-grid">
-        <div class="product" th:each="product : ${recommendations}">
-            <img th:if="${product.image}" th:src="@{'/img/product/' + ${product.image}}" class="product-image" alt="노트북 이미지">
-            <div class="product-name" th:text="${product.productName}">노트북 이름</div>
-            <div class="product-specs">
-                <p><strong>가격:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span></p>
-                <p th:if="${product.os}"><strong>운영체제:</strong> <span th:text="${product.os}">OS</span></p>
-                <p th:if="${product.company}"><strong>제조사:</strong> <span th:text="${product.company}">제조사</span></p>
-                <p th:if="${product.ram}"><strong>램 용량:</strong> <span th:text="${product.ram.ramSize}">RAM</span></p>
-                <p th:if="${product.cpu}"><strong>CPU:</strong> <span th:text="${product.cpu.cpuNumber}">CPU</span></p>
-                <p th:if="${product.cpu.cpuCore}"><strong>코어 수:</strong> <span th:text="${product.cpu.cpuCore}">코어 수</span></p>
-                <p th:if="${product.storage.storageCapacity}"><strong>저장 용량:</strong> <span th:text="${product.storage.storageCapacity}">저장 용량</span></p>
-                <p th:if="${product.display.screenSize}"><strong>화면 크기:</strong> <span th:text="${product.display.screenSize}">화면 크기</span></p>
-                <p th:if="${product.display.resolution}"><strong>해상도:</strong> <span th:text="${product.display.resolution}">해상도</span></p>
-                <p th:if="${product.gpu.gpuChipset}"><strong>GPU:</strong> <span th:text="${product.gpu.gpuChipset}">GPU</span></p>
-            </div>
-        </div>
-    </div>
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="product-grid">-->
+<!--        <div class="product" th:each="product : ${recommendations}">-->
+<!--            <img th:if="${product.image}" th:src="@{'/img/product/' + ${product.image}}" class="product-image" alt="노트북 이미지">-->
+<!--            <div class="product-name" th:text="${product.productName}">노트북 이름</div>-->
+<!--            <div class="product-specs">-->
+<!--                <p><strong>가격:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span></p>-->
+<!--                <p th:if="${product.os}"><strong>운영체제:</strong> <span th:text="${product.os}">OS</span></p>-->
+<!--                <p th:if="${product.company}"><strong>제조사:</strong> <span th:text="${product.company}">제조사</span></p>-->
+<!--                <p th:if="${product.ram}"><strong>램 용량:</strong> <span th:text="${product.ram.ramSize}">RAM</span></p>-->
+<!--                <p th:if="${product.cpu}"><strong>CPU:</strong> <span th:text="${product.cpu.cpuNumber}">CPU</span></p>-->
+<!--                <p th:if="${product.cpu.cpuCore}"><strong>코어 수:</strong> <span th:text="${product.cpu.cpuCore}">코어 수</span></p>-->
+<!--                <p th:if="${product.storage.storageCapacity}"><strong>저장 용량:</strong> <span th:text="${product.storage.storageCapacity}">저장 용량</span></p>-->
+<!--                <p th:if="${product.display.screenSize}"><strong>화면 크기:</strong> <span th:text="${product.display.screenSize}">화면 크기</span></p>-->
+<!--                <p th:if="${product.display.resolution}"><strong>해상도:</strong> <span th:text="${product.display.resolution}">해상도</span></p>-->
+<!--                <p th:if="${product.gpu.gpuChipset}"><strong>GPU:</strong> <span th:text="${product.gpu.gpuChipset}">GPU</span></p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <div class="button-container">
-        <a th:href="@{/recommend}" class="btn btn-primary">다시 추천받기</a>
     </div>
     </div>
 </div>
