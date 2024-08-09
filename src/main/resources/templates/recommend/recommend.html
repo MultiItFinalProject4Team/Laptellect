@@ -125,7 +125,7 @@ $(document).ready(function() {
         } else if (option === '사무용') {
             additionalHTML = generateOfficeOptions();
             requiredCategories = ['mainOption', 'purpose', 'performance', 'place', 'priority'];
-        }
+        } else if (option)
         $('#additionalOptions').html(additionalHTML);
 
         // 새롭게 추가된 옵션에 대해서도 click 이벤트를 설정
@@ -191,8 +191,8 @@ $(document).ready(function() {
             <div class="section">
                 <h3>용도</h3>
                 <div class="option-container">
-                    <div class="option"><input type="radio" name="purpose" value="코딩할거에요" id="purpose-1"><label for="purpose-1">코딩할거에요</label></div>
-                    <div class="option"><input type="radio" name="purpose" value="학생이에요" id="purpose-2"><label for="purpose-2">학생이에요</label></div>
+                    <div class="option"><input type="radio" name="purpose" value="코딩 작업할거에요" id="purpose-1"><label for="purpose-1">코딩 작업할거에요</label></div>
+                    <div class="option"><input type="radio" name="purpose" value="AI 작업할거에요" id="purpose-2"><label for="purpose-2">AI 작업할거에요</label></div>
                 </div>
             </div>
             <div class="section">
