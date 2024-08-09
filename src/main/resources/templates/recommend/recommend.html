@@ -125,7 +125,7 @@ $(document).ready(function() {
         } else if (option === '작업 할거에요') {
             additionalHTML = generateOfficeOptions();
             requiredCategories = ['mainOption', 'purpose', 'performance', 'place', 'priority'];
-        } else if (option)
+        }
         $('#additionalOptions').html(additionalHTML);
 
         // 새롭게 추가된 옵션에 대해서도 click 이벤트를 설정
@@ -175,7 +175,7 @@ $(document).ready(function() {
                 </div>
             </div>
             <div class="section">
-                <h3>우선순위</h3>
+                <h3>가성비</h3>
                 <div class="option-container">
                     <div class="option"><input type="radio" name="priority" value="하고 싶은 게임을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 게임을 우선해 주세요</label></div>
                     <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>

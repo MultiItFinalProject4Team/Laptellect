@@ -72,6 +72,9 @@ public class RecommendProductService {
             productFilterDTO.setInternet(internetValues);
         }
 
+
+
+
       String place = curationDTO.getPlace(); // key 값이 장소일 시 무게 중심
         List<String> placeValues = getPlace(place); // 장소에 따른 무게 태그 반환
         productFilterDTO.setPlace(placeValues);
@@ -144,18 +147,20 @@ public class RecommendProductService {
         }
         //사용 목적에 따라 CPU 태그를 반환
         switch (purpose) { //
-            case "코드 작업 할거에요": //맥북 시리즈 추가 예정
+            case "코드 작업할거에요": //맥북 시리즈 추가 예정
                 return List.of("7945HX", "7940HX", "I9-13980HX",
                         "I9-14900HX", "7845HX", "I9-13900HX", "I9-13950HX",
                         "I7-14650HX", "I7-13850HX", "I7-14700HX", "I9-12900HX", "I7-13700HX",
                         "7745HX", "I9-12950HX", "I7-12800HX", "8945HS",
-                        "I9-13900HK", "I7-13650HX", "I7-12850HX", "I5-1340P");
-            case "AI 작업 할거에요": //테스트를 위해 임시 Intel Xeon 라인 및 엔디비아 Quadro 라인 추가 될 예정
+                        "I9-13900HK", "I7-13650HX", "I7-12850HX", "I5-1340P"
+                );
+            case "AI 작업할거에요": //테스트를 위해 임시 Intel Xeon 라인 및 엔디비아 Quadro 라인 추가 될 예정
                 return List.of("I5-12500H", "5600H", "I5-11400H",
                         "4600H", "I5-10300H", "4500U",
                         "I5-1135G7", "5500U", "I5-10210U",
                         "3500U", "I7-1165G7", "4700U",
-                        "I7-10510U", "5700U", "I7-1185G7", "I5-1340P");
+                        "I7-10510U", "5700U", "I7-1185G7", "I5-1340P"
+                );
             default:
                 return List.of();
         }
