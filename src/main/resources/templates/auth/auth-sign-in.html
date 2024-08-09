@@ -30,6 +30,9 @@
                     <button type="submit" class="btn btn-primary btn-xs" style="width:100%">로그인</button>
                 </div>
             </form>
+            <div th:if="${ errorMessage != null }">
+                <div class="error-message" id="emailError" th:text="${ errorMessage }" style="color: red;"></div>
+            </div>
                 <hr>
 
                 <div class="row">

@@ -1,5 +1,6 @@
 package com.multi.laptellect.config.Security;
 
+import com.multi.laptellect.error.CustomAuthenticationFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationFailureHandler customFailureHandler;
 
     @Bean // 비밀번호 암호화
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -53,7 +55,8 @@ public class SecurityConfig {
                 );
         http
                 .formLogin((auth) -> auth.loginPage("/signin")
-                        .loginProcessingUrl("/signin").permitAll());
+                        .loginProcessingUrl("/signin").permitAll()
+                        .failureHandler(customFailureHandler));
 
         http
                 .logout(logout -> logout
