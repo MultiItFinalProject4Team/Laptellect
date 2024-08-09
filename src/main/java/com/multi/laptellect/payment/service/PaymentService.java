@@ -27,8 +27,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 @Service
 @Slf4j
 public class PaymentService {
@@ -78,8 +76,8 @@ public class PaymentService {
 
 
     @Transactional
-    public int updateRefundStatus(String imPortId) {
-        return paymentDAO.updateRefundStatus(imPortId);
+    public int updateRefundStatus(String imPortId, Long paymentNo) {
+        return paymentDAO.updateRefundStatus(imPortId, paymentNo);
     }
 
     @Transactional
@@ -96,33 +94,15 @@ public class PaymentService {
         return paymentDAO.findPaymentsByImPortId(imPortId);
     }
 
-    @Transactional
-    public int refundpoint(String imPortId) {
-        PaymentpointDTO paymentpointDTO = paymentDAO.select_refundpoint(imPortId);
-        if (paymentpointDTO != null && paymentpointDTO.getPaymentPointChange() != null) {
-
-
-            boolean reviewExists = findReview(imPortId);
-            int usedPoints = abs(Integer.parseInt(paymentpointDTO.getPaymentPointChange()));
-
-            if(reviewExists){
-                paymentDAO.refundReviewdPoint(paymentpointDTO);
-                paymentpointDTO.setUsedPoints(String.valueOf(Math.abs(paymentDAO.findReviewedPoint(imPortId))));
-                if(Integer.parseInt(paymentpointDTO.getUsedPoints())>0) {
-                    paymentDAO.refundpoint(paymentpointDTO);
-                    usedPoints = Integer.parseInt(paymentpointDTO.getUsedPoints());
-                    return usedPoints;
-                }
-            }else{
-                if(usedPoints>0) {
-                    paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
-                    paymentDAO.refundpoint(paymentpointDTO);
-                    return usedPoints;
-                }
-            }
-        }
-        return 0;
+    public PaymentpointDTO select_refundpoint(String imPortId){
+        return paymentDAO.select_refundpoint(imPortId);
     }
+
+    public int refundPoint(PaymentpointDTO paymentpointDTO){
+        return paymentDAO.refundPoint(paymentpointDTO);
+    }
+
+
 
     @Transactional
     public boolean verifyPayment(VerificationRequestDTO request, PaymentDTO paymentDTO) throws IamportResponseException, IOException {
@@ -188,13 +168,13 @@ public class PaymentService {
         BigDecimal cancelableAmount = paidAmount.subtract(canceledAmount);
 
         if (cancelableAmount.compareTo(requestAmount) < 0) {
-            throw new IllegalArgumentException("취소 요청 금액이 취소 가능 금액보다 큽니다.");
+            log.info("Cancelable amount: {}, Request amount: {}", cancelableAmount, requestAmount);
+            requestAmount = cancelableAmount;
+            log.info("Cancelable amount: {}, Request amount: {}", cancelableAmount, requestAmount);
         }
 
-        CancelData cancelData = new CancelData(imPortId, true);
-        cancelData.setChecksum(requestAmount);
+        CancelData cancelData = new CancelData(imPortId, true, requestAmount);
         cancelData.setReason(reason);
-
 
         return client.cancelPaymentByImpUid(cancelData);
     }
@@ -207,6 +187,8 @@ public class PaymentService {
     public List<String> getReviewedOrders() {
         return paymentDAO.getReviewedOrders();
     }
+
+
 
 
     public PaymentpageDTO findProduct(String productName) {
@@ -265,5 +247,14 @@ public class PaymentService {
         log.info("구매 확정 완료 = {}", result);
 
         return result;
+    }
+
+    public PaymentDTO getPaymentDetail(int paymentNo) {
+        return paymentDAO.selectPaymentDetail(paymentNo);
+    }
+
+
+    public int findRefundStatus(String imPortId) {
+        return paymentDAO.findRefundStatus(imPortId);
     }
 }
