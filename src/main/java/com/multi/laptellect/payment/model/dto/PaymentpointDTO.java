@@ -7,7 +7,7 @@ public class PaymentpointDTO {
     private int paymentPointNo;
     private int memberNo;
     private String imPortId;
-    private String paymentPointChange;
+    private int paymentPointChange;
     private String paymentPointInfo;
     private String createdAt;
 

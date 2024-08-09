@@ -16,4 +16,6 @@ public class ProductSearchDto {
     private String keyword;
     private String answer;
     private String date;
+    private String key;
+    private String type;
 }

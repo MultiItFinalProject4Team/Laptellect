@@ -11,8 +11,52 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
     <link href="/css/product/product_question.css" rel="stylesheet">
     <script src="/js/product/product_question.js"></script>
-    <script src="/js/product/question-review-tab.js"></script>
+    <script src="/js/product/Question-Opinion.js"></script>
     <style>
+        textarea {
+            resize: none;
+        }
+
+        .input-group {
+            display: flex;
+            width: 100%;
+        }
+        .input-group textarea {
+            flex-grow: 1;
+            resize: none;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .input-group button {
+            width: 80px; /* 버튼의 너비를 텍스트 에어리어와 맞춤 */
+            background-color: #6c757d;
+            color: white;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .custom-card .left-content {
+            width: 80%;
+        }
+        .custom-card .right-content .btn {
+            width: 150px;
+            height: 50px;
+            background-color: #333;
+            color: #fff;
+        }
+
 
         .review-stars {
             color: gold;
@@ -39,7 +83,6 @@
             $(".btn-process-wishlist").on("click", function () {
                 event.preventDefault();
                 let productNo = $(this).data('product-no');
-                console.log(productNo);
 
                 $.ajax({
                     url: "/api/product/process-wishlist",
@@ -70,7 +113,6 @@
             $(".btn-process-cart").on("click", function () {
                 event.preventDefault();
                 let productNo = $(this).data('product-no');
-                console.log(productNo);
 
                 $.ajax({
                     url: "/api/product/process-cart",
@@ -179,7 +221,18 @@
                 <hr>
             </div>
             <div class="row mt-2">
+
+
                 <div class="col-7">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><strong>가격 : <span class="price" th:text="${laptop.price}"></span></strong></span>
+                        <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
+                            <input type="hidden" name="productName" th:value="${laptop.productName}">
+                            <input type="hidden" name="imageUrl" th:value="${laptop.image}">
+                            <input type="hidden" name="price" th:value="${laptop.price}">
+                            <button type="submit" class="btn btn-custom-primary ms-4" style="width: 200px; font-size: 17px">구매하기</button>
+                        </form>
+                    </div>
                     <br>
                     <ul id="list-simple-spec">
                         <li><strong>제조사 : </strong><span class="spec" th:text="${ laptop.company }"> 삼성전자</span></li>
@@ -188,16 +241,6 @@
                         <li><strong>CPU : </strong><span class="spec" th:text="${ laptop.cpu.cpuType }"> CPU</span></li>
                         <li><strong>코어개수 : </strong><span class="spec" th:text="${ laptop.cpu.cpuCore }"> CPU</span></li>
                     </ul>
-
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span><strong>가격 : <span class="price" th:text="${laptop.price}"></span></strong></span>
-                        <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
-                            <input type="hidden" name="productName" th:value="${laptop.productName}">
-                            <input type="hidden" name="imageUrl" th:value="${laptop.image}">
-                            <input type="hidden" name="price" th:value="${laptop.price}">
-                            <button type="submit" class="btn btn-custom-primary ms-4">구매하기</button>
-                        </form>
-                    </div>
                 </div>
 
                 <div class="col-md-5">
@@ -461,43 +504,91 @@
 
         <div class="col-12 mt-4">
             <h4><strong>문의/리뷰</strong></h4>
-            <div class="tab-nav">
-                <button class="tab-button active" onclick="showTab('customer-box')">Home</button>
-                <button class="tab-button" onclick="showTab('review-box')">About</button>
-            </div>
-        </div>
-        <hr>
-<!--        10개의 최신 문의를 띄우고 전체 문의 보기로 해당 제품의 전체 문의 진입-->
-        <div id="customer-box" class="tab-content active">
-            <div id="customer-list">
-                <div th:each="each : ${productqList}" class="question">
-                    <div class="question-header">
-                        <div class="question-author">
-                            <span class="author-name" th:text="${each.memberName}"></span>
-                            <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">의견/문의</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="review-tab" data-bs-toggle="tab" href="#review-box" role="tab" aria-controls="review-box" aria-selected="false">리뷰</a>
+                </li>
+            </ul>
+            <!-- Tab content -->
+            <div class="tab-content mt-3" id="myTabContent">
+                <!-- Customer Box -->
+                <!--상품 문의/의견 관련 탭-->
+                <div class="tab-pane fade show active" id="customer-box" role="tabpanel" aria-labelledby="customer-tab">
+                    <div class="question_container">
+                        <div class="btn-category-div">
+                            <button id="getAllButton" class="btn-category active" th:data-product-no="${productNo}">전체</button>
+                            <button id="getQuestionButton" class="btn-category"  th:data-product-no="${productNo}">문의</button>
+                            <button id="getOpinionButton" class="btn-category"  th:data-product-no="${productNo}">의견</button>
+                        </div>
+                        <div class="form-search-div">
+                            <form class="d-flex" role="search" id="questionSearch">
+
+                                <select class="form-select" id="searchSelect" name="key">
+                                    <option value="all">전체</option>
+                                    <option value="title">제목</option>
+                                    <option value="content">내용</option>
+                                </select>
+                                <input class="form-control me-2" type="search" id="question_search" placeholder="제목/내용" aria-label="Search" style="width: 200px;" name="keyword" th:value="${page_keyword}">
+                                <input type="hidden" name="productNo" th:value="${productNo}">
+                                <input type="hidden" name="type" id="typeField" value="all">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="question-body">
-                        <div class="question-bodytop">
-                            <p class="question-category" th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"></p>
-                            <h4 class="question-title" th:text="${each.title}"></h4>
-                        </div>
-                        <div class="question-content">
-                            <p class="question-content" th:text="${each.content}"></p>
+                    <hr>
+                    <div id="customer-list">
+                        <div th:each="each : ${productqList}" class="question">
+                            <div class="question-header">
+                                <div class="question-author">
+                                    <span class="author-name" th:text="${each.memberName}"></span>
+                                    <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
+                                </div>
+                            </div>
+                            <div class="question-body">
+                                <div class="question-bodytop">
+                                    <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
+                                       th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
+                                    </p>
+                                    <h4 class="question-title" th:text="${each.title}"></h4>
+                                </div>
+                                <div class="question-content">
+                                    <p class="question-content" th:text="${each.content}"></p>
+                                </div>
+                            </div>
+                            <hr class="question-hr">
                         </div>
                     </div>
-                    <hr class="question-hr">
+                    <div class="custom-card">
+                        <div class="left-content">
+                            <p><strong>상품에 대해 궁금하신 점을 남겨주세요.</strong></p>
+                        </div>
+                        <div class="right-content">
+<!--                            <a class="btn btn-custom-primary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>-->
+                            <button type="button" class="btn btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">문의하기</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <a class="btn btn-secondary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>
-                <a th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}">전체문의 보기</a>
-            </div>
-        </div>
 
-        <div id="review-box" class="tab-content">
-
-            </div>
+                <!-- Review Box -->
+                <!-- 리뷰관련 내용 작성 탭-->
+                <div class="tab-pane fade" id="review-box" role="tabpanel" aria-labelledby="review-tab">
+                    <div class="content-box" style="height: 175px;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span>상품평</span>
+                        <div>
+                            <button type="button" class="btn btn-outline-secondary btn-sm">로그인</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <textarea class="form-control" rows="3" placeholder="상품평을 작성하시려면 로그인을 해주세요." readonly></textarea>
+                        <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;" disabled>등록</button>
+                    </div>
+                    </div>
+                </div>
 
             <div id="crolling-box">
 
@@ -531,7 +622,7 @@
                                 <input type="text" class="form-control" id="title" name="title" required style="width: 100%;">
                             </div>
                             <div class="col-md-4">
-                                <label for="inputGroupSelect01" class="form-label">카테고리</label>
+                                <label for="inputGroupSelect01" class="form-label">카테고리:</label>
                                 <select class="form-select" id="inputGroupSelect01" name="productqCategorycode">
                                     <option value="productq_opinion">의견</option>
                                     <option value="productq_question">문의</option>

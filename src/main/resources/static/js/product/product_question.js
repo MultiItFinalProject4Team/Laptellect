@@ -37,6 +37,8 @@
                                     $('#customer-list').empty(); // 기존 내용 삭제
                                     data.forEach(function(productqList) {
                                     console.log(productqList)
+                                    const categoryText = productqList.productqCategoryCode === 'productq_opinion' ? '의견' : '문의';
+                                    const categoryClass = productqList.productqCategoryCode === 'productq_opinion' ? 'opinion-class' : 'question-class';
                                         var newListItem = `
                                         <div class="question">
                                             <div class="question-header">
@@ -47,7 +49,7 @@
                                             </div>
                                             <div class="question-body">
                                                 <div class="question-bodytop">
-                                                    <p class="question-category">${productqList.productqCategoryCode === 'productq_opinion' ? '의견' : '문의'}</p>
+                                                    <p class="question-category ${categoryClass}">${categoryText}</p>
                                                     <h4 class="question-title">${productqList.title || '제목 없음'}</h4>
                                                 </div>
                                                 <div class="question-content">
@@ -66,7 +68,11 @@
                                 }
                             });
 
-                        } else {
+                        } else if(response==0){
+                            alert('로그인후 이용가능합니다.');
+                            window.location.href = '/signin';
+                        }
+                        else {
                             alert('문의 제출에 실패했습니다: ' + response.message);
                         }
                     },
@@ -74,6 +80,16 @@
                         console.error('Error:', textStatus, errorThrown);
                         alert('문제 발생! 다시 시도해 주세요.');
                     }
+                });
+
+                const buttons = document.querySelectorAll('.btn-category');
+                buttons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // 모든 버튼에서 active 클래스를 제거합니다.
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        // 클릭된 버튼에 active 클래스를 추가합니다.
+                    });
+                    document.getElementById('getAllButton').classList.add('active');
                 });
             });
             })

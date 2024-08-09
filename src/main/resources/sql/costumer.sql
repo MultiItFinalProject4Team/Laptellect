@@ -76,3 +76,5 @@ INSERT INTO personalquestion_category VALUES ('personalq_member','회원');
 INSERT INTO personalquestion_category VALUES ('personalq_else','기타');
 INSERT INTO productquestion_category VALUES ('productq_product','상품');
 INSERT INTO productquestion_category VALUES ('productq_else','기타');
+INSERT INTO productquestion_category VALUES ('productq_opinion','의견');
+INSERT INTO productquestion_category VALUES ('productq_question','문의');

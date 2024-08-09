@@ -8,6 +8,7 @@ import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -103,6 +104,7 @@ public interface ProductService {
 
     LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
 
-
     List<ProductDTO> searchProducts(String keyword,int typeNo);
+  
+    ArrayList<Integer> getWishlistString() throws Exception;
 }

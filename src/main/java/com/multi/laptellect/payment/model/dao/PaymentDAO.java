@@ -25,7 +25,8 @@ public interface PaymentDAO {
 
     List<PaymentDTO> selectOrders(String memberName);
 
-    int updateRefundStatus(String imPortId);
+    int updateRefundStatus(@Param("imPortId") String imPortId, @Param("paymentNo") Long paymentNo);
+
 
     int saveReview(PaymentReviewDTO paymentReviewDTO);
 
@@ -41,7 +42,7 @@ public interface PaymentDAO {
     PaymentpointDTO select_refundpoint(String imPortId);
 
 
-    int refundpoint(PaymentpointDTO paymentpointDTO);
+    int refundPoint(PaymentpointDTO paymentpointDTO);
 
     int newMemberPoint(PaymentpointDTO paymentpointDTO);
 
@@ -55,6 +56,11 @@ public interface PaymentDAO {
 
     PaymentDTO findPaymentByImPortId(String imPortId);
 
+
+    List<PaymentDTO> selectOrderItems(int memberNo);
+
+    List<PaymentDTO> findPaymentsByImPortId(String imPortId);
+
     ArrayList<PaymentDTO> findAllPaymentByMemberNo(@Param("pageable") Pageable pageable,  @Param("paginationDTO") PaginationDTO paginationDTO, @Param("memberNo") int memberNo);
 
     int countPaymentByMemberNo(@Param("paginationDTO") PaginationDTO paginationDTO, @Param("memberNo")  int memberNo);
@@ -64,4 +70,8 @@ public interface PaymentDAO {
 
     @Update("UPDATE payment SET confirm = 'Y', confirm_at = now() WHERE payment_no = #{ paymentNo }")
     int checkConfirm(int paymentNo);
+
+    PaymentDTO selectPaymentDetail(int paymentNo);
+
+    int findRefundStatus(String imPortId);
 }

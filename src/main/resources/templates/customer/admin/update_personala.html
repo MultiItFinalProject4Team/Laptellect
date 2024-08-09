@@ -43,7 +43,9 @@
 
         <button type="button" onclick="addFileInput()">이미지 추가</button>
         <input type="hidden" id="personalaNo" name="personalaNo" th:value="${dto.personalaNo}">
-        <button type="submit">답변 수정</button>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-custom-primary">답변 수정</button>
+        </div>
     </form>
 
     <script type="importmap">
@@ -55,7 +57,19 @@
         }
     </script>
     <script type="module" src="/js/customer/ckeditor.js"></script>
+    <script>
+        $(document).ready(function() {
+            var maxLength = 100;
 
+            $('#title').on('input', function() {
+                var length = $(this).val().length;
+                if (length > maxLength) {
+                    alert('최대 100자까지 입력 가능합니다.');
+                    $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
+                }
+            });
+        });
+    </script>
 </div>
 </div>
 </body>
