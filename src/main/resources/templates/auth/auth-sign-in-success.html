@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+<body>
+    <script th:inline="javascript">
+        let loginSuccess = /*[[${loginSuccess}]]*/ 'false';
+
+        $(document).ready(function() {
+            if (loginSuccess === 'success') {
+                alert("로그인 성공!");
+                window.opener.postMessage('closeAndRedirect', '*');
+                window.close();
+            } else {
+                alert("로그인 실패. 다시 시도하세요.");
+                window.close();
+            }
+        });
+    </script>
+</body>
+</html>
