@@ -29,11 +29,15 @@
   opacity: 1;
 }
 
+/*버튼 색*/
 .btn-custom { background-color: #3498DB;}
 ul li:hover .btn-custom { background-color: #2c7cbf; }
-
 ul li:active .btn-custom { background-color: #236097 !important; }
 
+.btn-process-basket { color: #32CD32; }
+.btn-process-wishlist { color: #FF0000; }
+/*
+.btn-custom-success { background-color: #3498DB; color: #FF0000;}*/
 
     .product-taps {
         display: flex;

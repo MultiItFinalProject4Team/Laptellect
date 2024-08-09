@@ -382,6 +382,17 @@ public class ProductServiceImpl implements ProductService {
         return specDTO;
     }
 
+    @Override
+    public ArrayList<Integer> getWishlistString() throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+        ArrayList<Integer> wishList = productMapper.findAllWishlistString(memberNo);
+
+        if (wishList == null) {
+            return null;
+        } else {
+            return wishList;
+        }
+    }
 
 
     //상품 전체 조회
