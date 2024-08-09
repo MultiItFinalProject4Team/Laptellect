@@ -13,12 +13,12 @@
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
     <style>
-        <!-- 상품 상세 정보 테이블 -->
+        /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
         .spec-table td { width: 30%; }
         #spec-box { width: 85%; margin: 0 auto;}
 
-        <!-- 문의/리뷰 -->
+        /* 문의/리뷰 */
         .input-group {
             display: flex;
             width: 100%;
@@ -219,7 +219,7 @@
 
                 <div class="col-7">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span><strong>가격 : <span class="price" th:text="${laptop.price}"></span></strong></span>
+                        <span><strong>가격 : <span class="price" style="font-size: 25px;" th:text="${laptop.price}"></span></strong></span>
                         <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
                             <input type="hidden" name="productName" th:value="${laptop.productName}">
                             <input type="hidden" name="imageUrl" th:value="${laptop.image}">
