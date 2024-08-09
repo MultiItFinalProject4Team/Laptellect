@@ -11,6 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
     <link href="/css/product/product_question.css" rel="stylesheet">
     <script src="/js/product/product_question.js"></script>
+    <script src="/js/product/Question-Opinion.js"></script>
     <style>
 
         .review-stars {
@@ -462,7 +463,7 @@
             <h4><strong>문의/리뷰</strong></h4>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">상품 문의</a>
+                    <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">의견/문의</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="review-tab" data-bs-toggle="tab" href="#review-box" role="tab" aria-controls="review-box" aria-selected="false">리뷰</a>
@@ -473,6 +474,28 @@
                 <!-- Customer Box -->
                 <!--상품 문의/의견 관련 탭-->
                 <div class="tab-pane fade show active" id="customer-box" role="tabpanel" aria-labelledby="customer-tab">
+                    <div class="question_container">
+                        <div class="btn-category-div">
+                            <button id="getAllButton" class="btn-category active" th:data-product-no="${productNo}">전체</button>
+                            <button id="getQuestionButton" class="btn-category"  th:data-product-no="${productNo}">문의</button>
+                            <button id="getOpinionButton" class="btn-category"  th:data-product-no="${productNo}">의견</button>
+                        </div>
+                        <div class="form-search-div">
+                            <form class="d-flex" role="search" id="questionSearch">
+
+                                <select class="form-select" id="searchSelect" name="key">
+                                    <option value="all">전체</option>
+                                    <option value="title">제목</option>
+                                    <option value="content">내용</option>
+                                </select>
+                                <input class="form-control me-2" type="search" id="question_search" placeholder="제목/내용" aria-label="Search" style="width: 200px;" name="keyword" th:value="${page_keyword}">
+                                <input type="hidden" name="productNo" th:value="${productNo}">
+                                <input type="hidden" name="type" id="typeField" value="all">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
                     <div id="customer-list">
                         <div th:each="each : ${productqList}" class="question">
                             <div class="question-header">

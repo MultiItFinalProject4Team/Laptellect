@@ -515,4 +515,39 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/getQuestion")
+    public ResponseEntity<List<ProductqList>> getQuestion(@RequestParam("productNo") int productNo){
+        try {
+            List<ProductqList> productqList = customerService.getProductQuestionList(productNo);
+            return ResponseEntity.ok(productqList);
+        } catch (Exception e) {
+            // 예외 처리 로직 추가
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/getOpinion")
+    public ResponseEntity<List<ProductqList>> getOpinion(@RequestParam("productNo") int productNo){
+        try {
+            List<ProductqList> productqList = customerService.getProductOpinionList(productNo);
+            return ResponseEntity.ok(productqList);
+        } catch (Exception e) {
+            // 예외 처리 로직 추가
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/getQuestionSearch")
+    public ResponseEntity<List<ProductqList>> getQuestionSearch(@RequestParam("productNo") int productNo, @RequestParam("key") String key, @RequestParam("keyword") String keyword, @RequestParam("type") String tpye){
+        ProductSearchDto searchDto = ProductSearchDto.builder()
+                                        .productNo(productNo)
+                                        .key(key)
+                                        .keyword(keyword)
+                                        .type(tpye)
+                                        .build();
+        System.out.println(searchDto);
+        List<ProductqList> productqList = customerService.getProductSearchList(searchDto);
+        return ResponseEntity.ok(productqList);
+    }
 }
