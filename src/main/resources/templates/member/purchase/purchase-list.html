@@ -16,21 +16,19 @@
   <tbody>
   <tr th:each="order, loop : ${ orders }">
     <th th:text="${page * size + loop.index + 1}" scope="row"></th>
-    <td><a th:href="@{/payment/order}" style="color: blue;" th:text="${ order.paymentNo }"></a></td>
+    <td><a href="#" class="order-detail" th:data-payment-no="${ order.paymentNo }" style="color: blue;" th:text="${ order.paymentNo }"></a></td>
     <td><a th:href="@{/product/laptop/laptopDetails(productNo=${ order.productNo })}" style="color: blue;" th:text="${ order.productName }"></a></td>
     <td th:text="${ order.purchasePrice }"></td>
-    <td th:text="${ order.getFormatConfirm }"></td>
+    <td th:text="${ order.refund == 'Y' } ? '환불완료' : ${ order.getFormatConfirm }"></td>
     <td th:text="${ order.getFormatCreatedAt }"></td>
     <td>
       <button class="btn btn-sm border border-light btn-custom-primary btn-confirm"
-           th:data-paymentNo="${order.paymentNo}"
-           data-bs-toggle="modal"
-           data-bs-target="#confirm-modal"
-           th:if="${order.confirm != 'Y'}">구매확정
+              th:data-payment-no="${order.paymentNo}"
+              th:if="${order.confirm != 'Y' and order.refund != 'Y'}">구매확정
       </button>
       <button class="btn btn-sm border border-light btn-custom-primary btn-confirm"
-           th:data-paymentNo="${order.paymentNo}"
-           th:if="${order.confirm == 'Y'}" disabled>구매확정
+              th:data-payment-no="${order.paymentNo}"
+              th:if="${order.confirm == 'Y' or order.refund == 'Y'}" disabled>구매확정
       </button>
     </td>
   </tr>
@@ -56,104 +54,3 @@
     </ul>
   </div>
 </nav>
-
-<script th:inline="javascript">
-    $(document).ready(function() {
-      let page = [[${ pagination.page }]];
-      let startDate = [[${ pagination.startDate }]];
-      let endDate = [[${ pagination.endDate }]];
-      let selectType = [[${ pagination.selectType }]];
-      let keyword = [[${ pagination.keyword }]];
-      let paymentNo = null;
-  
-      $('.btn-confirm').on('click', function(event) {
-          paymentNo = $(this).data('paymentno');
-          console.log(paymentNo);
-      });
-  
-      $('.btn-confirmed').on('click', function(event) {
-          console.log(paymentNo + "테스트");
-  
-          $.ajax({
-              url: '/api/payment/confirm',
-              type: 'POST',
-              data: {
-                  paymentNo: paymentNo,
-              },
-              success: function(response) {
-                  switch(response) {
-                      case 1:
-                          alert('구매가 확정되었습니다.');
-                          $('#confirm-modal').modal('hide');
-                          updateOrderList()
-                          break;
-  
-                      case 2:
-                          alert('사용자가 일치하지 않습니다.');
-                          break;
-
-                      case 3:
-                          alert('이미 확정된 상품입니다..');
-                          break;
-  
-                      default:
-                          alert("구매 확정 실패");
-                          break;
-                  }
-              },
-              error: function(xhr, status, error) {
-                  alert("구매 확정 실패");
-              }
-          });
-      });
-
-      function updateOrderList() {
-            $.ajax({
-                url: '/api/member/order-list',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                  page: page,
-                  startDate: startDate,
-                  endDate: endDate,
-                  selectType: selectType,
-                  keyword: keyword
-                }),
-                success: function(response) {
-                    $('#purchase-box').html(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('조회 실패:', error);
-                }
-            });
-        }
-  
-      $('.page-link').on('click', function(event) {
-          event.preventDefault();
-          let page = $(this).data('page');
-  
-          if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
-              return;
-          }
-  
-          $.ajax({
-              url: '/api/member/order-list',
-              type: 'POST',
-              contentType: 'application/json',
-              data: JSON.stringify({
-                  page: page,
-                  startDate: startDate,
-                  endDate: endDate,
-                  selectType: selectType,
-                  keyword: keyword
-              }),
-              success: function(response) {
-                  $('#purchase-box').html(response);
-              },
-              error: function(xhr, status, error) {
-                  console.error('조회 실패:', error);
-              }
-          });
-      });
-    });
-  </script>

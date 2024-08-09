@@ -78,9 +78,40 @@
         images i
         ON
         i.reference_code = p.reference_code
-        WHERE p.type_no = #{typeNo}
-        ORDER BY p.product_no
+        WHERE
+        p.type_no = #{typeNo}
+<!--        <if test="key != null and key != ''">-->
+<!--            AND p.product_name LIKE CONCAT('%', #{key}, '%')-->
+<!--        </if>-->
+        ORDER BY
+        p.product_no
+
     </select>
+
+    <select id="findByNameSearch" resultType="productDTO" resultMap="productResultMap">
+
+        SELECT
+        p.product_no,
+        p.type_no,
+        p.product_name,
+        p.price,
+        p.reference_code,
+        p.created_at,
+        p.updated_at,
+        p.product_code,
+        i.upload_name
+        FROM
+        product p
+        JOIN
+        images i ON i.reference_code = p.reference_code
+        WHERE
+        p.product_name LIKE CONCAT('%', #{keyword}, '%')
+        AND p.type_no = #{typeNo}
+        ORDER BY
+        p.product_no
+
+    </select>
+
 
     <!--리뷰 저장-->
     <insert id="inputReviewDate" parameterType="reviewDTO">

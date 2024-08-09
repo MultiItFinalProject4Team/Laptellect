@@ -260,7 +260,8 @@ public class MemberApiController {
         } catch (Exception e) {
             log.error("포인트 조회 실패 = ", e);
         }
-        return "/member/purchase/purchase-list";
+        return "member/purchase/purchase-list";
     }
+
 
 }

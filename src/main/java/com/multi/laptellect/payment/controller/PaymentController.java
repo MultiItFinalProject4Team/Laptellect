@@ -60,7 +60,7 @@ public class PaymentController {
                               Model model) {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-        paymentpageDTO.setPrice(400);
+//        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -209,6 +209,7 @@ public class PaymentController {
      * @param cancelRequest 결제검증dto를 통한 결제취소 요청 데이터
      * @return 결제취소에 대한 성공여부 반환
      */
+    @Transactional
     @PostMapping("/cancel")
     public ResponseEntity<Map<String, Object>> cancelPayment(@RequestBody VerificationRequestDTO cancelRequest) {
         try {
@@ -222,35 +223,31 @@ public class PaymentController {
                     "고객 요청으로 인한 취소"
             );
 
-            paymentService.updateRefundStatus(cancelRequest.getImPortId());
-            int refundedPoints = paymentService.refundpoint(cancelRequest.getImPortId());
+            paymentService.updateRefundStatus(cancelRequest.getImPortId(), cancelRequest.getPaymentNo());
 
-            int memberNo = SecurityUtil.getUserNo();
-            MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+            //장바구니로 주문했던 모든상품이 환불되었으면
+            if(paymentService.findRefundStatus(cancelRequest.getImPortId()) == 0) {
+                PaymentpointDTO paymentpointDTO = paymentService.select_refundpoint(cancelRequest.getImPortId());
+                if (paymentpointDTO != null) {
 
-            boolean reviewExists = paymentService.findReview(cancelRequest.getImPortId());
+                    int memberNo = SecurityUtil.getUserNo();
+                    MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
-            if(reviewExists){
-                try {
-                    int newPoint = memberDTO.getPoint() + refundedPoints - 500;
+
+                    paymentpointDTO.setPaymentPointChange(Math.abs(paymentpointDTO.getPaymentPointChange()));
+                    ;
+
+                    paymentService.refundPoint(paymentpointDTO);
+                    int newPoint = memberDTO.getPoint() + paymentpointDTO.getPaymentPointChange();
                     memberDTO.setPoint(newPoint);
                     memberService.updatePoint(memberDTO);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }else{
-                try {
-                    int newPoint = memberDTO.getPoint() + refundedPoints;
-                    memberDTO.setPoint(newPoint);
-                    memberService.updatePoint(memberDTO);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
                 }
             }
-
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "취소 실패: " + e.getMessage()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
