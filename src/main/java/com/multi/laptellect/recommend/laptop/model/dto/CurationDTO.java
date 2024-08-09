@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class CurationDTO {
     private String mainOption; // 게이밍 / 사무용 등 구분 공통 요소
-    private String place; // 장소
+    private String place; // 무게
     private String priority; // 작업 종류
     private String weight; // 원하는 무게
 

@@ -121,10 +121,10 @@ $(document).ready(function() {
         let additionalHTML = '';
         if (option === '게임 할거에요') {
             additionalHTML = generateGamingOptions();
-            requiredCategories = ['mainOption', 'game', 'place', 'screen', 'priority'];
+            requiredCategories = ['mainOption', 'game', 'place', 'screen']; //'priority'
         } else if (option === '작업 할거에요') {
             additionalHTML = generateOfficeOptions();
-            requiredCategories = ['mainOption', 'purpose', 'performance', 'place', 'priority'];
+            requiredCategories = ['mainOption', 'purpose', 'performance', 'place'];
         }
         $('#additionalOptions').html(additionalHTML);
 
@@ -174,14 +174,14 @@ $(document).ready(function() {
                     <div class="option"><input type="radio" name="screen" value="작은 화면이 좋아요" id="screen-3"><label for="screen-3">작은 화면이 좋아요</label></div>
                 </div>
             </div>
-            <div class="section">
-                <h3>가성비</h3>
-                <div class="option-container">
-                    <div class="option"><input type="radio" name="priority" value="하고 싶은 게임을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 게임을 우선해 주세요</label></div>
-                    <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>
-                    <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>
-                    <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>
-                </div>
+<!--            <div class="section">-->
+<!--                <h3>가성비</h3>-->
+<!--                <div class="option-container">-->
+<!--                    <div class="option"><input type="radio" name="priority" value="하고 싶은 게임을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 게임을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>-->
+<!--                </div>-->
             </div>
         `;
     }
@@ -211,14 +211,14 @@ $(document).ready(function() {
                     <div class="option"><input type="radio" name="place" value="가져고 다닐거에요" id="place-2"><label for="place-2">가져다닐거에요</label></div>
                 </div>
             </div>
-            <div class="section">
-                <h3>우선순위</h3>
-                <div class="option-container">
-                    <div class="option"><input type="radio" name="priority" value="하고 싶은 작업을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 작업을 우선해 주세요</label></div>
-                    <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>
-                    <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>
-                    <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>
-                </div>
+<!--            <div class="section">-->
+<!--                <h3>우선순위</h3>-->
+<!--                <div class="option-container">-->
+<!--                    <div class="option"><input type="radio" name="priority" value="하고 싶은 작업을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 작업을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>-->
+<!--                </div>-->
             </div>
         `;
     }

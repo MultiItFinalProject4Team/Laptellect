@@ -1,123 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO">
-    <select id="getRecommendedProducts" parameterType="map" resultType="com.multi.laptellect.recommend.laptop.model.dto.RecommendProductDTO">
-        SELECT DISTINCT
-        p.product_no,
-        p.product_name,  <!-- product 테이블에서 직접 product_name을 가져옵니다 -->
-        p.price,
-        p.product_code,
-        MAX(CASE WHEN pc.options = '운영체제(OS)' THEN ps.option_value END) as os,
-        MAX(CASE WHEN pc.options = '제조사' THEN ps.option_value END) as manufacturer,
-        MAX(CASE WHEN pc.options = '램 용량' THEN ps.option_value END) as ramSize,
-        MAX(CASE WHEN pc.options = 'CPU 넘버' THEN ps.option_value END) as cpuNumber,
-        MAX(CASE WHEN pc.options = '코어 수' THEN ps.option_value END) as coreCount,
-        MAX(CASE WHEN pc.options = '저장 용량' THEN ps.option_value END) as storageSize,
-        MAX(CASE WHEN pc.options = '화면 크기' THEN ps.option_value END) as screenSize,
-        MAX(CASE WHEN pc.options = '해상도' THEN ps.option_value END) as resolution,
-        MAX(CASE WHEN pc.options = 'GPU 종류' THEN ps.option_value END) as gpuType,
-        MAX(i.upload_name) as imageUrl
-        FROM product p
-        JOIN product_spec ps ON p.product_no = ps.product_no
-        JOIN product_category pc ON ps.category_no = pc.category_no
-        LEFT JOIN images i ON p.reference_code = i.reference_code
-        WHERE 1=1
-        <!-- GPU 태그 필터링 -->
-        <if test="gpuTags != null and gpuTags.size() > 0">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_gpu
-            WHERE ps_gpu.product_no = p.product_no
-            AND ps_gpu.category_no IN (
-            SELECT category_no FROM product_category
-            WHERE options IN ('GPU 종류', 'GPU 제조사', 'GPU 칩셋')
-            )
-            AND ( <!--and 우선 순위가 or 보다 높다-->
-            <foreach item="tag" collection="gpuTags" separator=" OR ">
-                LOWER(ps_gpu.option_value) LIKE CONCAT('%', (#{tag}), '%')
-            </foreach>
-            )
-            )
-        </if>
-
-        <!--사무용-->
-        <if test="cpuTags != null and cpuTags.size() > 0">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_cpu
-            WHERE ps_cpu.product_no = p.product_no
-            AND ps_cpu.category_no IN (
-            SELECT category_no FROM product_category
-            WHERE options IN ('CPU 종류', 'CPU 넘버')
-            )
-            AND (
-            <foreach item="tag" collection="cpuTags" separator=" OR ">
-                LOWER(ps_cpu.option_value) LIKE CONCAT('%', (#{tag}), '%')
-            </foreach>
-            )
-            )
-        </if>
-<!--이하 필터링 조건은 일단 사용하지 않음-->
-        <if test="place != null and place.size() > 0">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_weight
-            WHERE ps_weight.product_no = p.product_no
-            AND ps_weight.category_no = (
-            SELECT category_no FROM product_category
-            WHERE options = '무게'
-            )
-            AND (
-            <foreach item="weight" collection="place" separator=" OR ">
-                LOWER(ps_weight.option_value) LIKE CONCAT('%', LOWER(#{weight}), '%')
-            </foreach>
-            )
-            )
-        </if>
-        <if test="screenSizeTag != null">
-            AND EXISTS (
-            SELECT 1 FROM product_spec ps_screen
-            WHERE ps_screen.product_no = p.product_no
-            AND ps_screen.category_no = (SELECT category_no FROM product_category WHERE options = '화면 크기')
-            AND LOWER(ps_screen.option_value) LIKE CONCAT('%', LOWER(#{screenSizeTag}), '%')
-            )
-        </if>
-<!--        <if test="batteryTag != null">-->
-<!--            AND EXISTS (-->
-<!--            SELECT 1 FROM product_spec ps_battery-->
-<!--            WHERE ps_battery.product_no = p.product_no-->
-<!--            AND ps_battery.category_no = (SELECT category_no FROM product_category WHERE options = '배터리')-->
-<!--            AND LOWER(ps_battery.option_value) LIKE CONCAT('%', LOWER(#{batteryTag}), '%')-->
-<!--            )-->
-<!--        </if>-->
-<!--        <if test="performanceTag != null">-->
-<!--            AND EXISTS (-->
-<!--            SELECT 1 FROM product_spec ps_perf-->
-<!--            WHERE ps_perf.product_no = p.product_no-->
-<!--            AND ps_perf.category_no IN (SELECT category_no FROM product_category WHERE options IN ('CPU 종류', 'GPU 종류'))-->
-<!--            AND LOWER(ps_perf.option_value) LIKE CONCAT('%', LOWER(#{performanceTag}), '%')-->
-<!--            )-->
-<!--        </if>-->
-
-        <!-- GPU와 CPU 태그 모두 없는 경우 결과가 없도록 -->
-        <if test="gpuTags == null or gpuTags.size() == 0">
-            <if test="cpuTags == null or cpuTags.size() == 0">
-                AND 1 = 0 <!-- 필터링 조건 없는 경우에 쓰임 -->
-            </if>
-        </if>
-        GROUP BY p.product_no, p.product_name, p.price, p.product_code <!-- product 테이블에서 직접 product_name을 가져옴-->
-        ORDER BY p.product_no DESC LIMIT 10 <!-- 추천 상품 10개만  -->
-    </select>
-
     <select id="findLaptopDetailByFilter" parameterType="productFilterDTO">
-        SELECT
+        SELECT DISTINCT
             product_no
         FROM
             vw_product_detail
         WHERE
             type_no = 1
-
-        <if test="minPrice != 0 and maxPrice != 2147483647">
             AND price BETWEEN #{minPrice} AND #{maxPrice}
-        </if>
-
         <if test="gpu != null and gpu.size() > 0">
             <foreach item="item" index="index" collection="gpu" open="AND (" separator=" OR " close=")">
                 option_value LIKE CONCAT('%', #{ item }, '%')
@@ -133,6 +24,11 @@
                 option_value LIKE CONCAT('%', #{ item }, '%')
             </foreach>
         </if>
+       <if test="screen != null and screen.size() > 0">
+           <foreach item="item" index="index" collection="screen" open="AND(" separator=" OR " close=")">
+               option_value LIKE CONCAT('%', #{ item }, '%')
+           </foreach>
+       </if>
 
     </select>
 </mapper>

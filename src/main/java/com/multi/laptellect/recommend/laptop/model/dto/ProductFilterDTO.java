@@ -15,11 +15,11 @@ import java.util.List;
 public class ProductFilterDTO {
     private List<String> gpu;
     private List<String> cpu;
-    private List<String> place;
-    private int minPrice;
-    private int maxPrice; //
-    private int minGamePrice;
-    private int maxGamePrice; //
+    private List<String> place; // 무게
+    private int minPrice; // 가격
+    private int maxPrice; // 가격
+    private int minGamePrice;  // 게이밍 가격
+    private int maxGamePrice; // 게이밍 가격
     private List<String> screen;
     private List<String> battery;
     private List<String> internet;

@@ -88,9 +88,9 @@ public class RecommendProductService {
         List<String> screenValues = getScreenSizeTags(screen);
         productFilterDTO.setScreen(screenValues);
 
-        String battery = curationDTO.getBattery();
-        List<String> batteryValues = getBatteryTag(battery);
-        productFilterDTO.setBattery(batteryValues);
+//        String battery = curationDTO.getBattery();
+//        List<String> batteryValues = getBatteryTag(battery);
+//        productFilterDTO.setBattery(batteryValues);
 
 
 
@@ -98,10 +98,10 @@ public class RecommendProductService {
 //        criteria.put("designTag", getDesignTag(surveyResults.get("priority")));
 //        criteria.put("performanceTag", getPerformanceTag(surveyResults.get("performance")));
 
-        String gameperformance = curationDTO.getGameperformance();
-        int[] gamepriceRange = getGameperformance(gameperformance);
-        productFilterDTO.setMinGamePrice(gamepriceRange[0]);
-        productFilterDTO.setMaxGamePrice(gamepriceRange[1]);
+//        String gameperformance = curationDTO.getGameperformance();
+//        int[] gamepriceRange = getGameperformance(gameperformance);
+//        productFilterDTO.setMinGamePrice(gamepriceRange[0]);
+//        productFilterDTO.setMaxGamePrice(gamepriceRange[1]);
 
         return productFilterDTO;
     }
@@ -231,21 +231,21 @@ public class RecommendProductService {
         }
         }
 
-    private int[] getGameperformance(String gameperformance) {
-        if (gameperformance == null) {
-            return new int[]{0, Integer.MAX_VALUE};
-        }
-        switch (gameperformance) {
-            case "성능용":
-                return new int[]{2000000, Integer.MAX_VALUE};  // 150만원 이상
-            case "타협":
-                return new int[]{1000000, 1400000};  // 70만원 ~ 150만원
-            case "밸런스용":
-                return new int[]{1500000, 2500000};  // 150만원 ~ 250만원
-            default:
-                return new int[]{0, Integer.MAX_VALUE};
-        }
-    }
+//    private int[] getGameperformance(String gameperformance) {
+//        if (gameperformance == null) {
+//            return new int[]{0, Integer.MAX_VALUE};
+//        }
+//        switch (gameperformance) {
+//            case "성능용":
+//                return new int[]{2000000, Integer.MAX_VALUE};  // 150만원 이상
+//            case "타협":
+//                return new int[]{1000000, 1400000};  // 70만원 ~ 150만원
+//            case "밸런스용":
+//                return new int[]{1500000, 2500000};  // 150만원 ~ 250만원
+//            default:
+//                return new int[]{0, Integer.MAX_VALUE};
+//        }
+//    }
 
 
         private List<String> getScreenSizeTags(String screen) {
@@ -256,43 +256,43 @@ public class RecommendProductService {
 
             switch (screen) {
                 case "화면 넓은게 좋아요":
-                    return List.of("45.72cm(18인치)", "43.1cm(17인치)", "43.9cm(17.3인치)");
+                    return List.of("(18인치)", "(17인치)", "(17.3인치)");
 
                 case "적당한게 좋아요":
-                    return List.of("39.62cm(15.6인치)", "39.6cm(15.6인치)", "40.8cm(16인치)", "38.1cm(15인치)", "40.6cm(16인치)");
+                    return List.of("(15.6인치)", "(16인치)", "(15인치)");
 
                 case "작은 화면이 좋아요":
-                    return List.of("33.78cm(13.3인치)", "35.5cm(14인치)", "35.6cm(14인치)");
+                    return List.of("(13.3인치)", "(14인치)");
                 default:
                     return List.of();
             }
 
 
         }
-    private List<String> getBatteryTag(String batteryTag) {
-        if (batteryTag == null) {
-            return List.of();
+//    private List<String> getBatteryTag(String batteryTag) {
+//        if (batteryTag == null) {
+//            return List.of();
+//        }
+//
+//        // "WH" 제거 및 소문자 "wh" 고려
+//        String numericPart = batteryTag.replaceAll("(?i)Wh$", "").trim();
+//
+//        try {
+//            double batteryCapacity = Double.parseDouble(numericPart);
+//
+//            if (batteryCapacity >= 70.0 && batteryCapacity <= 99.9) {
+//                return List.of("70Wh~99.9Wh");
+//            } else if (batteryCapacity >= 30.0 && batteryCapacity <= 68.0) {
+//                return List.of("30Wh~68Wh");
+//            } else {
+//                return List.of();
+//            }
+//        } catch (NumberFormatException e) {
+//            // 숫자로 변환할 수 없는 경우 처리
+//            return List.of();
         }
-
-        // "WH" 제거 및 소문자 "wh" 고려
-        String numericPart = batteryTag.replaceAll("(?i)Wh$", "").trim();
-
-        try {
-            double batteryCapacity = Double.parseDouble(numericPart);
-
-            if (batteryCapacity >= 70.0 && batteryCapacity <= 99.9) {
-                return List.of("70Wh~99.9Wh");
-            } else if (batteryCapacity >= 30.0 && batteryCapacity <= 68.0) {
-                return List.of("30Wh~68Wh");
-            } else {
-                return List.of();
-            }
-        } catch (NumberFormatException e) {
-            // 숫자로 변환할 수 없는 경우 처리
-            return List.of();
-        }
-    }
-    }
+//    }
+//    }
 //}
 //
 //    private String getBatteryTag(String priority) {
