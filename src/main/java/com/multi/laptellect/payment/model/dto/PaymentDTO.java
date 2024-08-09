@@ -3,8 +3,7 @@ package com.multi.laptellect.payment.model.dto;
 import lombok.Data;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-
+import java.util.Date;
 
 @Data
 public class PaymentDTO {
@@ -12,12 +11,12 @@ public class PaymentDTO {
     private int memberNo;
     private int productNo;
     private int purchasePrice;
-    private LocalDateTime createdAt;
+    private Date createdAt;
     private String imPortId;
     private String confirm;
     private String confirmAt;
     private String refund;
-    private LocalDateTime refundAt;
+    private Date refundAt;
 
     // 조인 결과를 위한 필드
     private String userName;
@@ -30,6 +29,6 @@ public class PaymentDTO {
     }
 
     public String getFormatConfirm() {
-        return this.confirm.equals("Y") ? "구매확정" : "결제완료" ;
+        return this.confirm != null && this.confirm.equals("Y") ? "구매확정" : "결제완료";
     }
 }

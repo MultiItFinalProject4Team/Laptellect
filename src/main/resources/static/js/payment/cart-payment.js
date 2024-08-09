@@ -73,7 +73,7 @@ function mypayment() {
             pay_method: "card",
             name: products.map(p => p.productName).join(', '),
             amount: myAmount,
-            buyer_email: "gildong@gmail.com",
+            buyer_email: "",
             buyer_name: userName,
             buyer_tel: "010-4242-4242",
             buyer_addr: "서울특별시 강남구 신사동",
@@ -92,7 +92,7 @@ function mypayment() {
 
                     if (data.success) {
                         alert("결제 및 검증 성공");
-                        window.location.href = '/hello';
+                        window.location.href = '/';
                     } else {
                         // 검증 실패 시 결제 취소 로직 추가
                         await cancelPayment(rsp.imp_uid, myAmount);
