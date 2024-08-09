@@ -25,14 +25,12 @@ public interface ProductService {
      */
     void saveProductsToDB(List<ProductDTO> prodctList, int typeNo) throws Exception;
 
-    /**
-     * 상품리스트 조회
-     *
-     * @param pageNumber 페이지
-     * @param pageSize   페이지 크기
-     * @return the stored products
-     */
+
+
     List<ProductDTO> getStoredProducts(Integer typeNo);
+
+
+
 
     /**
      * 모든 상품의 수량 확인
@@ -106,5 +104,7 @@ public interface ProductService {
 
     LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
 
+    List<ProductDTO> searchProducts(String keyword,int typeNo);
+  
     ArrayList<Integer> getWishlistString() throws Exception;
 }
