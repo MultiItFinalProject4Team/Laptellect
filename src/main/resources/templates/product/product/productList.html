@@ -8,16 +8,39 @@
                      style="height: 200px; object-fit: contain;">
                 <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                     <ul class="list-unstyled">
-                        <li><a class="btn btn-custom text-white btn-process-wishlist"
-                               th:attr="data-product-no=${product.productNo}"><i
-                                class="far fa-heart"></i></a>
+                        <li>
+                            <div th:if="${wishlist != null}">
+                                <a class="btn btn-custom btn-process-wishlist"
+                                   th:if="${#lists.contains(wishlist, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="far fa-heart"></i>
+                                </a>
+
+                                <a class="btn btn-custom text-white btn-process-wishlist"
+                                   th:unless="${#lists.contains(wishlist, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="far fa-heart"></i>
+                                </a>
+                            </div>
                         </li>
                         <li><a class="btn btn-custom text-white mt-2"
                                th:href="@{${product.Url}}"><i
                                 class="far fa-eye"></i></a></li>
-                        <li><a class="btn btn-custom text-white mt-2 btn-process-basket"
-                               th:attr="data-product-no=${product.productNo}"><i
-                                class="fas fa-cart-plus"></i></a></li>
+                        <li>
+                            <div th:if="${carts != null}">
+                                <a class="btn btn-custom btn-process-basket"
+                                   th:if="${#lists.contains(carts, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="fas fa-cart-plus"></i>
+                                </a>
+
+                                <a class="btn btn-custom text-white btn-process-basket"
+                                   th:unless="${#lists.contains(carts, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="fas fa-cart-plus"></i>
+                                </a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -44,7 +67,6 @@
                     </div>
                 </div>
             </a>
-
         </div>
     </div>
 </div>
@@ -52,65 +74,71 @@
 <script>
     $(document).ready(function() {
 
-        // 위시리스트 추가/삭제
-        $(".btn-process-wishlist").on("click", function () {
-            let productNo = $(this).data('product-no');
-            console.log(productNo);
+            // 위시리스트 추가/삭제
+            $(".btn-process-wishlist").on("click", function () {
+                let productNo = $(this).data('product-no');
+                let product = $(this);
+                console.log(productNo);
 
-            $.ajax({
-                url: "/api/product/process-wishlist",
-                type: "POST",
-                data: { productNo: productNo },
-                success: function (response) {
-                    switch (response) {
-                      case 1:
-                        alert("위시리스트 추가 완료.");
-                        break;
-                      case 2:
-                        alert("위시리스트 삭제 완료.");
-                        break;
-                      case 3:
-                        alert("로그인이 필요합니다.");
-                        break;
-                      default:
-                        alert("위시리스트 Ajax Error");
-                    }
-                },
-                error: function () {
-                    console.log("위시리스트 Ajax Error");
-                },
-            });
-        })
+                $.ajax({
+                    url: "/api/product/process-wishlist",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("위시리스트 추가 완료.");
+                            product.removeClass('text-white');
+                            break;
+                          case 2:
+                            alert("위시리스트 삭제 완료.");
+                            product.addClass('text-white');
+                            break;
+                          case 3:
+                            alert("로그인이 필요합니다.");
+                            break;
+                          default:
+                            alert("위시리스트 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
 
-        // 장바구니 추가/삭제
-        $(".btn-process-basket").on("click", function () {
-            let productNo = $(this).data('product-no');
-            console.log(productNo);
+            // 장바구니 추가/삭제
+            $(".btn-process-basket").on("click", function () {
+                let productNo = $(this).data('product-no');
+                let product = $(this);
+                console.log(productNo);
 
-            $.ajax({
-                url: "/api/product/process-cart",
-                type: "POST",
-                data: { productNo: productNo },
-                success: function (response) {
-                    switch (response) {
-                      case 1:
-                        alert("장바구니 추가 완료.");
-                        break;
-                      case 2:
-                        alert("장바구니 삭제 완료.");
-                        break;
-                      case 3:
-                        alert("로그인이 필요합니다.");
-                        break;
-                      default:
-                        alert("장바구니 Ajax Error");
-                    }
-                },
-                error: function () {
-                    console.log("장바구니 Ajax Error");
-                },
-            });
-        })
-    });
-</script>
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            product.removeClass('text-white');
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            product.addClass('text-white');
+                            break;
+                          case 3:
+                            alert("로그인이 필요합니다.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("장바구니 Ajax Error");
+                    },
+                });
+            })
+        });
+    </script>
 </body>

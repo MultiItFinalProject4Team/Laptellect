@@ -45,11 +45,22 @@
             align-items: center;
         }
 
-        .question-category {
+        .opinion-class {
             font-size: 12px;
             margin-right: 10px;
             color: #333;
-            border: 1px solid #333; /* 테두리 색상과 두께 */
+            border: 1px solid #04B404; /* 테두리 색상과 두께 */
+            padding: 3px 10px; /* 내부 여백 */
+            border-radius: 50px; /* 타원 모양 */
+            text-align: center;
+            font-weight: bold;
+            display: inline-block; /* 컨텐츠가 타원 안에 맞게 조정되도록 */
+        }
+        .question-class {
+            border: 1px solid #FF8000; /* 문의에 대한 파란색 */
+            font-size: 12px;
+            margin-right: 10px;
+            color: #333;
             padding: 3px 10px; /* 내부 여백 */
             border-radius: 50px; /* 타원 모양 */
             text-align: center;
@@ -72,4 +83,42 @@
         .question-hr{
             width: 105%;
             margin-left: -25px
+        }
+
+        .btn-category {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        /* 기본 버튼 색상 */
+        .btn-category {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        /* 버튼 활성화 상태 스타일 */
+        .btn-category.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* 버튼 호버 상태 스타일 */
+        .btn-category:hover {
+            background-color: #e0e0e0;
+        }
+        .question_container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* 요소 사이의 간격 조정 */
+        }
+        .form-select, .form-control {
+            margin-right: 10px; /* 폼 요소 사이의 간격 조정 */
+        }
+        .btn-category-div{
+            margin-right: 100px;
         }

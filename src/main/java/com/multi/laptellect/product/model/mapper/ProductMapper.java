@@ -70,6 +70,8 @@ public interface ProductMapper {
 
     List<SpecDTO> findProductSpecByProductNo(@Param("productNo") int productNo, @Param("neededOptions") Set<String> neededOptions);
 
+    List<ProductDTO> findByNameSearch(@Param("keyword") String keyword, @Param("typeNo") int typeNo);
 
-    List<ProductDTO> findByNameSearch(@Param("keyword") String keyword,@Param("typeNo") int typeNo);
+    @Select("SELECT product_no FROM wishlist WHERE member_no = #{ member_no }")
+    ArrayList<Integer> findAllWishlistString(int memberNo);
 }

@@ -155,7 +155,7 @@
                     <input type="checkbox" class="form-check-input cartlist-checkbox" th:attr="data-product-no=${product.productNo}">
                 </div>
                 <div class="col-md-2">
-                    <a th:href="@{/product/laptopDetails(productCode=${product.productNo})}">
+                    <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}">
                         <img th:src="@{'/img/product/' + ${product.image}}" class="img-fluid rounded-start" alt="Product Image">
                     </a>
                 </div>

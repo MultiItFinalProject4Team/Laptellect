@@ -1,5 +1,5 @@
 // 전역 변수 선언
-let userName, productName, productPrice, originalPrice, possessionPoint;
+let userName, originalPrice, possessionPoint;
 
 // 숫자 포맷팅 함수
 function formatNumber(num) {
@@ -10,53 +10,21 @@ function formatNumber(num) {
 document.addEventListener('DOMContentLoaded', function() {
     // Thymeleaf에서 전달된 데이터를 JavaScript 변수에 할당
     userName = document.getElementById('name').value;
-    productName = document.querySelector('.product-info-table tbody tr td:nth-child(2)').textContent;
-    originalPrice = parseInt(document.querySelector('.price').textContent.replace(/[^\d]/g, ''));
-    possessionPoint = parseInt(document.querySelector('.payment-price-row:nth-child(2) span:last-child').textContent.replace(/[^\d]/g, ''));
-
-    // 초기 가격 설정
-    document.getElementById('originalPrice').textContent = formatNumber(originalPrice) + '원';
-    document.getElementById('amount').textContent = formatNumber(originalPrice) + '원';
+    originalPrice = parseInt(document.getElementById('originalPrice').textContent.replace(/[^\d]/g, ''));
+    possessionPoint = parseInt(document.getElementById('possessionPoint').textContent.replace(/[^\d]/g, ''));
 
     // 초기 총 결제금액 설정
     updateTotalPrice();
 
     // 이벤트 리스너 추가
-    document.querySelector('.quantity-minus').addEventListener('click', decreaseQuantity);
-    document.querySelector('.quantity-plus').addEventListener('click', increaseQuantity);
-    document.getElementById('pointInput').addEventListener('keyup', updateTotalPrice);
+    document.getElementById('pointInput').addEventListener('input', updateTotalPrice);
 });
-
-function decreaseQuantity(event) {
-    event.preventDefault();
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
-    if (quantity > 1) {
-        document.getElementById('productQuantity').textContent = quantity - 1;
-        updatePriceDisplay();
-        updateTotalPrice();
-    }
-}
-
-function increaseQuantity(event) {
-    event.preventDefault();
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
-    document.getElementById('productQuantity').textContent = quantity + 1;
-    updatePriceDisplay();
-    updateTotalPrice();
-}
-
-function updatePriceDisplay() {
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
-    let totalPrice = originalPrice * quantity;
-    document.querySelector('.price').textContent = formatNumber(totalPrice) + '원';
-}
 
 function updateTotalPrice() {
     const pointInput = document.getElementById('pointInput');
     const pointUsageDisplay = document.getElementById('pointUsageDisplay');
     const amountDisplay = document.getElementById('amount');
 
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
     let pointValue = parseInt(pointInput.value.replace(/,/g, '')) || 0;
 
     // 입력된 포인트가 보유 포인트를 초과하지 않도록 제한
@@ -65,13 +33,18 @@ function updateTotalPrice() {
         pointInput.value = formatNumber(pointValue);
     }
 
-    let totalPrice = originalPrice * quantity - pointValue;
+    // 입력된 포인트가 총 판매가를 초과하지 않도록 제한
+    if (pointValue > originalPrice) {
+        pointValue = originalPrice;
+        pointInput.value = formatNumber(pointValue);
+    }
 
-    // 총 결제금액이 100원 미만이 되지 않도록 제한
-    if (totalPrice < 100) {
-        alert("총 결제금액이 100원보다 작아질 수 없습니다");
-        totalPrice = 100;
-        pointValue = originalPrice * quantity - 100;
+    let totalPrice = originalPrice - pointValue;
+
+    // 총 결제금액이 0원 미만이 되지 않도록 제한
+    if (totalPrice < 0) {
+        totalPrice = 0;
+        pointValue = originalPrice;
         pointInput.value = formatNumber(pointValue);
     }
 
@@ -85,11 +58,20 @@ function mypayment() {
     const IMP = window.IMP;
     IMP.init("imp64527455");
 
+    // 장바구니의 모든 상품 정보를 가져옵니다.
+    const products = Array.from(document.querySelectorAll('.product-info-table tbody tr')).map(row => ({
+        productNo: Number(row.getAttribute('data-product-no')),
+        productName: row.querySelector('td:nth-child(2)').textContent,
+        quantity: Number(row.querySelector('td:nth-child(3) .quantity-value').textContent.trim().split(' ')[0]),
+        price: Number(row.querySelector('td:nth-child(4) .price').textContent.replace(/[^\d]/g, '')),
+        totalPrice: Number(row.querySelector('td:nth-child(4) .price').textContent.replace(/[^\d]/g, ''))
+    }));
+
     IMP.request_pay(
         {
             pg: "html5_inicis",
             pay_method: "card",
-            name: productName,
+            name: products.map(p => p.productName).join(', '),
             amount: myAmount,
             buyer_email: "",
             buyer_name: userName,
@@ -101,11 +83,11 @@ function mypayment() {
         async (rsp) => {
             if (rsp.success) {
                 try {
-                    const { data } = await axios.post('/payment/verifyPayment', {
+                    const { data } = await axios.post('/payment/verifyCartPayment', {
                         imPortId: rsp.imp_uid,
-                        amount: myAmount,
-                        usedPoints: usedPoints,
-                        productName: productName
+                        totalAmount: myAmount,
+                        usedPoints: usedPoints.toString(),
+                        products: products
                     });
 
                     if (data.success) {
@@ -121,8 +103,8 @@ function mypayment() {
                     await cancelPayment(rsp.imp_uid, myAmount);
                     console.log("Sending amount to server:", myAmount);
                     console.log("Used points:", usedPoints);
-                    console.log("Product name:", productName);
-                    alert("검증 실패로 인해 결제가 취소되었습니다: " + error.response.data);
+                    console.log("Products:", products);
+                    alert("검증 실패로 인해 결제가 취소되었습니다: " + (error.response ? error.response.data.message : error.message));
                 }
             } else {
                 alert("결제 실패: " + rsp.error_msg);
@@ -141,22 +123,4 @@ async function cancelPayment(imPortId, amount) {
     } catch (error) {
         console.error("결제 취소 실패:", error);
     }
-}
-
-function decreaseQuantity(event) {
-    event.preventDefault();
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
-    if (quantity > 1) {
-        document.getElementById('productQuantity').textContent = quantity - 1;
-        updatePriceDisplay();
-        updateTotalPrice();
-    }
-}
-
-function increaseQuantity(event) {
-    event.preventDefault();
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
-    document.getElementById('productQuantity').textContent = quantity + 1;
-    updatePriceDisplay();
-    updateTotalPrice();
 }

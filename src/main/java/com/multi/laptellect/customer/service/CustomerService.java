@@ -386,4 +386,16 @@ public class CustomerService {
     public List<ProductqList> getAllProductqList(int productNo) {
         return customDao.getAllProductqList(productNo);
     }
+
+    public List<ProductqList> getProductQuestionList(int productNo) {
+        return customDao.getProductQuestionList(productNo);
+    }
+
+    public List<ProductqList> getProductOpinionList(int productNo) {
+        return customDao.getProductOpinionList(productNo);
+    }
+
+    public List<ProductqList> getProductSearchList(ProductSearchDto searchDto) {
+        return  customDao.getProductSearchList(searchDto);
+    }
 }

@@ -45,9 +45,10 @@ public class PaymentController {
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
-        List<PaymentDTO> orderList = paymentService.selectOrders(memberDTO.getMemberName());
+        List<PaymentDTO> orderItems = paymentService.selectOrderItems(memberDTO.getMemberNo());
         List<String> reviewedOrders = paymentService.getReviewedOrders();
-        model.addAttribute("orderList", orderList);
+
+        model.addAttribute("orderItems", orderItems);
         model.addAttribute("reviewedOrders", reviewedOrders);
         return "/payment/orderlist";
     }
@@ -59,7 +60,7 @@ public class PaymentController {
                               Model model) {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-        paymentpageDTO.setPrice(400);
+//        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -82,9 +83,9 @@ public class PaymentController {
             int productTotal = cartList.size();
             int productTotalPrice = 0;
 
-//            for(int i = 0; i < cartList.size(); i++) {
-//                cartList.get(i).setPrice(300+i);
-//            }
+            for(int i = 0; i < cartList.size(); i++) {
+                cartList.get(i).setPrice(300+i);
+            }
 
             for(int i = 0; i < cartList.size(); i++) {
                 productTotalPrice += cartList.get(i).getTotalPrice();
@@ -92,6 +93,7 @@ public class PaymentController {
 
             int memberNo = SecurityUtil.getUserNo();
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+            System.out.println("ssd  " + cartList );
 
             model.addAttribute("cartList", cartList);
             model.addAttribute("total", productTotal);
@@ -156,12 +158,58 @@ public class PaymentController {
         }
     }
 
+    @Transactional
+    @PostMapping("/verifyCartPayment")
+    public ResponseEntity<Map<String, Object>> verifyCartPayment(@RequestBody CartPaymentDTO request) {
+        try {
+            int memberNo = SecurityUtil.getUserNo();
+            MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+
+            // 포인트 사용 처리
+            int usedPoints = Integer.parseInt(request.getUsedPoints());
+            if (usedPoints > 0) {
+                int newPoint = memberDTO.getPoint() - usedPoints;
+                if (newPoint >= 0) {
+                    memberDTO.setPoint(newPoint);
+                    memberService.updatePoint(memberDTO);
+                } else {
+                    return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Insufficient points"));
+                }
+            }
+
+            // 결제 검증
+            boolean verified = paymentService.verifyCartPayment(request);
+
+            if (verified) {
+                // 포인트 사용 기록
+                if (usedPoints > 0) {
+                    PaymentpointDTO paymentpointDTO = new PaymentpointDTO();
+                    paymentpointDTO.setMemberNo(memberNo);
+                    paymentpointDTO.setImPortId(request.getImPortId());
+                    paymentpointDTO.setUsedPoints(String.valueOf(usedPoints));
+                    paymentService.usepoint(paymentpointDTO);
+                }
+
+                // 장바구니 비우기
+                cartService.deleteCartProduct(request.getProducts().stream().map(p -> String.valueOf(p.getProductNo())).toList());
+
+                return ResponseEntity.ok(Map.of("success", true, "message", "Cart payment verified successfully"));
+            } else {
+                throw new IllegalStateException("Payment amount mismatch");
+            }
+        } catch (Exception e) {
+            // 롤백 처리
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Cart payment verification failed: " + e.getMessage()));
+        }
+    }
+
     /**
      * 결제 취소 매서드
      * 결제취소시 사용된 포인트 반환 및 실결제금액 반환
      * @param cancelRequest 결제검증dto를 통한 결제취소 요청 데이터
      * @return 결제취소에 대한 성공여부 반환
      */
+    @Transactional
     @PostMapping("/cancel")
     public ResponseEntity<Map<String, Object>> cancelPayment(@RequestBody VerificationRequestDTO cancelRequest) {
         try {
@@ -175,37 +223,31 @@ public class PaymentController {
                     "고객 요청으로 인한 취소"
             );
 
-            paymentService.updateRefundStatus(cancelRequest.getImPortId());
-            int refundedPoints = paymentService.refundpoint(cancelRequest.getImPortId());
+            paymentService.updateRefundStatus(cancelRequest.getImPortId(), cancelRequest.getPaymentNo());
 
-            int memberNo = SecurityUtil.getUserNo();
-            MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+            //장바구니로 주문했던 모든상품이 환불되었으면
+            if(paymentService.findRefundStatus(cancelRequest.getImPortId()) == 0) {
+                PaymentpointDTO paymentpointDTO = paymentService.select_refundpoint(cancelRequest.getImPortId());
+                if (paymentpointDTO != null) {
 
-            boolean reviewExists = paymentService.findReview(cancelRequest.getImPortId());
+                    int memberNo = SecurityUtil.getUserNo();
+                    MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
-            if(reviewExists){
-                try {
-                    int newPoint = memberDTO.getPoint() + refundedPoints - 500;
+
+                    paymentpointDTO.setPaymentPointChange(Math.abs(paymentpointDTO.getPaymentPointChange()));
+                    ;
+
+                    paymentService.refundPoint(paymentpointDTO);
+                    int newPoint = memberDTO.getPoint() + paymentpointDTO.getPaymentPointChange();
                     memberDTO.setPoint(newPoint);
                     memberService.updatePoint(memberDTO);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }else{
-                try {
-                    int newPoint = memberDTO.getPoint() + refundedPoints;
-                    memberDTO.setPoint(newPoint);
-                    memberService.updatePoint(memberDTO);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
                 }
             }
-
-
-
             return ResponseEntity.ok(Map.of("success", true, "message", "결제가 성공적으로 취소되었습니다.", "data", response));
         } catch (IamportResponseException | IOException e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "취소 실패: " + e.getMessage()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -215,6 +257,7 @@ public class PaymentController {
      * @param reviewDTO 리뷰dto
      * @return 리뷰등록 성공여부 반환
      */
+    @Transactional
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
         int memberNo = SecurityUtil.getUserNo();
