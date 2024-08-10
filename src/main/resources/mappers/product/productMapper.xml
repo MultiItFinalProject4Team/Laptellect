@@ -61,6 +61,16 @@
 
     </select>
 
+    <select id="checkSpecExists"  parameterType="map" resultType="int" >
+        SELECT COUNT(*)
+        FROM
+        product_spec
+        WHERE
+        product_no = #{productNo}
+        AND  category_no = #{category}
+        AND option_value = #{specValue}
+    </select>
+
     <select id="getProductsByType" resultType="productDTO" resultMap="productResultMap">
         SELECT
         p.product_no,
@@ -120,7 +130,7 @@
     </insert>
 
     <!-- 리뷰 조회 -->
-    <select id="getReviewRequired" >
+    <select id="getReviewRequired" resultType="productDTO">
         SELECT product_no, product_code
         FROM product
         WHERE type_no IN(2,3);
@@ -165,31 +175,21 @@
         #{specValue}
         )
     </insert>
-    
-    <select id="findProduct" parameterType="productDTO">
-        SELECT *
-        FROM
-        product
-    </select>
+
+<!--    <select id="findProduct" parameterType="productDTO">-->
+<!--        SELECT *-->
+<!--        FROM-->
+<!--        product-->
+<!--    </select>-->
 
     <!--제품의 상세 조회 -->
-    <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
+    <select id="productDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
         SELECT *
         FROM
         vw_product_detail
         WHERE
         product_no = #{productNo}
     </select>
-    
-    <select id="getProductByType" parameterType="int">
-        SELECT *
-        FROM
-        product
-        WHERE
-        type_no = #{typeNo}
-    </select>
-
-
 
 
     <!--이미지를 저장시키는 쿼리-->

@@ -1,9 +1,6 @@
 package com.multi.laptellect.product.service;
 
-import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
-import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.SpecDTO;
-import com.multi.laptellect.product.model.dto.WishlistDTO;
+import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +53,9 @@ public interface ProductService {
     LaptopSpecDTO getLaptopProductDetails(int productNo);
 
 
+    KeyBoardSpecDTO getKeyboardProductDetails(int productNo);
+
+
     /**
      * 위시리스트 INSERT
      *
@@ -103,6 +103,9 @@ public interface ProductService {
 
     LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
 
+    KeyBoardSpecDTO getKeyboardSpec(int productNo, List<LaptopDetailsDTO> keyBoardSpec);
 
     List<ProductDTO> searchProducts(String keyword,int typeNo);
+
+
 }

@@ -94,15 +94,24 @@
 <body>
 <div class="container" layout:fragment="content">
 
-    <form th:action="@{/product/test}" method="post">
+    <div>
+    <form th:action="@{/product/test}" method="get">
         <select id="productType" name="products">
             <option value="1"> 노트북</option>
             <option value="2"> 마우스</option>
             <option value="3"> 키보드</option>
         </select>
-        <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
+        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 기본정보 크롤링</button>
     </form>
-
+    <form th:action="@{/product/test2}" method="get">
+        <select id="productType1" name="typeDetails">
+            <option value=1> 노트북</option>
+            <option value=2> 마우스</option>
+            <option value=3> 키보드</option>
+        </select>
+        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 상세정보 크롤링</button>
+    </form>
+    </div>
     <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
         <div class="product-search">
             <div class="form-outline" data-mdb-input-init>

@@ -75,6 +75,8 @@ public class ProductApiController {
         for (ProductDTO productDTO : products) {
             int productNo = productDTO.getProductNo();
 
+            String detailUrl;
+
             switch (typeNo) {
                 case 1: // 노트북
                     log.info("laptop Get Spec = {}", typeNo);
@@ -86,13 +88,32 @@ public class ProductApiController {
                     String specsString = filteredSpecs.stream()
                             .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
                             .collect(Collectors.joining(" | "));
+
                     productDTO.setSpecsString(specsString);
+
+                    detailUrl = "/product/laptop/laptopDetails?productNo=" + productNo;
+                    productDTO.setUrl(detailUrl);
+
                     break;
                 case 2: // 마우스
                     log.info("Mouse Get Spec = {}", typeNo);
                     break;
                 case 3: // 키보드
                     log.info("keyboard Get Spec = {}", typeNo);
+                    Set<String> neededOptions1 = Set.of("제조사", "연결 방식", "사이즈", "인터페이스", "접점 방식", "스위치", "가로", "세로");
+                    List<SpecDTO> filteredSpecs1 = productService.filterSpecs(productNo, neededOptions1);
+                    productDTO.setSpecs(filteredSpecs1);
+                    log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs1);
+
+                    String specsString1 = filteredSpecs1.stream()
+                            .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
+                            .collect(Collectors.joining(" | "));
+
+                    productDTO.setSpecsString(specsString1);
+
+
+                    detailUrl = "/product/keyboard/keyboardDetails?productNo=" + productNo;
+                    productDTO.setUrl(detailUrl);
                     break;
             }
         }
