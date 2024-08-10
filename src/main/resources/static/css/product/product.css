@@ -105,14 +105,3 @@ ul li:active .btn-custom { background-color: #236097 !important; }
        box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
        margin-right: 10px; /* 버튼과 간격 설정 */
    }
-
-   /* Tag */
-   .tag {
-       display: inline-block;
-       padding: 2px 5px;
-       margin: 2px;
-       font-size: 12px;
-       background-color: #f0f0f0;
-       border-radius: 3px;
-       color: #333;
-   }

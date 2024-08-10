@@ -108,6 +108,10 @@
 
         $(document).on("click", ".btn-confirmed", function (event) {
           let paymentNo = $("#confirm-modal").data("payment-no");
+
+          let sidebarPoint = [[${#authentication.principal.getPoint}]]
+          console.log(sidebarPoint);
+
           $.ajax({
             url: "/api/payment/confirm",
             type: "POST",
@@ -120,6 +124,11 @@
                 case 1:
                   alert("구매가 확정되었습니다.");
                   loadOrderList(0);
+                  $.get("/api/payment/point", function(response) {
+                    console.log(response);
+                    $('.profile-point').val(response + " 점");
+                  });
+
                   break;
                 case 2:
                   alert("사용자가 일치하지 않습니다.");

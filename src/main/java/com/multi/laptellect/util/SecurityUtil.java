@@ -65,6 +65,7 @@ public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 �
         if (session != null) {
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             log.info("Session updated with new authentication details");
+            log.info("세션 업데이트 완료 = {}", memberDTO);
         }
     }
 
