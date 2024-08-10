@@ -3,6 +3,7 @@ package com.multi.laptellect.product.controller;
 
 import com.multi.laptellect.customer.dto.ProductqList;
 import com.multi.laptellect.customer.service.CustomerService;
+import com.multi.laptellect.product.model.dto.KeyBoardSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
@@ -14,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -44,7 +44,7 @@ public class ProductController {
      * @return the string
      */
 //상품별 크롤링 검색 기능
-    @PostMapping("/test")
+    @GetMapping("/test")
     public String crawlProducts(@RequestParam(name = "products") String productType, Model model) throws IOException {
         int typeNo;
 
@@ -62,7 +62,6 @@ public class ProductController {
                 typeNo = 0; // 기본값 또는 에러 처리
                 break;
         }
-
         try {
             List<ProductDTO> products = crawlingService.crawlProducts(typeNo);
 
@@ -73,21 +72,6 @@ public class ProductController {
             productService.saveProductsToDB(products, typeNo);
 
             int count = 0; // 상세 정보 크롤링 카운트
-
-            log.info("상품 타입 확인 = {}", typeNo);
-            switch (typeNo) {
-                case 1:
-                    crawlingService.processLaptopDetails(typeNo);
-                    log.info("productController = {}", typeNo);
-                    break;
-                case 2:
-                    // crawlingService.processMouseDetails(productDTO);
-                    break;
-                case 3:
-                    //   crawlingService.processKeyboardDetails(productDTO);
-                    break;
-            }
-
             model.addAttribute("products", products);
 
         } catch (IOException e) {
@@ -98,34 +82,6 @@ public class ProductController {
             log.error("2.에러발생", e);
         }
         return "product/productList";
-
-    }
-
-    @GetMapping("/laptopList")
-    public String LaptopList() {
-        int typeNo = 1;
-
-        productService.getProductByType(typeNo);
-
-
-        return "product/laptop/laptopList";
-
-    }
-
-    @GetMapping("/mouseList")
-    public String mouseList() {
-        int typeNo = 2;
-
-        return "product/mouse/mouseList";
-
-    }
-
-    @GetMapping("/keyboardList")
-    public String keyboardList() {
-        int typeNo = 3;
-
-
-        return "product/keyboard/keyboardList";
 
     }
 
@@ -152,6 +108,8 @@ public class ProductController {
         for (ProductDTO productDTO : products) {
             int productNo = productDTO.getProductNo();
 
+            String detailUrl;
+
             switch (typeNo) {
                 case 1: // 노트북
                     log.info("laptop Get Spec = {}", typeNo);
@@ -164,12 +122,28 @@ public class ProductController {
                             .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
                             .collect(Collectors.joining(" | "));
                     productDTO.setSpecsString(specsString);
+                    detailUrl = "/product/laptop/laptopDetails?productNo=" + productNo;
+                    productDTO.setUrl(detailUrl);
                     break;
                 case 2: // 마우스
                     log.info("Mouse Get Spec = {}", typeNo);
                     break;
                 case 3: // 키보드
                     log.info("keyboard Get Spec = {}", typeNo);
+                    Set<String> neededOptions1 = Set.of("제조사", "연결 방식", "사이즈", "인터페이스", "접점 방식", "스위치", "가로", "세로");
+                    List<SpecDTO> filteredSpecs1 = productService.filterSpecs(productNo, neededOptions1);
+                    productDTO.setSpecs(filteredSpecs1);
+                    log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs1);
+
+                    String specsString1 = filteredSpecs1.stream()
+                            .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
+                            .collect(Collectors.joining(" | "));
+
+                    productDTO.setSpecsString(specsString1);
+
+
+                    detailUrl = "/product/keyboard/keyboardDetails?productNo=" + productNo;
+                    productDTO.setUrl(detailUrl);
                     break;
             }
         }
@@ -189,7 +163,7 @@ public class ProductController {
      * @return the string
      */
     @GetMapping("/laptop/laptopDetails")
-    public String productDetails(@RequestParam(name = "productNo") int productNo,
+    public String productLaptopDetails(@RequestParam(name = "productNo") int productNo,
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
@@ -199,11 +173,31 @@ public class ProductController {
 
         // 제품 상세 정보 가져오기
         LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
+        log.info("상세 제품 정보 결과 값 = {}, {}",laptop,laptop.getProductNo());
 
         model.addAttribute("productNo",laptop.getProductNo());
         model.addAttribute("laptop", laptop);
 
         return "product/laptop/laptopDetails";
+    }
+
+    @GetMapping("/keyboard/keyboardDetails")
+    public String productKeyboardDetails(@RequestParam(name = "productNo") int productNo,
+                                 Model model) {
+        log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
+
+        //customer 문의 부분
+        List<ProductqList> productqList = customerService.getAllProductqList(productNo);
+        model.addAttribute("productqList",productqList);
+
+
+        // 제품 상세 정보 가져오기
+        KeyBoardSpecDTO keyboard = productService.getKeyboardProductDetails(productNo);
+
+        model.addAttribute("productNo",keyboard.getProductNo());
+        model.addAttribute("keyboard", keyboard);
+
+        return "product/keyboard/keyboardDetails";
     }
 
     @GetMapping("/review")
@@ -216,6 +210,28 @@ public class ProductController {
     @GetMapping("/cart")
     public String showCartList() {
         return "product/productCart";
+    }
+
+    @GetMapping("/test2")
+    public String detailstest(@RequestParam("typeDetails") int typeDetails) {
+
+        log.info("상품 타입 확인 = {}", typeDetails);
+        switch (typeDetails) {
+            case 1:
+                crawlingService.getLaptopDetails(typeDetails);
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+                crawlingService. getkeyboardDetails(typeDetails);
+                break;
+        }
+
+    return "product/product/productList";
+
+
     }
 
 }

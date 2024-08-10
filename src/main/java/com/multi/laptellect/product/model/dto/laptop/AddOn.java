@@ -19,4 +19,5 @@ public class AddOn {
     private String coolingfan; // 쿨링팬 유무
     private String bluetooth; // 블루투스
     private String thunderbolt; // 썬더볼트 단자
+    private String speaker;
 }
