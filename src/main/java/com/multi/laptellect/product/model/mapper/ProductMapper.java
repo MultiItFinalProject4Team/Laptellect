@@ -40,6 +40,8 @@ public interface ProductMapper {
 
     List<ProductDTO> getReviewRequired ();
 
+    List<LaptopDetailsDTO> laptopProductDetails(int productNo);
+
 
     int checkSpecExists(@Param("productNo") int productNo,@Param("category")String category,@Param("specValue") String specValue);
 

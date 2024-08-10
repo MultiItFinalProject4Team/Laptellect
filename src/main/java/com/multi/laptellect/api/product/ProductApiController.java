@@ -81,44 +81,7 @@ public class ProductApiController {
 
             String detailUrl;
 
-            switch (typeNo) {
-                case 1: // 노트북
-                    log.info("laptop Get Spec = {}", typeNo);
-                    Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
-                    List<SpecDTO> filteredSpecs = productService.filterSpecs(productNo, neededOptions);
-                    productDTO.setSpecs(filteredSpecs);
-                    log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs);
 
-                    String specsString = filteredSpecs.stream()
-                            .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
-                            .collect(Collectors.joining(" | "));
-
-                    productDTO.setSpecsString(specsString);
-
-                    detailUrl = "/product/laptop/laptopDetails?productNo=" + productNo;
-                    productDTO.setUrl(detailUrl);
-
-                    break;
-                case 2: // 마우스
-                    log.info("Mouse Get Spec = {}", typeNo);
-                    break;
-                case 3: // 키보드
-                    log.info("keyboard Get Spec = {}", typeNo);
-                    Set<String> neededOptions1 = Set.of("제조사", "연결 방식", "사이즈", "인터페이스", "접점 방식", "스위치", "가로", "세로");
-                    List<SpecDTO> filteredSpecs1 = productService.filterSpecs(productNo, neededOptions1);
-                    productDTO.setSpecs(filteredSpecs1);
-                    log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs1);
-
-                    String specsString1 = filteredSpecs1.stream()
-                            .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
-                            .collect(Collectors.joining(" | "));
-
-                    productDTO.setSpecsString(specsString1);
-
-
-                    detailUrl = "/product/keyboard/keyboardDetails?productNo=" + productNo;
-                    productDTO.setUrl(detailUrl);
-                    break;
         try {
             // 사용자가 로그인한 상태인지 확인하여 로그인한 상태면 위시리스트와 장바구니 정보가 담긴 model을 넘김
             if (SecurityUtil.isAuthenticated()) {
@@ -140,20 +103,45 @@ public class ProductApiController {
                 int productNo = productDTO.getProductNo();
 
                 switch (typeNo) {
-                    case 1 -> { // 노트북
+                    case 1: // 노트북
                         log.info("laptop Get Spec = {}", typeNo);
                         Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
                         List<SpecDTO> filteredSpecs = productService.filterSpecs(productNo, neededOptions);
                         productDTO.setSpecs(filteredSpecs);
                         log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs);
+
                         String specsString = filteredSpecs.stream()
                                 .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
                                 .collect(Collectors.joining(" | "));
+
                         productDTO.setSpecsString(specsString);
-                    }
-                    case 2 -> log.info("Mouse Get Spec = {}", typeNo);
-                    case 3 -> log.info("keyboard Get Spec = {}", typeNo);
+
+                        detailUrl = "/product/laptop/laptopDetails?productNo=" + productNo;
+                        productDTO.setUrl(detailUrl);
+
+                        break;
+                    case 2: // 마우스
+                        log.info("Mouse Get Spec = {}", typeNo);
+                        break;
+                    case 3: // 키보드
+                        log.info("keyboard Get Spec = {}", typeNo);
+                        Set<String> neededOptions1 = Set.of("제조사", "연결 방식", "사이즈", "인터페이스", "접점 방식", "스위치", "가로", "세로");
+                        List<SpecDTO> filteredSpecs1 = productService.filterSpecs(productNo, neededOptions1);
+                        productDTO.setSpecs(filteredSpecs1);
+                        log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs1);
+
+                        String specsString1 = filteredSpecs1.stream()
+                                .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
+                                .collect(Collectors.joining(" | "));
+
+                        productDTO.setSpecsString(specsString1);
+
+
+                        detailUrl = "/product/keyboard/keyboardDetails?productNo=" + productNo;
+                        productDTO.setUrl(detailUrl);
+                        break;
                 }
+
             }
         } catch (Exception e) {
             log.error("Product find fail = ", e);
