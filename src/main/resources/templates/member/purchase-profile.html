@@ -206,6 +206,131 @@
                   alert("환불이 성공적으로 처리되었습니다.");
                   $("#orderModal").modal("hide");
                   loadOrderList(0);
+                  window.location.href = "/profile";
+                } else {
+                  alert(
+                    "환불 처리 중 오류가 발생했습니다: " + response.message
+                  );
+                }
+              },
+              error: function (xhr, status, error) {
+                console.error("환불 처리 실패:", error);
+                alert("환불 처리 중 오류가 발생했습니다.");
+              },
+            });
+          }
+        });
+
+        $("#btn-search").on("click", function () {
+          loadOrderList(0);
+        });
+
+        $(document).on("click", ".btn-confirm", function (event) {
+          event.preventDefault();
+          let paymentNo = $(this).data("payment-no");
+          $("#confirm-modal").data("payment-no", paymentNo).modal("show");
+        });
+
+        $(document).on("click", ".btn-confirmed", function (event) {
+          let paymentNo = $("#confirm-modal").data("payment-no");
+          $.ajax({
+            url: "/api/payment/confirm",
+            type: "POST",
+            data: {
+              paymentNo: paymentNo,
+            },
+            success: function (response) {
+              $("#confirm-modal").modal("hide");
+              switch (response) {
+                case 1:
+                  alert("구매가 확정되었습니다.");
+                  loadOrderList(0);
+                  break;
+                case 2:
+                  alert("사용자가 일치하지 않습니다.");
+                  break;
+                case 3:
+                  alert("이미 확정된 상품입니다.");
+                  break;
+                default:
+                  alert("구매 확정 실패");
+                  break;
+              }
+            },
+            error: function (xhr, status, error) {
+              alert("구매 확정 실패");
+            },
+          });
+        });
+
+        $(document).on("click", ".order-detail", function (event) {
+          event.preventDefault();
+          let paymentNo = $(this).data("payment-no");
+          $.ajax({
+            url: "/api/payment/detail",
+            type: "GET",
+            data: { paymentNo: paymentNo },
+            success: function (response) {
+              $("#modalOrderNumber").text(response.paymentNo);
+              $("#modalMemberName").text(response.userName);
+              $("#modalProductName").text(response.productName);
+              $("#modalProductPrice").text(
+                response.productPrice.toLocaleString() + "원"
+              );
+              $("#modalPurchasePrice").text(
+                response.purchasePrice.toLocaleString() + "원"
+              );
+              $("#modalOrderDate").text(formatDate(response.createdAt));
+              $("#modalImPortId").text(response.imPortId);
+              $("#modalRefundStatus").text(
+                response.refund === "Y" ? "환불됨" : "-"
+              );
+              $("#modalRefundDate").text(formatDate(response.refundAt));
+              $("#modalConfirmStatus").text(
+                response.confirm === "Y" ? "확정됨" : "미확정"
+              );
+              $("#modalConfirmDate").text(formatDate(response.confirmAt));
+
+              let refundButton = $("#btn-refund");
+              if (response.refund === "Y") {
+                refundButton.prop("disabled", true).text("환불 완료");
+              } else if (response.confirm === "Y") {
+                refundButton.prop("disabled", true).text("구매확정");
+              } else {
+                refundButton.prop("disabled", false).text("환불하기");
+              }
+
+              $("#orderModal").modal("show");
+            },
+            error: function (xhr, status, error) {
+              console.error("주문 상세 정보 조회 실패:", error);
+              alert("주문 상세 정보를 불러오는데 실패했습니다.");
+            },
+          });
+        });
+
+        $(document).on("click", "#btn-refund", function () {
+          let paymentNo = $("#modalOrderNumber").text();
+          let imPortId = $("#modalImPortId").text();
+          let purchasePrice = $("#modalPurchasePrice")
+            .text()
+            .replace(/[^0-9]/g, "");
+
+          if (confirm("이 주문을 환불하시겠습니까?")) {
+            $.ajax({
+              url: "/payment/cancel",
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({
+                paymentNo: paymentNo,
+                imPortId: imPortId,
+                amount: purchasePrice,
+              }),
+              success: function (response) {
+                if (response.success) {
+                  alert("환불이 성공적으로 처리되었습니다.");
+                  $("#orderModal").modal("hide");
+                  loadOrderList(0);
                 } else {
                   alert(
                     "환불 처리 중 오류가 발생했습니다: " + response.message
