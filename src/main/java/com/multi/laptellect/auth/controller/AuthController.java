@@ -37,7 +37,17 @@ public class AuthController {
      * @return the string
      */
     @GetMapping("/signin")
-    public String showSignInForm(Model model) {
+    public String showSignInForm(@RequestParam(name = "error", required = false) String error, Model model) {
+        if(error != null) {
+            String errorMessage = "아이디 또는 비밀번호가 올바르지 않습니다.";
+
+            if (error.equals("password")) {
+                errorMessage = "비밀번호가 올바르지 않습니다.";
+            } else if (error.equals("username")) {
+                errorMessage = "존재하지 않는 사용자 입니다.";
+            }
+            model.addAttribute("errorMessage", errorMessage);
+        }
 
         return "auth/auth-sign-in";
     }
@@ -79,17 +89,16 @@ public class AuthController {
      * @return the string
      */
     @RequestMapping("/signin/oauth/kakao")
-    public String kakaoSignIn(@RequestParam("code") String code) {
+    public String kakaoSignIn(@RequestParam("code") String code, Model model) {
         try {
             String token = oAuthService.getKakaoAccessToken(code);
             SocialDTO socialDTO = oAuthService.getKaKaoProfileInfo(token);
-
             oAuthService.processKakaoUser(socialDTO);
+            model.addAttribute("loginSuccess", "success");
         } catch (Exception e) {
-
+            model.addAttribute("loginSuccess", "fail");
         }
-
-        return "redirect:/";
+        return "/auth/auth-sign-in-success";
     }
 
     /**
@@ -118,17 +127,19 @@ public class AuthController {
      * @return the string
      */
     @GetMapping("/signin/oauth/google")
-    public String googleSignIn(@RequestParam("code") String code) {
+    public String googleSignIn(@RequestParam("code") String code, Model model) {
         log.debug("구글 리턴 code = {}", code);
         try {
             String token = oAuthService.getGoogleAccessToken(code);
             SocialDTO SocialDTO = oAuthService.getGoogleProfileInfo(token);
 
             oAuthService.processGoogleUser(SocialDTO);
+            model.addAttribute("loginSuccess", "success");
         } catch (Exception e) {
             log.error("Google Login Error = ", e);
+            model.addAttribute("loginSuccess", "fail");
         }
         
-        return "redirect:/";
+        return "/auth/auth-sign-in-success";
     }
 }

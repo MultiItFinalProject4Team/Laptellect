@@ -36,8 +36,6 @@ ul li:active .btn-custom { background-color: #236097 !important; }
 
 .btn-process-basket { color: #32CD32; }
 .btn-process-wishlist { color: #FF0000; }
-/*
-.btn-custom-success { background-color: #3498DB; color: #FF0000;}*/
 
     .product-taps {
         display: flex;

@@ -1,0 +1,1413 @@
+CPU Name,Cores,CPU Mark,Thread Mark,"TDP									","Socket										",Category
+[Dual CPU] AMD EPYC 9454,48,"134,517","3,030",290,SP5,Laptop
+AMD Ryzen 9 7945HX3D,16,"57,796","4,116",55,FL1,Laptop
+AMD Ryzen 9 7945HX,16,"54,698","4,050",55,FL1,Laptop
+AMD Ryzen 9 7940HX,16,"53,704","3,946",55,AM5 (LGA 1718),"Desktop, Laptop"
+Intel Core i9-13980HX,24,"47,274","4,308",55,FCBGA1964,Laptop
+Intel Core i9-14900HX,24,"46,612","4,314",55,FCBGA1964,Laptop
+AMD Ryzen 9 7845HX,12,"45,723","3,977",55,FL1,Laptop
+Intel Core i9-13900HX,24,"44,566","4,145",55,FCBGA1964,Laptop
+Intel Core i9-13950HX,24,"43,941","4,034",55,FCBGA1964,Laptop
+Apple M3 Max 16 Core,16,"40,752","4,787",78,Unknown,Laptop
+Intel Core i7-14650HX,16,"38,148","3,913",157,FCBGA1964,Laptop
+Intel Core i7-13850HX,20,"37,992","3,846",55,FCBGA1964,Laptop
+Intel Core i7-14700HX,20,"37,297","3,951",55,FCBGA1964,Laptop
+Apple M3 Max 14 Core,14,"36,363","4,765",78,Unknown,Laptop
+Intel Core i9-12900HX,16,"34,170","3,834",55,FCBGA1964,Laptop
+Intel Core i7-13700HX,16,"33,944","3,879",55,FCBGA1964,Laptop
+AMD Ryzen 7 7745HX,8,"32,770","3,958",55,AM5 (LGA 1718),Laptop
+Intel Core i9-12950HX,16,"32,420","3,827",55,FCBGA1964,Laptop
+Intel Core i7-12800HX,16,"32,419","3,751",55,FCBGA1964,Laptop
+AMD Ryzen 9 8945H,8,"31,708","3,996",45,FP7 FP7r2 FP8,"Desktop, Laptop"
+Intel Core i9-13900HK,14,"31,690","3,990",45,FCBGA1744,Laptop
+Intel Core i7-13650HX,14,"31,625","3,829",55,FCBGA1964,Laptop
+Intel Core i7-12850HX,16,"30,802","3,711",55,FCBGA1964,Laptop
+AMD Ryzen 9 7940HS,8,"30,413","3,902",54,FP7 FP7r2 FP8,Laptop
+Intel Core i9-13905H,14,"30,133","3,646",45,FCBGA1792,Laptop
+Intel Core i5-13500HX,14,"29,881","3,644",55,FCBGA1964,Laptop
+AMD Ryzen 9 8945HS,8,"29,387","3,860",45,FP7 FP7r2 FP8,"Desktop, Laptop"
+Intel Core Ultra 9 185H,16,"29,048","3,735",45,FCBGA2049,Laptop
+Intel Core i9-13900H,14,"29,004","3,853",45,FCBGA1744,Laptop
+AMD Ryzen 7 7840HS,8,"28,943","3,780",54,FP7 FP7r2 FP8,Laptop
+AMD Ryzen 7 8845HS,8,"28,899","3,751",45,FP7 FP7r2 FP8,"Desktop, Laptop"
+AMD Ryzen 7 8845H,8,"28,774","3,708",45,FP7 FP7r2 FP8,"Desktop, Laptop"
+AMD Ryzen 7 PRO 8845HS,8,"28,629","3,879",45,FP7 FP7r2,"Desktop, Laptop, Server"
+AMD Ryzen 9 7940H,8,"28,608","3,996",54,FP7 FP7r2 FP8,Laptop
+AMD Ryzen 7 7840H,8,"28,504","3,739",54,FP7 FP7r2 FP8,Laptop
+AMD Ryzen 7 PRO 8840HS,8,"28,321","3,820",28,FP7 FP7r2 FP8,"Desktop, Laptop"
+Intel Core i5-14500HX,14,"28,177","3,519",55,FCBGA1964,Laptop
+AMD Ryzen 9 PRO 7940HS,8,"28,170","3,717",45,FP7 FP7r2,Laptop
+Intel Core i9-12900H,14,"28,108","3,794",45,FCBGA1744,Laptop
+Intel Core i9-12900HK,14,"27,615","3,651",45,FCBGA1744,Laptop
+Intel Core i5-13600HX,14,"27,520","3,646",55,FCBGA1964,Laptop
+Intel Core i7-13700H,14,"27,386","3,653",45,FCBGA1744,Laptop
+Apple M3 Pro 12 Core,12,"27,226","4,693",27,Unknown,Laptop
+Intel Core i7-13800H,14,"27,074","3,611",45,FCBGA1744,Laptop
+AMD Ryzen 5 7645HX,6,"26,868","3,915",55,AM5 (LGA 1718),Laptop
+AMD Ryzen 7 PRO 7840HS,8,"26,560","3,482",54,FP7 FP7r2 FP8,Laptop
+Apple M2 Max 12 Core 3680 MHz,12,"26,470","4,145",NA,Unknown,Laptop
+Apple M2 Pro 12 Core 3480 MHz,12,"26,399","4,108",NA,Unknown,Laptop
+Intel Core Ultra 7 165H,16,"26,343","3,549",28,FCBGA2049,Laptop
+Intel Core i7-12700H,14,"26,225","3,589",45,FCBGA1744,Laptop
+Intel Core i5-13450HX,10,"25,506","3,576",55,FCBGA1964,Laptop
+Intel Core i7-13620H,10,"25,352","3,675",45,FCBGA1744,Laptop
+Intel Core Ultra 7 155H,16,"25,065","3,550",28,Unknown,Laptop
+AMD Ryzen 7 PRO 8840U,8,"25,037","3,888",28,FP7 FP7r2,"Desktop, Laptop, Server"
+AMD Ryzen 7 7840U,8,"25,007","3,600",30,Unknown,Laptop
+AMD Ryzen 7 PRO 7840U,8,"24,925","3,707",30,Unknown,Laptop
+AMD Ryzen 7 7435HS,8,"24,869","3,329",45,FP7r2,"Desktop, Laptop"
+Intel Core i7-12800H,14,"24,857","3,487",45,FCBGA1744,Laptop
+AMD Ryzen 7 8840HS,8,"24,852","3,645",28,FP7 FP7r2 FP8,"Desktop, Laptop"
+AMD Ryzen 9 6900HX,8,"24,823","3,442",45,FP7,Laptop
+Qualcomm Snapdragon X Elite - X1E-84-100,12,"24,719","3,937",NA,Unknown,Laptop
+AMD Ryzen 7 7840S,8,"24,635","3,680",54,FP7 FP7r2 FP8,Laptop
+Apple M3 Pro 11 Core,11,"24,634","4,758",27,Unknown,Laptop
+Intel Core i5-12600HX,12,"24,579","3,699",55,FCBGA1964,Laptop
+Intel Core i5-13600H,12,"24,255","3,696",45,FCBGA1744,Laptop
+AMD Ryzen 7 7735H,8,"24,207","3,323",54,FP7,Laptop
+AMD Ryzen 7 7735HS,8,"24,115","3,358",54,FP7,Laptop
+Qualcomm Snapdragon X Elite - X1E-78-100,12,"23,993","3,215",23,Unknown,Laptop
+AMD Ryzen 7 8840U,8,"23,880","3,721",28,FP7 FP7r2 FP8,"Desktop, Laptop"
+Intel Core Ultra 5 135H,14,"23,684","3,564",28,FCBGA2049,Laptop
+AMD Ryzen 9 6900HS,8,"23,640","3,295",35,FP7,Laptop
+Intel Core i7-13705H,14,"23,624","3,498",45,FCBGA1792,Laptop
+AMD Ryzen 9 5980HX,8,"23,564","3,342",45,FP6,Laptop
+AMD Ryzen 7 6800H,8,"23,485","3,253",45,FP7,Laptop
+AMD Ryzen 5 8645HS,6,"23,129","3,795",45,"FP7 , FP7r2 , FP","Desktop, Laptop"
+Intel Core i7-13700TE,16,"23,074","3,228",35,FCLGA1700,Laptop
+Qualcomm Snapdragon X Elite - X1E-80-100,12,"23,001","3,406",NA,Unknown,Laptop
+Qualcomm Snapdragon X Plus X1P-64-100,10,"22,960","3,257",NA,Unknown,Laptop
+AMD Ryzen 7 6800HS,8,"22,914","3,213",35,FP7,Laptop
+AMD Ryzen 7 PRO 6850H,8,"22,908","3,234",45,FP7,Laptop
+Intel Core i9-11980HK @ 2.60GHz,8,"22,854","3,281",45,FCBGA1787,Laptop
+Intel Core i5-13500H,12,"22,851","3,562",45,Unknown,Laptop
+Intel Core i5-12600H,12,"22,839","3,578",45,FCBGA1744,Laptop
+AMD Ryzen 5 PRO 7640HS,6,"22,778","3,685",54,FP7 FP7r2,Laptop
+Intel Core i7-12650H,10,"22,756","3,599",45,FCBGA1744,Laptop
+AMD Ryzen 5 7640HS,6,"22,706","3,602",54,FP7 FP7r2 FP8,Laptop
+AMD Ryzen 9 PRO 6950HS,8,"22,697","3,405",35,FP7,Laptop
+Intel Core Ultra 5 125H,14,"22,649","3,567",28,FCBGA2049,Laptop
+Intel Xeon W-11955M @ 2.60GHz,8,"22,604","3,292",45,FCBGA1787,"Laptop, Server"
+AMD Ryzen 9 5900HX,8,"22,565","3,195",45,FP6,Laptop
+AMD Ryzen 9 PRO 6950H,8,"22,447","3,203",45,FP7,Laptop
+AMD Ryzen 7 7736U,8,"22,195","3,338",28,FP7,Laptop
+AMD Ryzen 9 5900HS Creator Edition,8,"22,138","3,275",35,Unknown,Laptop
+AMD Ryzen 7 PRO 6850HS,8,"22,114","3,285",35,FP7,Laptop
+Apple M1 Max 10 Core 3200 MHz,10,"22,042","3,837",NA,Unknown,"Desktop, Laptop"
+AMD Ryzen 5 PRO 8640HS,6,"22,041","3,735",28,FP7 FP7r2,"Desktop, Laptop, Server"
+AMD Ryzen 9 6900HS Creator Edition,8,"21,879","3,341",35,FP7,Laptop
+AMD Ryzen 7 6800HS Creator Edition,8,"21,878","3,240",35,FP7,Laptop
+Apple M1 Pro 10 Core 3200 MHz,10,"21,840","3,807",NA,Unknown,"Desktop, Laptop"
+AMD Ryzen 9 5900HS,8,"21,694","3,165",35,FP6,Laptop
+Apple M2 Pro 10 Core 3480 MHz,10,"21,668","4,103",NA,Unknown,"Desktop, Laptop"
+AMD Ryzen 5 7640U,6,"21,492","3,572",28,FP7 FP7r2 FP8,Laptop
+AMD Ryzen 9 5980HS,8,"21,318","3,192",35,FP6,Laptop
+AMD Ryzen 7 7735U,8,"21,304","3,288",28,FP7,Laptop
+Intel Core i9-11950H @ 2.60GHz,8,"21,295","3,190",45,FCBGA1787,Laptop
+AMD Ryzen 5 8640HS,6,"21,265","3,701",28,"FP7 , FP7r2 , FP","Desktop, Laptop"
+Intel Core i5-12500H,12,"21,250","3,478",45,FCBGA1744,Laptop
+AMD Ryzen 7 5800HS Creator Edition,8,"21,166","3,100",NA,Unknown,Laptop
+AMD Ryzen 7 5800H,8,"21,049","3,047",45,FP6,Laptop
+AMD Ryzen 7 PRO 6860Z,8,"20,863","3,167",28,Unknown,Laptop
+AMD Ryzen 7 PRO 6850U,8,"20,807","3,234",28,FP7,Laptop
+Intel Core i9-11900H @ 2.50GHz,8,"20,652","3,134",45,FCBGA1787,Laptop
+AMD Ryzen 5 8640U,6,"20,642","3,409",28,FP7 FP7r2 FP8,"Desktop, Laptop"
+AMD Ryzen 7 6800U,8,"20,581","3,210",28,Unknown,Laptop
+Intel Core i7-11850H @ 2.50GHz,8,"20,557","3,120",45,FCBGA1787,Laptop
+AMD Ryzen 9 5900H,8,"20,557","2,977",NA,AM4,Laptop
+Intel Core i7-11800H @ 2.30GHz,8,"20,534","3,080",45,FCBGA1787,Laptop
+Intel Core i7-1280P,14,"20,439","3,324",28,FCBGA1744,Laptop
+AMD Ryzen 7 Pro 7735U,8,"20,360","3,226",28,FP7,Laptop
+Intel Core i7-1370P,14,"20,190","3,560",28,FCBGA1744,Laptop
+Intel Core i5-1250P,12,"20,185","3,537",28,BGA1700,Laptop
+AMD Ryzen 7 5800HS,8,"20,133","3,035",35,FP6,Laptop
+Apple M3 8 Core,8,"19,561","4,843",20,Unknown,"Desktop, Laptop, Mobile/Embedded"
+Intel Core i7-1360P,12,"19,323","3,568",28,FCBGA1744,Laptop
+AMD Ryzen 5 8540U,6,"19,316","3,747",28,FP7 FP7r2,"Desktop, Laptop"
+AMD Ryzen 5 PRO 8540U,6,"19,316","3,813",28,FP7 FP7r2,"Desktop, Laptop, Mobile/Embedded"
+AMD Ryzen 7 PRO 7730U,8,"19,225","3,093",15,Unknown,Laptop
+AMD Ryzen 5 7540U,6,"19,213","3,722",28,FP7 FP7r2,Laptop
+Intel Core i5-1350P,12,"19,176","3,584",28,FCBGA1744,Laptop
+AMD Ryzen 9 4900H,8,"19,155","2,706",45,FP6,Laptop
+AMD Ryzen 9 4900HS,8,"19,001","2,600",35,FP6,Laptop
+AMD Ryzen 5 PRO 6650H,6,"18,928","3,214",45,FP7,Laptop
+AMD Ryzen 5 6600H,6,"18,872","3,201",45,FP7,Laptop
+Intel Core i5-1340P,12,"18,869","3,540",28,FCBGA1744,Laptop
+Intel Core i5-12450HX,8,"18,746","3,414",148,FCBGA1964,Laptop
+Intel Core i5-13420H,8,"18,724","3,460",45,FCBGA1744,Laptop
+AMD Ryzen 7 7730U,8,"18,642","3,063",15,FP6,Laptop
+AMD Ryzen 7 4800H,8,"18,540","2,616",45,FP6,Laptop
+AMD Ryzen 7 5800U,8,"18,497","3,043",15,FP6,Laptop
+AMD Ryzen 5 7535HS,6,"18,395","3,179",35,FP7,Laptop
+AMD Ryzen 7 5825U,8,"18,384","3,058",15,AM4,Laptop
+AMD Ryzen 7 4800HS,8,"18,370","2,576",45,FP6,Laptop
+AMD Ryzen 5 6600HS Creator Edition,6,"18,354","3,119",35,FP7,Laptop
+AMD Ryzen 5 PRO 7540U,6,"18,172","3,570",30,FP7 FP7r2,Laptop
+Intel Xeon W-11855M @ 3.20GHz,6,"18,161","3,256",45,FCBGA1787,"Laptop, Server"
+Intel Core Ultra 5 135U,12,"17,960","3,344",28,Unknown,Laptop
+Intel Core Ultra 7 165U,12,"17,749","3,438",15,Unknown,Laptop
+Intel Core Ultra 5 125U,12,"17,702","3,354",15,FCBGA2049,Laptop
+AMD Ryzen 7 4980U Microsoft Surface Edition,8,"17,469","2,752",15,FP6,Laptop
+Intel Core i7-1270P,12,"17,415","3,401",28,BGA1700,Laptop
+Intel Core i5-1240P,12,"17,227","3,285",28,FCBGA1744,Laptop
+Apple M1 Pro 8 Core 3200 MHz,8,"17,164","3,773",NA,Unknown,"Desktop, Laptop"
+Intel Core i5-12450H,8,"17,126","3,390",45,FCBGA1744,Laptop
+Intel Core i7-1260P,12,"17,110","3,306",28,FCBGA1744,Laptop
+AMD Ryzen 7 PRO 5850U,8,"17,046","3,003",15,FP6,Laptop
+AMD Ryzen 5 5600H,6,"17,018","2,949",45,FP6,Laptop
+AMD Ryzen 5 Pro 7535U,6,"16,971","3,187",28,FP7,Laptop
+AMD Ryzen 7 Extreme Edition,8,"16,903","2,457",NA,FP6,Laptop
+Intel Core i7-12700TE,12,"16,833","2,661",35,FCLGA1700,"Laptop, Mobile/Embedded"
+AMD Ryzen 5 6600U,6,"16,792","3,195",25,FP7,Laptop
+AMD Ryzen 5 PRO 6650U,6,"16,728","3,192",28,FP7,Laptop
+AMD Ryzen 7 4800U,8,"16,691","2,571",15,FP6,Laptop
+Intel Core i7-11600H @ 2.90GHz,6,"16,685","3,106",45,FCBGA1787,Laptop
+Intel Core Ultra 7 155U,12,"16,626","3,526",15,FCBGA2049,Laptop
+Intel Core i7-10700E @ 2.90GHz,8,"16,599","2,882",65,FCLGA1200,"Laptop, Mobile/Embedded"
+AMD Ryzen 7 PRO 5875U,8,"16,249","2,885",15,FP6,Laptop
+AMD Ryzen 5 7535U,6,"16,211","3,134",28,FP7,Laptop
+Intel Core i5-11500H @ 2.90GHz,6,"16,171","3,085",45,FCBGA1787,Laptop
+AMD Ryzen 5 7530U,6,"16,148","3,124",15,FP6,Laptop
+AMD Ryzen 7 4850U Mobile,8,"15,920","2,654",15,FP6,Laptop
+AMD Ryzen 7 5700U,8,"15,852","2,591",15,FP6,Laptop
+Intel Core i5-11260H @ 2.60GHz,6,"15,798","2,933",45,FCBGA1787,Laptop
+Intel Xeon W-10885M @ 2.40GHz,8,"15,700","2,759",45,FCBGA1440,"Laptop, Server"
+Intel Core i5-11400H @ 2.70GHz,6,"15,670","3,004",45,FCBGA1787,Laptop
+Apple M2 8 Core 3500 MHz,8,"15,532","3,921",NA,Unknown,"Desktop, Laptop"
+Intel Core i9-10980HK @ 2.40GHz,8,"15,480","2,778",45,FCBGA1440,Laptop
+AMD Ryzen 5 5600U,6,"15,450","2,916",15,FP6,Laptop
+Intel Core i5-1345U,10,"15,381","3,524",15,FCBGA1744,Laptop
+AMD Ryzen 5 7430U,6,"15,359","3,056",15,AM4,Laptop
+Intel Core 7 150U,10,"15,225","3,506",15,FCBGA1744,Laptop
+AMD Ryzen 7 PRO 4750U,8,"15,217","2,508",15,FP6,Laptop
+AMD Ryzen 5 5560U,6,"15,103","2,831",15,AM4,Laptop
+Intel Core i9-10885H @ 2.40GHz,8,"15,075","2,750",45,FCBGA1440,Laptop
+Intel Xeon E-2286M @ 2.40GHz,8,"15,055","2,729",45,FCBGA1440,Laptop
+Intel Core i7-1355U,10,"15,044","3,555",15,FCBGA1744,Laptop
+AMD Ryzen 5 PRO 7530U,6,"15,014","3,025",15,FP6,Laptop
+AMD Ryzen 5 5625U,6,"14,983","2,892",15,FP6,Laptop
+Intel Core i7-1365U,10,"14,975","3,567",15,FCBGA1744,Laptop
+AMD Ryzen 5 PRO 5650U,6,"14,921","2,932",15,FP6,Laptop
+Intel Core i7-10875H @ 2.30GHz,8,"14,875","2,727",45,FCBGA1440,Laptop
+Intel Core i5-1335U,10,"14,851","3,440",15,FCBGA1744,Laptop
+Intel Core Ultra 7 164U,12,"14,811","3,211",9,FCBGA2551,Laptop
+AMD Ryzen 5 PRO 4400GE,6,"14,795","2,664",35,Unknown,Laptop
+Intel Core i9-10880H @ 2.30GHz,8,"14,642","2,765",45,FCBGA1440,Laptop
+AMD Ryzen 5 PRO 5675U,6,"14,639","2,985",15,FP6,Laptop
+Intel Core i5-12500TE,6,"14,536","2,960",35,FCLGA1700,"Laptop, Mobile/Embedded"
+Intel Core i7-10870H @ 2.20GHz,8,"14,469","2,672",45,FCBGA1440,Laptop
+Intel Core i3-1220P,10,"14,463","3,411",28,FCBGA1744,Laptop
+AMD Ryzen 5 4600H,6,"14,441","2,434",45,FP6,Laptop
+AMD Ryzen 5 4600HS,6,"14,230","2,398",35,FP6,Laptop
+Intel Core i7-1260U,10,"14,197","3,230",9,FCBGA1781,Laptop
+Apple M1 8 Core 3200 MHz,8,"14,177","3,697",15.1,Unknown,"Desktop, Laptop, Mobile/Embedded"
+Intel Core i5-1334U,10,"14,158","3,486",15,FCBGA1744,Laptop
+Intel Core i9-9980HK @ 2.40GHz,8,"14,132","2,531",45,FCBGA1440,Laptop
+Intel Core i7-1265U,10,"13,817","3,199",15,FCBGA1744,"Laptop, Mobile/Embedded"
+Intel Core i5-1240U,10,"13,745","3,086",29,FCBGA1744,Laptop
+Intel Core i9-9880H @ 2.30GHz,8,"13,738","2,505",45,FCBGA1440,Laptop
+Intel Core i7-1255U,10,"13,737","3,290",15,FCBGA1744,Laptop
+AMD Ryzen 5 4600U,6,"13,466","2,437",15,FP6,Laptop
+Intel Core i5-1235U,10,"13,428","3,222",15,FCBGA1744,"Laptop, Mobile/Embedded"
+Intel Core i5-1245U,10,"13,417","3,135",15,FCBGA1744,"Laptop, Mobile/Embedded"
+AMD Ryzen 7 4700U,8,"13,397","2,525",15,FP6,Laptop
+Intel Core i7-10700TE @ 2.00GHz,8,"13,368","2,594",35,FCLGA1200,Laptop
+AMD Ryzen 5 5500U,6,"13,036","2,441",15,FP6,Laptop
+AMD Ryzen 3 PRO 7330U,4,"12,731","3,181",15,FP6,Laptop
+Intel Xeon W-10855M @ 2.80GHz,6,"12,730","2,778",45,FCBGA1440,"Laptop, Server"
+AMD Ryzen 5 PRO 4650U,6,"12,689","2,431",15,FP6,Laptop
+Intel Core i3-1315U,6,"12,400","3,550",15,FCBGA1744,Laptop
+AMD Ryzen 3 PRO 7335U,4,"12,333","3,108",30,FP7r2,"Desktop, Laptop"
+Intel Core i3-12100TE,4,"12,314","3,101",35,FCLGA1700,"Laptop, Mobile/Embedded"
+AMD Ryzen 5 PRO 4500U,6,"12,117","2,491",15,FP6,Laptop
+Intel Core i7-1250U,10,"11,988","2,822",9,FCBGA1781,Laptop
+Intel Core i7-8700B @ 3.20GHz,6,"11,936","2,733",65,FCBGA1440,Laptop
+Intel Core i7-10750H @ 2.60GHz,6,"11,891","2,660",45,FCBGA1440,Laptop
+Intel Core 3 100U,6,"11,885","3,696",15,FCBGA1744,Laptop
+Snapdragon 8cx Gen 3 @ 3.0 GHz,8,"11,840","2,441",NA,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i7-11375H @ 3.30GHz,4,"11,839","2,962",35,FCBGA1449,Laptop
+Intel Core i7-10850H @ 2.70GHz,6,"11,818","2,687",45,FCBGA1440,Laptop
+Intel Xeon E-2276M @ 2.80GHz,6,"11,812","2,623",45,FCBGA1440,Laptop
+Intel Core i7-11370H @ 3.30GHz,4,"11,712","2,939",35,FCBGA1449,Laptop
+Microsoft SQ3 @ 3.0 GHz,8,"11,684","2,365",NA,Unknown,Laptop
+AMD Ryzen 5 5500H,4,"11,659","3,011",45,FP6,Laptop
+Intel Core Ultra 5 134U,12,"11,597","2,756",30,FCBGA2551,"Laptop, Mobile/Embedded"
+Intel Xeon E-2186M @ 2.90GHz,6,"11,595","2,573",45,FCBGA1440,Laptop
+AMD Ryzen 3 7335U,4,"11,535","2,837",28,FP7,"Desktop, Laptop"
+AMD Ryzen 3 5425U,4,"11,422","2,935",15,FP6,Laptop
+AMD Ryzen 3 PRO 5475U,4,"11,381","2,905",15,FP6,Laptop
+Intel Core i5-10500H @ 2.50GHz,6,"11,238","2,586",45,FCBGA1440,Laptop
+Intel Core i5-1230U,10,"11,101","2,755",9,FCBGA1781,Laptop
+AMD Ryzen 3 PRO 5450U,4,"11,066","2,740",15,FP6,Laptop
+Intel Core i7-9850H @ 2.60GHz,6,"11,036","2,484",45,Unknown,Laptop
+AMD Ryzen 3 7330U,4,"11,036","3,028",15,FP6,Laptop
+AMD Ryzen 3 5400U,4,"11,032","2,737",15,FP6,Laptop
+Intel Core i5-11320H @ 3.20GHz,4,"10,996","2,954",35,FCBGA1449,Laptop
+Intel Core i3-1215U,6,"10,974","3,326",15,FCBGA1744,Laptop
+Intel Core i5-11300H @ 3.10GHz,4,"10,932","2,807",35,FCBGA1449,Laptop
+AMD Ryzen 5 4500U,6,"10,930","2,435",15,FP6,Laptop
+AMD Ryzen 3 PRO 4200GE,4,"10,930","2,540",35,Unknown,Laptop
+Intel Xeon E-2176M @ 2.70GHz,6,"10,886","2,468",45,FCBGA1440,Laptop
+Intel Core i7-9750H @ 2.60GHz,6,"10,850","2,429",45,FCBGA1440,Laptop
+Intel Core i7-1195G7 @ 2.90GHz,4,"10,811","3,027",28,FCBGA1449,Laptop
+Intel Core i7-9750HF @ 2.60GHz,6,"10,608","2,428",45,FCBGA1440,Laptop
+Intel Core i9-8950HK @ 2.90GHz,6,"10,513","2,438",45,FCBGA1440,Laptop
+Intel Core i3-1210U,6,"10,513","3,367",9,BGA1781,Laptop
+Intel Core i7-1185G7 @ 3.00GHz,4,"10,427","2,817",15,BGA1526,Laptop
+Intel Core i7-9700TE @ 1.80GHz,8,"10,280","2,201",35,FCLGA1151-2,"Desktop, Laptop"
+Intel Core i7-1185G7E @ 2.80GHz,4,"10,256","2,621",15,FCBGA1449,"Laptop, Mobile/Embedded"
+Intel Core i7-1165G7 @ 2.80GHz,4,"10,228","2,811",15,BGA1526,Laptop
+Intel Core i7-8850H @ 2.60GHz,6,"10,224","2,387",45,FCBGA1440,Laptop
+Intel Core i5-1155G7 @ 2.50GHz,4,"10,162","2,916",28,FCBGA1449,Laptop
+Intel Core i3-N305,8,"10,081","2,227",15,FCBGA1264,"Laptop, Mobile/Embedded"
+Intel Core i7-11390H @ 3.40GHz,4,"10,035","2,892",35,FCBGA1449,Laptop
+AMD Ryzen 3 PRO 4450U,4,"9,994","2,350",15,FP6,Laptop
+Intel Core i7-8750H @ 2.20GHz,6,"9,897","2,295",45,FCBGA1440,Laptop
+Intel Core i5-9500TE @ 2.20GHz,6,"9,861","2,370",35,FCLGA1151-2,Laptop
+Intel Core i5-1145G7 @ 2.60GHz,4,"9,804","2,747",28,FCBGA1449,Laptop
+Intel Core i5-1135G7 @ 2.40GHz,4,"9,797","2,686",15,BGA1526,Laptop
+AMD Ryzen 3 5300U,4,"9,677","2,350",15,FP6,Laptop
+Intel Core i3-1125G4 @ 2.00GHz,4,"9,660","2,485",28,FCBGA1449,Laptop
+Intel Core i7-10710U @ 1.10GHz,6,"9,582","2,345",15,FCBGA1528,Laptop
+Intel Core i7-1265UE,10,"9,471","2,582",28,FCBGA1744,"Laptop, Mobile/Embedded"
+Intel Core i5-9400F @ 2.90GHz,6,"9,469","2,438",65,FCLGA1151-2,"Desktop, Laptop"
+Intel Pentium Gold 8505,5,"9,358","3,272",15,BGA1700,"Laptop, Mobile/Embedded"
+Intel Core i7-1068NG7 @ 2.30GHz,4,"9,351","2,353",28,FCBGA1344,Laptop
+Intel U300,5,"9,309","3,413",15,FCBGA1744,Laptop
+AMD Ryzen 5 7520U,4,"9,293","2,498",15,FP6,Laptop
+AMD Ryzen 5 7235HS,4,"9,207","2,027",45,FP7r2,"Desktop, Laptop"
+Intel Core i7-1160G7 @ 1.20GHz,4,"9,181","2,675",NA,FCBGA1598,Laptop
+Intel Core i3-1305U,5,"8,989","3,260",15,FCBGA1744,Laptop
+Intel Core i5-1038NG7 @ 2.00GHz,4,"8,975","2,185",28,FCBGA1344,Laptop
+Intel Core i5-8500B @ 3.00GHz,6,"8,955","2,541",65,FCBGA1440,Laptop
+AMD Ryzen 3 7320U,4,"8,951","2,404",15,FP7,Laptop
+Intel Core i5-1130G7 @ 1.10GHz,4,"8,681","2,408",15,BGA 1449,Laptop
+AMD Ryzen 3 7320C,4,"8,614","2,436",15,FT6,Laptop
+AMD Ryzen Embedded V1807B,4,"8,567","2,225",45,FP5,"Laptop, Mobile/Embedded"
+Intel Core i7-8809G @ 3.10GHz,4,"8,548","2,385",100,BGA2270,Laptop
+Intel Core i5-10400H @ 2.60GHz,4,"8,494","2,630",45,FCBGA1440,Laptop
+Intel Core i5-10500TE @ 2.30GHz,6,"8,449","1,688",35,FCLGA1200,"Laptop, Mobile/Embedded"
+Intel Core i7-8559U @ 2.70GHz,4,"8,436","2,541",28,FCBGA1528,Laptop
+Intel Core i5-10300H @ 2.50GHz,4,"8,404","2,566",45,FCBGA1440,"Desktop, Laptop"
+Intel Core i7-1065G7 @ 1.30GHz,4,"8,327","2,325",15,FCBGA-1526,Laptop
+Intel Core i7-1180G7 @ 1.30GHz,4,"8,260","2,484",15,FCBGA1598,Laptop
+AMD Athlon Gold PRO 4150GE,4,"8,259","2,384",35,FP6,Laptop
+Intel Core i7-10810U @ 1.10GHz,6,"8,246","2,300",15,FCBGA1528,Laptop
+Intel Core i7-8569U @ 2.80GHz,4,"8,194","2,587",28,FCBGA1528,Laptop
+Intel Core i5-1035G7 @ 1.20GHz,4,"8,138","2,215",15,FCBGA1526,Laptop
+AMD Ryzen 7 3750H,4,"8,135","2,085",35,FP5,Laptop
+Intel Core i5-10200H @ 2.40GHz,4,"8,131","2,433",45,FCBGA1440,Laptop
+Intel Xeon E3-1535M v6 @ 3.10GHz,4,"8,021","2,318",35,FCBGA1440,"Laptop, Server"
+AMD Ryzen 7 2800H,4,"8,013","2,173",45,FP5,Laptop
+Intel Core i7-8709G @ 3.10GHz,4,"7,947","2,313",100,BGA2270,Laptop
+Intel Core i5-1035G4 @ 1.10GHz,4,"7,906","2,199",15,FCBGA1526,Laptop
+Intel Core i5-9400H @ 2.50GHz,4,"7,897","2,402",45,FCBGA1440,Laptop
+Intel Core i5-8259U @ 2.30GHz,4,"7,889","2,203",28,FCBGA1528,Laptop
+AMD Ryzen 5 3550H,4,"7,782","2,031",35,FP5,Laptop
+Intel Xeon E3-1545M v5 @ 2.90GHz,4,"7,780","2,108",45,FCBGA1440,"Laptop, Server"
+Intel Core i7-5950HQ @ 2.90GHz,4,"7,696","2,288",47,FCBGA1364,Laptop
+AMD Ryzen 5 3550U,4,"7,681","2,053",15,Unknown,Laptop
+AMD Ryzen 5 2600H,4,"7,670","2,060",45,FP5,Laptop
+Intel Core i5-8400H @ 2.50GHz,4,"7,669","2,348",45,FCBGA1440,Laptop
+Intel Core i7-8705G @ 3.10GHz,4,"7,668","2,216",65,BGA2270,Laptop
+Intel Core i5-9300H @ 2.40GHz,4,"7,589","2,292",45,FCBGA1440,Laptop
+Intel Core i5-8260U @ 1.60GHz,4,"7,577","2,282",15,FCBGA1528,Laptop
+Intel Core i7-9850HL @ 1.90GHz,6,"7,563","1,502",25,FCBGA1440,"Desktop, Laptop"
+Intel Xeon E3-1535M v5 @ 2.90GHz,4,"7,517","2,122",45,FCBGA1440,"Laptop, Server"
+Intel Core i7-8557U @ 1.70GHz,4,"7,492","2,403",15,FCBGA1528,Laptop
+Intel Core i5-8257U @ 1.40GHz,4,"7,491","2,275",15,FCBGA1528,Laptop
+Intel Core i5-8300H @ 2.30GHz,4,"7,474","2,282",45,FCLGA1151-2,Laptop
+Intel Core i5-8279U @ 2.40GHz,4,"7,459","2,300",28,FCBGA1528,Laptop
+AMD Ryzen 7 PRO 3700U,4,"7,458","2,025",15,FP5,Laptop
+Intel Core i7-7820EQ @ 3.00GHz,4,"7,453","2,207",45,FCBGA1440,Laptop
+AMD Ryzen 3 4300U,4,"7,445","2,308",15,FP6,Laptop
+Intel Core i5-1035G1 @ 1.00GHz,4,"7,403","2,240",15,FCBGA1526,Laptop
+Intel Core i7-7920HQ @ 3.10GHz,4,"7,402","2,233",45,FCBGA1440,Laptop
+Intel Core i7-7820HK @ 2.90GHz,4,"7,402","2,119",45,FCBGA1440,Laptop
+Intel Core i3-N300,8,"7,356","1,797",7,FCBGA1264,Laptop
+Intel Core i3-10100T @ 3.00GHz,4,"7,335","2,275",35,FCLGA1200,Laptop
+Intel Core i5-9300HF @ 2.40GHz,4,"7,324","2,280",45,FCBGA1440,Laptop
+Intel Core i7-6920HQ @ 2.90GHz,4,"7,321","2,092",45,FCBGA1440,Laptop
+Intel Core i7-8706G @ 3.10GHz,4,"7,287","2,322",65,BGA2270,Laptop
+AMD Ryzen 5 3580U,4,"7,259","1,982",15,FP5,Laptop
+AMD Ryzen 5 Microsoft Surface Edition,4,"7,243","1,815",15,FP5,Laptop
+Intel Core i7-7820HQ @ 2.90GHz,4,"7,167","2,121",45,FCBGA1440,Laptop
+AMD Ryzen 7 3700U,4,"7,161","1,976",15,FP5,Laptop
+AMD Ryzen 7 PRO 2700U,4,"7,155","1,947",15,FP5,Laptop
+AMD Ryzen 7 3700C,4,"7,145","2,301",15,FP5,"Laptop, Mobile/Embedded"
+Intel Core i7-6770HQ @ 2.60GHz,4,"7,121","1,951",45,FCBGA1440,Laptop
+Intel Core i5-8269U @ 2.60GHz,4,"7,111","2,377",28,FCBGA1528,"Laptop, Mobile/Embedded"
+Intel Core i7-6820HK @ 2.70GHz,4,"7,053","1,990",45,FCBGA1440,Laptop
+Intel Core i7-5850EQ @ 2.70GHz,4,"7,036","2,119",47,FCBGA1364,Laptop
+AMD Ryzen 5 PRO 3500U,4,"7,029","1,961",15,FP5,Laptop
+Intel Core i7-4940MX @ 3.10GHz,4,"7,003","2,234",57,"FPGA946,FPGA947",Laptop
+Intel Core i7-6820EQ @ 2.80GHz,4,"7,001","1,997",45,FCBGA1440,Laptop
+AMD Ryzen 7 3780U,4,"6,961","1,937",15,FP5,Laptop
+Intel Core i5-8305G @ 2.80GHz,4,"6,951","2,048",65,BGA2270,Laptop
+AMD Ryzen 5 3500U,4,"6,950","1,948",15,FP5,Laptop
+Intel Core i7-7700HQ @ 2.80GHz,4,"6,915","2,059",45,FCBGA1440,Laptop
+Intel Core i7-5850HQ @ 2.70GHz,4,"6,866","2,219",47,FCBGA1364,Laptop
+AMD Ryzen 7 2700U,4,"6,855","1,813",15,FP5,Laptop
+Intel Core i7-6820HQ @ 2.70GHz,4,"6,830","1,956",45,FCBGA1440,Laptop
+Intel Xeon D-1528 @ 1.90GHz,6,"6,785","1,469",35,FCBGA1667,"Laptop, Server"
+Snapdragon 8cx Gen 2 @ 3.0 GHz,8,"6,770","1,759",NA,Unknown,"Laptop, Mobile/Embedded"
+AMD Ryzen 5 3450U,4,"6,736","1,915",15,FP5,Laptop
+Intel Core i7-10610U @ 1.80GHz,4,"6,694","2,257",15,FCBGA1528,Laptop
+AMD Ryzen Embedded V1605B,4,"6,677","1,908",15,FP5,"Laptop, Mobile/Embedded"
+AMD Ryzen 3 PRO 3200GE,4,"6,662","2,120",35,AM4,Laptop
+AMD Ryzen 5 PRO 2500U,4,"6,656","1,797",15,FP5,Laptop
+Snapdragon 8cx Gen 2 @ 3.15 GHz,8,"6,610","1,951",7,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i7-1060NG7 @ 1.20GHz,4,"6,601","1,865",10,FCBGA1526,Laptop
+Intel Core i7-10510U @ 1.80GHz,4,"6,599","2,293",15,FCBGA1528,Laptop
+AMD Ryzen 5 2500U,4,"6,552","1,822",15,FP5,Laptop
+Intel Core i7-6700HQ @ 2.60GHz,4,"6,530","1,912",45,FCBGA1440,Laptop
+Intel Core i7-4980HQ @ 2.80GHz,4,"6,514","2,164",47,FCBGA1364,Laptop
+Intel Core i7-4930MX @ 3.00GHz,4,"6,435","2,075",57,FCPGA946,Laptop
+Intel Core i7-4960HQ @ 2.60GHz,4,"6,411","2,101",47,FCBGA1364,Laptop
+Intel Core i5-10310U @ 1.70GHz,4,"6,403","2,195",15,FCBGA1528,Laptop
+Intel Core i7-4870HQ @ 2.50GHz,4,"6,333","2,056",47,FCBGA1364,Laptop
+Microsoft SQ2 @ 3.15 GHz,8,"6,311","1,913",NA,Unknown,Laptop
+Intel Core i7-4760HQ @ 2.10GHz,4,"6,300","1,944",47,FCBGA1364,Laptop
+Intel Core i7-8650U @ 1.90GHz,4,"6,276","2,133",15,FC-BGA1356,Laptop
+Intel Core i7-8665U @ 1.90GHz,4,"6,254","2,190",15,FCBGA1528,Laptop
+Intel Core i7-4910MQ @ 2.90GHz,4,"6,245","2,025",47,FCPGA946,Laptop
+Intel Core i7-4860HQ @ 2.40GHz,4,"6,242","1,893",47,FCBGA1364,Laptop
+Intel Core i5-10210U @ 1.60GHz,4,"6,201","2,166",15,FCBGA1528,Laptop
+Intel Core i5-8350U @ 1.70GHz,4,"6,196","2,019",15,FC-BGA1356,Laptop
+Intel Core i7-8565UC @ 1.80GHz,4,"6,187","2,527",15,FCBGA1528,Laptop
+Intel Core i5-8365U @ 1.60GHz,4,"6,126","2,135",15,FCBGA1528,Laptop
+Intel Core i7-4850HQ @ 2.30GHz,4,"6,118","1,934",47,FCBGA1364,Laptop
+Intel Core i7-4900MQ @ 2.80GHz,4,"6,098","1,986",47,FCPGA946,Laptop
+Intel Core i7-8565U @ 1.80GHz,4,"6,097","2,159",15,FCBGA1356,Laptop
+Intel Xeon E3-1505L v6 @ 2.20GHz,4,"6,088","1,848",25,FCBGA1440,"Laptop, Server"
+Intel Core i7-4770HQ @ 2.20GHz,4,"6,086","1,917",47,FCBGA1364,Laptop
+Intel Xeon E3-1268L v5 @ 2.40GHz,4,"6,079","1,654",35,FCLGA1151,"Laptop, Server"
+Intel Core i3-1115G4 @ 3.00GHz,2,"6,076","2,635",15,FCBGA1449,Laptop
+Intel Core i7-4810MQ @ 2.80GHz,4,"6,062","2,024",47,FCPGA946,Laptop
+Intel Core i3-8100B @ 3.60GHz,4,"6,044","2,338",65,FCBGA1440,Laptop
+Intel Core i7-5700HQ @ 2.70GHz,4,"6,039","2,015",47,FCBGA1364,Laptop
+Intel Core i5-8265U @ 1.60GHz,4,"5,978","2,071",15,FCBGA1528,Laptop
+AMD Ryzen 3 PRO 3300U,4,"5,974","1,950",15,FP5,Laptop
+Intel Core i7-3840QM @ 2.80GHz,4,"5,930","1,941",45,rPGA988B,Laptop
+Intel Core i7-8550U @ 1.80GHz,4,"5,910","2,050",15,FC-BGA1356,Laptop
+Intel Core i5-8250U @ 1.60GHz,4,"5,877","1,909",15, FC-BGA1356,Laptop
+AMD Ryzen 3 3350U,4,"5,876","1,927",15,Unknown,Laptop
+Intel Core i7-4710MQ @ 2.50GHz,4,"5,845","1,890",47,FCPGA946,Laptop
+Intel Core i7-3940XM @ 3.00GHz,4,"5,830","1,919",55,rPGA988B,Laptop
+Intel Core i7-5700EQ @ 2.60GHz,4,"5,803","2,092",47,FCBGA1364,Laptop
+AMD Ryzen 3 PRO 2300U,4,"5,792","1,832",15,FP5,Laptop
+Intel Core i7-4720HQ @ 2.60GHz,4,"5,764","1,869",47,BGA1364,Laptop
+AMD Ryzen 3 3300U,4,"5,738","1,863",15,FP5,Laptop
+Intel Core i7-4800MQ @ 2.70GHz,4,"5,737","1,917",47,rPGA946B,Laptop
+Intel Core i5-1030NG7 @ 1.10GHz,4,"5,723","1,762",10,BGA1526,Laptop
+Intel Core i5-8365UE @ 1.60GHz,4,"5,711","2,188",15,FCBGA1528,Laptop
+Intel Core i5-7440EQ @ 2.90GHz,4,"5,711","2,131",45,FCBGA1440,Laptop
+Intel Core i7-3920XM @ 2.90GHz,4,"5,710","1,916",55,FCPGA988,Laptop
+Microsoft SQ1 @ 3.0 GHz,8,"5,704","1,831",15,Unknown,Laptop
+Intel Core i7-3740QM @ 2.70GHz,4,"5,695","1,875",45,rPGA988B,Laptop
+Intel Core i7-3720QM @ 2.60GHz,4,"5,684","1,869",45,BGA1224,Laptop
+Intel Core i7-4750HQ @ 2.00GHz,4,"5,680","1,745",47,FCBGA1364,Laptop
+AMD Ryzen 5 3500C,4,"5,647","1,980",15,FP5,Laptop
+Intel Core i7-4700HQ @ 2.40GHz,4,"5,638","1,795",47,FCBGA1364,Laptop
+Intel Core i7-3820QM @ 2.70GHz,4,"5,635","1,864",45,BGA1224,Laptop
+Intel Core i7-4722HQ @ 2.40GHz,4,"5,620","1,844",37,FCBGA1364,Laptop
+Intel Core i7-3615QE @ 2.30GHz,4,"5,548","1,791",45,BGA1224,Laptop
+AMD Ryzen 3 2300U,4,"5,544","1,748",15,FP5,Laptop
+Intel Core i7-4710HQ @ 2.50GHz,4,"5,533","1,779",47,FCBGA1364,Laptop
+Intel Core i5-7440HQ @ 2.80GHz,4,"5,512","2,078",45,BGA1440,Laptop
+Intel Core i7-4860EQ @ 1.80GHz,4,"5,500","1,754",47,FCBGA1364,Laptop
+Intel Core i5-6440EQ @ 2.70GHz,4,"5,445","2,045",45,FCBGA1440,Laptop
+Intel N95,4,"5,377","1,934",15,Unknown,"Laptop, Mobile/Embedded"
+Intel Pentium Silver N6005 @ 2.00GHz,4,"5,374","1,769",10,FCBGA1338,"Laptop, Mobile/Embedded"
+Intel Core i7-4700MQ @ 2.40GHz,4,"5,345","1,758",47,rPGA946B,Laptop
+Intel Core i7-4712MQ @ 2.30GHz,4,"5,334","1,815",37,FCPGA946,Laptop
+Intel Core i7-4702HQ @ 2.20GHz,4,"5,334","1,627",37,FCBGA1364,Laptop
+Intel Core i7-4712HQ @ 2.30GHz,4,"5,323","1,717",37,FCBGA1364,Laptop
+Intel Xeon E3-1505L v5 @ 2.00GHz,4,"5,301","1,590",25,FCBGA1440,"Laptop, Server"
+Intel Core i7-6822EQ @ 2.00GHz,4,"5,241","1,572",25,LGA 1151,Laptop
+Snapdragon 8c @ 2.46 GHz,8,"5,230","1,544",NA,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i7-3615QM @ 2.30GHz,4,"5,204","1,704",45,BGA1224,Laptop
+Intel Pentium Gold 7505 @ 2.00GHz,2,"5,200","2,262",15,FCBGA1449,Laptop
+Intel Core i7-4702MQ @ 2.20GHz,4,"5,182","1,704",37,FCPGA946,Laptop
+Intel Core i7-8665UE @ 1.70GHz,4,"5,170","1,621",15,FCBGA1528,Laptop
+Intel Core i7-3630QM @ 2.40GHz,4,"5,121","1,687",45,rPGA988B,Laptop
+Intel Core i5-6440HQ @ 2.60GHz,4,"5,121","1,967",45,LGA 1151,Laptop
+Intel Core i7-3610QM @ 2.30GHz,4,"5,120","1,668",45,PGA988B,Laptop
+Intel Core i7-10510Y @ 1.20GHz,4,"5,100","2,004",7,UTFCBGA1377,Laptop
+Intel Core i5-7300HQ @ 2.50GHz,4,"5,093","1,957",45,Unknown,Laptop
+Intel Core i5-8265UC @ 1.60GHz,4,"5,073","2,020",NA,FCBGA1528,Laptop
+Intel Core i7-3610QE @ 2.30GHz,4,"5,026","1,582",45,rPGA988B,Laptop
+Snapdragon 8cx @ 2.84 GHz,8,"4,999","1,720",NA,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i7-3612QE @ 2.10GHz,4,"4,929","1,678",35,BGA1224,Laptop
+Intel Core i3-1005G1 @ 1.20GHz,2,"4,925","2,190",15,FCBGA1526,Laptop
+Intel Core i5-7442EQ @ 2.10GHz,4,"4,834","1,819",25,FCBGA1440,Laptop
+Intel Core i3-9100TE @ 2.20GHz,4,"4,791","1,676",35,FCLGA1151-2,Laptop
+Intel Core i7-3635QM @ 2.40GHz,4,"4,776","1,697",45,Unknown,Laptop
+Intel Core i7-2960XM @ 2.70GHz,4,"4,754","1,598",55,PGA988B,Laptop
+AMD Athlon Gold 7220U,2,"4,725","2,076",15,FP6,Laptop
+Intel Core i7-3632QM @ 2.20GHz,4,"4,697","1,583",35,rPGA988B,Laptop
+Intel Core i5-6300HQ @ 2.30GHz,4,"4,692","1,788",45,LGA 1151,Laptop
+Intel Core i7-3612QM @ 2.10GHz,4,"4,672","1,541",35,"PGA988B, FCBGA12",Laptop
+Intel Core i7-6970HQ @ 2.80GHz,4,"4,632","1,532",45,FCBGA1440,Laptop
+AMD Athlon Silver 3050GE,2,"4,545","2,016",35,AM4,Laptop
+Intel Core i7-2860QM @ 2.50GHz,4,"4,506","1,547",45,BGA1224,Laptop
+Intel Core i5-6442EQ @ 1.90GHz,4,"4,487","1,649",25,FCBGA1440,Laptop
+Intel Core i5-10210Y @ 1.00GHz,4,"4,475","1,858",7,UTFCBGA1377,Laptop
+AMD Athlon 220GE,2,"4,429","1,961",35,AM4,Laptop
+Intel Pentium 6805 @ 1.10GHz,2,"4,424","1,834",15,FCBGA1526,Laptop
+Intel Core i7-2920XM @ 2.50GHz,4,"4,418","1,469",55,FCPGA988,Laptop
+Intel Core i3-8121U @ 2.20GHz,2,"4,388","1,942",15,Unknown,Laptop
+Intel Core i7-2820QM @ 2.30GHz,4,"4,385","1,488",45,BGA1224,Laptop
+Intel Core i7-2760QM @ 2.40GHz,4,"4,367","1,535",45,BGA1224,Laptop
+Intel Core i5-6350HQ @ 2.30GHz,4,"4,255","1,420",45,LGA 1151,Laptop
+Intel Core i3-8109U @ 3.00GHz,2,"4,254","2,120",28,FCBGA1528,Laptop
+Intel Core i3-8140U @ 2.10GHz,2,"4,227","2,135",15,FCBGA1528,Laptop
+Intel Core i7-7567U @ 3.50GHz,2,"4,126","2,217",28,BGA1356,Laptop
+Intel Core i3-8145UE @ 2.20GHz,2,"4,099","2,335",15,FCBGA1528,Laptop
+AMD Athlon PRO 300U,2,"4,080","1,931",15,FP5,Laptop
+Intel Core i7-7660U @ 2.50GHz,2,"4,064","2,143",15,BGA1356,Laptop
+Intel Core i7-2710QE @ 2.10GHz,4,"4,044","1,393",45,PGA988B,Laptop
+Intel Core i7-2720QM @ 2.20GHz,4,"4,034","1,379",45,BGA1224,Laptop
+AMD Athlon Gold 3150U,2,"4,008","1,772",15,FP5,Laptop
+Intel Core i5-7260U @ 2.20GHz,2,"3,981","1,984",15,BGA1356,Laptop
+AMD Athlon 300U,2,"3,923","1,799",15,FP5,Laptop
+Intel Core i3-10110U @ 2.10GHz,2,"3,899","2,199",15,FCBGA1528,Laptop
+Intel Core i5-7360U @ 2.30GHz,2,"3,875","2,113",15,FCBGA1356,Laptop
+AMD Ryzen Embedded R1505G,2,"3,853","1,836",15,FP5,"Laptop, Mobile/Embedded"
+AMD Ryzen 3 3250U,2,"3,845","1,785",15,FP5,Laptop
+Snapdragon 7c Gen 2 @ 2.55 GHz,8,"3,844","1,482",7,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i7-2840QM @ 2.40GHz,4,"3,842","1,493",NA,rPGA988B,Laptop
+Intel Core i7-2675QM @ 2.20GHz,4,"3,828","1,288",45,BGA1224,Laptop
+Intel Core i5-6287U @ 3.10GHz,2,"3,823","1,996",28,FCBGA1356,Laptop
+AMD Ryzen 3 3200U,2,"3,802","1,807",15,FP5,Laptop
+Intel Core i3-8145U @ 2.10GHz,2,"3,786","2,097",15,FCBGA1528,Laptop
+Intel Core i7-7560U @ 2.40GHz,2,"3,780","1,980",15,BGA1356,Laptop
+Intel Core i5-7287U @ 3.30GHz,2,"3,743","2,157",28,Unknown,Laptop
+Intel Core i7-2670QM @ 2.20GHz,4,"3,732","1,310",45,PGA988B,Laptop
+Intel Core i7-7600U @ 2.80GHz,2,"3,719","2,030",15,FCBGA1356,Laptop
+Snapdragon 7c @ 1.96 GHz,8,"3,712","1,519",NA,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i7-6567U @ 3.30GHz,2,"3,700","2,077",28,FCBGA1356,Laptop
+AMD Ryzen 3 2200U,2,"3,691","1,675",15,FP5,Laptop
+Intel Core i5-7300U @ 2.60GHz,2,"3,657","1,904",15,FCBGA1356,Laptop
+Intel Core i7-7500U @ 2.70GHz,2,"3,644","1,923",15,FCBGA1356,Laptop
+Intel Core i5-7267U @ 3.10GHz,2,"3,643","1,977",28,BGA1356,Laptop
+Intel Core i7-6650U @ 2.20GHz,2,"3,601","1,812",15,FCBGA1356,Laptop
+Intel Core i3-1000NG4 @ 1.10GHz,2,"3,583","1,771",9,BGA1526,Laptop
+Intel Core i7-6660U @ 2.40GHz,2,"3,577","1,925",15,FCBGA1356,Laptop
+Intel Core i3-8130U @ 2.20GHz,2,"3,551","1,886",15,FCBGA1356,Laptop
+Intel Core i7-2630QM @ 2.00GHz,4,"3,548","1,225",45,PGA988B,Laptop
+AMD A8-7680,4,"3,537","1,618",45,FM2+,Laptop
+AMD Ryzen Embedded V1202B,2,"3,532","1,600",15,FP5,"Laptop, Mobile/Embedded"
+Intel Core i7-6498DU @ 2.50GHz,2,"3,454","1,808",15,BGA1356,Laptop
+Intel Core i7-6600U @ 2.60GHz,2,"3,439","1,798",15,FCBGA1356,Laptop
+Intel Core i3-7100H @ 3.00GHz,2,"3,430","1,668",35,FCBGA1440,Laptop
+Intel Core i5-L16G7 @ 1.40GHz,5,"3,428","1,635",7,FC-CSP1016,Laptop
+AMD Embedded R-Series RX-418GD Radeon R6,4,"3,426","1,467",35,FP4,"Laptop, Mobile/Embedded"
+Intel Pentium Silver N5020 @ 1.10GHz,4,"3,404","1,307",6,FCBGA1090,Laptop
+Snapdragon 7c @ 2.40 GHz,8,"3,395","1,225",9,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i5-6267U @ 2.90GHz,2,"3,389","1,845",28,FCBGA1356,Laptop
+Intel Core i5-7200U @ 2.50GHz,2,"3,387","1,751",15,FCBGA1356,Laptop
+Intel Core i5-4340M @ 2.90GHz,2,"3,376","2,036",37,Unknown,Laptop
+Intel Core i7-2635QM @ 2.00GHz,4,"3,371","1,199",45,BGA1224,Laptop
+Intel Core i3-7167U @ 2.80GHz,2,"3,368","1,705",28,Unknown,Laptop
+Intel Core i7-6560U @ 2.20GHz,2,"3,356","1,696",15,Unknown,Laptop
+Snapdragon 850 @ 2.96 GHz,8,"3,326","1,424",5,Unknown,"Laptop, Mobile/Embedded"
+Intel Celeron N5100 @ 1.10GHz,4,"3,318","1,392",6,FCBGA1338,Laptop
+Intel Core i3-6100E @ 2.70GHz,2,"3,315","1,688",35,LGA 1151,Laptop
+AMD FX-9830P,4,"3,307","1,568",35,FP4,Laptop
+AMD Embedded R-Series RX-421BD,4,"3,302","1,477",35,BGA (FP4),"Laptop, Mobile/Embedded"
+Intel Core i3-10110Y @ 1.00GHz,2,"3,297","2,020",7,UTFCBGA1377,Laptop
+AMD Athlon Gold 3150C,2,"3,292","1,706",15,FP5,"Laptop, Mobile/Embedded"
+Intel Core i7-6500U @ 2.50GHz,2,"3,276","1,695",15,FCBGA1356,Laptop
+Intel Core i3-6167U @ 2.70GHz,2,"3,255","1,636",28,FCBGA1356,Laptop
+Intel Core i5-6300U @ 2.40GHz,2,"3,229","1,658",15,FCBGA1356,Laptop
+Intel Core i7-2715QE @ 2.10GHz,4,"3,221","1,287",45,BGA1023,Laptop
+Intel Core i5-4330M @ 2.80GHz,2,"3,219","1,878",37,Unknown,Laptop
+Intel Core i5-6260U @ 1.80GHz,2,"3,207","1,651",15,FCBGA1356,Laptop
+Intel Core i7-4610M @ 3.00GHz,2,"3,189","1,857",37,"FPGA946,FPGA947",Laptop
+Intel Core i7-4600M @ 2.90GHz,2,"3,188","1,859",37,PGA946,Laptop
+AMD Ryzen 3 3250C,2,"3,153","1,911",15,FP5,"Laptop, Mobile/Embedded"
+AMD Athlon Silver 7120U,2,"3,150","1,929",15,FP6,Laptop
+Intel Core i3-4350T @ 3.10GHz,2,"3,142","1,762",35,LGA1150,Laptop
+Intel Core i5-6198DU @ 2.30GHz,2,"3,118","1,644",15,BGA1356,Laptop
+Intel Core i5-6360U @ 2.00GHz,2,"3,117","1,745",15,FCBGA1356,Laptop
+Intel Core i5-4310M @ 2.70GHz,2,"3,110","1,809",37,Unknown,Laptop
+Intel Core i7-5557U @ 3.10GHz,2,"3,096","1,913",28,FCBGA1168,Laptop
+Intel Core i7-4578U @ 3.00GHz,2,"3,094","1,929",28,FCBGA1168,Laptop
+Intel Core i5-5287U @ 2.90GHz,2,"3,094","1,935",28,FCBGA1168,Laptop
+Intel Core i5-4210H @ 2.90GHz,2,"3,051","1,771",47,FCBGA1364,Laptop
+Intel Core i3-6100H @ 2.70GHz,2,"3,041","1,543",35,LGA 1151,Laptop
+Intel Core i7-5600U @ 2.60GHz,2,"3,037","1,775",15,FCBGA1168,Laptop
+Intel Core i3-7130U @ 2.70GHz,2,"3,024","1,568",15,FCBGA1356,Laptop
+ARM Cortex-A78 4 Core 2000 MHz,4,"3,016","1,121",NA,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i7-4558U @ 2.80GHz,2,"3,005","1,840",28,BGA1168,Laptop
+Intel Core i7-5650U @ 2.20GHz,2,"2,999","1,893",15,FCBGA1168,Laptop
+Intel Core i5-6200U @ 2.30GHz,2,"2,994","1,553",15,FCBGA1356,Laptop
+Intel Core i7-3540M @ 3.00GHz,2,"2,990","1,796",35,rPGA988B,Laptop
+AMD Athlon Silver 3050U,2,"2,990","1,704",15,FP5,Laptop
+Intel Core i5-4300M @ 2.60GHz,2,"2,976","1,731",37,PGA946,Laptop
+AMD A12-9730P,4,"2,958","1,407",35,FP4,Laptop
+AMD Ryzen Embedded R1305G,2,"2,953","1,587",8,FP5,"Laptop, Mobile/Embedded"
+AMD Athlon Silver 3050e,2,"2,952","1,448",6,Unknown,Laptop
+Intel Core i7-4560U @ 1.60GHz,2,"2,950","1,782",NA,Unknown,Laptop
+Intel Core i5-4308U @ 2.80GHz,2,"2,945","1,828",28,FCBGA1364,Laptop
+Intel Core i5-3380M @ 2.90GHz,2,"2,911","1,769",35,"FCPGA988, FCBGA1",Laptop
+AMD A10-9630P,4,"2,909","1,397",35,FP4,Laptop
+Intel Core i5-4210M @ 2.60GHz,2,"2,893","1,695",37,FCPGA946,Laptop
+AMD Athlon Silver 3050C,2,"2,879","1,809",15,FP5,Laptop
+Intel Core i5-3360M @ 2.80GHz,2,"2,871","1,753",35,BGA1023,Laptop
+Intel Core i7-3520M @ 2.90GHz,2,"2,870","1,744",35,BGA1023,Laptop
+Intel Core m3-8100Y @ 1.10GHz,2,"2,869","1,714",5,FCBGA1515,Laptop
+Intel Core i7-5550U @ 2.00GHz,2,"2,864","1,703",15,FCBGA1168,Laptop
+AMD FX-7600P APU,4,"2,856","1,436",35,FP3,Laptop
+AMD FX-8800P,2,"2,851","1,380",35,FP4,Laptop
+Intel Core i5-4278U @ 2.60GHz,2,"2,825","1,710",28,FCBGA1168,Laptop
+Intel Core i5-4200M @ 2.50GHz,2,"2,810","1,624",37,PGA946,Laptop
+Intel Core i5-5257U @ 2.70GHz,2,"2,805","1,721",23,FCBGA1168,Laptop
+AMD RX-427BB,4,"2,788","1,301",35,FP3,Laptop
+Intel Core i7-5500U @ 2.40GHz,2,"2,780","1,652",15,FCBGA1168,Laptop
+Intel Core i5-8210Y @ 1.60GHz,2,"2,769","1,683",7,FCBGA1515,Laptop
+Intel Core i3-6157U @ 2.40GHz,2,"2,761","1,436",28,BGA1356,Laptop
+Intel Core i5-5300U @ 2.30GHz,2,"2,729","1,630",15,FCBGA1168,Laptop
+Intel Core m3-7Y32 @ 1.10GHz,2,"2,727","1,626",4.5,FCBGA1515,Laptop
+Intel Core i3-7100U @ 2.40GHz,2,"2,722","1,386",15,FCBGA1356,Laptop
+AMD A6-9400,2,"2,717","1,664",10,FT4,Laptop
+AMD 3015e,2,"2,714","1,351",6,Unknown,Laptop
+Intel Core i7-4600U @ 2.10GHz,2,"2,707","1,649",15,FCBGA1168,Laptop
+Intel Core i5-3340M @ 2.70GHz,2,"2,694","1,648",35,BGA1023,Laptop
+AMD PRO A12-9800B,4,"2,691","1,392",15,FP4,Laptop
+Intel Core i5-4402E @ 1.60GHz,2,"2,681","1,510",25,FCBGA1364,Laptop
+Intel Core i3-4110M @ 2.60GHz,2,"2,678","1,389",37,FCPGA946,Laptop
+Intel Core i5-3320M @ 2.60GHz,2,"2,668","1,622",35,BGA1023,Laptop
+Intel Core i5-3610ME @ 2.70GHz,2,"2,666","1,579",35,BGA1023,Laptop
+AMD A12-9720P,4,"2,664","1,322",15,FP4,Laptop
+Intel Core i7-3687U @ 2.10GHz,2,"2,645","1,598",17,BGA1023,Laptop
+Intel Core i5-7Y54 @ 1.20GHz,2,"2,643","1,512",4.5,FCBGA1515,Laptop
+Intel Core i5-4288U @ 2.60GHz,2,"2,635","1,631",28,FCBGA1168,Laptop
+Intel Core i3-6100U @ 2.30GHz,2,"2,633","1,333",15,FCBGA1356,Laptop
+Intel Core i5-4258U @ 2.40GHz,2,"2,625","1,578",28,FCBGA1168,Laptop
+Intel Core i7-7Y75 @ 1.30GHz,2,"2,624","1,578",4.5,FCBGA1515,"Desktop, Laptop"
+AMD Athlon PRO 3045B,2,"2,618","1,493",15,FP5,Laptop
+AMD FX-7600P,4,"2,611","1,265",35,FP3,Laptop
+Intel Pentium Silver N5000 @ 1.10GHz,4,"2,603","1,135",6,FCBGA1090,Laptop
+Intel Core i3-5157U @ 2.50GHz,2,"2,593","1,392",28,FCBGA1168,Laptop
+Intel Core i7-4510U @ 2.00GHz,2,"2,588","1,536",15,FCBGA1168,Laptop
+Intel Core i5-7Y57 @ 1.20GHz,2,"2,585","1,624",4.5,FCBGA1515,Laptop
+Intel Core m3-7Y30 @ 1.00GHz,2,"2,583","1,405",4.5,FCBGA1515,Laptop
+AMD PRO A12-8800B,2,"2,580","1,315",15,FP4,Laptop
+Intel Core i5-5350U @ 1.80GHz,2,"2,578","1,652",15,FCBGA1168,Laptop
+Intel Core i3-7020U @ 2.30GHz,2,"2,577","1,321",15,FCBGA1356,Laptop
+Intel Pentium Silver N5030 @ 1.10GHz,4,"2,575","1,240",6,FCBGA1090,Laptop
+Intel Core i5-3230M @ 2.60GHz,2,"2,560","1,577",35,PGA988,Laptop
+AMD A10-9620P,4,"2,559","1,274",15,Unknown,Laptop
+AMD FX-9800P,4,"2,549","1,237",15,Unknown,Laptop
+AMD PRO A10-9700B,4,"2,545","1,294",15,FP4,Laptop
+Intel Core i5-4310U @ 2.00GHz,2,"2,530","1,511",15,FCBGA1168,Laptop
+Intel Core i3-7102E @ 2.10GHz,2,"2,521","1,292",25,FCBGA1440,Laptop
+Intel Core i3-4100M @ 2.50GHz,2,"2,521","1,407",37,FCPGA946,Laptop
+Intel Core i5-5200U @ 2.20GHz,2,"2,502","1,499",15,FCBGA1168,Laptop
+AMD PRO A12-8830B,4,"2,499","1,323",15,BGA (FP4),Laptop
+Intel Core i5-4300U @ 1.90GHz,2,"2,496","1,484",15,FCBGA1168,Laptop
+Intel Core i7-4500U @ 1.80GHz,2,"2,487","1,494",15,BGA1168,Laptop
+Intel Core i7-8500Y @ 1.50GHz,2,"2,472","1,457",5,FCBGA1515,Laptop
+Intel Core i5-3210M @ 2.50GHz,2,"2,469","1,528",35,PGA988B,Laptop
+Intel Core i7-2640M @ 2.80GHz,2,"2,465","1,497",35,BGA1023,Laptop
+Intel Celeron N4120 @ 1.10GHz,4,"2,457","1,085",6,FCBGA1090,Laptop
+Intel Core i5-5250U @ 1.60GHz,2,"2,456","1,526",15,FCBGA1168,Laptop
+AMD 3020e,2,"2,445","1,415",6,Unknown,Laptop
+Intel Celeron N4100 @ 1.10GHz,4,"2,443","1,006",6,FCBGA1090,Laptop
+AMD A12-9700P,4,"2,439","1,218",15,FP4,Laptop
+Intel Core i7-2620M @ 2.70GHz,2,"2,425","1,460",35,BGA1023,Laptop
+Intel Core i5-4350U @ 1.40GHz,2,"2,425","1,585",15,BGA1168,Laptop
+Intel Core i7-4650U @ 1.70GHz,2,"2,419","1,544",15,BGA1168,Laptop
+Intel Core i7-3667U @ 2.00GHz,2,"2,410","1,507",17,BGA1023,Laptop
+Intel Core i5-2560M @ 2.70GHz,2,"2,397","1,437",NA,Unknown,Laptop
+Intel Atom C2758 @ 2.40GHz,8,"2,397",576,20,BGA 1283,"Laptop, Mobile/Embedded"
+Intel Celeron 7305,5,"2,378",794,15,FCBGA1744,Laptop
+Intel Atom T5700 @ 1.70GHz,4,"2,363",906,NA,Unknown,Laptop
+Intel Pentium 6405U @ 2.40GHz,2,"2,359","1,386",15,FCBGA1528,Laptop
+Intel Core i5-2540M @ 2.60GHz,2,"2,357","1,404",35,BGA1023,Laptop
+Intel Core i3-6102E @ 1.90GHz,2,"2,349","1,068",25,FCBGA1440,Laptop
+AMD PRO A10-8730B,4,"2,344","1,185",15,FP4,Laptop
+AMD A10-9600P,4,"2,343","1,151",15,FP4,Laptop
+Intel Core m5-6Y57 @ 1.10GHz,2,"2,337","1,329",7,FCBGA1515,Laptop
+Intel Core i7-3537U @ 2.00GHz,2,"2,332","1,440",17,BGA1023,Laptop
+Intel Core i7-3517UE @ 1.70GHz,2,"2,320","1,366",17,BGA1023,Laptop
+Intel Core i5-3437U @ 1.90GHz,2,"2,315","1,432",17,BGA1023,Laptop
+Intel Core i5-4260U @ 1.40GHz,2,"2,311","1,457",15,FCBGA1168,Laptop
+Intel Core m7-6Y75 @ 1.20GHz,2,"2,310","1,348",7,FCBGA1515,Laptop
+Intel Core i5-4210U @ 1.70GHz,2,"2,307","1,377",15,FCBGA1168,Laptop
+AMD PRO A8-9600B,4,"2,292","1,194",15,FP4,Laptop
+Intel Core i3-6006U @ 2.00GHz,2,"2,281","1,161",15,FCBGA1356,Laptop
+Intel Core i7-4550U @ 1.50GHz,2,"2,272","1,290",15,BGA1168,Laptop
+Intel Core m5-6Y54 @ 1.10GHz,2,"2,265","1,303",7,FCBGA1515,Laptop
+Intel Pentium 4417U @ 2.30GHz,2,"2,264","1,314",15,FCBGA1356,Laptop
+Intel Pentium 5405U @ 2.30GHz,2,"2,263","1,314",15,FCBGA1528,Laptop
+Intel Core i5-3427U @ 1.80GHz,2,"2,258","1,362",17,BGA1023,Laptop
+AMD A8-8600P,2,"2,240","1,103",15,FP4,Laptop
+Intel Core i7-3555LE @ 2.50GHz,2,"2,238","1,336",25,BGA1023,Laptop
+AMD A10-8700P,2,"2,237","1,143",35,FP4,Laptop
+Intel Core i5-2520M @ 2.50GHz,2,"2,236","1,356",35,PGA988B,Laptop
+Intel Pentium 4415U @ 2.30GHz,2,"2,234","1,285",15,BGA1356,Laptop
+Intel Core i5-8200Y @ 1.30GHz,2,"2,213","1,437",5,FCBGA1515,Laptop
+AMD PRO A10-8700B,2,"2,212","1,122",15,BGA (FP4),Laptop
+Snapdragon 835,8,"2,211","1,035",9,Unknown,"Laptop, Mobile/Embedded"
+Intel Core i3-5010U @ 2.10GHz,2,"2,194","1,233",15,FCBGA1168,Laptop
+Intel Pentium G4400TE @ 2.40GHz,2,"2,190","1,481",35,FCLGA1151,Laptop
+AMD PRO A8-8600B,4,"2,190","1,090",15,BGA (FP4),Laptop
+Intel Core i3-5020U @ 2.20GHz,2,"2,188","1,244",15,FCBGA1168,Laptop
+Intel Core i7-940XM @ 2.13GHz,4,"2,187","1,122",55,PGA988,Laptop
+Intel Core i5-4200U @ 1.60GHz,2,"2,184","1,291",15,BGA1168,Laptop
+Intel Core m3-6Y30 @ 0.90GHz,2,"2,171","1,172",4.5,FCBGA1515,Laptop
+Intel Pentium N4200 @ 1.10GHz,4,"2,170",858,6,FCBGA1296,Laptop
+AMD A8-7200P,4,"2,154","1,054",35,FP3,Laptop
+Intel Core i5-4250U @ 1.30GHz,2,"2,148","1,337",15,BGA1168,Laptop
+Intel Pentium 4405U @ 2.10GHz,2,"2,112","1,198",15,FCBGA1356,Laptop
+Intel Atom x7-E3950 @ 1.60GHz,4,"2,096",742,12,BGA1296,Laptop
+Intel Celeron 6305 @ 1.80GHz,2,"2,094","1,199",NA,FCBGA1449,Laptop
+Intel Core i5-3337U @ 1.80GHz,2,"2,087","1,281",17,BGA1023,Laptop
+Intel Core i5-2435M @ 2.40GHz,2,"2,085","1,321",35,BGA1023,Laptop
+AMD A10-7400P,4,"2,078","1,033",35,FP3,Laptop
+Intel Core i7-640M @ 2.80GHz,2,"2,076","1,374",35,BGA1288,Laptop
+Intel Core i7-3517U @ 1.90GHz,2,"2,072","1,326",17,BGA1023,Laptop
+Intel Core i5-2450M @ 2.50GHz,2,"2,072","1,281",35,BGA1023,Laptop
+Intel Core i7-610E @ 2.53GHz,2,"2,071","1,420",35,BGA1288,Laptop
+AMD A10-5750M APU,4,"2,037","1,160",35,FS1r2,Laptop
+Intel Celeron G3900E @ 2.40GHz,2,"2,034","1,499",35,FCBGA1440,Laptop
+Intel Core i3-5005U @ 2.00GHz,2,"2,024","1,146",15,FCBGA1168,Laptop
+Intel Core M-5Y71 @ 1.20GHz,2,"2,021","1,268",4.5,FCBGA1234,Laptop
+Intel Core i5-3317U @ 1.70GHz,2,"2,015","1,257",17,BGA1023,Laptop
+Intel Core M-5Y51 @ 1.10GHz,2,"2,014","1,310",4.5,FCBGA1234,Laptop
+Intel Core i5-2430M @ 2.40GHz,2,"2,006","1,240",35,PGA988B,Laptop
+AMD A10-5757M APU,4,"1,987","1,143",35,FP2,Laptop
+Intel Core i7-620M @ 2.67GHz,2,"1,980","1,288",35,BGA1288,Laptop
+Intel Celeron N3450 @ 1.10GHz,4,"1,978",765,6,FCBGA1296,Laptop
+AMD FX-7500 APU,4,"1,972",977,19,FP3,Laptop
+Intel Core i7-3689Y @ 1.50GHz,2,"1,967","1,209",13,FCBGA1023,Laptop
+Intel Core i3-4025U @ 1.90GHz,2,"1,959","1,091",15,FCBGA1168,Laptop
+Intel Atom E3900 @ 1.60GHz,4,"1,953",675,NA,Unknown,Laptop
+Intel Core i5-580M @ 2.67GHz,2,"1,951","1,284",35,BGA1288,Laptop
+Intel Core i7-920XM @ 2.00GHz,4,"1,950","1,022",55,PGA988B,Laptop
+Intel Core i3-4120U @ 2.00GHz,2,"1,948","1,177",15,FCBGA1168,Laptop
+Intel Core i7-840QM @ 1.87GHz,4,"1,945","1,132",45,PGA988A,Laptop
+Intel Core i5-2410M @ 2.30GHz,2,"1,941","1,202",35," 	FCBGA1023, PPG",Laptop
+Intel Atom x5-E3940 @ 1.60GHz,4,"1,941",672,9.5,BGA1296,Laptop
+AMD A10-4600M APU,2,"1,934","1,077",35,FS1r2,Laptop
+Intel Core i3-4158U @ 2.00GHz,2,"1,921","1,075",28,FCBGA1168,Laptop
+AMD A10 PRO-7350B APU,4,"1,921",921,19,FP3,Laptop
+Intel Core2 Quad Q9100 @ 2.26GHz,4,"1,915",986,45,PGA478,Laptop
+Intel Core M-5Y31 @ 0.90GHz,2,"1,915","1,257",4.5,FCBGA1234,Laptop
+Intel Core i7-2677M @ 1.80GHz,2,"1,912","1,260",17,BGA1023,Laptop
+Intel Core i5-4422E @ 1.80GHz,2,"1,907","1,048",25,FCBGA1364,Laptop
+Intel Core M-5Y10a @ 0.80GHz,2,"1,905",993,4.5,FCBGA1234,Laptop
+Intel Core M-5Y10c @ 0.80GHz,2,"1,901","1,128",4.5,FCBGA1234,Laptop
+Intel Core i3-3130M @ 2.60GHz,2,"1,900","1,285",35,BGA1023,Laptop
+Intel Core i5-560M @ 2.67GHz,2,"1,899","1,239",35,BGA1288,Laptop
+Intel Core i5-2510E @ 2.50GHz,2,"1,889","1,183",35,PGA988B,Laptop
+Intel Core i3-4030U @ 1.90GHz,2,"1,871","1,022",15,FCBGA1168,Laptop
+Intel Core i3-5015U @ 2.10GHz,2,"1,869","1,036",15,FCBGA1168,Laptop
+AMD A8-5550M APU,4,"1,863","1,038",35,FS1r2,Laptop
+Intel Core i3-4110U @ 1.90GHz,2,"1,860","1,055",NA,Unknown,Laptop
+Intel Core i5-4230U @ 1.90GHz,2,"1,853","1,620",15,FCBGA1364,Laptop
+Intel Celeron G3900TE @ 2.30GHz,2,"1,850","1,402",35,FCLGA1151,Laptop
+Intel Core i3-2310E @ 2.10GHz,2,"1,845",733,35,FCBGA1023,Laptop
+Intel Core i7-2637M @ 1.70GHz,2,"1,831","1,126",17,BGA1023,Laptop
+Intel Core M-5Y70 @ 1.10GHz,2,"1,823","1,081",4.5,BGA1234,Laptop
+Intel Core i7-740QM @ 1.73GHz,4,"1,820","1,008",45,PGA988A,Laptop
+AMD A8-7410 APU,4,"1,814",804,25,Unknown,Laptop
+Intel Core i5-540M @ 2.53GHz,2,"1,806","1,161",35,BGA1288,Laptop
+AMD A8-5557M APU,4,"1,801","1,037",35,FP2,Laptop
+AMD PRO A4-3350B APU,4,"1,797",794,15,FT3b,Laptop
+AMD Phenom II X940 Quad-Core,4,"1,797",785,45,S1,Laptop
+AMD GX-420MC SOC,4,"1,796",695,17.5,FTB3b,Laptop
+AMD GX-424CC SOC,4,"1,787",801,25,FT3b,Laptop
+Intel Core i3-4000M @ 2.40GHz,2,"1,779","1,263",37,FCPGA946,Laptop
+AMD GX-420CA SOC,4,"1,777",675,25,FT3 (769-BGA),Laptop
+Intel Core i7-820QM @ 1.73GHz,4,"1,774","1,022",45,PGA988A,Laptop
+AMD A10-5745M APU,4,"1,773",949,25,FP2,Laptop
+AMD R-464L APU,4,"1,773","1,123",35,FS1r2,"Laptop, Mobile/Embedded"
+AMD A8-6410 APU,4,"1,770",782,15,BGA769 (FT3b),Laptop
+AMD Phenom II N830 3+1,4,"1,768",935,35,S1,Laptop
+Intel Celeron 3965U @ 2.20GHz,2,"1,761","1,358",15,FCBGA1356,Laptop
+AMD A10-4657M APU,4,"1,759",940,35,FP2,Laptop
+AMD A10-7300 APU,4,"1,739",861,19,FP3,Laptop
+AMD A6-7310 APU,4,"1,722",774,25,Unknown,Laptop
+Intel Core i5-520M @ 2.40GHz,2,"1,720","1,094",35,BGA1288,Laptop
+Intel Core i5-2557M @ 1.70GHz,2,"1,713","1,081",17,BGA1023,Laptop
+Intel Pentium 4425Y @ 1.70GHz,2,"1,700",957,6,FCBGA1515,Laptop
+Intel Celeron 4305UE @ 2.00GHz,2,"1,699","1,163",15,FCBGA1528,"Laptop, Mobile/Embedded"
+Intel Core i3-3120M @ 2.50GHz,2,"1,695","1,281",35,PGA988,Laptop
+Intel Core i7-2617M @ 1.50GHz,2,"1,687","1,092",17,BGA1023,Laptop
+AMD Phenom II N970 Quad-Core,4,"1,687",904,35,S1,Laptop
+AMD A8-3550MX APU,4,"1,687",962,45,FS1,Laptop
+AMD A8-4500M APU,2,"1,679",917,35,FS1r2,Laptop
+AMD A6-6310 APU,4,"1,675",742,15,FT3,Laptop
+AMD Phenom II X920 Quad-Core,4,"1,669",944,45,S1,Laptop
+AMD A6-5200 APU,4,"1,664",664,25,FT3,Laptop
+Intel Core i3-4005U @ 1.70GHz,2,"1,663",912,15,FCBGA1168,Laptop
+AMD A4-7210 APU,4,"1,661",725,25,BGA,Laptop
+Intel Core i7-720QM @ 1.60GHz,4,"1,657",928,45,PGA988A,Laptop
+AMD A4-6250J APU,4,"1,656",698,25,Unknown,"Laptop, Mobile/Embedded"
+AMD A10-4655M APU,2,"1,655",912,25,FP2,Laptop
+Intel Core i3-4030Y @ 1.60GHz,2,"1,654",901,11.5,FCBGA1168,Laptop
+Intel Core i3-4010U @ 1.70GHz,2,"1,651",899,15,BGA1168,Laptop
+AMD A4 PRO-3340B,4,"1,645",676,25,BGA769 (FT3),Laptop
+AMD A8-7100 APU,4,"1,642",845,19,FP3,Laptop
+Intel Core i3-3110M @ 2.40GHz,2,"1,636","1,239",35,BGA1023,Laptop
+Intel Core M-5Y10 @ 0.80GHz,2,"1,628",955,4.5,Unknown,Laptop
+AMD Embedded R-Series RX-216GD,2,"1,628","1,313",15,BGA (FP4),"Laptop, Mobile/Embedded"
+AMD A8-3510MX APU,4,"1,614",890,45,FS1,Laptop
+AMD A8-3530MX APU,4,"1,608",938,45,FS1,Laptop
+Intel Celeron 2000E @ 2.20GHz,2,"1,607","1,282",37,FCBGA1364,Laptop
+AMD PRO A6-8500B,2,"1,601","1,340",15,FP4,Laptop
+Intel Core i5-4220Y @ 1.60GHz,2,"1,591",952,11.5,FCBGA1364,Laptop
+AMD Phenom II N950 Quad-Core,4,"1,587",859,35,S1,Laptop
+Intel Pentium 4415Y @ 1.60GHz,2,"1,586",870,6,FCBGA1515,Laptop
+AMD Phenom II N930 Quad-Core,4,"1,584",817,35,S1,Laptop
+AMD Embedded G-Series GX-420GI Radeon R7E,4,"1,579",828,16.1,FP4,"Laptop, Mobile/Embedded"
+Intel Core2 Quad Q9000 @ 2.00GHz,4,"1,575",881,45,PGA478,Laptop
+AMD A8-5545M APU,4,"1,556",826,19,FP2,Laptop
+Intel Celeron N4020 @ 1.10GHz,2,"1,552","1,150",6,FCBGA1090,Laptop
+AMD R-460L APU,4,"1,538",928,25,BGA827 (FP2),Laptop
+AMD A8 PRO-7150B APU,4,"1,528",763,19,FP3,Laptop
+AMD A9-9410,2,"1,527","1,343",25,FP4,Laptop
+Intel Pentium 4405Y @ 1.50GHz,2,"1,526",886,6,FCBGA1515,Laptop
+Intel Celeron N4020C @ 1.10GHz,2,"1,520","1,113",6,FCBGA1090,"Laptop, Mobile/Embedded"
+AMD E2-7110 APU,4,"1,515",611,15,FP4 BGA,Laptop
+Intel Core i7-640LM @ 2.13GHz,2,"1,513","1,043",25,BGA1288,Laptop
+AMD A9-9425,2,"1,511","1,316",15,BGA (FT4),Laptop
+Intel Celeron 3955U @ 2.00GHz,2,"1,507","1,204",15,FCBGA1356,Laptop
+Intel Celeron 2970M @ 2.20GHz,2,"1,501","1,245",37,FCPGA946,Laptop
+AMD A9-9420,2,"1,501","1,296",15,Unknown,Laptop
+AMD A4-6210 APU,4,"1,498",610,15,FT3b,Laptop
+Intel Celeron 3867U @ 1.80GHz,2,"1,467","1,092",15,FCBGA1356,Laptop
+Intel Core i7-620LM @ 2.00GHz,2,"1,462","1,060",25,rPGA988A,Laptop
+AMD A8-3520M APU,4,"1,448",845,35,FS1,Laptop
+AMD A6-3430MX APU,4,"1,448",822,45,FS1,Laptop
+AMD A6-8500P,2,"1,445","1,253",15,BGA (FP4),Laptop
+Intel Core i5-2467M @ 1.60GHz,2,"1,444",847,17,BGA1023,Laptop
+Intel Celeron 5205U @ 1.90GHz,2,"1,441","1,101",15,FCBGA1528,Laptop
+AMD A10 Micro-6700T APU,4,"1,426",722,5,FT3b,Laptop
+Intel Celeron N4000 @ 1.10GHz,2,"1,425","1,040",6,FCBGA1090,Laptop
+Intel Atom C2558 @ 2.40GHz,4,"1,424",512,15,BGA 1283,"Laptop, Mobile/Embedded"
+Intel Pentium 2030M @ 2.50GHz,2,"1,413","1,222",35,FCPGA988,Laptop
+AMD GX-415GA SOC,4,"1,412",515,15,FT3 (769-BGA),Laptop
+AMD A8-3500M APU,4,"1,410",822,35,FS1,Laptop
+Intel Core i7-2610UE @ 1.50GHz,2,"1,409",972,17,BGA1023,Laptop
+Intel Celeron N4000C @ 1.10GHz,2,"1,406","1,004",6,FCBGA1090,Laptop
+Intel Celeron 1020E @ 2.20GHz,2,"1,406","1,224",35," 	FCBGA1023, FCP",Laptop
+Intel Pentium 3825U @ 1.90GHz,2,"1,395","1,108",15,FCBGA1168,Laptop
+Intel Pentium N3710 @ 1.60GHz,4,"1,386",687,6,FCBGA1170,Laptop
+AMD Phenom II P960 Quad-Core,4,"1,386",737,35,S1,Laptop
+Intel Pentium 4410Y @ 1.50GHz,2,"1,384",755,6,FCBGA1515,Laptop
+Intel Pentium 2020M @ 2.40GHz,2,"1,382","1,271",35,FCPGA988,Laptop
+AMD PRO A6-7350B,2,"1,376","1,305",15,FMA4,Laptop
+AMD PRO A6-9500B,2,"1,371","1,235",15,FP4,Laptop
+Intel Celeron 4205U @ 1.80GHz,2,"1,369","1,042",15,FCBGA1528,Laptop
+Intel Core i3-2370M @ 2.40GHz,2,"1,364","1,050",35,PGA988B,Laptop
+Intel Core i3-3217UE @ 1.60GHz,2,"1,362",711,17,BGA1023,Laptop
+Intel Core i3-2332M @ 2.20GHz,2,"1,353",936,35,rPGA988B,Laptop
+AMD A9-9400,2,"1,346","1,219",10,FP4,Laptop
+AMD A4-5100 APU,4,"1,346",540,15,FT3,Laptop
+Intel Pentium 3560M @ 2.40GHz,2,"1,345","1,221",37,FCPGA946,Laptop
+AMD A6-9225,2,"1,335","1,163",15,BGA (FT4),Laptop
+AMD A8-4555M APU,2,"1,331",789,19,FP2,Laptop
+Intel Pentium 3550M @ 2.30GHz,2,"1,330","1,184",37,FCPGA946,Laptop
+AMD A4-5050 APU,4,"1,328",538,13.5,FT3,Laptop
+AMD Phenom II N870 Triple-Core,3,"1,324",900,35,S1,Laptop
+Intel Core i5-480M @ 2.67GHz,2,"1,323","1,156",35,BGA1288,Laptop
+Intel Atom x7-Z8700 @ 1.60GHz,4,"1,323",649,4,BGA1380,Laptop
+Intel Celeron 3865U @ 1.80GHz,2,"1,320","1,035",15,BGA1356,Laptop
+AMD Phenom II P940 Quad-Core,4,"1,319",679,35,S1,Laptop
+Intel Core i5-460M @ 2.53GHz,2,"1,299","1,127",35,BGA1288,Laptop
+AMD Phenom II N850 Triple-Core,3,"1,298",895,35,S1,Laptop
+AMD A4-5000 APU,4,"1,295",508,15,FT3,Laptop
+AMD A6-3420M APU,4,"1,292",773,35,FS1,Laptop
+Intel Atom x7-Z8750 @ 1.60GHz,4,"1,289",679,4,UTFCBGA1380,Laptop
+Intel Core i7-660UM @ 1.33GHz,2,"1,284",925,18,BGA1288,Laptop
+Intel Core i3-3227U @ 1.90GHz,2,"1,284",944,17,BGA1023,Laptop
+Intel Celeron 3855U @ 1.60GHz,2,"1,279",955,15,FCBGA1356,Laptop
+Intel Core i3-4012Y @ 1.50GHz,2,"1,278",726,11.5,FCBGA1168,Laptop
+Intel Celeron 1020M @ 2.10GHz,2,"1,275","1,176",35,FCPGA988,Laptop
+AMD A6-9220,2,"1,274","1,129",15,Unknown,Laptop
+Intel Core i3-2348M @ 2.30GHz,2,"1,273","1,006",35,rPGA988B,Laptop
+AMD Embedded G-Series GX-224IJ Radeon R4E,2,"1,271","1,119",15,FP4,"Laptop, Mobile/Embedded"
+AMD A6-3410MX APU,4,"1,263",732,45,FS1,Laptop
+AMD Phenom II X620 Dual-Core,2,"1,262","1,339",45,S1,Laptop
+Intel Core i3-2350M @ 2.30GHz,2,"1,261",975,35,PGA988B,Laptop
+Intel Core i3-330E @ 2.13GHz,2,"1,260",934,35,BGA1288,Laptop
+Intel Celeron 3765U @ 1.90GHz,2,"1,252","1,171",15,FCBGA1168,Laptop
+AMD Phenom II P860 Triple-Core,3,"1,250",831,35,S1,Laptop
+Intel Pentium A1020 @ 2.41GHz,4,"1,249",726,10,FCBGA1170,Laptop
+Intel Pentium N3700 @ 1.60GHz,4,"1,247",631,6,FCBGA1170,Laptop
+Intel Core i3-390M @ 2.67GHz,2,"1,245","1,074",35,BGA1288,Laptop
+Intel Core i3-2328M @ 2.20GHz,2,"1,237",982,35,PGA988,Laptop
+Intel Celeron 2950M @ 2.00GHz,2,"1,237","1,150",37,FCPGA946,Laptop
+Intel Atom x5-Z8500 @ 1.44GHz,4,"1,236",631,4,UTFCBGA1380,Laptop
+Intel Core i5-450M @ 2.40GHz,2,"1,235","1,042",35,PGA988A,Laptop
+Intel Core i3-2330M @ 2.20GHz,2,"1,225",963,35,BGA1023,Laptop
+AMD A4-9120,2,"1,225","1,043",15,BGA,Laptop
+Intel Core i3-3217U @ 1.80GHz,2,"1,224",912,17,BGA1023,Laptop
+Intel Core i5-2537M @ 1.40GHz,2,"1,223",954,17,BGA1023,Laptop
+AMD A6-5350M APU,2,"1,223","1,237",35,FS1r2,Laptop
+Intel Core i3-2310M @ 2.10GHz,2,"1,221",944,35,BGA1023,Laptop
+Intel Core2 Duo T9800 @ 2.93GHz,2,"1,216","1,236",35,BGA479,Laptop
+AMD R-272F APU,2,"1,215","1,087",35,FS1,"Desktop, Laptop"
+Intel Pentium N3540 @ 2.16GHz,4,"1,210",712,7.5,FCBGA1170,Laptop
+Intel Pentium A1018 @ 2.10GHz,2,"1,210","1,085",35,FCPGA988,Laptop
+AMD A6-9210,2,"1,210","1,061",15,FP4,Laptop
+AMD Phenom II N830 Triple-Core,3,"1,209",819,35,S1,Laptop
+AMD A4-9125,2,"1,209","1,045",15,BGA (FT4),Laptop
+Intel Core i5-430M @ 2.27GHz,2,"1,199",980,35,BGA1288,Laptop
+Intel Core i3-380M @ 2.53GHz,2,"1,199","1,021",35,PGA988A,Laptop
+Intel Celeron J3355 @ 2.00GHz,2,"1,197",826,10,FCBGA1296,"Desktop, Laptop"
+Intel Core i7-680UM @ 1.47GHz,2,"1,196",911,18,BGA1288,Laptop
+Intel Celeron 3965Y @ 1.50GHz,2,"1,194",901,6,FCBGA1515,Laptop
+Intel Celeron N3150 @ 1.60GHz,4,"1,191",568,6,FCBGA1170,Laptop
+AMD A6-3400M APU,4,"1,190",690,35,FS1,Laptop
+Intel Atom Z3795 @ 1.60GHz,4,"1,188",640,4,UTFCBGA1380,Laptop
+Intel Pentium N3530 @ 2.16GHz,4,"1,186",700,7.5,FCBGA1170,Laptop
+Intel Core2 Duo T9900 @ 3.06GHz,2,"1,185","1,179",35,"BGA479,PGA478",Laptop
+Intel Core i7-640UM @ 1.20GHz,2,"1,183",879,18,BGA1288,Laptop
+Intel Celeron 3755U @ 1.70GHz,2,"1,182","1,022",15,FCBGA1168,Laptop
+Intel Pentium 3805U @ 1.90GHz,2,"1,180","1,099",15,FCBGA1168,Laptop
+Intel Celeron N3160 @ 1.60GHz,4,"1,178",557,6,FCBGA1170,Laptop
+Intel Core2 Extreme X9100 @ 3.06GHz,2,"1,171","1,178",44,PGA478,Laptop
+Intel Atom x5-Z8550 @ 1.44GHz,4,"1,166",674,4,UTFCBGA1380,"Laptop, Mobile/Embedded"
+AMD A6-5357M APU,2,"1,165","1,243",35,FP2,Laptop
+AMD QC-4000,4,"1,155",449,15,FT3,Laptop
+Intel Core i3-370M @ 2.40GHz,2,"1,153",974,35,PGA988A,Laptop
+AMD A8-7050,2,"1,152",945,15,Unknown,Laptop
+AMD E2-3800 APU,4,"1,148",436,15,FT3,Laptop
+Intel Core2 Duo P9700 @ 2.80GHz,2,"1,147","1,153",28,PGA478,Laptop
+AMD A6 Micro-6500T APU,4,"1,146",630,NA,Unknown,Laptop
+Intel Pentium N3520 @ 2.16GHz,4,"1,143",663,7.5,FCBGA1170,Laptop
+Intel Core2 Extreme X7800 @ 2.60GHz,2,"1,138","1,077",44,PGA478,Laptop
+AMD PRO A4-4350B,2,"1,134",952,15,FT4,Laptop
+Intel Core i3-2312M @ 2.10GHz,2,"1,128",893,35,PGA988B,Laptop
+AMD PRO A6-8530B,2,"1,127","1,149",15,FP4,Laptop
+AMD E2-6110 APU,4,"1,126",473,15,"AM1,FT3b",Laptop
+AMD A6-5345M APU,2,"1,122","1,094",17,FP2,Laptop
+Intel Celeron 3215U @ 1.70GHz,2,"1,118","1,050",15,FCBGA1168,Laptop
+AMD A6-9200,2,"1,117",973,10,BGA,Laptop
+Intel Core2 Duo E8135 @ 2.66GHz,2,"1,112","1,127",NA,Socket P,Laptop
+Intel Celeron N3350 @ 1.10GHz,2,"1,106",801,6,FCBGA1296,Laptop
+Intel Core2 Extreme X7900 @ 2.80GHz,2,"1,104","1,085",44,PGA478,Laptop
+Intel Core2 Duo E8435 @ 3.06GHz,2,"1,104","1,223",NA,Socket P,Laptop
+Intel Celeron 1005M @ 1.90GHz,2,"1,104","1,015",35,FCPGA988,Laptop
+Intel Core2 Extreme X9000 @ 2.80GHz,2,"1,099","1,098",44,PGA478,Laptop
+AMD A9-9420e,2,"1,099",952,NA,Unknown,Laptop
+AMD E2-9010,2,"1,093",909,15,FP4,Laptop
+Intel Celeron 2002E @ 1.50GHz,2,"1,091",871,25,FCBGA1364,Laptop
+AMD GX-412HC,4,"1,090",414,7,FT3b,Laptop
+Intel Core2 Duo P9600 @ 2.66GHz,2,"1,088","1,120",25,PGA478,Laptop
+Intel Core i3-350M @ 2.27GHz,2,"1,084",877,35,BGA1288,Laptop
+AMD Phenom II N660 Dual-Core,2,"1,083","1,093",35,S1,Laptop
+Intel Pentium B980 @ 2.40GHz,2,"1,082","1,047",35,FCPGA988,Laptop
+Intel Pentium B970 @ 2.30GHz,2,"1,082","1,029",35,PGA988,Laptop
+AMD A4 Micro-6400T APU,4,"1,082",540,4.5,FT3b,Laptop
+Intel Core2 Duo T9600 @ 2.80GHz,2,"1,079","1,121",35,BGA479,Laptop
+AMD Phenom II P840 Triple-Core,3,"1,079",760,35,S1,Laptop
+Intel Celeron 1000M @ 1.80GHz,2,"1,077",976,35,FCPGA988,Laptop
+AMD Phenom II P820 Triple-Core,3,"1,068",717,25,S1,Laptop
+Intel Pentium 2127U @ 1.90GHz,2,"1,064",969,17,FCBGA1023,Laptop
+AMD Embedded G-Series GX-215JJ Radeon R2E,2,"1,064",861,10,FP4,"Laptop, Mobile/Embedded"
+Intel Pentium 3556U @ 1.70GHz,2,"1,058",951,15,BGA1168,Laptop
+Intel Core2 Duo E8335 @ 2.66GHz,2,"1,057","1,157",NA,Socket P,Laptop
+Intel Celeron 2980U @ 1.60GHz,2,"1,056",929,15,FCBGA1168,Laptop
+AMD A6-9220C,2,"1,053",995,6,FT4,Laptop
+Intel Core2 Duo T9500 @ 2.60GHz,2,"1,046","1,074",35,BGA479,Laptop
+AMD A6-1450 APU,4,"1,045",458,8,FT3,Laptop
+AMD GX-222GC SOC,2,"1,044",783,15,BGA769 (FT3b),"Laptop, Mobile/Embedded"
+Intel Core2 Duo P9600 @ 2.53GHz,2,"1,040","1,082",25,PGA478,Laptop
+Intel Celeron N2940 @ 1.83GHz,4,"1,037",605,7.5,FCBGA1170,Laptop
+AMD Turion II Ultra Dual-Core Mobile M640,2,"1,034","1,067",35,S1,Laptop
+Intel Pentium 3558U @ 1.70GHz,2,"1,028",941,15,FCBGA1168,Laptop
+Intel Celeron 2981U @ 1.60GHz,2,"1,027",892,15,BGA1168,Laptop
+Intel Pentium 2117U @ 1.80GHz,2,"1,021",930,17,FCBGA1023,Laptop
+AMD Turion II P540 Dual-Core,2,"1,021",957,35,S1,Laptop
+Intel Core2 Duo E8235 @ 2.80GHz,2,"1,020","1,112",NA,Socket P,Laptop
+Intel Core i3-330M @ 2.13GHz,2,"1,020",814,35,BGA1288,Laptop
+Intel Celeron N2930 @ 1.83GHz,4,"1,018",584,7.5,FCBGA1170,Laptop
+Intel Core i5-560UM @ 1.33GHz,2,"1,015",898,18,BGA1288,Laptop
+Intel Celeron B840 @ 1.90GHz,2,"1,015",918,35,PGA988B,Laptop
+AMD Phenom II N620 Dual-Core,2,"1,014","1,088",35,S1,Laptop
+AMD Turion II Ultra Dual-Core Mobile M660,2,"1,011","1,103",35,S1,Laptop
+Intel Core i7-620UM @ 1.07GHz,2,"1,010",820,18,BGA1288,Laptop
+AMD A6-7000 ,2,"1,010",857,17,FP3,Laptop
+AMD A6-4400M APU,1,"1,010","1,027",35,FS1r2,Laptop
+AMD A6 PRO-7050B APU,2,"1,009",875,17,FP3,Laptop
+Intel Core2 Duo T9400 @ 2.53GHz,2,"1,006","1,045",35,BGA479,Laptop
+AMD Phenom II P920 Quad-Core,4,"1,006",597,25,S1,Laptop
+Intel Core2 Duo E8335 @ 2.93GHz,2,"1,002","1,132",NA,Socket P,Laptop
+Intel Core i5-540UM @ 1.20GHz,2,"1,002",818,18,BGA1288,Laptop
+AMD A4-4300M APU,1,"1,000","1,014",35,FS1,Laptop
+Intel Pentium B950 @ 2.10GHz,2,998,941,35,PGA988,Laptop
+Intel Celeron 1037U @ 1.80GHz,2,998,936,17,FCBGA1023,Laptop
+Intel Core2 Duo P9500 @ 2.53GHz,2,993,"1,057",25,BGA479,Laptop
+Intel Core2 Duo T9300 @ 2.50GHz,2,988,"1,032",35,BGA479,Laptop
+AMD E2-9000,2,983,829,10,Unknown,Laptop
+Intel Core i3-2340UE @ 1.30GHz,2,976,620,17,BGA-1023,Laptop
+Intel Core2 Duo T9550 @ 2.66GHz,2,972,"1,068",35,BGA479,Laptop
+AMD A6-9220e,2,971,857,NA,Unknown,Laptop
+Intel Pentium B960 @ 2.20GHz,2,967,964,35,PGA988,Laptop
+AMD Phenom II N640 Dual-Core,2,965,"1,039",35,S1,Laptop
+Intel Core2 Duo P8700 @ 2.53GHz,2,963,"1,028",25,BGA479,Laptop
+Intel Atom C2538 @ 2.40GHz,4,960,491,15,FCBGA1283,Laptop
+AMD Turion II Ultra Dual-Core Mobile M600,2,955,987,35,S1,Laptop
+AMD R-260H APU,2,954,902,17,BGA827 (FP2),Laptop
+Intel Core2 Duo P9300 @ 2.26GHz,2,952,950,NA,Unknown,Laptop
+Intel Celeron N2920 @ 1.86GHz,4,950,552,7.5,FCBGA1170,Laptop
+Intel Core2 Duo P8800 @ 2.66GHz,2,949,"1,085",25,BGA479,Laptop
+Intel Celeron 3205U @ 1.50GHz,2,947,907,15,FCBGA1168,Laptop
+Intel Core2 Duo T7700 @ 2.40GHz,2,945,969,35,BGA479,Laptop
+Intel Atom x5-E8000 @ 1.04GHz,4,943,505,5,FCBGA1170,Laptop
+AMD Phenom II P650 Dual-Core,2,933,985,35,S1,Laptop
+Intel Core2 Duo T7800 @ 2.60GHz,2,932,945,35,BGA479,Laptop
+Intel Atom x5-E3930 @ 1.30GHz,2,928,642,6.5,BGA1296,Laptop
+AMD Turion II Dual-Core Mobile M540,2,912,967,35,S1,Laptop
+Intel Pentium P6200 @ 2.13GHz,2,908,859,35,PGA988,Laptop
+Intel Core i5-520UM @ 1.07GHz,2,908,699,18,BGA1288,Laptop
+AMD E2-9000e,2,904,765,6,Unknown,Laptop
+Intel Core i3-2375M @ 1.50GHz,2,903,693,17,BGA1023,Laptop
+AMD Athlon II N370 Dual-Core,2,899,913,35,S1g4,Laptop
+Intel Core2 Duo T8300 @ 2.40GHz,2,894,968,35,BGA479,Laptop
+AMD A4-1350 APU,4,894,348,8,FT3,Laptop
+Intel Atom x5-Z8350 @ 1.44GHz,4,891,471,4,UTFCBGA592,Laptop
+Intel Celeron 1017U @ 1.60GHz,2,888,808,17,FCBGA1023,Laptop
+Intel Pentium P6100 @ 2.00GHz,2,880,831,35,PGA988,Laptop
+Intel Core2 Duo P7550 @ 2.26GHz,2,879,967,25,PGA478,Laptop
+Intel Pentium N3510 @ 1.99GHz,4,878,534,7.5,FCBGA1170,Laptop
+AMD Turion II P560 Dual-Core,2,878,"1,001",25,S1,Laptop
+Intel Celeron 2955U @ 1.40GHz,2,877,781,15,FCBGA1168,Laptop
+AMD Turion II N550 Dual-Core,2,877,891,35,S1,Laptop
+AMD Turion 64 X2 Mobile TL-68,2,866,882,35,S1,Laptop
+Intel Celeron 2957U @ 1.40GHz,2,863,785,15,FCBGA1168,Laptop
+Intel Celeron B830 @ 1.80GHz,2,857,831,35,rPGA988B,Laptop
+Intel Core2 Duo SP9400 @ 2.40GHz,2,855,921,25,BGA956,Laptop
+AMD Turion II N530 Dual-Core,2,855,968,35,S1,Laptop
+AMD Turion II Neo N54L Dual-Core,2,853,894,25,BGA812,Laptop
+Intel Core2 Duo P8400 @ 2.26GHz,2,850,922,25,BGA479,Laptop
+Intel Pentium 3560Y @ 1.20GHz,2,849,700,11.5,BGA1168,Laptop
+AMD A4-9120e,2,849,743,NA,FT4,Laptop
+Intel Celeron P4500 @ 1.87GHz,2,848,747,35,PGA988A,Laptop
+Intel Pentium B940 @ 2.00GHz,2,847,849,35,PGA988,Laptop
+Intel Core2 Duo P8600 @ 2.40GHz,2,846,940,25,BGA479,Laptop
+Intel Core2 Duo P7570 @ 2.26GHz,2,845,930,25,PGA478,Laptop
+AMD Turion II Dual-Core Mobile M520,2,844,923,35,S1,Laptop
+Intel Core i3-2367M @ 1.40GHz,2,843,620,17,BGA1023,Laptop
+AMD TurionX2 Ultra DualCore Mobile ZM-85,2,841,686,35,S1,Laptop
+Intel Celeron 1007U @ 1.50GHz,2,836,772,17,FCBGA1023,Laptop
+Intel Pentium P6300 @ 2.27GHz,2,834,772,35,PGA988,Laptop
+Intel Core i3-2377M @ 1.50GHz,2,833,613,17,BGA1023,Laptop
+Intel Celeron P4600 @ 2.00GHz,2,832,777,35,PGA988A,Laptop
+Intel Pentium T4500 @ 2.30GHz,2,829,911,35,PGA478,Laptop
+AMD Turion X2 Ultra Dual-Core Mobile ZM-85,2,828,864,35,S1,Laptop
+Intel Core2 Duo T7500 @ 2.20GHz,2,826,862,35,BGA479,Laptop
+Intel Core2 Duo T7600 @ 2.33GHz,2,824,874,34,"PBGA479, PPGA478",Laptop
+Intel Celeron B820 @ 1.70GHz,2,820,762,35,PGA988B,Laptop
+Intel Core2 Duo T6670 @ 2.20GHz,2,818,881,35,PGA478,Laptop
+AMD A4-9120C,2,817,888,6,FT4,Laptop
+Intel Core i3-2365M @ 1.40GHz,2,816,606,17,BGA1023,Laptop
+AMD Turion II Ultra Dual-Core Mobile M620,2,814,945,35,S1,Laptop
+Intel Atom x5-Z8300 @ 1.44GHz,4,814,455,4,UTFCBGA592,"Laptop, Mobile/Embedded"
+Intel Pentium P6000 @ 1.87GHz,2,810,735,35,PGA988,Laptop
+Intel Atom x5-Z8330 @ 1.44GHz,4,809,458,4,Unknown,Laptop
+AMD Athlon II Dual-Core M340,2,807,858,35,Unknown,Laptop
+AMD A4-4355M APU,2,806,813,17,FP2,Laptop
+AMD Turion X2 Ultra Dual-Core Mobile ZM-84,2,802,787,35,S1,Laptop
+Intel Atom Z3580 @ 1.33GHz,4,802,587,NA,Unknown,"Laptop, Mobile/Embedded"
+AMD Turion II P520 Dual-Core,2,801,875,25,S1,Laptop
+AMD Turion X2 Dual-Core Mobile RM-76,2,799,761,35,S1,Laptop
+Intel Atom Z3775D @ 1.49GHz,4,794,646,4.4,UTFCBGA1380,Laptop
+AMD A6-4455M APU,1,793,786,17,FP2,Laptop
+Intel Core2 Duo P7370 @ 2.00GHz,2,790,793,25,PGA478,Laptop
+Intel Core2 Duo T6600 @ 2.20GHz,2,788,859,35,PGA478,Laptop
+Intel Core2 Duo L9600 @ 2.13GHz,2,788,849,17,BGA956,Laptop
+Intel Core i3-2357M @ 1.30GHz,2,788,601,17,Unknown,Laptop
+AMD GX-217GA SOC,2,788,564,15,FT3 (769-BGA),Laptop
+Intel Core2 Duo P7450 @ 2.13GHz,2,783,837,25,PGA478,Laptop
+AMD A4-3310MX APU,2,782,832,45,FS1,Laptop
+Intel Core i5-470UM @ 1.33GHz,2,775,722,18,BGA1288,Laptop
+Intel Celeron B810 @ 1.60GHz,2,775,754,35,PGA988B,Laptop
+VIA QuadCore L4700 @ 1.2+ GHz,4,773,355,27.5,Unknown,Laptop
+Intel Celeron N2910 @ 1.60GHz,4,773,447,7.5,FCBGA1170,Laptop
+Intel Atom Z3735G @ 1.33GHz,4,772,476,4.4,Unknown,Laptop
+Intel Core2 Duo T8100 @ 2.10GHz,2,768,833,35,BGA479,Laptop
+AMD Athlon II N350 Dual-Core,2,767,945,35,Unknown,Laptop
+Intel Pentium T4400 @ 2.20GHz,2,766,841,35,PGA478,Laptop
+Intel Pentium T4300 @ 2.10GHz,2,765,821,35,PGA478,Laptop
+AMD A4-5150M APU,2,765,800,35,FS1r2,Laptop
+Intel Core2 Duo T7400 @ 2.16GHz,2,761,757,34,BGA479,Laptop
+Intel Core2 Duo SL9400 @ 1.86GHz,2,759,786,17,BGA956,Laptop
+Celeron Dual-Core T3500 @ 2.10GHz,2,756,863,35,PGA478,Laptop
+AMD Turion II Dual-Core Mobile M500,2,756,847,35,S1,Laptop
+AMD A4-3330MX APU,2,756,908,45,FS1 uPGA,Laptop
+Intel Core2 Duo T6570 @ 2.10GHz,2,755,842,35,PGA478,Laptop
+Intel Core2 Duo P7350 @ 2.00GHz,2,754,796,25,BGA479,Laptop
+Intel Celeron 887 @ 1.50GHz,2,754,703,17,BGA1023,Laptop
+AMD GX-218GL SOC,2,754,627,15,BGA769 (FT3b),Laptop
+Intel Pentium Dual T2390 @ 1.86GHz,2,745,712,35,PPGA478,Laptop
+Intel Core i3-380UM @ 1.33GHz,2,745,581,18,BGA1288,Laptop
+AMD Athlon II Dual-Core M320,2,743,850,35,Unknown,Laptop
+Intel Core2 Duo T6500 @ 2.10GHz,2,742,835,35,PGA478,Laptop
+AMD Turion X2 Ultra Dual-Core Mobile ZM-87,2,741,730,35,S1,Laptop
+Intel Core2 Duo T7200 @ 2.00GHz,2,738,743,34,"PBGA479, PPGA478",Laptop
+Intel Atom Z3770 @ 1.46GHz,4,736,539,4,UTFCBGA1380,Laptop
+AMD A4-3305M APU,2,734,824,35,FS1,Laptop
+AMD Turion X2 Ultra Dual-Core Mobile ZM-82,2,733,770,35,S1,Laptop
+AMD Athlon II P360 Dual-Core,2,730,861,25,S1g4,Laptop
+Intel Core2 Duo T6400 @ 2.00GHz,2,727,797,35,PGA478,Laptop
+Intel Celeron B815 @ 1.60GHz,2,727,703,35,PGA988B,Laptop
+AMD E2-3000 APU,2,726,547,15,FT3,Laptop
+Intel Pentium T4200 @ 2.00GHz,2,712,778,35,PGA478,Laptop
+AMD A4-3300M APU,2,710,788,65,FM1,Laptop
+Intel Core2 Duo T7250 @ 2.00GHz,2,708,771,35,BGA479,Laptop
+AMD Turion X2 Dual-Core Mobile RM-75,2,708,770,35,S1,Laptop
+Intel Atom Z3735D @ 1.33GHz,4,704,544,4.4,Unknown,Laptop
+Intel Atom Z3775 @ 1.46GHz,4,703,504,4,UTFCBGA1380,Laptop
+AMD Athlon II P320 Dual-Core,2,702,820,25,Unknown,Laptop
+Intel Core2 Duo T5870 @ 2.00GHz,2,698,740,35,"PPGA478, Socket ",Laptop
+AMD Athlon II P340 Dual-Core,2,697,840,25,S1g4,Laptop
+AMD Turion 64 X2 Mobile TL-66,2,696,846,35,S1,Laptop
+AMD Turion X2 Ultra Dual-Core Mobile ZM-86,2,695,820,35,S1,Laptop
+Intel Core2 Duo T5750 @ 2.00GHz,2,693,741,35,Socket P,Laptop
+Intel Celeron 877 @ 1.40GHz,2,692,644,17,BGA1023,Laptop
+AMD Turion X2 Dual Core Mobile RM-76,2,691,729,35,S1,Laptop
+Intel Core2 Duo L9300 @ 1.60GHz,2,690,703,17,BGA956,Laptop
+Intel Celeron P4505 @ 1.87GHz,2,689,820,35,BGA1288,Laptop
+Intel Core2 Duo T5850 @ 2.16GHz,2,687,787,NA,Socket P,Laptop
+Celeron Dual-Core T3000 @ 1.80GHz,2,687,748,35,PGA478,Laptop
+Intel Celeron 2961Y @ 1.10GHz,2,684,634,11.5,Unknown,Laptop
+AMD Turion II Neo K685 Dual-Core,2,684,729,15,BGA812,Laptop
+Intel Core2 Duo T7300 @ 2.00GHz,2,680,762,35,BGA479,Laptop
+AMD Turion 64 X2 Mobile TL-64,2,675,702,35,S1,Laptop
+AMD Athlon II Dual-Core M300,2,670,776,35,Unknown,Laptop
+AMD E2-3000M APU,2,668,731,35,FS1,Laptop
+AMD A4-3320M APU,2,668,708,35,FS1,Laptop
+AMD Athlon II N330 Dual-Core,2,665,813,35,Unknown,Laptop
+Intel Core2 Duo T5600 @ 1.83GHz,2,662,687,34,PGA478,Laptop
+AMD E2-7015 APU,2,662,507,NA,Unknown,Laptop
+Intel Celeron N3060 @ 1.60GHz,2,661,629,6,Unknown,Laptop
+AMD Turion Dual-Core RM-75,2,659,444,35,S1,Laptop
+AMD Athlon 64 X2 QL-60,2,659,656,35,S1,Laptop
+Intel Core2 Duo L7500 @ 1.60GHz,2,657,664,17,BGA479,Laptop
+AMD Turion X2 Dual-Core Mobile RM-74,2,655,738,35,S1,Laptop
+Intel Pentium T3400 @ 2.16GHz,2,653,732,35,PPGA478,Laptop
+AMD Turion X2 Dual-Core Mobile RM-72,2,653,756,35,S1,Laptop
+Intel Core2 Duo T5900 @ 2.20GHz,2,652,768,NA,Socket P,Laptop
+Intel Celeron B800 @ 1.50GHz,2,652,637,35,PGA988B,Laptop
+AMD Turion Dual-Core RM-72,2,649,725,35,S1,Laptop
+AMD Turion 64 X2 Mobile TL-62,2,649,724,35,S1,Laptop
+Intel Pentium 987 @ 1.50GHz,2,648,620,17,FCBGA1023,Laptop
+AMD GX-212JC SOC ,2,646,452,6,FT3b,Laptop
+Intel Pentium 967 @ 1.30GHz,2,643,616,17,FCBGA1023,Laptop
+AMD Athlon 64 X2 QL-66,2,641,751,35,S1,Laptop
+AMD Turion 64 X2 Mobile TL-60,2,639,703,31,S1,Laptop
+Intel Core2 Duo T5550 @ 1.83GHz,2,637,680,35,PGA478,Laptop
+AMD E2-7015,2,637,491,NA,Unknown,Laptop
+Intel Atom Z3740 @ 1.33GHz,4,634,419,4,UTFCBGA1380,Laptop
+AMD Athlon 64 X2 QL-65,2,634,672,35,S1,Laptop
+Intel Pentium T3200 @ 2.00GHz,2,631,711,35,PPGA478,Laptop
+Intel Core2 Duo T5800 @ 2.00GHz,2,628,725,35,PGA478,Laptop
+Intel Core i5-430UM @ 1.20GHz,2,627,481,18,BGA1288,Laptop
+Intel Pentium U5600 @ 1.33GHz,2,624,588,18,BGA1288,Laptop
+Intel Pentium 957 @ 1.20GHz,2,622,574,17,FCBGA1023,Laptop
+Intel Atom Z3745 @ 1.33GHz,4,621,435,4,UTFCBGA1380,Laptop
+Celeron Dual-Core T3300 @ 2.00GHz,2,620,701,35,Î¼FCPGA-478,Laptop
+AMD Turion II Neo K625 Dual-Core,2,618,631,15,S1,Laptop
+AMD Turion II Neo N40L Dual-Core,2,617,635,15,BGA812,Laptop
+AMD Athlon 64 X2 QL-64,2,617,728,35,S1,Laptop
+Intel Celeron N3000 @ 1.04GHz,2,616,566,4,FCBGA1170,Laptop
+Intel Atom Z3740D @ 1.33GHz,4,614,459,4.4,UTFCBGA1380,Laptop
+AMD Turion X2 Dual-Core Mobile RM-70,2,612,672,31,S1,Laptop
+Intel Core2 Duo L7700 @ 1.80GHz,2,607,748,17,Unknown,Laptop
+Intel Celeron N3010 @ 1.04GHz,2,605,588,4,FCBGA1170,Laptop
+Intel Core2 Duo T7100 @ 1.80GHz,2,604,688,35,BGA479,Laptop
+AMD Turion X2 Dual Core L510,2,603,593,20,ASB1,Laptop
+AMD E1 Micro-6200T APU,2,600,498,3.95,FT3b,Laptop
+Intel Atom Z3745D @ 1.33GHz,4,599,415,4.4,Unknown,Laptop
+Celeron Dual-Core T3100 @ 1.90GHz,2,599,637,35,BGA479,Laptop
+AMD E1-2500 APU,2,598,460,15,FT3,Laptop
+Intel Core2 Duo T5470 @ 1.60GHz,2,590,636,35,PGA478,Laptop
+AMD E1-7010 APU,2,589,483,10,BGA769 (FT3b),Laptop
+Intel Celeron N2840 @ 2.16GHz,2,588,672,7,FCBGA1170,Laptop
+AMD Turion Dual-Core RM-74,2,588,595,35,S1,Laptop
+Intel Pentium 2129Y @ 1.10GHz,2,587,564,10,FCBGA1023,Laptop
+Intel Core2 Duo T5670 @ 1.80GHz,2,587,664,35,Socket P,Laptop
+Intel Celeron N3050 @ 1.60GHz,2,587,552,6,FCBGA1170,Laptop
+Intel Celeron 847E @ 1.10GHz,2,584,520,17,FCBGA1023,Laptop
+Intel Atom C2338 @ 1.74GHz,2,584,233,7,FCBGA1283,Laptop
+AMD Athlon 64 X2 QL-67,2,582,515,35,S1,Laptop
+Intel Core2 Duo T5450 @ 1.66GHz,2,579,590,35,PGA478,Laptop
+Intel Celeron U3600 @ 1.20GHz,2,579,523,18,BGA1288,Laptop
+Intel Atom C2358 @ 1.74GHz,2,578,391,7,FCBGA1283,Laptop
+Intel Core2 Duo U9600 @ 1.60GHz,2,577,659,10,BGA956,Laptop
+AMD E1-6015 APU,2,571,448,NA,BGA769 (FT3b),Laptop
+Intel Celeron 857 @ 1.20GHz,2,569,476,17,BGA1023,Laptop
+Intel Pentium T2390 @ 1.86GHz,2,568,651,35,PPGA478,Laptop
+Intel Celeron 867 @ 1.30GHz,2,562,584,17,BGA1023,Laptop
+AMD Turion X2 Dual-Core Mobile RM-77,2,562,735,35,S1,Laptop
+AMD Turion Dual-Core RM-70,2,561,548,31,S1,Laptop
+Intel Core2 Duo T5250 @ 1.50GHz,2,560,572,35,PGA478,Laptop
+Intel Pentium T2370 @ 1.73GHz,2,558,594,35,PPGA478,Laptop
+Intel Atom Z3735E @ 1.33GHz,4,557,478,4.4,UTFCBGA1380,Laptop
+Intel Pentium U5400 @ 1.20GHz,2,552,501,18,BGA1288,Laptop
+Intel Celeron T1600 @ 1.66GHz,2,551,629,35,Unknown,Laptop
+Intel Celeron N2830 @ 2.16GHz,2,550,627,7.5,FCBGA1170,Laptop
+Intel Pentium T2330 @ 1.60GHz,2,543,575,35,PPGA478,Laptop
+Intel Atom Z3735F @ 1.33GHz,4,542,387,4.4,UTFCBGA592,Laptop
+AMD TurionX2 Dual Core Mobile RM-70,2,536,674,31,S1,Laptop
+Intel Core2 Duo T5500 @ 1.66GHz,2,535,604,34,PGA478,Laptop
+AMD Turion 64 X2 Mobile TL-52,2,534,564,31,S1,Laptop
+AMD E1-6010 APU,2,533,425,10,FT3b,Laptop
+Intel Pentium T2310 @ 1.46GHz,2,531,559,35,PPGA478,Laptop
+Intel Core2 Duo T5300 @ 1.73GHz,2,530,533,34,PGA478,Laptop
+AMD Athlon II Neo K345 Dual-Core,2,527,552,12,Unknown,Laptop
+AMD Athlon 64 X2 QL-62,2,525,623,35,S1,Laptop
+Intel Core2 Duo U7300 @ 1.30GHz,2,522,531,10,BGA956,Laptop
+AMD Turion 64 X2 Mobile TL-56,2,519,586,31,S1,Laptop
+Intel Core2 Duo L7400 @ 1.50GHz,2,516,555,17,BGA479,Laptop
+Intel Celeron U3400 @ 1.07GHz,2,516,456,18,BGA1288,Laptop
+Intel Core i3-330UM @ 1.20GHz,2,515,346,18,BGA1288,Laptop
+Intel Core2 Duo L7300 @ 1.40GHz,2,513,541,17,BGA479,Laptop
+Intel Atom D2701 @ 2.13GHz,2,511,384,10,BGA559,Laptop
+Intel Celeron N2808 @ 1.58GHz,2,510,586,4.5,FCBGA1170,Laptop
+AMD Turion X2 Ultra Dual-Core Mobile ZM-80,2,506,618,32,S1,Laptop
+Intel Celeron N2807 @ 1.58GHz,2,505,572,4.3,FCBGA1170,Laptop
+Intel Core2 Duo SU9400 @ 1.40GHz,2,503,583,10,BGA956,Laptop
+Intel Celeron N2820 @ 2.13GHz,2,502,602,7.5,FCBGA1170,Laptop
+Intel Core Duo T2700 @ 2.33GHz,2,498,652,31,BGA479,Laptop
+AMD Turion X2 Dual Core Mobile RM-70,2,497,504,31,S1,Laptop
+Intel Atom Z3736F @ 1.33GHz,4,496,423,4.4,UTFCBGA592,Laptop
+AMD E2-2000 APU,2,496,538,18,"BGA413,FT1",Laptop
+Intel Celeron N2815 @ 1.86GHz,2,495,560,7.5,FCBGA1170,Laptop
+Intel Pentium SU4100 @ 1.30GHz,2,492,524,10,BGA956,Laptop
+Intel Atom Z3770D @ 1.49GHz,4,488,361,4.4,BGA1380,Laptop
+AMD Athlon II Neo N36L Dual-Core,2,487,524,12,Unknown,Laptop
+AMD E-350D APU,2,486,523,18,Unknown,"Laptop, Mobile/Embedded"
+Intel Celeron N2806 @ 1.60GHz,2,485,534,4.5,FCBGA1170,Laptop
+Intel Celeron 847 @ 1.10GHz,2,484,476,17,BGA1023,Laptop
+AMD G-T56N,2,484,528,18,FT1,Laptop
+AMD Turion 64 X2 Mobile TL-58,2,483,574,31,S1,Laptop
+Intel Celeron SU2300 @ 1.20GHz,2,482,507,10,BGA956,Laptop
+Intel Celeron 925 @ 2.30GHz,1,477,910,35,Unknown,Laptop
+AMD Turion 64 X2 Mobile TL-50,2,474,541,31,S1,Laptop
+AMD E1-2200 APU,2,474,368,9,FT3,Laptop
+AMD TurionX2 Dual Core Mobile RM-72,2,471,392,35,S1,Laptop
+Intel Core2 Duo T5200 @ 1.60GHz,2,470,592,34,Socket M,Laptop
+Intel Core2 Duo L7100 @ 1.20GHz,2,467,484,NA,BGA956 ,Laptop
+Intel Atom E3827 @ 1.74GHz,2,463,468,8,FCBGA1170,Laptop
+Intel Core Duo T2600 @ 2.16GHz,2,460,667,31,BGA479,Laptop
+Intel Atom N2800 @ 1.86GHz,2,444,319,6.5,BGA559,Laptop
+AMD G-T56E,2,442,522,18,FT1,Laptop
+Intel Core2 Duo U9300 @ 1.20GHz,2,440,502,10,BGA956,Laptop
+AMD E-450 APU,2,435,498,18,FT1,Laptop
+AMD Turion Neo X2 Dual Core L625,2,432,486,18,ASB1,Laptop
+Intel Core2 Duo U7700 @ 1.33GHz,2,429,442,10,Unknown,Laptop
+AMD G-T48E,2,429,458,18,FT1,Laptop
+Intel Core2 Duo T5270 @ 1.40GHz,2,427,535,35,PGA478,Laptop
+AMD E-350 APU,2,423,490,18,FT1 BGA,"Desktop, Laptop"
+AMD E-350,2,421,485,18,FT1,"Desktop, Laptop"
+Intel Celeron N2810 @ 2.00GHz,2,420,512,7.5,FCBGA1170,Laptop
+AMD Athlon II Neo K325 Dual-Core,2,417,486,12,Unknown,Laptop
+AMD V140,1,416,850,25,S1,Laptop
+Intel Core Duo T2450 @ 2.00GHz,2,411,608,31,PGA478,Laptop
+Intel Core Duo T2500 @ 2.00GHz,2,408,613,31,BGA479,Laptop
+AMD A4-1250 APU,2,406,329,8,FT3,Laptop
+Intel Core Duo L2500 @ 1.83GHz,2,404,578,15,BGA479,Laptop
+AMD E1-2100 APU,2,403,322,9,FT3,Laptop
+VIA Nano X2 U4025 @ 1.2 GHz,2,400,298,NA,BGA400,Laptop
+Intel Core i7-2630UM @ 1.60GHz,2,400,221,NA,Unknown,Laptop
+AMD Turion 64 Mobile ML-42,1,400,455,35,754,Laptop
+AMD E1-1500 APU,2,398,458,18,FT1,Laptop
+Intel Celeron 900 @ 2.20GHz,1,396,822,34.8,PGA478,Laptop
+Intel Core2 Duo U7500 @ 1.06GHz,2,392,393,10,BGA479,Laptop
+Intel Celeron 807 @ 1.50GHz,1,392,608,17,BGA-1023,Laptop
+Intel Core Duo T2350 @ 1.86GHz,2,385,576,31,PGA478,Laptop
+AMD Turion 64 Mobile ML-44,1,384,469,35,754,Laptop
+Intel Pentium T2130 @ 1.86GHz,2,382,583,31,PGA478,Laptop
+AMD E1-1200 APU,2,379,430,18,FT1,Laptop
+Intel Celeron 827E @ 1.40GHz,1,371,674,17,FCBGA1023,Laptop
+AMD A4-1200 APU,2,369,303,3.9,FT3,Laptop
+Intel Core Duo T2400 @ 1.83GHz,2,362,527,31,BGA479,Laptop
+AMD Turion 64 Mobile MK-38,1,362,801,31,S1,Laptop
+Intel Atom N2600 @ 1.60GHz,2,360,289,3.5,BGA559,Laptop
+Mobile AMD Athlon 64 3700+,1,356,485,81.5,Unknown,Laptop
+AMD V120,1,352,806,25,S1,Laptop
+Intel Core Duo T2250 @ 1.73GHz,2,350,530,31,PGA478,Laptop
+Intel Core Duo L2400 @ 1.66GHz,2,348,501,15,BGA479,Laptop
+Intel Core2 Duo U7600 @ 1.20GHz,2,347,429,10,BGA479,Laptop
+Mobile Intel Pentium 4 3.33GHz,1,344,552,NA,Unknown,Laptop
+Intel Celeron 570 @ 2.26GHz,1,344,431,31,PGA478,Laptop
+Intel Atom N570 @ 1.66GHz,2,341,273,8.5,BGA559,Laptop
+AMD E-300 APU,2,340,394,18,FT1,Laptop
+Intel Pentium T2080 @ 1.73GHz,2,339,528,31,PGA478,Laptop
+Intel Celeron 560 @ 2.13GHz,1,339,632,31,PGA478,Laptop
+AMD V160,1,337,838,25,S1,Laptop
+AMD Turion 64 Mobile ML-40,1,336,662,35,754,Laptop
+Mobile AMD Sempron 3800+,1,335,735,NA,S1,Laptop
+Intel Celeron N2805 @ 1.46GHz,2,335,394,4.3,FCBGA1170,Laptop
+Intel Celeron 550 @ 2.00GHz,1,334,662,31,BGA479,Laptop
+AMD Turion 64 Mobile ML-37,1,334,510,35,754,Laptop
+AMD Turion 64 Mobile MK-36,1,334,735,31,S1,Laptop
+Mobile AMD Athlon 64 3400+,1,333,432,81.5,Unknown,Laptop
+Intel Pentium T2060 @ 1.60GHz,2,330,490,31,PGA478,Laptop
+AMD Athlon X2 Dual Core L310,2,329,395,13,S1,Laptop
+Mobile AMD Athlon 64 3200+,1,326,400,81.5,Unknown,Laptop
+AMD Turion 64 Mobile ML-34,1,319,526,35,754,Laptop
+Intel Core Duo T2300 @ 1.66GHz,2,317,507,31,BGA479,Laptop
+AMD Athlon II Neo K125,1,315,616,12,S1,Laptop
+AMD C-70 APU,2,315,364,9,Unknown,"Laptop, Mobile/Embedded"
+Mobile AMD Athlon 64 4000+,1,313,338,62,Unknown,Laptop
+AMD C-60 APU,2,312,355,9,Unknown,"Laptop, Mobile/Embedded"
+Intel Celeron 540 @ 1.86GHz,1,305,550,30,PGA478,Laptop
+Intel Atom E3826 @ 1.46GHz,2,304,395,7,FCBGA1170,Laptop
+Intel Celeron M 530 @ 1.73GHz,1,302,578,30,"PBGA479, PPGA478",Laptop
+AMD G-T40N,2,299,323,9,FT1,Laptop
+Intel Atom Z2760 @ 1.80GHz,2,298,206,NA,FC-MB4760,Laptop
+AMD Athlon II Neo K145,1,298,592,12,S1,Laptop
+Mobile AMD Sempron 3300+,1,294,391,NA,Socket 754,Laptop
+Intel Pentium M 2.10GHz,1,292,353,21,"H-PBGA479, PPGA4",Laptop
+AMD G-T40E,2,289,313,6.4,FT1,Laptop
+AMD Sempron SI-40,1,288,631,25,S1,Laptop
+AMD Turion 64 Mobile MT-32,1,286,367,24,754,Laptop
+AMD Turion 64 Mobile ML-32,1,285,321,35,754,Laptop
+Mobile AMD Sempron 3600+,1,284,618,25,S1,Laptop
+Intel Atom N550 @ 1.50GHz,2,283,239,8.5,BGA559,Laptop
+Intel Pentium M 1.80GHz,1,280,389,21,"H-PBGA479, PPGA4",Laptop
+VIA Nano L2100@1800MHz,1,279,182,25,BGA400,Laptop
+AMD Turion 64 Mobile MT-34,1,279,328,24,754,Laptop
+Mobile AMD Sempron 3100+,1,277,359,NA,Socket 754,Laptop
+AMD Turion 64 Mobile ML-30,1,277,314,35,754,Laptop
+Intel Celeron 743 @ 1.30GHz,1,275,496,10,BGA956,Laptop
+AMD Turion 64 Mobile MT-37,1,274,501,25,754,Laptop
+Intel Pentium M 2.00GHz,1,270,363,21,"H-PBGA479, PPGA4",Laptop
+Mobile AMD Sempron 3400+,1,269,489,25,Socket S1 (S1g1),Laptop
+Mobile AMD Sempron 3000+,1,269,350,NA,Socket 754,Laptop
+Intel Celeron 530 @ 1.73GHz,1,268,468,27,PGA478,Laptop
+Intel Celeron M 723 @ 1.20GHz,1,267,507,10,BGA956,Laptop
+AMD C-50,2,265,312,9,FT1,Laptop
+AMD Z-60 APU,2,262,318,4.5,FT1,Laptop
+Mobile AMD Sempron 3500+,1,259,535,NA,S1,Laptop
+Mobile AMD Sempron 2600+,1,256,316,NA,Socket 754,Laptop
+Intel Core Duo U2400 @ 1.06GHz,2,255,342,9,BGA479,Laptop
+AMD Turion 64 Mobile ML-28,1,254,314,25,754,Laptop
+Intel Core Solo T1400 @ 1.83GHz,1,253,525,27,PGA478,Laptop
+Intel Core2 Solo U3500 @ 1.40GHz,1,252,546,5.5,BGA956,Laptop
+Intel Celeron M 1.70GHz,1,252,370,NA,Unknown,Laptop
+AMD GX-210JA SOC,2,248,231,6,FT3 (769-BGA),Laptop
+AMD Sempron M120,1,247,559,25,S1,Laptop
+AMD Turion 64 Mobile MT-30,1,246,294,25,754,Laptop
+Mobile AMD Sempron 3200+,1,245,525,NA,S1,Laptop
+AMD Sempron SI-42,1,245,637,25,S1,Laptop
+Mobile AMD Athlon XP-M 2600+,1,241,375,NA,Unknown,Laptop
+Mobile AMD Athlon 2500+,1,241,365,NA,Unknown,Laptop
+Intel Celeron 807UE @ 1.00GHz,1,241,421,10,BGA-1023,Laptop
+Intel Pentium M 1.50GHz,1,240,323,24.5," 	H-PBGA479, PPG",Laptop
+Intel Pentium M 1.70GHz,1,239,318,24.5," 	H-PBGA479, PPG",Laptop
+Intel Celeron M 520 @ 1.60GHz,1,239,505,30,PPGA478,Laptop
+VIA Nano L2007@1600MHz,1,238,273,25,BGA400,Laptop
+Mobile AMD Athlon XP-M 3000+,1,238,365,NA,Unknown,Laptop
+Mobile AMD Athlon XP-M 2800+,1,238,385,NA,Unknown,Laptop
+Mobile AMD Sempron 2800+,1,237,299,NA,Socket 754,Laptop
+Mobile AMD Athlon XP-M 2200+,1,237,363,NA,Unknown,Laptop
+Intel Pentium M 1700MHz,1,237,361,24.5,"H-PBGA479, PPGA4",Laptop
+Intel Pentium M 2.13GHz,1,234,472,27,"H-PBGA479, PPGA4",Laptop
+Mobile AMD Athlon 4 2400+,1,233,358,NA,Unknown,Laptop
+Intel Core2 Solo U2100 @ 1.06GHz,1,233,258,5.5,Unknown,Laptop
+Intel Celeron M 450 @ 2.00GHz,1,230,598,27,PPGA478,Laptop
+Intel Pentium SU2700 @ 1.30GHz,1,228,480,10,Unknown,Laptop
+Intel Pentium M 2.26GHz,1,227,508,27,"H-PBGA479, PPGA4",Laptop
+Mobile AMD Athlon XP-M 2500+,1,226,355,NA,Unknown,Laptop
+Mobile AMD Athlon XP-M 2400+,1,225,355,NA,Unknown,Laptop
+Intel Pentium M 1.40GHz,1,225,264,22," 	H-PBGA479, PPG",Laptop
+Intel Atom N470 @ 1.83GHz,1,224,308,6.5,BGA559,Laptop
+Intel Core Duo U2500 @ 1.20GHz,2,223,361,9,BGA479,Laptop
+Intel Pentium M 1.86GHz,1,222,499,27,"H-PBGA479, PPGA4",Laptop
+Intel Celeron M 360 1.40GHz,1,221,305,21,"H-PBGA479, PPGA4",Laptop
+Intel Celeron M 1500MHz,1,217,297,NA,Unknown,Laptop
+Intel Celeron 723 @ 1.20GHz,1,213,460,10,BGA956,Laptop
+Intel Core Solo T1300 @ 1.66GHz,1,210,518,27,PGA478,Laptop
+Intel Pentium M 1400MHz,1,208,282,22,"H-PBGA479, PPGA4",Laptop
+Intel Pentium M 1.73GHz,1,205,494,27,"H-PBGA479, PPGA4",Laptop
+Intel Celeron M 1.30GHz,1,205,284,NA,Unknown,Laptop
+Intel Atom N450 @ 1.66GHz,1,203,277,5.5,BGA559,Laptop
+VIA Nano U2500@1200MHz,1,199,184,7,BGA400,Laptop
+Intel Pentium M 1.20GHz,1,199,262,NA,Unknown,Laptop
+Intel Pentium M 1300MHz,1,197,271,22,"H-PBGA479, PPGA4",Laptop
+Intel Celeron M 1300MHz,1,197,274,NA,Unknown,Laptop
+Mobile AMD Athlon XP-M 2000+,1,196,301,NA,Unknown,Laptop
+Intel Pentium M 1.30GHz,1,196,250,22," 	H-PBGA479, PPG",Laptop
+AMD E-240,1,195,403,18,FT1,Laptop
+Intel Pentium M 1.60GHz,1,194,427,24.5," 	H-PBGA479, PPG",Laptop
+Intel Core Solo T1350 @ 1.86GHz,1,194,413,31,Unknown,Laptop
+Mobile AMD Athlon XP-M 1800+,1,193,291,45,Socket A,Laptop
+Intel Pentium M 1600MHz,1,193,313,24.5,"H-PBGA479, PPGA4",Laptop
+Intel Atom N455 @ 1.66GHz,1,193,266,6.5,BGA559,Laptop
+Mobile AMD Athlon MP-M 2400+,1,192,314,NA,Unknown,Laptop
+Intel Celeron M 1.50GHz,1,192,374,21,"PPGA478, H-PBGA4",Laptop
+Intel Celeron M 1.60GHz,1,190,433,NA,Unknown,Laptop
+Intel Pentium M 1500MHz,1,188,251,24.5,"H-PBGA479, PPGA4",Laptop
+Intel Atom N2100 @ 1.60GHz,1,188,310,NA,BGA559,Laptop
+VIA Nano U2250 (1.6GHz Capable),1,187,256,8,BGA400,Laptop
+VIA Nano U3500@1000MHz,1,184,286,5,BGA400,Laptop
+Intel Pentium M 1.10GHz,1,184,218,NA,Unknown,Laptop
+AMD V105,1,184,452,9,BGA812,Laptop
+Mobile Intel Celeron 1333MHz,1,183,248,NA,Unknown,Laptop
+Intel Atom Z530 @ 1.60GHz,1,183,161,2,BGA441,Laptop
+VIA Nano U2250@1300+MHz,1,179,156,10,BGA400,Laptop
+Intel Atom N475 @ 1.83GHz,1,179,281,6.5,BGA559,Laptop
+AMD C-30,1,178,375,9,FT1,Laptop
+AMD G-T52R,1,177,381,18,FT1,Laptop
+Intel Celeron 215 @ 1.33GHz,1,174,440,27,BGA479,Laptop
+Mobile AMD Athlon MP-M 1800+,1,173,262,35,Unknown,Laptop
+Mobile AMD Athlon XP-M 1600+,1,169,274,NA,Unknown,Laptop
+Intel Celeron M 440 @ 1.86GHz,1,169,485,27,"PBGA479, PPGA478",Laptop
+Intel Celeron M 430 @ 1.73GHz,1,169,466,27,PPGA478,Laptop
+VIA Nano L2207@1600MHz,1,165,191,17,BGA400,Laptop
+Intel Pentium III Mobile 1133MHz,1,164,218,NA,Unknown,Laptop
+Intel Core Solo U1500 @ 1.33GHz,1,164,375,5.5,Unknown,Laptop
+Mobile AMD Sempron 2100+,1,164,203,8,S1,"Laptop, Mobile/Embedded"
+Intel Pentium III Mobile 1066MHz,1,160,210,NA,Unknown,Laptop
+Intel Atom Z670 @ 1.50GHz,1,158,95,3,BGA518,Laptop
+Intel Atom N280 @ 1.66GHz,1,157,234,2.5,BGA437,Laptop
+Intel Pentium M 1000MHz,1,156,222,7,Unknown,Laptop
+Intel Pentium III Mobile 1200MHz,1,156,216,NA,Unknown,Laptop
+Intel Pentium M 1200MHz,1,155,166,12,Unknown,Laptop
+Mobile Intel Celeron 2.40GHz,1,154,376,NA,Unknown,Laptop
+Intel Celeron M 1.00GHz,1,149,197,NA,Unknown,Laptop
+Mobile Intel Celeron 2.20GHz,1,147,355,NA,Unknown,Laptop
+Mobile Intel Pentium III - M 1200MHz,1,146,185,22,"BGA2, microPGA2",Laptop
+VIA C7-M 6300MHz,1,145,121,NA,Unknown,Laptop
+Mobile Intel Pentium 4 - M 2.20GHz,1,143,388,NA,Unknown,Laptop
+Intel Pentium M 900MHz,1,141,200,7,Unknown,Laptop
+Mobile Intel Pentium 4 - M 2.40GHz,1,139,317,NA,Unknown,Laptop
+Intel Celeron M 420 @ 1.60GHz,1,139,391,27,PPGA478,Laptop
+Mobile Intel Pentium 4 - M 2.00GHz,1,138,345,NA,Unknown,Laptop
+Intel Pentium 4 Mobile 1.90GHz,1,136,282,NA,Unknown,Laptop
+Intel Atom N270 @ 1.60GHz,1,136,174,2.5,BGA437,Laptop
+Mobile Intel Celeron 2.00GHz,1,133,290,NA,Unknown,Laptop
+Intel Pentium 4 Mobile 2.00GHz,1,132,310,NA,Unknown,Laptop
+Mobile Intel Pentium III - M 933MHz,1,130,177,20.1,"BGA2, microPGA2",Laptop
+Intel Core Solo U1400 @ 1.20GHz,1,130,365,5.5,PBGA479,Laptop
+Intel Core Solo U1300 @ 1.06GHz,1,127,340,6,PBGA479,Laptop
+Intel Celeron M 443 @ 1.20GHz,1,125,288,5.5,PBGA479,Laptop
+Intel Celeron M 900MHz,1,123,155,NA,Unknown,Laptop
+Intel Celeron M 410 @ 1.46GHz,1,123,301,27,PPGA478,Laptop
+Intel Atom Z520 @ 1.33GHz,1,122,151,2,BGA441,Laptop
+Mobile Intel Pentium 4 - M 1.70GHz,1,121,297,NA,Unknown,Laptop
+Mobile Intel Celeron 1.80GHz,1,121,280,66.1, PPGA478,Laptop
+AMD G-T44R,1,120,302,9,FT1,Laptop
+AMD G-T40R,1,120,327,5.5,FT1,Laptop
+Mobile Intel Pentium 4 - M 1.80GHz,1,119,297,NA,Unknown,Laptop
+Intel Pentium III Mobile 800MHz,1,119,155,NA,Unknown,Laptop
+Mobile Intel Celeron 1.70GHz,1,118,254,NA,Unknown,Laptop
+VIA C7-M 1600MHz,1,116,124,15,BGA400,Laptop
+Intel Pentium 4 Mobile 1.60GHz,1,116,254,NA,Unknown,Laptop
+Intel Pentium 4 Mobile 1.80GHz,1,114,195,NA,Unknown,Laptop
+VIA C7-M 1200MHz,1,112,93,NA,Unknown,Laptop
+Intel Celeron B710 @ 1.60GHz,1,106,101,35,rPGA988B,Laptop
+Intel Pentium III Mobile 866MHz,1,99,132,NA,Unknown,Laptop
+VIA Eden 1200MHz,1,93,97,7,NanoBGA2,Laptop
+VIA Eden 1000MHz,1,80,83,5,NanoBGA2,Laptop

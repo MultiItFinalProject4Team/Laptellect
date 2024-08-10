@@ -13,10 +13,12 @@
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
     <style>
-        textarea {
-            resize: none;
-        }
+        /* 상품 상세 정보 테이블 */
+        .spec-table th { background-color: #f8f9fa; width: 15%; }
+        .spec-table td { width: 30%; }
+        #spec-box { width: 85%; margin: 0 auto;}
 
+        /* 문의/리뷰 */
         .input-group {
             display: flex;
             width: 100%;
@@ -26,9 +28,10 @@
             resize: none;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
+            resize: none;
         }
         .input-group button {
-            width: 80px; /* 버튼의 너비를 텍스트 에어리어와 맞춤 */
+            width: 80px;
             background-color: #6c757d;
             color: white;
             border-top-left-radius: 0;
@@ -57,19 +60,13 @@
             color: #fff;
         }
 
-
         .review-stars {
             color: gold;
             font-size: 1.5rem;
         }
 
-        .spec-table th { background-color: #f8f9fa;
-                         width: 15%; }
-        .spec-table td { width: 30%; }
-        
-        #spec-box { width: 85%; margin: 0 auto;}
-
-        body { font-family: 'Noto Sans KR', sans-serif; }
+        <!-- 공통 -->
+        hr { border: 0; }
     </style>
     <script>
         $(document).ready(function() {
@@ -182,18 +179,15 @@
             <div class="spec-box mt-3">
                 <!-- 상품 기본 정보 -->
                 <ul class="list-unstyled">
-                    <li><strong>운영체제<span class="float-end" th:text="${ laptop.os }">Window 11</span></strong></li>
+                    <li><strong>운영체제<span class="float-end" th:text="${ laptop.os }"></span></strong></li>
                     <li><strong>화면 크기<span class="float-end"
-                                           th:text="${ laptop.display.screenSize }">15.6인치</span></strong></li>
+                                           th:text="${ laptop.display.screenSize }"></span></strong></li>
                     <li><strong>무게<span class="float-end"
-                                        th:text="${ laptop.portability.weight }">1.86kg</span></strong></li>
+                                        th:text="${ laptop.portability.weight }"></span></strong></li>
                     <li><strong>해상도<span class="float-end"
-                                         th:text="${ laptop.display.resolution }">1920x1080(FHD)</span></strong></li>
-                    <li><strong>RAM<span class="float-end" th:text="${ laptop.ram.ramSize }">16GB</span></strong></li>
+                                         th:text="${ laptop.display.resolution }"></span></strong></li>
+                    <li><strong>RAM<span class="float-end" th:text="${ laptop.ram.ramSize }"></span></strong></li>
                 </ul>
-            </div>
-            <div class="mt-2">
-
             </div>
         </div>
 
@@ -225,7 +219,7 @@
 
                 <div class="col-7">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span><strong>가격 : <span class="price" th:text="${laptop.price}"></span></strong></span>
+                        <span><strong>가격 : <span class="price" style="font-size: 25px;" th:text="${laptop.price}"></span></strong></span>
                         <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
                             <input type="hidden" name="productName" th:value="${laptop.productName}">
                             <input type="hidden" name="imageUrl" th:value="${laptop.image}">
@@ -500,160 +494,179 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
-
-        <div class="col-12 mt-4">
-            <h4><strong>문의/리뷰</strong></h4>
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">의견/문의</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="review-tab" data-bs-toggle="tab" href="#review-box" role="tab" aria-controls="review-box" aria-selected="false">리뷰</a>
-                </li>
-            </ul>
-            <!-- Tab content -->
-            <div class="tab-content mt-3" id="myTabContent">
-                <!-- Customer Box -->
-                <!--상품 문의/의견 관련 탭-->
-                <div class="tab-pane fade show active" id="customer-box" role="tabpanel" aria-labelledby="customer-tab">
-                    <div class="question_container">
-                        <div class="btn-category-div">
-                            <button id="getAllButton" class="btn-category active" th:data-product-no="${productNo}">전체</button>
-                            <button id="getQuestionButton" class="btn-category"  th:data-product-no="${productNo}">문의</button>
-                            <button id="getOpinionButton" class="btn-category"  th:data-product-no="${productNo}">의견</button>
-                        </div>
-                        <div class="form-search-div">
-                            <form class="d-flex" role="search" id="questionSearch">
-
-                                <select class="form-select" id="searchSelect" name="key">
-                                    <option value="all">전체</option>
-                                    <option value="title">제목</option>
-                                    <option value="content">내용</option>
-                                </select>
-                                <input class="form-control me-2" type="search" id="question_search" placeholder="제목/내용" aria-label="Search" style="width: 200px;" name="keyword" th:value="${page_keyword}">
-                                <input type="hidden" name="productNo" th:value="${productNo}">
-                                <input type="hidden" name="type" id="typeField" value="all">
-                                <button class="btn btn-outline-success" type="submit">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                    <hr>
-                    <div id="customer-list">
-                        <div th:each="each : ${productqList}" class="question">
-                            <div class="question-header">
-                                <div class="question-author">
-                                    <span class="author-name" th:text="${each.memberName}"></span>
-                                    <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
-                                </div>
-                            </div>
-                            <div class="question-body">
-                                <div class="question-bodytop">
-                                    <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
-                                       th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
-                                    </p>
-                                    <h4 class="question-title" th:text="${each.title}"></h4>
-                                </div>
-                                <div class="question-content">
-                                    <p class="question-content" th:text="${each.content}"></p>
-                                </div>
-                            </div>
-                            <hr class="question-hr">
-                        </div>
-                    </div>
-                    <div class="custom-card">
-                        <div class="left-content">
-                            <p><strong>상품에 대해 궁금하신 점을 남겨주세요.</strong></p>
-                        </div>
-                        <div class="right-content">
-<!--                            <a class="btn btn-custom-primary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>-->
-                            <button type="button" class="btn btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">문의하기</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Review Box -->
-                <!-- 리뷰관련 내용 작성 탭-->
-                <div class="tab-pane fade" id="review-box" role="tabpanel" aria-labelledby="review-tab">
-                    <div class="content-box" style="height: 175px;">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span>상품평</span>
-                        <div>
-                            <button type="button" class="btn btn-outline-secondary btn-sm">로그인</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <textarea class="form-control" rows="3" placeholder="상품평을 작성하시려면 로그인을 해주세요." readonly></textarea>
-                        <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;" disabled>등록</button>
-                    </div>
-                    </div>
-                </div>
-
-            <div id="crolling-box">
-
-            </div>
+            </div> <br> <br>
 
             <div class="col-12 mt-4">
-                <h4><strong>연관상품</strong></h4>
+                <h4><strong>문의/리뷰</strong></h4> <hr>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">문의/의견</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="review-tab" data-bs-toggle="tab" href="#review-box" role="tab" aria-controls="review-box" aria-selected="false">리뷰</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="other-review-tab" data-bs-toggle="tab" href="#other-review-box" role="tab" aria-controls="other-review-box" aria-selected="false">다른 쇼핑몰 리뷰</a>
+                    </li>
+                </ul> <br>
+                <!-- Tab content -->
+                <div class="tab-content mt-3" id="myTabContent">
+                    <!-- Customer Box -->
+                    <!--상품 문의/의견 관련 탭-->
+                    <div class="tab-pane fade show active" id="customer-box" role="tabpanel" aria-labelledby="customer-tab">
+                        <div class="question_container">
+                            <div class="btn-category-div">
+                                <button id="getAllButton" class="btn-category active" th:data-product-no="${productNo}">전체</button>
+                                <button id="getQuestionButton" class="btn-category"  th:data-product-no="${productNo}">문의</button>
+                                <button id="getOpinionButton" class="btn-category"  th:data-product-no="${productNo}">의견</button>
+                            </div>
+                            <div class="form-search-div">
+                                <form class="d-flex" role="search" id="questionSearch">
+                                    <select class="form-select" id="searchSelect" name="key">
+                                        <option value="all">전체</option>
+                                        <option value="title">제목</option>
+                                        <option value="content">내용</option>
+                                    </select>
+                                    <input class="form-control me-2" type="search" id="question_search" placeholder="제목/내용" aria-label="Search" style="width: 200px;" name="keyword" th:value="${page_keyword}">
+                                    <input type="hidden" name="productNo" th:value="${productNo}">
+                                    <input type="hidden" name="type" id="typeField" value="all">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="customer-list">
+                            <div th:each="each : ${productqList}" class="question">
+                                <div class="question-header">
+                                    <div class="question-author">
+                                        <span class="author-name" th:text="${each.memberName}"></span>
+                                        <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
+                                    </div>
+                                </div>
+                                <div class="question-body">
+                                    <div class="question-bodytop">
+                                        <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
+                                           th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
+                                        </p>
+                                        <h4 class="question-title" th:text="${each.title}"></h4>
+                                    </div>
+                                    <div class="question-content">
+                                        <p class="question-content" th:text="${each.content}"></p>
+                                    </div>
+                                </div>
+                                <hr class="question-hr">
+                            </div>
+                        </div>
+                        <div class="custom-card">
+                            <div class="left-content">
+                                <p><strong>상품에 대해 궁금하신 점을 남겨주세요.</strong></p>
+                            </div>
+                            <div class="right-content">
+    <!--                            <a class="btn btn-custom-primary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>-->
+                                <button type="button" class="btn btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">문의하기</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Box -->
+                    <!-- 리뷰관련 내용 작성 탭-->
+                    <div class="tab-pane fade" id="review-box" role="tabpanel"  aria-labelledby="review-tab">
+                        <div class="content-box" style="height: 175px; border-radius: 0;" th>
+                            <th:block sec:authorize="isAnonymous()">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>상품평</span>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm">로그인</button>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성하시려면 로그인을 해주세요." readonly></textarea>
+                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;" disabled>등록</button>
+                                </div>
+                            </th:block>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span><strong>상품평</strong></span>
+                                </div>
+                                <div class="input-group">
+                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성해주세요."></textarea>
+                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;">등록</button>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <!-- other-Review Box -->
+                    <!-- 리뷰관련 내용 작성 탭-->
+                    <div class="tab-pane fade" id="other-review-box" role="tabpanel"  aria-labelledby="other-review-tab">
+
+                    </div> <br>
+
+                    <div class="col-12 mt-4">
+                        <h4><strong>연관상품</strong></h4>
+                    </div> <hr>
+
+
+                    <div id="recommend-box">
+
+                    </div>
+
+                    <br> <br>
+
+                </div>
             </div>
-            <hr>
+        </div>
 
-            <div id="recommend-box">
-
+        <!--상품 문의 등록 모달-->
+        <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true" >
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">상품 문의 등록</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="productqForm" method="post" enctype="multipart/form-data">
+                            <!-- 제목과 카테고리 입력 -->
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <label for="title" class="form-label">제목:</label>
+                                    <input type="text" class="form-control" id="title" name="title" required style="width: 100%;">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="inputGroupSelect01" class="form-label">카테고리:</label>
+                                    <select class="form-select" id="inputGroupSelect01" name="productqCategorycode">
+                                        <option value="productq_opinion">의견</option>
+                                        <option value="productq_question">문의</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 내용 입력 -->
+                            <div class="mb-3">
+                                <label for="content" class="form-label">내용:</label>
+                                <textarea class="form-control editor-container__editor" id="content" name="content"></textarea>
+                            </div>
+                            <!-- 비밀글 설정 -->
+                            <div class="mb-3">
+                                <label>비밀글: </label>
+                                <div>
+                                    <label class="me-2">
+                                        <input type="radio" name="secret" value="Y"> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="secret" value="N" checked> No
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
+                            <button type="submit" class="btn btn-primary">등록</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!--상품 문의 등록 모달-->
-    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true" >
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">상품 문의 등록</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="productqForm" method="post" enctype="multipart/form-data">
-                        <!-- 제목과 카테고리 입력 -->
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <label for="title" class="form-label">제목:</label>
-                                <input type="text" class="form-control" id="title" name="title" required style="width: 100%;">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="inputGroupSelect01" class="form-label">카테고리:</label>
-                                <select class="form-select" id="inputGroupSelect01" name="productqCategorycode">
-                                    <option value="productq_opinion">의견</option>
-                                    <option value="productq_question">문의</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- 내용 입력 -->
-                        <div class="mb-3">
-                            <label for="content" class="form-label">내용:</label>
-                            <textarea class="form-control editor-container__editor" id="content" name="content"></textarea>
-                        </div>
-                        <!-- 비밀글 설정 -->
-                        <div class="mb-3">
-                            <label>비밀글: </label>
-                            <div>
-                                <label class="me-2">
-                                    <input type="radio" name="secret" value="Y"> Yes
-                                </label>
-                                <label>
-                                    <input type="radio" name="secret" value="N" checked> No
-                                </label>
-                            </div>
-                        </div>
-                        <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
-                        <button type="submit" class="btn btn-primary">등록</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 
 </body>

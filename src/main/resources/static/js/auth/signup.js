@@ -17,39 +17,45 @@ $(document).ready(function() {
     }
   }
 
-
-
   // 아이디 중복 체크
   $("#id").on("blur", function () {
-    let userId = $("#id").val();
-    console.log(userId);
-
-    $.ajax({
-        url: "/api/check-id",
-        type: "POST",
-        data: { userName: userId },
-        success: function (response) {
-          if (response === true) {
-            $('#id').addClass('is-invalid');
-            console.log("아이디 중복")
-            isId = false;
-            signupVisible();
-            $("#idError").show();
-          } else {
-            console.log("아이디 중복 X");
-            $('#id').removeClass('is-invalid');
-            isId = true;
-            signupVisible();
-            $("#idError").hide();
-          }
-        },
-        error: function () {
-          alert("아이디 중복 확인 실패")
-          $("#idError").hide();
+      let userId = $("#id").val().trim();
+      console.log(userId);
+      if (userId != "") {
+          $.ajax({
+              url: "/api/check-id",
+              type: "POST",
+              data: { userName: userId },
+              success: function (response) {
+                  if (response === true) {
+                      $('#id').addClass('is-invalid');
+                      console.log("아이디 중복");
+                      isId = false;
+                      signupVisible();
+                      $("#idError").show();
+                      $("#idError2").hide();
+                  } else {
+                      console.log("아이디 중복 X");
+                      $('#id').removeClass('is-invalid');
+                      isId = true;
+                      signupVisible();
+                      $("#idError").hide();
+                      $("#idError2").hide();
+                  }
+              },
+              error: function () {
+                  alert("아이디 중복 확인 실패");
+                  $("#idError").hide();
+                  isId = false;
+                  $("#insertBtn").prop("disabled", true);
+              }
+          });
+      } else {
+          $('#id').addClass('is-invalid');
+          $("#idError2").show();
           isId = false;
-          $("#insertBtn").prop("disabled", true);
-        },
-    });
+          signupVisible();
+      }
   });
 
   // 패스워드 정규식 검증

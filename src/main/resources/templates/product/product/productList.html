@@ -46,24 +46,23 @@
             </div>
             <a th:href="@{${product.Url}}">
                 <div class="card-body">
-                    <div class="card-body">
-                        <div class="tags mb-2">
-                            <button type="button" class="btn btn-secondary" disabled>게이밍</button>
-                            <button type="button" class="btn btn-secondary" disabled>사무용</button>
-                            <button type="button" class="btn btn-secondary" disabled>학생용</button>
-                        </div>
-                        <div class="product-name mb-2">
-                            <h5 class="card-title"><span th:text="${product.productName}">상품명</span></h5>
-                        </div>
-                        <div class="product-specs mb-2">
-                            <span class="small-text" th:text="${product.specsString}"></span>
-                        </div>
-                        <div class="product-price">
-                            <p class="card-text">
-                                <strong></strong> <span class="price"
-                                                        th:text="${product.price} + ' 원'">가격</span><br>
-                            </p>
-                        </div>
+                    <div class="tags mb-2">
+                        <span class="tag">#게이밍</span>
+                        <span class="tag">#펠월드</span>
+                        <span class="tag">#가성비</span>
+                        <span class="tag">#넓은 화면</span>
+                    </div>
+                    <div class="product-name mb-2">
+                        <h5 class="card-title"><span th:text="${product.productName}">상품명</span></h5>
+                    </div>
+                    <div class="product-specs mb-2">
+                        <span class="small-text" th:text="${product.specsString}"></span>
+                    </div>
+                    <div class="product-price">
+                        <p class="card-text">
+                            <strong></strong> <span class="price"
+                                                    th:text="${product.price} + ' 원'">가격</span><br>
+                        </p>
                     </div>
                 </div>
             </a>

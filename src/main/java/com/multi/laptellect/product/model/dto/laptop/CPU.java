@@ -11,7 +11,6 @@ import lombok.Data;
  */
 @Data
 public class CPU {
-
     private String cpuManufacturer; //CPU 제조사
     private String cpuType; //CPU 종류
     private String cpuCodeName; //CPU 코드명

@@ -611,9 +611,10 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-        @Override
+    @Override
     public List<ProductDTO> searchProducts(String keyword,int typeNo) {
-        return  productMapper.findByNameSearch(keyword,typeNo);
+        return productMapper.findByNameSearch(keyword, typeNo);
+    }
 
     @Override
     public ArrayList<Integer> getWishlistString() throws Exception {
