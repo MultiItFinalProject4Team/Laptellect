@@ -142,3 +142,15 @@ a {
         }
 
 body { font-family: 'Noto Sans KR', sans-serif; }
+.container-md { max-width: 1000px; }
+
+/* Tag */
+.tag {
+   display: inline-block;
+   padding: 2px 5px;
+   margin: 2px;
+   font-size: 12px;
+   background-color: #f0f0f0;
+   border-radius: 3px;
+   color: #333;
+}

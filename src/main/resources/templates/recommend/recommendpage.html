@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>노트북 추천 결과</title>
+<!--    <link rel="stylesheet" th:href="@{/css/product/product.css}">-->
+    <style>
+        .product-grid { display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .product { margin: 20px; padding: 20px; border: 1px solid #ccc; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .product-image { width: 100%; height: 200px; object-fit: contain; }
+        .product-name { font-size: 18px; font-weight: bold; margin-top: 10px; }
+        .product-specs { font-size: 14px; margin-top: 10px; }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+        }
+        .button-container a {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .button-container a:hover {
+            background-color: #45a049;
+        }
+        /* 태그 스타일 */
+        .tag {
+            display: inline-block;
+            padding: 2px 5px;
+            margin: 2px;
+            font-size: 12px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            color: #333;
+        }
+        /* 가격과 태그를 감싸는 컨테이너 스타일 */
+        .price-tag-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .price-tag-container .price {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="container-md">
+    <br>
+    <div class="row align-items-center">
+        <div class="col"><h2 class="mb-0">맞춤형 노트북 추천 결과</h2></div>
+        <div class="col-auto"><a th:href="@{/recommend}" class="btn btn-primary">다시 추천받기</a></div>
+    </div>
+    <hr>
+    <div class="">
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div th:if="${recommendations == null or recommendations.isEmpty()}">
+                    <p class="text-center">조회 정보가 없습니다</p>
+                </div>
+                <div class="card mb-3" th:each="product : ${ recommendations }">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-md-2">
+                            <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}">
+                                <img th:src="@{'/img/product/' + ${product.image}}" class="img-fluid rounded-start" alt="Product Image">
+                            </a>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}" class="product-name"><h6 class="card-title" th:text="${product.productName}"></h6></a>
+                                <p class="card-text text-danger price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'"></p>
+                                <span class="tag">#게이밍</span>
+                                <span class="tag">#펠월드</span>
+                                <span class="tag">#가성비</span>
+                                <span class="tag">#넓은 화면</span>
+                                <span class="tag">#빠른 와이파이</span>
+                                <span class="tag">#빠른 블루투스</span>
+                                <span class="tag">#윈도우 있음</span>
+                                <span class="tag">#가벼운</span>
+                                <span class="tag">#슬림</span>
+                                <span class="tag">#많은 USB 단자</span>
+                                <span class="tag">#최신제품</span>
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-end btn-wishlist">
+                            <button class="btn btn btn-outline-primary mb-2 btn-process-cart" th:attr="data-product-no=${product.productNo}">장바구니 담기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    <div class="product-grid">-->
+<!--        <div class="product" th:each="product : ${recommendations}">-->
+<!--            <img th:if="${product.image}" th:src="@{'/img/product/' + ${product.image}}" class="product-image" alt="노트북 이미지">-->
+<!--            <div class="product-name" th:text="${product.productName}">노트북 이름</div>-->
+<!--            <div class="product-specs">-->
+<!--                <p><strong>가격:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span></p>-->
+<!--                <p th:if="${product.os}"><strong>운영체제:</strong> <span th:text="${product.os}">OS</span></p>-->
+<!--                <p th:if="${product.company}"><strong>제조사:</strong> <span th:text="${product.company}">제조사</span></p>-->
+<!--                <p th:if="${product.ram}"><strong>램 용량:</strong> <span th:text="${product.ram.ramSize}">RAM</span></p>-->
+<!--                <p th:if="${product.cpu}"><strong>CPU:</strong> <span th:text="${product.cpu.cpuNumber}">CPU</span></p>-->
+<!--                <p th:if="${product.cpu.cpuCore}"><strong>코어 수:</strong> <span th:text="${product.cpu.cpuCore}">코어 수</span></p>-->
+<!--                <p th:if="${product.storage.storageCapacity}"><strong>저장 용량:</strong> <span th:text="${product.storage.storageCapacity}">저장 용량</span></p>-->
+<!--                <p th:if="${product.display.screenSize}"><strong>화면 크기:</strong> <span th:text="${product.display.screenSize}">화면 크기</span></p>-->
+<!--                <p th:if="${product.display.resolution}"><strong>해상도:</strong> <span th:text="${product.display.resolution}">해상도</span></p>-->
+<!--                <p th:if="${product.gpu.gpuChipset}"><strong>GPU:</strong> <span th:text="${product.gpu.gpuChipset}">GPU</span></p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="button-container">
+    </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.price').each(function() {
+            let value = $(this).text().replace('원', '').replace(',', '');
+            let formattedValue = new Intl.NumberFormat('ko-KR').format(value);
+            $(this).text(formattedValue + '원');
+        });
+    });
+</script>
+</body>
+</html>

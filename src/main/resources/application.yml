@@ -22,4 +22,3 @@ logging:
     jdbc.resultset: ERROR
 
     jdbc.resultsettable: DEBUG
-

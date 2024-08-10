@@ -30,17 +30,20 @@
                     <button type="submit" class="btn btn-primary btn-xs" style="width:100%">로그인</button>
                 </div>
             </form>
+            <div th:if="${ errorMessage != null }">
+                <div class="error-message" id="emailError" th:text="${ errorMessage }" style="color: red;"></div>
+            </div>
                 <hr>
 
                 <div class="row">
                     <div class="col text-center">
-                        <a href="/signin/kakao" class="btn btn-link login-content">
-                            <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 login-img">
-                        </a>
+                        <div class="btn btn-link login-content" id="kakao-login">
+                            <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Kakao Login" class="img-fluid mb-2 login-img">
+                        </div>
 
-                        <a href="/signin/google" class="btn btn-link login-content">
-                            <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 login-img">
-                        </a>
+                        <div class="btn btn-link login-content" id="google-login">
+                            <img th:src="@{/img/common/google-icon.png}" alt="Google Login" class="img-fluid mb-2 login-img">
+                        </div>
                 </div>
 
                 <div class="row">
@@ -57,22 +60,29 @@
     </div>
 </div>
 <script th:inline="javascript">
-    let kakaoApiKey = [[${kakaoApiKey}]];
-    let redirectUri = [[${redirectUrl}]];
+    function openKakaoLogin() {
+        window.open("/signin/kakao", '_blank', 'width=600,height=400');
+    }
 
-    console.log(kakaoApiKey, redirectUri);
+    function openGoogleLogin() {
+        window.open("/signin/google", '_blank', 'width=600,height=400');
+    }
 
     $(document).ready(function(){
-        Kakao.init(kakaoApiKey);
-        Kakao.isInitialized();
-    });
-
-    function loginWithKakao() {
-        Kakao.Auth.authorize({
-        redirectUri: redirectUri
+        window.addEventListener('message', function(event) {
+            if (event.data === 'closeAndRedirect') {
+                window.location.href = '/';
+            }
         });
-    }
-</script>
 
+        $("#kakao-login").on("click", function() {
+            openKakaoLogin();
+        });
+
+        $("#google-login").on("click", function() {
+            openGoogleLogin();
+        });
+    });
+</script>
 </body>
 </html>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO">
+    <select id="findLaptopDetailByFilter" parameterType="productFilterDTO">
+        SELECT DISTINCT
+            product_no
+        FROM
+            vw_product_detail
+        WHERE
+            type_no = 1
+            AND price BETWEEN #{minPrice} AND #{maxPrice}
+        <if test="gpu != null and gpu.size() > 0">
+            <foreach item="item" index="index" collection="gpu" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
+            </foreach>
+        </if>
+        <if test="cpu != null and cpu.size() > 0">
+            <foreach item="item" index="index" collection="cpu" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
+            </foreach>
+        </if>
+        <if test="place != null and place.size() > 0">
+            <foreach item="item" index="index" collection="place" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
+            </foreach>
+        </if>
+       <if test="screen != null and screen.size() > 0">
+           <foreach item="item" index="index" collection="screen" open="AND(" separator=" OR " close=")">
+               option_value LIKE CONCAT('%', #{ item }, '%')
+           </foreach>
+       </if>
+
+    </select>
+</mapper>

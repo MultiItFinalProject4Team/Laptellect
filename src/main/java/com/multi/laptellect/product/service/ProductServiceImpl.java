@@ -44,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+
     private List<ProductDTO> createProductDTOList(List<ProductDTO> productList, int typeNo) {
         List<ProductDTO> productDTOList = new ArrayList<>();
 
@@ -382,6 +383,22 @@ public class ProductServiceImpl implements ProductService {
         return specDTO;
     }
 
+    @Override
+    public List<ProductDTO> searchProducts(String keyword,int typeNo) {
+        return productMapper.findByNameSearch(keyword, typeNo);
+    }
+
+    @Override
+    public ArrayList<Integer> getWishlistString() throws Exception {
+        int memberNo = SecurityUtil.getUserNo();
+        ArrayList<Integer> wishList = productMapper.findAllWishlistString(memberNo);
+
+        if (wishList == null) {
+            return null;
+        } else {
+            return wishList;
+        }
+    }
 
 
     //상품 전체 조회
@@ -392,6 +409,7 @@ public class ProductServiceImpl implements ProductService {
 
         return productMapper.getProductsByType(typeNo);
     }
+
 
     @Override
     public int getTotalProducts() {

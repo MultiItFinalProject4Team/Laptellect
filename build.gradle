@@ -14,17 +14,23 @@ java {
 }
 
 configurations {
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+
+
 }
 
 repositories {
 	mavenCentral()
-	maven { url 'https://jitpack.io' }
+	maven { url'https://jitpack.io' }
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -48,11 +54,18 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.9' // gson
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // smtp
 	implementation 'org.springframework.boot:spring-boot-starter-aop' // aop
+	
+	implementation 'com.github.shin285:KOMORAN:3.3.9' // KOMORAN
+	implementation 'org.jsoup:jsoup:1.18.1'// jsoup
+	implementation 'org.seleniumhq.selenium:selenium-java:4.19.1'
+	// Spark MLlib 의존성 추가
+	compileOnly group: 'org.apache.spark', name: 'spark-mllib_2.13', version: '3.5.1' // spark mllib
+	implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.9.1' // webdrivermanager
 
-	implementation 'org.apache.httpcomponents.client5:httpclient5:5.1'
+	implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 	// https://mvnrepository.com/artifact/org.jsoup/jsoup
-	implementation 'org.jsoup:jsoup:1.7.2'
+
 
 
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.14' //payment
@@ -68,6 +81,10 @@ dependencies {
 
 
 }
+	
+
+
+
 
 tasks.named('test') {
 	useJUnitPlatform()
