@@ -19,8 +19,8 @@ import java.util.List;
 @Service
 public class RecommendProductService {
     // Product
-    private final ProductMapper productMapper; // 생성자 주입시 final
-    private final ProductService productService;
+    private final ProductMapper productMapper; // 생성자 주입시 final // ProductMapper는 노트북 상세 정보를 담는다
+    private final ProductService productService; // 생성자 주입시 final // ProductService는 노트북 스펙을 담는다
 
     // Recommend
     private final RecommendProductDAO recommendProductDAO;
@@ -35,15 +35,15 @@ public class RecommendProductService {
         log.info("추천 결과 맞는 제품 번호 = {}", productNos);
 
 
-        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>();
+        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>(); // 사용자에게 추천할 노트북 리스트 // 노트북 스펙을 담음
 
         for(int productNo : productNos) {
-            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo);
+            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo); //노트북 상세 정보 조회
 
-            log.info("상품 스펙 조회 = {}", laptopDetails);
+            log.info("상품 스펙 조회 = {}", laptopDetails); // 로그
 
-            if (!laptopDetails.isEmpty()) {
-                laptop.add(productService.getLaptopSpec(productNo, laptopDetails));
+            if (!laptopDetails.isEmpty()) { //상세 정보 여부
+                laptop.add(productService.getLaptopSpec(productNo, laptopDetails)); //노트북 스팩을 담는다
             } else {
                 return null;
             }
@@ -56,14 +56,14 @@ public class RecommendProductService {
         ProductFilterDTO productFilterDTO = new ProductFilterDTO(); // 사용자가 원하는 조건이 담긴 DTO
 
         log.debug("큐레이션 조건 반환 시작 = {}", curationDTO);
-        String mainOption = curationDTO.getMainOption();
+        String mainOption = curationDTO.getMainOption(); // key 값이 게임, 사무용, 장소 등 구분 공통 요소
 
-        if (mainOption.equals("게임 할거에요")) { // Key 값이 게임일 시 Gpu 중심
-            String game = curationDTO.getGame();
-            List<String> gpuValues = getGpuTags(game);
-            productFilterDTO.setGpu(gpuValues);
-        } else if (mainOption.equals("작업 할거에요")) { // key 값이 사무용일 시 CPU 중심
-            String purpose = curationDTO.getPurpose();
+        if (mainOption.equals("게임 할거에요")) { //키 값이 게임일 시 Gpu 중심
+            String game = curationDTO.getGame(); // 게임 타입
+            List<String> gpuValues = getGpuTags(game); // 게임 타입에 따라 gpu 태그 반환
+            productFilterDTO.setGpu(gpuValues); //gpu태그 설정
+        } else if (mainOption.equals("작업 할거에요")) { // key 값이 사무용일 시 cpu 중심
+            String purpose = curationDTO.getPurpose(); // 사용 목적 (코드 작업, AI 작업)
             List<String> cpuValues = getCpuTags(purpose);
             productFilterDTO.setGpu(cpuValues);
         }else if (mainOption.equals("문서나 인강 볼거에요")){
@@ -77,14 +77,14 @@ public class RecommendProductService {
 
       String place = curationDTO.getPlace(); // key 값이 장소일 시 무게 중심
         List<String> placeValues = getPlace(place); // 장소에 따른 무게 태그 반환
-        productFilterDTO.setPlace(placeValues);
+        productFilterDTO.setPlace(placeValues); //무게 태그 설정
 
-        String performance = curationDTO.getPerformance();
-        int[] priceRange = getPriceRange(performance);
-        productFilterDTO.setMinPrice(priceRange[0]);
-        productFilterDTO.setMaxPrice(priceRange[1]);
+        String performance = curationDTO.getPerformance(); // key 값이 성능일 시 가격 중심
+        int[] priceRange = getPriceRange(performance); // 성능에 따른 가격 범위 반환
+        productFilterDTO.setMinPrice(priceRange[0]); //최소 가격 설정
+        productFilterDTO.setMaxPrice(priceRange[1]); //최대 가격 설정
 
-        String screen = curationDTO.getScreen();
+        String screen = curationDTO.getScreen(); // key 값이 화면일 시 화면 중심
         List<String> screenValues = getScreenSizeTags(screen);
         productFilterDTO.setScreen(screenValues);
 
@@ -105,7 +105,7 @@ public class RecommendProductService {
 
         return productFilterDTO;
     }
-
+// 게임 타입에 따라 gpu태그를 반환
     private List<String> getGpuTags(String gameType) {
         //게임 타입이 null이면 빈 리스트 반환
         if (gameType == null) {
@@ -139,7 +139,7 @@ public class RecommendProductService {
                 return List.of();
         }
     }
-
+//사용 목적에 따라 cpu 태그를 반환
     private List<String> getCpuTags(String purpose) {
         //사용 목적이 null이면 빈 리스트 반환
         if (purpose == null) {
@@ -166,7 +166,7 @@ public class RecommendProductService {
         }
     }
 
-
+//인터넷 사용 목적에 따라 cpu 태그를 반환
     private List<String> getInternetTag(String internet){
 
         if (internet == null) {
@@ -192,7 +192,7 @@ public class RecommendProductService {
                 return List.of();
         }
     }
-
+//장소에 따라 무게 태그를 반환
     private List<String> getPlace(String place) {
 
         if (place == null) {
@@ -214,7 +214,7 @@ public class RecommendProductService {
 
     }
 
-
+//성능에 따라 가격 범위를 반환
     private int[] getPriceRange(String performance) {
         if (performance == null) {
             return new int[]{0, Integer.MAX_VALUE};
@@ -247,7 +247,7 @@ public class RecommendProductService {
 //        }
 //    }
 
-
+    //화면 크기에 따라 태그를 반환
         private List<String> getScreenSizeTags(String screen) {
 
             if (screen == null) {
