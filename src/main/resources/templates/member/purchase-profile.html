@@ -234,44 +234,6 @@
           loadOrderList(0);
         });
 
-        $(document).on("click", ".btn-confirm", function (event) {
-          event.preventDefault();
-          let paymentNo = $(this).data("payment-no");
-          $("#confirm-modal").data("payment-no", paymentNo).modal("show");
-        });
-
-        $(document).on("click", ".btn-confirmed", function (event) {
-          let paymentNo = $("#confirm-modal").data("payment-no");
-          $.ajax({
-            url: "/api/payment/confirm",
-            type: "POST",
-            data: {
-              paymentNo: paymentNo,
-            },
-            success: function (response) {
-              $("#confirm-modal").modal("hide");
-              switch (response) {
-                case 1:
-                  alert("구매가 확정되었습니다.");
-                  loadOrderList(0);
-                  break;
-                case 2:
-                  alert("사용자가 일치하지 않습니다.");
-                  break;
-                case 3:
-                  alert("이미 확정된 상품입니다.");
-                  break;
-                default:
-                  alert("구매 확정 실패");
-                  break;
-              }
-            },
-            error: function (xhr, status, error) {
-              alert("구매 확정 실패");
-            },
-          });
-        });
-
         $(document).on("click", ".order-detail", function (event) {
           event.preventDefault();
           let paymentNo = $(this).data("payment-no");
