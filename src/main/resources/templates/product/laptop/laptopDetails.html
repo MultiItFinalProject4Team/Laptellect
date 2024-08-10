@@ -566,6 +566,26 @@
                                 <button type="button" class="btn btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">문의하기</button>
                             </div>
                         </div>
+                    <!--ajx활용해 비동기로 변환 예정-->
+                    <div class="pagination-container">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                                    <a class="page-link" th:href="@{/product/laptop/laptopDetails(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+                                    <a class="page-link" th:href="@{/product/laptop/laptopDetails(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                                </li>
+                                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                                    <a class="page-link" th:href="@{/product/laptop/laptopDetails(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                     </div>
 
                     <!-- Review Box -->
