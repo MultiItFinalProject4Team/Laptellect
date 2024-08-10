@@ -37,7 +37,17 @@ public class AuthController {
      * @return the string
      */
     @GetMapping("/signin")
-    public String showSignInForm(Model model) {
+    public String showSignInForm(@RequestParam(name = "error", required = false) String error, Model model) {
+        if(error != null) {
+            String errorMessage = "아이디 또는 비밀번호가 올바르지 않습니다.";
+
+            if (error.equals("password")) {
+                errorMessage = "비밀번호가 올바르지 않습니다.";
+            } else if (error.equals("username")) {
+                errorMessage = "존재하지 않는 사용자 입니다.";
+            }
+            model.addAttribute("errorMessage", errorMessage);
+        }
 
         return "auth/auth-sign-in";
     }
