@@ -182,6 +182,14 @@
 <!--        product-->
 <!--    </select>-->
 
+    <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
+        SELECT *
+        FROM
+        vw_product_detail
+        WHERE
+        product_no = #{productNo}
+    </select>
+
     <!--제품의 상세 조회 -->
     <select id="productDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
         SELECT *
@@ -253,4 +261,5 @@
             #{ options }
         </foreach>
     </select>
+
 </mapper>
