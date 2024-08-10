@@ -22,6 +22,7 @@ public class ProductDTO {
     private Timestamp updatedAt;
     private int quantity;
     private int totalPrice;
+    private String url;
 
     public int getTotalPrice() {
         return this.price * this.quantity;

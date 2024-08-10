@@ -1,6 +1,7 @@
 package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.*;
+import com.multi.laptellect.product.model.dto.keyboard.*;
 import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.util.RedisUtil;
@@ -43,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
             log.error("제품 저장 중 오류 발생", e);
         }
     }
+
 
     private List<ProductDTO> createProductDTOList(List<ProductDTO> productList, int typeNo) {
         List<ProductDTO> productDTOList = new ArrayList<>();
@@ -104,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
 
         LaptopSpecDTO laptop = new LaptopSpecDTO();
 
-        List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo);
+        List<LaptopDetailsDTO> laptopDetails = productMapper.productDetails(productNo);
         log.info("상품 스펙 조회 = {}", laptopDetails);
 
         if (!laptopDetails.isEmpty()) {
@@ -114,6 +116,26 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return laptop;
+    }
+
+    @Override
+    @Cacheable(value = "product", key = "#p0", cacheManager = "productCacheManager")
+    public KeyBoardSpecDTO getKeyboardProductDetails(int productNo) {
+        log.info("프로덕트넘버값1 확인 = {}", productNo);
+
+        KeyBoardSpecDTO keyboard ;
+
+        List<LaptopDetailsDTO> keyBoardSpec = productMapper.productDetails(productNo);
+        log.info("상품 스펙 조회1 = {}", keyBoardSpec);
+
+
+        if (!keyBoardSpec.isEmpty()) {
+            keyboard = getKeyboardSpec(productNo, keyBoardSpec);
+        } else {
+            return null;
+        }
+
+        return keyboard;
     }
 
     @Override
@@ -173,7 +195,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-
     public LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails) {
         LaptopDetailsDTO laptopDetailsDTO = laptopDetails.get(0);
         LaptopSpecDTO specDTO = new LaptopSpecDTO();
@@ -220,6 +241,12 @@ public class ProductServiceImpl implements ProductService {
                     case "LBI5" :
                         portability.setThickness(laptop.getOptionValue());
                         break;
+                    case "LBI6" :
+                        addOn.setSpeaker(laptop.getOptionValue());
+                        break;
+                    case "LBI7" :
+                        addOn.setCoolingfan(laptop.getOptionValue());
+                        break;
 
                 }
 
@@ -228,78 +255,84 @@ public class ProductServiceImpl implements ProductService {
             if(categoryCode.contains("LC")) {
                 switch (categoryCode) {
                     case "LC13":
-                        cpu.setCpuType(laptop.getOptionValue());
+                        cpu.setCpuType(laptop.getOptionValue()); //CPU 종류
                         break;
                     case "LC14":
-                        cpu.setCpuCodeName(laptop.getOptionValue());
+                        cpu.setCpuCodeName(laptop.getOptionValue());// CPU 코드명
                         break;
                     case "LC15":
-                        cpu.setCpuNumber(laptop.getOptionValue());
+                        cpu.setCpuNumber(laptop.getOptionValue());// CPU 넘버
                         break;
                     case "LC16":
-                        cpu.setCpuCore(laptop.getOptionValue());
+                        cpu.setCpuCore(laptop.getOptionValue());//코어 수
                         break;
                     case "LC17":
-                        cpu.setCpuThread(laptop.getOptionValue());
+                        cpu.setCpuThread(laptop.getOptionValue());//스레드 수
                         break;
                     case "LC18":
-                        cpu.setNpu(laptop.getOptionValue());
+                        cpu.setNpu(laptop.getOptionValue());//NPU 종류
                         break;
                     case "LC19":
-                        cpu.setNpuTops(laptop.getOptionValue());
+                        cpu.setNpuTops(laptop.getOptionValue());//NPU TOPS
                         break;
                     case "LC20":
-                        cpu.setCpuManufacturer(laptop.getOptionValue());
+                        cpu.setCpuManufacturer(laptop.getOptionValue());//CPU 제조사
                         break;
                 }
             }
 
             if(categoryCode.contains("LD")) {
                 switch (categoryCode) {
-                    case "LD23":
-                        display.setScreenSize(laptop.getOptionValue());
-                        break;
                     case "LD24":
-                        display.setResolution(laptop.getOptionValue());
+                        display.setScreenSize(laptop.getOptionValue());//화면 크기
                         break;
                     case "LD25":
-                        display.setPanelSurface(laptop.getOptionValue());
+                        display.setResolution(laptop.getOptionValue());//해상도
                         break;
                     case "LD26":
-                        display.setRefreshRate(laptop.getOptionValue());
+                        display.setPanelSurface(laptop.getOptionValue());//패널 표면 처리
                         break;
                     case "LD27":
-                        display.setBrightness(laptop.getOptionValue());
+                        display.setRefreshRate(laptop.getOptionValue());//주사율
                         break;
                     case "LD28":
-                        display.setPanelType(laptop.getOptionValue());
+                        display.setBrightness(laptop.getOptionValue());//화면 밝기
+                        break;
+                    case "LD29":
+                        display.setPanelType(laptop.getOptionValue());//패널 종류
                         break;
                 }
             }
 
             if(categoryCode.contains("LG")){
                 switch (categoryCode){
-                    case "LG35" :
+                    case "LG36" :
                         gpu.setGpuType(laptop.getOptionValue());
                         break;
-                    case "LG36" :
+                    case "LG37" :
                         gpu.setGpuManufacturer(laptop.getOptionValue());
                         break;
-                    case "LG37" :
+                    case "LG38" :
                         gpu.setGpuChipset(laptop.getOptionValue());
+                        break;
+                    case "LG39" :
+                        gpu.setGpuCore(laptop.getOptionValue());
+                        break;
+                    case "LG40" :
+                        gpu.setGpuClock(laptop.getOptionValue());
                         break;
                 }
             }
 
             if(categoryCode.contains("LPA")) {
                 switch (categoryCode) {
-                    case "LPA40":
+                    case "LPA41":
                         power.setBattery(laptop.getOptionValue());
                         break;
-                    case "LPA41":
+                    case "LPA42":
                         power.setAdapter(laptop.getOptionValue());
                         break;
-                    case "LPA42":
+                    case "LPA43":
                         power.setCharging(laptop.getOptionValue());
                         break;
                 }
@@ -309,6 +342,9 @@ public class ProductServiceImpl implements ProductService {
                 switch (categoryCode){
                     case "LR10" :
                         ram.setRamSlot(laptop.getOptionValue());
+                        break;
+                    case "LR11" :
+                        ram.setRamBandwidth(laptop.getOptionValue());
                         break;
                     case "LR12" :
                         ram.setRamChange(laptop.getOptionValue());
@@ -324,13 +360,13 @@ public class ProductServiceImpl implements ProductService {
 
             if(categoryCode.contains("LS")){
                 switch (categoryCode){
-                    case "LS20" :
+                    case "LS21" :
                         storage.setStorageCapacity(laptop.getOptionValue());
                         break;
-                    case "LS21" :
+                    case "LS22" :
                         storage.setStorageType(laptop.getOptionValue());
                         break;
-                    case "LS22" :
+                    case "LS23" :
                         storage.setStorageSlots(laptop.getOptionValue());
                         break;
                 }
@@ -338,22 +374,22 @@ public class ProductServiceImpl implements ProductService {
 
             if(categoryCode.contains("LWC")){
                 switch (categoryCode){
-                    case "LWC29" :
+                    case "LWC30" :
                         addOn.setWirelessLan(laptop.getOptionValue());
                         break;
-                    case "LWC30" :
+                    case "LWC31" :
                         addOn.setUsb(laptop.getOptionValue());
                         break;
-                    case "LWC31" :
+                    case "LWC32" :
                         addOn.setUsbC(laptop.getOptionValue());
                         break;
-                    case "LWC32" :
+                    case "LWC33" :
                         addOn.setUsbA(laptop.getOptionValue());
                         break;
-                    case "LWC33" :
+                    case "LWC34" :
                         addOn.setBluetooth(laptop.getOptionValue());
                         break;
-                    case "LWC34" :
+                    case "LWC35" :
                         addOn.setThunderbolt(laptop.getOptionValue());
                         break;
                 }
@@ -383,6 +419,204 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public KeyBoardSpecDTO getKeyboardSpec(int productNo, List<LaptopDetailsDTO> keyBoardSpec) {
+        LaptopDetailsDTO keyboardDetailsDTO = keyBoardSpec.get(0);
+        KeyBoardSpecDTO specDTO = new KeyBoardSpecDTO();
+
+
+        String productName = keyboardDetailsDTO.getProductName();
+        int price = keyboardDetailsDTO.getPrice();
+        String image = keyboardDetailsDTO.getUploadName();
+        String productCode = keyboardDetailsDTO.getProductCode();
+        String manufacturer = specDTO.getManufacturer();
+        String registrationDate = specDTO.getRegistrationDate();
+
+        KeyAccessory accessory = new KeyAccessory();
+        KeyBuild build = new KeyBuild();
+        KeyDesign design = new KeyDesign();
+        KeyDimensions dimensions = new KeyDimensions();
+        KeyFeature feature = new KeyFeature();
+
+
+        log.debug("상품 상세 정보 분류 시작 = {}", keyBoardSpec);
+        for(LaptopDetailsDTO keyboard : keyBoardSpec){
+            String categoryCode = keyboard.getCategoryNo();
+
+
+
+            if(categoryCode.contains("LBI")){
+
+                switch (categoryCode) {
+
+                    case "LBI2":
+                        specDTO.setManufacturer(keyboard.getOptionValue());
+                        break;
+                    case "LBI3":
+                         specDTO.setRegistrationDate(keyboard.getOptionValue());
+                        break;
+
+                }
+            }
+
+
+            if(categoryCode.contains("KBI")){
+
+                switch (categoryCode){
+
+                    case "KBI3" :
+                        specDTO.setSize(keyboard.getOptionValue());
+                        break;
+                    case "KBI4" :
+                        specDTO.setConnectionType(keyboard.getOptionValue());
+                        break;
+                    case "KBI5" :
+                        specDTO.setRegistrationDate(keyboard.getOptionValue());
+                        break;
+                    case "KBI6" :
+                        specDTO.setInterfaceType(keyboard.getOptionValue());
+                        break;
+                }
+
+            }
+
+            if(categoryCode.contains("KB")) {
+                switch (categoryCode) {
+                    case "KB10":
+                        build.setKeySwitch(keyboard.getOptionValue());
+                        break;
+                    case "KB7":
+                        build.setKeyLayout(keyboard.getOptionValue());
+                        break;
+                    case "KB8":
+                        build.setSwitchType(keyboard.getOptionValue());
+                        break;
+                    case "KB9":
+                        build.setKeySwitch(keyboard.getOptionValue());
+                        break;
+
+                }
+            }
+
+            if(categoryCode.contains("KD")) {
+                switch (categoryCode) {
+                    case "KD12":
+                        design.setRainbowBacklight(keyboard.getOptionValue());
+                        break;
+                    case "KD13":
+                        design.setStepSculpture2(keyboard.getOptionValue());
+                        break;
+                    case "KD14":
+                        design.setMetalHousing(keyboard.getOptionValue());
+                        break;
+                    case "KD15":
+                        design.setWaterResistant(keyboard.getOptionValue());
+                        break;
+                    case "KD16":
+                        design.setRgbBacklight(keyboard.getOptionValue());
+                        break;
+                    case "KD17":
+                        design.setStabilizer(keyboard.getOptionValue());
+                        break;
+                    case "KD18":
+                        design.setSingleColorBacklight(keyboard.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("KDW")){
+                switch (categoryCode){
+                    case "KDW24" :
+                        dimensions.setWidth(keyboard.getOptionValue());
+                        break;
+                    case "KDW25" :
+                        dimensions.setHeight(keyboard.getOptionValue());
+                        break;
+                    case "KDW26" :
+                        dimensions.setDepth(keyboard.getOptionValue());
+                        break;
+                    case "KDW28" :
+                        dimensions.setCableLength(keyboard.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("KF")) {
+                switch (categoryCode) {
+                    case "KF19":
+                        feature.setNKeyRollover(keyboard.getOptionValue());
+                        break;
+                    case "KF20":
+                        feature.setKeycapMaterial(keyboard.getOptionValue());
+                        break;
+                    case "KF21":
+                        feature.setResponseRate(keyboard.getOptionValue());
+                        break;
+                    case "KF22":
+                        feature.setKeycapEngravingMethod(keyboard.getOptionValue());
+                        break;
+                    case "KF23":
+                        feature.setEngravingPosition(keyboard.getOptionValue());
+                        break;
+                }
+            }
+
+            if(categoryCode.contains("KC")){
+                switch (categoryCode){
+                    case "KC29" :
+                        accessory.setKeycapRemover(keyboard.getOptionValue());
+                        break;
+                    case "KC30" :
+                        accessory.setCleaningBrush(keyboard.getOptionValue());
+                        break;
+                    case "KC31" :
+                        accessory.setDeskPad(keyboard.getOptionValue());
+                        break;
+                    case "KC32" :
+                        accessory.setKeySkin(keyboard.getOptionValue());
+                        break;
+                    case "KC33" :
+                        accessory.setLoop(keyboard.getOptionValue());
+                        break;
+                    case "KC34" :
+                        accessory.setWristRest(keyboard.getOptionValue());
+                        break;
+                }
+            }
+
+
+
+            log.info("상품 상세 정보 분류 = {}", categoryCode);
+        }
+        log.info("상품 상세 정보 분류 완료");
+
+        specDTO.setProductNo(productNo);
+        specDTO.setProductName(productName);
+        specDTO.setPrice(price);
+        specDTO.setImage(image);
+        specDTO.setProductCode(productCode);
+        specDTO.setManufacturer(manufacturer);
+        specDTO.setRegistrationDate(registrationDate);
+
+        specDTO.setKeyAccessory(accessory);
+        specDTO.setKeyBuild(build);
+        specDTO.setKeyDesign(design);
+        specDTO.setKeyDimensions(dimensions);
+        specDTO.setKeyFeature(feature);
+
+
+        log.info("상품 상세 정보 분류 완료 = {}", specDTO);
+
+        return specDTO;
+    }
+
+
+
+    @Override
+    public List<ProductDTO> searchProducts(String keyword,int typeNo) {
+        return productMapper.findByNameSearch(keyword, typeNo);
+    }
+
+    @Override
     public ArrayList<Integer> getWishlistString() throws Exception {
         int memberNo = SecurityUtil.getUserNo();
         ArrayList<Integer> wishList = productMapper.findAllWishlistString(memberNo);
@@ -403,6 +637,7 @@ public class ProductServiceImpl implements ProductService {
 
         return productMapper.getProductsByType(typeNo);
     }
+
 
     @Override
     public int getTotalProducts() {

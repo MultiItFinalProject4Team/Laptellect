@@ -5,9 +5,11 @@ import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
@@ -31,7 +33,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider, Ser
 
         // loadUserByUsername에서 username(email)이 DB에 없어서 반환 못한 경우 예외 처리
         if (customUserDetails == null) {
-            throw new AuthenticationException("User not found") {};
+            throw new UsernameNotFoundException("User not found") {};
         }
 
         // 비밀번호 or 임시 비밀번호 둘 중 하나가 맞으면 true처리
@@ -45,7 +47,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider, Ser
 
         // 비밀번호 false 일 시 예외 처리
         if (!passwordMatches) {
-            throw new AuthenticationException("Wrong password") {};
+            throw new BadCredentialsException("Wrong password") {};
         }
 
         // 인증 정보가 담긴 객체 반환

@@ -1,9 +1,6 @@
 package com.multi.laptellect.product.service;
 
-import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
-import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.SpecDTO;
-import com.multi.laptellect.product.model.dto.WishlistDTO;
+import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +22,12 @@ public interface ProductService {
      */
     void saveProductsToDB(List<ProductDTO> prodctList, int typeNo) throws Exception;
 
-    /**
-     * 상품리스트 조회
-     *
-     * @param pageNumber 페이지
-     * @param pageSize   페이지 크기
-     * @return the stored products
-     */
+
+
     List<ProductDTO> getStoredProducts(Integer typeNo);
+
+
+
 
     /**
      * 모든 상품의 수량 확인
@@ -57,6 +52,9 @@ public interface ProductService {
      * @return the laptop product details
      */
     LaptopSpecDTO getLaptopProductDetails(int productNo);
+
+
+    KeyBoardSpecDTO getKeyboardProductDetails(int productNo);
 
 
     /**
@@ -106,5 +104,12 @@ public interface ProductService {
 
     LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
 
+    KeyBoardSpecDTO getKeyboardSpec(int productNo, List<LaptopDetailsDTO> keyBoardSpec);
+
+    
+
+
+    List<ProductDTO> searchProducts(String keyword,int typeNo);
+  
     ArrayList<Integer> getWishlistString() throws Exception;
 }

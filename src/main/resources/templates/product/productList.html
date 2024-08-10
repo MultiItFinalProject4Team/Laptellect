@@ -6,10 +6,14 @@
     <link rel="stylesheet" th:href="@{/css/product/product.css}">
     <script th:inline="javascript">
     $(document).ready(function() {
+
+        // 초기 typeNo 값을 설정 (thymeleaf를 사용 서버 전달 )
         let typeNo = [[${ typeNo }]];
 
+        // 기본 탭 에 acrive 클래스 추가 기본 선택 상태로 만듦
         $('#default-tab').addClass("active");
 
+        // 가격 형식을 포맷팅하는 함수
         function formatPrices() {
             $('.price').each(function() {
                 let value = $(this).text().replace(' 원', '').replace(/,/g, '');
@@ -18,6 +22,7 @@
             });
         }
 
+        // 초기 제품 리스트를 로드 함
         function loadInitialProducts() {
             $.ajax({
                 url: "/api/product/product-list",
@@ -33,11 +38,13 @@
             });
         }
 
+        // 페이지 로드 때 초기 상품 불러옴
         loadInitialProducts();
 
+        // 탭을 클릭했을 때 발생하는 이벤트 핸들러
         $(".product-link").on("click", function (e) {
-           e.preventDefault();
-            let typeNo = $(this).data('type-no');
+           e.preventDefault(); // 기본 클릭 이벤트를 막음 (페이지 이동 방지)
+            typeNo = $(this).data('type-no');
             console.log(typeNo);
 
               // 모든 탭에서 active 클래스 제거
@@ -45,6 +52,8 @@
               // 클릭된 탭에 active 클래스 추가
              $(this).addClass("active");
 
+
+             // 선택된 탭에 따라 제품 리스트를 다시 로드
             $.ajax({
                 url: "/api/product/product-list",
                 type: "GET",
@@ -58,31 +67,62 @@
                 }
             });
          });
+
+        // 검색 폼 제출 될 때 발생하는 이벤트 헨들러?
+           $("#searchForm").on("submit", function(e) {
+               e.preventDefault(); // 기본 폼 제출을 막음
+               $("#typeNo").val(typeNo); // 현재 선택된 typeNo 값을 숨겨진 입력 필드에 설정
+               console.log("제발나와라 ㅜ :" + typeNo);
+
+               $.ajax({
+               url: "/product/search",
+               type: "GET",
+               data: $(this).serialize(),
+               success: function(response) {
+                    $('#product-list').html(response); // 특정 부분만 업데이트
+                    formatPrices();
+             },
+              error: function(error) {
+            console.log(error);
+             }
+        });
+     });
     });
 </script>
 </head>
 
 <body>
-<div class="container" layout:fragment="content">
+<div class="container-md" layout:fragment="content">
 
-    <form th:action="@{/product/test}" method="post">
+    <div>
+    <form th:action="@{/product/test}" method="get">
         <select id="productType" name="products">
             <option value="1"> 노트북</option>
             <option value="2"> 마우스</option>
             <option value="3"> 키보드</option>
         </select>
-        <button type="submit" class="btn btn-primary mt-3 mb-4">크롤링 시작</button>
+        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 기본정보 크롤링</button>
     </form>
-    <div class="d-flex justify-content-end">
-        <div class="input-group">
+    <form th:action="@{/product/test2}" method="get">
+        <select id="productType1" name="typeDetails">
+            <option value=1> 노트북</option>
+            <option value=2> 마우스</option>
+            <option value=3> 키보드</option>
+        </select>
+        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 상세정보 크롤링</button>
+    </form>
+    </div>
+    <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
+        <div class="product-search">
             <div class="form-outline" data-mdb-input-init>
-                <input type="search" id="form1" class="form-control"/>
+                <input type="search" id="form1" class="form-control search-input" placeholder="검색어를 입력하세요." name="keyword"/>
             </div>
-            <button type="button" class="btn btn-primary-input" data-mdb-ripple-init>
+            <button type="submit" class="btn btn-primary-input" data-mdb-ripple-init>
                 <i class="fas fa-search"></i>
             </button>
         </div>
-    </div>
+        <input type="hidden" id="typeNo" name="typeNo" value="1"/>
+    </form>
     <div>
         <ul class="nav nav-tab product-taps">
             <li class="nav-item product-item">
@@ -95,8 +135,8 @@
                 <a class="nav-link product-link" data-type-no="3" href="#">키보드</a>
             </li>
         </ul>
-        <div class="row" id="product-list"></div>
-    </div>
+    </div> <br>
+    <div class="row" id="product-list"></div>
 </div>
 
 </body>

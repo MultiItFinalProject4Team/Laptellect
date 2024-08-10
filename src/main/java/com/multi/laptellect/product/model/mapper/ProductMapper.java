@@ -18,6 +18,7 @@ public interface ProductMapper {
 
     List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo);
 
+
     int getTotalProducts();
 
     List<ProductDTO> getTypeByProduct(int typeNo);
@@ -34,17 +35,23 @@ public interface ProductMapper {
 
     int getProductByType(@Param("typeNo") int typeNo);
 
-    List<ProductDTO> findProduct();
+    @Select("SELECT * FROM product WHERE type_no = #{ typeNo }")
+    List<ProductDTO> findProductsByType(@Param("typeNo") int typeNo);
 
-    @Select("SELECT COUNT(*) FROM product_spec WHERE product_no = #{ productNo } AND option_value = #{ specValue }")
-    int checkSpecExists(@Param("productNo") int productNo, @Param("specValue") String specValue);
+    List<ProductDTO> getReviewRequired ();
+
+    List<LaptopDetailsDTO> laptopProductDetails(int productNo);
+
+
+    int checkSpecExists(@Param("productNo") int productNo,@Param("category")String category,@Param("specValue") String specValue);
 
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
 
    List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
 
-    List<LaptopDetailsDTO> laptopProductDetails(int productNo);
+    List<LaptopDetailsDTO> productDetails(int productNo);
+
 
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")
@@ -64,6 +71,8 @@ public interface ProductMapper {
     ProductDTO findProductByProductNo(String productNo);
 
     List<SpecDTO> findProductSpecByProductNo(@Param("productNo") int productNo, @Param("neededOptions") Set<String> neededOptions);
+
+    List<ProductDTO> findByNameSearch(@Param("keyword") String keyword, @Param("typeNo") int typeNo);
 
     @Select("SELECT product_no FROM wishlist WHERE member_no = #{ member_no }")
     ArrayList<Integer> findAllWishlistString(int memberNo);
