@@ -12,6 +12,7 @@ import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/payment")
+@Slf4j
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -77,10 +79,15 @@ public class PaymentController {
     public String cartPayment(Model model) {
         try {
             ProductCart productCart = cartService.getCartList();
+            log.info("productCart 안에 값 = {}", productCart);
             ArrayList<ProductDTO> cartList = productCart.getProducts();
+            log.info("장바구니 프로덕트 안에 값 = {}", cartList);
             int totalQuantity = productCart.getTotalQuantity();
 
             int productTotal = cartList.size();
+            log.info("장바구니 사이즈 값 = {}", productTotal);
+
+
             int productTotalPrice = 0;
 
             for(int i = 0; i < cartList.size(); i++) {
@@ -161,6 +168,8 @@ public class PaymentController {
     @Transactional
     @PostMapping("/verifyCartPayment")
     public ResponseEntity<Map<String, Object>> verifyCartPayment(@RequestBody CartPaymentDTO request) {
+        log.info("반환 개수 = {}", request.getProducts().size());
+        log.info("반환 개수 = {}", request.getProducts());
         try {
             int memberNo = SecurityUtil.getUserNo();
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
