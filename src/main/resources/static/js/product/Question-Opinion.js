@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const opinion = document.getElementById('getOpinionButton');
     const all = document.getElementById('getAllButton');
     const typeField = document.getElementById('typeField');
+    var memberNo = $('#curmemberNo').val();
 
     question.addEventListener('click', function() {
     let productNo = question.getAttribute('data-product-no');
@@ -37,10 +38,14 @@ document.addEventListener('DOMContentLoaded', function() {
                          <div class="question-body">
                              <div class="question-bodytop">
                                  <p class="question-category ${categoryClass}">${categoryText}</p>
-                                 <h4 class="question-title">${productqList.title || '제목 없음'}</h4>
+                                 <h4 class="question-title">
+                                     ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '비밀글입니다 🔒' : productqList.title}
+                                 </h4>
                              </div>
                              <div class="question-content">
-                                 <p class="question-content">${productqList.content || '내용 없음'}</p>
+                                  <p class="question-content">
+                                      ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '본인만 확인 가능합니다' : productqList.content}
+                                  </p>
                              </div>
                          </div>
                          <hr class="question-hr">
@@ -89,10 +94,14 @@ document.addEventListener('DOMContentLoaded', function() {
                              <div class="question-body">
                                  <div class="question-bodytop">
                                      <p class="question-category ${categoryClass}">${categoryText}</p>
-                                     <h4 class="question-title">${productqList.title || '제목 없음'}</h4>
+                                     <h4 class="question-title">
+                                         ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '비밀글입니다 🔒' : productqList.title}
+                                     </h4>
                                  </div>
                                  <div class="question-content">
-                                     <p class="question-content">${productqList.content || '내용 없음'}</p>
+                                      <p class="question-content">
+                                          ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '본인만 확인 가능합니다' : productqList.content}
+                                      </p>
                                  </div>
                              </div>
                              <hr class="question-hr">
@@ -141,10 +150,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                      <div class="question-body">
                                          <div class="question-bodytop">
                                              <p class="question-category ${categoryClass}">${categoryText}</p>
-                                             <h4 class="question-title">${productqList.title || '제목 없음'}</h4>
+                                             <h4 class="question-title">
+                                                 ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '비밀글입니다 🔒' : productqList.title}
+                                             </h4>
                                          </div>
                                          <div class="question-content">
-                                             <p class="question-content">${productqList.content || '내용 없음'}</p>
+                                              <p class="question-content">
+                                                  ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '본인만 확인 가능합니다' : productqList.content}
+                                              </p>
                                          </div>
                                      </div>
                                      <hr class="question-hr">

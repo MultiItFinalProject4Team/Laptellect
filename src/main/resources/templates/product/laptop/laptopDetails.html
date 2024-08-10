@@ -12,6 +12,7 @@
     <link href="/css/product/product_question.css" rel="stylesheet">
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
+    <script src="/js/product/question_search.js"></script>
     <style>
         /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
@@ -496,63 +497,61 @@
                 </table>
             </div> <br> <br>
 
-            <div class="col-12 mt-4">
-                <h4><strong>문의/리뷰</strong></h4> <hr>
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">문의/의견</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="review-tab" data-bs-toggle="tab" href="#review-box" role="tab" aria-controls="review-box" aria-selected="false">리뷰</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="other-review-tab" data-bs-toggle="tab" href="#other-review-box" role="tab" aria-controls="other-review-box" aria-selected="false">다른 쇼핑몰 리뷰</a>
-                    </li>
-                </ul> <br>
-                <!-- Tab content -->
-                <div class="tab-content mt-3" id="myTabContent">
-                    <!-- Customer Box -->
-                    <!--상품 문의/의견 관련 탭-->
-                    <div class="tab-pane fade show active" id="customer-box" role="tabpanel" aria-labelledby="customer-tab">
-                        <div class="question_container">
-                            <div class="btn-category-div">
-                                <button id="getAllButton" class="btn-category active" th:data-product-no="${productNo}">전체</button>
-                                <button id="getQuestionButton" class="btn-category"  th:data-product-no="${productNo}">문의</button>
-                                <button id="getOpinionButton" class="btn-category"  th:data-product-no="${productNo}">의견</button>
-                            </div>
-                            <div class="form-search-div">
-                                <form class="d-flex" role="search" id="questionSearch">
-                                    <select class="form-select" id="searchSelect" name="key">
-                                        <option value="all">전체</option>
-                                        <option value="title">제목</option>
-                                        <option value="content">내용</option>
-                                    </select>
-                                    <input class="form-control me-2" type="search" id="question_search" placeholder="제목/내용" aria-label="Search" style="width: 200px;" name="keyword" th:value="${page_keyword}">
-                                    <input type="hidden" name="productNo" th:value="${productNo}">
-                                    <input type="hidden" name="type" id="typeField" value="all">
-                                    <button class="btn btn-outline-success" type="submit">Search</button>
-                                </form>
-                            </div>
+        <div class="col-12 mt-4">
+            <h4><strong>문의/리뷰</strong></h4>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box" role="tab" aria-controls="customer-box" aria-selected="true">의견/문의</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="review-tab" data-bs-toggle="tab" href="#review-box" role="tab" aria-controls="review-box" aria-selected="false">리뷰</a>
+                </li>
+            </ul>
+            <!-- Tab content -->
+            <div class="tab-content mt-3" id="myTabContent">
+                <!-- Customer Box -->
+                <!--상품 문의/의견 관련 탭-->
+                <div class="tab-pane fade show active" id="customer-box" role="tabpanel" aria-labelledby="customer-tab">
+                    <div class="question_container">
+                        <div class="btn-category-div">
+                            <button id="getAllButton" class="btn-category active" th:data-product-no="${productNo}">전체</button>
+                            <button id="getQuestionButton" class="btn-category"  th:data-product-no="${productNo}">문의</button>
+                            <button id="getOpinionButton" class="btn-category"  th:data-product-no="${productNo}">의견</button>
                         </div>
-                        <hr>
-                        <div id="customer-list">
-                            <div th:each="each : ${productqList}" class="question">
-                                <div class="question-header">
-                                    <div class="question-author">
-                                        <span class="author-name" th:text="${each.memberName}"></span>
-                                        <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
-                                    </div>
+                        <div class="form-search-div">
+                            <form class="d-flex" role="search" id="questionSearch">
+
+                                <select class="form-select" id="searchSelect" name="key">
+                                    <option value="all">전체</option>
+                                    <option value="title">제목</option>
+                                    <option value="content">내용</option>
+                                </select>
+                                <input class="form-control me-2" type="search" id="question_search" placeholder="제목/내용" aria-label="Search" style="width: 200px;" name="keyword" th:value="${page_keyword}">
+                                <input type="hidden" name="productNo" th:value="${productNo}">
+                                <input type="hidden" name="type" id="typeField" value="all">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
+                    <div id="customer-list">
+                        <div th:each="each : ${productqList}" class="question">
+                            <div class="question-header">
+                                <div class="question-author">
+                                    <span class="author-name" th:text="${each.memberName}"></span>
+                                    <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
                                 </div>
-                                <div class="question-body">
-                                    <div class="question-bodytop">
-                                        <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
-                                           th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
-                                        </p>
-                                        <h4 class="question-title" th:text="${each.title}"></h4>
-                                    </div>
-                                    <div class="question-content">
-                                        <p class="question-content" th:text="${each.content}"></p>
-                                    </div>
+                            </div>
+                            <div class="question-body">
+                                <div class="question-bodytop">
+                                    <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
+                                       th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
+                                    </p>
+                                    <h4 class="question-title" th:text="${each.secret=='Y' and each.memberNo!=memberNo } ? '비밀글입니다 🔒' : ${each.title}"></h4>
+                                </div>
+                                <div class="question-content">
+                                    <p class="question-content" th:text="${each.secret=='Y' and each.memberNo!=memberNo } ? '본인만 확인 가능합니다' : ${each.content}"></p>
                                 </div>
                                 <hr class="question-hr">
                             </div>
