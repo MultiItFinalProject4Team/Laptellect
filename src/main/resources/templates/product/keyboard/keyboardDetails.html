@@ -1,134 +1,481 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{common/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Product Details</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품 정보</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <link href="/css/product/product_question.css" rel="stylesheet">
+    <script src="/js/product/product_question.js"></script>
+    <script src="/js/product/question-review-tab.js"></script>
+    <style>
+
+        .review-stars {
+            color: gold;
+            font-size: 1.5rem;
+        }
+
+        .spec-table th { background-color: #f8f9fa;
+                         width: 15%; }
+        .spec-table td { width: 30%; }
+
+        #spec-box { width: 85%; margin: 0 auto;}
+
+        body { font-family: 'Noto Sans KR', sans-serif; }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
+            });
+
+            // 위시리스트 추가/삭제
+            $(".btn-process-wishlist").on("click", function () {
+                event.preventDefault();
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-wishlist",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("위시리스트 추가 완료.");
+                            break;
+                          case 2:
+                            alert("위시리스트 삭제 완료.");
+                            break;
+                          case 3:
+                            alert("로그인이 필요합니다.");
+                            break;
+                          default:
+                            alert("위시리스트 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+            // 장바구니 추가/삭제
+            $(".btn-process-cart").on("click", function () {
+                event.preventDefault();
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          case 3:
+                            alert("로그인이 필요합니다.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+            $(".btn-payment").on("click", function () {
+                event.preventDefault();
+                let productNo = $(this).data('product-no');
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                          case 1:
+                            alert("장바구니 추가 완료.");
+                            break;
+                          case 2:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          case 3:
+                            alert("장바구니 삭제 완료.");
+                            break;
+                          default:
+                            alert("장바구니 Ajax Error");
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+        });
+    </script>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-5">Product Details</h1>
+<div class="container mt-5" layout:fragment="content">
+    <hr>
     <div class="row">
-        <div class="col-12">
-            <div class="card mb-4">
-                <img th:src="${product.imageUrl}" class="card-img-top" alt="상품 이미지" style="height: 300px; object-fit: contain;">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${product.productName}">상품명</h5>
-                    <p class="card-text" th:text="${product.price + '원'}">가격</p>
+        <div class="col-md-4">
+            <!-- 상품 이미지 -->
+            <img th:src="@{'/img/product/' + ${ keyboard.image }}" class="card-img-top" alt="상품 이미지"
+                 style="height: 400px; object-fit: contain;">
+            <div class="spec-box mt-3">
+                <!-- 상품 기본 정보 -->
+                <ul class="list-unstyled">
+                    <li><strong>사이즈<span class="float-end" th:text="${ keyboard.size }">Window 11</span></strong></li>
+                    <li><strong>연결 방식<span class="float-end"
+                                           th:text="${ keyboard.connectionType }">15.6인치</span></strong></li>
+                    <li><strong>인터페이스<span class="float-end"
+                                        th:text="${ keyboard.interfaceType }">1.86kg</span></strong></li>
+                    <li><strong>접점 방식<span class="float-end"
+                                         th:text="${ keyboard.switchType }">1920x1080(FHD)</span></strong></li>
+
+                </ul>
+            </div>
+            <div class="mt-2">
+
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-12 mb-1" id="product-name">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 th:text="${ keyboard.productName }"></h4>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <div style="margin-left: 1rem !important;">
+                                <a class="btn-process-wishlist" href="#" th:attr="data-product-no=${productNo}">
+                                    <span><i class="fa-solid fa-heart fa-1.5x"></i></span>
+                                    <span>위시리스트</span>
+                                </a>
+                            </div>
+                            <div style="margin-left: 1rem !important;">
+                                <a class="btn-process-cart" href="#" th:attr="data-product-no=${productNo}">
+                                    <span><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
+                                    <span>장바구니</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row mt-2">
+                <div class="col-7">
+                    <br>
+                    <ul id="list-simple-spec">
+                        <li><strong>제조사 : </strong><span class="spec" th:text="${ keyboard.manufacturer }"> 제조사</span></li>
+                        <li><strong>등록월 : </strong><span class="spec" th:text="${ keyboard.registrationDate }"> 0000.00</span></li>
+                        <li><strong>연결방식 : </strong><span class="spec" th:text="${ keyboard.size }"> 연결방식</span></li>
+                        <li><strong>스위치 : </strong><span class="spec" th:text="${ keyboard.connectionType }"> 스위치</span></li>
+                    </ul>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><strong>가격 : <span class="price" th:text="${keyboard.price}"></span></strong></span>
+                        <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
+                            <input type="hidden" name="productName" th:value="${keyboard.productName}">
+                            <input type="hidden" name="imageUrl" th:value="${keyboard.image}">
+                            <input type="hidden" name="price" th:value="${keyboard.price}">
+                            <button type="submit" class="btn btn-custom-primary ms-4">구매하기</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center"><h5>상품평(614건)</h5> <a href="#">더보기</a></div>
+
+                        <div class="d-flex justify-content align-items-center"><span class="review-stars">★★★★☆</span> <span class="text-dark">4.9점</span></div>
+
+
+                        <div class="review-group">
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">게이밍으로 쓰기 편해요!...</h6>
+                                    <small>2024.05.25</small>
+                                </div>
+                                <p class="mb-1">마우스 미쳤다...</p>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">로지텍 덕분입니다. 저는 주로 인터넷...</h6>
+                                    <small>2024.05.27</small>
+                                </div>
+                                <p class="mb-1">로지텍 제품이라 믿고 구매했어요...</p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <table class="table table-striped">
-                <tbody>
-                <tr>
-                    <th>제조회사</th>
-                    <td th:text="${product.manufactureCompany}">제조회사</td>
-                </tr>
-                <tr>
-                    <th>사이즈</th>
-                    <td th:text="${product.size}">사이즈</td>
-                </tr>
-                <tr>
-                    <th>연결 방식</th>
-                    <td th:text="${product.contactMethod}">연결 방식</td>
-                </tr>
-                <tr>
-                    <th>무선 연결</th>
-                    <td th:text="${product.wirelessConnection}">무선 연결</td>
-                </tr>
-                <tr>
-                    <th>배터리</th>
-                    <td th:text="${product.battery}">배터리</td>
-                </tr>
-                <tr>
-                    <th>키 배열</th>
-                    <td th:text="${product.keyArrangement}">키 배열</td>
-                </tr>
-                <tr>
-                    <th>인터페이스</th>
-                    <td th:text="${product.interfaceKeyBoard}">인터페이스</td>
-                </tr>
-                <tr>
-                    <th>접점 방식</th>
-                    <td th:text="${product.contactMethod}">접점 방식</td>
-                </tr>
-                <tr>
-                    <th>스위치</th>
-                    <td th:text="${product.keyBoardSwitch}">스위치</td>
-                </tr>
-                <tr>
-                    <th>키보드 형태</th>
-                    <td>
-                        <ul>
-                            <li th:each="type : ${product.keyBoardType}" th:text="${type}">키보드 형태</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>키 스위치</th>
-                    <td th:text="${product.keySwitch}">키 스위치</td>
-                </tr>
-                <tr>
-                    <th>키압</th>
-                    <td th:text="${product.keyPressure}">키압</td>
-                </tr>
-                <tr>
-                    <th>동시입력</th>
-                    <td th:text="${product.simultaneousInput}">동시입력</td>
-                </tr>
-                <tr>
-                    <th>응답속도</th>
-                    <td th:text="${product.responseSpeed}">응답속도</td>
-                </tr>
-                <tr>
-                    <th>키캡 재질</th>
-                    <td th:text="${product.keycapMaterial}">키캡 재질</td>
-                </tr>
-                <tr>
-                    <th>키캡 각인방식</th>
-                    <td th:text="${product.keycapEngraving}">키캡 각인방식</td>
-                </tr>
-                <tr>
-                    <th>각인 위치</th>
-                    <td th:text="${product.engravingLocation}">각인 위치</td>
-                </tr>
-                <tr>
-                    <th>부가 기능</th>
-                    <td>
-                        <ul>
-                            <li th:each="addon : ${product.addOns}" th:text="${addon}">부가 기능</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>가로</th>
-                    <td th:text="${product.width}">가로</td>
-                </tr>
-                <tr>
-                    <th>세로</th>
-                    <td th:text="${product.length}">세로</td>
-                </tr>
-                <tr>
-                    <th>높이</th>
-                    <td th:text="${product.height}">높이</td>
-                </tr>
-                <tr>
-                    <th>무게</th>
-                    <td th:text="${product.weight}">무게</td>
-                </tr>
-                <tr>
-                    <th>케이블 길이</th>
-                    <td th:text="${product.cableLength}">케이블 길이</td>
-                </tr>
-                </tbody>
-            </table>
-            <form th:action="@{/payment}" method="post">
-                <input type="hidden" name="productName" th:value="${product.productName}">
-                <input type="hidden" name="imageUrl" th:value="${product.imageUrl}">
-                <input type="hidden" name="price" th:value="${product.price}">
-                <button type="submit" class="btn btn-primary mt-4">결제하기</button>
-            </form>
+        </div>
+
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <!--      숫자 형태로 넣어주고 Js로 동적 생성 or 타임리프 if문 걸어주고 별 생성     -->
+                    <span class="review-stars">★★★★☆</span>
+                    <span class="ms-2"> / </span>
+                    <a href="#" class="text-decoration-none ms-2">리뷰 보러가기</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mt-4">
+                <h4><strong>상품 상세 정보</strong></h4>
+            </div>
+            <hr>
+
+            <div id="spec-box">
+                <div class="col-12 mt-4">
+                    <h6><strong>기본사양</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>제조사</th>
+                        <td th:text="${ keyboard.manufacturer != null ? keyboard.manufacturer : 'X' }">제조사</td>
+                        <th>등록월</th>
+                        <td th:text="${ keyboard.registrationDate != null ? keyboard.registrationDate : 'X' }">등록월</td>
+                    </tr>
+                    <tr>
+                        <th>사이즈</th>
+                        <td th:text="${ keyboard.size != null ? keyboard.size : 'X' }">Window 11</td>
+                        <th>연결 방식</th>
+                        <td th:text="${ keyboard.connectionType != null ? keyboard.connectionType : 'X'  }">화면 크기</td>
+                    </tr>
+                    <tr>
+                        <th>인터페이스</th>
+                        <td th:text="${ keyboard.interfaceType != null ? keyboard.interfaceType : 'X'  }">램</td>
+                        <th>접점 방식</th>
+                        <td th:text="${ keyboard.switchType != null ? keyboard.switchType : 'X'  }">내장 그래픽</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>키보드 구성</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>키 배열</th>
+                        <td th:text="${ keyboard.keyBuild.keyLayout != null ? keyboard.keyBuild.keyLayout : 'X' }">해상도</td>
+                        <th>스위치</th>
+                        <td th:text="${ keyboard.keyBuild.switchType != null ? keyboard.keyBuild.switchType : 'X' }">화면 밝기</td>
+                    </tr>
+                    <tr>
+                        <th>키 스위치</th>
+                        <td th:text="${ keyboard.keyBuild.keySwitch != null ? keyboard.keyBuild.keySwitch : 'X' }">패널 종류</td>
+                        <th>스위치 방식</th>
+                        <td th:text="${ keyboard.keyBuild.switchMethod != null ? keyboard.keyBuild.switchMethod : 'X' }">패널 표면 처리</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="col-12 mt-4">
+                    <h6><strong>키보드 구조</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>레인보우 백라이트</th>
+                        <td th:text="${ keyboard.keyDesign.rainbowBacklight != null ? keyboard.keyDesign.rainbowBacklight : 'X' }">CPU 종류</td>
+                        <th>스텝스컬쳐2</th>
+                        <td th:text="${ keyboard.keyDesign.stepSculpture2 != null ? keyboard.keyDesign.stepSculpture2 : 'X' }">CPU 종류</td>
+                    </tr>
+                    <tr>
+                        <th>금속하우징</th>
+                        <td th:text="${ keyboard.keyDesign.metalHousing != null ? keyboard.keyDesign.metalHousing : 'X' }">CPU 넘버</td>
+                        <th>생활방수</th>
+                        <td th:text="${ keyboard.keyDesign.waterResistant != null ? keyboard.keyDesign.waterResistant : 'X' }">CPU 코드명</td>
+                    </tr>
+                    <tr>
+                        <th>RGB 백라이트</th>
+                        <td th:text="${ keyboard.keyDesign.rgbBacklight != null ? keyboard.keyDesign.rgbBacklight : 'X' }">화면 크기</td>
+                        <th>스테빌라이저</th>
+                        <td th:text="${ keyboard.keyDesign.stabilizer != null ? keyboard.keyDesign.stabilizer : 'X' }">코어 수</td>
+                    </tr>
+                    <tr>
+                        <th>단색 백라이트</th>
+                        <td th:text="${ keyboard.keyDesign.singleColorBacklight != null ? keyboard.keyDesign.singleColorBacklight : 'X' }">화면 크기</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>크기와 무게</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>가로</th>
+                        <td th:text="${ keyboard.keyDimensions.width != null ? keyboard.keyDimensions.width : 'X' }">GPU 종류</td>
+                        <th>세로</th>
+                        <td th:text="${ keyboard.keyDimensions.height != null ? keyboard.keyDimensions.height : 'X' }">GPU 제조사</td>
+                    </tr>
+                    <tr>
+                        <th>높이</th>
+                        <td th:text="${ keyboard.keyDimensions.depth != null ? keyboard.keyDimensions.depth : 'X' }">GPU 칩셋</td>
+                        <th>케이블 길이</th>
+                        <td th:text="${ keyboard.keyDimensions.cableLength != null ? keyboard.keyDimensions.cableLength : 'X' }">GPU 코어</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 mt-4">
+                    <h6><strong>기능</strong></h6>
+                </div>
+
+                <table class="table table-bordered spec-table">
+                    <tbody>
+                    <tr>
+                        <th>동시입력</th>
+                        <td th:text="${ keyboard.keyFeature.nKeyRollover != null ? keyboard.keyFeature.nKeyRollover : 'X' }">램 슬롯</td>
+                        <th>키캡 재질</th>
+                        <td th:text="${ keyboard.keyFeature.keycapMaterial != null ? keyboard.keyFeature.keycapMaterial : 'X' }">램 슬롯</td>
+                    </tr>
+                    <tr>
+                        <th>응답속도</th>
+                        <td th:text="${ keyboard.keyFeature.responseRate != null ? keyboard.keyFeature.responseRate : 'X' }">램 교체</td>
+                        <th>키캡 각인방식</th>
+                        <td th:text="${ keyboard.keyFeature.keycapEngravingMethod != null ? keyboard.keyFeature.keycapEngravingMethod : 'X' }">램 타입</td>
+                    </tr>
+                    <tr>
+                        <th>각인 위치</th>
+                        <td th:text="${ keyboard.keyFeature.engravingPosition != null ? keyboard.keyFeature.engravingPosition : 'X' }">램 용량</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-12 mt-4">
+                <h4><strong>문의/리뷰</strong></h4>
+                <div class="tab-nav">
+                    <button class="tab-button active" onclick="showTab('customer-box')">Home</button>
+                    <button class="tab-button" onclick="showTab('review-box')">About</button>
+                </div>
+            </div>
+            <hr>
+            <!--        10개의 최신 문의를 띄우고 전체 문의 보기로 해당 제품의 전체 문의 진입-->
+            <div id="customer-box" class="tab-content active">
+                <div id="customer-list">
+                    <div th:each="each : ${productqList}" class="question">
+                        <div class="question-header">
+                            <div class="question-author">
+                                <span class="author-name" th:text="${each.memberName}"></span>
+                                <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
+                            </div>
+                        </div>
+                        <div class="question-body">
+                            <div class="question-bodytop">
+                                <p class="question-category" th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"></p>
+                                <h4 class="question-title" th:text="${each.title}"></h4>
+                            </div>
+                            <div class="question-content">
+                                <p class="question-content" th:text="${each.content}"></p>
+                            </div>
+                        </div>
+                        <hr class="question-hr">
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-secondary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>
+                    <a th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}">전체문의 보기</a>
+                </div>
+            </div>
+
+            <div id="review-box" class="tab-content">
+
+            </div>
+
+            <div id="crolling-box">
+
+            </div>
+
+            <div class="col-12 mt-4">
+                <h4><strong>연관상품</strong></h4>
+            </div>
+            <hr>
+
+            <div id="recommend-box">
+
+            </div>
+        </div>
+    </div>
+
+    <!--상품 문의 등록 모달-->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">상품 문의 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productqForm" method="post" enctype="multipart/form-data">
+                        <!-- 제목과 카테고리 입력 -->
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="title" class="form-label">제목:</label>
+                                <input type="text" class="form-control" id="title" name="title" required style="width: 100%;">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="inputGroupSelect01" class="form-label">카테고리</label>
+                                <select class="form-select" id="inputGroupSelect01" name="productqCategorycode">
+                                    <option value="productq_opinion">의견</option>
+                                    <option value="productq_question">문의</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 내용 입력 -->
+                        <div class="mb-3">
+                            <label for="content" class="form-label">내용:</label>
+                            <textarea class="form-control editor-container__editor" id="content" name="content"></textarea>
+                        </div>
+                        <!-- 비밀글 설정 -->
+                        <div class="mb-3">
+                            <label>비밀글: </label>
+                            <div>
+                                <label class="me-2">
+                                    <input type="radio" name="secret" value="Y"> Yes
+                                </label>
+                                <label>
+                                    <input type="radio" name="secret" value="N" checked> No
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+</div>
+
 </body>
 </html>

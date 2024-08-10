@@ -24,7 +24,7 @@
                             </div>
                         </li>
                         <li><a class="btn btn-custom text-white mt-2 mb-2"
-                               th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}"><i
+                               th:href="@{${product.Url}}"><i
                                 class="far fa-eye"></i></a></li>
                         <li>
                             <div th:if="${carts != null}">
@@ -44,7 +44,7 @@
                     </ul>
                 </div>
             </div>
-            <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}">
+            <a th:href="@{${product.Url}}">
                 <div class="card-body">
                     <div class="tags mb-2">
                         <span class="tag">#게이밍</span>
@@ -71,7 +71,7 @@
 </div>
 
 <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
 
             // 위시리스트 추가/삭제
             $(".btn-process-wishlist").on("click", function () {

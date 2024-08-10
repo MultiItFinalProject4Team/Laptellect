@@ -51,7 +51,7 @@ public class CrawlingService {
     public List<ProductDTO> crawlProducts(int typeNo) throws IOException {
         List<ProductDTO> productList = new ArrayList<>();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            for (int page = 1; page <= 10; page++) {
+            for (int page = 1; page <= 2; page++) {
                 String responseString = sendPostRequest(httpClient, page, typeNo);
                 parseHtml(responseString, productList);
                 log.info("productList확인{}", productList);
@@ -85,7 +85,7 @@ public class CrawlingService {
                         "&physicsCate2=869" +
                         "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
-                        "&listCount=90");
+                        "&listCount=10");
                 log.info("laptopType {}", productType);
                 break;
 
@@ -205,97 +205,90 @@ public class CrawlingService {
         return ProductDTO;
     }
 
-    public void processLaptopDetails(int productType) {
-        //제품 번호의 리스트 가져옴
-        List<ProductDTO> products = productMapper.findProduct();
-        for (ProductDTO product : products) {
-            int productNo = product.getProductNo();
-            String productCode = product.getProductCode();
-            log.info("processLaptopDetails = {}", productType);
-            getLaptopDetails(productNo, productCode, productType);
-        }
-    }
-
-//    public void processMouseDetails() {
-//        //제품 번호의 리스트 가져옴
-//        List<ProductDTO> productNos = productMapper.findProduct();
-//
-//        log.info("productNos리스트 {}", productNos);
-//
-//        //각 제품에 대한 처리
-//        for (ProductDTO productDTO : productNos) {
-//            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
-//            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
-//
-//            int productNo = productDTO.getProductNo();
-//            String productCode = productDTO.getProductCode();
-//
-//            getLaptopDetails(productNo, productCode);
-//        }
-//    }
-//
-//    public void processKeyboardDetails() {
-//        //제품 번호의 리스트 가져옴
-//        List<ProductDTO> productNos = productMapper.findProduct();
-//
-//        log.info("productNos리스트 {}", productNos);
-//
-//        //각 제품에 대한 처리
-//        for (ProductDTO productDTO : productNos) {
-//            log.info("1. 제품 리스트 단계 확인 작업 = {}", productNos);
-//            log.info("2. 제품 리스트 단계 확인 작업 = {}", productDTO);
-//
-//            int productNo = productDTO.getProductNo();
-//            String productCode = productDTO.getProductCode();
-//
-//            getLaptopDetails(productNo, productCode);
-//        }
-//    }
-
 
     /**
      * 제품 세부 정보를 가져오는 메서드
      *
-     * @param productCode 제품의 코드 (url 경로 매핑시키기 위함)
-     * @param productNo   제품의 번호
      * @return 제품 세부 정보가 담긴 LaptopSpecDTO 객체
      */
-    public LaptopSpecDTO getLaptopDetails(int productNo, String productCode, int productType) {
-        log.info("크롤링 사전 준비 제품 번호 = {} ", productNo);
-        log.info("크롤링 사전 준비 제품 코드 = {} ", productCode);
+    public LaptopSpecDTO getLaptopDetails(int productType) {
+
+
         LaptopSpecDTO laptopSpecDTO = new LaptopSpecDTO();
+        ProductDTO productDTO = new ProductDTO();
+        List<ProductDTO> productNoList = productMapper.findProductsByType(productType);
 
-        try {
-            String referer = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=112758";
-            String bodyData = "pcode=" + productCode +
-                    "&cate1=860" +
-                    "&cate2=869";
+        for (ProductDTO no : productNoList) {
+            int prodNo = no.getProductNo();
+            String code = no.getProductCode();
+            try {
+                String referer = "https://prod.danawa.com/info/?pcode=" + code + "&cate=112758";
+                String bodyData = "pcode=" + code +
+                        "&cate1=860" +
+                        "&cate2=869";
 
-            String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
-            log.info("responseHtml = {}", responseHtml);
+                String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
+                log.info("responseHtml = {}", responseHtml);
 
-            Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
+                Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
 
-            log.info("doc 확인 = {}", doc);
+                log.info("doc 확인 = {}", doc);
 
-            Map<String, List<String>> categoryMap = createLaptopCategory(productType);
-            log.info("getLaptopDetails = {}", productType);
-
-
-            ProductDTO productDTO = getProductDetails1(productCode);
-            log.info("ProductDTO 확인 = {}", productDTO);
-
-
-            createLaptopSpec(productNo, categoryMap, doc,productDTO);
-        } catch (IOException e) {
-            log.error("Error while getting product details", e);
+                Map<String, List<String>> categoryMap = createLaptopCategory(productType);
+                log.info("getLaptopDetails = {}", categoryMap);
+                productDTO = getProductDetails1(code);
+                log.info("getProductDetails1 = {}", categoryMap);
+                createLaptopSpec(prodNo, categoryMap, doc, productDTO);
+            } catch (IOException e) {
+                log.error("Error while getting product details", e);
+            }
         }
+
+
         return laptopSpecDTO;
 
     }
 
+    public LaptopSpecDTO getkeyboardDetails(int productType) {
+
+
+        LaptopSpecDTO laptopSpecDTO = new LaptopSpecDTO();
+        ProductDTO productDTO = new ProductDTO();
+        List<ProductDTO> productNoList = productMapper.findProductsByType(productType);
+
+        for (ProductDTO no : productNoList) {
+            int prodNo = no.getProductNo();
+            String code = no.getProductCode();
+            try {
+                String referer = "https://prod.danawa.com/info/?pcode=" + code + "&cate=112758";
+                String bodyData = "pcode=" + code +
+                        "&cate1=861" +
+                        "&cate2=881";
+
+                String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
+                log.info("responseHtml = {}", responseHtml);
+
+                Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
+
+                log.info("doc 확인 = {}", doc);
+
+                Map<String, List<String>> categoryMap = createKeyboardCategory(productType);
+                log.info("getkeyboardDetails = {}", categoryMap);
+                productDTO = getProductDetails1(code);
+                log.info("getProductDetails1 = {}", categoryMap);
+                createKeyboardSpec(prodNo, categoryMap, doc, productDTO);
+            } catch (IOException e) {
+                log.error("Error while getting product details", e);
+            }
+        }
+
+
+        return laptopSpecDTO;
+
+    }
+
+
     /**
-     *
      * @param productCode 제품의 코드
      * @return 조건이 아닐시 반환
      * @throws IOException 예외처리
@@ -311,11 +304,14 @@ public class CrawlingService {
     }
 
 
-
     public ProductDTO getProductDetails1(String productCode) throws IOException {
+
         ProductDTO productDTO = new ProductDTO();
+
         String url = "https://prod.danawa.com/info/?pcode=" + productCode + "&cate=112758";
         Document doc = Jsoup.connect(url).get();
+
+        log.info("registrationMonthElements");
 
         Elements registrationMonthElements = doc.select("span.txt");
         for (Element element : registrationMonthElements) {
@@ -373,8 +369,6 @@ public class CrawlingService {
     }
 
 
-
-
     /**
      * HTTP POST 요청을 보내는 정적 메서드
      *
@@ -418,8 +412,21 @@ public class CrawlingService {
             Elements td = row.select("td");
             for (int i = 0; i < th.size(); i++) {
                 if (th.get(i).text().equals(specName)) {
+                    // 우선적으로 th와 같은 행의 다음 td 요소를 찾아본다
+                    Element correspondingTd = th.get(i).nextElementSibling();
+                    if (correspondingTd != null && correspondingTd.tagName().equals("td")) {
+                        String value = correspondingTd.text().trim();
+                        if (!value.isEmpty()) {
+                            return value;  // 값이 존재하면 바로 반환
+                        }
+                    }
+
+                    // 만약 빈 값이거나 null이면 인덱스 기반으로 다시 시도한다
                     if (td.size() > i) {
-                        return td.get(i).text().trim();
+                        String value = td.get(i).text().trim();
+                        if (!value.isEmpty()) {
+                            return value;  // 인덱스에서 값을 찾으면 반환
+                        }
                     }
                 }
             }
@@ -464,7 +471,7 @@ public class CrawlingService {
 
         categoryMap.put("LBI", Arrays.asList("운영체제(OS)", "제조사", "등록월", "무게", "두께", "스피커", "쿨링팬"));
         categoryMap.put("LR", Arrays.asList("램 타입", "램 용량", "램 슬롯", "램 대역폭", "램 교체"));
-        categoryMap.put("LC", Arrays.asList( "CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS","CPU 제조사"));
+        categoryMap.put("LC", Arrays.asList("CPU 종류", "CPU 코드명", "CPU 넘버", "코어 수", "스레드 수", "NPU 종류", "NPU TOPS", "CPU 제조사"));
         categoryMap.put("LS", Arrays.asList("저장 용량", "저장장치 종류", "저장 슬롯"));
         categoryMap.put("LD", Arrays.asList("화면 크기", "해상도", "패널 표면 처리", "주사율", "화면 밝기", "패널 종류"));
         categoryMap.put("LWC", Arrays.asList("무선랜", "USB", "USB-C", "USB-A", "블루투스", "썬더볼트4"));
@@ -501,11 +508,51 @@ public class CrawlingService {
         return categoryMap;
     }
 
+    public Map<String, List<String>> createKeyboardCategory(int productType) {
+
+        Map<String, List<String>> categoryMap = new LinkedHashMap<>();
+
+        categoryMap.put("KBI", Arrays.asList("제조사", "등록월", "사이즈", "연결 방식", "인터페이스", "접점 방식"));
+        categoryMap.put("KB", Arrays.asList("키 배열", "스위치", "키 스위치", "스위치 방식", "램 교체")); //Key Build 키보드 빌더
+        categoryMap.put("KD", Arrays.asList("레인보우 백라이트", "스텝스컬쳐2", "금속하우징", "생활방수", "RGB 백라이트", "스테빌라이저", "단색 백라이트")); //키보드 구조
+        categoryMap.put("KF", Arrays.asList("동시입력", "키캡 재질", "응답속도", "키캡 각인방식", "각인 위치")); //키보드 기능
+        categoryMap.put("KDW", Arrays.asList("가로", "세로", "높이", "무게", "케이블 길이")); //키보드 크기와 무게
+        categoryMap.put("KC", Arrays.asList("키캡 리무버", "청소용 브러쉬", "장패드", "키스킨", "루프", "일체형 손목받침대")); //키보드 구성품
+
+        int categoryCount = 0;
+
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            String categoryPrefix = entry.getKey();
+            List<String> specs = entry.getValue();
+
+            log.info("categoryPrefix 데이터 확인 = {}", categoryPrefix);
+            log.info("specs 데이터 확인 = {}", specs);
+            log.info("createLaptopCategory = {}", productType);
 
 
+            for (String specName : specs) {
 
-    public void createLaptopSpec(int productNo, Map<String, List<String>> categoryMap, Document doc,ProductDTO productDTO) {
+                categoryCount++;
+                String categoryNo = categoryPrefix + categoryCount;
+
+                ProductCategoryDTO spec = productMapper.findByOptions(specName);
+                log.info("specname {}:", specName);
+                if (spec == null) {
+
+                    productMapper.insertProductCategory(categoryNo, productType, specName);
+
+
+                }
+            }
+        }
+
+        return categoryMap;
+    }
+
+
+    public void createLaptopSpec(int productNo, Map<String, List<String>> categoryMap, Document doc, ProductDTO productDTO) {
         ArrayList<String> laptopSpecValue = new ArrayList<>();
+        log.info("createLaptopSpec 메서드가 호출됨: productNo = {}", productNo);
 
         // 노트북 기본 정보 (LBI)
         laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
@@ -568,10 +615,14 @@ public class CrawlingService {
 
 
         log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
-
+        log.info("GPU 제조사 값 = {}", getSpecValue(doc, "GPU 제조사"));
         int index = 0;
+
         for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
             List<String> specs = entry.getValue();
+            String category = entry.getKey();
+            log.info("category넘버= {}", category);
+
 
             for (String specName : specs) {
                 if (index >= laptopSpecValue.size()) {
@@ -587,9 +638,10 @@ public class CrawlingService {
                     log.info("Insert 값 = {} : {}", specName, specValue);
 
                     // 중복 확인 쿼리
-                    int exists = productMapper.checkSpecExists(productNo, specValue);
+                    int exists = productMapper.checkSpecExists(productNo, category, specValue);
                     if (exists == 0) {
                         log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
+                        log.info("exists 값 = {}", exists);
                         productMapper.insertProductSpec(productNo, specName, specValue);
 
                         log.info("ProductSpec Insert 완료 = {}", productNo);
@@ -603,9 +655,101 @@ public class CrawlingService {
 
     }
 
+    public void createKeyboardSpec(int productNo, Map<String, List<String>> categoryMap, Document doc, ProductDTO productDTO) {
+        ArrayList<String> keyboardSpecValue = new ArrayList<>();
+        log.info("createKeyboardSpec 메서드가 호출됨: productNo = {}", productNo);
+
+        // KBI: 제조사, 등록월, 사이즈, 연결 방식, 인터페이스, 접점 방식
+        keyboardSpecValue.add(productDTO.getManufacturer()); // 제조사
+        keyboardSpecValue.add(productDTO.getRegistrationMonth()); // 등록월
+        keyboardSpecValue.add(getSpecValue(doc, "사이즈")); // 사이즈
+        keyboardSpecValue.add(getSpecValue(doc, "연결 방식")); // 연결 방식
+        keyboardSpecValue.add(getSpecValue(doc, "인터페이스")); // 인터페이스
+        keyboardSpecValue.add(getSpecValue(doc, "접점 방식")); // 접점 방식
+
+        // KB: 키 배열, 스위치, 키 스위치, 스위치 방식, 램 교체
+        keyboardSpecValue.add(getSpecValue(doc, "키 배열")); // 키 배열
+        keyboardSpecValue.add(getSpecValue(doc, "스위치")); // 스위치
+        keyboardSpecValue.add(getSpecValue(doc, "키 스위치")); // 키 스위치
+        keyboardSpecValue.add(getSpecValue(doc, "스위치 방식")); // 스위치 방식
+        keyboardSpecValue.add(getSpecValue(doc, "램 교체")); // 램 교체
+
+        // KD: 레인보우 백라이트, 스텝스컬쳐2, 금속하우징, 생활방수, RGB 백라이트, 스테빌라이저, 단색 백라이트
+        keyboardSpecValue.add(getSpecValue(doc, "레인보우 백라이트")); // 레인보우 백라이트
+        keyboardSpecValue.add(getSpecValue(doc, "스텝스컬쳐2")); // 스텝스컬쳐2
+        keyboardSpecValue.add(getSpecValue(doc, "금속하우징")); // 금속하우징
+        keyboardSpecValue.add(getSpecValue(doc, "생활방수")); // 생활방수
+        keyboardSpecValue.add(getSpecValue(doc, "RGB 백라이트")); // RGB 백라이트
+        keyboardSpecValue.add(getSpecValue(doc, "스테빌라이저")); // 스테빌라이저
+        keyboardSpecValue.add(getSpecValue(doc, "단색 백라이트")); // 단색 백라이트
+
+        // KF: 동시입력, 키캡 재질, 응답속도, 키캡 각인방식, 각인 위치
+        keyboardSpecValue.add(getSpecValue(doc, "동시입력"));     // 동시입력
+        keyboardSpecValue.add(getSpecValue(doc, "키캡 재질"));    // 키캡 재질
+        keyboardSpecValue.add(getSpecValue(doc, "응답속도"));     // 응답속도
+        keyboardSpecValue.add(getSpecValue(doc, "키캡 각인방식")); // 키캡 각인방식
+        keyboardSpecValue.add(getSpecValue(doc, "각인 위치"));    // 각인 위치
+
+        // KDW: 가로, 세로, 높이, 무게, 케이블 길이
+        keyboardSpecValue.add(getSpecValue(doc, "가로")); // 가로
+        keyboardSpecValue.add(getSpecValue(doc, "세로")); // 세로
+        keyboardSpecValue.add(getSpecValue(doc, "높이")); // 높이
+        keyboardSpecValue.add(getSpecValue(doc, "무게")); // 무게
+        keyboardSpecValue.add(getSpecValue(doc, "케이블 길이")); // 케이블 길이
+
+        // KC: 키캡 리무버, 청소용 브러쉬, 장패드, 키스킨, 루프, 일체형 손목받침대
+        keyboardSpecValue.add(getSpecValue(doc, "키캡 리무버"));   // 키캡 리무버
+        keyboardSpecValue.add(getSpecValue(doc, "청소용 브러쉬")); // 청소용 브러쉬
+        keyboardSpecValue.add(getSpecValue(doc, "장패드"));      // 장패드
+        keyboardSpecValue.add(getSpecValue(doc, "키스킨"));      // 키스킨
+        keyboardSpecValue.add(getSpecValue(doc, "루프"));       // 루프
+        keyboardSpecValue.add(getSpecValue(doc, "일체형 손목받침대")); // 일체형 손목받침대
+
+
+        log.debug("상품 스펙 저장 시작 = {}", keyboardSpecValue);
+        int index = 0;
+
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            List<String> specs = entry.getValue();
+            String category = entry.getKey();
+            log.info("category넘버= {}", category);
+
+
+            for (String specName : specs) {
+                if (index >= keyboardSpecValue.size()) {
+                    log.error("Index out of bounds: index = {}, size = {}", index, keyboardSpecValue.size());
+                    return; // 인덱스가 리스트 크기를 벗어날 때 메서드 종료
+                }
+
+                String specValue = keyboardSpecValue.get(index);
+
+                if (specValue == null || specValue.equals("정보 없음")) {
+                    log.info("옵션 정보 없음 = {}", specValue);
+                } else {
+                    log.info("Insert 값 = {} : {}", specName, specValue);
+
+                    // 중복 확인 쿼리
+                    int exists = productMapper.checkSpecExists(productNo, category, specValue);
+                    if (exists == 0) {
+                        log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
+                        log.info("exists 값 = {}", exists);
+                        productMapper.insertProductSpec(productNo, specName, specValue);
+
+                        log.info("ProductSpec Insert 완료 = {}", productNo);
+                    }
+
+                    log.info("ProductSpec Insert 완료");
+                }
+                index++;
+            }
+        }
+
+    }
+
+
     public void reviewCrawler() {
 
-        List<ProductDTO> productNos = productMapper.findProduct();
+        List<ProductDTO> productNos = productMapper.getReviewRequired();
         int emptyReviewData = 0;
 
 
