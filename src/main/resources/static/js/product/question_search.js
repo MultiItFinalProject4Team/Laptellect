@@ -24,7 +24,6 @@
                     success: function(data){
                           $('#customer-list').empty(); // 기존 내용 삭제
                           console.log(data)
-                                                       alert(memberNo)
                              data.forEach(function(productqList) {
                              console.log(productqList)
                              const categoryText = productqList.productqCategoryCode === 'productq_opinion' ? '의견' : '문의';
