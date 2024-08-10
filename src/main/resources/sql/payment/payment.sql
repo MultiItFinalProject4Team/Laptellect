@@ -84,3 +84,26 @@ BEGIN
     WHERE im_port_id = NEW.im_port_id
     AND confirm = 'N';
 END;
+
+CREATE TRIGGER after_payment_confirm
+AFTER UPDATE ON payment
+FOR EACH ROW
+BEGIN
+    DECLARE point_change INT;
+
+    IF NEW.confirm = 'Y' AND OLD.confirm = 'N' THEN
+        -- 포인트 변동 계산 (구매 가격의 5%, 내림)
+        SET point_change = FLOOR(NEW.purchase_price * 0.05);
+
+        -- 포인트 로그 테이블에 기록 추가
+        INSERT INTO payment_point
+        (member_no, im_port_id, payment_point_change, payment_point_info, created_at)
+        VALUES
+        (NEW.member_no, NEW.im_port_id, point_change, '상품구매 확정으로 포인트지급', CURRENT_TIMESTAMP);
+
+        -- 회원 테이블의 포인트 업데이트
+        UPDATE mem_member
+        SET point = point + point_change
+        WHERE member_no = NEW.member_no;
+    END IF;
+END;
