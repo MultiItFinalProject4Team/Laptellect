@@ -36,8 +36,6 @@ ul li:active .btn-custom { background-color: #236097 !important; }
 
 .btn-process-basket { color: #32CD32; }
 .btn-process-wishlist { color: #FF0000; }
-/*
-.btn-custom-success { background-color: #3498DB; color: #FF0000;}*/
 
     .product-taps {
         display: flex;
@@ -106,4 +104,15 @@ ul li:active .btn-custom { background-color: #236097 !important; }
        min-width: 200px; /* 최소 너비 설정 */
        box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
        margin-right: 10px; /* 버튼과 간격 설정 */
+   }
+
+   /* Tag */
+   .tag {
+       display: inline-block;
+       padding: 2px 5px;
+       margin: 2px;
+       font-size: 12px;
+       background-color: #f0f0f0;
+       border-radius: 3px;
+       color: #333;
    }
