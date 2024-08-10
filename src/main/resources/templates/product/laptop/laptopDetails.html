@@ -12,6 +12,7 @@
     <link href="/css/product/product_question.css" rel="stylesheet">
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
+    <script src="/js/product/question_search.js"></script>
     <style>
         textarea {
             resize: none;
@@ -539,6 +540,7 @@
                         </div>
                     </div>
                     <hr>
+                    <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
                     <div id="customer-list">
                         <div th:each="each : ${productqList}" class="question">
                             <div class="question-header">
@@ -552,10 +554,10 @@
                                     <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
                                        th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
                                     </p>
-                                    <h4 class="question-title" th:text="${each.title}"></h4>
+                                    <h4 class="question-title" th:text="${each.secret=='Y' and each.memberNo!=memberNo } ? '비밀글입니다 🔒' : ${each.title}"></h4>
                                 </div>
                                 <div class="question-content">
-                                    <p class="question-content" th:text="${each.content}"></p>
+                                    <p class="question-content" th:text="${each.secret=='Y' and each.memberNo!=memberNo } ? '본인만 확인 가능합니다' : ${each.content}"></p>
                                 </div>
                             </div>
                             <hr class="question-hr">

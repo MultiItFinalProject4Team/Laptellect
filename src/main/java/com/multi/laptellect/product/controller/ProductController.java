@@ -8,6 +8,7 @@ import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -159,6 +160,7 @@ public class ProductController {
         //customer 문의 부분
         List<ProductqList> productqList = customerService.getAllProductqList(productNo);
         model.addAttribute("productqList",productqList);
+        model.addAttribute("memberNo", SecurityUtil.getUserNo());
 
         // 제품 상세 정보 가져오기
         LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);

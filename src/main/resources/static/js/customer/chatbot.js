@@ -23,7 +23,7 @@ function connect(roomId) {
         console.log('Connected: ' + frame);
         showMessage("챗봇에 오신걸 환영합니다.", 'received');
 
-        // 특정 방에 구독
+        // 경로에 랜덤 roomid 추가
         stompClient.subscribe('/topic/public/' + roomId, function (message) {
             showMessage(message.body, 'received');
             var formattedMessage = message.body.replace(/\n/g, "<br>");

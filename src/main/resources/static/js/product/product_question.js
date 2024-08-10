@@ -9,6 +9,7 @@
                 var content = formData.get('content');
                 var secret = formData.get('secret');
                 var productNo = formData.get('productNo');
+                var memberNo = $('#curmemberNo').val();
 
                 // 날짜 포맷팅 함수
                 function formatDate(dateString) {
@@ -50,10 +51,14 @@
                                             <div class="question-body">
                                                 <div class="question-bodytop">
                                                     <p class="question-category ${categoryClass}">${categoryText}</p>
-                                                    <h4 class="question-title">${productqList.title || '제목 없음'}</h4>
+                                                    <h4 class="question-title">
+                                                        ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '비밀글입니다 🔒' : productqList.title}
+                                                    </h4>
                                                 </div>
                                                 <div class="question-content">
-                                                    <p class="question-content">${productqList.content || '내용 없음'}</p>
+                                                     <p class="question-content">
+                                                         ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '본인만 확인 가능합니다' : productqList.content}
+                                                     </p>
                                                 </div>
                                             </div>
                                             <hr class="question-hr">
