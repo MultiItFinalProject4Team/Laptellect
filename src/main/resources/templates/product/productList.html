@@ -11,7 +11,20 @@
         let typeNo = [[${ typeNo }]];
 
         // 기본 탭 에 acrive 클래스 추가 기본 선택 상태로 만듦
-        $('#default-tab').addClass("active");
+        switch(typeNo) {
+            case 1:
+                $("#laptop-tab").addClass("active");
+                break;
+            case 2:
+                $("#mouse-tab").addClass("active");
+                break;
+            case 3:
+                $("#keyboard-tab").addClass("active");
+                break;
+            default:
+                $("#laptop-tab").addClass("active");
+                break;
+        }
 
         // 가격 형식을 포맷팅하는 함수
         function formatPrices() {
@@ -94,24 +107,25 @@
 <body>
 <div class="container-md" layout:fragment="content">
 
-    <div>
-    <form th:action="@{/product/test}" method="get">
-        <select id="productType" name="products">
-            <option value="1"> 노트북</option>
-            <option value="2"> 마우스</option>
-            <option value="3"> 키보드</option>
-        </select>
-        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 기본정보 크롤링</button>
-    </form>
-    <form th:action="@{/product/test2}" method="get">
-        <select id="productType1" name="typeDetails">
-            <option value=1> 노트북</option>
-            <option value=2> 마우스</option>
-            <option value=3> 키보드</option>
-        </select>
-        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 상세정보 크롤링</button>
-    </form>
-    </div>
+<!--    <div>-->
+<!--    <form th:action="@{/product/test}" method="get">-->
+<!--        <select id="productType" name="products">-->
+<!--            <option value="1"> 노트북</option>-->
+<!--            <option value="2"> 마우스</option>-->
+<!--            <option value="3"> 키보드</option>-->
+<!--        </select>-->
+<!--        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 기본정보 크롤링</button>-->
+<!--    </form>-->
+<!--    <form th:action="@{/product/test2}" method="get">-->
+<!--        <select id="productType1" name="typeDetails">-->
+<!--            <option value=1> 노트북</option>-->
+<!--            <option value=2> 마우스</option>-->
+<!--            <option value=3> 키보드</option>-->
+<!--        </select>-->
+<!--        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 상세정보 크롤링</button>-->
+<!--    </form>-->
+<!--    </div>-->
+    <br>
     <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
         <div class="product-search">
             <div class="form-outline" data-mdb-input-init>
@@ -126,13 +140,13 @@
     <div>
         <ul class="nav nav-tab product-taps">
             <li class="nav-item product-item">
-                <a class="nav-link product-link" id="default-tab" data-type-no="1" href="#">노트북</a>
+                <a class="nav-link product-link" id="laptop-tab" data-type-no="1" href="#">노트북</a>
             </li>
             <li class="nav-item product-item">
-                <a class="nav-link product-link" data-type-no="2" href="#">마우스</a>
+                <a class="nav-link product-link" id="mouse-tab" data-type-no="2" href="#">마우스</a>
             </li>
             <li class="nav-item product-item">
-                <a class="nav-link product-link" data-type-no="3" href="#">키보드</a>
+                <a class="nav-link product-link" id="keyboard-tab" data-type-no="3" href="#">키보드</a>
             </li>
         </ul>
     </div> <br>

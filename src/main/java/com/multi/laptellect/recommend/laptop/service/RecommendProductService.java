@@ -195,8 +195,8 @@ public class RecommendProductService {
 //장소에 따라 무게 태그를 반환
     private List<String> getPlace(String place) {
 
-        if (place == null) {
-            return List.of();
+        if (place == null) {//장소가 null이면 빈 리스트 반환
+            return List.of(); //빈 리스트 반환
         }
         switch (place) {
             case "가지고 다닐거에요":
@@ -219,7 +219,7 @@ public class RecommendProductService {
         if (performance == null) {
             return new int[]{0, Integer.MAX_VALUE};
         }
-        switch (performance) {
+        switch (performance) { //성능에 따라 가격 범위 반환
             case "성능용":
                 return new int[]{1500000, Integer.MAX_VALUE};  // 150만원 이상
             case "타협":
