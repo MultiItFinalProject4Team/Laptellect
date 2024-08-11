@@ -147,7 +147,7 @@ public class MemberApiController {
      * 회원 포인트 전체 조회
      *
      * @param model    조회 결과
-     * @param pageable 페이징을 위한 객체
+     * @param `pageable` 페이징을 위한 객체
      * @return the point list
      */
     @GetMapping("/all-point-list")

@@ -1,6 +1,7 @@
 package com.multi.laptellect.config.Security;
 
 import com.multi.laptellect.error.CustomAuthenticationFailureHandler;
+import com.multi.laptellect.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationFailureHandler customFailureHandler;
+    private final RedisUtil redisUtil;
 
     @Bean // 비밀번호 암호화
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -28,7 +30,7 @@ public class SecurityConfig {
     // CustomAuthenticationProvider 원본 비밀번호와 임시 비밀번호 동시 사용을 위해 커스텀
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(customUserDetailsService, bCryptPasswordEncoder());
+        return new CustomAuthenticationProvider(customUserDetailsService, bCryptPasswordEncoder(), redisUtil);
     }
 
     @Bean
