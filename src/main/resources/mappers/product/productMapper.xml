@@ -90,11 +90,9 @@
         i.reference_code = p.reference_code
         WHERE
         p.type_no = #{typeNo}
-<!--        <if test="key != null and key != ''">-->
-<!--            AND p.product_name LIKE CONCAT('%', #{key}, '%')-->
-<!--        </if>-->
         ORDER BY
         p.product_no
+        LIMIT #{ } OFFSET #{ }
 
     </select>
 

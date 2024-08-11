@@ -512,7 +512,48 @@ public class CrawlingService {
 
         Map<String, List<String>> categoryMap = new LinkedHashMap<>();
 
-        categoryMap.put("KBI", Arrays.asList("제조사", "등록월", "사이즈", "연결 방식", "인터페이스", "접점 방식"));
+        categoryMap.put("KBI", Arrays.asList(".제조사", ".등록월", "사이즈", "연결 방식", "인터페이스", "접점 방식"));
+        categoryMap.put("KB", Arrays.asList("키 배열", "스위치", "키 스위치", "스위치 방식", "램 교체")); //Key Build 키보드 빌더
+        categoryMap.put("KD", Arrays.asList("레인보우 백라이트", "스텝스컬쳐2", "금속하우징", "생활방수", "RGB 백라이트", "스테빌라이저", "단색 백라이트")); //키보드 구조
+        categoryMap.put("KF", Arrays.asList("동시입력", "키캡 재질", "응답속도", "키캡 각인방식", "각인 위치")); //키보드 기능
+        categoryMap.put("KDW", Arrays.asList("가로", "세로", "높이", "무게", "케이블 길이")); //키보드 크기와 무게
+        categoryMap.put("KC", Arrays.asList("키캡 리무버", "청소용 브러쉬", "장패드", "키스킨", "루프", "일체형 손목받침대")); //키보드 구성품
+
+        int categoryCount = 0;
+
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            String categoryPrefix = entry.getKey();
+            List<String> specs = entry.getValue();
+
+            log.info("categoryPrefix 데이터 확인 = {}", categoryPrefix);
+            log.info("specs 데이터 확인 = {}", specs);
+            log.info("createLaptopCategory = {}", productType);
+
+
+            for (String specName : specs) {
+
+                categoryCount++;
+                String categoryNo = categoryPrefix + categoryCount;
+
+                ProductCategoryDTO spec = productMapper.findByOptions(specName);
+                log.info("specname {}:", specName);
+                if (spec == null) {
+
+                    productMapper.insertProductCategory(categoryNo, productType, specName);
+
+
+                }
+            }
+        }
+
+        return categoryMap;
+    }
+
+    public Map<String, List<String>> createMouseCategory(int productType) {
+
+        Map<String, List<String>> categoryMap = new LinkedHashMap<>();
+
+        categoryMap.put("MBI", Arrays.asList("제조사", "등록월", "사이즈", "연결 방식", "인터페이스", "접점 방식"));
         categoryMap.put("KB", Arrays.asList("키 배열", "스위치", "키 스위치", "스위치 방식", "램 교체")); //Key Build 키보드 빌더
         categoryMap.put("KD", Arrays.asList("레인보우 백라이트", "스텝스컬쳐2", "금속하우징", "생활방수", "RGB 백라이트", "스테빌라이저", "단색 백라이트")); //키보드 구조
         categoryMap.put("KF", Arrays.asList("동시입력", "키캡 재질", "응답속도", "키캡 각인방식", "각인 위치")); //키보드 기능
