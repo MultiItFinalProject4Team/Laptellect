@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.multi.laptellect.recommend.txttag.model.dao.ProductDAO2">
+<mapper namespace="com.multi.laptellect.recommend.txttag.model.dao.ProductTagDAO">
     <select id="getAllProducts" resultType="com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2">
-        SELECT
-            p.product_no AS productNo,
-            p.product_name AS productName,
-            (SELECT ps.option_value FROM product_spec ps WHERE ps.product_no = p.product_no AND ps.category_no = 'GPU') AS gpu,
-            (SELECT ps.option_value FROM product_spec ps WHERE ps.product_no = p.product_no AND ps.category_no = 'CPU') AS cpu,
-            (SELECT ps.option_value FROM product_spec ps WHERE ps.product_no = p.product_no AND ps.category_no = 'WEIGHT') AS weight,
-            (SELECT ps.option_value FROM product_spec ps WHERE ps.product_no = p.product_no AND ps.category_no = 'SCREEN_SIZE') AS screenSize,
-            (SELECT ps.option_value FROM product_spec ps WHERE ps.product_no = p.product_no AND ps.category_no = 'BATTERY') AS batteryCapacity
+        SELECT DISTINCT
+            product_no
         FROM
-            product p
+            vw_product_detail
         WHERE
-            p.type_no = 1
+            type_no = 1
+        <if test="gpu != null and gpu.size() > 0">
+            <foreach item="item" index="index" collection="gpu" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
+            </foreach>
+        </if>
+        <if test="cpu != null and cpu.size() > 0">
+            <foreach item="item" index="index" collection="cpu" open="AND (" separator=" OR " close=")">
+                option_value LIKE CONCAT('%', #{ item }, '%')
+            </foreach>
+        </if>
     </select>
+    
+    <select id="getAllTags" resultType="com.multi.laptellect.recommend.txttag.model.dto.TaggDTO">
+        SELECT DISTINCT
+            tag_no
+        FROM
+            laptop_tag
+    </select>
+
+    <insert id="insertProductTag">
+        INSERT INTO machine_tagkey (product_no, tag_no) VALUES (#{productNo}, #{tagNo})
+    </insert>
+
 </mapper>
+
+
+<!-- vw_product_detail 테이블에서 product_no를 가져온다.-->
+<!-- gpu가 null이 아니고 gpu의 크기가 0보다 크면-->
+<!-- gpu의 크기만큼 반복문을 돌면서 option_value LIKE CONCAT('%', #{ item }, '%')를 실행한다. -->

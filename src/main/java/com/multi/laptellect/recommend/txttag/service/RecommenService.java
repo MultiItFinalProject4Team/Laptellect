@@ -1,111 +1,110 @@
 package com.multi.laptellect.recommend.txttag.service;
 
-import com.multi.laptellect.recommend.txttag.model.dao.ProductDAO2;
+import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
+import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
+import com.multi.laptellect.product.model.mapper.ProductMapper;
+import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.txttag.model.dao.ProductTagDAO;
-import com.multi.laptellect.recommend.txttag.model.dao.TagDAO2;
-import com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
+import com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class RecommenService {
-    @Autowired
-    private ProductDAO2 productMapper;
-    @Autowired
-    private TagDAO2 tagMapper;
-    @Autowired
-    private ProductTagDAO productTagMapper;
+
+    private final ProductMapper productMapper;
+    private final ProductTagDAO tagMapper;
+    private final ProductService productService;
 
     public void assignTagsToProducts() {
-        List<ProductDTO2> products = productMapper.getAllProducts();
+        log.info("태그 할당 프로세스 시작");
         List<TaggDTO> tags = tagMapper.getAllTags();
+        log.info("전체 태그 수: {}", tags.size());
+        List<ProductDTO2> products = tagMapper.getAllProducts();
+        log.info("전체 제품 수: {}", products.size());
 
         for (ProductDTO2 product : products) {
-            try {
-                productTagMapper.deleteProductTags(product.getProductNo());
-                List<Integer> assignedTags = determineTagsForProduct(product, tags);
+            log.info("제품 {} 처리 시작", product.getProductNo());
+            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(product.getProductNo());
+
+            if (!laptopDetails.isEmpty()) {
+                log.info("제품 {}의 상세 정보 존재", product.getProductNo());
+                LaptopSpecDTO laptopSpec = productService.getLaptopSpec(product.getProductNo(), laptopDetails);
+                List<Integer> assignedTags = determineTagsForProduct(laptopSpec, tags);
+
                 for (Integer tagNo : assignedTags) {
-                    productTagMapper.insertProductTag(product.getProductNo(), tagNo);
+                    tagMapper.insertProductTag(product.getProductNo(), tagNo);
+                    log.info("제품 {}에 태그 {} 삽입 완료", product.getProductNo(), tagNo);
                 }
-                log.info("Tags assigned to product {}: {}", product.getProductNo(), assignedTags);
-            } catch (Exception e) {
-                log.error("Error assigning tags to product {}: {}", product.getProductNo(), e.getMessage());
+
+                log.info("노트북에 할당된 태그 {}: {}", product.getProductNo(), assignedTags);
+            } else {
+                log.warn("상품 번호 {}에 대한 상세 정보가 없습니다.", product.getProductNo());
             }
         }
+        log.info("태그 할당 프로세스 완료");
     }
 
-    private List<Integer> determineTagsForProduct(ProductDTO2 product, List<TaggDTO> tags) {
+    private List<Integer> determineTagsForProduct(LaptopSpecDTO laptop, List<TaggDTO> tags) {
         List<Integer> assignedTags = new ArrayList<>();
 
-        String gpu = product.getGpu().toLowerCase();
-        if (isGpuSuitableForSteamOrFPS(gpu)) {
-            assignedTags.add(findTagByData(tags, "스팀게임/FPS 게임"));
+        log.info("제품 {} 태그 결정 시작", laptop.getProductNo());
+
+        if (isGpuSuitableForSteamOrFPS(laptop.getGpu().getGpuChipset())) {
+            int tagNo = findTagByData(tags, "게이밍");
+            assignedTags.add(tagNo);
+            log.info("제품 {}에 '게이밍' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
-        if (isGpuSuitableForOnlineGames(gpu)) {
-            assignedTags.add(findTagByData(tags, "온라인 게임"));
+        if (isGpuSuitableForOnlineGames(laptop.getGpu().getGpuChipset())) {
+            int tagNo = findTagByData(tags, "온라인게임");
+            assignedTags.add(tagNo);
+            log.info("제품 {}에 '온라인게임' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
-        if (isGpuSuitableForAOSGames(gpu)) {
-            assignedTags.add(findTagByData(tags, "AOS게임"));
+        if (isGpuSuitableForAOSGames(laptop.getGpu().getGpuChipset())) {
+            int tagNo = findTagByData(tags, "가성비");
+            assignedTags.add(tagNo);
+            log.info("제품 {}에 '가성비' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
 
-        String cpu = product.getCpu().toLowerCase();
-        if (isCpuSuitableForCoding(cpu)) {
-            assignedTags.add(findTagByData(tags, "코딩용"));
+        if (isScreenSuitableForCoding(laptop.getDisplay().getScreenSize())) {
+            int tagNo = findTagByData(tags, "넓은 화면");
+            assignedTags.add(tagNo);
+            log.info("제품 {}에 '넓은 화면' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
-        if (isCpuSuitableForDocuments(cpu)) {
-            assignedTags.add(findTagByData(tags, "문서용"));
+        if (isScreenSuitableForDocuments(laptop.getDisplay().getScreenSize())) {
+            int tagNo = findTagByData(tags, "작은 화면");
+            assignedTags.add(tagNo);
+            log.info("제품 {}에 '작은 화면' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
-        if (isCpuSuitableForStudents(cpu)) {
-            assignedTags.add(findTagByData(tags, "학생용/인강용"));
-        }
-
-        double weight = Double.parseDouble(product.getWeight().replace("kg", ""));
-        if (weight <= 1.5) {
-            assignedTags.add(findTagByData(tags, "가벼워요"));
-        } else if (weight >= 2.5) {
-            assignedTags.add(findTagByData(tags, "무거워요"));
+        if (isScreenSuitableForStudents(laptop.getDisplay().getScreenSize())) {
+            int tagNo = findTagByData(tags, "적당한 화면");
+            assignedTags.add(tagNo);
+            log.info("제품 {}에 '적당한 화면' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
 
-        double screenSize = Double.parseDouble(product.getScreenSize().replace("cm", "").replace("(", "").split("인치")[0]);
-        if (screenSize >= 17.0) {
-            assignedTags.add(findTagByData(tags, "넓은 화면"));
-        } else if (screenSize >= 15.0 && screenSize < 17.0) {
-            assignedTags.add(findTagByData(tags, "적당한 화면"));
-        } else {
-            assignedTags.add(findTagByData(tags, "작은 화면"));
+        if (isDesignBeautiful(laptop.getProductName())) {
+            int tagNo = findTagByData(tags, "예쁜 디자인");
+            assignedTags.add(tagNo);
+            log.info("제품 {}에 '예쁜 디자인' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
-
-        int batteryCapacity = Integer.parseInt(product.getBatteryCapacity().replace("Wh", ""));
-        if (batteryCapacity >= 70) {
-            assignedTags.add(findTagByData(tags, "오래 가는 배터리"));
-        } else {
-            assignedTags.add(findTagByData(tags, "짧은 배터리"));
-        }
-
-        if (isDesignBeautiful(product.getProductName())) {
-            assignedTags.add(findTagByData(tags, "예쁜 디자인"));
-        }
-
-        if (isHighPerformance(cpu, gpu)) {
-            assignedTags.add(findTagByData(tags, "동세대 최고 성능"));
-        }
-
+        
+        log.info("제품 {} 태그 결정 완료. 할당된 태그: {}", laptop.getProductNo(), assignedTags);
         return assignedTags;
     }
 
     private boolean isGpuSuitableForSteamOrFPS(String gpu) {
-        List<String> suitableGpus = Arrays.asList(
-                "geforce rtx 4090", "geforce rtx 4080", "radeon rx 7900m", "radeon 610m ryzen 9 7845hx",
-                "geforce rtx 3080 ti", "geforce rtx 4070", "geforce rtx 3070 ti", "geforce rtx 4060",
-                "radeon rx 6850m xt", "geforce rtx 3080", "rtx a5000", "geforce rtx 3070",
-                "radeon rx 6800s", "rtx a4000", "geforce rtx 2080"
+        List<String> suitableGpus = List.of(
+                "RTX 4090", "RTX 4080", "라데온 RX 7900M", "라데온 610M 라이젠 9 7845HX",
+                "RTX 3080 Ti", "RTX 4070", "RTX 3070 Ti", "RTX 4060",
+                "라데온 RX 6850M XT", "RTX 3080", "RTX A5000", "RTX 3070",
+                "라데온 RX 6800S", "RTX A4000", "RTX 2080"
         );
         for (String suitableGpu : suitableGpus) {
             if (gpu.contains(suitableGpu)) {
@@ -116,12 +115,13 @@ public class RecommenService {
     }
 
     private boolean isGpuSuitableForOnlineGames(String gpu) {
-        List<String> suitableGpus = Arrays.asList(
-                "radeon rx 6650m", "radeon rx 6700s", "quadro rtx 5000", "geforce rtx 4050",
-                "radeon rx 7600s", "radeont rx 6850m xt", "geforce rtx 2080 super", "geforce rtx 2070 super",
-                "radeon rx 6600m", "radeon rx 6600s", "radeon pro w6600m", "radeon rx 6700m",
-                "geforce rtx 3060", "radeon rx 6800m", "geforce rtx 2080", "quadro rtx 4000",
-                "rtx a3000", "geforce rtx 2070"
+        List<String> suitableGpus = List.of(
+                "GTX 1050", "GTX 1050 Ti", "GTX 1650", "GTX 1060", "GTX 1660", "GTX 1660 Ti",
+                "RTX 2060", "RTX 2070", "RTX 2080", "RTX 2070 ", "RTX 2080 ",
+                "RTX 3060", "RTX 3070", "RTX 3080", "RTX 3090",
+                "RTX 4050", "RTX 4060", "RTX 4070", "RTX 4080", "RTX 4090",
+                "RX 560", "RX 570", "RX 580", "RX 590",
+                "RX 5500 XT", "RX 5600 XT", "RX 5700", "RX 5700 XT"
         );
         for (String suitableGpu : suitableGpus) {
             if (gpu.contains(suitableGpu)) {
@@ -132,11 +132,12 @@ public class RecommenService {
     }
 
     private boolean isGpuSuitableForAOSGames(String gpu) {
-        List<String> suitableGpus = Arrays.asList(
-                "quadro p5200", "radeon rx 6850m", "geforce rtx 2070", "geforce gtx 1080",
-                "radeon rx 7600m xt", "intel arc a770m", "geforce rtx 2060", "quadro rtx 3000",
-                "geforce gtx 1070", "geforce rtx 3050", "geforce gtx 1660 ti", "rtx a2000",
-                "radeon rx 6550m", "radeon pro 5600m", "radeon rx 5600m"
+        List<String> suitableGpus = List.of(
+                "라데온 RX 7900M", "라데온 RX 6850M XT", "라데온 RX 6800M", "라데온 RX 6700M", "라데온 RX 6650M", "라데온 RX 6600M",
+                "라데온 RX 6500M", "Radeon 740M", "RTX 4090", "RTX 4080", "RTX 4070", "RTX 4060", "RTX 4050", "RTX 3080 Ti",
+                "RTX 3070 Ti", "RTX 3060", "I9-14900HX", "I9-13980HX", "I7-13700HX", "I5-13500HX", "I9-13900H", "I7-13700H",
+                "I5-13500H", "Ryzen 9 7945HX", "Ryzen 7 7745HX", "Ryzen 5 7645HX", "Ryzen 9 7940HS", "Ryzen 7 7840HS",
+                "Ryzen 5 7640HS"
         );
         for (String suitableGpu : suitableGpus) {
             if (gpu.contains(suitableGpu)) {
@@ -146,50 +147,30 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isCpuSuitableForCoding(String cpu) {
-        List<String> suitableCpus = Arrays.asList(
-                "amd ryzen 9 7945hx3d", "amd ryzen 9 7945hx", "amd ryzen 9 7940hx",
-                "intel core i9-13980hx", "intel core i9-14900hx", "amd ryzen 9 7845hx",
-                "intel core i9-13900hx", "intel core i9-13950hx", "intel core i7-14650hx",
-                "intel core i7-13850hx", "intel core i7-14700hx", "intel core i9-12900hx",
-                "intel core i7-13700hx", "amd ryzen 7 7745hx", "intel core i9-12950hx",
-                "intel core i7-12800hx", "amd ryzen 9 8945h", "intel core i9-13900hk",
-                "intel core i7-13650hx", "intel core i7-12850hx"
-        );
-        for (String suitableCpu : suitableCpus) {
-            if (cpu.contains(suitableCpu)) {
+    private boolean isScreenSuitableForCoding(String screen) {
+        List<String> suitableScreens = List.of("18인치", "17인치", "17.3인치");
+        for (String suitableScreen : suitableScreens) {
+            if (screen.contains(suitableScreen)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isCpuSuitableForDocuments(String cpu) {
-        List<String> suitableCpus = Arrays.asList(
-                "intel core i5-1235u", "amd ryzen 3 5425u", "intel pentium gold 7505",
-                "intel core i3-1215u", "amd ryzen 3 5300u", "intel core i3-1115g4",
-                "intel core i5-10210u", "amd ryzen 3 3250u", "intel core i3-1005g1",
-                "intel pentium gold 6405u", "intel core i3-8145u", "amd athlon gold 3150u",
-                "intel celeron 6305", "amd athlon silver 3050u", "intel pentium 6805"
-        );
-        for (String suitableCpu : suitableCpus) {
-            if (cpu.contains(suitableCpu)) {
+    private boolean isScreenSuitableForDocuments(String screen) {
+        List<String> suitableScreens = List.of("15.6인치", "16인치", "15인치");
+        for (String suitableScreen : suitableScreens) {
+            if (screen.contains(suitableScreen)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isCpuSuitableForStudents(String cpu) {
-        List<String> suitableCpus = Arrays.asList(
-                "intel core i5-12500h", "amd ryzen 5 5600h", "intel core i5-11400h",
-                "amd ryzen 5 4600h", "intel core i5-10300h", "amd ryzen 5 4500u",
-                "intel core i5-1135g7", "amd ryzen 5 5500u", "intel core i5-10210u",
-                "amd ryzen 5 3500u", "intel core i7-1165g7", "amd ryzen 7 4700u",
-                "intel core i7-10510u", "amd ryzen 7 5700u", "intel core i7-1185g7"
-        );
-        for (String suitableCpu : suitableCpus) {
-            if (cpu.contains(suitableCpu)) {
+    private boolean isScreenSuitableForStudents(String screen) {
+        List<String> suitableScreens = List.of("13.3인치", "14인치", "13인치");
+        for (String suitableScreen : suitableScreens) {
+            if (screen.contains(suitableScreen)) {
                 return true;
             }
         }
@@ -197,15 +178,15 @@ public class RecommenService {
     }
 
     private boolean isDesignBeautiful(String model) {
-        List<String> beautifulModels = Arrays.asList(
-                "macbook air (m1, 2020)", "macbook air (m2, 2022)", "macbook pro 13-inch (m1, 2020)",
-                "macbook pro 14-inch (2021)", "macbook pro 16-inch (2021)", "macbook pro 13-inch (m2, 2022)",
-                "lg gram 14 (14z90p)", "lg gram 16 (16z90p)", "lg gram 17 (17z90p)",
-                "lg gram 2-in-1 14 (14t90p)", "lg gram 2-in-1 16 (16t90p)", "lg gram superslim (15z90rt)",
-                "lg gram style (16z90rs)"
+        List<String> beautifulModels = List.of(
+                "MacBook Air (M1, 2020)", "MacBook Air (M2, 2022)", "MacBook Pro 13-inch (M1, 2020)",
+                "MacBook Pro 14-inch (2021)", "MacBook Pro 16-inch (2021)", "MacBook Pro 13-inch (M2, 2022)",
+                "LG Gram 14 (14Z90P)", "LG Gram 16 (16Z90P)", "LG Gram 17 (17Z90P)",
+                "LG Gram 2-in-1 14 (14T90P)", "LG Gram 2-in-1 16 (16T90P)", "LG Gram SuperSlim (15Z90RT)",
+                "LG Gram Style (16Z90RS)"
         );
         for (String beautifulModel : beautifulModels) {
-            if (model.toLowerCase().contains(beautifulModel)) {
+            if (model.contains(beautifulModel)) {
                 return true;
             }
         }
@@ -213,18 +194,18 @@ public class RecommenService {
     }
 
     private boolean isHighPerformance(String cpu, String gpu) {
-        List<String> highPerformanceCombos = Arrays.asList(
-                "amd ryzen 9 7945hx3d geforce rtx 4090",
-                "intel core i9-14900hx geforce rtx 4080",
-                "amd ryzen 9 7945hx radeon rx 7900m",
-                "intel core i9-13980hx geforce rtx 3080 ti",
-                "amd ryzen 9 7940hs radeon rx 6850m xt",
-                "intel core i9-13905h geforce rtx 3080",
-                "amd ryzen 9 6980hx radeon rx 6800m",
-                "intel core i9-12900hx rtx a5000",
-                "apple m3 max"
+        List<String> highPerformanceCombos = List.of(
+                "AMD Ryzen 9 7945HX3D GeForce RTX 4090",
+                "Intel Core i9-14900HX GeForce RTX 4080",
+                "AMD Ryzen 9 7945HX Radeon RX 7900M",
+                "Intel Core i9-13980HX GeForce RTX 3080 Ti",
+                "AMD Ryzen 9 7940HS Radeon RX 6850M XT",
+                "Intel Core i9-13905H GeForce RTX 3080",
+                "AMD Ryzen 9 6980HX Radeon RX 6800M",
+                "Intel Core i9-12900HX RTX A5000",
+                "Apple M3 Max"
         );
-        String combo = (cpu + " " + gpu).toLowerCase();
+        String combo = cpu + " " + gpu;
         for (String highPerformanceCombo : highPerformanceCombos) {
             if (combo.contains(highPerformanceCombo)) {
                 return true;
@@ -236,9 +217,11 @@ public class RecommenService {
     private int findTagByData(List<TaggDTO> tags, String tagData) {
         for (TaggDTO tag : tags) {
             if (tag.getTagData().equals(tagData)) {
+                log.info("태그 '{}' 찾음: #{}", tagData, tag.getTagNo());
                 return tag.getTagNo();
             }
         }
+        log.warn("태그 '{}' 를 찾을 수 없음", tagData);
         return -1;
     }
 }
