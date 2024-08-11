@@ -3,6 +3,7 @@ package com.multi.laptellect.product.controller;
 
 import com.multi.laptellect.customer.dto.ProductqList;
 import com.multi.laptellect.customer.service.CustomerService;
+import com.multi.laptellect.customer.service.PaginationService;
 import com.multi.laptellect.product.model.dto.KeyBoardSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.SpecDTO;
@@ -37,6 +38,7 @@ public class ProductController {
     private final CrawlingService crawlingService;
     private final ProductService productService;
     private final CustomerService customerService;
+    private final PaginationService paginationService;
 
     /**
      * 크롤링을 시작합니다.
@@ -165,13 +167,22 @@ public class ProductController {
      */
     @GetMapping("/laptop/laptopDetails")
     public String productLaptopDetails(@RequestParam(name = "productNo") int productNo,
-                                 Model model) {
+                                 Model model, @RequestParam(value = "page",defaultValue = "1") int page) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
         //customer 문의 부분
         List<ProductqList> productqList = customerService.getAllProductqList(productNo);
         model.addAttribute("productqList",productqList);
         model.addAttribute("memberNo", SecurityUtil.getUserNo());
+        int page_size=10;
+        int adjustPage=page-1;
+        List<ProductqList> paginationList=paginationService.productpaginate2(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        System.out.println(paginationList.size());
+        model.addAttribute("productqList",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
 
         // 제품 상세 정보 가져오기
         LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);

@@ -13,6 +13,7 @@
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
     <script src="/js/product/question_search.js"></script>
+<!--    <script src="/js/product/question_paging.js"></script>-->
     <style>
         /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
@@ -535,6 +536,7 @@
                     </div>
                     <hr>
                     <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
+                    <input type="hidden" name="productNo" id="curproductNo" th:value="${productNo}">
                     <div id="customer-list">
                         <div th:each="each : ${productqList}" class="question">
                             <div class="question-header">
@@ -566,6 +568,12 @@
                                 <button type="button" class="btn btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">문의하기</button>
                             </div>
                         </div>
+                    <!--페이징 처리 부분-->
+                    <input type="hidden" name="totalPages" id="totalPages" th:value="${totalPages}">
+                    <div class="pagination-container">
+                        <ul id="pagination">
+                        </ul>
+                    </div>
                     </div>
 
                     <!-- Review Box -->
