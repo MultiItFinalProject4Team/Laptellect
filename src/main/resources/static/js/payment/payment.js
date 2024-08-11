@@ -49,6 +49,8 @@ function updatePriceDisplay() {
     let quantity = parseInt(document.getElementById('productQuantity').textContent);
     let totalPrice = originalPrice * quantity;
     document.querySelector('.price').textContent = formatNumber(totalPrice) + '원';
+    // 판매가 업데이트
+    document.getElementById('originalPrice').textContent = formatNumber(totalPrice) + '원';
 }
 
 function updateTotalPrice() {
@@ -143,20 +145,64 @@ async function cancelPayment(imPortId, amount) {
     }
 }
 
-function decreaseQuantity(event) {
-    event.preventDefault();
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
-    if (quantity > 1) {
-        document.getElementById('productQuantity').textContent = quantity - 1;
-        updatePriceDisplay();
-        updateTotalPrice();
-    }
-}
 
-function increaseQuantity(event) {
-    event.preventDefault();
-    let quantity = parseInt(document.getElementById('productQuantity').textContent);
-    document.getElementById('productQuantity').textContent = quantity + 1;
-    updatePriceDisplay();
-    updateTotalPrice();
-}
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('addressModal');
+    var btn = document.getElementById('changeAddressBtn');
+    var span = document.getElementsByClassName('close')[0];
+    var addressListDiv = document.getElementById('addressList');
+
+    if (btn) {
+        btn.onclick = function() {
+            modal.style.display = 'block';
+            // 주소 목록 렌더링
+            addressListDiv.innerHTML = '';
+            if (Array.isArray(addressList) && addressList.length > 0) {
+                addressList.forEach(function(address, index) {
+                    var addressDiv = document.createElement('div');
+                    addressDiv.className = 'address-item';
+                    addressDiv.innerHTML = `
+                        <p><strong>${address.recipientName}</strong> (${address.recipientPhone})</p>
+                        <p>${address.address} ${address.detailAddress}</p>
+                        <p>요청사항: ${address.request}</p>
+                        <button class="select-address-btn" data-index="${index}">선택</button>
+                    `;
+                    addressListDiv.appendChild(addressDiv);
+                });
+            } else {
+                addressListDiv.innerHTML = '<p>등록된 주소가 없습니다.</p>';
+            }
+        }
+    }
+
+    span.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // 주소 선택 이벤트
+    addressListDiv.addEventListener('click', function(e) {
+        if (e.target.classList.contains('select-address-btn')) {
+            var index = e.target.getAttribute('data-index');
+            var selectedAddress = addressList[index];
+
+            // 선택된 주소로 폼 업데이트
+            document.getElementById('recipientName').value = selectedAddress.recipientName;
+            document.getElementById('recipientPhone').value = selectedAddress.recipientPhone;
+            document.getElementById('address').value = selectedAddress.address + ' ' + selectedAddress.detailAddress;
+            document.getElementById('delivery_request').value = selectedAddress.request;
+
+            modal.style.display = 'none';
+        }
+    });
+});

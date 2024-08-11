@@ -1,5 +1,6 @@
 package com.multi.laptellect.payment.controller;
 
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.member.service.MemberService;
@@ -59,7 +60,7 @@ public class PaymentController {
     public String paymentpage(@RequestParam("imageUrl") String img,
                               @RequestParam("productName") String productName,
                               @RequestParam("price") int price,
-                              Model model) {
+                              Model model) throws Exception {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
 //        paymentpageDTO.setPrice(400);
@@ -67,6 +68,15 @@ public class PaymentController {
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
+
+        ArrayList<AddressDTO> userAddressList = memberService.findAllAddressByMemberNo();
+        AddressDTO userAddress = userAddressList.get(0);
+        System.out.println(userAddressList);
+        System.out.println(userAddress);
+
+
+        model.addAttribute("addressList", userAddressList);
+        model.addAttribute("userAddress", userAddress);
 
         model.addAttribute("paymentpageDTO", paymentpageDTO);
         model.addAttribute("paymentpointDTO", paymentpointDTO);
