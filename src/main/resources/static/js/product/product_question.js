@@ -32,7 +32,7 @@
                             $.ajax({
                                 url: "/customer/user/get_AllproductqList", // 최신 데이터 가져오는 엔드포인트
                                 type: "GET",
-                                data: { productNo: productNo },
+                                data: { productNo: productNo, page: 1 },
                                 success: function(data) {
                                     // 서버에서 받아온 데이터로 #customer-box를 업데이트
                                     $('#customer-list').empty(); // 기존 내용 삭제

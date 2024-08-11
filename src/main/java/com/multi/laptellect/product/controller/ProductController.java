@@ -174,7 +174,7 @@ public class ProductController {
         List<ProductqList> productqList = customerService.getAllProductqList(productNo);
         model.addAttribute("productqList",productqList);
         model.addAttribute("memberNo", SecurityUtil.getUserNo());
-        int page_size=4;
+        int page_size=10;
         int adjustPage=page-1;
         List<ProductqList> paginationList=paginationService.productpaginate2(productqList, adjustPage, page_size);
         int totalPages = (int) Math.ceil((double) productqList.size() / page_size);

@@ -18,9 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
        $.ajax({
            url: "/customer/user/getQuestion", // 서버의 URL
            type: "GET",
-           data: { productNo: productNo },
+           data: { productNo: productNo, page: 1 },
            success: function(data) {
-              alert("문의"); // 성공 메시지 표시
               $('#customer-list').empty(); // 기존 내용 삭제
               console.log(data)
                  data.forEach(function(productqList) {
@@ -74,9 +73,8 @@ document.addEventListener('DOMContentLoaded', function() {
            $.ajax({
                url: "/customer/user/getOpinion", // 서버의 URL
                type: "GET",
-               data: { productNo: productNo },
+               data: { productNo: productNo, page: 1 },
                success: function(data) {
-                  alert("의견"); // 성공 메시지 표시
                   $('#customer-list').empty(); // 기존 내용 삭제
                   console.log(data)
                      data.forEach(function(productqList) {
@@ -130,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
                    $.ajax({
                        url: "/customer/user/get_AllproductqList", // 서버의 URL
                        type: "GET",
-                       data: { productNo: productNo },
+                       data: { productNo: productNo, page: 1 },
                        success: function(data) {
-                          alert("전체"); // 성공 메시지 표시
                           $('#customer-list').empty(); // 기존 내용 삭제
                           console.log(data)
                              data.forEach(function(productqList) {

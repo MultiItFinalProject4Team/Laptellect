@@ -506,10 +506,14 @@ public class CustomerController {
     //    }
 
     @GetMapping("/get_AllproductqList")
-    public ResponseEntity<List<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo) {
+    public ResponseEntity<List<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
+            int page_size=10;
+            int adjustPage=page-1;
             List<ProductqList> productqList = customerService.getAllProductqList(productNo);
-            return ResponseEntity.ok(productqList);
+            List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+
+            return ResponseEntity.ok(paginationList);
         } catch (Exception e) {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

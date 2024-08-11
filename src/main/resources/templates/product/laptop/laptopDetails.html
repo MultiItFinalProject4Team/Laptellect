@@ -13,6 +13,7 @@
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
     <script src="/js/product/question_search.js"></script>
+<!--    <script src="/js/product/question_paging.js"></script>-->
     <style>
         /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
@@ -535,6 +536,7 @@
                     </div>
                     <hr>
                     <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
+                    <input type="hidden" name="productNo" id="curproductNo" th:value="${productNo}">
                     <div id="customer-list">
                         <div th:each="each : ${productqList}" class="question">
                             <div class="question-header">
@@ -566,25 +568,11 @@
                                 <button type="button" class="btn btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">문의하기</button>
                             </div>
                         </div>
-                    <!--ajx활용해 비동기로 변환 예정-->
+                    <!--페이징 처리 부분-->
+                    <input type="hidden" name="totalPages" id="totalPages" th:value="${totalPages}">
                     <div class="pagination-container">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/product/laptop/laptopDetails(productNo=${productNo}, page=${currentPage - 1})}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
-                                    <a class="page-link" th:href="@{/product/laptop/laptopDetails(productNo=${productNo}, page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
-                                </li>
-                                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/product/laptop/laptopDetails(productNo=${productNo}, page=${currentPage + 1})}" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        <ul id="pagination">
+                        </ul>
                     </div>
                     </div>
 
