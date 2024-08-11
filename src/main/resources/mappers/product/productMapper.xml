@@ -92,7 +92,7 @@
         p.type_no = #{typeNo}
         ORDER BY
         p.product_no
-        LIMIT #{ } OFFSET #{ }
+<!--        LIMIT #{ } OFFSET #{ }-->
 
     </select>
 
