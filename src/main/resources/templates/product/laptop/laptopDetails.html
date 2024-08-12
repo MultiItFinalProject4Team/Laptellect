@@ -13,7 +13,7 @@
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
     <script src="/js/product/question_search.js"></script>
-<!--    <script src="/js/product/question_paging.js"></script>-->
+    <script src="/js/product/question_paging.js"></script>
     <style>
         /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
@@ -538,27 +538,8 @@
                     <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
                     <input type="hidden" name="productNo" id="curproductNo" th:value="${productNo}">
                     <div id="customer-list">
-                        <div th:each="each : ${productqList}" class="question">
-                            <div class="question-header">
-                                <div class="question-author">
-                                    <span class="author-name" th:text="${each.memberName}"></span>
-                                    <span class="question-date" th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}"></span>
-                                </div>
-                            </div>
-                            <div class="question-body">
-                                <div class="question-bodytop">
-                                    <p th:text="${each.productqCategoryCode=='productq_opinion'}? '의견':'문의'"
-                                       th:class="${each.productqCategoryCode=='productq_opinion'} ? 'opinion-class' : 'question-class'">
-                                    </p>
-                                    <h4 class="question-title" th:text="${each.secret=='Y' and each.memberNo!=memberNo } ? '비밀글입니다 🔒' : ${each.title}"></h4>
-                                </div>
-                                <div class="question-content">
-                                    <p class="question-content" th:text="${each.secret=='Y' and each.memberNo!=memberNo } ? '본인만 확인 가능합니다' : ${each.content}"></p>
-                                </div>
-                                <hr class="question-hr">
-                            </div>
-                        </div>
-                        </div>
+
+                    </div>
                         <div class="custom-card">
                             <div class="left-content">
                                 <p><strong>상품에 대해 궁금하신 점을 남겨주세요.</strong></p>
@@ -569,7 +550,6 @@
                             </div>
                         </div>
                     <!--페이징 처리 부분-->
-                    <input type="hidden" name="totalPages" id="totalPages" th:value="${totalPages}">
                     <div class="pagination-container">
                         <ul id="pagination">
                         </ul>
