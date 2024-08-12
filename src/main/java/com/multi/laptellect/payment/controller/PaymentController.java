@@ -63,14 +63,14 @@ public class PaymentController {
                               Model model) throws Exception {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-//        paymentpageDTO.setPrice(400);
+        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
 
         ArrayList<AddressDTO> userAddressList = memberService.findAllAddressByMemberNo();
-        AddressDTO userAddress = userAddressList.get(0);
+        AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
         System.out.println(userAddressList);
         System.out.println(userAddress);
 
@@ -110,7 +110,19 @@ public class PaymentController {
 
             int memberNo = SecurityUtil.getUserNo();
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-            System.out.println("ssd  " + cartList );
+
+
+            ArrayList<AddressDTO> userAddressList = memberService.findAllAddressByMemberNo();
+            AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
+            System.out.println(userAddressList);
+            System.out.println(userAddress);
+
+
+            model.addAttribute("addressList", userAddressList);
+            model.addAttribute("userAddress", userAddress);
+
+
+
 
             model.addAttribute("cartList", cartList);
             model.addAttribute("total", productTotal);
@@ -142,6 +154,7 @@ public class PaymentController {
             paymentDTO.setProductNo(paymentpageDTO.getProductNo());
             paymentDTO.setPurchasePrice(request.getAmount().intValue());
             paymentDTO.setImPortId(request.getImPortId());
+            paymentDTO.setAddressId(request.getAddressId());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
             paymentpointDTO.setUsedPoints(request.getUsedPoints());

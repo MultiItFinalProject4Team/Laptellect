@@ -11,7 +11,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/css/payment/payment.css">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var addressList = /*[[${addressList}]]*/ [];
+        /*]]>*/
+    </script>
     <script src="/js/payment/payment.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" th:src="@{/js/common/kakao-post-api.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -72,10 +79,10 @@
             </div>
             <br>
             <hr>
-            <h3 align="center">
-                받는사람 정보
-                <button id="changeAddressBtn" class="btn btn-primary">배송지 변경</button>
-            </h3>
+            <div class="recipient-info-header">
+                <h3>받는사람 정보</h3>
+                <button id="changeAddressBtn" class="btn btn-primary change-address-btn">배송지 변경</button>
+            </div>
             <div id="recipientInfo">
                 <div class="payment-form-group">
                     <label for="recipientName">받는사람 성함</label>
@@ -123,20 +130,54 @@
 
     <!-- 배송지 선택 모달 -->
     <div id="addressModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
+        <div class="modal-content"></span>
             <h2>배송지 선택</h2>
             <div id="addressList">
                 <!-- 여기에 주소 목록이 동적으로 추가됩니다 -->
             </div>
+<!--            <button id="addAddressBtn" class="btn btn-primary">배송지 추가하기</button>-->
         </div>
     </div>
-</div>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var addressList = /*[[${addressList}]]*/ [];
-    /*]]>*/
-</script>
+<!--    &lt;!&ndash; 배송지 추가 모달 &ndash;&gt;-->
+<!--    <div id="addDeliveryModal" class="modal">-->
+<!--        <div class="modal-content">-->
+<!--            <h2>배송지 등록</h2>-->
+<!--            <div class="form-group">-->
+<!--                <label for="address-name">배송지 이름</label>-->
+<!--                <input type="text" id="address-name" name="address-name" required>-->
+<!--                <div class="error-message" id="addressError" style="color: red; display: none;">-->
+<!--                    저장할 배송지 이름을 입력해주세요.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="recipient-name">받는 사람 이름</label>-->
+<!--                <input type="text" id="recipient-name" name="recipient-name" required>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="postal-code">우편번호</label>-->
+<!--                <input type="text" id="postal-code" name="postal-code" required readonly>-->
+<!--                <button onclick="postCode()">찾기</button>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="address-input">주소</label>-->
+<!--                <input type="text" id="address-input" name="address-input" required>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="detail-address">상세주소</label>-->
+<!--                <input type="text" id="detail-address" name="detail-address" required>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="recipient-phone">받는 사람 연락처</label>-->
+<!--                <input type="tel" id="recipient-phone" name="recipient-phone" required>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="request">배송 요청사항</label>-->
+<!--                <input type="text" id="request" name="request" required>-->
+<!--            </div>-->
+<!--            <button type="button" class="btn btn-primary addAddressBtn" disabled>배송지 등록</button>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
 </body>
 </html>

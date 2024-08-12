@@ -23,6 +23,7 @@ public class PaymentDTO {
     private String userName;
     private String productName;
     private int productPrice;
+    private int addressId;
 
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy.MM.dd");
 
