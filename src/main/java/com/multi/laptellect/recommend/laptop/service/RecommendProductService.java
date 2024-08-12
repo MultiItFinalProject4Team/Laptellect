@@ -32,10 +32,10 @@ public class RecommendProductService {
 
         // 조건에 따라 Product_no를 반환
         ArrayList<Integer> productNos = recommendProductDAO.findLaptopDetailByFilter(productFilterDTO);
-        log.info("추천 결과 맞는 제품 번호 = {}", productNos);
+        log.info("추천 결과 맞는 제품 번호 = {}", productNos);        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>(); // 사용자에게 추천할 노트북 리스트 // 노트북 스펙을 담음
 
 
-        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>(); // 사용자에게 추천할 노트북 리스트 // 노트북 스펙을 담음
+
 
         for(int productNo : productNos) {
             List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo); //노트북 상세 정보 조회

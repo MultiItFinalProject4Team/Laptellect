@@ -5,7 +5,6 @@ import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.txttag.model.dao.ProductTagDAO;
-import com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,79 +18,77 @@ import java.util.List;
 @Slf4j
 public class RecommenService {
 
-    private final ProductMapper productMapper;
-    private final ProductTagDAO tagMapper;
-    private final ProductService productService;
+    private final ProductMapper productMapper; // 제품 매퍼 추가
+    private final ProductTagDAO tagMapper; // 태그 매퍼 추가
+    private final ProductService productService; // 제품 서비스 추가
 
-    public void assignTagsToProducts() {
+    public void assignTagsToProducts () {
         log.info("태그 할당 프로세스 시작");
-        List<TaggDTO> tags = tagMapper.getAllTags();
-        log.info("전체 태그 수: {}", tags.size());
 
-        List<ProductDTO2> products = tagMapper.getAllProducts();
-        log.info("전체 제품 수: {}", products.size());
+        ArrayList<Integer> productNOs = tagMapper.findAllProductNo(); // 제품 번호 조회
 
-        for (ProductDTO2 product : products) {
-            log.info("제품 {} 처리 시작", product.getProductNo());
-            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(product.getProductNo());
+        for (int productNO : productNOs) {
+            log.info("제품 {} 처리 시작", productNO);
+            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNO);
 
             if (!laptopDetails.isEmpty()) {
-                log.info("제품 {}의 상세 정보 존재", product.getProductNo());
-                LaptopSpecDTO laptopSpec = productService.getLaptopSpec(product.getProductNo(), laptopDetails);
-                List<Integer> assignedTags = determineTagsForProduct(laptopSpec, tags, product);
+                log.info("제품 {}의 상세 정보 존재", laptopDetails);
+                LaptopSpecDTO laptops = productService.getLaptopSpec(productNO, laptopDetails);// 제품 상세 정보 조회
 
-                for (Integer tagNo : assignedTags) {
-                    tagMapper.insertProductTag(product.getProductNo(), tagNo);
-                    log.info("제품 {}에 태그 {} 삽입 완료", product.getProductNo(), tagNo);
-                }
+                List<Integer> tags = determineTagsForProduct(laptops);
 
-                log.info("노트북에 할당된 태그 {}: {}", product.getProductNo(), assignedTags);
+                tagMapper.insertProductTag(productNO, tags);
+
+                log.info("태그 할당 완료 = {} ", productNO);
+
             } else {
-                log.warn("상품 번호 {}에 대한 상세 정보가 없습니다.", product.getProductNo());
+                log.warn("상품 번호 {}에 대한 상세 정보가 없습니다.", productNO);
             }
         }
         log.info("태그 할당 프로세스 완료");
     }
 
-    private List<Integer> determineTagsForProduct(LaptopSpecDTO laptop, List<TaggDTO> tags, ProductDTO2 product) {
+    private List<Integer> determineTagsForProduct(LaptopSpecDTO laptopSpecDTO) {
         List<Integer> assignedTags = new ArrayList<>();
+        List<TaggDTO> tags = tagMapper.findAllTag();
+        int tagNo;
 
-        if (isGpuSuitableForSteamOrFPS(product.getGpu())) {
-            int tagNo = findTagByData(tags, "게이밍");
-            assignedTags.add(tagNo);
-            log.info("제품 {}에 '게이밍' 태그(#{}) 할당", product.getProductNo(), tagNo);
-        }
-        if (isGpuSuitableForOnlineGames(product.getGpu())) {
-            int tagNo = findTagByData(tags, "온라인게임");
-            assignedTags.add(tagNo);
-            log.info("제품 {}에 '온라인게임' 태그(#{}) 할당", product.getProductNo(), tagNo);
-        }
-        if (isGpuSuitableForAOSGames(product.getGpu())) {
-            int tagNo = findTagByData(tags, "가성비");
-            assignedTags.add(tagNo);
-            log.info("제품 {}에 '가성비' 태그(#{}) 할당", product.getProductNo(), tagNo);
-        }
 
-        if (isScreenSuitableForCoding(product.getScreenSize())) {
-            int tagNo = findTagByData(tags, "넓은 화면");
+        String gpuName = laptopSpecDTO.getGpu().getGpuChipset();
+        String screenSize = laptopSpecDTO.getDisplay().getScreenSize();
+
+
+
+        if (isGpuSuitableForSteamOrFPS(gpuName)) {
+            tagNo = findTagByData(tags,"게이밍");
             assignedTags.add(tagNo);
-            log.info("제품 {}에 '넓은 화면' 태그(#{}) 할당", product.getProductNo(), tagNo);
+            log.info("제품 {}에 '게이밍' 태그(#{}) 할당",  tagNo);
         }
-        if (isScreenSuitableForDocuments(product.getScreenSize())) {
-            int tagNo = findTagByData(tags, "작은 화면");
+        if (isGpuSuitableForOnlineGames(gpuName)) {
+            tagNo = findTagByData(tags, "온라인게임");
             assignedTags.add(tagNo);
-            log.info("제품 {}에 '작은 화면' 태그(#{}) 할당", product.getProductNo(), tagNo);
+            log.info(" '온라인게임' 태그(#{}) 할당", tagNo);
         }
-        if (isScreenSuitableForStudents(product.getScreenSize())) {
-            int tagNo = findTagByData(tags, "적당한 화면");
+        if (isGpuSuitableForAOSGames(gpuName)) {
+            tagNo = findTagByData(tags, "가성비");
             assignedTags.add(tagNo);
-            log.info("제품 {}에 '적당한 화면' 태그(#{}) 할당", product.getProductNo(), tagNo);
+            log.info(" '가성비' 태그(#{}) 할당", tagNo);
         }
 
-        if (isDesignBeautiful(product.getProductName())) {
-            int tagNo = findTagByData(tags, "예쁜 디자인");
+        if (isScreenSuitableForCoding(screenSize)) {
+            tagNo = findTagByData(tags, "넓은 화면");
             assignedTags.add(tagNo);
-            log.info("제품 {}에 '예쁜 디자인' 태그(#{}) 할당", product.getProductNo(), tagNo);
+            log.info(" '넓은 화면' 태그(#{}) 할당", tagNo);
+        }
+        if (isScreenSuitableForDocuments(screenSize)) {
+            tagNo = findTagByData(tags, "작은 화면");
+            assignedTags.add(tagNo);
+            log.info(" '작은 화면' 태그(#{}) 할당", tagNo);
+        }
+        if (isScreenSuitableForStudents(screenSize)) {
+            tagNo = findTagByData(tags, "적당한 화면");
+            assignedTags.add(tagNo);
+            log.info(" '적당한 화면' 태그(#{}) 할당", tagNo);
         }
 
         return assignedTags;

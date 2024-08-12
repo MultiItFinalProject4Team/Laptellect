@@ -1,18 +1,22 @@
 package com.multi.laptellect.recommend.txttag.model.dao;
 
-import com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
 public interface ProductTagDAO {
-    void insertProductTag(int productNo, int tagNo);
-    List<ProductDTO2> getAllProducts(); // 모든 제품 정보 조회
-    List<TaggDTO> getAllTags();
-    ArrayList<Integer> findTagByData(ProductDTO2 productDTO2);
+    void insertProductTag(int productNo, List<Integer> tagNo);
+
+    @Select("SELECT product_no FROM product WHERE type_no = 1")
+    ArrayList<Integer> findAllProductNo();
+
+
+    @Select("SELECT * FROM laptop_tag")
+    List<TaggDTO> findAllTag();
 
 }
-
+//인터페이스에서는 변수명을 안 쓴다
