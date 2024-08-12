@@ -188,25 +188,6 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isDesignBeautiful(String model) {
-        if (model == null) {
-            return false;
-        }
-        List<String> beautifulModels = List.of(
-                "MacBook Air (M1, 2020)", "MacBook Air (M2, 2022)", "MacBook Pro 13-inch (M1, 2020)",
-                "MacBook Pro 14-inch (2021)", "MacBook Pro 16-inch (2021)", "MacBook Pro 13-inch (M2, 2022)",
-                "LG Gram 14 (14Z90P)", "LG Gram 16 (16Z90P)", "LG Gram 17 (17Z90P)",
-                "LG Gram 2-in-1 14 (14T90P)", "LG Gram 2-in-1 16 (16T90P)", "LG Gram SuperSlim (15Z90RT)",
-                "LG Gram Style (16Z90RS)"
-        );
-        for (String beautifulModel : beautifulModels) {
-            if (model.contains(beautifulModel)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private int findTagByData(List<TaggDTO> tags, String tagData) {
         for (TaggDTO tag : tags) {
             if (tag.getTagData().equals(tagData)) {
