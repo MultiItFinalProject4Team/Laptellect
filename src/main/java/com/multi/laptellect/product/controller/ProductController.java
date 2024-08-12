@@ -171,18 +171,7 @@ public class ProductController {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
         //customer 문의 부분
-        List<ProductqList> productqList = customerService.getAllProductqList(productNo);
-        model.addAttribute("productqList",productqList);
         model.addAttribute("memberNo", SecurityUtil.getUserNo());
-        int page_size=10;
-        int adjustPage=page-1;
-        List<ProductqList> paginationList=paginationService.productpaginate2(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
-        if(totalPages==0){totalPages=1;}
-        System.out.println(paginationList.size());
-        model.addAttribute("productqList",paginationList);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
 
         // 제품 상세 정보 가져오기
         LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);

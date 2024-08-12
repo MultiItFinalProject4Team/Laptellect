@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class PaginationService {
-    public int pageSize=10;
     public List<PersonalqListDto> personalpaginate(List<PersonalqListDto> list, int page, int pageSize) {
         int start = page * pageSize;
         int end = Math.min(start + pageSize, list.size());

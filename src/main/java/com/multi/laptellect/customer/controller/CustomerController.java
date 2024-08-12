@@ -37,7 +37,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
@@ -57,7 +57,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
@@ -193,7 +193,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("currentPage", page);
@@ -284,7 +284,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("category",category);
@@ -370,7 +370,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> categories = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
@@ -406,7 +406,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("currentPage", page);
@@ -445,7 +445,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("category",categories);
@@ -506,14 +506,17 @@ public class CustomerController {
     //    }
 
     @GetMapping("/get_AllproductqList")
-    public ResponseEntity<List<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
+    public ResponseEntity<PageResponse<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
-            int page_size=10;
+            int page_size=5;
             int adjustPage=page-1;
             List<ProductqList> productqList = customerService.getAllProductqList(productNo);
             List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+            int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+            if(totalPages==0){totalPages=1;}
 
-            return ResponseEntity.ok(paginationList);
+            PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -521,10 +524,17 @@ public class CustomerController {
     }
 
     @GetMapping("/getQuestion")
-    public ResponseEntity<List<ProductqList>> getQuestion(@RequestParam("productNo") int productNo){
+    public ResponseEntity<PageResponse<ProductqList>> getQuestion(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
+            int page_size=5;
+            int adjustPage=page-1;
             List<ProductqList> productqList = customerService.getProductQuestionList(productNo);
-            return ResponseEntity.ok(productqList);
+            List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+            int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+            if(totalPages==0){totalPages=1;}
+
+            PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -532,10 +542,17 @@ public class CustomerController {
     }
 
     @GetMapping("/getOpinion")
-    public ResponseEntity<List<ProductqList>> getOpinion(@RequestParam("productNo") int productNo){
+    public ResponseEntity<PageResponse<ProductqList>> getOpinion(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
+            int page_size=5;
+            int adjustPage=page-1;
             List<ProductqList> productqList = customerService.getProductOpinionList(productNo);
-            return ResponseEntity.ok(productqList);
+            List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+            int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+            if(totalPages==0){totalPages=1;}
+
+            PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -543,7 +560,7 @@ public class CustomerController {
     }
 
     @GetMapping("/getQuestionSearch")
-    public ResponseEntity<List<ProductqList>> getQuestionSearch(@RequestParam("productNo") int productNo, @RequestParam("key") String key, @RequestParam("keyword") String keyword, @RequestParam("type") String tpye){
+    public ResponseEntity<PageResponse<ProductqList>> getQuestionSearch(@RequestParam("productNo") int productNo, @RequestParam("key") String key, @RequestParam("keyword") String keyword, @RequestParam("type") String tpye, @RequestParam("page") int page){
         ProductSearchDto searchDto = ProductSearchDto.builder()
                                         .productNo(productNo)
                                         .key(key)
@@ -551,7 +568,13 @@ public class CustomerController {
                                         .type(tpye)
                                         .build();
         System.out.println(searchDto);
+        int page_size=5;
+        int adjustPage=page-1;
         List<ProductqList> productqList = customerService.getProductSearchList(searchDto);
-        return ResponseEntity.ok(productqList);
+        List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+        return ResponseEntity.ok(response);
     }
 }
