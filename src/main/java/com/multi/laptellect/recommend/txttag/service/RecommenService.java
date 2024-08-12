@@ -6,7 +6,7 @@ import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.txttag.model.dao.ProductTagDAO;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
-import com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,20 +27,20 @@ public class RecommenService {
         log.info("태그 할당 프로세스 시작");
         List<TaggDTO> tags = tagMapper.getAllTags();
         log.info("전체 태그 수: {}", tags.size());
-        List<ProductDTO2> products = tagMapper.getAllProducts();
+        List<LaptopSpecDTO> products = tagMapper.getAllProducts();
         log.info("전체 제품 수: {}", products.size());
 
-        for (ProductDTO2 product : products) {
+        for (LaptopSpecDTO product : products) {
             log.info("제품 {} 처리 시작", product.getProductNo());
             List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(product.getProductNo());
 
-            if (!laptopDetails.isEmpty()) {
-                log.info("제품 {}의 상세 정보 존재", product.getProductNo());
-                LaptopSpecDTO laptopSpec = productService.getLaptopSpec(product.getProductNo(), laptopDetails);
-                List<Integer> assignedTags = determineTagsForProduct(laptopSpec, tags);
+            if (!laptopDetails.isEmpty()) { // 상세 정보가 존재하는 경우에만 태그 할당
+                log.info("제품 {}의 상세 정보 존재", product.getProductNo()); // 상세 정보가 존재하는 경우에만 태그 할당
+                LaptopSpecDTO laptopSpec = productService.getLaptopSpec(product.getProductNo(), laptopDetails); // 상세 정보로 제품 스펙 추출
+                List<Integer> assignedTags = determineTagsForProduct(laptopSpec, tags); // 제품 스펙을 기반으로 태그 결정
 
-                for (Integer tagNo : assignedTags) {
-                    tagMapper.insertProductTag(product.getProductNo(), tagNo);
+                for (Integer tagNo : assignedTags) { // 결정된 태그를 제품에 할당
+                    tagMapper.insertProductTag(product.getProductNo(), tagNo); // 태그 할당
                     log.info("제품 {}에 태그 {} 삽입 완료", product.getProductNo(), tagNo);
                 }
 
@@ -53,13 +53,13 @@ public class RecommenService {
     }
 
     private List<Integer> determineTagsForProduct(LaptopSpecDTO laptop, List<TaggDTO> tags) {
-        List<Integer> assignedTags = new ArrayList<>();
+        List<Integer> assignedTags = new ArrayList<>(); // 할당된 태그 목록
 
         log.info("제품 {} 태그 결정 시작", laptop.getProductNo());
 
         if (isGpuSuitableForSteamOrFPS(laptop.getGpu().getGpuChipset())) {
-            int tagNo = findTagByData(tags, "게이밍");
-            assignedTags.add(tagNo);
+            int tagNo = findTagByData(tags, "게이밍"); // 게이밍 태그 찾기
+            assignedTags.add(tagNo); // 게이밍 태그 할당
             log.info("제품 {}에 '게이밍' 태그(#{}) 할당", laptop.getProductNo(), tagNo);
         }
         if (isGpuSuitableForOnlineGames(laptop.getGpu().getGpuChipset())) {
@@ -106,12 +106,12 @@ public class RecommenService {
                 "라데온 RX 6850M XT", "RTX 3080", "RTX A5000", "RTX 3070",
                 "라데온 RX 6800S", "RTX A4000", "RTX 2080"
         );
-        for (String suitableGpu : suitableGpus) {
-            if (gpu.contains(suitableGpu)) {
-                return true;
+        for (String suitableGpu : suitableGpus) { // 게이밍 태그에 적합한 GPU인지 확인
+            if (gpu.contains(suitableGpu)) { // GPU에 적합한 경우
+                return true; // 적합한 GPU인 경우
             }
         }
-        return false;
+        return false; // 적합하지 않은 GPU인 경우
     }
 
     private boolean isGpuSuitableForOnlineGames(String gpu) {
