@@ -26,6 +26,7 @@ public class RecommenService {
         log.info("태그 할당 프로세스 시작");
 
         ArrayList<Integer> productNOs = tagMapper.findAllProductNo(); // 제품 번호 조회
+        log.info("제품 번호 수 = {}", productNOs.size());
 
         for (int productNO : productNOs) {
             log.info("제품 {} 처리 시작", productNO);
@@ -38,6 +39,7 @@ public class RecommenService {
                 LaptopSpecDTO laptops = productService.getLaptopSpec(productNO, laptopDetails);
 
                 List<Integer> tags = determineTagsForProduct(laptops);
+                log.info("제품 {}에 할당된 태그 = {}", productNO, tags);
 
                 tagMapper.insertProductTag(productNO, tags);
 
@@ -58,6 +60,11 @@ public class RecommenService {
 
         String gpuName = laptopSpecDTO.getGpu().getGpuChipset();
         String screenSize = laptopSpecDTO.getDisplay().getScreenSize();
+        String osName = laptopSpecDTO.getAddOn().getOs();
+        String thicName = laptopSpecDTO.getPortability().getThickness();
+        String usbNo = laptopSpecDTO.getAddOn().getUsb();
+        String recentNo = laptopSpecDTO.getRegistrationDate();
+        String weightName = laptopSpecDTO.getPortability().getWeight();
         //gpuName, screenSize 변수명 변경
 
 
@@ -93,6 +100,38 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info(" '적당한 화면' 태그(#{}) 할당", tagNo);
         }
+        if (isWindowsOS(osName)) {
+            tagNo = findTagByData(tags, "윈도우");
+            assignedTags.add(tagNo);
+            log.info(" '윈도우' 태그(#{}) 할당", tagNo);
+        }
+        if (isSlim(thicName)) {
+            tagNo = findTagByData(tags, "슬림");
+            assignedTags.add(tagNo);
+            log.info(" '슬림' 태그(#{}) 할당", tagNo);
+        }
+        if (isUsb(usbNo)) {
+            tagNo = findTagByData(tags, "많은 Usb");
+            assignedTags.add(tagNo);
+            log.info("'많은 usb' 태그(#{}) 할당", tagNo);
+        }
+        if (isUsbe(usbNo)) {
+            tagNo = findTagByData(tags, "적은 Usb");
+            assignedTags.add(tagNo);
+            log.info("'적은 Usb' 태그(#{}) 할당", tagNo);
+        }
+        if (isRecent(recentNo)) {
+            tagNo = findTagByData(tags, "최신 제품");
+            assignedTags.add(tagNo);
+            log.info("'최신 제품' 태그(#{}) 할당", tagNo);
+        }
+        if (isWeight(weightName)) {
+            tagNo = findTagByData(tags, "가벼움");
+            assignedTags.add(tagNo);
+            log.info("'가벼움' 태그(#{}) 할당", tagNo);
+        }
+
+
 
         return assignedTags;
     }
@@ -152,45 +191,122 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isScreenSuitableForCoding(String screenSize) {
-        if (screenSize == null) {
+    private boolean isScreenSuitableForCoding(String screen) {
+        if (screen == null) {
             return false;
         }
         List<String> suitableScreens = List.of("18인치", "17인치", "17.3인치");
         for (String suitableScreen : suitableScreens) {
-            if (screenSize.contains(suitableScreen)) {
+            if (screen.contains(suitableScreen)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isScreenSuitableForDocuments(String screenSize) {
-        if (screenSize == null) {
+    private boolean isScreenSuitableForDocuments(String screen) {
+        if (screen == null) {
             return false;
         }
         List<String> suitableScreens = List.of("15.6인치", "16인치", "15인치");
         for (String suitableScreen : suitableScreens) {
-            if (screenSize.contains(suitableScreen)) {
+            if (screen.contains(suitableScreen)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isScreenSuitableForStudents(String screenSize) {
-        if (screenSize == null) {
+    private boolean isScreenSuitableForStudents(String screen) {
+        if (screen == null) {
             return false;
         }
         List<String> suitableScreens = List.of("13.3인치", "14인치", "13인치");
         for (String suitableScreen : suitableScreens) {
-            if (screenSize.contains(suitableScreen)) {
+            if (screen.contains(suitableScreen)) {
                 return true;
             }
         }
         return false;
     }
 
+    private boolean isWindowsOS(String os) {
+        if (os == null) {
+            return false;
+        }
+        List<String> suitableOs = List.of("윈도우11프로", "윈도우11홈", "윈도우10 프로", "윈도우11(설치)", "Whale OS");
+        for (String suitableOss : suitableOs) {
+            if (os.contains(suitableOss)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isSlim(String thickness) {
+        if (thickness == null) {
+            return false;
+        }
+        List<String> suitableThickness = List.of("");
+        for (String suitableThicknes : suitableThickness) {
+            if (thickness.contains(suitableThicknes)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isUsb(String usb) {
+        if (usb == null) {
+            return false;
+        }
+            List<String> suitableteUsb = List.of("총5개", "총6개");
+            for (String suitabletUsbs : suitableteUsb) {
+                if (usb.contains(suitabletUsbs)) {
+                    return true;
+                }
+            }
+            return false;
+    }
+
+    private boolean isUsbe(String usbe) {
+        if (usbe == null) {
+            return false;
+        }
+        List<String> suitableUsbe = List.of("총4개", "총3개", "총2개");
+        for (String suitableUsebs : suitableUsbe) {
+            if (usbe.contains(suitableUsebs)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isRecent(String recent) {
+        if (recent == null) {
+            return false;
+        }
+        List<String> suitableRecent = List.of("2024");
+        for (String suitableRecents : suitableRecent) {
+            if (recent.contains(suitableRecents)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isWeight(String weight) {
+        if (weight == null) {
+            return false;
+        }
+        List<String> suitableWeight = List.of("");
+        for (String suitableWeights : suitableWeight) {
+            if (weight.contains(suitableWeights)) {
+                return true;
+            }
+        }
+        return false;
+    }
     private int findTagByData(List<TaggDTO> tags, String tagData) {
         for (TaggDTO tag : tags) {
             if (tag.getTagData().equals(tagData)) {
