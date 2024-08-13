@@ -21,6 +21,9 @@ ALTER TABLE mem_member
 ADD COLUMN is_active CHAR(1) NOT NULL DEFAULT 'N',
 ADD COLUMN is_active_at TIMESTAMP NULL;
 
+ALTER TABLE mem_member
+MODIFY COLUMN email VARCHAR(255) NULL;
+
 -- 비밀번호 테이블
 CREATE TABLE mem_password (
     password_id INT NOT NULL AUTO_INCREMENT,
