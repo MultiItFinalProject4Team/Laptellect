@@ -3,6 +3,7 @@ package com.multi.laptellect.product.controller;
 
 import com.multi.laptellect.customer.dto.ProductqList;
 import com.multi.laptellect.customer.service.CustomerService;
+import com.multi.laptellect.customer.service.PaginationService;
 import com.multi.laptellect.product.model.dto.KeyBoardSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.SpecDTO;
@@ -38,6 +39,7 @@ public class ProductController {
     private final CrawlingService crawlingService;
     private final ProductService productService;
     private final CustomerService customerService;
+    private final PaginationService paginationService;
 
     /**
      * 크롤링을 시작합니다.
@@ -166,12 +168,15 @@ public class ProductController {
      */
     @GetMapping("/laptop/laptopDetails")
     public String productLaptopDetails(@RequestParam(name = "productNo") int productNo,
-                                 Model model) {
+                                 Model model, @RequestParam(value = "page",defaultValue = "1") int page) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
         // 장바구니 및 위시리스트 변수 선언
         ArrayList<Integer> carts = new ArrayList<>();
         ArrayList<Integer> wishlist = new ArrayList<>();
+        
+        //customer 문의 부분
+        model.addAttribute("memberNo", SecurityUtil.getUserNo());
 
         try {
             if (SecurityUtil.isAuthenticated()) {

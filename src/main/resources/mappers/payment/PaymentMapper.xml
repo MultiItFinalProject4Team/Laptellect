@@ -8,6 +8,7 @@
         <id column="payment_no" property="paymentNo"/>
         <result column="member_no" property="memberNo"/>
         <result column="product_no" property="productNo"/>
+        <result column="address_id" property="addressId"/>
         <result column="purchase_price" property="purchasePrice"/>
         <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
         <result column="im_port_id" property="imPortId"/>
@@ -29,15 +30,30 @@
         <result column="created_at" property="createdAt"/>
     </resultMap>
 
+    <resultMap id="addressResultMap" type="com.multi.laptellect.member.model.dto.AddressDTO">
+        <result property="rowNum" column="row_num"/>
+        <result property="addressId" column="address_id"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="addressName" column="address_name"/>
+        <result property="recipientName" column="recipient_name"/>
+        <result property="postalCode" column="postal_code"/>
+        <result property="address" column="address"/>
+        <result property="detailAddress" column="detail_address"/>
+        <result property="recipientPhone" column="recipient_phone"/>
+        <result property="request" column="request"/>
+    </resultMap>
+
     <insert id="insertPayment" parameterType="com.multi.laptellect.payment.model.dto.PaymentDTO">
         INSERT INTO payment (
         member_no,
         product_no,
+        address_id,
         purchase_price,
         im_port_id
         ) VALUES (
         #{memberNo},
         #{productNo},
+        #{addressId},
         #{purchasePrice},
         #{imPortId}
         )
@@ -351,5 +367,12 @@
         p.payment_no = #{paymentNo}
     </select>
 
+
+    <select id="selectPaymentAddress" resultMap="addressResultMap">
+        SELECT mda.*
+        FROM payment p
+        JOIN mem_delivery_address mda ON p.address_id = mda.address_id
+        WHERE p.payment_no = #{paymentNo};
+    </select>
 
 </mapper>
