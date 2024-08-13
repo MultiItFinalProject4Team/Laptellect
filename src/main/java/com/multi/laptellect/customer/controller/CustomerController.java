@@ -224,7 +224,7 @@ public class CustomerController {
      */
     @PostMapping("/productq_app")
     @ResponseBody // JSON 응답을 반환하기 위해 추가
-    public int productq_app(ProductqAppDto appDto, @RequestParam("productNo") int productNo) {
+    public int productq_app(ProductqAppDto appDto) {
         int memberNo;
         try {
             memberNo = SecurityUtil.getUserNo();
@@ -595,5 +595,16 @@ public class CustomerController {
         if(totalPages==0){totalPages=1;}
         PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get_AllproductaList")
+    public ResponseEntity<ProductqAnswerDto> getAllProductaList(@RequestParam("productqNo") int productqNo){
+        try {
+            ProductqAnswerDto productaList = customerService.getProducta(productqNo);
+            return ResponseEntity.ok(productaList);
+        } catch (Exception e) {
+            // 예외 처리 로직 추가
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

@@ -653,8 +653,38 @@
                                 </div>
                             </div>
                             <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
-                            <input type="hidden" id="productqNo" name="productqNo">
+                            <input type="hidden" id="productqNo" name="productqNo" value=0>
                             <button id="save_update" type="submit" class="btn btn-primary">등록</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--상품 문의 답변 모달-->
+        <div class="modal fade" id="productAnswerModal" tabindex="-1" aria-labelledby="productAnswerModalLabel" aria-hidden="true" >
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productAnswerModalLabel">상품 문의 등록</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="productaForm" method="post" enctype="multipart/form-data">
+                            <!-- 제목과 카테고리 입력 -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="Atitle" class="form-label">제목:</label>
+                                    <input type="text" class="form-control" id="Atitle" name="title" required style="width: 100%;">
+                                </div>
+                            </div>
+                            <!-- 내용 입력 -->
+                            <div class="mb-3">
+                                <label for="Acontent" class="form-label">내용:</label>
+                                <textarea class="form-control editor-container__editor" id="Acontent" name="content"></textarea>
+                            </div>
+                            <input type="hidden" id="AproductNo" name="productNo" th:value="${productNo}">
+                            <input type="hidden" id="AproductqNo" name="productqNo">
+                            <button id="Asave_update" type="submit" class="btn btn-primary">등록</button>
                         </form>
                     </div>
                 </div>

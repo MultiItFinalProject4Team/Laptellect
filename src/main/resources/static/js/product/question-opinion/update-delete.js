@@ -69,7 +69,7 @@ buttons.forEach(button => {
 });
 function confirmDelete(productqNo) {
     // 확인 대화상자를 띄우고 사용자의 응답을 체크
-    var isConfirmed = confirm("정말로 삭제하시겠습니까?");
+    var isConfirmed = confirm("정말로 삭제하시겠습니까?\n답변이 달려있는 경우 답변까지 모두 삭제됩니다.");
 
     if (isConfirmed) {
         // 사용자가 확인 버튼을 클릭한 경우, 삭제 요청을 수행

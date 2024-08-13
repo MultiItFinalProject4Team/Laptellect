@@ -59,7 +59,7 @@
         where reference_code=#{referenceCode}
     </select>
 
-    <insert id="personalAnswerApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto" useGeneratedKeys="true" keyProperty="personalaNo">
+    <insert id="personalAnswerApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto" keyProperty="personalaNo" useGeneratedKeys="true">
         insert into
         personal_answer(personalq_no, title, content)
         values(#{personalqNo},#{title},#{content})
@@ -184,6 +184,7 @@
         from
         product_answer
         where productq_no=#{productqNo}
+        order by producta_no desc
     </select>
 
     <update id="updateProductq" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto">
