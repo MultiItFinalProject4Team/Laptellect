@@ -1,6 +1,7 @@
 package com.multi.laptellect.api.product;
 
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.model.dto.ProductSearchDTO;
 import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.service.CartService;
@@ -72,10 +73,29 @@ public class ProductApiController {
         return "member/wishlist/wishlist";
     }
 
+    /**
+     *
+     *
+     * @param searchDTO 검색,정렬,페이징 이 담겨있는 dto
+     * @return
+     */
     @GetMapping("/product-list")
     public String getProductList(Model model,
-                                 @RequestParam(name = "typeNo", defaultValue = "1") int typeNo) {
-        List<ProductDTO> products = productService.getStoredProducts(typeNo);
+                                 Pageable pageable,
+                                 ProductSearchDTO searchDTO) {
+
+        searchDTO.setPage(pageable.getPageNumber());
+        searchDTO.setSize(pageable.getPageSize());
+
+
+        // Page<> : 페이징된 결과와 관련 정보를 함께 제공하는 Spring Data JPA의 강력한 도구
+        Page<ProductDTO> productPage = productService.searchProducts(searchDTO);
+        // getContent() : 페이징된 데이터를 얻을 수 있음
+        List<ProductDTO> products = productPage.getContent();
+        log.info( "페이징 데이터 = {},{}",productPage , products);
+
+
+
         ArrayList<Integer> carts = new ArrayList<>();
         ArrayList<Integer> wishlist = new ArrayList<>();
 
@@ -102,9 +122,9 @@ public class ProductApiController {
             for (ProductDTO productDTO : products) {
                 int productNo = productDTO.getProductNo();
 
-                switch (typeNo) {
+                switch (searchDTO.getTypeNo()) {
                     case 1: // 노트북
-                        log.info("laptop Get Spec = {}", typeNo);
+                        log.info("laptop Get Spec = {}", searchDTO.getTypeNo());
                         Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
                         List<SpecDTO> filteredSpecs = productService.filterSpecs(productNo, neededOptions);
                         productDTO.setSpecs(filteredSpecs);
@@ -121,10 +141,10 @@ public class ProductApiController {
 
                         break;
                     case 2: // 마우스
-                        log.info("Mouse Get Spec = {}", typeNo);
+                        log.info("Mouse Get Spec = {}", searchDTO.getTypeNo());
                         break;
                     case 3: // 키보드
-                        log.info("keyboard Get Spec = {}", typeNo);
+                        log.info("keyboard Get Spec = {}", searchDTO.getTypeNo());
                         Set<String> neededOptions1 = Set.of("제조사", "연결 방식", "사이즈", "인터페이스", "접점 방식", "스위치", "가로", "세로");
                         List<SpecDTO> filteredSpecs1 = productService.filterSpecs(productNo, neededOptions1);
                         productDTO.setSpecs(filteredSpecs1);
@@ -147,8 +167,15 @@ public class ProductApiController {
             log.error("Product find fail = ", e);
             model.addAttribute("wishlist", wishlist); // 예외 발생 시에도 빈 리스트 추가
         }
-
+        model.addAttribute("currentPage", pageable.getPageNumber() + 1);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("size", searchDTO.getSize());
+        model.addAttribute("sort", searchDTO.getSort());
         model.addAttribute("products", products);
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("typeNo", searchDTO.getTypeNo());
+        model.addAttribute("keyword", searchDTO.getKeyword());
+
         return "product/product/productList";
     }
 }
