@@ -1,36 +1,48 @@
-//package com.multi.laptellect.config.Scheduler;
-//
-//import com.multi.laptellect.util.RedisUtil;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.scheduling.annotation.Scheduled;
-//import org.springframework.stereotype.Component;
-//
-///**
-// * 스케쥴러 설정 클래스
-// *
-// * @author : 이강석
-// * @fileName : SchedulerConfiguration
-// * @since : 2024-08-09
-// */
-//@Slf4j
-//@Component
-//@RequiredArgsConstructor
-//public class SchedulerConfiguration {
-//    private final RedisUtil redisUtil;
-//
-////    @Scheduled(fixedRate = 50000) // fixedRate(서버 작동하자마자 시작) fixedDelay(종료 시점부터 시작, 1000 = 1초)
-////    public void run() {
-////        log.info("서버 시작 스케쥴러 확인");
-////    }
-//
-//    @Scheduled(fixedRate = 30000) // 5분 간격
-//    public void visitorCount() {
-//        log.info("방문자 수 카운트 스케쥴러");
+package com.multi.laptellect.config.Scheduler;
+
+import com.multi.laptellect.recommend.txttag.service.RecommenService;
+import com.multi.laptellect.util.RedisUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+/**
+ * 스케쥴러 설정 클래스
+ *
+ * @author : 이강석
+ * @fileName : SchedulerConfiguration
+ * @since : 2024-08-09
+ */
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class SchedulerConfiguration {
+    private final RedisUtil redisUtil;
+    private final RecommenService recommenService;
+
+//    @Scheduled(fixedRate = 50000) // fixedRate(서버 작동하자마자 시작) fixedDelay(종료 시점부터 시작, 1000 = 1초)
+//    public void run() {
+//        log.info("서버 시작 스케쥴러 확인");
 //    }
-//
-//    @Scheduled(fixedRate = 18000) // 3분 간격
-//    public void viewProductCount() {
-//        log.info("상품 조회수 스케쥴러");
+
+    @Scheduled(fixedRate = 30000) // 5분 간격
+    public void visitorCount() {
+        log.info("방문자 수 카운트 스케쥴러");
+    }
+
+    @Scheduled(fixedRate = 18000) // 3분 간격
+    public void viewProductCount() {
+        log.info("상품 조회수 스케쥴러");
+    }
+
+//    @Scheduled(fixedRate = 5000)  //5초 간격 태그 할당
+//    public void tagAssignmentCount() {
+//        try {
+//            recommenService.assignTagsToProducts();
+//            log.info("태그 할당 완료");
+//        } catch (Exception e) {
+//            log.error("태그 할당 중 오류: e");
+//        }
 //    }
-//}
+}

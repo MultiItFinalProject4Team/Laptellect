@@ -75,7 +75,7 @@ public class RecommenService {
             log.info("제품 {}에 '게이밍' 태그(#{}) 할당",  tagNo);
         }
         if (isGpuSuitableForOnlineGames(gpuName)) {
-            tagNo = findTagByData(tags, "온라인게임");
+            tagNo = findTagByData(tags, "펠월드");
             assignedTags.add(tagNo);
             log.info(" '온라인게임' 태그(#{}) 할당", tagNo);
         }
@@ -101,7 +101,7 @@ public class RecommenService {
             log.info(" '적당한 화면' 태그(#{}) 할당", tagNo);
         }
         if (isWindowsOS(osName)) {
-            tagNo = findTagByData(tags, "윈도우");
+            tagNo = findTagByData(tags, "윈도우 있음");
             assignedTags.add(tagNo);
             log.info(" '윈도우' 태그(#{}) 할당", tagNo);
         }
@@ -111,17 +111,17 @@ public class RecommenService {
             log.info(" '슬림' 태그(#{}) 할당", tagNo);
         }
         if (isUsb(usbNo)) {
-            tagNo = findTagByData(tags, "많은 Usb");
+            tagNo = findTagByData(tags, "많은 USB 단자");
             assignedTags.add(tagNo);
             log.info("'많은 usb' 태그(#{}) 할당", tagNo);
         }
         if (isUsbe(usbNo)) {
-            tagNo = findTagByData(tags, "적은 Usb");
+            tagNo = findTagByData(tags, "적은 USB 단자");
             assignedTags.add(tagNo);
             log.info("'적은 Usb' 태그(#{}) 할당", tagNo);
         }
         if (isRecent(recentNo)) {
-            tagNo = findTagByData(tags, "최신 제품");
+            tagNo = findTagByData(tags, "최신제품");
             assignedTags.add(tagNo);
             log.info("'최신 제품' 태그(#{}) 할당", tagNo);
         }
@@ -247,7 +247,7 @@ public class RecommenService {
         if (thickness == null) {
             return false;
         }
-        List<String> suitableThickness = List.of("");
+        List<String> suitableThickness = List.of("null");
         for (String suitableThicknes : suitableThickness) {
             if (thickness.contains(suitableThicknes)) {
                 return true;
@@ -299,7 +299,7 @@ public class RecommenService {
         if (weight == null) {
             return false;
         }
-        List<String> suitableWeight = List.of("");
+        List<String> suitableWeight = List.of("null");
         for (String suitableWeights : suitableWeight) {
             if (weight.contains(suitableWeights)) {
                 return true;
@@ -307,7 +307,7 @@ public class RecommenService {
         }
         return false;
     }
-    private int findTagByData(List<TaggDTO> tags, String tagData) {
+    private int findTagByData(List<TaggDTO> tags, String tagData ) {
         for (TaggDTO tag : tags) {
             if (tag.getTagData().equals(tagData)) {
                 log.info("태그 '{}' 찾음: #{}", tagData, tag.getTagNo());
