@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -147,6 +148,21 @@ public class ProductController {
 //        return "product/product/productList";
 //
 //    }
+
+    @GetMapping("/cate")
+    public String cate(Model model){
+
+        Map<String, List<String>> cate = productService.productFilterSearch();
+
+
+
+        log.info("컨트롤러 cate 데이터 확인 = {}", cate);
+
+        model.addAttribute("cate", cate);
+
+        return "/product/productList";
+
+    }
 
 
     /**

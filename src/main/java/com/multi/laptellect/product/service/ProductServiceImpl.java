@@ -16,10 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The type Product service.
@@ -616,6 +613,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDTO> searchProducts(ProductSearchDTO searchDTO) {
 
+
+
+
+
         Pageable pageable = PageRequest.of(searchDTO.getPage(),searchDTO.getSize());
 
         log.info("서비스 로직 pageble 확인 = {}, {}", searchDTO.getPage(),searchDTO.getSize());
@@ -633,6 +634,8 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+
+
     @Override
     public ArrayList<Integer> getWishlistString() throws Exception {
         int memberNo = SecurityUtil.getUserNo();
@@ -643,6 +646,52 @@ public class ProductServiceImpl implements ProductService {
         } else {
             return wishList;
         }
+    }
+
+    @Override
+    public Map<String, List<String>> productFilterSearch() {
+
+       List<SpecDTO> specDTOS =  productMapper.productFilterSearch();
+
+       Map<String, List<String>> specMap = new HashMap<>();
+
+
+        Set<String> keysToKeep = new HashSet<>(Arrays.asList(
+                "LBI1", "LBI2", "LBI4", "LBI5", "LR9",
+                "LC13", "LG38", "LS22", "LS21",
+                "LD25"
+        ));
+
+
+       for(SpecDTO spec : specDTOS){
+
+           log.info("필터링 과정 = {}",spec.getCategoryNo());
+
+           String key = spec.getCategoryNo();
+           String value = spec.getOptionValue();
+
+           //-contains()함수는 대상 문자열에 특정 문자열이 포함되어 있는지 확인하는 함수이다.
+           //- 대/소문자를 구분한다.
+
+           if (keysToKeep.contains(key)) {
+               List<String> values = specMap.get(key);
+
+               if (values == null) {
+                   values = new ArrayList<>();
+                   specMap.put(key, values);  // 생성한 리스트를 다시 Map에 추가
+               }
+
+               // 값이 리스트에 이미 포함되어 있는지 확인하고, 포함되어 있지 않으면 추가
+               if (!values.contains(value)) {
+                   values.add(value);
+               }
+           }
+       }
+
+        log.info("필터링 과정3 = {}",specMap);
+
+
+       return specMap;
     }
 
 
@@ -676,6 +725,12 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.getProductByType(typeNo);
 
     }
+
+
+
+
+
+
 
 
 

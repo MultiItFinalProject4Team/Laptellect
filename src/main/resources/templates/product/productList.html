@@ -7,6 +7,12 @@
     <script th:inline="javascript">
         $(document).ready(function() {
 
+
+        let filters = {
+
+
+        };
+
             let currentPage = 1;
             let pageSize = 30;
             let typeNo = 1;
@@ -95,32 +101,149 @@
                 loadProducts(1, pageSize, typeNo, keyword); // 폼에서 입력된 keyword 사용
             });
 
-
 });
+
+
+
+
 </script>
+
+    <style>
+        /* 테이블 셀 안의 내용들을 왼쪽 정렬 */
+        .left-align {
+            text-align: left;
+        }
+        /* 필터 항목 열의 넓이를 좁게, 선택 옵션 열의 넓이를 넓게 설정 */
+        .filter-header {
+            width: 100px;
+        }
+        /* 선택 옵션을 나란히 표시하는 스타일 */
+        .options-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .options-list label {
+            margin-right: 10px; /* 각 옵션 사이에 간격 추가 */
+        }
+    </style>
 </head>
 
 <body>
 <div class="container-md" layout:fragment="content">
+    <br>
+    <form id="filterForm" th:action="@{/product/cate}" method="get">
+        <table border="1">
+            <tbody class="table custom-table custom-table-striped custom-table-bordered custom-table-hover">
+            <!-- 제조사 -->
+            <tr>
+                <td class="filter-header">제조사</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="manufacturer : ${cate['LBI2']}">
+                            <input type="checkbox" name="manufacturer" th:value="${manufacturer}" th:id="${manufacturer}">
+                            <label th:for="${manufacturer}" th:text="${manufacturer}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
 
-    <div>
-    <form th:action="@{/product/test}" method="get">
-        <select id="productType" name="products">
-            <option value="1"> 노트북</option>
-            <option value="2"> 마우스</option>
-            <option value="3"> 키보드</option>
-        </select>
-        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 기본정보 크롤링</button>
+            <!-- 운영체제(OS) -->
+            <tr>
+                <td class="filter-header">운영체제(OS)</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="osOption : ${cate['LBI1']}">
+                            <input type="checkbox" name="os" th:value="${osOption}" th:id="${osOption}">
+                            <label th:for="${osOption}" th:text="${osOption}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- 저장장치 종류 -->
+            <tr>
+                <td class="filter-header">저장장치 종류</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="storageType : ${cate['LS22']}">
+                            <input type="checkbox" name="storageType" th:value="${storageType}" th:id="${storageType}">
+                            <label th:for="${storageType}" th:text="${storageType}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- 저장 용량 -->
+            <tr>
+                <td class="filter-header">저장 용량</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="value : ${cate['LS21']}">
+                            <input type="checkbox" name="storageCapacity" th:value="${value}" th:id="${value}">
+                            <label th:for="${value}" th:text="${value}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- GPU 종류 -->
+            <tr>
+                <td class="filter-header">GPU 종류</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="value : ${cate['LG38']}">
+                            <input type="checkbox" name="gpu" th:value="${value}" th:id="${value}">
+                            <label th:for="${value}" th:text="${value}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- CPU 종류 -->
+            <tr>
+                <td class="filter-header">CPU 종류</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="value : ${cate['LC13']}">
+                            <input type="checkbox" name="cpu" th:value="${value}" th:id="${value}">
+                            <label th:for="${value}" th:text="${value}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- 램 용량 -->
+            <tr>
+                <td class="filter-header">램 용량</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="value : ${cate['LR9']}">
+                            <input type="checkbox" name="ram" th:value="${value}" th:id="${value}">
+                            <label th:for="${value}" th:text="${value}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- 해상도 -->
+            <tr>
+                <td class="filter-header">해상도</td>
+                <td class="left-align">
+                    <div class="options-list">
+                        <div th:each="value : ${cate['LD25']}">
+                            <input type="checkbox" name="resolution" th:value="${value}" th:id="${value}">
+                            <label th:for="${value}" th:text="${value}"></label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <button type="submit" class="btn btn-custom-primary ms-4" style="width: 100px; font-size: 15px">검색</button>
+        </div>
     </form>
-    <form th:action="@{/product/test2}" method="get">
-        <select id="productType1" name="typeDetails">
-            <option value=1> 노트북</option>
-            <option value=2> 마우스</option>
-            <option value=3> 키보드</option>
-        </select>
-        <button type="submit" class="btn btn-primary mt-3 mb-4">상품 상세정보 크롤링</button>
-    </form>
-    </div>
     <br>
     <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
         <div class="product-search">

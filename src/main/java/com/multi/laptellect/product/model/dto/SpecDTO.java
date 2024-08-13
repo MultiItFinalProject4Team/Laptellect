@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class SpecDTO {
 
+    private String categoryNo;
     private String optionValue;
     private String options;
+
 }

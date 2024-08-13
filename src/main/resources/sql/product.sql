@@ -15,6 +15,9 @@ CREATE TABLE product (
 ALTER TABLE product
 ADD CONSTRAINT unique_product_code UNIQUE (product_code);
 
+alter table product
+add column view_count INT not null default 0;
+
 -- 상품 카테고리 테이블
 CREATE TABLE product_category (
     category_no VARCHAR(50) NOT NULL,

@@ -115,6 +115,10 @@
         WHERE
         p.product_name LIKE CONCAT('%', #{ searchDTO.keyword }, '%')
         AND p.type_no = #{ searchDTO.typeNo }
+<!--        <if test="searchDTO.cate != null and searchDTO.cate.size() > 0">-->
+<!--            AND -->
+<!--            -->
+<!--        </if>-->
         ORDER BY
         p.product_no
         LIMIT
@@ -148,6 +152,7 @@
     <select id="getTotalProducts" resultType="int">
         SELECT COUNT(*) FROM product
     </select>
+
 
     <!-- 선택 제품 조회-->
     <select id="getProductByCode" parameterType="String" resultType="laptopSpecDTO">
@@ -188,6 +193,12 @@
 <!--        FROM-->
 <!--        product-->
 <!--    </select>-->
+<!--    -->
+    <select id="productFilterSearch" resultType="specDTO">
+        SELECT options, option_value, category_no
+        FROM
+        vw_spec_and_value
+    </select>
 
     <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
         SELECT *

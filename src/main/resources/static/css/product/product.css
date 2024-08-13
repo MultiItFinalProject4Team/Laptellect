@@ -4,6 +4,55 @@
     font-size: 1.5rem;
 }
 
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table th, .custom-table td {
+    padding: 5px; /* 패딩을 줄여서 높이 간격 조정 */
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+    line-height: 1.2; /* 행의 높이 간격 조정 */
+}
+
+.custom-table th {
+    background-color: #f8f9fa;
+    text-align: left;
+    font-weight: bold;
+}
+
+.custom-table .filter-header {
+    width: 150px;
+}
+
+.custom-table .left-align {
+    text-align: left;
+}
+
+.custom-table .options-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.custom-table .options-list label {
+    margin-right: 5px;
+}
+
+/* 부트스트랩 기본 테이블 스타일을 활용 */
+.custom-table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.custom-table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.custom-table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
 .product-name {
     font-weight: bold;
     text-align: center;
