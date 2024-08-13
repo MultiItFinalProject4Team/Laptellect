@@ -9,11 +9,13 @@
     <title>제품 정보</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-    <link href="/css/product/product_question.css" rel="stylesheet">
-    <script src="/js/product/product_question.js"></script>
-    <script src="/js/product/Question-Opinion.js"></script>
-    <script src="/js/product/question_search.js"></script>
-    <script src="/js/product/question_paging.js"></script>
+    <link href="/css/product/question-opinion/product_question.css" rel="stylesheet">
+    <script src="/js/product/question-opinion/product_question.js"></script>
+    <script src="/js/product/question-opinion/Question-Opinion.js"></script>
+    <script src="/js/product/question-opinion/question_search.js"></script>
+    <script src="/js/product/question-opinion/question_paging.js"></script>
+    <script src="/js/product/question-opinion/loadtext.js"></script>
+    <script src="/js/product/question-opinion/update-delete.js"></script>
     <style>
         /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
@@ -537,6 +539,7 @@
                     <hr>
                     <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
                     <input type="hidden" name="productNo" id="curproductNo" th:value="${productNo}">
+                    <!--의견/문의 띄우는 div-->
                     <div id="customer-list">
 
                     </div>
@@ -546,13 +549,15 @@
                             </div>
                             <div class="right-content">
     <!--                            <a class="btn btn-custom-primary btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">상품 문의 등록</a>-->
-                                <button type="button" class="btn btn-sm" id="openModalButton" role="button" data-bs-toggle="modal" data-bs-target="#productModal">문의하기</button>
+                                <button type="button" class="btn btn-sm" id="openModalButton" role="button" onclick="QuestionApp()">문의하기</button>
                             </div>
                         </div>
                     <!--페이징 처리 부분-->
                     <div class="pagination-container">
-                        <ul id="pagination">
-                        </ul>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center order" id="pagination">
+                            </ul>
+                        </nav>
                     </div>
                     </div>
 
@@ -648,7 +653,8 @@
                                 </div>
                             </div>
                             <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
-                            <button type="submit" class="btn btn-primary">등록</button>
+                            <input type="hidden" id="productqNo" name="productqNo">
+                            <button id="save_update" type="submit" class="btn btn-primary">등록</button>
                         </form>
                     </div>
                 </div>

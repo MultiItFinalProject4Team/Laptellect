@@ -189,7 +189,7 @@
     <update id="updateProductq" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto">
         update
         product_question
-        set productq_categorycode=#{productqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        set productq_categorycode=#{productqCategorycode}, title=#{title}, content=#{content}, secret=#{secret}, updated_at=current_timestamp
         where productq_no = #{productqNo}
     </update>
 

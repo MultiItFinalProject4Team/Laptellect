@@ -1,15 +1,9 @@
-            //상품문의 등록
-            $(document).ready(function() {
-            $('#productqForm').on('submit', function(event) {
+        //상품문의 등록
+        $(document).ready(function() {
+            $(document).on('submit', '#productqForm',function(event) {
                 event.preventDefault(); // 폼의 기본 제출 동작을 방지
 
                 var formData = new FormData(this);
-                var title = formData.get('title');
-                var category = formData.get('productqCategorycode');
-                var content = formData.get('content');
-                var secret = formData.get('secret');
-                var productNo = formData.get('productNo');
-                var memberNo = $('#curmemberNo').val();
 
                 // 날짜 포맷팅 함수
                 function formatDate(dateString) {
@@ -55,3 +49,17 @@
         });
     });
     })
+
+function QuestionApp(){
+    $('#title').val('');
+    $('#inputGroupSelect01').val('productq_opinion');
+    $('#content').val('');
+    $("input[name='secret'][value='N']").prop('checked', true);
+
+    var button = $('#save_update');
+    button.text('등록');
+    var form = $('#updateForm');
+    form.off();
+    form.attr('id', 'productqForm');
+    $('#productModal').modal('show');
+}
