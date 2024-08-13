@@ -48,7 +48,7 @@ public interface MemberService {
      * @return the string
      * @throws Exception the exception
      */
-    String findUserId(MemberDTO memberDTO) throws Exception;
+    boolean findUserId(MemberDTO memberDTO) throws Exception;
 
     /**
      * 사용자 비밀번호 업데이트
@@ -141,10 +141,11 @@ public interface MemberService {
     /**
      * 임시 비밀번호 발급
      *
-     * @param email      사용자 이메일
-     * @param tel        사용자 휴대폰 번호
-     * @param verifyCode 인증 코드
+     * @param userId
+     * @param email
      * @return 결과값 반환
      */
-    int sendTempPassword(String email, String tel, String verifyCode);
+    int sendTempPassword(String userId, String email) throws Exception;
+
+    boolean deleteMember() throws Exception;
 }

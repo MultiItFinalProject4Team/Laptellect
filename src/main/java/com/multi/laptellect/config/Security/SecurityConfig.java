@@ -59,7 +59,12 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.loginPage("/signin")
                         .loginProcessingUrl("/signin").permitAll()
                         .failureHandler(customFailureHandler));
-
+        http
+                .rememberMe() // 아이디 저장
+                .rememberMeParameter("remember-me")
+                .tokenValiditySeconds(604800) // 14일
+                .alwaysRemember(false) // 항상 실행 false
+                .userDetailsService(customUserDetailsService);
         http
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/signout"))
@@ -70,7 +75,7 @@ public class SecurityConfig {
         http
                 .sessionManagement((auth) -> auth
                         .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true));
+                        .maxSessionsPreventsLogin(false));
 
         http
                 .exceptionHandling(exceptionHandling ->

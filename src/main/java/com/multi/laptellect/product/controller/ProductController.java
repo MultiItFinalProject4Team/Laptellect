@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -168,17 +169,40 @@ public class ProductController {
                                  Model model) {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
-        //customer 문의 부분
-        List<ProductqList> productqList = customerService.getAllProductqList(productNo);
-        model.addAttribute("productqList",productqList);
-        model.addAttribute("memberNo", SecurityUtil.getUserNo());
+        // 장바구니 및 위시리스트 변수 선언
+        ArrayList<Integer> carts = new ArrayList<>();
+        ArrayList<Integer> wishlist = new ArrayList<>();
 
-        // 제품 상세 정보 가져오기
-        LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
-        log.info("상세 제품 정보 결과 값 = {}, {}",laptop,laptop.getProductNo());
+        try {
+            if (SecurityUtil.isAuthenticated()) {
 
-        model.addAttribute("productNo",laptop.getProductNo());
-        model.addAttribute("laptop", laptop);
+                if(cartService.getCartList() != null) {
+                    ArrayList<ProductDTO> cartInfo = cartService.getCartList().getProducts();
+                    for(ProductDTO cartProduct : cartInfo) {
+                        int productNo2 = cartProduct.getProductNo();
+                        carts.add(productNo2);
+                    }
+                }
+
+                wishlist = productService.getWishlistString();
+            }
+            model.addAttribute("carts", carts);
+            model.addAttribute("wishlist", wishlist);
+
+            //customer 문의 부분
+            List<ProductqList> productqList = customerService.getAllProductqList(productNo);
+            model.addAttribute("productqList",productqList);
+            model.addAttribute("memberNo", SecurityUtil.getUserNo());
+
+            // 제품 상세 정보 가져오기
+            LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
+            log.info("상세 제품 정보 결과 값 = {}, {}",laptop,laptop.getProductNo());
+
+            model.addAttribute("productNo",laptop.getProductNo());
+            model.addAttribute("laptop", laptop);
+        } catch (Exception e) {
+            log.error("상품 상세 조회 에러 = ", e);
+        }
 
         return "product/laptop/laptopDetails";
     }

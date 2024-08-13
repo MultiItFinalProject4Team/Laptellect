@@ -90,9 +90,11 @@
                         switch (response) {
                           case 1:
                             alert("위시리스트 추가 완료.");
+                            $("#icon-wishlist").css("color", "#FF0000");
                             break;
                           case 2:
                             alert("위시리스트 삭제 완료.");
+                            $("#icon-wishlist").css("color", "");
                             break;
                           case 3:
                             alert("로그인이 필요합니다.");
@@ -120,9 +122,11 @@
                         switch (response) {
                           case 1:
                             alert("장바구니 추가 완료.");
+                            $("#icon-cart").css("color", "#32CD32");
                             break;
                           case 2:
                             alert("장바구니 삭제 완료.");
+                            $("#icon-cart").css("color", "");
                             break;
                           case 3:
                             alert("로그인이 필요합니다.");
@@ -197,16 +201,42 @@
                 <div class="col-12 mb-1" id="product-name">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 th:text="${ laptop.productName }"></h4>
+
                         <div class="d-flex justify-content-end align-items-center">
                             <div style="margin-left: 1rem !important;">
-                                <a class="btn-process-wishlist" href="#" th:attr="data-product-no=${productNo}">
-                                    <span><i class="fa-solid fa-heart fa-1.5x"></i></span>
-                                    <span>위시리스트</span>
-                                </a>
+                                <div th:if="${wishlist != null}">
+                                    <a class="btn-process-wishlist"
+                                       th:if="${#lists.contains(wishlist, productNo)}"
+                                       th:attr="data-product-no=${productNo}">
+                                    <span id="icon-wishlist" style="color: #FF0000;">
+                                        <i class="fa-solid fa-heart fa-1.5x"></i>
+                                    </span>
+                                        <span>위시리스트</span>
+                                    </a>
+
+                                    <a class="btn-process-wishlist"
+                                       th:unless="${#lists.contains(wishlist, productNo)}"
+                                       th:attr="data-product-no=${productNo}">
+                                    <span id="icon-wishlist">
+                                        <i class="fa-solid fa-heart fa-1.5x"></i>
+                                    </span>
+                                        <span>위시리스트</span>
+                                    </a>
+                                </div>
                             </div>
-                            <div style="margin-left: 1rem !important;">
-                                <a class="btn-process-cart" href="#" th:attr="data-product-no=${productNo}">
-                                    <span><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
+
+                            <div th:if="${carts != null}" style="margin-left: 1rem !important;">
+                                <a class="btn-process-cart"
+                                   th:if="${#lists.contains(carts, productNo)}"
+                                   th:attr="data-product-no=${productNo}">
+                                    <span id="icon-cart" style="color: #32CD32;"><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
+                                    <span>장바구니</span>
+                                </a>
+
+                                <a class="btn-process-cart"
+                                   th:unless="${#lists.contains(carts, productNo)}"
+                                   th:attr="data-product-no=${productNo}">
+                                    <span id="icon-cart"><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
                                     <span>장바구니</span>
                                 </a>
                             </div>

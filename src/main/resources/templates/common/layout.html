@@ -214,53 +214,7 @@
 
                 <br> <br>
                 <div>
-                  <th:block sec:authorize="isAnonymous()">
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary me-2"
-                      th:onclick="|location.href='@{/signin}'|"
-                    >
-                      로그인
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary me-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#loginModal"
-                    >
-                      회원가입
-                    </button>
-                  </th:block>
-
-                  <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary me-2"
-                      th:onclick="|location.href='@{/profile}'|"
-                    >
-                      마이페이지
-                    </button>
-                  </th:block>
-
-                  <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary me-2"
-                      th:onclick="|location.href='@{/admin}'|"
-                    >
-                      어드민페이지
-                    </button>
-                  </th:block>
-
-                  <th:block sec:authorize="isAuthenticated()">
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary me-2"
-                      th:onclick="|location.href='@{/signout}'|"
-                    >
-                      로그아웃
-                    </button>
-                  </th:block>
+                    <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
                 </div>
               </ul>
             </div>

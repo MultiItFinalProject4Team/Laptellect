@@ -29,7 +29,7 @@
           <h4 class="modal-title w-100 text-center">배송지 등록</h4>
           <br> <br>
           <div class="form-floating">
-            <input type="text" class="form-control" id="address-name" placeholder="address-name" value="">
+            <input type="text" class="form-control" id="address-name" placeholder="address-name" value="" maxlength="255">
             <label for="address-name">배송지 이름</label>
             <div class="error-message" id="addressError" style="color: red">
               저장할 배송지 이름을 입력해주세요.
@@ -38,7 +38,7 @@
           </div>
 
           <div class="form-floating">
-            <input type="text" class="form-control" id="recipient-name" placeholder="recipient-name" value="">
+            <input type="text" class="form-control" id="recipient-name" placeholder="recipient-name" value="" maxlength="100">
             <label for="address-name">받는 사람 이름</label>
             <br>
           </div>
@@ -59,19 +59,19 @@
           </div>
 
           <div class="form-floating">
-            <input type="text" class="form-control" id="detail-address" placeholder="detail-address" value="">
+            <input type="text" class="form-control" id="detail-address" placeholder="detail-address" value="" maxlength="255">
             <label for="address-name">상세주소</label>
             <br>
           </div>
 
           <div class="form-floating">
-            <input type="tel" class="form-control" id="recipient-phone" placeholder="recipient-phone" value="">
+            <input type="tel" class="form-control" id="recipient-phone" placeholder="recipient-phone" value="" maxlength="15">
             <label for="address-name">받는 사람 연락처</label>
             <br>
           </div>
 
           <div class="form-floating">
-            <input type="text" class="form-control" id="request" placeholder="request" value="">
+            <input type="text" class="form-control" id="request" placeholder="request" value="" maxlength="255">
             <label for="request">배송 요청사항</label>
           </div>
 
