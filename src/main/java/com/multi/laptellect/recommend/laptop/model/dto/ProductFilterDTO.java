@@ -12,7 +12,7 @@ import java.util.List;
  * @since : 2024-08-08
  */
 @Data
-public class ProductFilterDTO {
+public class ProductFilterDTO { //
     private List<String> gpu;
     private List<String> cpu;
     private List<String> place; // 무게
