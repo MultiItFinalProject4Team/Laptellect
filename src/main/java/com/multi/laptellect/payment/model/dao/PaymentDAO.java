@@ -1,6 +1,7 @@
 package com.multi.laptellect.payment.model.dao;
 
 import com.multi.laptellect.common.model.PaginationDTO;
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.payment.model.dto.PaymentDTO;
 import com.multi.laptellect.payment.model.dto.PaymentReviewDTO;
 import com.multi.laptellect.payment.model.dto.PaymentpageDTO;
@@ -74,4 +75,6 @@ public interface PaymentDAO {
     PaymentDTO selectPaymentDetail(int paymentNo);
 
     int findRefundStatus(String imPortId);
+
+    AddressDTO selectPaymentAddress(int paymentNo);
 }

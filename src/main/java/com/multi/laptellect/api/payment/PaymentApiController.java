@@ -2,7 +2,7 @@ package com.multi.laptellect.api.payment;
 
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
-import com.multi.laptellect.payment.model.dto.PaymentDTO;
+import com.multi.laptellect.payment.model.dto.PaymentDetailDTO;
 import com.multi.laptellect.payment.service.PaymentService;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -62,9 +62,11 @@ public class PaymentApiController {
 
     @GetMapping("/detail")
     @ResponseBody
-    public PaymentDTO getPaymentDetail(@RequestParam("paymentNo") int paymentNo) {
+    public PaymentDetailDTO getPaymentDetail(@RequestParam("paymentNo") int paymentNo) {
         try {
-            return paymentService.getPaymentDetail(paymentNo);
+
+
+            return paymentService.paymentDetail(paymentNo);
         } catch (Exception e) {
             log.error("주문 상세 정보 조회 실패", e);
             return null;

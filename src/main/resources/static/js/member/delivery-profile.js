@@ -65,23 +65,32 @@ $(function () {
                   switch(response) {
                     case 1:
                         alert("배송지 등록 성공");
-                        $('#inset-delivery-modal').modal('hide');
-                        getAddressList();
+                        $('#add-delivery-modal').modal('hide');  // 모달 닫기
+                        getAddressList();  // 배송지 목록 새로고침
+                        location.reload();
                         break;
                     case 0:
                         alert("배송지 이름을 입력해주세요.");
+                        break;
                     case 101:
-                        alert("배송지는 최대 10개만 등록 가능합니다.")
+                        alert("배송지는 최대 10개만 등록 가능합니다.");
+                        break;
                     case 500:
                         alert("배송지 등록 실패.");
-                        
+                        break;
                   }
               },
               error: function () {
                   alert("배송지 등록 실패");
               }
-              // 생성 작업 수행
           });
+        });
+
+        // 배송지 삭제 이벤트 리스너 추가
+        $(document).on('click', '.delete-address', function() {
+            // 여기에 배송지 삭제 로직 추가
+            // 삭제 완료 후 페이지 새로고침
+            location.reload();
         });
       });
     });

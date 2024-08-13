@@ -2,6 +2,7 @@ package com.multi.laptellect.payment.service;
 
 import com.multi.laptellect.api.payment.ApiKeys;
 import com.multi.laptellect.common.model.PaginationDTO;
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.payment.model.dao.PaymentDAO;
@@ -144,6 +145,7 @@ public class PaymentService {
                     if (product.getProductNo() == 0) {
                         throw new IllegalArgumentException("Invalid product number: " + product.getProductName());
                     }
+                    paymentDTO.setAddressId(request.getAddressId());
                     insertPayment(paymentDTO);
                 } catch (Exception e) {
                     // 로그 기록 및 예외 처리
@@ -249,12 +251,31 @@ public class PaymentService {
         return result;
     }
 
-    public PaymentDTO getPaymentDetail(int paymentNo) {
+    public PaymentDTO selectPaymentDetail(int paymentNo) {
         return paymentDAO.selectPaymentDetail(paymentNo);
+    }
+
+    private AddressDTO selectPaymentAddress(int paymentNo) {
+        return paymentDAO.selectPaymentAddress(paymentNo);
     }
 
 
     public int findRefundStatus(String imPortId) {
         return paymentDAO.findRefundStatus(imPortId);
     }
+
+
+
+    public PaymentDetailDTO paymentDetail(int paymentNo){
+        PaymentDTO paymentDTO = selectPaymentDetail(paymentNo);
+        AddressDTO addressDTO = selectPaymentAddress(paymentNo);
+
+        PaymentDetailDTO detailDTO = new PaymentDetailDTO();
+        detailDTO.setPaymentDTO(paymentDTO);
+        detailDTO.setAddressDTO(addressDTO);
+
+        return detailDTO;
+    }
+
+
 }
