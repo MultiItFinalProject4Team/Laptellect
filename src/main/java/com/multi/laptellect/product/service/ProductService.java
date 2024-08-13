@@ -102,14 +102,15 @@ public interface ProductService {
 
     ProductDTO findProductByProductNo(String productNo) throws Exception;
 
+
     LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails);
 
     KeyBoardSpecDTO getKeyboardSpec(int productNo, List<LaptopDetailsDTO> keyBoardSpec);
 
-    
 
 
-    List<ProductDTO> searchProducts(String keyword,int typeNo);
+
+    Page<ProductDTO> searchProducts(ProductSearchDTO searchDTO);
   
     ArrayList<Integer> getWishlistString() throws Exception;
 }

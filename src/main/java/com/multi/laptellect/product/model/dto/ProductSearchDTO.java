@@ -1,5 +1,7 @@
 package com.multi.laptellect.product.model.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,14 +24,23 @@ import java.util.List;
 @Getter
 public class ProductSearchDTO implements Pageable {
     // 페이징을 위한 기본 변수
+
+
+    @Min(0) //Validation 데이터 무결성 보장을 위한 어노테이션
     private int page; // 페이지 번호
+
+    @Min(1)
     private int size; // 페이징 할 개수 (10개, 20개, 30개 등)
+
     private Sort sort; // 정렬 기준
 
     // 검색을 위한 변수
+    @NotNull
     private int typeNo; // 상품 카테고리 번호
     private List<String> cate; // 카테고리 옵션
     private String keyword; // 검색어
+
+
 
 
     @Override

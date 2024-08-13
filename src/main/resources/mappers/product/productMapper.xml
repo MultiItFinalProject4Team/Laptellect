@@ -96,7 +96,7 @@
 
     </select>
 
-    <select id="findByNameSearch" resultType="productDTO" resultMap="productResultMap">
+    <select id="findByNameSearch" resultType="productDTO">
 
         SELECT
         p.product_no,
@@ -113,13 +113,22 @@
         JOIN
         images i ON i.reference_code = p.reference_code
         WHERE
-        p.product_name LIKE CONCAT('%', #{keyword}, '%')
-        AND p.type_no = #{typeNo}
+        p.product_name LIKE CONCAT('%', #{ searchDTO.keyword }, '%')
+        AND p.type_no = #{ searchDTO.typeNo }
         ORDER BY
         p.product_no
-
+        LIMIT
+        #{ searchDTO.size }
+        OFFSET
+        #{ searchDTO.offset }
     </select>
 
+    <select id="countBySearchCriteria" resultType="long">
+        SELECT COUNT(*)
+        FROM product p
+        WHERE p.product_name LIKE CONCAT('%', #{keyword}, '%')
+        AND p.type_no = #{typeNo}
+    </select>
 
     <!--리뷰 저장-->
     <insert id="inputReviewDate" parameterType="reviewDTO">
