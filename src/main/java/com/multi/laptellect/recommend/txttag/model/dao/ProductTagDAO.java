@@ -12,13 +12,8 @@ import java.util.List;
 @Mapper
 public interface ProductTagDAO {
 
-    @Insert("<script>" +
-            "INSERT INTO machine_tagkey (product_no, tag_no) VALUES " +
-            "<foreach item='tagNo' collection='tagNos' separator=','>" +
-            "(#{productNo}, #{tagNo})" +
-            "</foreach>" +
-            "</script>")
-    void insertProductTag(@Param("productNo") int productNo, @Param("tagNos") List<Integer> tagNos);
+    @Insert("INSERT IGNORE INTO machine_tagkey (product_no, tag_no) VALUES (#{productNo}, #{tagNo})" )
+    void insertProductTag(@Param("productNo") int productNo, @Param("tagNo") int tagNo);
 
     @Select("SELECT product_no FROM product WHERE type_no = 1")
     ArrayList<Integer> findAllProductNo(); //find = select , all = 모든 , product_no = 제품번호

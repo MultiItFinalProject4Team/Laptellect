@@ -41,7 +41,11 @@ public class RecommenService {
                 List<Integer> tags = determineTagsForProduct(laptops);
                 log.info("제품 {}에 할당된 태그 = {}", productNO, tags);
 
-                tagMapper.insertProductTag(productNO, tags);
+                for (int tag : tags) {
+
+                    tagMapper.insertProductTag(productNO, tag);
+                }
+
 
                 log.info("태그 할당 완료 = {} ", productNO);
 
@@ -105,11 +109,11 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info(" '윈도우' 태그(#{}) 할당", tagNo);
         }
-        if (isSlim(thicName)) {
-            tagNo = findTagByData(tags, "슬림");
-            assignedTags.add(tagNo);
-            log.info(" '슬림' 태그(#{}) 할당", tagNo);
-        }
+//        if (isSlim(thicName)) {
+//            tagNo = findTagByData(tags, "슬림");
+//            assignedTags.add(tagNo);
+//            log.info(" '슬림' 태그(#{}) 할당", tagNo);
+//        }
         if (isUsb(usbNo)) {
             tagNo = findTagByData(tags, "많은 USB 단자");
             assignedTags.add(tagNo);
@@ -125,11 +129,11 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'최신 제품' 태그(#{}) 할당", tagNo);
         }
-        if (isWeight(weightName)) {
-            tagNo = findTagByData(tags, "가벼움");
-            assignedTags.add(tagNo);
-            log.info("'가벼움' 태그(#{}) 할당", tagNo);
-        }
+//        if (isWeight(weightName)) {
+//            tagNo = findTagByData(tags, "가벼움");
+//            assignedTags.add(tagNo);
+//            log.info("'가벼움' 태그(#{}) 할당", tagNo);
+//        }
 
 
 
@@ -243,18 +247,18 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isSlim(String thickness) {
-        if (thickness == null) {
-            return false;
-        }
-        List<String> suitableThickness = List.of("null");
-        for (String suitableThicknes : suitableThickness) {
-            if (thickness.contains(suitableThicknes)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private boolean isSlim(String thickness) {
+//        if (thickness == null) {
+//            return false;
+//        }
+//        List<String> suitableThickness = List.of("null");
+//        for (String suitableThicknes : suitableThickness) {
+//            if (thickness.contains(suitableThicknes)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     private boolean isUsb(String usb) {
         if (usb == null) {
@@ -295,18 +299,18 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isWeight(String weight) {
-        if (weight == null) {
-            return false;
-        }
-        List<String> suitableWeight = List.of("null");
-        for (String suitableWeights : suitableWeight) {
-            if (weight.contains(suitableWeights)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private boolean isWeight(String weight) {
+//        if (weight == null) {
+//            return false;
+//        }
+//        List<String> suitableWeight = List.of("null");
+//        for (String suitableWeights : suitableWeight) {
+//            if (weight.contains(suitableWeights)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
     private int findTagByData(List<TaggDTO> tags, String tagData ) {
         for (TaggDTO tag : tags) {
             if (tag.getTagData().equals(tagData)) {
