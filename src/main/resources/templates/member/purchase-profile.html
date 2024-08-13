@@ -1,505 +1,412 @@
 <!DOCTYPE html>
 <html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.w3.org/1999/xhtml"
-  layout:decorate="~{common/layout-profile}"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{common/layout-profile}"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <title>주문 목록</title>
-    <style>
-      .purchase-tap {
+<head>
+  <meta charset="UTF-8" />
+  <title>주문 목록</title>
+  <style>
+    .purchase-tap {
         background-color: #3498db;
         color: white !important;
-      }
-      .btn-refund {
+    }
+    .btn-refund {
         background-color: #d0d0d0;
         border-color: #d0d0d0;
         color: #333;
-      }
-      .btn-refund:hover {
+    }
+    .btn-refund:hover {
         background-color: #9e9e9e;
         border-color: #9e9e9e;
         color: #333;
-      }
-      .btn-refund:disabled {
+    }
+    .btn-refund:disabled {
         background-color: #9e9e9e;
         border-color: #9e9e9e;
         color: black;
         cursor: not-allowed;
-      }
-      .modal-dialog-centered {
+    }
+    .modal-dialog-centered {
         display: flex;
         align-items: center;
         min-height: calc(100% - 1rem);
-      }
-      .modal-content {
+    }
+    .modal-content {
         width: 100%;
-      }
-      @media (min-width: 576px) {
+    }
+    @media (min-width: 576px) {
         .modal-dialog-centered {
-          min-height: calc(100% - 3.5rem);
+            min-height: calc(100% - 3.5rem);
         }
-      }
-      #orderModal .modal-dialog {
+    }
+    #orderModal .modal-dialog {
         max-width: 50%;
         width: 600px;
-      }
-      #orderModal .modal-content {
+    }
+    #orderModal .modal-content {
         min-height: 500px;
-      }
-      #orderModal .modal-body {
+    }
+    #orderModal .modal-body {
         max-height: calc(80vh - 200px);
         overflow-y: auto;
-      }
-    </style>
-    <script th:inline="javascript">
-      $(document).ready(function () {
+    }
+  </style>
+  <script th:inline="javascript">
+    $(document).ready(function () {
         function convertEmptyToNull(value) {
-          return value.trim() === "" ? null : value;
+            return value.trim() === "" ? null : value;
         }
 
         function loadOrderList(page) {
-          let startDate = convertEmptyToNull($("#startDate").val());
-          let endDate = convertEmptyToNull($("#endDate").val());
-          let selectType = convertEmptyToNull($("#select").val());
-          let keyword = convertEmptyToNull($("#keyword").val());
+            let startDate = convertEmptyToNull($("#startDate").val());
+            let endDate = convertEmptyToNull($("#endDate").val());
+            let selectType = convertEmptyToNull($("#select").val());
+            let keyword = convertEmptyToNull($("#keyword").val());
 
-          $.ajax({
-            url: "/api/member/order-list",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-              page: page,
-              startDate: startDate,
-              endDate: endDate,
-              selectType: selectType,
-              keyword: keyword,
-            }),
-            success: function (response) {
-              $("#purchase-box").html(response);
-              bindPaginationEvents();
-            },
-            error: function (xhr, status, error) {
-              console.error("조회 실패:", error);
-            },
-          });
+            $.ajax({
+                url: "/api/member/order-list",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    page: page,
+                    startDate: startDate,
+                    endDate: endDate,
+                    selectType: selectType,
+                    keyword: keyword,
+                }),
+                success: function (response) {
+                    $("#purchase-box").html(response);
+                    bindPaginationEvents();
+                },
+                error: function (xhr, status, error) {
+                    console.error("조회 실패:", error);
+                },
+            });
         }
 
         function bindPaginationEvents() {
-          $(".pagination .page-link").on("click", function (e) {
-            e.preventDefault();
-            let page = $(this).data("page");
-            loadOrderList(page);
-          });
+            $(".pagination .page-link").on("click", function (e) {
+                e.preventDefault();
+                let page = $(this).data("page");
+                loadOrderList(page);
+            });
         }
 
         loadOrderList(0);
 
         $("#btn-search").on("click", function () {
-          loadOrderList(0);
+            loadOrderList(0);
         });
 
         $(document).on("click", ".btn-confirm", function (event) {
-          event.preventDefault();
-          let paymentNo = $(this).data("payment-no");
-          $("#confirm-modal").data("payment-no", paymentNo).modal("show");
+            event.preventDefault();
+            let paymentNo = $(this).data("payment-no");
+            $("#confirm-modal").data("payment-no", paymentNo).modal("show");
         });
 
         $(document).on("click", ".btn-confirmed", function (event) {
-          let paymentNo = $("#confirm-modal").data("payment-no");
+            let paymentNo = $("#confirm-modal").data("payment-no");
 
-          let sidebarPoint = [[${#authentication.principal.getPoint}]]
-          console.log(sidebarPoint);
+            let sidebarPoint = [[${#authentication.principal.getPoint}]]
+            console.log(sidebarPoint);
 
-          $.ajax({
-            url: "/api/payment/confirm",
-            type: "POST",
-            data: {
-              paymentNo: paymentNo,
-            },
-            success: function (response) {
-              $("#confirm-modal").modal("hide");
-              switch (response) {
-                case 1:
-                  alert("구매가 확정되었습니다.");
-                  loadOrderList(0);
-                  $.get("/api/payment/point", function(response) {
-                    console.log(response);
-                    $('.profile-point').val(response + " 점");
-                  });
-
-                  break;
-                case 2:
-                  alert("사용자가 일치하지 않습니다.");
-                  break;
-                case 3:
-                  alert("이미 확정된 상품입니다.");
-                  break;
-                default:
-                  alert("구매 확정 실패");
-                  break;
-              }
-            },
-            error: function (xhr, status, error) {
-              alert("구매 확정 실패");
-            },
-          });
+            $.ajax({
+                url: "/api/payment/confirm",
+                type: "POST",
+                data: {
+                    paymentNo: paymentNo,
+                },
+                success: function (response) {
+                    $("#confirm-modal").modal("hide");
+                    switch (response) {
+                        case 1:
+                            alert("구매가 확정되었습니다.");
+                            loadOrderList(0);
+                            $.get("/api/payment/point", function(response) {
+                                console.log(response);
+                                $('.profile-point').val(response + " 점");
+                            });
+                            break;
+                        case 2:
+                            alert("사용자가 일치하지 않습니다.");
+                            break;
+                        case 3:
+                            alert("이미 확정된 상품입니다.");
+                            break;
+                        default:
+                            alert("구매 확정 실패");
+                            break;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("구매 확정 실패");
+                },
+            });
         });
 
         $(document).on("click", ".order-detail", function (event) {
-          event.preventDefault();
-          let paymentNo = $(this).data("payment-no");
-          $.ajax({
-            url: "/api/payment/detail",
-            type: "GET",
-            data: { paymentNo: paymentNo },
-            success: function (response) {
-              $("#modalOrderNumber").text(response.paymentNo);
-              $("#modalMemberName").text(response.userName);
-              $("#modalProductName").text(response.productName);
-              $("#modalProductPrice").text(
-                response.productPrice.toLocaleString() + "원"
-              );
-              $("#modalPurchasePrice").text(
-                response.purchasePrice.toLocaleString() + "원"
-              );
-              $("#modalOrderDate").text(formatDate(response.createdAt));
-              $("#modalImPortId").text(response.imPortId);
-              $("#modalRefundStatus").text(
-                response.refund === "Y" ? "환불됨" : "-"
-              );
-              $("#modalRefundDate").text(formatDate(response.refundAt));
-              $("#modalConfirmStatus").text(
-                response.confirm === "Y" ? "확정됨" : "미확정"
-              );
-              $("#modalConfirmDate").text(formatDate(response.confirmAt));
+            event.preventDefault();
+            let paymentNo = $(this).data("payment-no");
+            $.ajax({
+                url: "/api/payment/detail",
+                type: "GET",
+                data: { paymentNo: paymentNo },
+                success: function (response) {
+                    // PaymentDTO 정보
+                    $("#modalOrderNumber").text(response.paymentDTO.paymentNo);
+                    $("#modalMemberName").text(response.paymentDTO.userName);
+                    $("#modalProductName").text(response.paymentDTO.productName);
+                    $("#modalProductPrice").text(
+                        response.paymentDTO.productPrice.toLocaleString() + "원"
+                    );
+                    $("#modalPurchasePrice").text(
+                        response.paymentDTO.purchasePrice.toLocaleString() + "원"
+                    );
+                    $("#modalOrderDate").text(formatDate(response.paymentDTO.createdAt));
+                    $("#modalImPortId").text(response.paymentDTO.imPortId);
+                    $("#modalRefundStatus").text(
+                        response.paymentDTO.refund === "Y" ? "환불됨" : "-"
+                    );
+                    $("#modalRefundDate").text(formatDate(response.paymentDTO.refundAt));
+                    $("#modalConfirmStatus").text(
+                        response.paymentDTO.confirm === "Y" ? "확정됨" : "미확정"
+                    );
+                    $("#modalConfirmDate").text(formatDate(response.paymentDTO.confirmAt));
 
-              let refundButton = $("#btn-refund");
-              if (response.refund === "Y") {
-                refundButton.prop("disabled", true).text("환불 완료");
-              } else if (response.confirm === "Y") {
-                refundButton.prop("disabled", true).text("구매확정");
-              } else {
-                refundButton.prop("disabled", false).text("환불하기");
-              }
+                    // AddressDTO 정보
+                    $("#modalRecipientName").text(response.addressDTO.recipientName);
+                    $("#modalAddress").text(response.addressDTO.address + " " + response.addressDTO.detailAddress);
+                    $("#modalPostalCode").text(response.addressDTO.postalCode);
+                    $("#modalRecipientPhone").text(response.addressDTO.recipientPhone);
+                    $("#modalDeliveryRequest").text(response.addressDTO.request);
 
-              $("#orderModal").modal("show");
-            },
-            error: function (xhr, status, error) {
-              console.error("주문 상세 정보 조회 실패:", error);
-              alert("주문 상세 정보를 불러오는데 실패했습니다.");
-            },
-          });
+                    let refundButton = $("#btn-refund");
+                    if (response.paymentDTO.refund === "Y") {
+                        refundButton.prop("disabled", true).text("환불 완료");
+                    } else if (response.paymentDTO.confirm === "Y") {
+                        refundButton.prop("disabled", true).text("구매확정");
+                    } else {
+                        refundButton.prop("disabled", false).text("환불하기");
+                    }
+
+                    $("#orderModal").modal("show");
+                },
+                error: function (xhr, status, error) {
+                    console.error("주문 상세 정보 조회 실패:", error);
+                    alert("주문 상세 정보를 불러오는데 실패했습니다.");
+                },
+            });
         });
 
         $(document).on("click", "#btn-refund", function () {
-          let paymentNo = $("#modalOrderNumber").text();
-          let imPortId = $("#modalImPortId").text();
-          let purchasePrice = $("#modalPurchasePrice")
-            .text()
-            .replace(/[^0-9]/g, "");
+            let paymentNo = $("#modalOrderNumber").text();
+            let imPortId = $("#modalImPortId").text();
+            let purchasePrice = $("#modalPurchasePrice")
+                .text()
+                .replace(/[^0-9]/g, "");
 
-          if (confirm("이 주문을 환불하시겠습니까?")) {
-            $.ajax({
-              url: "/payment/cancel",
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({
-                paymentNo: paymentNo,
-                imPortId: imPortId,
-                amount: purchasePrice,
-              }),
-              success: function (response) {
-                if (response.success) {
-                  alert("환불이 성공적으로 처리되었습니다.");
-                  $("#orderModal").modal("hide");
-                  loadOrderList(0);
-                  window.location.href = "/profile";
-                } else {
-                  alert(
-                    "환불 처리 중 오류가 발생했습니다: " + response.message
-                  );
-                }
-              },
-              error: function (xhr, status, error) {
-                console.error("환불 처리 실패:", error);
-                alert("환불 처리 중 오류가 발생했습니다.");
-              },
-            });
-          }
+            if (confirm("이 주문을 환불하시겠습니까?")) {
+                $.ajax({
+                    url: "/payment/cancel",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        paymentNo: paymentNo,
+                        imPortId: imPortId,
+                        amount: purchasePrice,
+                    }),
+                    success: function (response) {
+                        if (response.success) {
+                            alert("환불이 성공적으로 처리되었습니다.");
+                            $("#orderModal").modal("hide");
+                            loadOrderList(0);
+                            window.location.href = "/profile";
+                        } else {
+                            alert(
+                                "환불 처리 중 오류가 발생했습니다: " + response.message
+                            );
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("환불 처리 실패:", error);
+                        alert("환불 처리 중 오류가 발생했습니다.");
+                    },
+                });
+            }
         });
+    });
 
-        $("#btn-search").on("click", function () {
-          loadOrderList(0);
-        });
-
-        $(document).on("click", ".order-detail", function (event) {
-          event.preventDefault();
-          let paymentNo = $(this).data("payment-no");
-          $.ajax({
-            url: "/api/payment/detail",
-            type: "GET",
-            data: { paymentNo: paymentNo },
-            success: function (response) {
-              $("#modalOrderNumber").text(response.paymentNo);
-              $("#modalMemberName").text(response.userName);
-              $("#modalProductName").text(response.productName);
-              $("#modalProductPrice").text(
-                response.productPrice.toLocaleString() + "원"
-              );
-              $("#modalPurchasePrice").text(
-                response.purchasePrice.toLocaleString() + "원"
-              );
-              $("#modalOrderDate").text(formatDate(response.createdAt));
-              $("#modalImPortId").text(response.imPortId);
-              $("#modalRefundStatus").text(
-                response.refund === "Y" ? "환불됨" : "-"
-              );
-              $("#modalRefundDate").text(formatDate(response.refundAt));
-              $("#modalConfirmStatus").text(
-                response.confirm === "Y" ? "확정됨" : "미확정"
-              );
-              $("#modalConfirmDate").text(formatDate(response.confirmAt));
-
-              let refundButton = $("#btn-refund");
-              if (response.refund === "Y") {
-                refundButton.prop("disabled", true).text("환불 완료");
-              } else if (response.confirm === "Y") {
-                refundButton.prop("disabled", true).text("구매확정");
-              } else {
-                refundButton.prop("disabled", false).text("환불하기");
-              }
-
-              $("#orderModal").modal("show");
-            },
-            error: function (xhr, status, error) {
-              console.error("주문 상세 정보 조회 실패:", error);
-              alert("주문 상세 정보를 불러오는데 실패했습니다.");
-            },
-          });
-        });
-
-        $(document).on("click", "#btn-refund", function () {
-          let paymentNo = $("#modalOrderNumber").text();
-          let imPortId = $("#modalImPortId").text();
-          let purchasePrice = $("#modalPurchasePrice")
-            .text()
-            .replace(/[^0-9]/g, "");
-
-          if (confirm("이 주문을 환불하시겠습니까?")) {
-            $.ajax({
-              url: "/payment/cancel",
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({
-                paymentNo: paymentNo,
-                imPortId: imPortId,
-                amount: purchasePrice,
-              }),
-              success: function (response) {
-                if (response.success) {
-                  alert("환불이 성공적으로 처리되었습니다.");
-                  $("#orderModal").modal("hide");
-                  loadOrderList(0);
-                } else {
-                  alert(
-                    "환불 처리 중 오류가 발생했습니다: " + response.message
-                  );
-                }
-              },
-              error: function (xhr, status, error) {
-                console.error("환불 처리 실패:", error);
-                alert("환불 처리 중 오류가 발생했습니다.");
-              },
-            });
-          }
-        });
-      });
-
-      function formatDate(dateString) {
+    function formatDate(dateString) {
         if (!dateString) return "-";
         const date = new Date(dateString);
         return (
-          date.getFullYear() +
-          "." +
-          String(date.getMonth() + 1).padStart(2, "0") +
-          "." +
-          String(date.getDate()).padStart(2, "0")
+            date.getFullYear() +
+            "." +
+            String(date.getMonth() + 1).padStart(2, "0") +
+            "." +
+            String(date.getDate()).padStart(2, "0")
         );
-      }
-    </script>
-  </head>
-  <body>
-    <div layout:fragment="content">
-      <div class="profile-box" style="height: auto; width: auto">
-        <h2>주문목록</h2>
-        <div class="input-group mb-3 d-flex align-items-center">
-          <input
-            type="date"
-            id="startDate"
-            class="form-control"
-            placeholder="시작 날짜"
-            aria-label="Start date"
-            style="flex: 0.5; margin-right: 8px"
-          />
+    }
+  </script>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="profile-box" style="height: auto; width: auto">
+    <h2>주문목록</h2>
+    <div class="input-group mb-3 d-flex align-items-center">
+      <input
+              type="date"
+              id="startDate"
+              class="form-control"
+              placeholder="시작 날짜"
+              aria-label="Start date"
+              style="flex: 0.5; margin-right: 8px"
+      />
 
-          <span class="mx-2" style="margin-right: 8px">~</span>
+      <span class="mx-2" style="margin-right: 8px">~</span>
 
-          <input
-            type="date"
-            id="endDate"
-            class="form-control"
-            placeholder="종료 날짜"
-            aria-label="End date"
-            style="flex: 0.5; margin-right: 12px"
-          />
+      <input
+              type="date"
+              id="endDate"
+              class="form-control"
+              placeholder="종료 날짜"
+              aria-label="End date"
+              style="flex: 0.5; margin-right: 12px"
+      />
 
-          <select
-            class="form-control"
-            id="select"
-            style="flex: 0.8; margin-right: 12px"
-          >
-            <option value="all">All</option>
-            <option value="orderNumber">주문번호</option>
-            <option value="productName">상품명</option>
-          </select>
-
-          <input
-            type="text"
-            id="keyword"
-            class="form-control"
-            placeholder="주문번호 또는 상품명 검색"
-            aria-label="Search"
-            style="flex: 2; margin-right: 12px"
-          />
-
-          <div class="input-group-append">
-            <button id="btn-search" class="btn btn-primary" type="button">
-              검색
-            </button>
-          </div>
-        </div>
-        <hr />
-        <br />
-        <div id="purchase-box"></div>
-      </div>
-
-      <div
-        class="modal fade"
-        id="confirm-modal"
-        tabindex="-1"
-        aria-labelledby="confirmModalLabel"
-        aria-hidden="true"
+      <select
+              class="form-control"
+              id="select"
+              style="flex: 0.8; margin-right: 12px"
       >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="confirmModalLabel">
-                구매를 확정하시겠습니까?
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <ul>
-                <li>
-                  <strong>반품 및 교환 불가:</strong> 구매 확정 후에는 반품이나
-                  교환이 불가능합니다.
-                </li>
-                <li>
-                  <strong>거래 완료:</strong> 해당 거래가 최종 완료되며,
-                  이후에는 추가적인 조치가 불가능합니다.
-                </li>
-                <li>
-                  <strong>포인트 지급:</strong> 구매 확정 시, 적립 포인트가
-                  지급됩니다.
-                </li>
-              </ul>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                취소
-              </button>
-              <button type="button" class="btn btn-primary btn-confirmed">
-                확인
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+        <option value="all">All</option>
+        <option value="orderNumber">주문번호</option>
+        <option value="productName">상품명</option>
+      </select>
 
-      <div
-        class="modal fade"
-        id="orderModal"
-        tabindex="-1"
-        aria-labelledby="orderModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="orderModalLabel">주문 상세 정보</h5>
-              <div class="ms-auto">
-                <button id="btn-refund" class="btn btn-refund me-2">
-                  환불하기
-                </button>
-                <button
+      <input
+              type="text"
+              id="keyword"
+              class="form-control"
+              placeholder="주문번호 또는 상품명 검색"
+              aria-label="Search"
+              style="flex: 2; margin-right: 12px"
+      />
+
+      <div class="input-group-append">
+        <button id="btn-search" class="btn btn-primary" type="button">
+          검색
+        </button>
+      </div>
+    </div>
+    <hr />
+    <br />
+    <div id="purchase-box"></div>
+  </div>
+
+  <div
+          class="modal fade"
+          id="confirm-modal"
+          tabindex="-1"
+          aria-labelledby="confirmModalLabel"
+          aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">
+            구매를 확정하시겠습니까?
+          </h5>
+          <button
                   type="button"
                   class="btn-close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
-                ></button>
-              </div>
-            </div>
-            <div class="modal-body">
-              <p>
-                <strong>주문 번호:</strong> <span id="modalOrderNumber"></span>
-              </p>
-              <p>
-                <strong>구매자명:</strong> <span id="modalMemberName"></span>
-              </p>
-              <p>
-                <strong>상품명:</strong> <span id="modalProductName"></span>
-              </p>
-              <p>
-                <strong>상품 가격:</strong> <span id="modalProductPrice"></span>
-              </p>
-              <p>
-                <strong>구매 가격:</strong>
-                <span id="modalPurchasePrice"></span>
-              </p>
-              <p>
-                <strong>주문 일자:</strong> <span id="modalOrderDate"></span>
-              </p>
-              <p>
-                <strong>결제 번호:</strong> <span id="modalImPortId"></span>
-              </p>
-              <p>
-                <strong>환불 상태:</strong> <span id="modalRefundStatus"></span>
-              </p>
-              <p>
-                <strong>환불 일자:</strong> <span id="modalRefundDate"></span>
-              </p>
-              <p>
-                <strong>확정 상태:</strong>
-                <span id="modalConfirmStatus"></span>
-              </p>
-              <p>
-                <strong>확정 일자:</strong> <span id="modalConfirmDate"></span>
-              </p>
-            </div>
-          </div>
+          ></button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            <li>
+              <strong>반품 및 교환 불가:</strong> 구매 확정 후에는 반품이나
+              교환이 불가능합니다.
+            </li>
+            <li>
+              <strong>거래 완료:</strong> 해당 거래가 최종 완료되며,
+              이후에는 추가적인 조치가 불가능합니다.
+            </li>
+            <li>
+              <strong>포인트 지급:</strong> 구매 확정 시, 적립 포인트가
+              지급됩니다.
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+          >
+            취소
+          </button>
+          <button type="button" class="btn btn-primary btn-confirmed">
+            확인
+          </button>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+
+  <div
+          class="modal fade"
+          id="orderModal"
+          tabindex="-1"
+          aria-labelledby="orderModalLabel"
+          aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orderModalLabel">주문 상세 정보</h5>
+          <div class="ms-auto">
+            <button id="btn-refund" class="btn btn-refund me-2">
+              환불하기
+            </button>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+            ></button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <h6 align="center">주문 정보</h6>
+          <hr>
+          <p><strong>주문 번호:</strong> <span id="modalOrderNumber"></span></p>
+          <p><strong>구매자명:</strong> <span id="modalMemberName"></span></p>
+          <p><strong>상품명:</strong> <span id="modalProductName"></span></p>
+          <p><strong>상품 가격:</strong> <span id="modalProductPrice"></span></p>
+          <p><strong>구매 가격:</strong> <span id="modalPurchasePrice"></span></p>
+          <p><strong>주문 일자:</strong> <span id="modalOrderDate"></span></p>
+          <p><strong>결제 번호:</strong> <span id="modalImPortId"></span></p>
+          <p><strong>환불 상태:</strong> <span id="modalRefundStatus"></span></p>
+          <p><strong>환불 일자:</strong> <span id="modalRefundDate"></span></p>
+          <p><strong>확정 상태:</strong> <span id="modalConfirmStatus"></span></p>
+          <p><strong>확정 일자:</strong> <span id="modalConfirmDate"></span></p>
+          <hr>
+          <h6 class="mt-4" align="center">배송 정보</h6>
+          <hr>
+          <p><strong>수령인:</strong> <span id="modalRecipientName"></span></p>
+          <p><strong>주소:</strong> <span id="modalAddress"></span></p>
+          <p><strong>우편번호:</strong> <span id="modalPostalCode"></span></p>
+          <p><strong>연락처:</strong> <span id="modalRecipientPhone"></span></p>
+          <p><strong>배송 요청사항:</strong> <span id="modalDeliveryRequest"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
 </html>

@@ -1,5 +1,6 @@
 // 전역 변수 선언
 let userName, originalPrice, possessionPoint;
+let selectedAddressId = 1; // 선택된 주소의 ID를 저장할 변수
 
 // 숫자 포맷팅 함수
 function formatNumber(num) {
@@ -7,36 +8,97 @@ function formatNumber(num) {
 }
 
 // DOM이 로드된 후 실행될 함수
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
     // Thymeleaf에서 전달된 데이터를 JavaScript 변수에 할당
-    userName = document.getElementById('name').value;
-    originalPrice = parseInt(document.getElementById('originalPrice').textContent.replace(/[^\d]/g, ''));
-    possessionPoint = parseInt(document.getElementById('possessionPoint').textContent.replace(/[^\d]/g, ''));
+    userName = $('#name').val();
+    originalPrice = parseInt($('#originalPrice').text().replace(/[^\d]/g, ''));
+    possessionPoint = parseInt($('#possessionPoint').text().replace(/[^\d]/g, ''));
 
     // 초기 총 결제금액 설정
     updateTotalPrice();
 
     // 이벤트 리스너 추가
-    document.getElementById('pointInput').addEventListener('input', updateTotalPrice);
+    $('#pointInput').on('keyup', updateTotalPrice);
+
+    // 모달 관련 코드
+    $('#changeAddressBtn').on('click', function() {
+        $('#addressModal').show();
+        renderAddressList();
+    });
+
+    $('.close').on('click', function() {
+        $(this).closest('.modal').hide();
+    });
+
+    $(window).on('click', function(event) {
+        if ($(event.target).hasClass('modal')) {
+            $('.modal').hide();
+        }
+    });
+
+    // 주소 선택 이벤트
+    $('#addressList').on('click', '.select-address-btn', function() {
+        var index = $(this).data('index');
+        var selectedAddress = addressList[index];
+
+        // 선택된 주소로 폼 업데이트
+        updateDeliveryInfo(selectedAddress);
+
+        // 선택된 주소의 ID 저장
+        selectedAddressId = selectedAddress.addressId;
+
+        $('#addressModal').hide();
+    });
 });
 
-function updateTotalPrice() {
-    const pointInput = document.getElementById('pointInput');
-    const pointUsageDisplay = document.getElementById('pointUsageDisplay');
-    const amountDisplay = document.getElementById('amount');
+function updateDeliveryInfo(address) {
+    $('#recipientName').val(address.recipientName);
+    $('#recipientPhone').val(address.recipientPhone);
+    $('#address').val(address.address + ' ' + address.detailAddress);
+    $('#delivery_request').val(address.request);
+}
 
-    let pointValue = parseInt(pointInput.value.replace(/,/g, '')) || 0;
+function renderAddressList() {
+    var addressListDiv = $('#addressList');
+    if (addressListDiv.length) {
+        addressListDiv.empty();
+        if (Array.isArray(addressList) && addressList.length > 0) {
+            addressList.forEach(function(address, index) {
+                var addressDiv = $('<div>').addClass('address-item');
+                addressDiv.html(`
+                    <div class="address-content">
+                        <p><strong>${address.addressName}</strong></p>
+                        <p><strong>${address.recipientName}</strong> (${address.recipientPhone})</p>
+                        <p>${address.address} ${address.detailAddress}</p>
+                        <p>요청사항: ${address.request}</p>
+                    </div>
+                    <button class="select-address-btn" data-index="${index}">선택</button>
+                `);
+                addressListDiv.append(addressDiv);
+            });
+        } else {
+            addressListDiv.html('<p>등록된 주소가 없습니다.</p>');
+        }
+    }
+}
+
+function updateTotalPrice() {
+    const pointInput = $('#pointInput');
+    const pointUsageDisplay = $('#pointUsageDisplay');
+    const amountDisplay = $('#amount');
+
+    let pointValue = parseInt(pointInput.val().replace(/,/g, '')) || 0;
 
     // 입력된 포인트가 보유 포인트를 초과하지 않도록 제한
     if (pointValue > possessionPoint) {
         pointValue = possessionPoint;
-        pointInput.value = formatNumber(pointValue);
+        pointInput.val(formatNumber(pointValue));
     }
 
     // 입력된 포인트가 총 판매가를 초과하지 않도록 제한
     if (pointValue > originalPrice) {
         pointValue = originalPrice;
-        pointInput.value = formatNumber(pointValue);
+        pointInput.val(formatNumber(pointValue));
     }
 
     let totalPrice = originalPrice - pointValue;
@@ -45,26 +107,26 @@ function updateTotalPrice() {
     if (totalPrice < 0) {
         totalPrice = 0;
         pointValue = originalPrice;
-        pointInput.value = formatNumber(pointValue);
+        pointInput.val(formatNumber(pointValue));
     }
 
-    pointUsageDisplay.textContent = formatNumber(pointValue) + '원';
-    amountDisplay.textContent = formatNumber(totalPrice) + '원';
+    pointUsageDisplay.text(formatNumber(pointValue) + '원');
+    amountDisplay.text(formatNumber(totalPrice) + '원');
 }
 
 function mypayment() {
-    const myAmount = Number(document.getElementById("amount").textContent.replace(/[^\d]/g, ''));
-    const usedPoints = Number(document.getElementById("pointInput").value.replace(/,/g, '')) || 0;
+    const myAmount = Number($('#amount').text().replace(/[^\d]/g, ''));
+    const usedPoints = Number($('#pointInput').val().replace(/,/g, '')) || 0;
     const IMP = window.IMP;
     IMP.init("imp64527455");
 
     // 장바구니의 모든 상품 정보를 가져옵니다.
-    const products = Array.from(document.querySelectorAll('.product-info-table tbody tr')).map(row => ({
-        productNo: Number(row.getAttribute('data-product-no')),
-        productName: row.querySelector('td:nth-child(2)').textContent,
-        quantity: Number(row.querySelector('td:nth-child(3) .quantity-value').textContent.trim().split(' ')[0]),
-        price: Number(row.querySelector('td:nth-child(4) .price').textContent.replace(/[^\d]/g, '')),
-        totalPrice: Number(row.querySelector('td:nth-child(4) .price').textContent.replace(/[^\d]/g, ''))
+    const products = Array.from($('.product-info-table tbody tr')).map(row => ({
+        productNo: Number($(row).attr('data-product-no')),
+        productName: $(row).find('td:nth-child(2)').text(),
+        quantity: Number($(row).find('td:nth-child(3) .quantity-value').text().trim().split(' ')[0]),
+        price: Number($(row).find('td:nth-child(4) .price').text().replace(/[^\d]/g, '')),
+        totalPrice: Number($(row).find('td:nth-child(4) .price').text().replace(/[^\d]/g, ''))
     }));
 
     IMP.request_pay(
@@ -73,10 +135,10 @@ function mypayment() {
             pay_method: "card",
             name: products.map(p => p.productName).join(', '),
             amount: myAmount,
-            buyer_email: "",
+            buyer_email: $('#email').val(),
             buyer_name: userName,
-            buyer_tel: "010-4242-4242",
-            buyer_addr: "서울특별시 강남구 신사동",
+            buyer_tel: $('#tel').val(),
+            buyer_addr: $('#address').val(),
             buyer_postcode: "01181",
             m_redirect_url: "",
         },
@@ -87,7 +149,8 @@ function mypayment() {
                         imPortId: rsp.imp_uid,
                         totalAmount: myAmount,
                         usedPoints: usedPoints.toString(),
-                        products: products
+                        products: products,
+                        addressId: selectedAddressId // 선택된 주소 ID 추가
                     });
 
                     if (data.success) {
@@ -104,6 +167,7 @@ function mypayment() {
                     console.log("Sending amount to server:", myAmount);
                     console.log("Used points:", usedPoints);
                     console.log("Products:", products);
+                    console.log("Address ID:", selectedAddressId);
                     alert("검증 실패로 인해 결제가 취소되었습니다: " + (error.response ? error.response.data.message : error.message));
                 }
             } else {
