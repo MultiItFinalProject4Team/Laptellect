@@ -83,15 +83,15 @@ public class CustomerAdminController {
      * @return
      */
     @PostMapping("/answer_productq")
-    public String answer_producta(ProductqAnswerDto answerDto){
+    @ResponseBody
+    public int answer_producta(ProductqAnswerDto answerDto){
         System.out.println(answerDto);
         customerService.productAnwerApp(answerDto);
         String state = "Y";
         customerService.productAnwerChange(answerDto.getProductqNo(), state);
         String code = "producta"+answerDto.getProductaNo();
         customerService.setproductaCode(answerDto.getProductaNo(),code);
-        String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
-        return "redirect:"+redirectUrl;
+        return 1;
     }
 
     /**
