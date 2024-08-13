@@ -212,6 +212,7 @@ $(".updateAddressBtn").on("click", function () {
                 case 1:
                     alert("배송지 수정 성공");
                     $('#update-delivery-modal').modal('hide');
+                    location.reload();
                     break;
                 case 0:
                     alert("배송지 이름을 입력해주세요.");
@@ -251,6 +252,7 @@ $('.deleteAddressBtn').on('click', function() {
               alert("배송지 삭제 완료");
               $('#delete-delivery-modal').modal('hide');
               getAddressList()
+              location.reload();
             } else {
               alert("사용자가 일치하지 않습니다.");
             }

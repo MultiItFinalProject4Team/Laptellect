@@ -1,6 +1,7 @@
 package com.multi.laptellect.payment.controller;
 
 import com.multi.laptellect.member.model.dto.AddressDTO;
+import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.member.service.MemberService;
@@ -70,14 +71,27 @@ public class PaymentController {
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
 
         ArrayList<AddressDTO> userAddressList = memberService.findAllAddressByMemberNo();
-        AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
-        System.out.println(userAddressList);
-        System.out.println(userAddress);
 
+
+
+
+        if(userAddressList.isEmpty()){
+            model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 기본배송지 미설정");
+            return "/member/delivery-profile";
+        } else if (memberDTO.getTel() == null) {
+
+            CustomUserDetails userInfo = SecurityUtil.getUserDetails();
+
+            model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 전화번호 미인증");
+            model.addAttribute("userInfo", userInfo);
+            return "/member/edit-profile";
+        }
+
+
+        AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
 
         model.addAttribute("addressList", userAddressList);
         model.addAttribute("userAddress", userAddress);
-
         model.addAttribute("paymentpageDTO", paymentpageDTO);
         model.addAttribute("paymentpointDTO", paymentpointDTO);
         model.addAttribute("memberDTO", memberDTO);
@@ -113,6 +127,19 @@ public class PaymentController {
 
 
             ArrayList<AddressDTO> userAddressList = memberService.findAllAddressByMemberNo();
+
+            if(userAddressList.isEmpty()){
+                model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 기본배송지 미설정");
+                return "/member/delivery-profile";
+            } else if (memberDTO.getTel() == null) {
+
+                CustomUserDetails userInfo = SecurityUtil.getUserDetails();
+
+                model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 전화번호 미인증");
+                model.addAttribute("userInfo", userInfo);
+                return "/member/edit-profile";
+            } 
+
             AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
             System.out.println(userAddressList);
             System.out.println(userAddress);
