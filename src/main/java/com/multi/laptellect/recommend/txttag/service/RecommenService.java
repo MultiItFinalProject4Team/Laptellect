@@ -63,7 +63,7 @@ public class RecommenService {
         log.info("DTO 확인 : {}", laptopSpecDTO);
 
 
-        String gpuName = laptopSpecDTO.getGpu().getGpuManufacturer();
+        String gpuName = laptopSpecDTO.getGpu().getGpuChipset();
         String screenSize = laptopSpecDTO.getDisplay().getScreenSize();
         String osName = laptopSpecDTO.getOs();
         String thicName = laptopSpecDTO.getPortability().getThickness();
