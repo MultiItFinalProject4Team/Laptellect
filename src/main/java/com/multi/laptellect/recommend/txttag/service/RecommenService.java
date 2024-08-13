@@ -30,10 +30,12 @@ public class RecommenService {
         for (int productNO : productNOs) {
             log.info("제품 {} 처리 시작", productNO);
             List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNO);
+            // 제품 번호별로 태그 할당
+
 
             if (!laptopDetails.isEmpty()) {
                 log.info("제품 {}의 상세 정보 존재", laptopDetails);
-                LaptopSpecDTO laptops = productService.getLaptopSpec(productNO, laptopDetails);// 제품 상세 정보 조회
+                LaptopSpecDTO laptops = productService.getLaptopSpec(productNO, laptopDetails);
 
                 List<Integer> tags = determineTagsForProduct(laptops);
 
@@ -47,15 +49,16 @@ public class RecommenService {
         }
         log.info("태그 할당 프로세스 완료");
     }
-
+     //제품번호별로 태그 할당
     private List<Integer> determineTagsForProduct(LaptopSpecDTO laptopSpecDTO) {
-        List<Integer> assignedTags = new ArrayList<>();
+        List<Integer> assignedTags = new ArrayList<>(); //미리 선언 해두는게 나음
         List<TaggDTO> tags = tagMapper.findAllTag();
-        int tagNo;
+        int tagNo; //int 도 미리미리 해두는게 나음
 
 
         String gpuName = laptopSpecDTO.getGpu().getGpuChipset();
         String screenSize = laptopSpecDTO.getDisplay().getScreenSize();
+        //gpuName, screenSize 변수명 변경
 
 
 
