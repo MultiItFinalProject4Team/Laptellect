@@ -224,7 +224,7 @@ public class CustomerController {
      */
     @PostMapping("/productq_app")
     @ResponseBody // JSON 응답을 반환하기 위해 추가
-    public int productq_app(ProductqAppDto appDto, @RequestParam("productNo") int productNo) {
+    public int productq_app(ProductqAppDto appDto) {
         int memberNo;
         try {
             memberNo = SecurityUtil.getUserNo();
@@ -313,6 +313,14 @@ public class CustomerController {
         model.addAttribute("dto",dto);
         return "/customer/user/productq_update";
     }
+    @GetMapping("/update_productq")
+    public ResponseEntity<ProductqDto> getProductDetails(@RequestParam("productqNo") int productqNo) {
+        // 서비스 또는 데이터베이스에서 제품 세부정보를 가져옴
+        ProductqDto dto = customerService.getProductq(productqNo);
+
+        // 제품 정보를 JSON 형식으로 반환
+        return ResponseEntity.ok(dto);
+    }
 
     /**
      * 상품 문의 수정 메소드
@@ -320,20 +328,20 @@ public class CustomerController {
      * @return
      */
     @PostMapping("/update_productq")
-    public String update_productq(ProductqAppDto appDto){
-        int memberNo;
+    @ResponseBody
+    public int update_productq(ProductqAppDto appDto){
+        int memberNo = 0;
         try {
             memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            System.out.println("미로그인");
         }
-        System.out.println(appDto);
+        System.out.println("수정: "+ appDto);
         appDto.setMemberNo(memberNo);
         int text_result=customerService.updateProductq(appDto);
         String code = customerService.getproductqCode(appDto.getProductqNo());
         System.out.println(code);
-        String redirectUrl = String.format("/customer/user/productq_detail/%s", appDto.getProductqNo());
-        return "redirect:"+redirectUrl;
+        return text_result;
     }
 
     /**
@@ -348,6 +356,17 @@ public class CustomerController {
         int result = customerService.deleteProductq(productqNo, code);
         String redirectUrl = String.format("/customer/user/customer_productq/%s", productNo);
         return "redirect:"+redirectUrl;
+    }
+
+    @PostMapping("/delete_productq")
+    public ResponseEntity<?> delete_productq(@RequestParam("productqNo") int productqNo) {
+        String code = customerService.getProductq(productqNo).getReferenceCode();
+        int result = customerService.deleteProductq(productqNo, code);
+        if (result > 0) {
+            return ResponseEntity.ok(result); // 200 OK와 함께 결과 반환
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패"); // 500 Internal Server Error
+        }
     }
 
     /**
@@ -576,5 +595,16 @@ public class CustomerController {
         if(totalPages==0){totalPages=1;}
         PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get_AllproductaList")
+    public ResponseEntity<ProductqAnswerDto> getAllProductaList(@RequestParam("productqNo") int productqNo){
+        try {
+            ProductqAnswerDto productaList = customerService.getProducta(productqNo);
+            return ResponseEntity.ok(productaList);
+        } catch (Exception e) {
+            // 예외 처리 로직 추가
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
