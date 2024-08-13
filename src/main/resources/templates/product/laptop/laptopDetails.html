@@ -10,10 +10,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
     <link href="/css/product/product_question.css" rel="stylesheet">
+    <link href="/css/payment/review.css" rel="stylesheet">
     <script src="/js/product/product_question.js"></script>
     <script src="/js/product/Question-Opinion.js"></script>
     <script src="/js/product/question_search.js"></script>
     <script src="/js/product/question_paging.js"></script>
+    <script src="/js/payment/review.js"></script>
     <style>
         /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
@@ -574,12 +576,14 @@
                                 </div>
                             </th:block>
                             <th:block sec:authorize="isAuthenticated()">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span><strong>상품평</strong></span>
-                                </div>
-                                <div class="input-group">
-                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성해주세요."></textarea>
-                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;">등록</button>
+                                <span><strong>상품평</strong></span>
+                                <div class="custom-card">
+                                    <div class="left-content">
+                                        <p><strong>상품에대한 리뷰를 남겨보세요!</strong></p>
+                                    </div>
+                                    <div class="right-content">
+                                        <button type="button" class="btn btn-sm" id="reviewModalButton" role="button" data-bs-toggle="modal" data-bs-target="#reviewModal">리뷰 등록하기</button>
+                                    </div>
                                 </div>
                             </th:block>
                         </div>
@@ -650,6 +654,40 @@
                             <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
                             <button type="submit" class="btn btn-primary">등록</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리뷰등록 모달 -->
+        <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reviewModalLabel">리뷰 작성하기</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>작성자: <span id="reviewUsername" th:text="${memberDTO.memberName}"></span></p>
+                        <p>상품명: <span id="reviewProductName" th:text="${productDTO.productName}"></span></p>
+                        <p>평점:
+                            <select id="reviewRating">
+                                <option value="5">5점</option>
+                                <option value="4">4점</option>
+                                <option value="3">3점</option>
+                                <option value="2">2점</option>
+                                <option value="1">1점</option>
+                            </select>
+                        </p>
+                        <p>리뷰 내용: <textarea id="reviewContent" class="form-control"></textarea></p>
+                        <input type="hidden" id="memberNo" th:value="${memberDTO.memberNo}">
+                        <input type="hidden" id="productNo2" th:value="${productDTO.productNo}">
+                        <input type="hidden" id="imPortId" th:value="${paymentDTO != null ? paymentDTO.imPortId : ''}">
+                        <input type="hidden" id="isPurchased" th:value="${paymentDTO != null}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary" id="submitReviewButton" disabled>리뷰 제출</button>
                     </div>
                 </div>
             </div>

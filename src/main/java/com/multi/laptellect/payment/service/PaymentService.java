@@ -87,8 +87,8 @@ public class PaymentService {
     }
 
     @Transactional
-    public List<PaymentDTO> selectOrderItems(int memberNo) {
-        return paymentDAO.selectOrderItems(memberNo);
+    public PaymentDTO selectOrderItems(int memberNo, int productNo) {
+        return paymentDAO.selectOrderItems(memberNo, productNo);
     }
 
     public List<PaymentDTO> findPaymentsByImPortId(String imPortId) {
@@ -140,6 +140,7 @@ public class PaymentService {
                 paymentDTO.setProductNo(product.getProductNo());
                 paymentDTO.setPurchasePrice(product.getTotalPrice());
                 paymentDTO.setImPortId(request.getImPortId());
+                paymentDTO.setQuantity(product.getQuantity());
 
                 try {
                     if (product.getProductNo() == 0) {
@@ -270,11 +271,24 @@ public class PaymentService {
         PaymentDTO paymentDTO = selectPaymentDetail(paymentNo);
         AddressDTO addressDTO = selectPaymentAddress(paymentNo);
 
+        int usedPoint = 0;
+
+        if(findUsedPoint(paymentDTO.getImPortId()) != null) {
+            usedPoint = Math.abs(findUsedPoint(paymentDTO.getImPortId()).getPaymentPointChange());
+        }
+        System.out.println(usedPoint);
+
+
         PaymentDetailDTO detailDTO = new PaymentDetailDTO();
         detailDTO.setPaymentDTO(paymentDTO);
         detailDTO.setAddressDTO(addressDTO);
+        detailDTO.setPointChange(usedPoint);
 
         return detailDTO;
+    }
+
+    private PaymentpointDTO findUsedPoint(String imPortId) {
+        return paymentDAO.findUsedPoint(imPortId);
     }
 
 

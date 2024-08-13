@@ -10,6 +10,7 @@
         <result column="product_no" property="productNo"/>
         <result column="address_id" property="addressId"/>
         <result column="purchase_price" property="purchasePrice"/>
+        <result column="quantity" property="quantity"/>
         <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
         <result column="im_port_id" property="imPortId"/>
         <result column="refund" property="refund"/>
@@ -49,12 +50,14 @@
         product_no,
         address_id,
         purchase_price,
+        quantity,
         im_port_id
         ) VALUES (
         #{memberNo},
         #{productNo},
         #{addressId},
         #{purchasePrice},
+        #{quantity},
         #{imPortId}
         )
     </insert>
@@ -231,9 +234,13 @@
         FROM payment p
         JOIN mem_member m ON p.member_no = m.member_no
         JOIN product pr ON p.product_no = pr.product_no
+        LEFT JOIN payment_product_reviews ppr ON p.im_port_id = ppr.im_port_id
         WHERE p.refund = 'N'
-        AND m.member_no = #{memberNo}
-        ORDER BY p.created_at DESC, p.payment_no ASC
+        AND p.member_no = #{memberNo}
+        AND p.product_no = #{productNo}
+        AND ppr.payment_product_reviews_no IS NULL
+        ORDER BY p.created_at DESC
+        LIMIT 1
     </select>
 
     <select id="findPaymentsByImPortId" resultMap="PaymentResultMap">
@@ -375,4 +382,10 @@
         WHERE p.payment_no = #{paymentNo};
     </select>
 
+    <select id="findUsedPoint" resultMap="PointResultMap">
+        SELECT *
+        FROM payment_point
+        WHERE im_port_id = #{imPortId}
+        AND payment_point_info = '구매 시 포인트사용'
+    </select>
 </mapper>

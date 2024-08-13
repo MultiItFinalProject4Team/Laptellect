@@ -6,6 +6,7 @@ CREATE TABLE payment (
     product_no INT NOT NULL,
     address_id INT NOT NULL,
     purchase_price INT,
+    quantity INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     im_port_id varchar(255),
     confirm char(1) DEFAULT 'N',
