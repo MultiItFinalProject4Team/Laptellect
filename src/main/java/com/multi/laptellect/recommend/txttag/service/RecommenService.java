@@ -60,11 +60,12 @@ public class RecommenService {
         List<Integer> assignedTags = new ArrayList<>(); //미리 선언 해두는게 나음
         List<TaggDTO> tags = tagMapper.findAllTag();
         int tagNo; //int 도 미리미리 해두는게 나음
+        log.info("DTO 확인 : {}", laptopSpecDTO);
 
 
-        String gpuName = laptopSpecDTO.getGpu().getGpuChipset();
+        String gpuName = laptopSpecDTO.getGpu().getGpuManufacturer();
         String screenSize = laptopSpecDTO.getDisplay().getScreenSize();
-        String osName = laptopSpecDTO.getAddOn().getOs();
+        String osName = laptopSpecDTO.getOs();
         String thicName = laptopSpecDTO.getPortability().getThickness();
         String usbNo = laptopSpecDTO.getAddOn().getUsb();
         String recentNo = laptopSpecDTO.getRegistrationDate();
@@ -77,6 +78,8 @@ public class RecommenService {
             tagNo = findTagByData(tags,"게이밍");
             assignedTags.add(tagNo);
             log.info("제품 {}에 '게이밍' 태그(#{}) 할당",  tagNo);
+        }else {
+            log.warn("'게이밍' 태그를 찾을 수 없습니다.");
         }
         if (isGpuSuitableForOnlineGames(gpuName)) {
             tagNo = findTagByData(tags, "펠월드");
@@ -145,10 +148,10 @@ public class RecommenService {
             return false;
         }
         List<String> suitableGpus = List.of(
-                "RTX 4090", "RTX 4080", "라데온 RX 7900M", "라데온 610M 라이젠 9 7845HX",
-                "RTX 3080 Ti", "RTX 4070", "RTX 3070 Ti", "RTX 4060",
-                "라데온 RX 6850M XT", "RTX 3080", "RTX A5000", "RTX 3070",
-                "라데온 RX 6800S", "RTX A4000", "RTX 2080", "RTX3050 Ti"
+                "RTX4090", "RTX4080", "라데온 RX 7900M", "라데온 610M 라이젠 9 7845HX",
+                "RTX3080Ti", "RTX4070", "RTX3070Ti", "RTX4060",
+                "라데온 RX 6850M XT", "RTX 3080", "RTX A5000", "RTX3070",
+                "라데온 RX 6800S", "RTXA4000", "RTX2080", "RTX3050Ti"
         );
         for (String suitableGpu : suitableGpus) {
             if (gpu.contains(suitableGpu)) {
@@ -195,39 +198,58 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isScreenSuitableForCoding(String screen) {
-        if (screen == null) {
+    private boolean isScreenSuitableForCoding(String screena) {
+        if (screena == null) {
             return false;
         }
-        List<String> suitableScreens = List.of("18인치", "17인치", "17.3인치");
-        for (String suitableScreen : suitableScreens) {
-            if (screen.contains(suitableScreen)) {
+        List<String> suitableBingScreens = List.of("40.8cm(16인치)",
+                "40.8cm(16인치)", "40.89cm(16.1인치)", "41.05cm(16.2인치)",
+                "41.4cm(16.3인치)", "43.18cm(17인치)", "43.18cm(17인치)",
+                "43.94cm(17.3인치)", "45.72cm(18인치)");
+
+        for (String suitableScreen : suitableBingScreens) {
+            if (screena.contains(suitableScreen)) {
+                log.info("큰 화면 태그 할당 : {} {} ", screena, suitableScreen);
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isScreenSuitableForDocuments(String screen) {
-        if (screen == null) {
+    private boolean isScreenSuitableForDocuments(String screenb) {
+        if (screenb == null) {
             return false;
         }
-        List<String> suitableScreens = List.of("15.6인치", "16인치", "15인치");
+        List<String> suitableScreens = List.of("33.02cm(13인치)", "33.78cm(13.3인치)",
+                "33.78cm(13.3인치)", "34.03cm(13.4인치)", "34.29cm(13.5인치)",
+                "34.54cm(13.6인치)", "35.05cm(13.8인치)", "35.3cm(13.9인치)",
+                "35.56cm(14인치)", "35.56cm(14인치)", "35.8cm(14.1인치)",
+                "35.97cm(14.2인치)", "36.6cm(14.4인치)", "36.8cm(14.5인치)",
+                "38.1cm(15인치)", "38.86cm(15.3인치)", "39.11cm(15.4인치)",
+                "39.62cm(15.6인치)", "39.62cm(15.6인치)");
+
         for (String suitableScreen : suitableScreens) {
-            if (screen.contains(suitableScreen)) {
+            if (screenb.contains(suitableScreen)) {
+                log.info("중간 태그 할당 : {} {} ", screenb, suitableScreen);
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isScreenSuitableForStudents(String screen) {
-        if (screen == null) {
+    private boolean isScreenSuitableForStudents(String screenc) {
+        if (screenc == null) {
             return false;
         }
-        List<String> suitableScreens = List.of("13.3인치", "14인치", "13인치");
-        for (String suitableScreen : suitableScreens) {
-            if (screen.contains(suitableScreen)) {
+        List<String> suitableScreenss = List.of( "20.32cm(8인치)", "25.4cm(10인치)", "25.65cm(10.1인치)",
+                "26.16cm(10.3인치)", "26.67cm(10.5인치)", "26.92cm(10.6인치)",
+                "27.69cm(10.9인치)", "27.94cm(11인치)", "29.21cm(11.5인치)",
+                "29.46cm(11.6인치)", "30.48cm(12인치)", "31.24cm(12.3인치)",
+                "31.62cm(12.4인치)");
+
+        for (String suitableScreen : suitableScreenss) {
+            if (screenc.contains(suitableScreen)) {
+                log.info("작은 태그 할당 : {} {} ", screenc, suitableScreen);
                 return true;
             }
         }
@@ -238,9 +260,11 @@ public class RecommenService {
         if (os == null) {
             return false;
         }
-        List<String> suitableOs = List.of("윈도우11프로", "윈도우11홈", "윈도우10 프로", "윈도우11(설치)", "Whale OS");
+        List<String> suitableOs = List.of("윈도우11프로", "윈도우11홈", "윈도우10 프로", "윈도우11(설치)", "윈도우10(설치)", "윈도우10");
+
         for (String suitableOss : suitableOs) {
             if (os.contains(suitableOss)) {
+                log.info("윈도우 태그 할당 : {} {} ", os, suitableOss);
                 return true;
             }
         }
@@ -264,9 +288,11 @@ public class RecommenService {
         if (usb == null) {
             return false;
         }
-            List<String> suitableteUsb = List.of("총5개", "총6개");
+            List<String> suitableteUsb = List.of("총5개", "총6개", "총4개");
+
             for (String suitabletUsbs : suitableteUsb) {
                 if (usb.contains(suitabletUsbs)) {
+                    log.info("usb 많음 태그 할당 : {} {} ", usb, suitabletUsbs);
                     return true;
                 }
             }
@@ -277,9 +303,11 @@ public class RecommenService {
         if (usbe == null) {
             return false;
         }
-        List<String> suitableUsbe = List.of("총4개", "총3개", "총2개");
+        List<String> suitableUsbe = List.of("총3개", "총2개");
+
         for (String suitableUsebs : suitableUsbe) {
             if (usbe.contains(suitableUsebs)) {
+                log.info("usb 적음 태그 할당 : {} {} ", usbe, suitableUsebs);
                 return true;
             }
         }
