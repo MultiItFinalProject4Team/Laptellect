@@ -6,6 +6,7 @@ import com.multi.laptellect.config.api.GoogleConfig;
 import com.multi.laptellect.config.api.KakaoConfig;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.dto.SocialDTO;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -45,6 +46,8 @@ public class AuthController {
                 errorMessage = "비밀번호가 올바르지 않습니다.";
             } else if (error.equals("username")) {
                 errorMessage = "존재하지 않는 사용자 입니다.";
+            } else if (error.equals("memberNotFound")) {
+                errorMessage = "탈퇴한 사용자 입니다.";
             }
             model.addAttribute("errorMessage", errorMessage);
         }
@@ -96,6 +99,7 @@ public class AuthController {
             oAuthService.processKakaoUser(socialDTO);
             model.addAttribute("loginSuccess", "success");
         } catch (Exception e) {
+            log.error("카카오 로그인 에러 = ", e);
             model.addAttribute("loginSuccess", "fail");
         }
         return "/auth/auth-sign-in-success";
@@ -141,5 +145,39 @@ public class AuthController {
         }
         
         return "/auth/auth-sign-in-success";
+    }
+
+    @GetMapping("/find-id")
+    public String findId() {
+        return "/auth/auth-find-id";
+    }
+
+    @GetMapping("/find-pw")
+    public String findPw() {
+        return "/auth/auth-find-pw";
+    }
+
+    @GetMapping("/delete-id")
+    public String deleteId() {
+        String loginType = SecurityUtil.getUserDetails().getLoginType();
+
+        try {
+            switch (loginType) {
+                case "local":
+                    log.info("일반 회원 탈퇴 진행");
+                    break;
+                case "kakao":
+                    log.info("카카오 회원 탈퇴 진행");
+                    break;
+                case "google":
+                    log.info("구글 회원 탈퇴 진행");
+                    break;
+            }
+
+            return "redirect:/";
+        } catch (Exception e) {
+            log.error("회원탈퇴 에러 = ", e);
+            return "redirect:/";
+        }
     }
 }

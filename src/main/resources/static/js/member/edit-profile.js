@@ -260,7 +260,7 @@ $(function () {
               $("#passwordChangeBtn").prop("disabled", true);
             } else {
               $('#passwordError4').hide();
-              $('#afterPassword2').addClass('is-invalid');
+              $('#afterPassword2').removeClass('is-invalid');
               $("#passwordChangeBtn").prop("disabled", false);
             }
           }
@@ -278,12 +278,30 @@ $(function () {
               $("#passwordChangeBtn").prop("disabled", true);
             } else {
               $('#passwordError4').hide();
-              $('#afterPassword2').addClass('is-invalid');
+              $('#afterPassword2').removeClass('is-invalid');
               $("#passwordChangeBtn").prop("disabled", false);
             }
           }
         });
 
+        $("#btn-delete-id").on("click", function () {
+          $.ajax({
+            url: "/api/delete-member",
+            type: "GET",
+            success: function (response) {
+              if (response === true) {
+                alert("회원 탈퇴 성공");
+                window.location.href='/';
+              } else {
+                alert("회원 탈퇴 실패");
+              }
+
+            },
+            error: function () {
+              alert("회원 탈퇴 에러");
+            },
+          });
+        });
 
         $("#passwordChangeBtn").on("click", function () {
           let afterPassword2 = $('#afterPassword2').val();

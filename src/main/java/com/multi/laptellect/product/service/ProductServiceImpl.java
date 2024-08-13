@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -193,6 +194,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findProductByProductNo(String productNo) throws Exception {
         return productMapper.findProductByProductNo(productNo);
     }
+
 
     @Override
     public LaptopSpecDTO getLaptopSpec(int productNo, List<LaptopDetailsDTO> laptopDetails) {
@@ -612,8 +614,23 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<ProductDTO> searchProducts(String keyword,int typeNo) {
-        return productMapper.findByNameSearch(keyword, typeNo);
+    public Page<ProductDTO> searchProducts(ProductSearchDTO searchDTO) {
+
+        Pageable pageable = PageRequest.of(searchDTO.getPage(),searchDTO.getSize());
+
+        log.info("서비스 로직 pageble 확인 = {}, {}", searchDTO.getPage(),searchDTO.getSize());
+
+        ArrayList<ProductDTO> productList = productMapper.findByNameSearch(searchDTO);
+
+        long total = productMapper.countBySearchCriteria(searchDTO);
+
+        log.info("PageImpl searchProducts 확인 = {}, {}, \n 총 수량 : {}", pageable, productList, total );
+
+
+        return new PageImpl<>(productList,pageable,total);
+
+
+
     }
 
     @Override

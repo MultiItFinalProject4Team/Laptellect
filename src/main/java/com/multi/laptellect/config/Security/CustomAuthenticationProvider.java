@@ -28,7 +28,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider, Ser
         // 입력한 ID와 비밀번호 임시 비밀번호 변수에 담기
         String username = authentication.getName(); // 입력한 아이디
         String password = (String)authentication.getCredentials(); // 입력한 비밀번호
-        String tempPassword = redisUtil.getData("temp:" + username); // 임시 비밀번호 가져오기
+
+        String tempPasswordKey = "password:" + username;
+        String tempPassword = redisUtil.getData(tempPasswordKey); // 임시 비밀번호 가져오기
 
         // CustomUserDetailsService로 변환
         CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(username);

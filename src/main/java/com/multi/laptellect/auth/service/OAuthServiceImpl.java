@@ -102,16 +102,13 @@ public class OAuthServiceImpl implements OAuthService{
 
         JsonObject jsonObject = JsonParser.parseString(response.getBody()).getAsJsonObject();
         String id = jsonObject.get("id").getAsString();
-        String nickname = jsonObject.get("properties").getAsJsonObject().get("nickname").getAsString();
         String email = jsonObject.get("kakao_account").getAsJsonObject().get("email").getAsString();
-
 
         log.info("카카오 JSON 리턴 = {}", jsonObject);
 
         SocialDTO socialDTO = new SocialDTO();
         socialDTO.setExternalId(id);
         socialDTO.setEmail(email);
-        socialDTO.setNickName(nickname);
 
         log.info("카카오 파싱 = {}", socialDTO);
 

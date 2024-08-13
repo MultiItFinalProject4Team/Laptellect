@@ -108,6 +108,13 @@
         </div>
         <br> <br>
       </div>
+
+      <div class="form-group">
+        <div class="input-group">
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-id-Modal" style="width: 100%;">회원탈퇴</button>
+        </div>
+        <br> <br>
+      </div>
     </form>
   </div>
 
@@ -122,7 +129,7 @@
         <div class="modal-body">
           <div class="input-group mb-3">
             <div class="form-floating flex-grow-1">
-              <input type="text" class="form-control" id="nickNameInput" placeholder="nickName" value="">
+              <input type="text" class="form-control" id="nickNameInput" placeholder="nickName" maxlength="50" value="">
               <label for="emailInput">닉네임을 입력해주세요.</label>
             </div>
           </div>
@@ -150,7 +157,7 @@
           <div class="modal-body">
             <div class="input-group mb-3">
               <div class="form-floating flex-grow-1">
-                <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
+                <input type="email" class="form-control" id="emailInput" placeholder="email" maxlength="255" value="">
                 <label for="emailInput">이메일을 입력해주세요.</label>
               </div>
               <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
@@ -195,7 +202,7 @@
               <br>
 
               <div class="form-floating">
-                <input type="password" class="form-control" id="afterPassword" placeholder="password" value="" readonly>
+                <input type="password" class="form-control" id="afterPassword" placeholder="password" value="" maxlength="15" readonly>
                 <label for="afterPassword">변경 할 비밀번호를 입력해주세요.</label>
                 <div class="error-message" id="passwordError2" style="color: red">
                   비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.
@@ -236,7 +243,7 @@
           <div class="input-group mb-3">
 
             <div class="form-floating flex-grow-1">
-              <input type="tel" class="form-control" id="phoneNumInput" placeholder="phone" value="">
+              <input type="tel" class="form-control" id="phoneNumInput" placeholder="phone" value="" maxlength="15">
               <label for="phoneNumInput">휴대폰 번호를 입력해주세요.</label>
             </div>
             <button type="button" class="btn btn-primary" id="smsVerifyButton">인증</button>
@@ -259,7 +266,7 @@
   </div>
 
   <!-- 회원탈퇴 모달 -->
-  <div class="modal fade" id="resignModal" tabindex="-1">
+  <div class="modal fade" id="delete-id-Modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -267,12 +274,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>모든 정보가 삭제 됩니다.</p>
           <p>정말로 탈퇴 하시겠습니까?</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <a th:href="@{/member/reSign}" class="btn btn-primary">확인</a>
+          <a type="button" class="btn btn-primary" id="btn-delete-id">확인</a>
         </div>
       </div>
     </div>

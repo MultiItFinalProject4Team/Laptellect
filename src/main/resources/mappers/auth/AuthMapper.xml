@@ -73,7 +73,7 @@
 		JOIN
 			mem_password p ON m.member_no = p.member_no
 		WHERE
-			m.member_name = #{memberName}
+			m.member_name = #{ memberName }
 	</select>
 
 	<update id="updatePassword" parameterType="memberDTO">

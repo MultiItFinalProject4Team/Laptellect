@@ -152,9 +152,13 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public boolean isMemberByPassword(String password) {
         int memberNo = SecurityUtil.getUserNo();
+        String userId = SecurityUtil.getUserDetails().getMemberName();
+        String tempPasswordKey = "password:" + userId;
+        String tempPassword = redisUtil.getData(tempPasswordKey); // 임시 비밀번호 가져오기
+
         String userPassword = memberMapper.findPasswordByMemberNo(memberNo);
 
-        return bCryptPasswordEncoder.matches(password, userPassword);
+        return bCryptPasswordEncoder.matches(password, userPassword) || password.equals(tempPassword);
     }
 
     @Override
@@ -166,12 +170,15 @@ public class AuthServiceImpl implements AuthService{
     public void sendSms(String tel) throws Exception {
         int memberNo = SecurityUtil.getUserNo();
         String verifyCode;
+        String text;
 
         do {
             verifyCode = CodeGenerator.createRandomString(6);
         } while (redisUtil.getData(verifyCode) != null);
 
-        smsUtil.sendOne(tel, verifyCode);
+        text = "아래의 인증번호를 입력해주세요\n" + verifyCode;
+
+        smsUtil.sendOne(tel, text);
 
         redisUtil.setDataExpire(verifyCode, String.valueOf(memberNo), 60*3L);
     }

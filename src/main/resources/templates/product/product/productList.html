@@ -3,7 +3,7 @@
     <div class="col-md-4 mb-4" th:each="product : ${products}">
         <div class="card h-100 product-wap rounded-0">
             <div class="card rounded-0">
-                <img th:src="@{'/img/product/' + ${product.image}}"
+                <img th:src="@{'/img/product/' + ${product.uploadName}}"
                      class="card-img-top card-img rounded-0 img-fluid" alt="상품 이미지"
                      style="height: 200px; object-fit: contain;">
                 <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
@@ -68,10 +68,71 @@
             </a>
         </div>
     </div>
+    <nav aria-label="Page navigation">
+        <div th:if="${!products.isEmpty()}">
+            <ul class="pagination justify-content-center all-product">
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link" href="#" th:data-page="${currentPage - 1}" tabindex="-1"><</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i} ? 'active' : ''">
+                    <a class="page-link" href="#" th:data-page="${i}" th:text="${i}">1</a>
+                </li>
+
+                <li class="page-item" th:classappend="${!productPage.hasNext} ? 'disabled'">
+                    <a class="page-link btn-delete" href="#" th:data-page="${currentPage + 1}">></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 
 <script>
     $(document).ready(function() {
+
+            let currentPage = 1;
+            let pageSize = 30;
+            let typeNo = 1;
+
+    function loadProducts(page, size, typeNo, keyword) {
+            let data = {
+                page: page - 1,
+                size: size,
+                typeNo: typeNo,
+                keyword: keyword
+            };
+            console.log("Calling loadProducts with - page:", page, "size:", size, "typeNo:", typeNo, "keyword:", keyword);
+
+            $.ajax({
+                url: "/api/product/product-list",
+                type: "GET",
+                data: data,
+                success: function (response) {
+                    console.log("AJAX success:", response);
+                    $('#product-list').html(response);
+                    formatPrices();
+                },
+                error: function (error){
+                    console.log(error);
+                }
+            });
+        }
+
+
+    $('.all-product').on('click', 'a.page-link', function(event) {
+            event.preventDefault();
+
+            let page = $(this).data('page');
+
+            if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
+                console.log('Link is disabled or active');
+                return;
+            }
+            loadProducts(page, pageSize, typeNo, '');
+            console.log('Page:', page, 'Page Size:', pageSize, 'Type No:', typeNo);
+        });
+
+
 
             // 위시리스트 추가/삭제
             $(".btn-process-wishlist").on("click", function () {

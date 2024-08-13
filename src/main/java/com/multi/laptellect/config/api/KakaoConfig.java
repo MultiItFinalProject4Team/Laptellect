@@ -26,4 +26,6 @@ public class KakaoConfig {
     @Value("${spring.kakao.secret-key}")
     private String kakaoSecretKey;
 
+    @Value("${spring.kakao.admin-key}")
+    private String kakaoAdminKey;
 }
