@@ -58,7 +58,7 @@ public interface PaymentDAO {
     PaymentDTO findPaymentByImPortId(String imPortId);
 
 
-    List<PaymentDTO> selectOrderItems(int memberNo);
+    PaymentDTO selectOrderItems(@Param("memberNo") int memberNo, @Param("productNo") int productNo);
 
     List<PaymentDTO> findPaymentsByImPortId(String imPortId);
 
@@ -77,4 +77,6 @@ public interface PaymentDAO {
     int findRefundStatus(String imPortId);
 
     AddressDTO selectPaymentAddress(int paymentNo);
+
+    PaymentpointDTO findUsedPoint(String imPortId);
 }

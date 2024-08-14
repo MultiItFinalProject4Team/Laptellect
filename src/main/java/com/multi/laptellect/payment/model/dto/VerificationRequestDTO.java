@@ -12,4 +12,5 @@ public class VerificationRequestDTO {
     private BigDecimal amount;
     private String usedPoints;
     private int addressId;
+    private int quantity;
 }

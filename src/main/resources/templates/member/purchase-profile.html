@@ -158,12 +158,14 @@
                     $("#modalOrderNumber").text(response.paymentDTO.paymentNo);
                     $("#modalMemberName").text(response.paymentDTO.userName);
                     $("#modalProductName").text(response.paymentDTO.productName);
+                    $("#modalPurchaseQuantity").text(response.paymentDTO.quantity);
                     $("#modalProductPrice").text(
                         response.paymentDTO.productPrice.toLocaleString() + "원"
                     );
                     $("#modalPurchasePrice").text(
                         response.paymentDTO.purchasePrice.toLocaleString() + "원"
                     );
+                    $("#modalUsedPoint").text(response.pointChange + "원");
                     $("#modalOrderDate").text(formatDate(response.paymentDTO.createdAt));
                     $("#modalImPortId").text(response.paymentDTO.imPortId);
                     $("#modalRefundStatus").text(
@@ -387,8 +389,10 @@
           <p><strong>주문 번호:</strong> <span id="modalOrderNumber"></span></p>
           <p><strong>구매자명:</strong> <span id="modalMemberName"></span></p>
           <p><strong>상품명:</strong> <span id="modalProductName"></span></p>
+          <p><strong>구매 수량:</strong> <span id="modalPurchaseQuantity"></span></p>
           <p><strong>상품 가격:</strong> <span id="modalProductPrice"></span></p>
           <p><strong>구매 가격:</strong> <span id="modalPurchasePrice"></span></p>
+          <p><strong>사용포인트:</strong> <span id="modalUsedPoint"></span></p>
           <p><strong>주문 일자:</strong> <span id="modalOrderDate"></span></p>
           <p><strong>결제 번호:</strong> <span id="modalImPortId"></span></p>
           <p><strong>환불 상태:</strong> <span id="modalRefundStatus"></span></p>

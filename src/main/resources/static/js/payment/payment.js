@@ -229,6 +229,7 @@ function updateTotalPrice() {
 function mypayment() {
     const myAmount = Number($('#amount').text().replace(/[^\d]/g, ''));
     const usedPoints = Number($('#pointInput').val().replace(/,/g, '')) || 0;
+    const quantity = parseInt($('#productQuantity').text());
     const IMP = window.IMP;
     IMP.init("imp64527455");
 
@@ -253,7 +254,8 @@ function mypayment() {
                         amount: myAmount,
                         usedPoints: usedPoints,
                         productName: productName,
-                        addressId: selectedAddressId // 선택된 주소 ID 추가
+                        addressId: selectedAddressId,
+                        quantity: quantity
                     });
 
                     if (data.success) {
@@ -271,6 +273,7 @@ function mypayment() {
                     console.log("Used points:", usedPoints);
                     console.log("Product name:", productName);
                     console.log("Address ID:", selectedAddressId);
+                    console.log("quantity:", quantity);
                     alert("검증 실패로 인해 결제가 취소되었습니다: " + error.response.data);
                 }
             } else {
