@@ -4,9 +4,10 @@ import com.multi.laptellect.recommend.txttag.service.RecommenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/product-tags")
@@ -21,7 +22,7 @@ public class ProductTagAssignmentController {
         this.recommenService = recommenService;
     }
 
-    @PostMapping("/assign")
+    @GetMapping("/assign")
     public ResponseEntity<String> assignTags() {
         log.info("Manual product tag assignment requested");
         try {
@@ -34,11 +35,5 @@ public class ProductTagAssignmentController {
         }
     }
 
-    @PostMapping("/toggle-scheduler")
-    public ResponseEntity<String> toggleScheduler() {
-        isSchedulerRunning = !isSchedulerRunning;
-        String message = isSchedulerRunning ? "Scheduler started" : "Scheduler stopped";
-        log.info(message);
-        return ResponseEntity.ok(message);
+
     }
-}
