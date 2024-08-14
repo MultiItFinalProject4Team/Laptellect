@@ -632,13 +632,43 @@
                                 </div>
                             </th:block>
                         </div>
+                        <!-- other-Review Box -->
+                        <!-- 리뷰관련 내용 작성 탭-->
+                        <br><hr>
+                        <div class="review-list mt-4">
+                            <h5>상품 리뷰</h5>
+                            <hr>
+                            <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
+                                <p>아직 작성된 리뷰가 없습니다.</p>
+                            </div>
+                            <div th:each="review : ${paymentReviewDTOList}" class="review-item">
+                                <div class="review-header">
+                                    <span class="review-author" th:text="'구매자 : ' +
+                                        (${#strings.length(review.memberName)} > 1 ?
+                                        ${#strings.substring(review.memberName,0,1)} + '*' +
+                                        ${#strings.substring(review.memberName,2)} :
+                                        ${review.memberName})">사용자</span>
+                                    <span class="review-date" th:text="${#strings.substring(review.createdAt, 0, 10)}">날짜</span>
+                                    <br>
+                                    <span> 평점 : </span>
+                                    <span class="review-star" th:text="${'★'.repeat(review.rating)}">★★★★★</span>
+                                </div>
+                                <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="pagination-container mt-3">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center order" id="reviewPagination">
+                                    <!-- 페이지 동적처리 -->
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
 
-                    <!-- other-Review Box -->
-                    <!-- 리뷰관련 내용 작성 탭-->
-                    <div class="tab-pane fade" id="other-review-box" role="tabpanel"  aria-labelledby="other-review-tab">
 
-                    </div> <br>
+
+                    <br>
 
                     <div class="col-12 mt-4">
                         <h4><strong>연관상품</strong></h4>
