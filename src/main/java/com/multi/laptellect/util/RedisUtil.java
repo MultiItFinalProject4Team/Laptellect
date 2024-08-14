@@ -237,4 +237,13 @@ public class RedisUtil { // Redis 사용 클래스
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         zSetOperations.remove(key, value);
     }
+
+    /**
+     * 스프링 세션 수 카운트
+     *
+     * @return 현재 접속중인 사용자 수 반환
+     */
+    public int getActiveUserCount() {
+        return redisTemplate.keys("spring:session:sessions:*").size();
+    }
 }

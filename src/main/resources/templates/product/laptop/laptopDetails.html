@@ -8,7 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>제품 정보</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>   
+    <link href="/css/payment/review.css" rel="stylesheet">
+    <script src="/js/payment/review.js"></script>
     <link href="/css/product/question-opinion/product_question.css" rel="stylesheet">
     <script src="/js/product/question-opinion/product_question.js"></script>
     <script src="/js/product/question-opinion/Question-Opinion.js"></script>
@@ -16,6 +18,7 @@
     <script src="/js/product/question-opinion/question_paging.js"></script>
     <script src="/js/product/question-opinion/loadtext.js"></script>
     <script src="/js/product/question-opinion/update-delete.js"></script>
+
     <style>
         /* 상품 상세 정보 테이블 */
         .spec-table th { background-color: #f8f9fa; width: 15%; }
@@ -598,35 +601,76 @@
                     <div class="tab-pane fade" id="review-box" role="tabpanel"  aria-labelledby="review-tab">
                         <div class="content-box" style="height: 175px; border-radius: 0;" th>
                             <th:block sec:authorize="isAnonymous()">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span>상품평</span>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-secondary btn-sm">로그인</button>
-                                        <button type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>
+                                <span><strong>상품평</strong></span>
+                                <div class="custom-card">
+                                    <div class="left-content">
+                                        <p><strong>상품평을 작성하시려면 로그인을 해주세요.</strong></p>
+                                    </div>
+                                    <div class="right-content">
+                                        <button type="button" class="btn btn-sm" id="reviewModalButton" role="button" data-bs-toggle="modal" data-bs-target="#reviewModal" disabled>리뷰 등록하기</button>
                                     </div>
                                 </div>
-                                <div class="input-group">
-                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성하시려면 로그인을 해주세요." readonly></textarea>
-                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;" disabled>등록</button>
-                                </div>
+<!--                                <div class="d-flex justify-content-between align-items-center mb-3">-->
+<!--                                    <span>상품평</span>-->
+<!--                                    <div>-->
+<!--                                        <button type="button" class="btn btn-outline-secondary btn-sm">로그인</button>-->
+<!--                                        <button type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="input-group">-->
+<!--                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성하시려면 로그인을 해주세요." readonly></textarea>-->
+<!--                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;" disabled>등록</button>-->
+<!--                                </div>-->
                             </th:block>
                             <th:block sec:authorize="isAuthenticated()">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span><strong>상품평</strong></span>
-                                </div>
-                                <div class="input-group">
-                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성해주세요."></textarea>
-                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;">등록</button>
+                                <span><strong>상품평</strong></span>
+                                <div class="custom-card">
+                                    <div class="left-content">
+                                        <p><strong>상품에대한 리뷰를 남겨보세요!</strong></p>
+                                    </div>
+                                    <div class="right-content">
+                                        <button type="button" class="btn btn-sm" id="reviewModalButton" role="button" data-bs-toggle="modal" data-bs-target="#reviewModal">리뷰 등록하기</button>
+                                    </div>
                                 </div>
                             </th:block>
                         </div>
+                        <!-- other-Review Box -->
+                        <!-- 리뷰관련 내용 작성 탭-->
+                        <br><hr>
+                        <div class="review-list mt-4">
+                            <h5>상품 리뷰</h5>
+                            <hr>
+                            <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
+                                <p>아직 작성된 리뷰가 없습니다.</p>
+                            </div>
+                            <div th:each="review : ${paymentReviewDTOList}" class="review-item">
+                                <div class="review-header">
+                                    <span class="review-author" th:text="'구매자 : ' +
+                                        (${#strings.length(review.memberName)} > 1 ?
+                                        ${#strings.substring(review.memberName,0,1)} + '*' +
+                                        ${#strings.substring(review.memberName,2)} :
+                                        ${review.memberName})">사용자</span>
+                                    <span class="review-date" th:text="${#strings.substring(review.createdAt, 0, 10)}">날짜</span>
+                                    <br>
+                                    <span> 평점 : </span>
+                                    <span class="review-star" th:text="${'★'.repeat(review.rating)}">★★★★★</span>
+                                </div>
+                                <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="pagination-container mt-3">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center order" id="reviewPagination">
+                                    <!-- 페이지 동적처리 -->
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
 
-                    <!-- other-Review Box -->
-                    <!-- 리뷰관련 내용 작성 탭-->
-                    <div class="tab-pane fade" id="other-review-box" role="tabpanel"  aria-labelledby="other-review-tab">
 
-                    </div> <br>
+
+                    <br>
 
                     <div class="col-12 mt-4">
                         <h4><strong>연관상품</strong></h4>
@@ -692,37 +736,74 @@
                 </div>
             </div>
         </div>
-        <!--상품 문의 답변 모달-->
-        <div class="modal fade" id="productAnswerModal" tabindex="-1" aria-labelledby="productAnswerModalLabel" aria-hidden="true" >
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="productAnswerModalLabel">상품 문의 답변 등록</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="productAForm" method="post" enctype="multipart/form-data">
-                            <!-- 제목과 카테고리 입력 -->
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="Atitle" class="form-label">제목:</label>
-                                    <input type="text" class="form-control" id="Atitle" name="title" required style="width: 100%;">
+        <th:block sec:authorize="isAuthenticated()">
+            <!--상품   문의 답변 모달-->
+            <div class="modal fade" id="productAnswerModal" tabindex="-1" aria-labelledby="productAnswerModalLabel" aria-hidden="true" >
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productAnswerModalLabel">상품 문의 등록</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="productaForm" method="post" enctype="multipart/form-data">
+                                <!-- 제목과 카테고리 입력 -->
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="Atitle" class="form-label">제목:</label>
+                                        <input type="text" class="form-control" id="Atitle" name="title" required style="width: 100%;">
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- 내용 입력 -->
-                            <div class="mb-3">
-                                <label for="Acontent" class="form-label">내용:</label>
-                                <textarea class="form-control editor-container__editor" id="Acontent" name="content"></textarea>
-                            </div>
-                            <input type="hidden" id="AproductNo" name="productNo" th:value="${productNo}">
-                            <input type="hidden" id="AproductqNo" name="productqNo">
-                            <button id="Asave_update" type="submit" class="btn btn-primary">등록</button>
-                        </form>
+                                <!-- 내용 입력 -->
+                                <div class="mb-3">
+                                    <label for="Acontent" class="form-label">내용:</label>
+                                    <textarea class="form-control editor-container__editor" id="Acontent" name="content"></textarea>
+                                </div>
+                                <input type="hidden" id="AproductNo" name="productNo" th:value="${productNo}">
+                                <input type="hidden" id="AproductqNo" name="productqNo">
+                                <button id="Asave_update" type="submit" class="btn btn-primary">등록</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- 리뷰등록 모달 -->
+            <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="reviewModalLabel">리뷰 작성하기</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>작성자: <span id="reviewUsername" th:text="${memberName}"></span></p>
+                            <p>상품명: <span id="reviewProductName" th:text="${productDTO.productName}"></span></p>
+                            <p>평점:
+                                <select id="reviewRating">
+                                    <option value="5">5점</option>
+                                    <option value="4">4점</option>
+                                    <option value="3">3점</option>
+                                    <option value="2">2점</option>
+                                    <option value="1">1점</option>
+                                </select>
+                            </p>
+                            <p>리뷰 내용: <textarea id="reviewContent" class="form-control"></textarea></p>
+                            <input type="hidden" id="memberNo" th:value="${memberNo}">
+                            <input type="hidden" id="productNo2" th:value="${productDTO.productNo}">
+                            <input type="hidden" id="imPortId" th:value="${paymentDTO != null ? paymentDTO.imPortId : ''}">
+                            <input type="hidden" id="isPurchased" th:value="${paymentDTO != null}">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-primary" id="submitReviewButton" disabled>리뷰 제출</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
     </div>
+
 </div>
 
 </body>

@@ -6,6 +6,7 @@ CREATE TABLE payment (
     product_no INT NOT NULL,
     address_id INT NOT NULL,
     purchase_price INT,
+    quantity INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     im_port_id varchar(255),
     confirm char(1) DEFAULT 'N',
@@ -17,6 +18,7 @@ CREATE TABLE payment (
     CONSTRAINT address_id_fk FOREIGN KEY (address_id) REFERENCES mem_delivery_address(address_id) ON DELETE CASCADE
 );
 SELECT * from payment;
+
 DROP TABLE payment;
 
 

@@ -91,12 +91,20 @@
                         <li class="nav-item d-flex align-items-center">
                             <a href="/product/cart" class="nav-link d-flex align-items-center" style="position: relative;">
                                 <i class="fa-solid fa-cart-shopping"></i>
-                                <span class="ms-1">장바구니</span>
+                                <span class="ms-1">장바구니
+<!--                                    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-->
+<!--                                    0-->
+<!--                                    </span>-->
+                                </span>
                             </a>
                             <span class="separator">|</span>
                             <a href="/profile/wishlist" class="nav-link d-flex align-items-center" style="position: relative;">
                                 <i class="fa-regular fa-heart"></i>
-                                <span class="ms-1">관심상품</span>
+                                <span class="ms-1">관심상품
+<!--                                    <span id="wishlist-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-->
+<!--                                    0-->
+<!--                                    </span>-->
+                                </span>
                             </a>
                         </li>
                         <th:block sec:authorize="hasAnyAuthority('ROLE_SELLER')">

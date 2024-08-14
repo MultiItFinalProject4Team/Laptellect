@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -44,18 +43,18 @@ public class PaymentController {
         this.cartService = cartService;
     }
 
-    @GetMapping("/orderlist")
-    public String orderList(Model model) {
-        int memberNo = SecurityUtil.getUserNo();
-        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-
-        List<PaymentDTO> orderItems = paymentService.selectOrderItems(memberDTO.getMemberNo());
-        List<String> reviewedOrders = paymentService.getReviewedOrders();
-
-        model.addAttribute("orderItems", orderItems);
-        model.addAttribute("reviewedOrders", reviewedOrders);
-        return "/payment/orderlist";
-    }
+//    @GetMapping("/orderlist")
+//    public String orderList(Model model) {
+//        int memberNo = SecurityUtil.getUserNo();
+//        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+//
+//        List<PaymentDTO> orderItems = paymentService.selectOrderItems(memberDTO.getMemberNo(), productNo);
+//        List<String> reviewedOrders = paymentService.getReviewedOrders();
+//
+//        model.addAttribute("orderItems", orderItems);
+//        model.addAttribute("reviewedOrders", reviewedOrders);
+//        return "/payment/orderlist";
+//    }
 
     @PostMapping("/payment")
     public String paymentpage(@RequestParam("imageUrl") String img,
@@ -138,7 +137,7 @@ public class PaymentController {
                 model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 전화번호 미인증");
                 model.addAttribute("userInfo", userInfo);
                 return "/member/edit-profile";
-            } 
+            }
 
             AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
             System.out.println(userAddressList);
@@ -182,6 +181,7 @@ public class PaymentController {
             paymentDTO.setPurchasePrice(request.getAmount().intValue());
             paymentDTO.setImPortId(request.getImPortId());
             paymentDTO.setAddressId(request.getAddressId());
+            paymentDTO.setQuantity(request.getQuantity());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
             paymentpointDTO.setUsedPoints(request.getUsedPoints());
@@ -319,39 +319,18 @@ public class PaymentController {
     @Transactional
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
-        int memberNo = SecurityUtil.getUserNo();
-        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
 
-        String username = memberDTO.getMemberName();
-        reviewDTO.setUserName(username);
-        reviewDTO.setMemberNo(memberDTO.getMemberNo());
 
-        // Fetch the product information using the imPortId
-        PaymentDTO paymentDTO = paymentService.findPaymentByImPortId(reviewDTO.getImPortId());
-        if (paymentDTO != null) {
-            reviewDTO.setProductNo(paymentDTO.getProductNo());
-        } else {
-            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "주문 정보를 찾을 수 없습니다."));
-        }
+
+
+
 
         int result = paymentService.saveReview(reviewDTO);
 
         Map<String, Object> response = new HashMap<>();
         if (result > 0) {
-            PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
-            paymentpointDTO.setImPortId(reviewDTO.getImPortId());
-            paymentService.givepoint(paymentpointDTO);
-
-            try {
-                int newPoint = memberDTO.getPoint() + 500;
-                memberDTO.setPoint(newPoint);
-                memberService.updatePoint(memberDTO);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
             response.put("success", true);
-            response.put("message", "리뷰가 성공적으로 저장되었습니다. \n리뷰감사 포인트 500p를 지급합니다.\n" + "보유포인트 : " + memberDTO.getPoint() + "p");
+            response.put("message", "리뷰가 성공적으로 저장되었습니다.");
         } else {
             response.put("success", false);
             response.put("message", "리뷰 저장에 실패했습니다.");

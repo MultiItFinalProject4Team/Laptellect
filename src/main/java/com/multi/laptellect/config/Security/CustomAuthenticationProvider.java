@@ -1,6 +1,7 @@
 package com.multi.laptellect.config.Security;
 
 
+import com.multi.laptellect.error.MemberNotFoundException;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider, Ser
         if (!passwordMatches) {
             throw new BadCredentialsException("Wrong password") {};
         }
+
+        if(customUserDetails.getIsActive().equals("Y")) throw new MemberNotFoundException("탈퇴한 회원");
 
         // 인증 정보가 담긴 객체 반환
         return new UsernamePasswordAuthenticationToken(customUserDetails, password, customUserDetails.getAuthorities());

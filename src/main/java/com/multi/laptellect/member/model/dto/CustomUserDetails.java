@@ -90,4 +90,8 @@ public class CustomUserDetails implements UserDetails, Serializable {
         this.memberDTO.setTel(updateDTO.getTel());
         this.memberDTO.setPoint(updateDTO.getPoint());
     }
+
+    public String getIsActive() {
+        return memberDTO.getIsActive();
+    }
 }

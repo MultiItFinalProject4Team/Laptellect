@@ -45,3 +45,4 @@ html, body {
             flex-grow: 1;
             padding: 20px;
         }
+body { font-family: 'Noto Sans KR', sans-serif; }
