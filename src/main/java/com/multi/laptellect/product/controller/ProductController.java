@@ -167,10 +167,6 @@ public class ProductController {
         // 장바구니 및 위시리스트 변수 선언
         ArrayList<Integer> carts = new ArrayList<>();
         ArrayList<Integer> wishlist = new ArrayList<>();
-        
-        //customer 문의 부분
-        model.addAttribute("memberNo", SecurityUtil.getUserNo());
-        model.addAttribute("memberName",SecurityUtil.getUserDetails().getMemberName());
 
         try {
             if (SecurityUtil.isAuthenticated()) {
@@ -192,6 +188,7 @@ public class ProductController {
             List<ProductqList> productqList = customerService.getAllProductqList(productNo);
             model.addAttribute("productqList",productqList);
             model.addAttribute("memberNo", SecurityUtil.getUserNo());
+            model.addAttribute("memberName",SecurityUtil.getUserDetails().getMemberName());
 
             // 제품 상세 정보 가져오기
             LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
