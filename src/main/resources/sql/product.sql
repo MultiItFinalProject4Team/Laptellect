@@ -131,9 +131,8 @@ JOIN
 
 
 -- 테이블 데이터 삭제
-
+delete from product_spec ;
 delete from images;
 delete from product ;
 delete from product_category;
-delete from product_spec ;
 delete from review ;

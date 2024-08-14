@@ -154,8 +154,6 @@ public class ProductController {
 
         Map<String, List<String>> cate = productService.productFilterSearch();
 
-
-
         log.info("컨트롤러 cate 데이터 확인 = {}", cate);
 
         model.addAttribute("cate", cate);
