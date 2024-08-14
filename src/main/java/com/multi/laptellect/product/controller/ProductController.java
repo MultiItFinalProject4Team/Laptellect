@@ -196,8 +196,8 @@ public class ProductController {
 
             //customer 문의 부분
             List<ProductqList> productqList = customerService.getAllProductqList(productNo);
-            model.addAttribute("productqList",productqList);
-            model.addAttribute("memberName"memberName);
+            model.addAttribute("productqList", productqList);
+            model.addAttribute("memberName", memberName);
             model.addAttribute("memberNo", memberNo);
 
             // 제품 상세 정보 가져오기
