@@ -569,6 +569,8 @@
                     <hr>
                     <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
                     <input type="hidden" name="productNo" id="curproductNo" th:value="${productNo}">
+                    <input type="hidden" name="curauth" id="curauth" sec:authorize="hasRole('ROLE_ADMIN')" value="ADMIN">
+                    <input type="hidden" name="curmemname" id="curmemname" th:value="${memberName}">
                     <!--의견/문의 띄우는 div-->
                     <div id="customer-list">
 
@@ -695,11 +697,11 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="productAnswerModalLabel">상품 문의 등록</h5>
+                        <h5 class="modal-title" id="productAnswerModalLabel">상품 문의 답변 등록</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="productaForm" method="post" enctype="multipart/form-data">
+                        <form id="productAForm" method="post" enctype="multipart/form-data">
                             <!-- 제목과 카테고리 입력 -->
                             <div class="row mb-3">
                                 <div class="col-md-12">

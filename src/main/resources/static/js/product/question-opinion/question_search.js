@@ -23,7 +23,7 @@ function loadSearchComments(page){
             type: type,
             page: page
         },
-        success: function(response) {
+        success:async function(response) {
             let commentUl = $("#customer-list");
             commentUl.empty(); // 선택 요소 비우기
             let totalPages = response.totalPages;
@@ -32,10 +32,31 @@ function loadSearchComments(page){
             makeSearchPagination(page, totalPages);
 
             // 댓글을 리스트에 추가
-            data.forEach(function (productqList) {
-                const commentItemHtml = createCommentItem(productqList, memberNo);
-                $('#customer-list').append(commentItemHtml);
-            });
+            for (const productqList of data) {
+                if (productqList.answer === 'Y') {
+                    console.log("답변 존재: " + productqList.productqNo);
+
+                    try {
+                        let productaList = await $.ajax({
+                            type: "GET",
+                            url: `/customer/user/get_AllproductaList`,
+                            data: {
+                                productqNo: productqList.productqNo
+                            },
+                            dataType: 'json'
+                        });
+
+                        console.log(productaList.content);
+                        const commentItemHtml2 = createCommentItem2(productqList, productaList, memberNo);
+                        $('#customer-list').append(commentItemHtml2);
+                    } catch (error) {
+                        console.error("Error fetching product list:", error);
+                    }
+                } else if (productqList.answer === 'N') {
+                    const commentItemHtml = createCommentItem(productqList, memberNo);
+                    $('#customer-list').append(commentItemHtml);
+                }
+            }
         },
         error: function() {
             alert("댓글을 로드하는 중 오류가 발생했습니다.");

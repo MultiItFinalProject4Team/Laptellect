@@ -170,6 +170,7 @@ public class ProductController {
         
         //customer 문의 부분
         model.addAttribute("memberNo", SecurityUtil.getUserNo());
+        model.addAttribute("memberName",SecurityUtil.getUserDetails().getMemberName());
 
         try {
             if (SecurityUtil.isAuthenticated()) {

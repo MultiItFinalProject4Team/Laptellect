@@ -51,7 +51,7 @@
     });
 
     //상품 문의 답변
-    $(document).on('submit', '#productaForm',function(event) {
+    $(document).on('submit', '#productAForm',function(event) {
         event.preventDefault(); // 폼의 기본 제출 동작을 방지
 
         var formData = new FormData(this);
@@ -72,7 +72,7 @@
             success: function(response) {
                 if (response == 1) {
                     alert("상품 문의 답변 등록"); // 성공 메시지 표시
-                    $('#productaForm')[0].reset(); // 폼 필드 초기화
+                    $('#productAForm')[0].reset(); // 폼 필드 초기화
                     $('#productAnswerModal').modal('hide'); // 모달 닫기
                     loadComments(1);
 
@@ -121,10 +121,10 @@ function appReply(productqNo){
     $('#AinputGroupSelect01').val('productq_opinion');
     $('#Acontent').val('');
     $('#AproductqNo').val(productqNo);
-//    var button = $('#save_update');
-//    button.text('등록');
-//    var form = $('#updateaForm');
-//    form.off();
-//    form.attr('id', 'productaForm');
+    var button = $('#Asave_update');
+    button.text('등록');
+    var form = $('#updateAForm');
+    form.off();
+    form.attr('id', 'productAForm');
     $('#productAnswerModal').modal('show');
 }
