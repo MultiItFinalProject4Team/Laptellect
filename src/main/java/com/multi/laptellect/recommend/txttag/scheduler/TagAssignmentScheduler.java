@@ -17,14 +17,14 @@
 //        this.recommenService = recommenService;
 //    }
 //
-//    @Scheduled(cron = "0 0 1 * * ?")  // 매일 새벽 1시에 실행
+//    @Scheduled(fixedRate = 50000)  // 매일 새벽 1시에 실행
 //    public void scheduleTagAssignment() {
-//        log.info("Starting scheduled tag assignment");
+//        log.info("태그 할당 스케줄러 시작");
 //        try {
 //            recommenService.assignTagsToProducts();
-//            log.info("Scheduled tag assignment completed successfully");
+//            log.info("태그 할당 스케줄러 완료");
 //        } catch (Exception e) {
-//            log.error("Error during scheduled tag assignment: {}", e.getMessage());
+//            log.error("태그 할당 중 오류: {}", e.getMessage());
 //        }
 //    }
 //}

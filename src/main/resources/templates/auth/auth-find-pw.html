@@ -15,7 +15,7 @@
 
     <!-- css + js 파일 Load-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-    <script type="text/javascript" th:src="@{/js/auth/find-id.js}"></script>
+    <script type="text/javascript" th:src="@{/js/auth/find-pw.js}"></script>
     <style>
     body { font-family: 'Noto Sans KR', sans-serif; }
     }
@@ -32,8 +32,12 @@
 </head>
 <body>
 <div class="container">
-    <h2 class="text-center mt-3">아이디 찾기</h2>
+    <h2 class="text-center mt-3">비밀번호 찾기</h2>
     <div class="mb-3">
+        <label for="email" class="form-label">아이디</label>
+        <input type="email" class="form-control" id="userid" name="memberId" placeholder="아이디를 입력해주세요" required>
+        <div class="error-message text-center" id="idError" style="color: red;">존재하지 않는 아이디 입니다.</div>
+        <br>
         <label for="email" class="form-label">이메일 주소</label>
         <input type="email" class="form-control" id="email" name="memberEmail" placeholder="이메일을 입력해주세요" required>
         <div class="error-message text-center" id="emailError" style="color: red;">존재하지 않는 이메일 입니다.</div>

@@ -1,12 +1,9 @@
 package com.multi.laptellect.member.service;
 
-import com.multi.laptellect.member.model.dto.AddressDTO;
-import com.multi.laptellect.member.model.dto.CustomUserDetails;
-import com.multi.laptellect.member.model.dto.MemberDTO;
-import com.multi.laptellect.member.model.dto.PointLogDTO;
+import com.multi.laptellect.common.model.Email;
+import com.multi.laptellect.member.model.dto.*;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
-import com.multi.laptellect.util.RedisUtil;
-import com.multi.laptellect.util.SecurityUtil;
+import com.multi.laptellect.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,7 +22,9 @@ public class MemberServiceImpl implements MemberService{
     private final RedisUtil redisUtil;
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private final EmailUtil emailUtil;
+    private final SmsUtil smsUtil;
+    
     @Override
     @Transactional
     public boolean updateEmail(MemberDTO memberDTO, String verifyCode) throws Exception{ // email update
@@ -83,24 +82,29 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String findUserId(MemberDTO memberDTO) throws Exception {
-        String request = "";
+    public boolean findUserId(MemberDTO memberDTO) throws Exception {
         String memberName = "";
         String email = memberDTO.getEmail();
         String tel = memberDTO.getTel();
 
 
-        if(email == null) {
-            memberDTO.setTel(tel);
+        if(email != null) {
+            Email emailDTO = new Email();
             memberName = memberMapper.findMemberByEmail(email).getMemberName();
-            request = "회원님의 아이디는 [" + memberName + "] 입니다.";
-        } else {
+
+            emailDTO.setReceiveAddress(email);
+            emailDTO.setMailTitle("[Laptellect] 아이디 찾기");
+            emailDTO.setMailContent("회원님의 아이디는 " + memberName + " 입니다.");
+
+            emailUtil.sendEmail(emailDTO);
+            return true;
+        } else if(tel != null) {
             memberDTO.setEmail(email);
             memberName = memberMapper.findMemberByTel(tel).getMemberName();
-            request = "회원님의 아이디는 [" + memberName + "] 입니다.";
+            return true;
+        } else {
+            throw new Exception();
         }
-
-        return request;
     }
 
     @Override
@@ -119,9 +123,14 @@ public class MemberServiceImpl implements MemberService{
         String userPassword = memberMapper.findPasswordByMemberNo(memberNo);
 
         log.debug("비밀번호 업데이트 시작 = {}", beforePassword);
+        String username = userInfo.getMemberName();
+        String tempPasswordKey = "password:" + username;
+        String tempPassword = redisUtil.getData(tempPasswordKey); // 임시 비밀번호 가져오기
+
         // 변경 전 비밀번호를 다시 검증하여 보안 강화
-        if(bCryptPasswordEncoder.matches(beforePassword, userPassword)) {
+        if(bCryptPasswordEncoder.matches(beforePassword, userPassword) || beforePassword.equals(tempPassword)) {
             String password = bCryptPasswordEncoder.encode(afterPassword);
+            log.info("변경할 비밀번호 = {} {}",memberNo, password);
             memberMapper.updatePassword(memberNo, password);
             log.info("비밀번호 변경 성공 {}", password);
         } else {
@@ -206,10 +215,55 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public int sendTempPassword(String email, String tel, String verifyCode) {
+    public int sendTempPassword(String userId, String email) throws Exception{
+        Email emailDTO = new Email();
+        String memberInfo = null;
+        String type = null;
+        String tempPassword = CodeGenerator.createRandomString(10);
 
+        // Email로 임시 비밀번호 발급 했을 시 Null이 아니고 공백이 아닐경우 실행
+        if(email != null && !email.equals("")) {
+            memberInfo = memberMapper.findMemberByEmail(email).getMemberName();
 
-        return 0;
+            // 입력한 아이디의 email이 동일하면 이메일 전송 아닐 시 에러를 의미하는 숫자를 반환
+            if(userId.equals(memberInfo)) {
+                type = email;
+                emailDTO.setReceiveAddress(email);
+                emailDTO.setMailTitle("[Laptellect] 비밀번호 찾기");
+                emailDTO.setMailContent("회원님의 임시 비밀번호는 " + tempPassword + " 입니다.");
+                emailUtil.sendEmail(emailDTO);
+            } else {
+                return 2;
+            }
+        }
+
+        redisUtil.setDataExpire("password:" + userId, tempPassword, 60L * 3);
+
+        return 1;
+    }
+
+    @Override
+    public boolean deleteMember() throws Exception {
+        CustomUserDetails userDetails = SecurityUtil.getUserDetails();
+        int memberNo = userDetails.getMemberNo();
+        String loginType = userDetails.getLoginType();
+        boolean result;
+
+        log.debug("회원 탈퇴 시작 = {}", memberNo);
+        if(loginType.equals("local")) {
+            log.info("일반 회원 탈퇴 시작 = {}", loginType);
+
+            result = memberMapper.deleteMember(memberNo) > 0;
+            log.info("일반 회원 탈퇴 완료 = {}", result);
+        } else {
+            log.info("소셜 회원 탈퇴 시작 = {}", loginType);
+
+            SocialDTO socialDTO = memberMapper.findSocialNoByMemberNo(memberNo);
+            result = memberMapper.deleteSocialMember(socialDTO.getSocialId()) > 0 &&  memberMapper.deleteMember(memberNo) > 0;
+            log.info("소셜 회원 탈퇴 완료 = {}", result);
+        }
+
+        return result;
     }
 
     @Override

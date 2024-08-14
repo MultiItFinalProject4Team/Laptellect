@@ -1,15 +1,13 @@
 package com.multi.laptellect.util;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Redis Util 클래스
@@ -73,7 +71,7 @@ public class RedisUtil { // Redis 사용 클래스
      * @param key    키값
      * @param values 밸류값
      */
-    public void setListData(String key, List<String> values) { // 리스트 데이터 저장
+    public void setListData(String key, String values) { // 리스트 데이터 저장
         ListOperations<String, String> listOperations = redisTemplate.opsForList();
         listOperations.rightPushAll(key, values);
     }
@@ -125,6 +123,11 @@ public class RedisUtil { // Redis 사용 클래스
         listOperations.remove(key, count, value);
     }
 
+    public void setHashData(String key, String field, String value) { // Hash 데이터 저장
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        hashOperations.put(key, field, value);
+    }
+
     /**
      * Hash 데이터 Set
      *
@@ -156,7 +159,7 @@ public class RedisUtil { // Redis 사용 클래스
     /**
      * 특정 Value 값 가져오가
      *
-     * @param key     키값
+     * @param key   키값
      * @param field 필드값
      * @return 특정 필드의 Value 값 반환
      */
@@ -179,11 +182,59 @@ public class RedisUtil { // Redis 사용 클래스
     /**
      * 특정 필드 삭제
      *
-     * @param key     키값
+     * @param key   키값
      * @param field 필드값
      */
     public void deleteHashData(String key, String field) { // Hash 데이터 삭제
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         hashOperations.delete(key, field);
+    }
+
+    /**
+     * sorted set 데이터 추가
+     *
+     * @param key   키값
+     * @param value 밸류 값
+     * @param score 스코어
+     */
+    public void addSortedSetData(String key, String value, double score) {
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.add(key, value, score);
+    }
+
+    /**
+     * 범위 내의 sorted set 가져오기
+     *
+     * @param key   키값
+     * @param start 시작 값
+     * @param end   끝나는 값
+     * @return the sorted set range
+     */
+    public Set<String> getSortedSetRange(String key, long start, long end) {
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        return zSetOperations.range(key, start, end);
+    }
+
+    /**
+     * 특정 항목 가져오기
+     *
+     * @param key   키값
+     * @param value 밸류값
+     * @return the sorted set score
+     */
+    public Double getSortedSetScore(String key, String value) {
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        return zSetOperations.score(key, value);
+    }
+
+    /**
+     * 특정 항목 삭제
+     *
+     * @param key   키값
+     * @param value 밸류값
+     */
+    public void removeSortedSetData(String key, String value) {
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.remove(key, value);
     }
 }

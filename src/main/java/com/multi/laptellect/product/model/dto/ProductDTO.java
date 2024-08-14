@@ -14,6 +14,7 @@ public class ProductDTO {
     private int price;
     private String referenceCode;
     private String image;
+    private String uploadName;
     private String manufacturer;
     private String registrationMonth;
     private List<SpecDTO> specs;

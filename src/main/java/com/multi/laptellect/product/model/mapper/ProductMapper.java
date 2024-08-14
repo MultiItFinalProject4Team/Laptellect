@@ -70,9 +70,11 @@ public interface ProductMapper {
     
     ProductDTO findProductByProductNo(String productNo);
 
+    long countBySearchCriteria(ProductSearchDTO searchDTO);
+
     List<SpecDTO> findProductSpecByProductNo(@Param("productNo") int productNo, @Param("neededOptions") Set<String> neededOptions);
 
-    List<ProductDTO> findByNameSearch(@Param("keyword") String keyword, @Param("typeNo") int typeNo);
+    ArrayList<ProductDTO> findByNameSearch(@Param("searchDTO") ProductSearchDTO searchDTO);
 
     @Select("SELECT product_no FROM wishlist WHERE member_no = #{ member_no }")
     ArrayList<Integer> findAllWishlistString(int memberNo);

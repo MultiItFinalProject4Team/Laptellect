@@ -40,13 +40,14 @@ public class SmsUtil {
      * @param verifyCode 보낼 코드
      * @return the single message sent response
      */
-    public SingleMessageSentResponse sendOne(String phoneNum, String verifyCode) {
+    public SingleMessageSentResponse sendOne(String phoneNum, String text) {
         Message message = new Message();
         message.setFrom(caller);
         message.setTo(phoneNum);
-        message.setText("[Laptellect] 아래의 인증번호를 입력해주세요\n" + verifyCode);
+        message.setText("[Laptellect] " + text);
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         return response;
     }
+
 }

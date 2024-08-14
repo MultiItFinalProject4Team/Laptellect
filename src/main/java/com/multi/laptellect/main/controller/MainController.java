@@ -1,27 +1,24 @@
 package com.multi.laptellect.main.controller;
 
+import com.multi.laptellect.util.RedisUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.format.DateTimeFormatter;
+
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class MainController {
+    private final RedisUtil redisUtil;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("/")
-    public String main(HttpSession httpSession){
-        String sessionKey = "Session:" + "user";
-        if (httpSession.getAttribute(sessionKey) == null) {
-            httpSession.setAttribute("mySessionAttribute", "This is my session data");
-
-            log.info("세션 없음 = {}", httpSession.getAttribute(sessionKey));
-            // 세션에 조회 여부 기록
-            httpSession.setAttribute(sessionKey, true);
-        } else {
-            log.info("세션 이미 있음 = {}", httpSession.getAttribute(sessionKey));
-        }
-
+    public String main(HttpSession httpSession, HttpServletRequest httpServletRequest) {
         return "common/main";
     }
 

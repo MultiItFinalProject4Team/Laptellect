@@ -26,6 +26,10 @@
             <form action="/signin" method="post" name="loginform">
                 <div class="input-form-box"><span>아이디 </span><input type="text" name="username" class="form-control"></div>
                 <div class="input-form-box"><span>비밀번호 </span><input type="password" name="password" class="form-control"></div>
+                <div class="remember-me-container">
+                    <input type="checkbox" id="remember-me" name="remember-me">
+                    <label for="remember-me">로그인 상태 유지</label>
+                </div>
                 <div class="button-login-box">
                     <button type="submit" class="btn btn-primary btn-xs" style="width:100%">로그인</button>
                 </div>
@@ -48,9 +52,9 @@
 
                 <div class="row">
                     <div class="col text-center">
-                        <a href="#" class="btn btn-link find-content">아이디 찾기</a>
+                        <a href="#" class="btn btn-link find-content" id="find-id">아이디 찾기</a>
                         <span class="separator">|</span>
-                        <a href="#" class="btn btn-link find-content">비밀번호 찾기</a>
+                        <a href="#" class="btn btn-link find-content" id="find-pw">비밀번호 찾기</a>
                         <span class="separator">|</span>
                         <a href="/signup" class="btn btn-link find-content">회원가입</a>
                     </div>
@@ -61,11 +65,19 @@
 </div>
 <script th:inline="javascript">
     function openKakaoLogin() {
-        window.open("/signin/kakao", '_blank', 'width=600,height=400');
+        window.open("/signin/kakao", '_blank', 'width=600,height=425');
     }
 
     function openGoogleLogin() {
-        window.open("/signin/google", '_blank', 'width=600,height=400');
+        window.open("/signin/google", '_blank', 'width=600,height=425');
+    }
+
+    function openFindId() {
+        window.open("/find-id", '_blank', 'width=300,height=300');
+    }
+
+    function openFindPw() {
+        window.open("/find-pw", '_blank', 'width=300,height=300');
     }
 
     $(document).ready(function(){
@@ -81,6 +93,14 @@
 
         $("#google-login").on("click", function() {
             openGoogleLogin();
+        });
+
+        $("#find-id").on("click", function() {
+            openFindId();
+        });
+
+        $("#find-pw").on("click", function() {
+            openFindPw();
         });
     });
 </script>

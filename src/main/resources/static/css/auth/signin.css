@@ -14,7 +14,7 @@
         }
 
         #loginBox {
-          height: 425px;
+          height: 475px;
           width: 400px;
           text-align: center;
           background-color: #ffffff;
@@ -77,6 +77,15 @@
         text-decoration: none;
         color: black;
         font-size: 11px;
+    }
+    .remember-me-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .remember-me-container input[type="checkbox"] {
+        margin-right: 5px;
     }
 
     body { font-family: 'Noto Sans KR', sans-serif; }

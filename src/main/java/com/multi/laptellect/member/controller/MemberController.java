@@ -1,5 +1,6 @@
 package com.multi.laptellect.member.controller;
 
+import com.multi.laptellect.auth.service.AuthService;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.service.MemberService;
 import com.multi.laptellect.payment.service.PaymentService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MemberController {
     private final MemberService memberService;
     private final PaymentService paymentService;
+    private final AuthService authService;
 
 //    @GetMapping // 대시보드 시간 남으면 개발
 //    public String showProfileDashboard(Model model) {
@@ -90,5 +92,4 @@ public class MemberController {
 
         return "member/edit-profile";
     }
-
 }

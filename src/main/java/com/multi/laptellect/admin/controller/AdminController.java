@@ -21,7 +21,7 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping({"/dashboard", ""})
     public String admin_dashboard_page() {
         return "/admin/dashboard";
     }
