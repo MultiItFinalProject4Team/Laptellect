@@ -107,13 +107,17 @@ function QuestionApp(){
     $('#inputGroupSelect01').val('productq_opinion');
     $('#content').val('');
     $("input[name='secret'][value='N']").prop('checked', true);
-
-    var button = $('#save_update');
-    button.text('등록');
-    var form = $('#updateForm');
-    form.off();
-    form.attr('id', 'productqForm');
-    $('#productModal').modal('show');
+    if($('#curmemname').val()===''){
+        alert('로그인 후 이용 가능합니다.')
+    }
+    else{
+        var button = $('#save_update');
+        button.text('등록');
+        var form = $('#updateForm');
+        form.off();
+        form.attr('id', 'productqForm');
+        $('#productModal').modal('show');
+    }
 }
 
 function appReply(productqNo){
@@ -121,10 +125,15 @@ function appReply(productqNo){
     $('#AinputGroupSelect01').val('productq_opinion');
     $('#Acontent').val('');
     $('#AproductqNo').val(productqNo);
-    var button = $('#Asave_update');
-    button.text('등록');
-    var form = $('#updateAForm');
-    form.off();
-    form.attr('id', 'productAForm');
-    $('#productAnswerModal').modal('show');
+    if($('#curmemname').val()===''){
+        alert('로그인 후 이용 가능합니다.')
+    }
+    else{
+        var button = $('#Asave_update');
+        button.text('등록');
+        var form = $('#updateAForm');
+        form.off();
+        form.attr('id', 'productAForm');
+        $('#productAnswerModal').modal('show');
+    }
 }
