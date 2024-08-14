@@ -292,4 +292,7 @@ public class PaymentService {
     }
 
 
+    public List<PaymentReviewDTO> findPaymentReviewsByProductNo(int productNo) {
+        return paymentDAO.findPaymentReviewsByProductNo(productNo);
+    }
 }

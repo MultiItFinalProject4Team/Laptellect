@@ -59,7 +59,7 @@ CREATE TABLE product_answer(
 	created_at timestamp DEFAULT current_timestamp,
 	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
 	reference_code varchar(100),
-	FOREIGN KEY (productq_no) REFERENCES product_question(productq_no)
+	FOREIGN KEY (productq_no) REFERENCES product_question(productq_no) ON DELETE CASCADE
 );
 -- 이미지 테이블
 CREATE TABLE images(

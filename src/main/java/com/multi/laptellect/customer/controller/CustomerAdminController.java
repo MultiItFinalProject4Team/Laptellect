@@ -3,8 +3,10 @@ package com.multi.laptellect.customer.controller;
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -106,19 +108,41 @@ public class CustomerAdminController {
         model.addAttribute("dto",dto);
         return"/customer/admin/update_producta";
     }
+    @GetMapping("/update_producta")
+    public ResponseEntity<ProductqAnswerDto> update_producta(@RequestParam("productqNo") int productqNo) {
+        // 서비스 또는 데이터베이스에서 제품 세부정보를 가져옴
+        ProductqAnswerDto dto = customerService.getProducta(productqNo);
+        // 제품 정보를 JSON 형식으로 반환
+        return ResponseEntity.ok(dto);
+    }
 
     /**
      * 상품문의 답변 수정 메소드
-     * @param answerDto
+     * @param appDto
      * @return
      */
     @PostMapping("/update_producta")
-    public String update_producta(ProductqAnswerDto answerDto){
-        customerService.updateProducta(answerDto);
-        String code=customerService.getProductaCode(answerDto.getProductaNo());
-        System.out.println("코드"+code);
-        String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
-        return "redirect:"+redirectUrl;
+    @ResponseBody
+    public int update_producta(ProductqAnswerDto appDto){
+        int memberNo = 0;
+        try {
+            memberNo= SecurityUtil.getUserNo();
+        }catch (Exception e){
+            System.out.println("미로그인");
+        }
+        System.out.println("수정: "+ appDto);
+        customerService.updateProducta(appDto);
+        return 1;
+    }
+
+
+    @PostMapping("/delete_producta")
+    public ResponseEntity<?> delete_productA(@RequestParam("productqNo") int productqNo) {
+        String code = customerService.getProducta(productqNo).getReferenceCode();
+        customerService.deleteProducta(productqNo, code);
+        String state="N";
+        customerService.productAnwerChange(productqNo,state);
+        return ResponseEntity.ok(1); // 200 OK와 함께 결과 반환
     }
 
     /**

@@ -79,4 +79,6 @@ public interface PaymentDAO {
     AddressDTO selectPaymentAddress(int paymentNo);
 
     PaymentpointDTO findUsedPoint(String imPortId);
+
+    List<PaymentReviewDTO> findPaymentReviewsByProductNo(int productNo);
 }

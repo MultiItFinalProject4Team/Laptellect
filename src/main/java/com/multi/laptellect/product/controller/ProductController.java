@@ -5,6 +5,7 @@ import com.multi.laptellect.customer.dto.ProductqList;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
 import com.multi.laptellect.payment.model.dto.PaymentDTO;
+import com.multi.laptellect.payment.model.dto.PaymentReviewDTO;
 import com.multi.laptellect.payment.service.PaymentService;
 import com.multi.laptellect.product.model.dto.KeyBoardSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
@@ -195,7 +196,8 @@ public class ProductController {
 
             //customer 문의 부분
             List<ProductqList> productqList = customerService.getAllProductqList(productNo);
-            model.addAttribute("productqList",productqList);
+            model.addAttribute("productqList", productqList);
+            model.addAttribute("memberName", memberName);
             model.addAttribute("memberNo", memberNo);
 
             // 제품 상세 정보 가져오기
@@ -208,11 +210,11 @@ public class ProductController {
             log.error("상품 상세 조회 에러 = ", e);
         }
 
-
-
         ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
-
+        List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+        
         model.addAttribute("paymentDTO", paymentDTO);
+        model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
         model.addAttribute("productDTO", productDTO );
         model.addAttribute("memberNo", memberNo);
         model.addAttribute("memberName", memberName);

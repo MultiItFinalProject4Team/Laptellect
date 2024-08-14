@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PaymentReviewDTO {
-    private int paymentProductReivewsNo;
+    private int paymentProductReviewsNo;
     private int memberNo;
     private int productNo;
     private char tagAnswer;
@@ -14,5 +14,5 @@ public class PaymentReviewDTO {
     private String createdAt;
     private String modifyAt;
     private String productName;
-    private String userName;
+    private String memberName;
 }
