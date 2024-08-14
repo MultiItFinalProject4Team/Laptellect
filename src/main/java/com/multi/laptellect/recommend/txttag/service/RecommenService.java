@@ -70,6 +70,8 @@ public class RecommenService {
         String usbNo = laptopSpecDTO.getAddOn().getUsb();
         String recentNo = laptopSpecDTO.getRegistrationDate();
         String weightName = laptopSpecDTO.getPortability().getWeight();
+        String powerName = laptopSpecDTO.getPower().getAdapter();
+        String storageName = laptopSpecDTO.getStorage().getStorageCapacity();
         //gpuName, screenSize 변수명 변경
 
 
@@ -112,11 +114,11 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info(" '윈도우' 태그(#{}) 할당", tagNo);
         }
-//        if (isSlim(thicName)) {
-//            tagNo = findTagByData(tags, "슬림");
-//            assignedTags.add(tagNo);
-//            log.info(" '슬림' 태그(#{}) 할당", tagNo);
-//        }
+        if (isSlim(thicName)) {
+            tagNo = findTagByData(tags, "슬림");
+            assignedTags.add(tagNo);
+            log.info(" '슬림' 태그(#{}) 할당", tagNo);
+        }
         if (isUsb(usbNo)) {
             tagNo = findTagByData(tags, "많은 USB 단자");
             assignedTags.add(tagNo);
@@ -132,11 +134,31 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'최신 제품' 태그(#{}) 할당", tagNo);
         }
-//        if (isWeight(weightName)) {
-//            tagNo = findTagByData(tags, "가벼움");
-//            assignedTags.add(tagNo);
-//            log.info("'가벼움' 태그(#{}) 할당", tagNo);
-//        }
+        if (isWeight(weightName)) {
+            tagNo = findTagByData(tags, "가벼움");
+            assignedTags.add(tagNo);
+            log.info("'가벼움' 태그(#{}) 할당", tagNo);
+        }
+        if (isWeighte(weightName)) {
+            tagNo = findTagByData(tags, "무거움");
+            assignedTags.add(tagNo);
+            log.info("'무거움' 태그(#{}) 할당", tagNo);
+        }
+        if (isPower(powerName)) {
+            tagNo = findTagByData(tags, "고전력");
+            assignedTags.add(tagNo);
+            log.info("'고전력' 태그(#{}) 할당", tagNo);
+        }
+        if (isPowerSmall(powerName)) {
+            tagNo = findTagByData(tags, "저전력");
+            assignedTags.add(tagNo);
+            log.info("'저전력' 태그(#{}) 할당", tagNo);
+        }
+        if (isStorage(storageName)) {
+            tagNo = findTagByData(tags, "넉넉한 저장 공간");
+            assignedTags.add(tagNo);
+            log.info("'넉넉한 저장 공간' 태그(#{}) 할당", tagNo);
+        }
 
 
 
@@ -205,8 +227,8 @@ public class RecommenService {
         List<String> suitableBingScreens = List.of("40.8cm(16인치)",
                 "40.8cm(16인치)", "40.89cm(16.1인치)", "41.05cm(16.2인치)",
                 "41.4cm(16.3인치)", "43.18cm(17인치)", "43.18cm(17인치)",
-                "43.94cm(17.3인치)", "45.72cm(18인치)");
-
+                "43.94cm(17.3인치)", "45.72cm(18인치)"
+        );
         for (String suitableScreen : suitableBingScreens) {
             if (screena.contains(suitableScreen)) {
                 log.info("큰 화면 태그 할당 : {} {} ", screena, suitableScreen);
@@ -226,8 +248,8 @@ public class RecommenService {
                 "35.56cm(14인치)", "35.56cm(14인치)", "35.8cm(14.1인치)",
                 "35.97cm(14.2인치)", "36.6cm(14.4인치)", "36.8cm(14.5인치)",
                 "38.1cm(15인치)", "38.86cm(15.3인치)", "39.11cm(15.4인치)",
-                "39.62cm(15.6인치)", "39.62cm(15.6인치)");
-
+                "39.62cm(15.6인치)", "39.62cm(15.6인치)"
+        );
         for (String suitableScreen : suitableScreens) {
             if (screenb.contains(suitableScreen)) {
                 log.info("중간 태그 할당 : {} {} ", screenb, suitableScreen);
@@ -245,8 +267,8 @@ public class RecommenService {
                 "26.16cm(10.3인치)", "26.67cm(10.5인치)", "26.92cm(10.6인치)",
                 "27.69cm(10.9인치)", "27.94cm(11인치)", "29.21cm(11.5인치)",
                 "29.46cm(11.6인치)", "30.48cm(12인치)", "31.24cm(12.3인치)",
-                "31.62cm(12.4인치)");
-
+                "31.62cm(12.4인치)"
+        );
         for (String suitableScreen : suitableScreenss) {
             if (screenc.contains(suitableScreen)) {
                 log.info("작은 태그 할당 : {} {} ", screenc, suitableScreen);
@@ -261,7 +283,6 @@ public class RecommenService {
             return false;
         }
         List<String> suitableOs = List.of("윈도우11프로", "윈도우11홈", "윈도우10 프로", "윈도우11(설치)", "윈도우10(설치)", "윈도우10");
-
         for (String suitableOss : suitableOs) {
             if (os.contains(suitableOss)) {
                 log.info("윈도우 태그 할당 : {} {} ", os, suitableOss);
@@ -271,29 +292,26 @@ public class RecommenService {
         return false;
     }
 
-//    private boolean isSlim(String thickness) {
-//        if (thickness == null) {
-//            return false;
-//        }
-//        List<String> suitableThickness = List.of("null");
-//        for (String suitableThicknes : suitableThickness) {
-//            if (thickness.contains(suitableThicknes)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    private boolean isSlim(String thickness) {
+        if (thickness == null) {
+            return false;
+        } try {
+            double thicknesValuee = Double.parseDouble(thickness.replace("mm", ""));
+            return thicknesValuee < 20.0;
+        } catch (Exception e){
+            return false;
+        }
+    }
 
     private boolean isUsb(String usb) {
         if (usb == null) {
             return false;
         }
-            List<String> suitableteUsb = List.of("총5개", "총6개", "총4개");
-
-            for (String suitabletUsbs : suitableteUsb) {
-                if (usb.contains(suitabletUsbs)) {
-                    log.info("usb 많음 태그 할당 : {} {} ", usb, suitabletUsbs);
-                    return true;
+        List<String> suitableteUsb = List.of("총5개", "총6개", "총4개");
+        for (String suitabletUsbs : suitableteUsb) {
+            if (usb.contains(suitabletUsbs)) {
+                log.info("usb 많음 태그 할당 : {} {} ", usb, suitabletUsbs);
+                return true;
                 }
             }
             return false;
@@ -304,7 +322,6 @@ public class RecommenService {
             return false;
         }
         List<String> suitableUsbe = List.of("총3개", "총2개");
-
         for (String suitableUsebs : suitableUsbe) {
             if (usbe.contains(suitableUsebs)) {
                 log.info("usb 적음 태그 할당 : {} {} ", usbe, suitableUsebs);
@@ -327,18 +344,58 @@ public class RecommenService {
         return false;
     }
 
-//    private boolean isWeight(String weight) {
-//        if (weight == null) {
-//            return false;
-//        }
-//        List<String> suitableWeight = List.of("null");
-//        for (String suitableWeights : suitableWeight) {
-//            if (weight.contains(suitableWeights)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    private boolean isWeight(String weight) {
+        if (weight == null) {
+            return false;
+        } try {
+            double weighta = Double.parseDouble(weight.replace("kg", ""));
+            return weighta < 2.1;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isWeighte(String weighte) {
+        if (weighte == null){
+            return false;
+    } try {
+            double weightee = Double.parseDouble(weighte.replace("kg", ""));
+            return weightee > 2.1;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPower(String power) {
+        if (power == null) {
+        } try {
+            double powerWh = Double.parseDouble(power.replace("W", ""));
+            return powerWh > 80;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPowerSmall(String powersmall) {
+        if (powersmall == null) {
+        } try {
+            double powerWhSmall = Double.parseDouble(powersmall.replace("W", ""));
+            return powerWhSmall < 80;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isStorage(String storage) {
+        if (storage == null) {
+        } try {
+            double storageBig = Double.parseDouble(storage.replace("GB", ""));
+            return storageBig > 511;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private int findTagByData(List<TaggDTO> tags, String tagData ) {
         for (TaggDTO tag : tags) {
             if (tag.getTagData().equals(tagData)) {
