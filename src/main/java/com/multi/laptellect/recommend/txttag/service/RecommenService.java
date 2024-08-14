@@ -4,6 +4,8 @@ import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.recommend.txttag.config.CpuConfig;
+import com.multi.laptellect.recommend.txttag.config.GpuConfig;
 import com.multi.laptellect.recommend.txttag.model.dao.ProductTagDAO;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Service
@@ -21,8 +25,11 @@ public class RecommenService {
     private final ProductMapper productMapper; // 제품 매퍼 추가
     private final ProductTagDAO tagMapper; // 태그 매퍼 추가
     private final ProductService productService; // 제품 서비스 추가
+    private final CpuConfig cpuConfig;
+    private final GpuConfig gpuConfig;
 
-    public void assignTagsToProducts () {
+
+    public void assignTagsToProducts() {
         log.info("태그 할당 프로세스 시작");
 
         ArrayList<Integer> productNOs = tagMapper.findAllProductNo(); // 제품 번호 조회
@@ -55,12 +62,14 @@ public class RecommenService {
         }
         log.info("태그 할당 프로세스 완료");
     }
-     //제품번호별로 태그 할당
+
+    //제품번호별로 태그 할당
     private List<Integer> determineTagsForProduct(LaptopSpecDTO laptopSpecDTO) {
         List<Integer> assignedTags = new ArrayList<>(); //미리 선언 해두는게 나음
         List<TaggDTO> tags = tagMapper.findAllTag();
         int tagNo; //int 도 미리미리 해두는게 나음
         log.info("DTO 확인 : {}", laptopSpecDTO);
+
 
 
         String gpuName = laptopSpecDTO.getGpu().getGpuChipset();
@@ -72,27 +81,27 @@ public class RecommenService {
         String weightName = laptopSpecDTO.getPortability().getWeight();
         String powerName = laptopSpecDTO.getPower().getAdapter();
         String storageName = laptopSpecDTO.getStorage().getStorageCapacity();
+        String cpuName = laptopSpecDTO.getCpu().getCpuNumber();
+
+
         //gpuName, screenSize 변수명 변경
 
 
-
         if (isGpuSuitableForSteamOrFPS(gpuName)) {
-            tagNo = findTagByData(tags,"게이밍");
+            tagNo = findTagByData(tags, "게이밍");
             assignedTags.add(tagNo);
-            log.info("제품 {}에 '게이밍' 태그(#{}) 할당",  tagNo);
-        }else {
-            log.warn("'게이밍' 태그를 찾을 수 없습니다.");
+            log.info("제품 {}에 '게이밍' 태그(#{}) 할당", tagNo);
         }
-        if (isGpuSuitableForOnlineGames(gpuName)) {
+        if (isGpuSuitableForOnlineGames(gpuName, cpuName)) {
             tagNo = findTagByData(tags, "펠월드");
             assignedTags.add(tagNo);
-            log.info(" '온라인게임' 태그(#{}) 할당", tagNo);
+            log.info(" '펠월드' 태그(#{}) 할당", tagNo);
         }
-        if (isGpuSuitableForAOSGames(gpuName)) {
-            tagNo = findTagByData(tags, "가성비");
-            assignedTags.add(tagNo);
-            log.info(" '가성비' 태그(#{}) 할당", tagNo);
-        }
+//        if (isGpuSuitableForAOSGames(gpuName)) {
+//            tagNo = findTagByData(tags, "가성비");
+//            assignedTags.add(tagNo);
+//            log.info(" '가성비' 태그(#{}) 할당", tagNo);
+//        }
 
         if (isScreenSuitableForCoding(screenSize)) {
             tagNo = findTagByData(tags, "넓은 화면");
@@ -159,123 +168,275 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'넉넉한 저장 공간' 태그(#{}) 할당", tagNo);
         }
-
+        if (isCoding(cpuName)) {
+            tagNo = findTagByData(tags, "코딩");
+            assignedTags.add(tagNo);
+            log.info("'코딩용' 태그(#{}) 할당", tagNo);
+        }
+        if (isWork(cpuName)) {
+            tagNo = findTagByData(tags, "작업용");
+            assignedTags.add(tagNo);
+            log.info("'작업용' 태그(#{}) 할당", tagNo);
+        }
+        if (isLol(cpuName)) {
+            tagNo = findTagByData(tags, "리그오브레전드");
+            assignedTags.add(tagNo);
+            log.info("'리그오브레전드' 태그(#{}) 할당", tagNo);
+        }
+        if (isBet(cpuName, gpuName)) {
+            tagNo = findTagByData(tags, "배틀그라운드");
+            assignedTags.add(tagNo);
+            log.info("'배틀 그라운드' 태그(#{}) 할당", tagNo);
+        }
+        if (islost(cpuName, gpuName)){
+            tagNo = findTagByData(tags, "로스트 아크");
+            assignedTags.add(tagNo);
+            log.info("'로스트 아크' 태그(#{}) 할당", tagNo);
+        }
 
 
         return assignedTags;
     }
 
+    private boolean islost(String cpu, String gpu) {
+        Map<String, Integer> cEnt = cpuConfig.getCpuMark();
+        Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+        Pattern pattern2 = Pattern.compile("[\\s()]+");
+        String Key3 = pattern2.matcher("i3-6100U (2.3GHz)").replaceAll("");
+        String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
+        Integer cpuScore = cEnt.get(Key3);
+        Integer gpuScore = gEnt.get(Key4);
+
+        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null) {
+            return false;
+        }
+
+        for (String cpuName : cEnt.keySet()) {
+            String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
+                int cpuCode = cEnt.get(cpuName);
+
+                for (String gpuName : gEnt.keySet()) {
+                    String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+                    if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
+                        int gpuCode = gEnt.get(gpuName);
+                        return cpuCode >= cpuScore && gpuCode >= gpuScore;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isBet(String cpu, String gpu) {
+        Map<String, Integer> cEnt = cpuConfig.getCpuMark();
+        Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+        Pattern pattern2 = Pattern.compile("[\\s()]+");
+        String Key3 = pattern2.matcher("i5-7300U (2.6GHz)").replaceAll("");
+        String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
+        Integer cpuScore = cEnt.get(Key3);
+        Integer gpuScore = gEnt.get(Key4);
+
+        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null) {
+            return false;
+        }
+
+        for (String cpuName : cEnt.keySet()) {
+            String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
+                int cpuCode = cEnt.get(cpuName);
+
+                for (String gpuName : gEnt.keySet()) {
+                    String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+                    if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
+                        int gpuCode = gEnt.get(gpuName);
+                        return cpuCode >= cpuScore && gpuCode >= gpuScore;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isLol(String cpu) {
+        Map<String, Integer> cEnt = cpuConfig.getCpuMark();
+        Pattern pattern = Pattern.compile("[\\s()]+");
+        String Key1 = pattern.matcher("i5-8265U (1.6GHz)").replaceAll("");
+        Integer cpuScore1 = cEnt.get(Key1);
+
+        if (cpu == null || cpuScore1 == null) {
+            return false;
+        }
+        for (String cpuName : cEnt.keySet()) {
+            String cpuNameC1 = pattern.matcher(cpuName).replaceAll("");
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
+                int cpuCode = cEnt.get(cpuName);
+                log.info("펠 cpu 소스 {} :", cpuScore1);
+                return cpuCode > cpuScore1;
+            }
+        }
+        return false;
+    }
+
+    private boolean isWork(String gpu) {
+        Map<String, Integer> ent5 = cpuConfig.getCpuMark();
+        Pattern pattern3 = Pattern.compile("[\\s()]+");
+        String key4 = pattern3.matcher( "i7-1165G7 (2.8GHz)").replaceAll("");
+        String key5 = pattern3.matcher("i3-1005G1 (1.2GHz)").replaceAll("");
+        Integer cpuScoer5 = ent5.get(key4);
+        Integer cpuScoer6 = ent5.get(key5);
+
+        if (gpu == null) {
+            return false;
+        }
+        if (cpuScoer5 == null || cpuScoer6 == null) {
+            return false;
+        }
+            for (String cpuName2 : ent5.keySet()) {
+                String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
+                if (gpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
+                    int cpuCode2 = ent5.get(cpuName2);
+                    return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6;
+                }
+            }
+            return false;
+        }
+
+
+
+    private boolean isCoding(String coding) {
+        Map<String, Integer> ent3 = cpuConfig.getCpuMark();
+        Pattern pattern = Pattern.compile("[\\s()]+");
+        String key = pattern.matcher("i3-1315U (1.2GHz)").replaceAll("");
+        Integer cpuScore = ent3.get(key);
+
+        log.info("cpu소스 가져오나요? {} :", cpuScore);
+        log.info("결과는요? {} :", coding);
+        log.info("ent비어있나요? {}:", ent3);
+
+        if (coding == null) {
+            return false;
+        }
+        if (cpuScore == null)
+            return false;
+        for (String cpuName : ent3.keySet()) {
+            String cpuNameC = pattern.matcher(cpuName).replaceAll("");
+            if (coding.replaceAll("[\\s()]+", "").contains(cpuNameC)) {
+                int cpuCode = ent3.get(cpuName);
+                return cpuCode > cpuScore;
+            }
+        }
+        return false;
+    }
+
     private boolean isGpuSuitableForSteamOrFPS(String gpu) {
+        Map<String, Integer> ent = gpuConfig.getGpuMark();
+        Pattern pattern1 = Pattern.compile("[\\s()]+");
+        String key2 = pattern1.matcher("GTX1650").replaceAll("");
+        Integer gtxScore = ent.get(key2);
+
+        log.info("gpu 소스 가져오나요 {} :", gtxScore);
+
         if (gpu == null) {
             return false;
         }
-        List<String> suitableGpus = List.of(
-                "RTX4090", "RTX4080", "라데온 RX 7900M", "라데온 610M 라이젠 9 7845HX",
-                "RTX3080Ti", "RTX4070", "RTX3070Ti", "RTX4060",
-                "라데온 RX 6850M XT", "RTX 3080", "RTX A5000", "RTX3070",
-                "라데온 RX 6800S", "RTXA4000", "RTX2080", "RTX3050Ti"
-        );
-        for (String suitableGpu : suitableGpus) {
-            if (gpu.contains(suitableGpu)) {
-                return true;
+        if (gtxScore == null)
+            return false;
+        for (String gpuName : ent.keySet()) {
+            String gpuNameG = pattern1.matcher(gpuName).replaceAll("");
+            if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameG)) {
+                int gpuCode = ent.get(gpuName);
+                return gpuCode >= gtxScore;
+            }
+        }
+            return false;
+    }
+    private boolean isGpuSuitableForOnlineGames(String cpu, String gpu) {
+        Map<String, Integer> cEnt = cpuConfig.getCpuMark();
+        Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+        Pattern pattern2 = Pattern.compile("[\\s()]+");
+        String Key3 = pattern2.matcher("i7-10750H (2.6GHz)").replaceAll("");
+        String Key4 = pattern2.matcher("RTX4060").replaceAll("");
+        Integer cpuScore1 = cEnt.get(Key3);
+        Integer gpuScore1 = gEnt.get(Key4);
+        log.info("펠 cpu 소스 {} :", cpuScore1);
+        log.info("펠 gpu 소스 {} :", gpuScore1);
+
+        if (cpu == null || gpu == null || cpuScore1 == null || gpuScore1 == null) {
+            return false;
+        }
+
+        for (String cpuName : cEnt.keySet()) {
+            String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
+                int cpuCode = cEnt.get(cpuName);
+
+                for (String gpuName : gEnt.keySet()) {
+                    String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+                    if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
+                        int gpuCode = gEnt.get(gpuName);
+                        log.info("펠 cpu 소스 {} :", cpuScore1);
+                        log.info("펠 gpu 소스 {} :", gpuScore1);
+                        return cpuCode >= cpuScore1 && gpuCode >= gpuScore1;
+
+                    }
+                }
             }
         }
         return false;
     }
 
-    private boolean isGpuSuitableForOnlineGames(String gpu) {
-        if (gpu == null) {
-            return false;
-        }
-        List<String> suitableGpus = List.of(
-                "라데온 RX 6650M", "라데온 RX 6700S", "쿼드로 RTX 5000", "RTX4050",
-                "라데온 RX 7600S", "라데온 RX 6850M XT", "RTX2080 SUPER", "RTX2070 SUPER",
-                "라데온 RX 6600M", "라데온 RX 6600S", "라데온 Pro W6600M", "라데온 RX 6700M",
-                "RTX3060", "라데온 RX 6800M", "RTX2080", "쿼드로 RTX 4000",
-                "RTX A3000", "RTX2070"
-        );
-        for (String suitableGpu : suitableGpus) {
-            if (gpu.contains(suitableGpu)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isGpuSuitableForAOSGames(String gpu) {
-        if (gpu == null) {
-            return false;
-        }
-        List<String> suitableGpus = List.of(
-                "쿼드로 P5200", "라데온 RX 6850M", "RTX2070", "GTX1080",
-                "라데온 RX 7600M XT", "인텔 Arc A770M", "RTX2060", "쿼드로 RTX 3000",
-                "GTX1070", "RTX3050", "GTX1660 Ti", "RTX A2000",
-                "라데온 RX 6550M", "라데온 Pro 5600M", "쿼드로 P4000", "라데온 RX 5600M"
-        );
-        for (String suitableGpu : suitableGpus) {
-            if (gpu.contains(suitableGpu)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private boolean isGpuSuitableForAOSGames(String gpu) {
+//        Map<String, Integer> ent4 = gpuConfig.getGpuMark();
+//        Pattern pattern2 = Pattern.compile("[\\s()]+");
+//        String key2 = pattern2.matcher("");
+//        if (gpu == null) {
+//            return false;
+//        }
+//
+//        );
+//        for (String suitableGpu : suitableGpus) {
+//            if (gpu.contains(suitableGpu)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     private boolean isScreenSuitableForCoding(String screena) {
         if (screena == null) {
             return false;
+        } try {
+            String point = screena.replaceAll("[^0-9.]", "");
+            double screenaa = Double.parseDouble(point);
+            return screenaa >= 16;
+        } catch (Exception e){
+            return false;
         }
-        List<String> suitableBingScreens = List.of("40.8cm(16인치)",
-                "40.8cm(16인치)", "40.89cm(16.1인치)", "41.05cm(16.2인치)",
-                "41.4cm(16.3인치)", "43.18cm(17인치)", "43.18cm(17인치)",
-                "43.94cm(17.3인치)", "45.72cm(18인치)"
-        );
-        for (String suitableScreen : suitableBingScreens) {
-            if (screena.contains(suitableScreen)) {
-                log.info("큰 화면 태그 할당 : {} {} ", screena, suitableScreen);
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isScreenSuitableForDocuments(String screenb) {
         if (screenb == null) {
             return false;
+        } try {
+            String point2 = screenb.replaceAll("[^0-9.]", "");
+            double screenbb = Double.parseDouble(point2);
+            return screenbb >= 13 && screenbb < 16;
+        } catch (Exception e) {
+            return false;
         }
-        List<String> suitableScreens = List.of("33.02cm(13인치)", "33.78cm(13.3인치)",
-                "33.78cm(13.3인치)", "34.03cm(13.4인치)", "34.29cm(13.5인치)",
-                "34.54cm(13.6인치)", "35.05cm(13.8인치)", "35.3cm(13.9인치)",
-                "35.56cm(14인치)", "35.56cm(14인치)", "35.8cm(14.1인치)",
-                "35.97cm(14.2인치)", "36.6cm(14.4인치)", "36.8cm(14.5인치)",
-                "38.1cm(15인치)", "38.86cm(15.3인치)", "39.11cm(15.4인치)",
-                "39.62cm(15.6인치)", "39.62cm(15.6인치)"
-        );
-        for (String suitableScreen : suitableScreens) {
-            if (screenb.contains(suitableScreen)) {
-                log.info("중간 태그 할당 : {} {} ", screenb, suitableScreen);
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isScreenSuitableForStudents(String screenc) {
         if (screenc == null) {
             return false;
+        } try {
+            String point3 = screenc.replaceAll("[^0-9.]", "");
+            double screencc = Double.parseDouble(point3);
+            return screencc < 13;
+        } catch (Exception e) {
+            return false;
         }
-        List<String> suitableScreenss = List.of( "20.32cm(8인치)", "25.4cm(10인치)", "25.65cm(10.1인치)",
-                "26.16cm(10.3인치)", "26.67cm(10.5인치)", "26.92cm(10.6인치)",
-                "27.69cm(10.9인치)", "27.94cm(11인치)", "29.21cm(11.5인치)",
-                "29.46cm(11.6인치)", "30.48cm(12인치)", "31.24cm(12.3인치)",
-                "31.62cm(12.4인치)"
-        );
-        for (String suitableScreen : suitableScreenss) {
-            if (screenc.contains(suitableScreen)) {
-                log.info("작은 태그 할당 : {} {} ", screenc, suitableScreen);
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isWindowsOS(String os) {
@@ -395,6 +556,7 @@ public class RecommenService {
             return false;
         }
     }
+
 
     private int findTagByData(List<TaggDTO> tags, String tagData ) {
         for (TaggDTO tag : tags) {
