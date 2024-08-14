@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadQuestionComments(page) {
     var productNo = $('#curproductNo').val();
+    console.log("상품번호"+productNo);
     var memberNo = $('#curmemberNo').val();
     $.ajax({
         type: "GET",
@@ -50,7 +51,7 @@ function loadQuestionComments(page) {
             page: page // 페이지 번호를 올바르게 전달
         },
         dataType: 'json', // 데이터 타입 명시
-        success: function (response) {
+        success:async function (response) {
             let commentUl = $("#customer-list");
             commentUl.empty(); // 선택 요소 비우기
             console.log("현재 페이지: "+page)
@@ -60,10 +61,31 @@ function loadQuestionComments(page) {
             makeQPagination(page, totalPages);
 
             // 댓글을 리스트에 추가
-            data.forEach(function (productqList) {
-                const commentItemHtml = createCommentItem(productqList, memberNo);
-                $('#customer-list').append(commentItemHtml);
-            });
+            for (const productqList of data) {
+                if (productqList.answer === 'Y') {
+                    console.log("답변 존재: " + productqList.productqNo);
+
+                    try {
+                        let productaList = await $.ajax({
+                            type: "GET",
+                            url: `/customer/user/get_AllproductaList`,
+                            data: {
+                                productqNo: productqList.productqNo
+                            },
+                            dataType: 'json'
+                        });
+
+                        console.log(productaList.content);
+                        const commentItemHtml2 = createCommentItem2(productqList, productaList, memberNo);
+                        $('#customer-list').append(commentItemHtml2);
+                    } catch (error) {
+                        console.error("Error fetching product list:", error);
+                    }
+                } else if (productqList.answer === 'N') {
+                    const commentItemHtml = createCommentItem(productqList, memberNo);
+                    $('#customer-list').append(commentItemHtml);
+                }
+        }
         },
         error: function () {
             alert("댓글을 로드하는 중 오류가 발생했습니다.");
@@ -109,7 +131,7 @@ function loadOpinionComments(page) {
             page: page // 페이지 번호를 올바르게 전달
         },
         dataType: 'json', // 데이터 타입 명시
-        success: function (response) {
+        success:async function (response) {
             let commentUl = $("#customer-list");
             commentUl.empty(); // 선택 요소 비우기
             console.log("현재 페이지: "+page)
@@ -119,10 +141,31 @@ function loadOpinionComments(page) {
             makeOPagination(page, totalPages);
 
             // 댓글을 리스트에 추가
-            data.forEach(function (productqList) {
-                const commentItemHtml = createCommentItem(productqList, memberNo);
-                $('#customer-list').append(commentItemHtml);
-            });
+            for (const productqList of data) {
+                if (productqList.answer === 'Y') {
+                    console.log("답변 존재: " + productqList.productqNo);
+
+                    try {
+                        let productaList = await $.ajax({
+                            type: "GET",
+                            url: `/customer/user/get_AllproductaList`,
+                            data: {
+                                productqNo: productqList.productqNo
+                            },
+                            dataType: 'json'
+                        });
+
+                        console.log(productaList.content);
+                        const commentItemHtml2 = createCommentItem2(productqList, productaList, memberNo);
+                        $('#customer-list').append(commentItemHtml2);
+                    } catch (error) {
+                        console.error("Error fetching product list:", error);
+                    }
+                } else if (productqList.answer === 'N') {
+                    const commentItemHtml = createCommentItem(productqList, memberNo);
+                    $('#customer-list').append(commentItemHtml);
+                }
+            }
         },
         error: function () {
             alert("댓글을 로드하는 중 오류가 발생했습니다.");

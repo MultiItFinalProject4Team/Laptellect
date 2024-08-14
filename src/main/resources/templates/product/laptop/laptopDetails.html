@@ -572,6 +572,8 @@
                     <hr>
                     <input type="hidden" name="curmemberNo" id="curmemberNo" th:value="${memberNo}">
                     <input type="hidden" name="productNo" id="curproductNo" th:value="${productNo}">
+                    <input type="hidden" name="curauth" id="curauth" sec:authorize="hasRole('ROLE_ADMIN')" value="ADMIN">
+                    <input type="hidden" name="curmemname" id="curmemname" th:value="${memberName}">
                     <!--의견/문의 띄우는 div-->
                     <div id="customer-list">
 
