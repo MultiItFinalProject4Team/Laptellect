@@ -18,6 +18,7 @@ CREATE TABLE payment (
     CONSTRAINT address_id_fk FOREIGN KEY (address_id) REFERENCES mem_delivery_address(address_id) ON DELETE CASCADE
 );
 SELECT * from payment;
+
 DROP TABLE payment;
 
 

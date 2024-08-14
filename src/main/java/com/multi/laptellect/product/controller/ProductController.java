@@ -170,9 +170,9 @@ public class ProductController {
         // 장바구니 및 위시리스트 변수 선언
         ArrayList<Integer> carts = new ArrayList<>();
         ArrayList<Integer> wishlist = new ArrayList<>();
-        
-        //customer 문의 부분
-        model.addAttribute("memberNo", SecurityUtil.getUserNo());
+        PaymentDTO paymentDTO = new PaymentDTO();
+        int memberNo = 0;
+        String memberName = "";
 
         try {
             if (SecurityUtil.isAuthenticated()) {
@@ -186,6 +186,9 @@ public class ProductController {
                 }
 
                 wishlist = productService.getWishlistString();
+                paymentDTO = paymentService.selectOrderItems(SecurityUtil.getUserNo(), productNo);
+                memberNo = SecurityUtil.getUserNo();
+                memberName = SecurityUtil.getUserDetails().getMemberName();
             }
             model.addAttribute("carts", carts);
             model.addAttribute("wishlist", wishlist);
@@ -193,7 +196,7 @@ public class ProductController {
             //customer 문의 부분
             List<ProductqList> productqList = customerService.getAllProductqList(productNo);
             model.addAttribute("productqList",productqList);
-            model.addAttribute("memberNo", SecurityUtil.getUserNo());
+            model.addAttribute("memberNo", memberNo);
 
             // 제품 상세 정보 가져오기
             LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
@@ -205,14 +208,14 @@ public class ProductController {
             log.error("상품 상세 조회 에러 = ", e);
         }
 
-        new PaymentDTO();
-        PaymentDTO paymentDTO;
-        paymentDTO = paymentService.selectOrderItems(SecurityUtil.getUserNo(), productNo);
+
+
         ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
 
         model.addAttribute("paymentDTO", paymentDTO);
-        model.addAttribute("memberDTO", SecurityUtil.getUserDetails());
         model.addAttribute("productDTO", productDTO );
+        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("memberName", memberName);
 
 
         return "product/laptop/laptopDetails";

@@ -1,0 +1,44 @@
+package com.multi.laptellect.admin.member.controller;
+
+import com.multi.laptellect.admin.member.service.AdminMemberService;
+import com.multi.laptellect.util.RedisUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * Please explain the class!!
+ *
+ * @author : 이강석
+ * @fileName : AdminMemberController
+ * @since : 2024-08-13
+ */
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/admin/member")
+public class AdminMemberController {
+    private final AdminMemberService adminMemberService;
+    private final RedisUtil redisUtil;
+
+    @GetMapping({""})
+    public String showMemberManagement(Model model) {
+
+        try {
+            int newMemberCount = adminMemberService.findNewMemberCount(); // 금일 가입자 수
+            int memberCount = adminMemberService.findMemberCount(); // 금일 가입자 수
+            int activeMemberCount = redisUtil.getActiveUserCount(); // 현재 접속중인 인원 수
+
+            model.addAttribute("memberCount", memberCount);
+            model.addAttribute("newMemberCount", newMemberCount);
+            model.addAttribute("activeMemberCount", activeMemberCount);
+        } catch (Exception e) {
+            log.error("Member Mgt Error = ", e);
+        }
+
+        return "/admin/member/member-manage";
+    }
+}

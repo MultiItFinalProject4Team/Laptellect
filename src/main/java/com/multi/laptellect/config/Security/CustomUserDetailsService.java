@@ -2,7 +2,6 @@ package com.multi.laptellect.config.Security;
 
 
 import com.multi.laptellect.auth.model.mapper.AuthMapper;
-import com.multi.laptellect.error.MemberNotFoundException;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("아이디 입력 값 = {}", username);
 
         MemberDTO userDTO = authMapper.selectMemberById(username);
-
-        if(userDTO.getIsActive().equals("Y")) throw new MemberNotFoundException("탈퇴한 회원");
 
         if (userDTO == null) {
             log.error("log error = {}", username );
