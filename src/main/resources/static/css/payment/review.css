@@ -76,3 +76,35 @@
 .modal.show .modal-dialog {
     transform: none;
 }
+
+/* 리뷰 내용 스타일 */
+.review-content {
+    font-weight: bold;
+    font-size: 1.0625em; /* 1pt 더 크게 (기본 16px * 1.0625 = 17px) */
+}
+
+/* 애니메이션 효과 */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+.review-star {
+    color: gold;
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+.review-date {
+    font-size: 0.9em; /* 기본 폰트 크기보다 약간 작게 설정 */
+    color: #666; /* 날짜 텍스트 색상을 약간 어둡게 설정 */
+}
+
+/* 페이징 스타일 */
+#reviewPagination {
+    padding: 0;
+    margin: 20px 0;
+}

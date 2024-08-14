@@ -44,6 +44,18 @@
         <result property="request" column="request"/>
     </resultMap>
 
+    <resultMap id="PaymentReviewsResultMap" type="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        <result property="paymentProductReviewsNo" column="payment_product_reviews_no"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="productNo" column="product_no"/>
+        <result property="tagAnswer" column="tag_answer"/>
+        <result property="content" column="content"/>
+        <result property="rating" column="rating"/>
+        <result property="imPortId" column="im_port_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="modifyAt" column="modify_at"/>
+    </resultMap>
+
     <insert id="insertPayment" parameterType="com.multi.laptellect.payment.model.dto.PaymentDTO">
         INSERT INTO payment (
         member_no,
@@ -388,4 +400,13 @@
         WHERE im_port_id = #{imPortId}
         AND payment_point_info = '구매 시 포인트사용'
     </select>
+
+    <select id="findPaymentReviewsByProductNo" resultType="paymentReviewDTO">
+        SELECT ppr.*, mm.member_name AS memberName
+        FROM payment_product_reviews ppr
+        JOIN mem_member mm ON ppr.member_no = mm.member_no
+        WHERE ppr.product_no = #{productNo}
+        ORDER BY payment_product_reviews_no DESC;
+    </select>
+
 </mapper>
