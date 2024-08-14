@@ -150,7 +150,7 @@ function mypayment() {
                         totalAmount: myAmount,
                         usedPoints: usedPoints.toString(),
                         products: products,
-                        addressId: selectedAddressId // 선택된 주소 ID 추가
+                        addressId: selectedAddressId
                     });
 
                     if (data.success) {

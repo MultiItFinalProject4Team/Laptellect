@@ -12,6 +12,7 @@ public class PaymentDTO {
     private int memberNo;
     private int productNo;
     private int purchasePrice;
+    private int quantity;
     private Date createdAt;
     private String imPortId;
     private String confirm;

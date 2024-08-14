@@ -7,4 +7,5 @@ import lombok.Data;
 public class PaymentDetailDTO {
     private PaymentDTO paymentDTO;
     private AddressDTO addressDTO;
+    private int pointChange;
 }

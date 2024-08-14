@@ -4,6 +4,8 @@ package com.multi.laptellect.product.controller;
 import com.multi.laptellect.customer.dto.ProductqList;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
+import com.multi.laptellect.payment.model.dto.PaymentDTO;
+import com.multi.laptellect.payment.service.PaymentService;
 import com.multi.laptellect.product.model.dto.KeyBoardSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
@@ -37,6 +39,7 @@ public class ProductController {
     private final ProductService productService;
     private final CustomerService customerService;
     private final PaginationService paginationService;
+    private final PaymentService paymentService;
 
     /**
      * 크롤링을 시작합니다.
@@ -161,7 +164,7 @@ public class ProductController {
      */
     @GetMapping("/laptop/laptopDetails")
     public String productLaptopDetails(@RequestParam(name = "productNo") int productNo,
-                                 Model model, @RequestParam(value = "page",defaultValue = "1") int page) {
+                                 Model model, @RequestParam(value = "page",defaultValue = "1") int page) throws Exception {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
         // 장바구니 및 위시리스트 변수 선언
@@ -201,6 +204,16 @@ public class ProductController {
         } catch (Exception e) {
             log.error("상품 상세 조회 에러 = ", e);
         }
+
+        new PaymentDTO();
+        PaymentDTO paymentDTO;
+        paymentDTO = paymentService.selectOrderItems(SecurityUtil.getUserNo(), productNo);
+        ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
+
+        model.addAttribute("paymentDTO", paymentDTO);
+        model.addAttribute("memberDTO", SecurityUtil.getUserDetails());
+        model.addAttribute("productDTO", productDTO );
+
 
         return "product/laptop/laptopDetails";
     }
