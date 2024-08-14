@@ -210,4 +210,40 @@ public class CustomerAdminController {
         model.addAttribute("date",searchDto.getDate());
         return "/customer/admin/search_all_personalq";
     }
+
+    @GetMapping("/admin_notice")
+    public String admin_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        return "/admin/customer/admin_notice";
+    }
+
+    @GetMapping("/notice_app")
+    public String notice_app(Model model){
+        model.addAttribute("memberNo",SecurityUtil.getUserNo());
+        return "/admin/customer/notice_app";
+    }
+
+    @PostMapping("/notice_app")
+    public String notice_app(NoticeListDto noticeListDto, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        System.out.println(noticeListDto);
+        customerService.noticeApp(noticeListDto);
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        return "redirect:/customer/admin/admin_notice";
+    }
 }

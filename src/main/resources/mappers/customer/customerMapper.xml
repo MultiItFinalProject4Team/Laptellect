@@ -376,4 +376,20 @@
         </if>
         order by a.productq_no desc
     </select>
+
+    <select id="getNoticeList" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
+        select * from notice
+    </select>
+
+    <select id="getnotice" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
+        select * from notice
+        where notice_no = #{noticeNo}
+    </select>
+
+    <insert id="noticeApp" parameterType="com.multi.laptellect.customer.dto.NoticeListDto">
+        insert into notice
+        (member_no, title, content, main_regist)
+        values
+        (#{memberNo}, #{title}, #{content}, #{mainRegist})
+    </insert>
 </mapper>

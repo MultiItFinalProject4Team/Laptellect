@@ -1,17 +1,23 @@
 package com.multi.laptellect.customer.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@ToString
+import java.util.Date;
+
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class NoticeListDto {
-    private int no;
+    private int noticeNo;
+    private int memberNo;
     private String title;
-    private String createdAt;
-    //private Timestamp createdAt;
+    private String content;
+    private String mainRegist;
+    private Date createdAt;
+    private Date updatedAt;
+    private String referenceCode;
 }
