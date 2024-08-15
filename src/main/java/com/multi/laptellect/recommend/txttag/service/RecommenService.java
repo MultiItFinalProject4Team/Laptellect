@@ -71,7 +71,7 @@ public class RecommenService {
         log.info("DTO 확인 : {}", laptopSpecDTO);
 
 
-
+        String gpuTypeName = laptopSpecDTO.getGpu().getGpuType();//gpu 종류
         String gpuName = laptopSpecDTO.getGpu().getGpuChipset();//gpu
         String screenSize = laptopSpecDTO.getDisplay().getScreenSize();//화면 크기
         String osName = laptopSpecDTO.getOs();//운영 체제 여부
@@ -89,12 +89,12 @@ public class RecommenService {
         //gpuName, screenSize 변수명 변경
 
 
-        if (isGpuSuitableForSteamOrFPS(gpuName)) {
+        if (isGpuSuitableForSteamOrFPS(gpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "게이밍");
             assignedTags.add(tagNo);
             log.info("'게이밍' 태그(#{}) 할당", tagNo);
         }
-        if (isGpuSuitableForOnlineGames(gpuName, cpuName)) {
+        if (isGpuSuitableForOnlineGames(gpuName, cpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "펠월드");
             assignedTags.add(tagNo);
             log.info("'펠월드' 태그(#{}) 할당", tagNo);
@@ -179,12 +179,12 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'리그오브레전드' 태그(#{}) 할당", tagNo);
         }
-        if (isBet(cpuName, gpuName)) {
+        if (isBet(cpuName, gpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "배틀그라운드");
             assignedTags.add(tagNo);
             log.info("'배틀 그라운드' 태그(#{}) 할당", tagNo);
         }
-        if (islost(cpuName, gpuName)){
+        if (islost(cpuName, gpuName, gpuTypeName)){
             tagNo = findTagByData(tags, "로스트 아크");
             assignedTags.add(tagNo);
             log.info("'로스트 아크' 태그(#{}) 할당", tagNo);
@@ -204,7 +204,7 @@ public class RecommenService {
         return assignedTags;
     }
 
-    private boolean islost(String cpu, String gpu) {
+    private boolean islost(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
         Pattern pattern2 = Pattern.compile("[\\s()]+");
@@ -212,29 +212,31 @@ public class RecommenService {
         String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
         Integer cpuScore = cEnt.get(Key3);
         Integer gpuScore = gEnt.get(Key4);
+        int cpuCode = -1;
+        int gpuCode = -1;
 
-        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null) {
+        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
             return false;
         }
 
         for (String cpuName : cEnt.keySet()) {
             String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
             if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
-                int cpuCode = cEnt.get(cpuName);
-
-                for (String gpuName : gEnt.keySet()) {
-                    String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
-                    if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
-                        int gpuCode = gEnt.get(gpuName);
-                        return cpuCode >= cpuScore && gpuCode >= gpuScore;
-                    }
-                }
+                cpuCode = cEnt.get(cpuName);
+                break;
             }
         }
-        return false;
+        for (String gpuName : gEnt.keySet()) {
+            String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+            if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
+                gpuCode = gEnt.get(gpuName);
+                break;
+            }
+        }
+        return cpuCode >= cpuScore && gpuCode >= gpuScore;
     }
 
-    private boolean isBet(String cpu, String gpu) {
+    private boolean isBet(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
         Pattern pattern2 = Pattern.compile("[\\s()]+");
@@ -242,27 +244,31 @@ public class RecommenService {
         String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
         Integer cpuScore = cEnt.get(Key3);
         Integer gpuScore = gEnt.get(Key4);
+        int cpuCode = -1;
+        int gpuCode = -1;
 
-        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null) {
+        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
             return false;
         }
 
         for (String cpuName : cEnt.keySet()) {
             String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
             if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
-                int cpuCode = cEnt.get(cpuName);
-
-                for (String gpuName : gEnt.keySet()) {
-                    String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
-                    if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
-                        int gpuCode = gEnt.get(gpuName);
-                        return cpuCode >= cpuScore && gpuCode >= gpuScore;
-                    }
-                }
+                cpuCode = cEnt.get(cpuName);
+                break;
             }
         }
-        return false;
+
+        for (String gpuName : gEnt.keySet()) {
+            String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+            if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
+                gpuCode = gEnt.get(gpuName);
+                break;
+            }
+        }
+        return cpuCode >= cpuScore && gpuCode >= gpuScore;
     }
+
 
     private boolean isLol(String cpu) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
@@ -308,33 +314,41 @@ public class RecommenService {
             return false;
         }
 
-    private boolean isCoding(String coding) {
-        Map<String, Integer> ent3 = cpuConfig.getCpuMark();
-        Pattern pattern = Pattern.compile("[\\s()]+");
-        String key = pattern.matcher("i3-1315U (1.2GHz)").replaceAll("");
-        Integer cpuScore = ent3.get(key);
+    private boolean isCoding(String gpu) {
+        Map<String, Integer> ent5 = cpuConfig.getCpuMark();
+        Pattern pattern3 = Pattern.compile("[\\s()]+");
+        String key4 = pattern3.matcher( "i7-1165G7 (2.8GHz)").replaceAll("");
+        String key5 = pattern3.matcher("i3-1315U (1.2GHz)").replaceAll("");
+        Integer cpuScoer5 = ent5.get(key4);
+        Integer cpuScoer6 = ent5.get(key5);
 
-        if (coding == null) {
+        if (gpu == null) {
             return false;
         }
-        if (cpuScore == null)
+        if (cpuScoer5 == null || cpuScoer6 == null) {
             return false;
-
-        for (String cpuName : ent3.keySet()) {
-            String cpuNameC = pattern.matcher(cpuName).replaceAll("");
-            if (coding.replaceAll("[\\s()]+", "").contains(cpuNameC)) {
-                int cpuCode = ent3.get(cpuName);
-                return cpuCode > cpuScore;
+        }
+        for (String cpuName2 : ent5.keySet()) {
+            String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
+            if (gpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
+                int cpuCode2 = ent5.get(cpuName2);
+                return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6;
             }
         }
         return false;
     }
 
-    private boolean isGpuSuitableForSteamOrFPS(String gpu) {
+
+    private boolean isGpuSuitableForSteamOrFPS(String gpu, String gpuTypeName) {
         Map<String, Integer> ent = gpuConfig.getGpuMark();
         Pattern pattern1 = Pattern.compile("[\\s()]+");
         String key2 = pattern1.matcher("GTX1650").replaceAll("");
         Integer gtxScore = ent.get(key2);
+
+        if (gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
+            return false;
+        }
+        int gpuCode = -1;
 
         if (gpu == null) {
             return false;
@@ -345,13 +359,13 @@ public class RecommenService {
         for (String gpuName : ent.keySet()) {
             String gpuNameG = pattern1.matcher(gpuName).replaceAll("");
             if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameG)) {
-                int gpuCode = ent.get(gpuName);
-                return gpuCode >= gtxScore;
+                gpuCode = ent.get(gpuName);
+                break;
             }
         }
-        return false;
+        return gpuCode >= gtxScore;
     }
-    private boolean isGpuSuitableForOnlineGames(String cpu, String gpu) {
+    private boolean isGpuSuitableForOnlineGames(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
         Pattern pattern2 = Pattern.compile("[\\s()]+");
@@ -359,26 +373,28 @@ public class RecommenService {
         String Key4 = pattern2.matcher("RTX4060").replaceAll("");
         Integer cpuScore1 = cEnt.get(Key3);
         Integer gpuScore1 = gEnt.get(Key4);
+        int cpuCode = -1;
+        int gpuCode = -1;
 
-        if (cpu == null || gpu == null || cpuScore1 == null || gpuScore1 == null) {
+        if (cpu == null || gpu == null || cpuScore1 == null || gpuScore1 == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
             return false;
         }
 
         for (String cpuName : cEnt.keySet()) {
             String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
             if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
-                int cpuCode = cEnt.get(cpuName);
-
-                for (String gpuName : gEnt.keySet()) {
-                    String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
-                    if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
-                        int gpuCode = gEnt.get(gpuName);
-                        return cpuCode >= cpuScore1 && gpuCode >= gpuScore1;
-                    }
-                }
+                 cpuCode = cEnt.get(cpuName);
+                break;
             }
         }
-        return false;
+        for (String gpuName : gEnt.keySet()) {
+            String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+            if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
+                gpuCode = gEnt.get(gpuName);
+                break;
+            }
+        }
+        return cpuCode >= cpuScore1 && gpuCode >= gpuScore1;
     }
 
     private boolean isScreenSuitableForCoding(String screena) {

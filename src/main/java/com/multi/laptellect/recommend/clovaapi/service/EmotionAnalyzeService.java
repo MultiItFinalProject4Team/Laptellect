@@ -5,6 +5,7 @@ import com.multi.laptellect.recommend.clovaapi.model.dao.SentimentDAO;
 import com.multi.laptellect.recommend.clovaapi.model.dto.SentimentDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,14 +18,13 @@ import java.util.HashMap;
 @Service
 @RequiredArgsConstructor //이란 ? 생성자 주입을 위한 어노테이션 //생성자 주입 : 생성자를 통해 의존성 주입을 받는 방법 //생성자 주입을 사용하면 final 키워드를 사용할 수 있어서 불변성을 보장
 public class EmotionAnalyzeService {
+    private final SentimentDAO sentimentDAO;
 
-//    @Value("${spring.sentiment.clientId}") //application.properties에 있는 값을 가져옴 //yml파일에서는 @Value("${sentiment.clientId}")로 사용
+    @Value("${spring.sentiment.clientId}") //application.properties에 있는 값을 가져옴 //yml파일에서는 @Value("${sentiment.clientId}")로 사용
     private String clientId;
 
-//    @Value("${spring.sentiment.clientSecret}")
+    @Value("${spring.sentiment.clientSecret}")
     private String clientSecret;
-
-    private final SentimentDAO sentimentDAO;
 
     public HashMap<String, Object> getAnalyzeResult(String content, int productNo2) {
         String url = "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
@@ -56,9 +56,8 @@ public class EmotionAnalyzeService {
                 HashMap<String, Double> sentiment = (HashMap<String, Double>) document.get("sentiment");
                 //HashMap<String, Double> : key는 String, value는 Double인 HashMap
 
-
                 SentimentDTO sentimentDTO = new SentimentDTO();
-                sentimentDTO.setProduct_no2(productNo2);
+                sentimentDTO.setProduct_no(productNo2);
                 sentimentDTO.setSentiment_positive(sentiment.get("positive"));
                 sentimentDTO.setSentiment_negative(sentiment.get("negative"));
                 sentimentDTO.setSentiment_neutral(sentiment.get("neutral"));

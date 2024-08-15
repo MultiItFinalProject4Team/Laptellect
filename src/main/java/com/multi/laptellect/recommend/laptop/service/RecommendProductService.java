@@ -193,6 +193,7 @@ public class RecommendProductService {
         }
     }
 //장소에 따라 무게 태그를 반환
+
     private List<String> getPlace(String place) {
 
         if (place == null) {//장소가 null이면 빈 리스트 반환
