@@ -96,4 +96,14 @@ public interface CustomDao {
     List<ProductqList> getProductOpinionList(int productNo);
 
     List<ProductqList> getProductSearchList(ProductSearchDto searchDto);
+
+    List<NoticeListDto> getNoticeList();
+
+    NoticeListDto getnotice(int noticeNo);
+
+    void noticeApp(NoticeListDto noticeListDto);
+
+    void deleteNotice(int noticeNo);
+
+    void updateNotice(NoticeListDto dto);
 }

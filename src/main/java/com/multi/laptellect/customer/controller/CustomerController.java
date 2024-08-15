@@ -77,7 +77,7 @@ public class CustomerController {
     @GetMapping("/notice_detail/{noticeNo}")
     public String notice_detail(@PathVariable("noticeNo") int noticeNo, Model model) {
         System.out.println(noticeNo);
-        NoticeDto notice = customerService.getnotice(noticeNo);
+        NoticeListDto notice = customerService.getnotice(noticeNo);
         model.addAttribute("notice",notice);
         return "/customer/user/notice_detail";
     }
