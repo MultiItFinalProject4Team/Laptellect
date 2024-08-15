@@ -72,16 +72,18 @@ public class RecommenService {
 
 
 
-        String gpuName = laptopSpecDTO.getGpu().getGpuChipset();
-        String screenSize = laptopSpecDTO.getDisplay().getScreenSize();
-        String osName = laptopSpecDTO.getOs();
-        String thicName = laptopSpecDTO.getPortability().getThickness();
-        String usbNo = laptopSpecDTO.getAddOn().getUsb();
-        String recentNo = laptopSpecDTO.getRegistrationDate();
-        String weightName = laptopSpecDTO.getPortability().getWeight();
-        String powerName = laptopSpecDTO.getPower().getAdapter();
-        String storageName = laptopSpecDTO.getStorage().getStorageCapacity();
-        String cpuName = laptopSpecDTO.getCpu().getCpuNumber();
+        String gpuName = laptopSpecDTO.getGpu().getGpuChipset();//gpu
+        String screenSize = laptopSpecDTO.getDisplay().getScreenSize();//화면 크기
+        String osName = laptopSpecDTO.getOs();//운영 체제 여부
+        String thicName = laptopSpecDTO.getPortability().getThickness();//두께
+        String usbNo = laptopSpecDTO.getAddOn().getUsb();//usb 단자 갯수
+        String recentNo = laptopSpecDTO.getRegistrationDate();//등록일
+        String weightName = laptopSpecDTO.getPortability().getWeight();//무게
+        String powerName = laptopSpecDTO.getPower().getAdapter();//어댑터
+        String storageName = laptopSpecDTO.getStorage().getStorageCapacity();//저장공간
+        String cpuName = laptopSpecDTO.getCpu().getCpuNumber(); //cpu
+        String panelSurName = laptopSpecDTO.getDisplay().getPanelSurface(); //패널 표면 처리
+        String refreshName = laptopSpecDTO.getDisplay().getResolution(); //해상도
 
 
         //gpuName, screenSize 변수명 변경
@@ -90,43 +92,37 @@ public class RecommenService {
         if (isGpuSuitableForSteamOrFPS(gpuName)) {
             tagNo = findTagByData(tags, "게이밍");
             assignedTags.add(tagNo);
-            log.info("제품 {}에 '게이밍' 태그(#{}) 할당", tagNo);
+            log.info("'게이밍' 태그(#{}) 할당", tagNo);
         }
         if (isGpuSuitableForOnlineGames(gpuName, cpuName)) {
             tagNo = findTagByData(tags, "펠월드");
             assignedTags.add(tagNo);
-            log.info(" '펠월드' 태그(#{}) 할당", tagNo);
+            log.info("'펠월드' 태그(#{}) 할당", tagNo);
         }
-//        if (isGpuSuitableForAOSGames(gpuName)) {
-//            tagNo = findTagByData(tags, "가성비");
-//            assignedTags.add(tagNo);
-//            log.info(" '가성비' 태그(#{}) 할당", tagNo);
-//        }
-
         if (isScreenSuitableForCoding(screenSize)) {
             tagNo = findTagByData(tags, "넓은 화면");
             assignedTags.add(tagNo);
-            log.info(" '넓은 화면' 태그(#{}) 할당", tagNo);
+            log.info("'넓은 화면' 태그(#{}) 할당", tagNo);
         }
         if (isScreenSuitableForDocuments(screenSize)) {
             tagNo = findTagByData(tags, "작은 화면");
             assignedTags.add(tagNo);
-            log.info(" '작은 화면' 태그(#{}) 할당", tagNo);
+            log.info("'작은 화면' 태그(#{}) 할당", tagNo);
         }
         if (isScreenSuitableForStudents(screenSize)) {
             tagNo = findTagByData(tags, "적당한 화면");
             assignedTags.add(tagNo);
-            log.info(" '적당한 화면' 태그(#{}) 할당", tagNo);
+            log.info("'적당한 화면' 태그(#{}) 할당", tagNo);
         }
         if (isWindowsOS(osName)) {
             tagNo = findTagByData(tags, "윈도우 있음");
             assignedTags.add(tagNo);
-            log.info(" '윈도우' 태그(#{}) 할당", tagNo);
+            log.info("'윈도우' 태그(#{}) 할당", tagNo);
         }
         if (isSlim(thicName)) {
             tagNo = findTagByData(tags, "슬림");
             assignedTags.add(tagNo);
-            log.info(" '슬림' 태그(#{}) 할당", tagNo);
+            log.info("'슬림' 태그(#{}) 할당", tagNo);
         }
         if (isUsb(usbNo)) {
             tagNo = findTagByData(tags, "많은 USB 단자");
@@ -192,6 +188,16 @@ public class RecommenService {
             tagNo = findTagByData(tags, "로스트 아크");
             assignedTags.add(tagNo);
             log.info("'로스트 아크' 태그(#{}) 할당", tagNo);
+        }
+        if(ispaneSur(panelSurName)) {
+            tagNo = findTagByData(tags, "눈부심 방지");
+            assignedTags.add(tagNo);
+            log.info("'눈부심 방지' 태그(#{}) 할당", tagNo);
+        }
+        if (isRefresh(refreshName)) {
+            tagNo = findTagByData(tags, "높은 해상도");
+            assignedTags.add(tagNo);
+            log.info("'높은 해상도' 태그(#{}) 할당", tagNo);
         }
 
 
@@ -267,11 +273,11 @@ public class RecommenService {
         if (cpu == null || cpuScore1 == null) {
             return false;
         }
+
         for (String cpuName : cEnt.keySet()) {
             String cpuNameC1 = pattern.matcher(cpuName).replaceAll("");
             if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
                 int cpuCode = cEnt.get(cpuName);
-                log.info("펠 cpu 소스 {} :", cpuScore1);
                 return cpuCode > cpuScore1;
             }
         }
@@ -302,23 +308,18 @@ public class RecommenService {
             return false;
         }
 
-
-
     private boolean isCoding(String coding) {
         Map<String, Integer> ent3 = cpuConfig.getCpuMark();
         Pattern pattern = Pattern.compile("[\\s()]+");
         String key = pattern.matcher("i3-1315U (1.2GHz)").replaceAll("");
         Integer cpuScore = ent3.get(key);
 
-        log.info("cpu소스 가져오나요? {} :", cpuScore);
-        log.info("결과는요? {} :", coding);
-        log.info("ent비어있나요? {}:", ent3);
-
         if (coding == null) {
             return false;
         }
         if (cpuScore == null)
             return false;
+
         for (String cpuName : ent3.keySet()) {
             String cpuNameC = pattern.matcher(cpuName).replaceAll("");
             if (coding.replaceAll("[\\s()]+", "").contains(cpuNameC)) {
@@ -335,13 +336,12 @@ public class RecommenService {
         String key2 = pattern1.matcher("GTX1650").replaceAll("");
         Integer gtxScore = ent.get(key2);
 
-        log.info("gpu 소스 가져오나요 {} :", gtxScore);
-
         if (gpu == null) {
             return false;
         }
         if (gtxScore == null)
             return false;
+
         for (String gpuName : ent.keySet()) {
             String gpuNameG = pattern1.matcher(gpuName).replaceAll("");
             if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameG)) {
@@ -349,7 +349,7 @@ public class RecommenService {
                 return gpuCode >= gtxScore;
             }
         }
-            return false;
+        return false;
     }
     private boolean isGpuSuitableForOnlineGames(String cpu, String gpu) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
@@ -359,8 +359,6 @@ public class RecommenService {
         String Key4 = pattern2.matcher("RTX4060").replaceAll("");
         Integer cpuScore1 = cEnt.get(Key3);
         Integer gpuScore1 = gEnt.get(Key4);
-        log.info("펠 cpu 소스 {} :", cpuScore1);
-        log.info("펠 gpu 소스 {} :", gpuScore1);
 
         if (cpu == null || gpu == null || cpuScore1 == null || gpuScore1 == null) {
             return false;
@@ -375,33 +373,13 @@ public class RecommenService {
                     String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
                     if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
                         int gpuCode = gEnt.get(gpuName);
-                        log.info("펠 cpu 소스 {} :", cpuScore1);
-                        log.info("펠 gpu 소스 {} :", gpuScore1);
                         return cpuCode >= cpuScore1 && gpuCode >= gpuScore1;
-
                     }
                 }
             }
         }
         return false;
     }
-
-//    private boolean isGpuSuitableForAOSGames(String gpu) {
-//        Map<String, Integer> ent4 = gpuConfig.getGpuMark();
-//        Pattern pattern2 = Pattern.compile("[\\s()]+");
-//        String key2 = pattern2.matcher("");
-//        if (gpu == null) {
-//            return false;
-//        }
-//
-//        );
-//        for (String suitableGpu : suitableGpus) {
-//            if (gpu.contains(suitableGpu)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     private boolean isScreenSuitableForCoding(String screena) {
         if (screena == null) {
@@ -446,7 +424,6 @@ public class RecommenService {
         List<String> suitableOs = List.of("윈도우11프로", "윈도우11홈", "윈도우10 프로", "윈도우11(설치)", "윈도우10(설치)", "윈도우10");
         for (String suitableOss : suitableOs) {
             if (os.contains(suitableOss)) {
-                log.info("윈도우 태그 할당 : {} {} ", os, suitableOss);
                 return true;
             }
         }
@@ -471,7 +448,6 @@ public class RecommenService {
         List<String> suitableteUsb = List.of("총5개", "총6개", "총4개");
         for (String suitabletUsbs : suitableteUsb) {
             if (usb.contains(suitabletUsbs)) {
-                log.info("usb 많음 태그 할당 : {} {} ", usb, suitabletUsbs);
                 return true;
                 }
             }
@@ -485,7 +461,6 @@ public class RecommenService {
         List<String> suitableUsbe = List.of("총3개", "총2개");
         for (String suitableUsebs : suitableUsbe) {
             if (usbe.contains(suitableUsebs)) {
-                log.info("usb 적음 태그 할당 : {} {} ", usbe, suitableUsebs);
                 return true;
             }
         }
@@ -505,6 +480,19 @@ public class RecommenService {
         return false;
     }
 
+    private boolean ispaneSur(String panel) {
+        if (panel == null) {
+            return false;
+        }
+        List<String> suitableSur = List.of("눈부심 방지");
+        for (String suitableSure : suitableSur) {
+            if (panel.contains(suitableSure)) {
+
+            }
+        }
+        return true;
+
+    }
     private boolean isWeight(String weight) {
         if (weight == null) {
             return false;
@@ -556,6 +544,17 @@ public class RecommenService {
             return false;
         }
     }
+
+    private boolean isRefresh(String refresh) {
+        if (refresh == null) {
+        } try {
+            double RefreshBig = Double.parseDouble(refresh.replaceAll("[\\\\s()a-zA-Z-]+", ""));
+            return RefreshBig > 19201080;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
 
     private int findTagByData(List<TaggDTO> tags, String tagData ) {
