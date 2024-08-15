@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<html layout:decorate="~{customer/layout/layout-customer}">
+<html layout:decorate="~{common/layout-Admin}">
 <head>
     <meta charset="UTF-8">
     <title>공지사항</title>
@@ -25,8 +25,14 @@
         <hr>
     </header>
     <div>
-        <p th:text="${notice.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</p>
-        <p th:text="${#dates.format(notice.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
+        <input type="hidden" id="noitceNo" th:value="${notice.noticeNo}" />
+        <input type="hidden" id="mainRegist" th:value="${notice.mainRegist}" />
+        <p th:text="${notice.title}" style="font-size: 40px; font-weight: bold; line-height: 1;" id="title">제목</p>
+        <p th:text="${#dates.format(notice.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;" id="createdAt">작성일</p>
+        <div class="d-flex justify-content-end" aria-label="Small button group">
+            <a th:href="@{/customer/admin/update_notice/{noticeNo}(noticeNo=${notice.noticeNo})}" th:onclick="updateNotice([[${notice.noticeNo}]])" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn crud-btn">공지 수정</a>
+            <a th:href="@{/customer/admin/delete_notice/{noticeNo}(noticeNo=${notice.noticeNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn crud-btn">공지 삭제</a>
+        </div>
     </div>
     <hr class="border border-dark">
     <div id="content" name="content" th:utext="${notice.content}" readonly="true">내용</div>
@@ -36,7 +42,7 @@
 <div align="center">
     <hr class="border border-dark">
     <div class="btn-group" aria-label="Small button group">
-        <a href="/customer/user/customer_notice" class="btn bg-body-secondary">목록으로</a>
+        <a href="/customer/admin/admin_notice" class="btn bg-body-secondary">목록으로</a>
     </div>
 </div>
 </div>

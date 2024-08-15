@@ -71,6 +71,19 @@ CREATE TABLE images(
 	reference_code varchar(100)
 );
 
+-- 공지사항 테이블
+CREATE TABLE notice(
+	notice_no int AUTO_INCREMENT PRIMARY KEY,
+	member_no int,
+	title varchar(100),
+	content text,
+	main_regist varchar(10) DEFAULT 'N',
+	create_at timestamp DEFAULT current_timestamp,
+	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
+	reference_code varchar(100),
+	FOREIGN KEY (member_no) REFERENCES mem_member(member_no)
+);
+
 -- 임시 카테고리
 INSERT INTO personalquestion_category VALUES ('personalq_member','회원');
 INSERT INTO personalquestion_category VALUES ('personalq_else','기타');

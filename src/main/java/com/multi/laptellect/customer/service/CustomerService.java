@@ -29,32 +29,12 @@ public class CustomerService {
     private EmailUtil emailUtil;
 
     public List<NoticeListDto> getNoticeList() {
-        List<NoticeListDto> notice = new ArrayList<>();
-        NoticeListDto note = NoticeListDto.builder()
-                .no(1)
-                .title("title1")
-                .createdAt("2024-07-19")
-                .build();
-        notice.add(note);
-        NoticeListDto note2 = NoticeListDto.builder()
-                .no(2)
-                .title("title2")
-                .createdAt("2024-07-18")
-                .build();
-        notice.add(note2);
-        return notice;
+        return customDao.getNoticeList();
     }
 
 
-    public NoticeDto getnotice(int noticeNo) {
-        NoticeDto noticeDto = NoticeDto.builder()
-                .noticeNo(noticeNo)
-                .title("test")
-                .writer("admin")
-                .createDate("2024-07-19")
-                .content("content")
-                .build();
-        return noticeDto;
+    public NoticeListDto getnotice(int noticeNo) {
+        return customDao.getnotice(noticeNo);
     }
 
     public List<PersonalqListDto> getPersonalqList(int memberNo) {
@@ -397,5 +377,17 @@ public class CustomerService {
 
     public List<ProductqList> getProductSearchList(ProductSearchDto searchDto) {
         return  customDao.getProductSearchList(searchDto);
+    }
+
+    public void noticeApp(NoticeListDto noticeListDto) {
+        customDao.noticeApp(noticeListDto);
+    }
+
+    public void deleteNotice(int noticeNo) {
+        customDao.deleteNotice(noticeNo);
+    }
+
+    public void updateNotice(NoticeListDto dto) {
+        customDao.updateNotice(dto);
     }
 }

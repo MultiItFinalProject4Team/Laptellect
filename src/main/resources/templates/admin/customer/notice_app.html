@@ -2,50 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<html layout:decorate="~{customer/layout/layout-customer}">
+<html layout:decorate="~{common/layout-Admin}">
 <head>
     <meta charset="UTF-8">
-    <title>1:1 문의</title>
+    <title>공지사항 관리</title>
     <link rel="stylesheet" href="/css/customer/ckeditor.css">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
-    <style>
-        .file-input-wrapper {
-            margin-bottom: 10px;
-        }
-    </style>
     <link href="/css/customer/nav.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <style>
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-5">
+<div class="container mt-2">
     <header>
-        <h1 align="left"style="font-size:40px">1:1 문의 수정</h1>
+        <h1 align="left"style="font-size:40px">공지사항 등록</h1>
     </header>
     <hr>
-    <form action="/customer/user/update_personalq" method="post" enctype="multipart/form-data">
+    <form action="/customer/admin/notice_app" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">
-        <label class="input-group-text" for="title">제목:</label>
-        <input class="col-md-9" type="text" id="title" name="title" th:value="${dto.title}" required><br><br>
-
-        <label class="input-group-text" for="inputGroupSelect01" >카테고리</label>
-        <select class="form-select col-md-3" id="inputGroupSelect01" name="personalqCategorycode">
-            <option th:each="categories : ${category}"
-                    th:value="${categories.personalqCategorycode}"
-                    th:text="${categories.personalqCategoryname}">
-            </option>
-        </select>
+            <input type="text" id="memberNo" name="memberNo" th:value="${memberNo}" hidden="true"><br><br>
+            <label class="input-group-text" for="title">제목:</label>
+            <input class="col-md-9" type="text" id="title" name="title" required><br><br>
+            <div class="d-flex row justify-content-center" style="margin-left:10px; border: 2px solid #000000;">
+                <label class="input-group-text">메인 공지 여부 </label>
+                <label>
+                    <input type="radio" name="mainRegist" value="Y"> Yes
+                </label>
+                <label>
+                    <input type="radio" name="mainRegist" value="N" checked> No
+                </label>
+            </div>
         </div>
+
         <div class="editor-container editor-container_classic-editor" id="editor-container">
-            <div class="editor-container__editor" aria-required="true"><textarea id="content" name="content" th:text="${dto.content}"></textarea></div>
+            <div class="editor-container__editor" aria-required="true">
+                <textarea id="content" name="content"></textarea>
+            </div>
         </div>
 
-        <input type="hidden" id="personalqNo" name="personalqNo" th:value="${dto.personalqNo}">
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-custom-primary">수정하기</button>
+            <button type="submit" class="btn btn-custom-primary">등록</button>
         </div>
     </form>
-
     <script type="importmap">
         {
             "imports": {

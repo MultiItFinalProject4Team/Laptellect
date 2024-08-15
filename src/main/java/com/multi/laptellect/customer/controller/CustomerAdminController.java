@@ -210,4 +210,74 @@ public class CustomerAdminController {
         model.addAttribute("date",searchDto.getDate());
         return "/customer/admin/search_all_personalq";
     }
+
+    @GetMapping("/admin_notice")
+    public String admin_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        int count=0;
+        for(NoticeListDto dto: list){
+            if (dto.getMainRegist().equals("Y")) {
+                count++;
+            }
+        }
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        return "/admin/customer/admin_notice";
+    }
+
+    @GetMapping("/notice_app")
+    public String notice_app(Model model){
+        model.addAttribute("memberNo",SecurityUtil.getUserNo());
+        return "/admin/customer/notice_app";
+    }
+
+    @PostMapping("/notice_app")
+    public String notice_app(NoticeListDto noticeListDto, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        System.out.println(noticeListDto);
+        customerService.noticeApp(noticeListDto);
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        return "redirect:/customer/admin/admin_notice";
+    }
+
+    @GetMapping("/admin_notice_detail/{noticeNo}")
+    public String notice_detail(@PathVariable("noticeNo") int noticeNo, Model model) {
+        System.out.println(noticeNo);
+        NoticeListDto notice = customerService.getnotice(noticeNo);
+        model.addAttribute("notice",notice);
+        return "/admin/customer/admin_notice_detail";
+    }
+
+    @GetMapping("/delete_notice/{noticeNo}")
+    public String delete_notice(@PathVariable("noticeNo")int noticeNo){
+        customerService.deleteNotice(noticeNo);
+        return "redirect:/customer/admin/admin_notice";
+    }
+
+    @GetMapping("update_notice/{noticeNo}")
+    public String update_notice(@PathVariable("noticeNo") int noticeNo, Model model){
+        NoticeListDto dto = customerService.getnotice(noticeNo);
+        model.addAttribute("dto",dto);
+        return "/admin/customer/notice_update";
+    }
+
+    @PostMapping("update_notice")
+    public String update_notice(NoticeListDto dto){
+        customerService.updateNotice(dto);
+        String redirectUrl = String.format("/customer/admin/admin_notice_detail/%s", dto.getNoticeNo());
+        return "redirect:"+redirectUrl;
+    }
 }
