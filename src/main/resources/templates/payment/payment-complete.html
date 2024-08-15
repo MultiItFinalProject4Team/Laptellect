@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>결제 완료</title>
+    <link rel="stylesheet" href="/css/payment/payment-complete.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="payment-complete-container">
+        <h1 class="payment-complete-title">결제가 완료되었습니다</h1>
+        <div class="payment-info">
+            <table>
+                <thead>
+                <tr>
+                    <th>상품 이미지</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                    <th>총 가격</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${paymentInfo.products}">
+                    <td class="product-image"><img th:src="@{'/img/product/' + ${product.image}}" alt="Product Image"></td>
+                    <td th:text="${product.productName}"></td>
+                    <td th:text="${product.quantity}"></td>
+                    <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + '원'}"></td>
+                    <td th:text="${#numbers.formatDecimal(product.price * product.quantity, 0, 'COMMA', 0, 'POINT') + '원'}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="summary-info">
+                <p><strong>총 수량:</strong> <span th:text="${paymentInfo.totalQuantity} + '개'"></span></p>
+                <p><strong>할인 금액:</strong> <span th:text="${#numbers.formatDecimal(paymentInfo.discountAmount, 0, 'COMMA', 0, 'POINT') + '원'}"></span></p>
+                <p><strong>총 결제금액:</strong> <span th:text="${#numbers.formatDecimal(paymentInfo.totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}"></span></p>
+            </div>
+        </div>
+        <div class="btn-container">
+            <a href="/" class="btn">홈으로 돌아가기</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

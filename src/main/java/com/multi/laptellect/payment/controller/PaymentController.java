@@ -43,6 +43,13 @@ public class PaymentController {
         this.cartService = cartService;
     }
 
+    @GetMapping("/complete")
+    public String paymentComplete(@RequestParam("impUid") String impUid, Model model) throws Exception {
+        PaymentCompleteDTO paymentInfo = paymentService.getPaymentInfo(impUid);
+        model.addAttribute("paymentInfo", paymentInfo);
+        return "payment/payment-complete";
+    }
+
 //    @GetMapping("/orderlist")
 //    public String orderList(Model model) {
 //        int memberNo = SecurityUtil.getUserNo();
@@ -206,7 +213,11 @@ public class PaymentController {
                 if (Integer.parseInt(paymentpointDTO.getUsedPoints()) > 0) {
                     paymentService.usepoint(paymentpointDTO);
                 }
-                return ResponseEntity.ok(Map.of("success", true, "message", "Payment verified successfully"));
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "message", "Payment verified successfully",
+                        "redirectUrl", "/payment/complete?impUid=" + request.getImPortId()
+                ));
             } else {
                 return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Payment amount mismatch"));
             }
@@ -218,8 +229,6 @@ public class PaymentController {
     @Transactional
     @PostMapping("/verifyCartPayment")
     public ResponseEntity<Map<String, Object>> verifyCartPayment(@RequestBody CartPaymentDTO request) {
-        log.info("반환 개수 = {}", request.getProducts().size());
-        log.info("반환 개수 = {}", request.getProducts());
         try {
             int memberNo = SecurityUtil.getUserNo();
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -252,7 +261,11 @@ public class PaymentController {
                 // 장바구니 비우기
                 cartService.deleteCartProduct(request.getProducts().stream().map(p -> String.valueOf(p.getProductNo())).toList());
 
-                return ResponseEntity.ok(Map.of("success", true, "message", "Cart payment verified successfully"));
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "message", "Cart payment verified successfully",
+                        "redirectUrl", "/payment/complete?impUid=" + request.getImPortId()
+                ));
             } else {
                 throw new IllegalStateException("Payment amount mismatch");
             }
