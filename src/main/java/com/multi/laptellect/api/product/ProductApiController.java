@@ -178,6 +178,8 @@ public class ProductApiController {
         model.addAttribute("typeNo", searchDTO.getTypeNo());
         model.addAttribute("keyword", searchDTO.getKeyword());
 
+        log.info("컨트롤러 model 데이터 확인 {},{},{},{},{},{},{}",pageable.getPageNumber() + 1, productPage.getTotalPages(), searchDTO.getSize(), searchDTO.getSort(),productPage, searchDTO.getTypeNo(), searchDTO.getKeyword());
+
         return "product/product/productList";
     }
 }

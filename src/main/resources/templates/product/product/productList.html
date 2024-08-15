@@ -90,33 +90,35 @@
 <script>
     $(document).ready(function() {
 
-            let currentPage = 1;
-            let pageSize = 30;
-            let typeNo = 1;
+            // 제품 리스트를 로드하는 함수
+            function loadProducts(page, size, typeNo, keyword, filters = []) {
+                let data = {
+                    page: page - 1,
+                    size: size,
+                    typeNo: typeNo,
+                    keyword: keyword,
+                    cate: filters
+                };
+                console.log("Calling loadProducts with - page:", data);
 
-    function loadProducts(page, size, typeNo, keyword) {
-            let data = {
-                page: page - 1,
-                size: size,
-                typeNo: typeNo,
-                keyword: keyword
-            };
-            console.log("Calling loadProducts with - page:", page, "size:", size, "typeNo:", typeNo, "keyword:", keyword);
-
-            $.ajax({
-                url: "/api/product/product-list",
-                type: "GET",
-                data: data,
-                success: function (response) {
+                $.ajax({
+                    url: "/api/product/product-list",
+                    type: "GET",
+                    data: data,
+                    success: function (response) {
                     console.log("AJAX success:", response);
-                    $('#product-list').html(response);
-                    formatPrices();
-                },
-                error: function (error){
-                    console.log(error);
-                }
-            });
-        }
+                        $('#product-list').html(response);
+                        formatPrices();
+                    },
+                    error: function (error){
+                        console.log(error);
+                    }
+                });
+            }
+
+            // 페이지 로드 시 초기 제품 리스트 로드
+            loadProducts(1, pageSize, typeNo, '');
+
 
 
     $('.all-product').on('click', 'a.page-link', function(event) {

@@ -98,33 +98,41 @@
 
     <select id="findByNameSearch" resultType="productDTO">
 
-        SELECT
-        p.product_no,
-        p.type_no,
-        p.product_name,
-        p.price,
-        p.reference_code,
-        p.created_at,
-        p.updated_at,
-        p.product_code,
-        i.upload_name
+        SELECT DISTINCT
+            p.product_no,
+            p.type_no,
+            p.product_name,
+            p.price,
+            p.reference_code,
+            p.created_at,
+            p.updated_at,
+            p.product_code,
+            i.upload_name
         FROM
-        product p
+            product p
         JOIN
-        images i ON i.reference_code = p.reference_code
+            images i ON i.reference_code = p.reference_code
+        JOIN
+            product_spec po ON po.product_no = p.product_no
         WHERE
-        p.product_name LIKE CONCAT('%', #{ searchDTO.keyword }, '%')
-        AND p.type_no = #{ searchDTO.typeNo }
-<!--        <if test="searchDTO.cate != null and searchDTO.cate.size() > 0">-->
-<!--            AND -->
-<!--            -->
-<!--        </if>-->
+            p.product_no IN (
+                SELECT DISTINCT p.product_no
+                FROM product p
+                JOIN product_spec po ON po.product_no = p.product_no
+                WHERE p.product_name LIKE CONCAT('%', #{ searchDTO.keyword }, '%')
+                AND p.type_no = #{ searchDTO.typeNo }
+                <if test="searchDTO.cate != null and searchDTO.cate.size() > 0">
+                    <foreach item="item" index="index" collection="searchDTO.cate"  open="(" separator="," close=")">
+                        po.option_value = #{item}
+                    </foreach>
+                </if>
+        )
         ORDER BY
-        p.product_no
+            p.product_no
         LIMIT
-        #{ searchDTO.size }
+            #{ searchDTO.size }
         OFFSET
-        #{ searchDTO.offset }
+            #{ searchDTO.offset }
     </select>
 
     <select id="countBySearchCriteria" resultType="long">

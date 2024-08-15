@@ -89,11 +89,11 @@ public class ProductController {
      * Product list string.
      * @return the string
      */
-    @GetMapping("/productList")
-    public String ProductList()
-                               {
-        return "product/productList";
-    }
+//    @GetMapping("/productList")
+//    public String ProductList()
+//                               {
+//        return "product/productList";
+//    }
 
 //    @GetMapping("/search")
 //    public String searchProducts(@RequestParam(name = "typeNo") int typeNo,
@@ -149,7 +149,7 @@ public class ProductController {
 //
 //    }
 
-    @GetMapping("/cate")
+    @GetMapping("/productList")
     public String cate(Model model){
 
         Map<String, List<String>> cate = productService.productFilterSearch();

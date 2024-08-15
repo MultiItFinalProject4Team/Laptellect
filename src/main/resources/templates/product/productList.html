@@ -6,107 +6,109 @@
     <link rel="stylesheet" th:href="@{/css/product/product.css}">
     <script th:inline="javascript">
         $(document).ready(function() {
+                let currentPage = 1;
+                let pageSize = 30;
+                let typeNo = 1;
 
+                // 기본 탭에 active 클래스 추가 기본 선택 상태로 만듦
+                switch(typeNo) {
+                    case 1:
+                        $("#laptop-tab").addClass("active");
+                        break;
+                    case 2:
+                        $("#mouse-tab").addClass("active");
+                        break;
+                    case 3:
+                        $("#keyboard-tab").addClass("active");
+                        break;
+                    default:
+                        $("#laptop-tab").addClass("active");
+                        break;
+                }
 
-        let filters = {
+                // 가격 형식을 포맷팅하는 함수
+                function formatPrices() {
+                    $('.price').each(function() {
+                        let value = $(this).text().replace(' 원', '').replace(/,/g, '');
+                        let formattedValue = new Intl.NumberFormat().format(value);
+                        $(this).text(formattedValue + ' 원');
+                    });
+                }
 
+                // 선택된 필터를 가져오는 함수
+                function getSelectedFilters() {
+                    let selectedFilters = [];
+                    $("#filterForm input[type='checkbox']:checked").each(function(){
+                        selectedFilters.push($(this).val()); // 선택된 값만 리스트에 추가
+                    });
+                    return selectedFilters;
+                }
 
-        };
+                // 제품 리스트를 로드하는 함수
+                function loadProducts(page, size, typeNo, keyword, filters = []) {
+                    let data = {
+                        page: page - 1,
+                        size: size,
+                        typeNo: typeNo,
+                        keyword: keyword,
+                        cate: filters
+                    };
+                    console.log("Calling loadProducts with - page:", data);
 
-            let currentPage = 1;
-            let pageSize = 30;
-            let typeNo = 1;
+                    $.ajax({
+                        url: "/api/product/product-list",
+                        type: "GET",
+                        data: data,
+                        success: function (response) {
+                            $('#product-list').html(response);
+                            formatPrices();
+                            currentPage = page;
+                        },
+                        error: function (error){
+                            console.log(error);
+                        }
+                    });
+                }
 
+                // 페이지 로드 시 초기 제품 리스트 로드
+                loadProducts(currentPage, pageSize, typeNo, '');
 
-
-            // 기본 탭에 active 클래스 추가 기본 선택 상태로 만듦
-            switch(typeNo) {
-                case 1:
-                    $("#laptop-tab").addClass("active");
-                    break;
-                case 2:
-                    $("#mouse-tab").addClass("active");
-                    break;
-                case 3:
-                    $("#keyboard-tab").addClass("active");
-                    break;
-                default:
-                    $("#laptop-tab").addClass("active");
-                    break;
-            }
-
-            // 가격 형식을 포맷팅하는 함수
-            function formatPrices() {
-                $('.price').each(function() {
-                    let value = $(this).text().replace(' 원', '').replace(/,/g, '');
-                    let formattedValue = new Intl.NumberFormat().format(value);
-                    $(this).text(formattedValue + ' 원');
+                // 탭을 클릭했을 때 발생하는 이벤트 핸들러
+                $(".product-link").on("click", function (e) {
+                    e.preventDefault();
+                    typeNo = $(this).data('type-no');
+                    currentPage = 1;
+                    loadProducts(currentPage, pageSize, typeNo, '');
+                    console.log(typeNo);
                 });
-            }
 
+                // 검색 폼 제출 시 발생하는 이벤트 핸들러
+                $("#searchForm").on("submit", function(e) {
+                    e.preventDefault();
+                    let keyword = $("#form1").val();
+                    currentPage = 1;
+                    loadProducts(currentPage, pageSize, typeNo, keyword);
+                });
 
-            // 제품 리스트를 로드하는 함수
-            function loadProducts(page, size, typeNo, keyword) {
-                let data = {
-                    page: page - 1,
-                    size: size,
-                    typeNo: typeNo,
-                    keyword: keyword
+                // 필터 변경 시 발생하는 이벤트 핸들러
+                $("#filterForm input[type='checkbox']").on("change", function() {
+                    let filters = getSelectedFilters();
+                    currentPage = 1;
+                    loadProducts(currentPage, pageSize, typeNo, '', filters);
+                });
 
-
-                };
-                    console.log("Calling loadProducts with - page:", page, "size:", size, "typeNo:", typeNo, "keyword:", keyword);
-
+                // 카테고리 데이터를 로드하는 AJAX 요청
                 $.ajax({
-                    url: "/api/product/product-list",
+                    url: "/product/productList",
                     type: "GET",
-                    data: data,
                     success: function (response) {
-                    console.log("AJAX success:", data);
-                        $('#product-list').html(response);
-                        formatPrices();
+                        // 카테고리 데이터를 사용해 동적 콘텐츠를 업데이트하는 코드가 필요합니다.
                     },
                     error: function (error){
                         console.log(error);
                     }
                 });
-            }
-
-
-            // 페이지 로드 때 초기 상품 불러옴
-            loadProducts(1, 10, 1, '');
-
-            // 탭을 클릭했을 때 발생하는 이벤트 핸들러
-            $(".product-link").on("click", function (e) {
-                e.preventDefault(); // 기본 클릭 이벤트를 막음 (페이지 이동 방지)
-                typeNo = $(this).data('type-no');
-                console.log(typeNo);
-
-                // 모든 탭에서 active 클래스 제거
-                $(".product-link").removeClass("active");
-                // 클릭된 탭에 active 클래스 추가
-                $(this).addClass("active");
-
-                // 선택된 탭에 따라 제품 리스트를 다시 로드
-                loadProducts(1, pageSize, typeNo, ''); // 선택된 typeNo를 사용해 제품 로드
             });
-
-            // 검색 폼 제출 시 발생하는 이벤트 핸들러
-            $("#searchForm").on("submit", function(e) {
-                e.preventDefault(); // 기본 폼 제출을 막음
-                $("#typeNo").val(typeNo); // 현재 선택된 typeNo 값을 숨겨진 입력 필드에 설정
-                console.log("제발나와라 ㅜ :" + typeNo);
-
-                let keyword = $("#form1").val();
-
-                loadProducts(1, pageSize, typeNo, keyword); // 폼에서 입력된 keyword 사용
-            });
-
-});
-
-
-
-
 </script>
 
     <style>
@@ -132,7 +134,7 @@
 <body>
 <div class="container-md" layout:fragment="content">
     <br>
-    <form id="filterForm" th:action="@{/product/cate}" method="get">
+    <form id="filterForm">
         <table border="1">
             <tbody class="table custom-table custom-table-striped custom-table-bordered custom-table-hover">
             <!-- 제조사 -->
@@ -240,10 +242,6 @@
             </tr>
             </tbody>
         </table>
-
-        <div>
-            <button type="submit" class="btn btn-custom-primary ms-4" style="width: 100px; font-size: 15px">검색</button>
-        </div>
     </form>
     <br>
     <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
@@ -258,7 +256,7 @@
         <input type="hidden" id="typeNo" name="typeNo" value="1"/>
     </form>
     <div>
-        <ul class="nav nav-tab product-taps">
+        <ul class="nav nav-tab product-taps flex-grow-1">
             <li class="nav-item product-item">
                 <a class="nav-link product-link" id="laptop-tab" data-type-no="1" href="#">노트북</a>
             </li>
