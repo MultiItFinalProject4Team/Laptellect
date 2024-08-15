@@ -22,4 +22,6 @@ public interface RecommendProductDAO {
     List<Integer> findAllProductNo();
 
     ArrayList<Integer> findLaptopDetailByFilter(ProductFilterDTO productFilterDTO); // 필터에 맞는 제품 조회
+
+
 }
