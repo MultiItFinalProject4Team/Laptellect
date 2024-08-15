@@ -382,4 +382,12 @@ public class CustomerService {
     public void noticeApp(NoticeListDto noticeListDto) {
         customDao.noticeApp(noticeListDto);
     }
+
+    public void deleteNotice(int noticeNo) {
+        customDao.deleteNotice(noticeNo);
+    }
+
+    public void updateNotice(NoticeListDto dto) {
+        customDao.updateNotice(dto);
+    }
 }

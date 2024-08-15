@@ -216,6 +216,12 @@ public class CustomerAdminController {
         List<NoticeListDto> list = customerService.getNoticeList();
         int page_size=10;
         int adjustPage=page-1;
+        int count=0;
+        for(NoticeListDto dto: list){
+            if (dto.getMainRegist().equals("Y")) {
+                count++;
+            }
+        }
         List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
         int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
@@ -245,5 +251,33 @@ public class CustomerAdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         return "redirect:/customer/admin/admin_notice";
+    }
+
+    @GetMapping("/admin_notice_detail/{noticeNo}")
+    public String notice_detail(@PathVariable("noticeNo") int noticeNo, Model model) {
+        System.out.println(noticeNo);
+        NoticeListDto notice = customerService.getnotice(noticeNo);
+        model.addAttribute("notice",notice);
+        return "/admin/customer/admin_notice_detail";
+    }
+
+    @GetMapping("/delete_notice/{noticeNo}")
+    public String delete_notice(@PathVariable("noticeNo")int noticeNo){
+        customerService.deleteNotice(noticeNo);
+        return "redirect:/customer/admin/admin_notice";
+    }
+
+    @GetMapping("update_notice/{noticeNo}")
+    public String update_notice(@PathVariable("noticeNo") int noticeNo, Model model){
+        NoticeListDto dto = customerService.getnotice(noticeNo);
+        model.addAttribute("dto",dto);
+        return "/admin/customer/notice_update";
+    }
+
+    @PostMapping("update_notice")
+    public String update_notice(NoticeListDto dto){
+        customerService.updateNotice(dto);
+        String redirectUrl = String.format("/customer/admin/admin_notice_detail/%s", dto.getNoticeNo());
+        return "redirect:"+redirectUrl;
     }
 }

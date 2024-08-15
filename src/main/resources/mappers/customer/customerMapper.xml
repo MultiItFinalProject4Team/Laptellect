@@ -392,4 +392,18 @@
         values
         (#{memberNo}, #{title}, #{content}, #{mainRegist})
     </insert>
+
+    <delete id="deleteNotice">
+        delete from notice
+        where notice_no=#{noticeNo}
+    </delete>
+
+    <update id="updateNotice" parameterType="com.multi.laptellect.customer.dto.NoticeListDto">
+        update notice
+        set
+        title=#{title},
+        content=#{content},
+        main_regist=#{mainRegist}
+        where notice_no=#{noticeNo}
+    </update>
 </mapper>
