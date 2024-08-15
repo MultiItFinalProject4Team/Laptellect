@@ -36,13 +36,4 @@ public class SchedulerConfiguration {
         log.info("상품 조회수 스케쥴러");
     }
 
-//    @Scheduled(fixedRate = 5000)  //5초 간격 태그 할당
-//    public void tagAssignmentCount() {
-//        try {
-//            recommenService.assignTagsToProducts();
-//            log.info("태그 할당 완료");
-//        } catch (Exception e) {
-//            log.error("태그 할당 중 오류: e");
-//        }
-//    }
 }

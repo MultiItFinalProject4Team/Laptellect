@@ -24,7 +24,7 @@
 //            recommenService.assignTagsToProducts();
 //            log.info("태그 할당 스케줄러 완료");
 //        } catch (Exception e) {
-//            log.error("태그 할당 중 오류: {}", e.getMessage());
+//            log.error("태그 할당 중 오류:", e);
 //        }
 //    }
 //}
