@@ -110,4 +110,6 @@ public interface AuthService {
      * @throws Exception the exception
      */
     boolean isVerifyTel(String verifyCode) throws Exception;
+
+    int isRegistrationNo(MemberDTO memberDTO) throws Exception;
 }

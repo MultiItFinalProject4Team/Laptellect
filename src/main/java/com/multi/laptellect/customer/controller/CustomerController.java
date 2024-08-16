@@ -33,6 +33,7 @@ public class CustomerController {
     //공지사항 페이지(메인)
     @GetMapping({"/customer_notice",""})
     public String customer_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        NoticeSearchDto searchDto = NoticeSearchDto.builder().mainRegist("A").keyword("").date("recent").build();
         List<NoticeListDto> list = customerService.getNoticeList();
         int page_size=10;
         int adjustPage=page-1;
@@ -42,6 +43,8 @@ public class CustomerController {
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("dto",searchDto);
+        model.addAttribute("state","all");
         return "/customer/user/customer_notice";
     }
     //1:1문의 페이지
@@ -606,5 +609,22 @@ public class CustomerController {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/user_search_notice")
+    public String search_notice(NoticeSearchDto dto, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        System.out.println(dto);
+        List<NoticeListDto> list = customerService.getNoticeSearchList(dto);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("dto",dto);
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("state","search");
+        return "/customer/user/customer_notice";
     }
 }

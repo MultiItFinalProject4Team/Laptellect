@@ -1,7 +1,10 @@
-html, body {
-    height: 100%;
-    margin: 0;
-}
+
+
+
+        #adminLogo {
+            width: 80px;
+            height: 80px;
+        }
 
         ul {
           list-style: none;
@@ -13,12 +16,17 @@ html, body {
             height: 80px;
         }
 
-        .d-flex {
-            display: flex;
-        }
         .sidebar {
-            width: 280px;
+            width: 240px;
+            height: auto;
             box-sizing: border-box;
+            text-color: black;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
         }
         .sidebar a {
             color: white;
@@ -33,16 +41,28 @@ html, body {
             padding: 15px;
             text-align: center;
         }
-        .sidebar .profile img {
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
+
         .sidebar .profile p {
             margin: 0;
             color: white;
         }
-        .content {
-            flex-grow: 1;
+
+        .profile-box {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
             padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 700px;
         }
+
+        .profile-point {
+            width: 100%;
+            margin: 10px 0;
+            padding: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            text-align: right;
+        }
+
 body { font-family: 'Noto Sans KR', sans-serif; }

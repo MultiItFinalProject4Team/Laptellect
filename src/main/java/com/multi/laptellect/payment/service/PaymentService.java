@@ -8,6 +8,7 @@ import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.payment.model.dao.PaymentDAO;
 import com.multi.laptellect.payment.model.dto.*;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -34,6 +35,7 @@ public class PaymentService {
 
     private final ApiKeys apiKeys;
     private final MemberMapper memberMapper;
+    private final ProductService productService;
 
 
 
@@ -41,10 +43,11 @@ public class PaymentService {
     private PaymentDAO paymentDAO;
 
     @Autowired
-    public PaymentService(ApiKeys apiKeys, MemberMapper memberMapper) {
+    public PaymentService(ApiKeys apiKeys, MemberMapper memberMapper, ProductService productService) {
         this.apiKeys = apiKeys;
         this.memberMapper = memberMapper;
 
+        this.productService = productService;
     }
 
     public int usepoint(PaymentpointDTO paymentpointDTO) {
@@ -294,5 +297,61 @@ public class PaymentService {
 
     public List<PaymentReviewDTO> findPaymentReviewsByProductNo(int productNo) {
         return paymentDAO.findPaymentReviewsByProductNo(productNo);
+    }
+
+    public PaymentCompleteDTO getPaymentInfo(String impUid) throws Exception {
+        List<PaymentDTO> payments = paymentDAO.findPaymentsByImPortId(impUid);
+        PaymentpointDTO paymentpointDTO = paymentDAO.findUsedPoint(impUid);
+
+        PaymentCompleteDTO paymentInfo = new PaymentCompleteDTO();
+        List<ProductInfo> productInfoList = new ArrayList<>();
+        int totalQuantity = 0;
+        int totalPrice = 0;
+        int count = 0;
+
+        for (PaymentDTO payment : payments) {
+            ProductDTO product = productService.findProductByProductNo(String.valueOf(payment.getProductNo()));
+
+            ProductInfo productInfo = new ProductInfo();
+            productInfo.setProductName(product.getProductName());
+            productInfo.setQuantity(payment.getQuantity());
+            productInfo.setPrice(product.getPrice());
+            productInfo.setTotalPrice(payment.getPurchasePrice());
+            productInfo.setImage(product.getImage());
+
+            productInfoList.add(productInfo);
+
+            totalQuantity += payment.getQuantity();
+            totalPrice += payment.getPurchasePrice();
+            count++;
+        }
+
+        paymentInfo.setProducts(productInfoList);
+        paymentInfo.setTotalQuantity(totalQuantity);
+
+
+        int usedPoints = 0;
+        if (paymentpointDTO != null) {
+            usedPoints = Math.abs(Integer.parseInt(String.valueOf(paymentpointDTO.getPaymentPointChange())));
+        }
+
+        paymentInfo.setDiscountAmount(usedPoints);
+        if(count > 1) {
+            paymentInfo.setTotalPrice(totalPrice - usedPoints);
+        }else{
+            paymentInfo.setTotalPrice(totalPrice);
+        }
+
+        return paymentInfo;
+    }
+
+    @Transactional
+    public int updateReview(PaymentReviewDTO reviewDTO) {
+        return paymentDAO.updateReview(reviewDTO);
+    }
+
+    @Transactional
+    public int deleteReview(int paymentProductReviewsNo) {
+        return paymentDAO.deleteReview(paymentProductReviewsNo);
     }
 }

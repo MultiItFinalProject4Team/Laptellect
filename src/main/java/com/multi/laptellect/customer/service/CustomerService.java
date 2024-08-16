@@ -390,4 +390,8 @@ public class CustomerService {
     public void updateNotice(NoticeListDto dto) {
         customDao.updateNotice(dto);
     }
+
+    public List<NoticeListDto> getNoticeSearchList(NoticeSearchDto dto) {
+        return customDao.getNoticeSearchList(dto);
+    }
 }

@@ -48,10 +48,11 @@ public interface ProductMapper {
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
 
-   List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
+    List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
 
     List<LaptopDetailsDTO> productDetails(int productNo);
 
+    List<SpecDTO> productFilterSearch();
 
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")
@@ -78,4 +79,7 @@ public interface ProductMapper {
 
     @Select("SELECT product_no FROM wishlist WHERE member_no = #{ member_no }")
     ArrayList<Integer> findAllWishlistString(int memberNo);
+
+    @Update("UPDATE product SET view_count = view_count + #{ visitCount }, updated_at = updated_at WHERE product_no = #{ productNo }")
+    int updateProductVisit(@Param("productNo") String productNo, @Param("visitCount") int visitCount);
 }

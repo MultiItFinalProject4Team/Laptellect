@@ -169,18 +169,21 @@ public class CustomerAdminController {
     @GetMapping("/all_personal_question")
     public String all_personal_question(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         List<PersonalqListDto> list = customerService.getAllPersonalqList();
+        PersonalqSearchDto searchDto = PersonalqSearchDto.builder().answer("A").keyword("").category("").date("recent").build();
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
         int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
+        model.addAttribute("dto",searchDto);
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("category",category);
         model.addAttribute("role","admin");
-        return "/customer/user/customer_personalq";
+        model.addAttribute("state","all");
+        return "/admin/customer/admin_personalq";
     }
 
     /**
@@ -214,6 +217,7 @@ public class CustomerAdminController {
     @GetMapping("/admin_notice")
     public String admin_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         List<NoticeListDto> list = customerService.getNoticeList();
+        NoticeSearchDto searchDto = NoticeSearchDto.builder().mainRegist("A").keyword("").date("recent").build();
         int page_size=10;
         int adjustPage=page-1;
         int count=0;
@@ -228,6 +232,8 @@ public class CustomerAdminController {
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("dto",searchDto);
+        model.addAttribute("state","all");
         return "/admin/customer/admin_notice";
     }
 
@@ -267,17 +273,58 @@ public class CustomerAdminController {
         return "redirect:/customer/admin/admin_notice";
     }
 
-    @GetMapping("update_notice/{noticeNo}")
+    @GetMapping("/update_notice/{noticeNo}")
     public String update_notice(@PathVariable("noticeNo") int noticeNo, Model model){
         NoticeListDto dto = customerService.getnotice(noticeNo);
         model.addAttribute("dto",dto);
         return "/admin/customer/notice_update";
     }
 
-    @PostMapping("update_notice")
+    @PostMapping("/update_notice")
     public String update_notice(NoticeListDto dto){
         customerService.updateNotice(dto);
         String redirectUrl = String.format("/customer/admin/admin_notice_detail/%s", dto.getNoticeNo());
         return "redirect:"+redirectUrl;
+    }
+
+    @GetMapping("/search_notice")
+    public String search_notice(NoticeSearchDto dto, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        System.out.println(dto);
+        List<NoticeListDto> list = customerService.getNoticeSearchList(dto);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("dto",dto);
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("state","search");
+        return "/admin/customer/admin_notice";
+    }
+
+    @GetMapping("/admin_customer")
+    public String admin_customer(){
+        return "/admin/customer/admin_customer";
+    }
+
+    @GetMapping("/search_all_personal_question")
+    public String search_all_personal_question(Model model, @RequestParam(value = "page",defaultValue = "1") int page, PersonalqSearchDto searchDto){
+        List<PersonalqListDto> list = customerService.getAllPersonalqSearchList(searchDto);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
+        model.addAttribute("dto",searchDto);
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",category);
+        model.addAttribute("role","admin");
+        model.addAttribute("state","search");
+        return "/admin/customer/admin_personalq";
     }
 }

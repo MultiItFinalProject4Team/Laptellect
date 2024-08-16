@@ -91,8 +91,8 @@ public class ProductApiController {
         // Page<> : 페이징된 결과와 관련 정보를 함께 제공하는 Spring Data JPA의 강력한 도구
         Page<ProductDTO> productPage = productService.searchProducts(searchDTO);
         // getContent() : 페이징된 데이터를 얻을 수 있음
-        List<ProductDTO> products = productPage.getContent();
-        log.info( "페이징 데이터 = {},{}",productPage , products);
+        log.info( "페이징 데이터 = {},{}",productPage);
+
 
 
 
@@ -119,8 +119,9 @@ public class ProductApiController {
             model.addAttribute("carts", carts);
             model.addAttribute("wishlist", wishlist);
 
-            for (ProductDTO productDTO : products) {
+            for (ProductDTO productDTO : productPage) {
                 int productNo = productDTO.getProductNo();
+
 
                 switch (searchDTO.getTypeNo()) {
                     case 1: // 노트북
@@ -171,10 +172,12 @@ public class ProductApiController {
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("size", searchDTO.getSize());
         model.addAttribute("sort", searchDTO.getSort());
-        model.addAttribute("products", products);
+        model.addAttribute("products", productPage.getContent());
         model.addAttribute("productPage", productPage);
         model.addAttribute("typeNo", searchDTO.getTypeNo());
         model.addAttribute("keyword", searchDTO.getKeyword());
+
+        log.info("컨트롤러 model 데이터 확인 {},{},{},{},{},{},{}",pageable.getPageNumber() + 1, productPage.getTotalPages(), searchDTO.getSize(), searchDTO.getSort(),productPage, searchDTO.getTypeNo(), searchDTO.getKeyword());
 
         return "product/product/productList";
     }

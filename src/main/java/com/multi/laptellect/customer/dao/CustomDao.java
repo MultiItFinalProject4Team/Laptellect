@@ -106,4 +106,6 @@ public interface CustomDao {
     void deleteNotice(int noticeNo);
 
     void updateNotice(NoticeListDto dto);
+
+    List<NoticeListDto> getNoticeSearchList(NoticeSearchDto dto);
 }

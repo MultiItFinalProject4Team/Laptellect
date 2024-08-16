@@ -41,7 +41,7 @@
                     </a>
                 </th:block>
 
-                <th:block sec:authorize="hasAnyAuthority('ROLE_USER')">
+                <th:block sec:authorize="hasAnyAuthority('ROLE_USER', 'ROLE_SELLER')">
                     <a href="/profile">마이페이지</a>
                 </th:block>
 
@@ -65,28 +65,38 @@
             <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
                 <div class="flex-fill">
                     <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/recommended">추천</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/product/productList?pages=1">스토어</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/user">고객센터</a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="/product/cart" class="nav-link d-flex align-items-center" style="position: relative;">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                                <span class="ms-1">장바구니</span>
-                            </a>
-                            <span class="separator">|</span>
-                            <a href="/profile/wishlist" class="nav-link d-flex align-items-center" style="position: relative;">
-                                <i class="fa-regular fa-heart"></i>
-                                <span class="ms-1">관심상품</span>
-                            </a>
+                        <th:block sec:authorize="hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN') or isAnonymous()">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/recommend">추천</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/product/productList?pages=1">스토어</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/customer/user">고객센터</a>
+                            </li>
+                            <li class="nav-item d-flex align-items-center">
+                                <a href="/product/cart" class="nav-link d-flex align-items-center" style="position: relative;">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    <span class="ms-1">장바구니
+                                        <!--                                    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-->
+                                        <!--                                    0-->
+                                        <!--                                    </span>-->
+                                </span>
+                                </a>
+                                <span class="separator">|</span>
+                                <a href="/profile/wishlist" class="nav-link d-flex align-items-center" style="position: relative;">
+                                    <i class="fa-regular fa-heart"></i>
+                                    <span class="ms-1">관심상품
+                                        <!--                                    <span id="wishlist-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-->
+                                        <!--                                    0-->
+                                        <!--                                    </span>-->
+                                </span>
+                                </a>
+                        </th:block>
                         </li>
                         <th:block sec:authorize="hasAnyAuthority('ROLE_SELLER')">
                             <li class="nav-item">
@@ -118,7 +128,7 @@
 
     <div class="d-flex">
         <div class="d-flex flex-column flex-shrink-0 p-3 text-dark bg-white sidebar">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"></a>
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"></a>
             <hr>
             <div class="profile">
                 <p class="text-dark">환영합니다.</p>
