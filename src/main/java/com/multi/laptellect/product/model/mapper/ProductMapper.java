@@ -80,6 +80,11 @@ public interface ProductMapper {
     @Select("SELECT product_no FROM wishlist WHERE member_no = #{ member_no }")
     ArrayList<Integer> findAllWishlistString(int memberNo);
 
+
+    @Delete("DELETE FROM product WHERE product_no = #{ productNo }")
+    void deleteproduct(@Param("productNo") String productNo);
+    
+
     @Update("UPDATE product SET view_count = view_count + #{ visitCount }, updated_at = updated_at WHERE product_no = #{ productNo }")
     int updateProductVisit(@Param("productNo") String productNo, @Param("visitCount") int visitCount);
 }
