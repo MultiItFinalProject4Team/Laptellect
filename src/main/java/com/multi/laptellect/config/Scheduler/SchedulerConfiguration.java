@@ -31,12 +31,12 @@ public class SchedulerConfiguration {
 //        log.info("서버 시작 스케쥴러 확인");
 //    }
 
-    @Scheduled(fixedRate = 30000) // 5분 간격
+    @Scheduled(fixedRate = 300000) // 5분 간격
     public void visitorCount() {
         log.info("방문자 수 카운트 스케쥴러");
     }
 
-    @Scheduled(fixedRate = 18000) // 3분 간격
+    @Scheduled(fixedRate = 180000) // 3분 간격
     public void viewProductCount() {
         String key = "Visit:product";
 
