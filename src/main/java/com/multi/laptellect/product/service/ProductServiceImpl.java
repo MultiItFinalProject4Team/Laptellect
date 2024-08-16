@@ -613,10 +613,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDTO> searchProducts(ProductSearchDTO searchDTO) {
 
-
-
-
-
         Pageable pageable = PageRequest.of(searchDTO.getPage(),searchDTO.getSize());
 
         log.info("서비스 로직 pageble 확인 = {}, {}", searchDTO.getPage(),searchDTO.getSize());

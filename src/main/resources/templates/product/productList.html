@@ -78,6 +78,8 @@
                     e.preventDefault();
                     typeNo = $(this).data('type-no');
                     currentPage = 1;
+                    $(".product-link").removeClass("active");
+                    $(this).addClass("active");
                     loadProducts(currentPage, pageSize, typeNo, '');
                     console.log(typeNo);
                 });
@@ -95,6 +97,21 @@
                     let filters = getSelectedFilters();
                     currentPage = 1;
                     loadProducts(currentPage, pageSize, typeNo, '', filters);
+                });
+
+
+                // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
+                $(document).on('click', '.pagination a.page-link', function(event) {
+                    event.preventDefault();
+
+                    let page = $(this).data('page');
+
+                    if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
+                        console.log('Link is disabled or active');
+                        return;
+                    }
+                    loadProducts(page, pageSize, typeNo, '');  // 페이지 이동 시 currentPage와 typeNo를 유지
+                    console.log('Page:', page, 'Page Size:', pageSize, 'Type No:', typeNo);
                 });
 
                 // 카테고리 데이터를 로드하는 AJAX 요청
