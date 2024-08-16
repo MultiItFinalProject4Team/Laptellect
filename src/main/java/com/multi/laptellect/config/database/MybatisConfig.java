@@ -1,5 +1,6 @@
 package com.multi.laptellect.config.database;
 
+import com.multi.laptellect.admin.member.model.dto.AdminMemberDTO;
 import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
 import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
 import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
@@ -76,6 +77,7 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("reviewDTO", ReviewDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("specDTO", SpecDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("productSearchDTO", ProductSearchDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("laptopSpecDTO", LaptopSpecDTO.class);
 
 
         configuration.getTypeAliasRegistry().registerAlias("socialDTO", SocialDTO.class);
@@ -89,6 +91,12 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("DTO", com.multi.laptellect.recommend.reviewtag.model.dto.TagDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("TaggDTO", com.multi.laptellect.recommend.txttag.model.dto.TaggDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("productFilterDTO", ProductFilterDTO.class);
+
+
+
+
+
+        configuration.getTypeAliasRegistry().registerAlias("adminMemberDTO", AdminMemberDTO.class);
 
 
 

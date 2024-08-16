@@ -66,7 +66,12 @@ public class AuthController {
         MemberDTO memberDTO = new MemberDTO();
         model.addAttribute("member", memberDTO);
 
-        return  "auth/auth-sign-up-form.html";
+        return  "/auth/auth-sign-up-form";
+    }
+
+    @GetMapping("/signup/seller")
+    public String showSellerSignUpForm() {
+        return "/auth/auth-seller-sign-up-form";
     }
 
     /**

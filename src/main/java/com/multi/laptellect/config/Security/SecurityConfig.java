@@ -10,8 +10,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -38,6 +41,16 @@ public class SecurityConfig {
             AuthenticationConfiguration authenticationConfiguration
     ) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     @Bean // static 예외 처리
@@ -68,14 +81,16 @@ public class SecurityConfig {
         http
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/signout"))
-//                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("remember-me")
                         .invalidateHttpSession(true)
                         .logoutSuccessUrl("/"));
 
         http
                 .sessionManagement((auth) -> auth
                         .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false));
+                        .maxSessionsPreventsLogin(false)
+                        .expiredUrl("/signin")
+                        .sessionRegistry(sessionRegistry()));
 
         http
                 .exceptionHandling(exceptionHandling ->

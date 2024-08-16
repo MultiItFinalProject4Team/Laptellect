@@ -345,25 +345,16 @@
                 <if test="paginationDTO.keyword != null">
                     AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
                 </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
-                </if>
             </when>
             <when test="paginationDTO.selectType == 'productName'">
                 <if test="paginationDTO.keyword != null">
                     AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
-                </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
                 </if>
             </when>
             <when test="paginationDTO.selectType == 'all'">
                 <if test="paginationDTO.keyword != null">
                     AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
                     OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
-                </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
                 </if>
             </when>
         </choose>
@@ -408,5 +399,18 @@
         WHERE ppr.product_no = #{productNo}
         ORDER BY payment_product_reviews_no DESC;
     </select>
+
+    <update id="updateReview" parameterType="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        UPDATE payment_product_reviews
+        SET content = #{content},
+        rating = #{rating},
+        modify_at = NOW()
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </update>
+
+    <delete id="deleteReview" parameterType="int">
+        DELETE FROM payment_product_reviews
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </delete>
 
 </mapper>

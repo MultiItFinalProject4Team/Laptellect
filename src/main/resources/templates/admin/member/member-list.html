@@ -1,35 +1,53 @@
 <div class="table-container">
         <table>
                 <thead>
-                <tr>
-                        <th class="checkbox-column"><input type="checkbox" id="selectAll"></th>
-                        <th class="">번호</th>
-                        <th class="">ID</th>
-                        <th class="">Email</th>
-                        <th class="">NickName</th>
-                        <th class="">회원 타입</th>
-                        <th class="">연락처</th>
-                        <th class="">생성일자</th>
-                        <th class="">탈퇴여부</th>
-                        <th class="">탈퇴일자</th>
-                </tr>
+                        <tr>
+                                <th style="width: 5%;">번호</th>
+                                <th style="width: 10%;">ID</th>
+                                <th style="width: 15%;">Email</th>
+                                <th style="width: 10%;">NickName</th>
+                                <th style="width: 5%;">회원 타입</th>
+                                <th style="width: 10%;">연락처</th>
+                                <th style="width: 10%;">생성일자</th>
+                                <th style="width: 5%;">탈퇴여부</th>
+                                <th style="width: 10%;">탈퇴일자</th>
+                        </tr>
                 </thead>
-                <tbody id="orderTableBody">
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
-                <td>안녕</td>
+                <tbody>
+                        <tr th:each="member, loop : ${ members }">
+                                <th><a href="#" th:text="${ page * size + loop.index + 1 }" scope="row"></a></th>
+                                <td th:text="${ member.memberName }"></td>
+                                <td th:text="${ member.email }"></td>
+                                <td th:text="${ member.nickName }"></td>
+                                <td th:text="${ member.loginType }"></td>
+                                <td th:text="${ member.tel }"></td>
+                                <td th:text="${ member.createdAt }"></td>
+                                <td th:text="${ member.isActive }"></td>
+                                <td th:text="${ member.isActiveAt }"></td>
+                        </tr>
                 </tbody>
         </table>
 </div>
-<div class="pagination">
-        <button id="prevButton" onclick="changePage('prev')">&lt; 이전</button>
-        <div id="pageNumbers"></div>
-        <button id="nextButton" onclick="changePage('next')">다음 &gt;</button>
+<div class="pagination" th:if="${!members.isEmpty()}">
+        <div class="pagination-controls" style="display: flex; gap: 10px; align-items: center;">
+                <button id="prevButton"
+                        th:disabled="${!members.hasPrevious}"
+                        th:data-page="${ page - 1 }"
+                        th:text="'&lt; 이전'">
+                </button>
+
+                <div id="pageNumbers">
+                        <button th:each="page : ${#numbers.sequence(startPage, endPage)}"
+                                th:text="${ page + 1 }"
+                                th:classappend="${page == members.number} ? 'active'"
+                                th:data-page="${ page }">
+                        </button>
+                </div>
+
+                <button id="nextButton"
+                        th:disabled="${ !members.hasNext }"
+                        th:data-page="${ page + 1 }"
+                        th:text="'다음 &gt;'">
+                </button>
+        </div>
 </div>

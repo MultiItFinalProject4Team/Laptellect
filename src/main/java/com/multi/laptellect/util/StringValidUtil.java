@@ -7,7 +7,7 @@ package com.multi.laptellect.util;
  * @fileName : StringToVarcharSizeCheckUtil
  * @since : 2024-08-01
  */
-public class StringToVarcharSizeCheckUtil {
+public class StringValidUtil {
     /**
      * 문자열이 VARCHAR 크기에 맞는지 검증
      *
@@ -17,5 +17,12 @@ public class StringToVarcharSizeCheckUtil {
      */
     public static boolean isVarcharSizeWithinString(String str, int varcharSize) {
         return str.length() < varcharSize;
+    }
+
+    public static boolean isValidString(String str) {
+        if (str == null || str.trim().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

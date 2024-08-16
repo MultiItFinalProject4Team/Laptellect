@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns:th="http://www.w3.org/1999/xhtml">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Layout</title>
+    <title th:text="${title}">Insert title here</title>
 
-  <link rel="shortcut icon" href="#">
+    <!-- 부트스트랩 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 
-  <!-- 부트스트랩 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- fontawesom -->
+    <script src="https://kit.fontawesome.com/8e3f0717f9.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-  <!-- fontawesom -->
-  <script src="https://kit.fontawesome.com/8e3f0717f9.js" crossorigin="anonymous"></script>
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <!-- css + js 파일 Load-->
+    <!-- css + js 파일 Load-->
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <link rel="stylesheet" th:href="@{/css/admin/adminpagesidebar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/member/profile.css}"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
 
-
+    </style>
 </head>
 <body>
 <div id="wrapper">
@@ -52,8 +55,7 @@
             </div>
         </div>
     </div>
-
-
+    <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand logo h1 align-self-center" href="/">
@@ -121,55 +123,86 @@
             </div>
         </div>
     </nav>
+    <!-- Close Header -->
+    <br>
 
     <div class="d-flex">
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar">
-          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span class="fs-4">Laptellect</span>
-          </a>
-          <p>관리자님 환영합니다</p>
-          <hr>
-          <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-              <a th:href="@{/admin/dashboard}" class="nav-link text-white">대시보드</a>
-            </li>
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-dark bg-white sidebar">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"></a>
             <hr>
-            <li class="nav-item">
-              <a href="/admin/member" class="nav-link text-white">회원 관리</a>
-            </li>
-            <hr>
-            <li class="nav-item">
-              <a href="/admin/ticketing" class="nav-link text-white">상품 관리</a>
-            </li>
-            <li class="nav-item">
-              <a th:href="@{/admin/orders_manage}" class="nav-link text-white">주문 관리</a>
-            </li>
-            <li class="nav-item">
-              <a th:href="@{/admin/reviews_manage}" class="nav-link text-white">리뷰 관리</a>
-            </li>
-            <hr>
-            <li class="nav-item">
-              <a th:href="@{/customer/admin/admin_notice}" class="nav-link text-white">공지사항 관리</a>
-            </li>
-            <hr>
-            <li class="nav-item">
-              <a th:href="@{/admin/product}" class="nav-link text-white">이벤트 관리</a>
-            </li>
-            <hr>
-            <li class="nav-item">
-              <a th:href="@{/customer/admin/admin_customer}" class="nav-link text-white">고객센터 관리</a>
-            </li>
-    <!--        <hr>-->
-    <!--        <li class="nav-item">-->
-    <!--          <a th:href="@{/admin/question}" class="nav-link text-white">Q&A 관리</a>-->
-    <!--        </li>-->
-          </ul>
+            <div class="profile">
+                <p class="text-dark" style="font-size:30px">고객센터</p>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <!--        <li class="nav-item">-->
+                <!--          <a th:href="@{/admin}" class="nav-link text-white">대시보드</a>-->
+                <!--        </li>-->
+                <hr>
+                <li class="nav-item">
+                    <a href="/customer/user/customer_notice" class="nav-link text-dark purchase-tap">공지 사항</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/customer/user/customer_personalq" class="nav-link text-dark purchase-tap">1:1 문의 내역</a>
+                </li>
+                <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <li class="nav-item">
+                  <a href="/customer/user/my_productqList" class="nav-link text-dark purchase-tap">상품문의 내역</a> <!--  상품id랑 엮어서 상품명+문의내역으로 표시-->
+                </li>
+                </th:block>
+                <li class="nav-item">
+                    <a href="/customer/user/customer_chatbot" class="nav-link text-dark purchase-tap">챗 봇</a>
+                </li>
+                <hr>
+                <li class="nav-item">
+                    <a href="/customer/user/personalq_app" class="nav-link text-dark purchase-tap">1:1 문의하기</a>
+                </li>
+                <hr>
+            </ul>
         </div>
+
         <div class="flex-grow-1 p-3">
-            <div layout:fragment="content" style="height: auto;"></div>
+            <div layout:fragment="content"></div>
         </div>
     </div>
 
+<!-- 회원가입 모달 -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <h4 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #6c5ce7;">Laptellect</h4>
+                    <br> <br>
+                    <div class="image-container">
+                        <a href="/signin/kakao">
+                            <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
+                            <div>카카오</div>
+                        </a>
+                    </div>
+                    <div class="image-container">
+                        <a href="/signin/google">
+                            <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
+                            <div>구글</div>
+                        </a>
+                    </div>
+                    <div class="image-container">
+                        <a href="/signup">
+                            <img th:src="@{/img/common/default-icon.png}" alt="Image 3" class="img-fluid mb-2 modal-img">
+                            <div>일반회원</div>
+                        </a>
+                    </div>
+
+                    <br> <br>
+                    <div>
+                        <button type="button" class="btn btn-primary w-100">판매자 회원 가입</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Start Footer -->
@@ -223,5 +256,6 @@
         </div>
     </div>
 </footer>
+<!-- End Footer -->
 </body>
 </html>

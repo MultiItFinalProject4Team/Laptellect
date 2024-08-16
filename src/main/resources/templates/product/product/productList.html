@@ -94,45 +94,39 @@
             let pageSize = 30;
             let typeNo = 1;
 
-    function loadProducts(page, size, typeNo, keyword) {
-            let data = {
-                page: page - 1,
-                size: size,
-                typeNo: typeNo,
-                keyword: keyword
-            };
-            console.log("Calling loadProducts with - page:", page, "size:", size, "typeNo:", typeNo, "keyword:", keyword);
+
+            // 제품 리스트를 로드하는 함수
+            function loadProducts(page, size, typeNo, keyword, filters = []) {
+                let data = {
+                    page: page - 1,
+                    size: size,
+                    typeNo: typeNo,
+                    keyword: keyword,
+                    cate: filters
+                };
+                console.log("Calling loadProducts with - page:", data);
 
             $.ajax({
-                url: "/api/product/product-list",
-                type: "GET",
-                data: data,
-                success: function (response) {
+                    url: "/api/product/product-list",
+                    type: "GET",
+                    data: data,
+                    success: function (response) {
                     console.log("AJAX success:", response);
-                    $('#product-list').html(response);
-                    formatPrices();
-                },
-                error: function (error){
-                    console.log(error);
-                }
-            });
-        }
-
-
-    $('.all-product').on('click', 'a.page-link', function(event) {
-            event.preventDefault();
-
-            let page = $(this).data('page');
-
-            if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
-                console.log('Link is disabled or active');
-                return;
+                        $('#product-list').html(response);
+                        formatPrices();
+                        currentPage = page;
+                    },
+                    error: function (error){
+                        console.log(error);
+                    }
+                });
             }
-            loadProducts(page, pageSize, typeNo, '');
-            console.log('Page:', page, 'Page Size:', pageSize, 'Type No:', typeNo);
-        });
 
-
+            $(document).on('click', '.pagination a.page-link', function(event) {
+                event.preventDefault();
+                let page = $(this).data('page');
+                loadProducts(page, pageSize, typeNo, '');
+            });
 
             // 위시리스트 추가/삭제
             $(".btn-process-wishlist").on("click", function () {
@@ -198,7 +192,7 @@
                         console.log("장바구니 Ajax Error");
                     },
                 });
-            })
+            });
         });
     </script>
 </body>

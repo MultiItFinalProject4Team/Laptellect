@@ -20,19 +20,19 @@
 		(
 			  member_name
 			, email
-<!--		<if test="nickName != null">-->
-<!--			, nick_name-->
-<!--		</if>-->
 			, login_type
+		<if test='role != null'>
+			, role
+		</if>
 		)
 		VALUES
 		(
 			  #{ memberName }
 			, #{ email }
-<!--		<if test="nickName != null">-->
-<!--			, #{ nickName }-->
-<!--		</if>-->
 			, #{ loginType }
+		<if test='role != null'>
+			, #{ role }
+		</if>
 		)
 	</insert>
 
@@ -61,6 +61,24 @@
 		(
 			  #{ memberNo }
 			, #{ externalId }
+		)
+	</insert>
+
+	<insert id="insertSeller" parameterType="memberDTO">
+		INSERT INTO
+			mem_seller_member
+		(
+			  member_no
+			, company_name
+			, representative_name
+			, business_registration_number
+		)
+		VALUES
+		(
+			  #{ memberNo }
+			, #{ companyName }
+			, #{ ownerName }
+			, #{ registrationNo }
 		)
 	</insert>
 

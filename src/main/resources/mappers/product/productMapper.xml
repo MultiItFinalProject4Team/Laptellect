@@ -98,29 +98,40 @@
 
     <select id="findByNameSearch" resultType="productDTO">
 
-        SELECT
-        p.product_no,
-        p.type_no,
-        p.product_name,
-        p.price,
-        p.reference_code,
-        p.created_at,
-        p.updated_at,
-        p.product_code,
-        i.upload_name
+        SELECT DISTINCT
+            p.product_no,
+            p.type_no,
+            p.product_name,
+            p.price,
+            p.reference_code,
+            p.created_at,
+            p.updated_at,
+            p.product_code,
+            i.upload_name
         FROM
-        product p
+            product p
         JOIN
-        images i ON i.reference_code = p.reference_code
+            images i ON i.reference_code = p.reference_code
+        JOIN
+            product_spec po ON po.product_no = p.product_no
         WHERE
-        p.product_name LIKE CONCAT('%', #{ searchDTO.keyword }, '%')
-        AND p.type_no = #{ searchDTO.typeNo }
+            p.product_name LIKE CONCAT('%', #{searchDTO.keyword}, '%')
+            AND p.type_no = #{searchDTO.typeNo}
+        <if test="searchDTO.cate != null and searchDTO.cate.size() > 0">
+            AND po.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.cate" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY
+            p.product_no, p.type_no, p.product_name, p.price,
+            p.reference_code, p.created_at, p.updated_at, p.product_code, i.upload_name
         ORDER BY
-        p.product_no
+            p.product_no
         LIMIT
-        #{ searchDTO.size }
+        #{searchDTO.size}
         OFFSET
-        #{ searchDTO.offset }
+        #{searchDTO.offset}
     </select>
 
     <select id="countBySearchCriteria" resultType="long">
@@ -149,6 +160,7 @@
         SELECT COUNT(*) FROM product
     </select>
 
+
     <!-- 선택 제품 조회-->
     <select id="getProductByCode" parameterType="String" resultType="laptopSpecDTO">
         SELECT * FROM product WHERE product_no = #{productNo}
@@ -158,10 +170,16 @@
     <select id="getProductSpec" resultType="specDTO">
         SELECT  options , option_value
         FROM vw_spec_and_value
-        WHERE product_no = #{productNo}
+        WHERE = #{productNo}
 
     </select>
 
+    <delete id="productDelete">
+        DELETE FROM
+        product
+        WHERE =#{productNo}
+    </delete>
+    
     <!--제품 카테고리를 옵션으로 조회-->
     <select id="findByOptions" parameterType="map" resultType="productCategoryDTO">
         SELECT *
@@ -188,6 +206,12 @@
 <!--        FROM-->
 <!--        product-->
 <!--    </select>-->
+<!--    -->
+    <select id="productFilterSearch" resultType="specDTO">
+        SELECT options, option_value, category_no
+        FROM
+        vw_spec_and_value
+    </select>
 
     <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
         SELECT *

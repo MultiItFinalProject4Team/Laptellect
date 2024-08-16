@@ -44,6 +44,17 @@ CREATE TABLE mem_social_member (
     CONSTRAINT social_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
+-- 판매자 테이블
+CREATE TABLE mem_seller_member (
+    seller_id INT NOT NULL AUTO_INCREMENT,
+    member_no INT NOT NULL,
+    company_name VARCHAR(64) NOT NULL,
+    representative_name VARCHAR(50) NOT NULL,
+    business_registration_number VARCHAR(50) NOT NULL,
+    PRIMARY KEY (seller_id),
+    CONSTRAINT seller_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+);
+
 -- 배송지 테이블
 CREATE TABLE mem_delivery_address (
     address_id INT NOT NULL AUTO_INCREMENT,

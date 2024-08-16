@@ -21,4 +21,6 @@ public interface AuthMapper {
     MemberDTO findMemberBySocialId(Long socialId);
 
     MemberDTO findMemberByMemberNo(int memberNo);
+
+    int insertSeller(MemberDTO memberDTO);
 }

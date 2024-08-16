@@ -1,48 +1,47 @@
-//package com.multi.laptellect.config.aop;
-//
-//import com.multi.laptellect.util.RedisUtil;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpSession;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.aspectj.lang.JoinPoint;
-//import org.aspectj.lang.annotation.After;
-//import org.aspectj.lang.annotation.Aspect;
-//import org.aspectj.lang.annotation.Pointcut;
-//import org.springframework.stereotype.Component;
-//
-//import java.time.LocalDateTime;
-//import java.time.format.DateTimeFormatter;
-//
-///**
-// * 로그 관련 AOP
-// *
-// * @author : 이강석
-// * @fileName : LogAspect
-// * @since : 2024-08-12
-// */
-//@Slf4j
-//@Aspect
-//@Component
-//@RequiredArgsConstructor
-//public class LogAspect {
-//    private final HttpServletRequest httpServletRequest;
-//    private final HttpSession httpSession;
-//    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//    private final RedisUtil redisUtil;
-//
-//    // 방문자 로그
-//    @Pointcut("within(com.multi.laptellect.main.controller.MainController) || " +
-//              "within(com.multi.laptellect.product.controller..*) || within(com.multi.laptellect.recommend.laptop.controller.RecommendationController)")
-//    public void visitControllers() {
-//    }
-//
-//    // 상품 조회수
-//    @Pointcut("execution(* com.multi.laptellect.product.controller.ProductController.productLaptopDetails(..))")
-//    public void countProductMethod() {
-//    }
-//
-//    // 상품 방문자 로그 AOP
+package com.multi.laptellect.config.aop;
+
+import com.multi.laptellect.util.RedisUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+
+import java.time.format.DateTimeFormatter;
+
+/**
+ * 로그 관련 AOP
+ *
+ * @author : 이강석
+ * @fileName : LogAspect
+ * @since : 2024-08-12
+ */
+@Slf4j
+@Aspect
+@Component
+@RequiredArgsConstructor
+public class LogAspect {
+    private final HttpServletRequest httpServletRequest;
+    private final HttpSession httpSession;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final RedisUtil redisUtil;
+
+    // 방문자 로그
+    @Pointcut("within(com.multi.laptellect.main.controller.MainController) || " +
+              "within(com.multi.laptellect.product.controller..*) || within(com.multi.laptellect.recommend.laptop.controller.RecommendationController)")
+    public void visitControllers() {
+    }
+
+    // 상품 조회수
+    @Pointcut("execution(* com.multi.laptellect.product.controller.ProductController.productLaptopDetails(..))")
+    public void countProductMethod() {
+    }
+
+    // 상품 방문자 로그 AOP
 //    @After("visitControllers()")
 //    public void logVisit() {
 //        String sessionKey = "Visit:" + "count";
@@ -79,31 +78,31 @@
 //
 //        log.info("방문 로그 기록 = {}" , redisUtil.getListData("VisitLog"));
 //    }
-//
-//    // 상품 조회수 AOP
-//    @After("countProductMethod()")
-//    public void countProduct(JoinPoint joinPoint) {
-//        Object[] args = joinPoint.getArgs();
-//        String productNo = String.valueOf((int) args[0]);
-//
-//        String sessionKey = "Visit:" + "product" + productNo;
-//        String key = "Visit:product";
-//
-//        // 방문한 적 없는 사용자 일 시 count를 올리고 세션에 true 값 할당
-//        if (httpSession.getAttribute(sessionKey) == null) { // 상품 조회 수
-//
-//            String countStr = redisUtil.getHashData(key, productNo);
-//
-//            int count = countStr != null ? Integer.parseInt(countStr) : 0;
-//            count++;
-//
-//            redisUtil.setHashData(key, productNo, String.valueOf(count));
-//
-//            // 세션에 조회 여부 기록
-//            httpSession.setAttribute(sessionKey, true);
-//            log.info("상품 조회수 카운트 = {}", countStr);
-//        } else {
-//            log.info("상품 조회수 카운트 세션 있음 = {}", redisUtil.getHashData(key, productNo));
-//        }
-//    }
-//}
+
+    // 상품 조회수 AOP
+    @After("countProductMethod()")
+    public void countProduct(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        String productNo = String.valueOf((int) args[0]);
+
+        String sessionKey = "Visit:" + "product" + productNo;
+        String key = "Visit:product";
+
+        // 방문한 적 없는 사용자 일 시 count를 올리고 세션에 true 값 할당
+        if (httpSession.getAttribute(sessionKey) == null) { // 상품 조회 수
+
+            String countStr = redisUtil.getHashData(key, productNo);
+
+            int count = countStr != null ? Integer.parseInt(countStr) : 0;
+            count++;
+
+            redisUtil.setHashData(key, productNo, String.valueOf(count));
+
+            // 세션에 조회 여부 기록
+            httpSession.setAttribute(sessionKey, true);
+            log.info("상품 조회수 카운트 = {}", countStr);
+        } else {
+            log.info("상품 조회수 카운트 세션 있음 = {}", redisUtil.getHashData(key, productNo));
+        }
+    }
+}

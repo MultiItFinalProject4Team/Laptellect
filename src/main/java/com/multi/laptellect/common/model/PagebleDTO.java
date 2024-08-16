@@ -1,43 +1,32 @@
-package com.multi.laptellect.product.model.dto;
+package com.multi.laptellect.common.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import java.util.List;
-
 /**
  * Please explain the class!!
  *
- * @author : 이우석
- * @fileName : ProductSearchDTO
- * @since : 2024-08-08
+ * @author : 이강석
+ * @fileName : PagebleDTO
+ * @since : 2024-08-14
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-public class ProductSearchDTO implements Pageable {
+@Data
+public class PagebleDTO implements Pageable {
     // 페이징을 위한 기본 변수
+    private int page = 0; // 페이지 번호
 
-
-
-    private int page; // 페이지 번호
-
-
-    private int size; // 페이징 할 개수 (10개, 20개, 30개 등)
+    private int size = 10; // 페이징 할 개수 (10개, 20개, 30개 등)
 
     private Sort sort; // 정렬 기준
 
     // 검색을 위한 변수
-    private int typeNo; // 상품 카테고리 번호
-    private List<String> cate; // 카테고리 옵션
+    private String cate; // 카테고리 옵션
     private String keyword; // 검색어
 
-
+    private String startDate;
+    private String endDate;
 
 
     @Override
@@ -85,7 +74,6 @@ public class ProductSearchDTO implements Pageable {
         return this.page > 0;
     }
 }
-
 /* Ajax로 보낼 떄 예시
 let data = {
     page: 1,
