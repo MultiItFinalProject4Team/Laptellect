@@ -169,12 +169,14 @@ public class CustomerAdminController {
     @GetMapping("/all_personal_question")
     public String all_personal_question(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         List<PersonalqListDto> list = customerService.getAllPersonalqList();
+        PersonalqSearchDto searchDto = PersonalqSearchDto.builder().answer("A").keyword("").category("").date("recent").build();
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
         int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
+        model.addAttribute("dto",searchDto);
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
