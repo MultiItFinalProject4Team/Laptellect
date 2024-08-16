@@ -295,7 +295,7 @@
           var endIndex = Math.min(startIndex + itemsPerPage, totalRows);
 
           // 페이지에 표시할 행 설정
-          view.setRows(startIndex, endIndex);
+          view.setRows(Array.from({length: endIndex - startIndex}, (_, i) => startIndex + i));
 
           var table = new google.visualization.Table(document.getElementById('recent_reviews_table'));
           table.draw(view, {
