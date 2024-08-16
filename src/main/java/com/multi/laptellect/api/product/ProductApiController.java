@@ -87,11 +87,13 @@ public class ProductApiController {
         searchDTO.setPage(pageable.getPageNumber());
         searchDTO.setSize(pageable.getPageSize());
 
+        log.info("파라미터 = {}", searchDTO.getCate());
+
 
         // Page<> : 페이징된 결과와 관련 정보를 함께 제공하는 Spring Data JPA의 강력한 도구
         Page<ProductDTO> productPage = productService.searchProducts(searchDTO);
         // getContent() : 페이징된 데이터를 얻을 수 있음
-        log.info( "페이징 데이터 = {},{}",productPage);
+        log.info( "페이징 데이터 = {}", productPage);
 
 
 
