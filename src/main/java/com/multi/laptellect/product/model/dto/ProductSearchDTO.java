@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Please explain the class!!
@@ -34,7 +35,7 @@ public class ProductSearchDTO implements Pageable {
 
     // 검색을 위한 변수
     private int typeNo; // 상품 카테고리 번호
-    private List<String> cate; // 카테고리 옵션
+    private Map<String, List<String>> cate; // 카테고리 옵션
     private String keyword; // 검색어
 
 
