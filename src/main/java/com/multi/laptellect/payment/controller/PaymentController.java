@@ -15,6 +15,7 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -333,11 +334,6 @@ public class PaymentController {
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
 
-
-
-
-
-
         int result = paymentService.saveReview(reviewDTO);
 
         Map<String, Object> response = new HashMap<>();
@@ -349,5 +345,48 @@ public class PaymentController {
             response.put("message", "리뷰 저장에 실패했습니다.");
         }
         return ResponseEntity.ok(response);
+    }
+
+    @Transactional
+    @PostMapping("/reviews/update")
+    public ResponseEntity<Map<String, Object>> updateReview(@RequestBody PaymentReviewDTO reviewDTO) {
+        try {
+            int result = paymentService.updateReview(reviewDTO);
+            Map<String, Object> response = new HashMap<>();
+            if (result > 0) {
+                response.put("success", true);
+                response.put("message", "리뷰가 성공적으로 수정되었습니다.");
+            } else {
+                response.put("success", false);
+                response.put("message", "리뷰 수정에 실패했습니다.");
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("리뷰 수정 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "리뷰 수정 중 오류가 발생했습니다."));
+        }
+    }
+
+    @Transactional
+    @PostMapping("/reviews/delete")
+    public ResponseEntity<Map<String, Object>> deleteReview(@RequestBody Map<String, Integer> payload) {
+        try {
+            int paymentProductReviewsNo = payload.get("paymentProductReviewsNo");
+            int result = paymentService.deleteReview(paymentProductReviewsNo);
+            Map<String, Object> response = new HashMap<>();
+            if (result > 0) {
+                response.put("success", true);
+                response.put("message", "리뷰가 성공적으로 삭제되었습니다.");
+            } else {
+                response.put("success", false);
+                response.put("message", "리뷰 삭제에 실패했습니다.");
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("리뷰 삭제 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "리뷰 삭제 중 오류가 발생했습니다."));
+        }
     }
 }

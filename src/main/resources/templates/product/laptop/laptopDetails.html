@@ -653,7 +653,17 @@
                                     <span> 평점 : </span>
                                     <span class="review-star" th:text="${'★'.repeat(review.rating)}">★★★★★</span>
                                 </div>
-                                <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>
+                                <div class="review-content-wrapper">
+                                    <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>
+                                    <div th:if="${review.memberNo == memberNo}" class="review-actions">
+                                        <button class="btn btn-sm btn-outline-primary edit-review"
+                                                th:data-review-id="${review.paymentProductReviewsNo}"
+                                                th:data-review-content="${review.content}"
+                                                th:data-review-rating="${review.rating}">수정</button>
+                                        <button class="btn btn-sm btn-outline-danger delete-review"
+                                                th:data-review-id="${review.paymentProductReviewsNo}">삭제</button>
+                                    </div>
+                                </div>
                                 <hr>
                             </div>
                         </div>
@@ -791,6 +801,7 @@
                             <input type="hidden" id="productNo2" th:value="${productDTO.productNo}">
                             <input type="hidden" id="imPortId" th:value="${paymentDTO != null ? paymentDTO.imPortId : ''}">
                             <input type="hidden" id="isPurchased" th:value="${paymentDTO != null}">
+                            <input type="hidden" id="paymentProductReviewsNo"> <!-- 수정된 부분 -->
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>

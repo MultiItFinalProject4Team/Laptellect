@@ -302,7 +302,6 @@ public class PaymentService {
     public PaymentCompleteDTO getPaymentInfo(String impUid) throws Exception {
         List<PaymentDTO> payments = paymentDAO.findPaymentsByImPortId(impUid);
         PaymentpointDTO paymentpointDTO = paymentDAO.findUsedPoint(impUid);
-        System.out.println("123123 : " + paymentpointDTO);
 
         PaymentCompleteDTO paymentInfo = new PaymentCompleteDTO();
         List<ProductInfo> productInfoList = new ArrayList<>();
@@ -337,8 +336,6 @@ public class PaymentService {
         }
 
         paymentInfo.setDiscountAmount(usedPoints);
-        System.out.println("1456456 : " + paymentInfo.getDiscountAmount());
-        System.out.println("0000 : " + usedPoints);
         if(count > 1) {
             paymentInfo.setTotalPrice(totalPrice - usedPoints);
         }else{
@@ -346,5 +343,15 @@ public class PaymentService {
         }
 
         return paymentInfo;
+    }
+
+    @Transactional
+    public int updateReview(PaymentReviewDTO reviewDTO) {
+        return paymentDAO.updateReview(reviewDTO);
+    }
+
+    @Transactional
+    public int deleteReview(int paymentProductReviewsNo) {
+        return paymentDAO.deleteReview(paymentProductReviewsNo);
     }
 }
