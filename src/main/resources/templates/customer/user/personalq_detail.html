@@ -2,13 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<html layout:decorate="~{customer/layout/layout-customer}">
+<html layout:decorate="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')') ? 'common/layout-Admin' : 'customer/layout/layout-customer'}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
     <link href="/css/customer/nav.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
         .crud-btn{
             background-color: transparent !important;
@@ -59,7 +60,8 @@
         <a th:href="@{/customer/admin/answer_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn btn-custom-primary">답변하기</a>
     </div>
     <div class="btn-group" aria-label="Small button group">
-        <a href="/customer/user/customer_personalq" class="btn btn-custom-primary">목록으로</a>
+        <a sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/customer_personalq" class="btn btn-custom-primary">목록으로</a>
+        <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:href="@{/customer/admin/all_personal_question}" class="btn btn-custom-primary">목록으로</a>
     </div>
     </div>
 </div>

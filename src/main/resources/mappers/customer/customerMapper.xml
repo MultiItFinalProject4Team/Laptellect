@@ -406,4 +406,19 @@
         main_regist=#{mainRegist}
         where notice_no=#{noticeNo}
     </update>
+
+    <select id="getNoticeSearchList" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
+        select *
+        from notice
+        where title LIKE CONCAT('%', #{keyword}, '%')
+        <if test='mainRegist == "Y"'>
+            AND main_regist=#{mainRegist}
+        </if>
+        <if test='date == "old"'>
+            order by created_at desc
+        </if>
+        <if test='date == "recent"'>
+            order by created_at asc
+        </if>
+    </select>
 </mapper>
