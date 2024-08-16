@@ -645,6 +645,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+
     public Map<String, List<String>> productFilterSearch() {
 
        List<SpecDTO> specDTOS =  productMapper.productFilterSearch();
@@ -688,6 +689,10 @@ public class ProductServiceImpl implements ProductService {
 
 
        return specMap;
+
+    public int updateProductVisit(String productNo, int visitCount) throws Exception {
+        return productMapper.updateProductVisit(productNo, visitCount);
+
     }
 
 

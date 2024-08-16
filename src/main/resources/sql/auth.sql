@@ -16,6 +16,14 @@ CREATE TABLE mem_member (
     CONSTRAINT nick_name_uk UNIQUE (nick_name)
 );
 
+-- 회원 테이블 회원 탈퇴 컬럼 add
+ALTER TABLE mem_member
+ADD COLUMN is_active CHAR(1) NOT NULL DEFAULT 'N',
+ADD COLUMN is_active_at TIMESTAMP NULL;
+
+ALTER TABLE mem_member
+MODIFY COLUMN email VARCHAR(255) NULL;
+
 -- 비밀번호 테이블
 CREATE TABLE mem_password (
     password_id INT NOT NULL AUTO_INCREMENT,
@@ -34,6 +42,17 @@ CREATE TABLE mem_social_member (
     external_id VARCHAR(64) NOT NULL,
     PRIMARY KEY (social_id),
     CONSTRAINT social_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+);
+
+-- 판매자 테이블
+CREATE TABLE mem_seller_member (
+    seller_id INT NOT NULL AUTO_INCREMENT,
+    member_no INT NOT NULL,
+    company_name VARCHAR(64) NOT NULL,
+    representative_name VARCHAR(50) NOT NULL,
+    business_registration_number VARCHAR(50) NOT NULL,
+    PRIMARY KEY (seller_id),
+    CONSTRAINT seller_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
 -- 배송지 테이블

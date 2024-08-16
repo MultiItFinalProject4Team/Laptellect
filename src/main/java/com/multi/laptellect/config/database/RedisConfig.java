@@ -18,6 +18,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import java.time.Duration;
 
@@ -31,6 +32,7 @@ import java.time.Duration;
 @Configuration
 @RequiredArgsConstructor
 @EnableRedisRepositories
+@EnableRedisHttpSession
 @EnableCaching
 @Slf4j
 public class RedisConfig {

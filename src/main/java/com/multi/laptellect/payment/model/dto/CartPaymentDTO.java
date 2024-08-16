@@ -13,4 +13,5 @@ public class CartPaymentDTO {
     private String imPortId;
     private BigDecimal totalAmount;
     private String usedPoints;
+    private int addressId;
 }

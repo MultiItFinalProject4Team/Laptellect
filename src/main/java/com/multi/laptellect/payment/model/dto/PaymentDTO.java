@@ -12,6 +12,7 @@ public class PaymentDTO {
     private int memberNo;
     private int productNo;
     private int purchasePrice;
+    private int quantity;
     private Date createdAt;
     private String imPortId;
     private String confirm;
@@ -23,6 +24,7 @@ public class PaymentDTO {
     private String userName;
     private String productName;
     private int productPrice;
+    private int addressId;
 
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy.MM.dd");
 

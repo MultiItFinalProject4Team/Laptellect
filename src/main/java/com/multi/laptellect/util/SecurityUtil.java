@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -42,6 +43,11 @@ public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 �
         return (CustomUserDetails) authentication.getPrincipal();
     }
 
+    /**
+     * Gets user no.
+     *
+     * @return the user no
+     */
     public static int getUserNo() {
         return getUserDetails().getMemberNo();
     }
@@ -69,6 +75,11 @@ public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 �
         }
     }
 
+    /**
+     * 로그인 된 사용자인지 체크
+     *
+     * @return the boolean
+     */
     public static boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -82,5 +93,20 @@ public class SecurityUtil { // 시큐리티 세션 정보 가져오기 위한 �
         }
 
         return true;
+    }
+
+    /**
+     * 특정 권한을 가진 사용자인지 체크
+     *
+     * @param authority 권한 이름
+     * @return true false 반환
+     */
+    public static boolean hasAuthority (String authority) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            return authentication.getAuthorities().contains(new SimpleGrantedAuthority(authority));
+        }
+        return false;
     }
 }

@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{common/layout-customer}">
 <head>
     <meta charset="UTF-8">
     <title>공지사항</title>
+    <link href="/css/customer/nav.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
-    <link href="/css/customer/nav.css" rel="stylesheet">
+    <style>
+        .crud-btn{
+            background-color: transparent !important;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-5">
+<div class="container mt-2">
     <header>
-        <h1 align="center">고객센터</h1>
-        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
-            <li class="nav-item">
-                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_notice">공지사항</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cus_nav"  href="/customer/user/customer_personalq">1:1 문의</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
-            </li>
-        </ul>
+        <header>
+            <h1 align="left"style="font-size:40px">공지사항</h1>
+        </header>
+        <hr>
     </header>
-    <h3 th:text="${notice.noticeNo}">번호</h3>
-    <h3 th:text="${notice.title}">제목</h3>
-    <h3 th:text="${notice.content}">내용</h3>
-    <h3 th:text="${notice.createDate}">날짜</h3>
+    <div>
+        <p th:text="${notice.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</p>
+        <p th:text="${#dates.format(notice.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
+    </div>
+    <hr class="border border-dark">
+    <div id="content" name="content" th:utext="${notice.content}" readonly="true">내용</div>
+
+    <hr class="border border-dark">
 </div>
 <div align="center">
     <hr class="border border-dark">

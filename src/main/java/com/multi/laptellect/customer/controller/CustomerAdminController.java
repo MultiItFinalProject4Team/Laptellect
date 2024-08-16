@@ -3,8 +3,10 @@ package com.multi.laptellect.customer.controller;
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
+import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -83,15 +85,15 @@ public class CustomerAdminController {
      * @return
      */
     @PostMapping("/answer_productq")
-    public String answer_producta(ProductqAnswerDto answerDto){
+    @ResponseBody
+    public int answer_producta(ProductqAnswerDto answerDto){
         System.out.println(answerDto);
         customerService.productAnwerApp(answerDto);
         String state = "Y";
         customerService.productAnwerChange(answerDto.getProductqNo(), state);
         String code = "producta"+answerDto.getProductaNo();
         customerService.setproductaCode(answerDto.getProductaNo(),code);
-        String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
-        return "redirect:"+redirectUrl;
+        return 1;
     }
 
     /**
@@ -106,19 +108,41 @@ public class CustomerAdminController {
         model.addAttribute("dto",dto);
         return"/customer/admin/update_producta";
     }
+    @GetMapping("/update_producta")
+    public ResponseEntity<ProductqAnswerDto> update_producta(@RequestParam("productqNo") int productqNo) {
+        // 서비스 또는 데이터베이스에서 제품 세부정보를 가져옴
+        ProductqAnswerDto dto = customerService.getProducta(productqNo);
+        // 제품 정보를 JSON 형식으로 반환
+        return ResponseEntity.ok(dto);
+    }
 
     /**
      * 상품문의 답변 수정 메소드
-     * @param answerDto
+     * @param appDto
      * @return
      */
     @PostMapping("/update_producta")
-    public String update_producta(ProductqAnswerDto answerDto){
-        customerService.updateProducta(answerDto);
-        String code=customerService.getProductaCode(answerDto.getProductaNo());
-        System.out.println("코드"+code);
-        String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
-        return "redirect:"+redirectUrl;
+    @ResponseBody
+    public int update_producta(ProductqAnswerDto appDto){
+        int memberNo = 0;
+        try {
+            memberNo= SecurityUtil.getUserNo();
+        }catch (Exception e){
+            System.out.println("미로그인");
+        }
+        System.out.println("수정: "+ appDto);
+        customerService.updateProducta(appDto);
+        return 1;
+    }
+
+
+    @PostMapping("/delete_producta")
+    public ResponseEntity<?> delete_productA(@RequestParam("productqNo") int productqNo) {
+        String code = customerService.getProducta(productqNo).getReferenceCode();
+        customerService.deleteProducta(productqNo, code);
+        String state="N";
+        customerService.productAnwerChange(productqNo,state);
+        return ResponseEntity.ok(1); // 200 OK와 함께 결과 반환
     }
 
     /**
@@ -148,7 +172,7 @@ public class CustomerAdminController {
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
@@ -172,7 +196,7 @@ public class CustomerAdminController {
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> categories = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
@@ -185,5 +209,75 @@ public class CustomerAdminController {
         model.addAttribute("answer",searchDto.getAnswer());
         model.addAttribute("date",searchDto.getDate());
         return "/customer/admin/search_all_personalq";
+    }
+
+    @GetMapping("/admin_notice")
+    public String admin_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        int count=0;
+        for(NoticeListDto dto: list){
+            if (dto.getMainRegist().equals("Y")) {
+                count++;
+            }
+        }
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        return "/admin/customer/admin_notice";
+    }
+
+    @GetMapping("/notice_app")
+    public String notice_app(Model model){
+        model.addAttribute("memberNo",SecurityUtil.getUserNo());
+        return "/admin/customer/notice_app";
+    }
+
+    @PostMapping("/notice_app")
+    public String notice_app(NoticeListDto noticeListDto, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        System.out.println(noticeListDto);
+        customerService.noticeApp(noticeListDto);
+        List<NoticeListDto> list = customerService.getNoticeList();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        return "redirect:/customer/admin/admin_notice";
+    }
+
+    @GetMapping("/admin_notice_detail/{noticeNo}")
+    public String notice_detail(@PathVariable("noticeNo") int noticeNo, Model model) {
+        System.out.println(noticeNo);
+        NoticeListDto notice = customerService.getnotice(noticeNo);
+        model.addAttribute("notice",notice);
+        return "/admin/customer/admin_notice_detail";
+    }
+
+    @GetMapping("/delete_notice/{noticeNo}")
+    public String delete_notice(@PathVariable("noticeNo")int noticeNo){
+        customerService.deleteNotice(noticeNo);
+        return "redirect:/customer/admin/admin_notice";
+    }
+
+    @GetMapping("update_notice/{noticeNo}")
+    public String update_notice(@PathVariable("noticeNo") int noticeNo, Model model){
+        NoticeListDto dto = customerService.getnotice(noticeNo);
+        model.addAttribute("dto",dto);
+        return "/admin/customer/notice_update";
+    }
+
+    @PostMapping("update_notice")
+    public String update_notice(NoticeListDto dto){
+        customerService.updateNotice(dto);
+        String redirectUrl = String.format("/customer/admin/admin_notice_detail/%s", dto.getNoticeNo());
+        return "redirect:"+redirectUrl;
     }
 }

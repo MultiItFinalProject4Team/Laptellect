@@ -7,13 +7,13 @@
     <head>
       <title>SingUp Page</title>
           <link rel="stylesheet" th:href="@{/css/auth/signup.css}">
-          <script type="text/javascript" th:src="@{/js/auth/signup.js}"></script>
+          <script type="text/javascript" th:src="@{/js/auth/seller-signup.js}"></script>
     </head>
     <body>
       <div layout:fragment="content">
         <br> <br>
         <div id="container">
-          <div id="loginBox">
+          <div id="loginBox" style="height: 1050px;">
             <div class="logo">
               <h1 id="signupTitle">Laptellect</h1>
             </div>
@@ -25,6 +25,7 @@
                         id="id"
                         placeholder="id"
                         value=""
+                        maxlength="30"
                 />
                 <label for="id">아이디</label>
               </div>
@@ -64,7 +65,7 @@
 
               <div class="input-group mb-3">
                 <div class="form-floating flex-grow-1">
-                  <input type="email" class="form-control" id="emailInput" placeholder="email" value="">
+                  <input type="email" class="form-control" id="emailInput" placeholder="email" value="" maxlength="255">
                   <label for="emailInput">이메일을 입력해주세요.</label>
                 </div>
                 <button type="button" class="btn btn-primary" id="emailVerifyButton">인증</button>
@@ -79,6 +80,65 @@
               <div class="error-message" id="emailError2" style="color: red;">틀린 인증번호 입니다.</div>
               <br />
 
+              <hr> <br>
+
+              <div class="form-floating id-form">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="ownerName"
+                        placeholder="company"
+                        value=""
+                        maxlength="30"
+                />
+                <label for="company">대표자명</label>
+              </div>
+              <br>
+
+              <div class="form-floating id-form">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="company"
+                        placeholder="company"
+                        value=""
+                        maxlength="30"
+                />
+                <label for="company">회사명</label>
+              </div>
+              <br>
+
+              <div class="form-floating id-form">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="businessDate"
+                        placeholder="businessDate"
+                        value=""
+                        maxlength="30"
+                />
+                <label for="company">개업일자</label>
+              </div>
+              <br>
+
+              <div class="form-floating id-form">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="registrationNo"
+                        placeholder="company"
+                        value=""
+                        maxlength="30"
+                />
+                <label for="registrationNo">사업자 등록번호</label>
+              </div>
+              <div class="error-message" id="registrationNoError" style="color: red">
+                사업자 정보가 일치하지 않습니다.
+              </div> <br>
+              <div class="error-message" id="registrationNoError2" style="color: red">
+                필수 정보를 입력해주세요.
+              </div> <br>
+
               <button type="submit" class="btn btn-primary w-100 nextBtn" id="insertBtn">
                 회원가입
               </button>
@@ -89,3 +149,14 @@
     </body>
   </html>
 </html>
+
+
+<!--{-->
+<!--"businesses": [-->
+<!--{-->
+<!--"b_no": "7248702463",-->
+<!--"start_dt": "20230217",-->
+<!--"p_nm": "이재훈"-->
+<!--}-->
+<!--]-->
+<!--}-->

@@ -37,7 +37,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<NoticeListDto> paginationList=pagination.noticepaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("list",paginationList);
         model.addAttribute("currentPage", page);
@@ -57,7 +57,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
@@ -77,7 +77,7 @@ public class CustomerController {
     @GetMapping("/notice_detail/{noticeNo}")
     public String notice_detail(@PathVariable("noticeNo") int noticeNo, Model model) {
         System.out.println(noticeNo);
-        NoticeDto notice = customerService.getnotice(noticeNo);
+        NoticeListDto notice = customerService.getnotice(noticeNo);
         model.addAttribute("notice",notice);
         return "/customer/user/notice_detail";
     }
@@ -193,7 +193,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("currentPage", page);
@@ -224,7 +224,7 @@ public class CustomerController {
      */
     @PostMapping("/productq_app")
     @ResponseBody // JSON 응답을 반환하기 위해 추가
-    public int productq_app(ProductqAppDto appDto, @RequestParam("productNo") int productNo) {
+    public int productq_app(ProductqAppDto appDto) {
         int memberNo;
         try {
             memberNo = SecurityUtil.getUserNo();
@@ -284,7 +284,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("category",category);
@@ -313,6 +313,14 @@ public class CustomerController {
         model.addAttribute("dto",dto);
         return "/customer/user/productq_update";
     }
+    @GetMapping("/update_productq")
+    public ResponseEntity<ProductqDto> getProductDetails(@RequestParam("productqNo") int productqNo) {
+        // 서비스 또는 데이터베이스에서 제품 세부정보를 가져옴
+        ProductqDto dto = customerService.getProductq(productqNo);
+
+        // 제품 정보를 JSON 형식으로 반환
+        return ResponseEntity.ok(dto);
+    }
 
     /**
      * 상품 문의 수정 메소드
@@ -320,20 +328,20 @@ public class CustomerController {
      * @return
      */
     @PostMapping("/update_productq")
-    public String update_productq(ProductqAppDto appDto){
-        int memberNo;
+    @ResponseBody
+    public int update_productq(ProductqAppDto appDto){
+        int memberNo = 0;
         try {
             memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            System.out.println("미로그인");
         }
-        System.out.println(appDto);
+        System.out.println("수정: "+ appDto);
         appDto.setMemberNo(memberNo);
         int text_result=customerService.updateProductq(appDto);
         String code = customerService.getproductqCode(appDto.getProductqNo());
         System.out.println(code);
-        String redirectUrl = String.format("/customer/user/productq_detail/%s", appDto.getProductqNo());
-        return "redirect:"+redirectUrl;
+        return text_result;
     }
 
     /**
@@ -348,6 +356,17 @@ public class CustomerController {
         int result = customerService.deleteProductq(productqNo, code);
         String redirectUrl = String.format("/customer/user/customer_productq/%s", productNo);
         return "redirect:"+redirectUrl;
+    }
+
+    @PostMapping("/delete_productq")
+    public ResponseEntity<?> delete_productq(@RequestParam("productqNo") int productqNo) {
+        String code = customerService.getProductq(productqNo).getReferenceCode();
+        int result = customerService.deleteProductq(productqNo, code);
+        if (result > 0) {
+            return ResponseEntity.ok(result); // 200 OK와 함께 결과 반환
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패"); // 500 Internal Server Error
+        }
     }
 
     /**
@@ -370,7 +389,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<PersonalqListDto> paginationList=pagination.personalpaginate(list, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) list.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
         if(totalPages==0){totalPages=1;}
         List<PersonalqCategoryDto> categories = customerService.getPersonalqCategory();
         model.addAttribute("list",paginationList);
@@ -406,7 +425,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("currentPage", page);
@@ -445,7 +464,7 @@ public class CustomerController {
         int page_size=10;
         int adjustPage=page-1;
         List<ProuductqListDto> paginationList=pagination.productpaginate(productqList, adjustPage, page_size);
-        int totalPages = (int) Math.ceil((double) productqList.size() / pagination.pageSize);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
         if(totalPages==0){totalPages=1;}
         model.addAttribute("productqList",paginationList);
         model.addAttribute("category",categories);
@@ -506,10 +525,17 @@ public class CustomerController {
     //    }
 
     @GetMapping("/get_AllproductqList")
-    public ResponseEntity<List<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo) {
+    public ResponseEntity<PageResponse<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
+            int page_size=5;
+            int adjustPage=page-1;
             List<ProductqList> productqList = customerService.getAllProductqList(productNo);
-            return ResponseEntity.ok(productqList);
+            List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+            int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+            if(totalPages==0){totalPages=1;}
+
+            PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -517,10 +543,17 @@ public class CustomerController {
     }
 
     @GetMapping("/getQuestion")
-    public ResponseEntity<List<ProductqList>> getQuestion(@RequestParam("productNo") int productNo){
+    public ResponseEntity<PageResponse<ProductqList>> getQuestion(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
+            int page_size=5;
+            int adjustPage=page-1;
             List<ProductqList> productqList = customerService.getProductQuestionList(productNo);
-            return ResponseEntity.ok(productqList);
+            List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+            int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+            if(totalPages==0){totalPages=1;}
+
+            PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -528,10 +561,17 @@ public class CustomerController {
     }
 
     @GetMapping("/getOpinion")
-    public ResponseEntity<List<ProductqList>> getOpinion(@RequestParam("productNo") int productNo){
+    public ResponseEntity<PageResponse<ProductqList>> getOpinion(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
+            int page_size=5;
+            int adjustPage=page-1;
             List<ProductqList> productqList = customerService.getProductOpinionList(productNo);
-            return ResponseEntity.ok(productqList);
+            List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+            int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+            if(totalPages==0){totalPages=1;}
+
+            PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             // 예외 처리 로직 추가
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -539,7 +579,7 @@ public class CustomerController {
     }
 
     @GetMapping("/getQuestionSearch")
-    public ResponseEntity<List<ProductqList>> getQuestionSearch(@RequestParam("productNo") int productNo, @RequestParam("key") String key, @RequestParam("keyword") String keyword, @RequestParam("type") String tpye){
+    public ResponseEntity<PageResponse<ProductqList>> getQuestionSearch(@RequestParam("productNo") int productNo, @RequestParam("key") String key, @RequestParam("keyword") String keyword, @RequestParam("type") String tpye, @RequestParam("page") int page){
         ProductSearchDto searchDto = ProductSearchDto.builder()
                                         .productNo(productNo)
                                         .key(key)
@@ -547,7 +587,24 @@ public class CustomerController {
                                         .type(tpye)
                                         .build();
         System.out.println(searchDto);
+        int page_size=5;
+        int adjustPage=page-1;
         List<ProductqList> productqList = customerService.getProductSearchList(searchDto);
-        return ResponseEntity.ok(productqList);
+        List<ProductqList> paginationList=pagination.productpaginate2(productqList, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) productqList.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        PageResponse<ProductqList> response = new PageResponse<>(paginationList, totalPages);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get_AllproductaList")
+    public ResponseEntity<ProductqAnswerDto> getAllProductaList(@RequestParam("productqNo") int productqNo){
+        try {
+            ProductqAnswerDto productaList = customerService.getProducta(productqNo);
+            return ResponseEntity.ok(productaList);
+        } catch (Exception e) {
+            // 예외 처리 로직 추가
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

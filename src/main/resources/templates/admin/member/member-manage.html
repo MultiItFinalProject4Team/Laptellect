@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout-Admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>회원 관리</title>
+  <link rel="stylesheet" href="/css/admin/member.css">
+  <script src="/js/admin/member.js"></script>
+</head>
+<body>
+<div layout:fragment="content" class="content-wrapper">
+  <div class="profile-box" style="height: auto; width: auto">
+  <h1>회원 관리</h1>
+
+  <div class="d-flex justify-content-center text-center" style="gap: 250px;">
+    <div style="flex-basis: auto;">
+      <span style="font-size: 50px; font-weight: bold;" th:text="${ memberCount }"></span>
+      <br>
+      <span>회원 수</span>
+    </div>
+    <div style="flex-basis: auto;">
+      <span style="font-size: 50px; font-weight: bold;" th:text="${ newMemberCount }"></span>
+      <br>
+      <span>신규 가입자 수</span>
+    </div>
+    <div style="flex-basis: auto;">
+      <span style="font-size: 50px; font-weight: bold;" th:text="${ activeMemberCount }"></span>
+      <br>
+      <span>접속자 수</span>
+    </div>
+  </div> <br>
+
+  <div class="input-group mb-3 d-flex align-items-center">
+    <div class="col-12">
+      <div class="input-group mb-3" style="width: 100%">
+        <span class="input-group-text" style="margin-right: 10px;">기간</span>
+        <input type="date" class="form-control" id="startDate" style="margin-right: 10px;">
+        <input type="date" class="form-control" id="endDate" style="margin-right: 10px;">
+        <select class="form-select" style="margin-right: 10px;">
+          <option value="all">All</option>
+          <option value="userName">아이디</option>
+          <option value="email">이메일</option>
+          <option value="nickName">닉네임</option>
+          <option value="loginType">회원타입</option>
+        </select>
+        <input type="text" class="form-control" id="keyword" placeholder="검색어 입력" style="margin-right: 10px;">
+        <button class="btn btn-primary" type="button" id="btn-search">검색</button>
+      </div>
+    </div>
+  </div>
+  <div id="member-list-box"></div>
+</div>
+</div>
+</body>
+</html>

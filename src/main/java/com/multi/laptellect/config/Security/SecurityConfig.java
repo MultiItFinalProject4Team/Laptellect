@@ -10,8 +10,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -40,6 +43,16 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
     @Bean // static 예외 처리
     public WebSecurityCustomizer configure() {
 
@@ -59,18 +72,25 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.loginPage("/signin")
                         .loginProcessingUrl("/signin").permitAll()
                         .failureHandler(customFailureHandler));
-
+        http
+                .rememberMe() // 아이디 저장
+                .rememberMeParameter("remember-me")
+                .tokenValiditySeconds(604800) // 14일
+                .alwaysRemember(false) // 항상 실행 false
+                .userDetailsService(customUserDetailsService);
         http
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/signout"))
-//                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("remember-me")
                         .invalidateHttpSession(true)
                         .logoutSuccessUrl("/"));
 
         http
                 .sessionManagement((auth) -> auth
                         .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true));
+                        .maxSessionsPreventsLogin(false)
+                        .expiredUrl("/signin")
+                        .sessionRegistry(sessionRegistry()));
 
         http
                 .exceptionHandling(exceptionHandling ->

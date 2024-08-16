@@ -1,10 +1,25 @@
 package com.multi.laptellect.recommend.txttag.model.dao;
 
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mapper
 public interface ProductTagDAO {
-    void deleteProductTags(int productNo);
-    void insertProductTag(int productNo, int tagNo);
-}
 
+    @Insert("INSERT IGNORE INTO machine_tagkey (product_no, tag_no) VALUES (#{productNo}, #{tagNo})" )
+    void insertProductTag(@Param("productNo") int productNo, @Param("tagNo") int tagNo);
+
+    @Select("SELECT product_no FROM product WHERE type_no = 1")
+    ArrayList<Integer> findAllProductNo();
+
+
+    @Select("SELECT * FROM laptop_tag")
+    List<TaggDTO> findAllTag();
+
+}

@@ -62,22 +62,22 @@ public class ProductSearchDTO implements Pageable {
 
     @Override
     public Pageable next() { // JPA꺼 무시하면 됨
-        return new ProductSearchDTO(this.page + 1, this.size, this.sort, this.typeNo, this.cate, this.keyword);
+        return null;
     }
 
     @Override
     public Pageable previousOrFirst() { // JPA꺼 무시하면 됨
-        return hasPrevious() ? new ProductSearchDTO(this.page - 1, this.size, this.sort, this.typeNo, this.cate, this.keyword) : this;
+        return null;
     }
 
     @Override
     public Pageable first() { // JPA꺼 무시하면 됨
-        return new ProductSearchDTO(0, this.size, this.sort, this.typeNo, this.cate, this.keyword);
+        return null;
     }
 
     @Override
     public Pageable withPage(int pageNumber) { // JPA꺼 무시하면 됨
-        return new ProductSearchDTO(pageNumber, this.size, this.sort, this.typeNo, this.cate, this.keyword);
+        return null;
     }
 
     @Override

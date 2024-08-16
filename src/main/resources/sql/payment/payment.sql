@@ -4,7 +4,9 @@ CREATE TABLE payment (
 	payment_no INT AUTO_INCREMENT PRIMARY KEY,
     member_no INT NOT NULL,
     product_no INT NOT NULL,
+    address_id INT NOT NULL,
     purchase_price INT,
+    quantity INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     im_port_id varchar(255),
     confirm char(1) DEFAULT 'N',
@@ -12,9 +14,11 @@ CREATE TABLE payment (
     refund CHAR(1) DEFAULT 'N',
     refund_at TIMESTAMP DEFAULT NULL,
     CONSTRAINT payment_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE,
-    CONSTRAINT payment_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE
+    CONSTRAINT payment_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE,
+    CONSTRAINT address_id_fk FOREIGN KEY (address_id) REFERENCES mem_delivery_address(address_id) ON DELETE CASCADE
 );
 SELECT * from payment;
+
 DROP TABLE payment;
 
 

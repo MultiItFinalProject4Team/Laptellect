@@ -13,188 +13,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 
-    <!-- fontawesom -->
-    <script src="https://kit.fontawesome.com/8e3f0717f9.js" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
     <!-- css + js 파일 Load-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-
+    <script type="text/javascript" th:src="@{/js/auth/find-id.js}"></script>
     <style>
     body { font-family: 'Noto Sans KR', sans-serif; }
-        .nav-tabs {
-            display: flex;
-            width: 100%;
-        }
-        .nav-item {
-            flex: 1;
-            text-align: center;
-        }
-        .nav-item .nav-link {
-            width: 100%;
-        }
-        .custom-checkbox input[type="checkbox"] {
-            margin-right: 8px;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .tab-content {
-            border: 1px solid #e0e0e0;
-            border-top: none;
+    }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 50px;
             padding: 20px;
-            border-radius: 0 0 5px 5px;
-        }
-        .nav-tabs .nav-link {
-            border-radius: 0;
-        }
-        .nav-tabs .nav-link.active {
-            border-color: #e0e0e0 #e0e0e0 transparent;
-        }
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-        }
-        .btn-custom:hover {
-            background-color: #0056b3;
-        }
-
-
-        .border-box {
-            border: 1px solid #007bff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        .checkbox-title {
-            font-weight: bold;
-            color: #007bff;
-            
-        }
-        span {
-
-            position: absolute;
-        }
-        .form-control:disabled {
-            background-color: #f8f9fa;
-        }
-        .hidden {
-            display: none;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
-
-    <script>
-    </script>
 </head>
 <body>
-    <div class="container mt-5">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#find-id">아이디 찾기</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#find-pw">비밀번호 찾기</a>
-            </li>
-        </ul>
-    
-        <div class="tab-content">
-            <div id="find-id" class="tab-pane fade show active">
-                <div class="border-box">
-                    <div class="form-check mb-3">
-                        <div class="checkbox-title">
-                            <span>휴대폰 번호로 찾기</span>
-                        </div>
-                    </div>
-                    <div id="phoneForm" class="hidden">
-                        <div class="form-group">
-                            <label for="phoneNumber">휴대폰 번호</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="phoneNumber" placeholder="213123123">
-                                <button class="btn btn-outline-secondary" type="button">인증번호</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="authNumber">인증번호</label>
-                            <input type="text" class="form-control" id="authNumber" placeholder="인증번호" disabled>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="border-box">
-                    <div class="form-check mb-3">
-                        <label class="form-check-label" for="findByEmail">
-                            이메일 주소로 찾기
-                        </label>
-                    </div>
-                </div>
-    
-                <div class="border-box">
-                    <div class="form-check mb-3">
-                        <label class="form-check-label" for="findByPhoneVerification">
-                            휴대폰 본인인증으로 찾기
-                        </label>
-                    </div>
-                </div>
-    
-                <button type="button" class="btn btn-custom">아이디 확인</button>
-            </div>
-    
-            <div id="find-pw" class="tab-pane fade">
-                <div class="border-box">
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="findByPhone">
-                        <input class="form-check-input" type="checkbox" value="" id="findByPhone" checked>
-                        <label class="form-check-label checkbox-title" for="findByPhone">
-                            휴대폰 번호로 찾기
-                        </label>
-                    </div>
-                    <div id="phoneForm" class="hidden">
-                        <div class="form-group">
-                            <label for="phoneNumber">휴대폰 번호</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="phoneNumber" placeholder="213123123">
-                                <button class="btn btn-outline-secondary" type="button">인증번호</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="authNumber">인증번호</label>
-                            <input type="text" class="form-control" id="authNumber" placeholder="인증번호" disabled>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="border-box">
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="findByEmail">
-                        <label class="form-check-label" for="findByEmail">
-                            이메일 주소로 찾기
-                        </label>
-                    </div>
-                </div>
-    
-                <button type="button" class="btn btn-custom">아이디 확인</button>
-            </div>
-        </div>
+<div class="container">
+    <h2 class="text-center mt-3">아이디 찾기</h2>
+    <div class="mb-3">
+        <label for="email" class="form-label">이메일 주소</label>
+        <input type="email" class="form-control" id="email" name="memberEmail" placeholder="이메일을 입력해주세요" required>
+        <div class="error-message text-center" id="emailError" style="color: red;">존재하지 않는 이메일 입니다.</div>
     </div>
+    <button type="submit" id="send-email" class="btn btn-primary w-100">전송</button>
 </div>
-
-<script>
-    $(document).ready(function(){
-        $('#findByPhone').on(click, function() {
-            if ($(this).is(':checked')) {
-                $('#phoneForm').removeClass('hidden');
-            } else {
-                $('#phoneForm').addClass('hidden');
-            }
-        });
-    });
-</script>
 
 </body>
 </html>

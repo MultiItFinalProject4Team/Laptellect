@@ -3,6 +3,7 @@ package com.multi.laptellect.member.model.mapper;
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.dto.PointLogDTO;
+import com.multi.laptellect.member.model.dto.SocialDTO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Pageable;
 
@@ -39,7 +40,7 @@ public interface MemberMapper {
     int updateTel(MemberDTO memberDTO);
 
     @Update("UPDATE mem_password SET member_password = #{ password } WHERE member_no = #{ memberNo }")
-    void updatePassword(int memberNo, String password);
+    void updatePassword(@Param("memberNo") int memberNo, @Param("password") String password);
 
     int insertAddress(AddressDTO addressDTO);
 
@@ -73,4 +74,12 @@ public interface MemberMapper {
     @Select("SELECT * FROM payment_point WHERE member_no = #{ memberNo } AND payment_point_change < 0 ORDER BY payment_point_no DESC LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }")
     ArrayList<PointLogDTO> findAllUsePointLogByMemberNo(@Param("memberNo") int memberNo, @Param("pageable") Pageable pageable);
 
+    @Select("SELECT * FROM mem_social_member WHERE member_no = #{ memberNo }")
+    SocialDTO findSocialNoByMemberNo(int memberNo);
+
+    @Delete("DELETE FROM mem_social_member WHERE social_id = #{ socialId }")
+    int deleteSocialMember(Long socialId);
+
+    @Update("UPDATE mem_member SET nick_name = null, email = null, is_active = 'Y', is_active_at = now() WHERE member_no = #{ memberNo }")
+    int deleteMember(int memberNo);
 }

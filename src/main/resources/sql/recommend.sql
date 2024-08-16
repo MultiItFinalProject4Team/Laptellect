@@ -10,7 +10,7 @@ CREATE TABLE laptop_tag (
 CREATE TABLE machine_tagkey(
     product_no INT NOT NULL ,
     tag_no INT NOT NULL,
-    UNIQUE (product_no, tag_no), --중복방지
+    PRIMARY KEY (product_no, tag_no),
    CONSTRAINT  product_FK FOREIGN KEY(product_no) REFERENCES product(product_no),
     CONSTRAINT tag_FK FOREIGN KEY(tag_no) REFERENCES laptop_tag(tag_no)
 );

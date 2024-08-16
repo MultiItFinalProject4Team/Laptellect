@@ -115,5 +115,9 @@ public interface ProductService {
   
     ArrayList<Integer> getWishlistString() throws Exception;
 
+
     Map<String, List<String>> productFilterSearch();
+
+    int updateProductVisit(String productNo, int visitCount) throws Exception;
+
 }

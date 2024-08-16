@@ -1,6 +1,7 @@
 package com.multi.laptellect.payment.model.dao;
 
 import com.multi.laptellect.common.model.PaginationDTO;
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.payment.model.dto.PaymentDTO;
 import com.multi.laptellect.payment.model.dto.PaymentReviewDTO;
 import com.multi.laptellect.payment.model.dto.PaymentpageDTO;
@@ -57,7 +58,7 @@ public interface PaymentDAO {
     PaymentDTO findPaymentByImPortId(String imPortId);
 
 
-    List<PaymentDTO> selectOrderItems(int memberNo);
+    PaymentDTO selectOrderItems(@Param("memberNo") int memberNo, @Param("productNo") int productNo);
 
     List<PaymentDTO> findPaymentsByImPortId(String imPortId);
 
@@ -74,4 +75,14 @@ public interface PaymentDAO {
     PaymentDTO selectPaymentDetail(int paymentNo);
 
     int findRefundStatus(String imPortId);
+
+    AddressDTO selectPaymentAddress(int paymentNo);
+
+    PaymentpointDTO findUsedPoint(String imPortId);
+
+    List<PaymentReviewDTO> findPaymentReviewsByProductNo(int productNo);
+
+    int updateReview(PaymentReviewDTO reviewDTO);
+
+    int deleteReview(int paymentProductReviewsNo);
 }

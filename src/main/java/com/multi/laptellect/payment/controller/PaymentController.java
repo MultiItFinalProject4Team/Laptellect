@@ -1,5 +1,7 @@
 package com.multi.laptellect.payment.controller;
 
+import com.multi.laptellect.member.model.dto.AddressDTO;
+import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.member.service.MemberService;
@@ -13,6 +15,7 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -42,32 +44,61 @@ public class PaymentController {
         this.cartService = cartService;
     }
 
-    @GetMapping("/orderlist")
-    public String orderList(Model model) {
-        int memberNo = SecurityUtil.getUserNo();
-        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-
-        List<PaymentDTO> orderItems = paymentService.selectOrderItems(memberDTO.getMemberNo());
-        List<String> reviewedOrders = paymentService.getReviewedOrders();
-
-        model.addAttribute("orderItems", orderItems);
-        model.addAttribute("reviewedOrders", reviewedOrders);
-        return "/payment/orderlist";
+    @GetMapping("/complete")
+    public String paymentComplete(@RequestParam("impUid") String impUid, Model model) throws Exception {
+        PaymentCompleteDTO paymentInfo = paymentService.getPaymentInfo(impUid);
+        model.addAttribute("paymentInfo", paymentInfo);
+        return "payment/payment-complete";
     }
+
+//    @GetMapping("/orderlist")
+//    public String orderList(Model model) {
+//        int memberNo = SecurityUtil.getUserNo();
+//        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
+//
+//        List<PaymentDTO> orderItems = paymentService.selectOrderItems(memberDTO.getMemberNo(), productNo);
+//        List<String> reviewedOrders = paymentService.getReviewedOrders();
+//
+//        model.addAttribute("orderItems", orderItems);
+//        model.addAttribute("reviewedOrders", reviewedOrders);
+//        return "/payment/orderlist";
+//    }
 
     @PostMapping("/payment")
     public String paymentpage(@RequestParam("imageUrl") String img,
                               @RequestParam("productName") String productName,
                               @RequestParam("price") int price,
-                              Model model) {
+                              Model model) throws Exception {
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-//        paymentpageDTO.setPrice(400);
+        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
         PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
 
+        ArrayList<AddressDTO> userAddressList = memberService.findAllAddressByMemberNo();
+
+
+
+
+        if(userAddressList.isEmpty()){
+            model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 기본배송지 미설정");
+            return "/member/delivery-profile";
+        } else if (memberDTO.getTel() == null) {
+
+            CustomUserDetails userInfo = SecurityUtil.getUserDetails();
+
+            model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 전화번호 미인증");
+            model.addAttribute("userInfo", userInfo);
+            return "/member/edit-profile";
+        }
+
+
+        AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
+
+        model.addAttribute("addressList", userAddressList);
+        model.addAttribute("userAddress", userAddress);
         model.addAttribute("paymentpageDTO", paymentpageDTO);
         model.addAttribute("paymentpointDTO", paymentpointDTO);
         model.addAttribute("memberDTO", memberDTO);
@@ -100,7 +131,32 @@ public class PaymentController {
 
             int memberNo = SecurityUtil.getUserNo();
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-            System.out.println("ssd  " + cartList );
+
+
+            ArrayList<AddressDTO> userAddressList = memberService.findAllAddressByMemberNo();
+
+            if(userAddressList.isEmpty()){
+                model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 기본배송지 미설정");
+                return "/member/delivery-profile";
+            } else if (memberDTO.getTel() == null) {
+
+                CustomUserDetails userInfo = SecurityUtil.getUserDetails();
+
+                model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 전화번호 미인증");
+                model.addAttribute("userInfo", userInfo);
+                return "/member/edit-profile";
+            }
+
+            AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);
+            System.out.println(userAddressList);
+            System.out.println(userAddress);
+
+
+            model.addAttribute("addressList", userAddressList);
+            model.addAttribute("userAddress", userAddress);
+
+
+
 
             model.addAttribute("cartList", cartList);
             model.addAttribute("total", productTotal);
@@ -132,6 +188,8 @@ public class PaymentController {
             paymentDTO.setProductNo(paymentpageDTO.getProductNo());
             paymentDTO.setPurchasePrice(request.getAmount().intValue());
             paymentDTO.setImPortId(request.getImPortId());
+            paymentDTO.setAddressId(request.getAddressId());
+            paymentDTO.setQuantity(request.getQuantity());
 
             PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
             paymentpointDTO.setUsedPoints(request.getUsedPoints());
@@ -156,7 +214,11 @@ public class PaymentController {
                 if (Integer.parseInt(paymentpointDTO.getUsedPoints()) > 0) {
                     paymentService.usepoint(paymentpointDTO);
                 }
-                return ResponseEntity.ok(Map.of("success", true, "message", "Payment verified successfully"));
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "message", "Payment verified successfully",
+                        "redirectUrl", "/payment/complete?impUid=" + request.getImPortId()
+                ));
             } else {
                 return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Payment amount mismatch"));
             }
@@ -168,8 +230,6 @@ public class PaymentController {
     @Transactional
     @PostMapping("/verifyCartPayment")
     public ResponseEntity<Map<String, Object>> verifyCartPayment(@RequestBody CartPaymentDTO request) {
-        log.info("반환 개수 = {}", request.getProducts().size());
-        log.info("반환 개수 = {}", request.getProducts());
         try {
             int memberNo = SecurityUtil.getUserNo();
             MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -202,7 +262,11 @@ public class PaymentController {
                 // 장바구니 비우기
                 cartService.deleteCartProduct(request.getProducts().stream().map(p -> String.valueOf(p.getProductNo())).toList());
 
-                return ResponseEntity.ok(Map.of("success", true, "message", "Cart payment verified successfully"));
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "message", "Cart payment verified successfully",
+                        "redirectUrl", "/payment/complete?impUid=" + request.getImPortId()
+                ));
             } else {
                 throw new IllegalStateException("Payment amount mismatch");
             }
@@ -269,43 +333,60 @@ public class PaymentController {
     @Transactional
     @PostMapping("/reviews")
     public ResponseEntity<Map<String, Object>> createReview(@RequestBody PaymentReviewDTO reviewDTO) {
-        int memberNo = SecurityUtil.getUserNo();
-        MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
-
-        String username = memberDTO.getMemberName();
-        reviewDTO.setUserName(username);
-        reviewDTO.setMemberNo(memberDTO.getMemberNo());
-
-        // Fetch the product information using the imPortId
-        PaymentDTO paymentDTO = paymentService.findPaymentByImPortId(reviewDTO.getImPortId());
-        if (paymentDTO != null) {
-            reviewDTO.setProductNo(paymentDTO.getProductNo());
-        } else {
-            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "주문 정보를 찾을 수 없습니다."));
-        }
 
         int result = paymentService.saveReview(reviewDTO);
 
         Map<String, Object> response = new HashMap<>();
         if (result > 0) {
-            PaymentpointDTO paymentpointDTO = paymentService.selectpoint(memberNo);
-            paymentpointDTO.setImPortId(reviewDTO.getImPortId());
-            paymentService.givepoint(paymentpointDTO);
-
-            try {
-                int newPoint = memberDTO.getPoint() + 500;
-                memberDTO.setPoint(newPoint);
-                memberService.updatePoint(memberDTO);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
             response.put("success", true);
-            response.put("message", "리뷰가 성공적으로 저장되었습니다. \n리뷰감사 포인트 500p를 지급합니다.\n" + "보유포인트 : " + memberDTO.getPoint() + "p");
+            response.put("message", "리뷰가 성공적으로 저장되었습니다.");
         } else {
             response.put("success", false);
             response.put("message", "리뷰 저장에 실패했습니다.");
         }
         return ResponseEntity.ok(response);
+    }
+
+    @Transactional
+    @PostMapping("/reviews/update")
+    public ResponseEntity<Map<String, Object>> updateReview(@RequestBody PaymentReviewDTO reviewDTO) {
+        try {
+            int result = paymentService.updateReview(reviewDTO);
+            Map<String, Object> response = new HashMap<>();
+            if (result > 0) {
+                response.put("success", true);
+                response.put("message", "리뷰가 성공적으로 수정되었습니다.");
+            } else {
+                response.put("success", false);
+                response.put("message", "리뷰 수정에 실패했습니다.");
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("리뷰 수정 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "리뷰 수정 중 오류가 발생했습니다."));
+        }
+    }
+
+    @Transactional
+    @PostMapping("/reviews/delete")
+    public ResponseEntity<Map<String, Object>> deleteReview(@RequestBody Map<String, Integer> payload) {
+        try {
+            int paymentProductReviewsNo = payload.get("paymentProductReviewsNo");
+            int result = paymentService.deleteReview(paymentProductReviewsNo);
+            Map<String, Object> response = new HashMap<>();
+            if (result > 0) {
+                response.put("success", true);
+                response.put("message", "리뷰가 성공적으로 삭제되었습니다.");
+            } else {
+                response.put("success", false);
+                response.put("message", "리뷰 삭제에 실패했습니다.");
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("리뷰 삭제 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "리뷰 삭제 중 오류가 발생했습니다."));
+        }
     }
 }

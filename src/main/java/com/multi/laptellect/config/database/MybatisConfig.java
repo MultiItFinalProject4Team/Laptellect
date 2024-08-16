@@ -1,5 +1,6 @@
 package com.multi.laptellect.config.database;
 
+import com.multi.laptellect.admin.member.model.dto.AdminMemberDTO;
 import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
 import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
 import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
@@ -56,6 +57,7 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("paymentReviewDTO", com.multi.laptellect.payment.model.dto.PaymentReviewDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("paymentpointDTO", com.multi.laptellect.payment.model.dto.PaymentpointDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("paymentProductDTO", com.multi.laptellect.payment.model.dto.PaymentProductDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("paymentDetailDTO", com.multi.laptellect.payment.model.dto.PaymentDetailDTO.class);
 
 
         configuration.getTypeAliasRegistry().registerAlias("adminReviewDTO", AdminReviewDTO.class);
@@ -87,9 +89,14 @@ public class MybatisConfig {
         configuration.getTypeAliasRegistry().registerAlias("sentimentDTO", com.multi.laptellect.recommend.clovaapi.model.dto.SentimentDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("RecommendProductDTO", com.multi.laptellect.recommend.laptop.model.dto.RecommendProductDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("DTO", com.multi.laptellect.recommend.reviewtag.model.dto.TagDTO.class);
-        configuration.getTypeAliasRegistry().registerAlias("ProductDTO2", com.multi.laptellect.recommend.txttag.model.dto.ProductDTO2.class);
         configuration.getTypeAliasRegistry().registerAlias("TaggDTO", com.multi.laptellect.recommend.txttag.model.dto.TaggDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("productFilterDTO", ProductFilterDTO.class);
+
+
+
+
+
+        configuration.getTypeAliasRegistry().registerAlias("adminMemberDTO", AdminMemberDTO.class);
 
 
 

@@ -8,7 +8,9 @@
         <id column="payment_no" property="paymentNo"/>
         <result column="member_no" property="memberNo"/>
         <result column="product_no" property="productNo"/>
+        <result column="address_id" property="addressId"/>
         <result column="purchase_price" property="purchasePrice"/>
+        <result column="quantity" property="quantity"/>
         <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
         <result column="im_port_id" property="imPortId"/>
         <result column="refund" property="refund"/>
@@ -29,16 +31,45 @@
         <result column="created_at" property="createdAt"/>
     </resultMap>
 
+    <resultMap id="addressResultMap" type="com.multi.laptellect.member.model.dto.AddressDTO">
+        <result property="rowNum" column="row_num"/>
+        <result property="addressId" column="address_id"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="addressName" column="address_name"/>
+        <result property="recipientName" column="recipient_name"/>
+        <result property="postalCode" column="postal_code"/>
+        <result property="address" column="address"/>
+        <result property="detailAddress" column="detail_address"/>
+        <result property="recipientPhone" column="recipient_phone"/>
+        <result property="request" column="request"/>
+    </resultMap>
+
+    <resultMap id="PaymentReviewsResultMap" type="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        <result property="paymentProductReviewsNo" column="payment_product_reviews_no"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="productNo" column="product_no"/>
+        <result property="tagAnswer" column="tag_answer"/>
+        <result property="content" column="content"/>
+        <result property="rating" column="rating"/>
+        <result property="imPortId" column="im_port_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="modifyAt" column="modify_at"/>
+    </resultMap>
+
     <insert id="insertPayment" parameterType="com.multi.laptellect.payment.model.dto.PaymentDTO">
         INSERT INTO payment (
         member_no,
         product_no,
+        address_id,
         purchase_price,
+        quantity,
         im_port_id
         ) VALUES (
         #{memberNo},
         #{productNo},
+        #{addressId},
         #{purchasePrice},
+        #{quantity},
         #{imPortId}
         )
     </insert>
@@ -215,9 +246,13 @@
         FROM payment p
         JOIN mem_member m ON p.member_no = m.member_no
         JOIN product pr ON p.product_no = pr.product_no
+        LEFT JOIN payment_product_reviews ppr ON p.im_port_id = ppr.im_port_id
         WHERE p.refund = 'N'
-        AND m.member_no = #{memberNo}
-        ORDER BY p.created_at DESC, p.payment_no ASC
+        AND p.member_no = #{memberNo}
+        AND p.product_no = #{productNo}
+        AND ppr.payment_product_reviews_no IS NULL
+        ORDER BY p.created_at DESC
+        LIMIT 1
     </select>
 
     <select id="findPaymentsByImPortId" resultMap="PaymentResultMap">
@@ -310,25 +345,16 @@
                 <if test="paginationDTO.keyword != null">
                     AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
                 </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
-                </if>
             </when>
             <when test="paginationDTO.selectType == 'productName'">
                 <if test="paginationDTO.keyword != null">
                     AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
-                </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
                 </if>
             </when>
             <when test="paginationDTO.selectType == 'all'">
                 <if test="paginationDTO.keyword != null">
                     AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
                     OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
-                </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
                 </if>
             </when>
         </choose>
@@ -351,5 +377,40 @@
         p.payment_no = #{paymentNo}
     </select>
 
+
+    <select id="selectPaymentAddress" resultMap="addressResultMap">
+        SELECT mda.*
+        FROM payment p
+        JOIN mem_delivery_address mda ON p.address_id = mda.address_id
+        WHERE p.payment_no = #{paymentNo};
+    </select>
+
+    <select id="findUsedPoint" resultMap="PointResultMap">
+        SELECT *
+        FROM payment_point
+        WHERE im_port_id = #{imPortId}
+        AND payment_point_info = '구매 시 포인트사용'
+    </select>
+
+    <select id="findPaymentReviewsByProductNo" resultType="paymentReviewDTO">
+        SELECT ppr.*, mm.member_name AS memberName
+        FROM payment_product_reviews ppr
+        JOIN mem_member mm ON ppr.member_no = mm.member_no
+        WHERE ppr.product_no = #{productNo}
+        ORDER BY payment_product_reviews_no DESC;
+    </select>
+
+    <update id="updateReview" parameterType="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        UPDATE payment_product_reviews
+        SET content = #{content},
+        rating = #{rating},
+        modify_at = NOW()
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </update>
+
+    <delete id="deleteReview" parameterType="int">
+        DELETE FROM payment_product_reviews
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </delete>
 
 </mapper>

@@ -2,11 +2,13 @@ package com.multi.laptellect.payment.service;
 
 import com.multi.laptellect.api.payment.ApiKeys;
 import com.multi.laptellect.common.model.PaginationDTO;
+import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.mapper.MemberMapper;
 import com.multi.laptellect.payment.model.dao.PaymentDAO;
 import com.multi.laptellect.payment.model.dto.*;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.util.SecurityUtil;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -33,6 +35,7 @@ public class PaymentService {
 
     private final ApiKeys apiKeys;
     private final MemberMapper memberMapper;
+    private final ProductService productService;
 
 
 
@@ -40,10 +43,11 @@ public class PaymentService {
     private PaymentDAO paymentDAO;
 
     @Autowired
-    public PaymentService(ApiKeys apiKeys, MemberMapper memberMapper) {
+    public PaymentService(ApiKeys apiKeys, MemberMapper memberMapper, ProductService productService) {
         this.apiKeys = apiKeys;
         this.memberMapper = memberMapper;
 
+        this.productService = productService;
     }
 
     public int usepoint(PaymentpointDTO paymentpointDTO) {
@@ -86,8 +90,8 @@ public class PaymentService {
     }
 
     @Transactional
-    public List<PaymentDTO> selectOrderItems(int memberNo) {
-        return paymentDAO.selectOrderItems(memberNo);
+    public PaymentDTO selectOrderItems(int memberNo, int productNo) {
+        return paymentDAO.selectOrderItems(memberNo, productNo);
     }
 
     public List<PaymentDTO> findPaymentsByImPortId(String imPortId) {
@@ -139,11 +143,13 @@ public class PaymentService {
                 paymentDTO.setProductNo(product.getProductNo());
                 paymentDTO.setPurchasePrice(product.getTotalPrice());
                 paymentDTO.setImPortId(request.getImPortId());
+                paymentDTO.setQuantity(product.getQuantity());
 
                 try {
                     if (product.getProductNo() == 0) {
                         throw new IllegalArgumentException("Invalid product number: " + product.getProductName());
                     }
+                    paymentDTO.setAddressId(request.getAddressId());
                     insertPayment(paymentDTO);
                 } catch (Exception e) {
                     // 로그 기록 및 예외 처리
@@ -249,12 +255,103 @@ public class PaymentService {
         return result;
     }
 
-    public PaymentDTO getPaymentDetail(int paymentNo) {
+    public PaymentDTO selectPaymentDetail(int paymentNo) {
         return paymentDAO.selectPaymentDetail(paymentNo);
+    }
+
+    private AddressDTO selectPaymentAddress(int paymentNo) {
+        return paymentDAO.selectPaymentAddress(paymentNo);
     }
 
 
     public int findRefundStatus(String imPortId) {
         return paymentDAO.findRefundStatus(imPortId);
+    }
+
+
+
+    public PaymentDetailDTO paymentDetail(int paymentNo){
+        PaymentDTO paymentDTO = selectPaymentDetail(paymentNo);
+        AddressDTO addressDTO = selectPaymentAddress(paymentNo);
+
+        int usedPoint = 0;
+
+        if(findUsedPoint(paymentDTO.getImPortId()) != null) {
+            usedPoint = Math.abs(findUsedPoint(paymentDTO.getImPortId()).getPaymentPointChange());
+        }
+        System.out.println(usedPoint);
+
+
+        PaymentDetailDTO detailDTO = new PaymentDetailDTO();
+        detailDTO.setPaymentDTO(paymentDTO);
+        detailDTO.setAddressDTO(addressDTO);
+        detailDTO.setPointChange(usedPoint);
+
+        return detailDTO;
+    }
+
+    private PaymentpointDTO findUsedPoint(String imPortId) {
+        return paymentDAO.findUsedPoint(imPortId);
+    }
+
+
+    public List<PaymentReviewDTO> findPaymentReviewsByProductNo(int productNo) {
+        return paymentDAO.findPaymentReviewsByProductNo(productNo);
+    }
+
+    public PaymentCompleteDTO getPaymentInfo(String impUid) throws Exception {
+        List<PaymentDTO> payments = paymentDAO.findPaymentsByImPortId(impUid);
+        PaymentpointDTO paymentpointDTO = paymentDAO.findUsedPoint(impUid);
+
+        PaymentCompleteDTO paymentInfo = new PaymentCompleteDTO();
+        List<ProductInfo> productInfoList = new ArrayList<>();
+        int totalQuantity = 0;
+        int totalPrice = 0;
+        int count = 0;
+
+        for (PaymentDTO payment : payments) {
+            ProductDTO product = productService.findProductByProductNo(String.valueOf(payment.getProductNo()));
+
+            ProductInfo productInfo = new ProductInfo();
+            productInfo.setProductName(product.getProductName());
+            productInfo.setQuantity(payment.getQuantity());
+            productInfo.setPrice(product.getPrice());
+            productInfo.setTotalPrice(payment.getPurchasePrice());
+            productInfo.setImage(product.getImage());
+
+            productInfoList.add(productInfo);
+
+            totalQuantity += payment.getQuantity();
+            totalPrice += payment.getPurchasePrice();
+            count++;
+        }
+
+        paymentInfo.setProducts(productInfoList);
+        paymentInfo.setTotalQuantity(totalQuantity);
+
+
+        int usedPoints = 0;
+        if (paymentpointDTO != null) {
+            usedPoints = Math.abs(Integer.parseInt(String.valueOf(paymentpointDTO.getPaymentPointChange())));
+        }
+
+        paymentInfo.setDiscountAmount(usedPoints);
+        if(count > 1) {
+            paymentInfo.setTotalPrice(totalPrice - usedPoints);
+        }else{
+            paymentInfo.setTotalPrice(totalPrice);
+        }
+
+        return paymentInfo;
+    }
+
+    @Transactional
+    public int updateReview(PaymentReviewDTO reviewDTO) {
+        return paymentDAO.updateReview(reviewDTO);
+    }
+
+    @Transactional
+    public int deleteReview(int paymentProductReviewsNo) {
+        return paymentDAO.deleteReview(paymentProductReviewsNo);
     }
 }

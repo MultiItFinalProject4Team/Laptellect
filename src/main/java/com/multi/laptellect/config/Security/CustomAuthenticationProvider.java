@@ -1,6 +1,7 @@
 package com.multi.laptellect.config.Security;
 
 
+import com.multi.laptellect.error.MemberNotFoundException;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider, Ser
         // 입력한 ID와 비밀번호 임시 비밀번호 변수에 담기
         String username = authentication.getName(); // 입력한 아이디
         String password = (String)authentication.getCredentials(); // 입력한 비밀번호
-        String tempPassword = redisUtil.getData("temp:" + username); // 임시 비밀번호 가져오기
+
+        String tempPasswordKey = "password:" + username;
+        String tempPassword = redisUtil.getData(tempPasswordKey); // 임시 비밀번호 가져오기
 
         // CustomUserDetailsService로 변환
         CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(username);
@@ -46,6 +49,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider, Ser
         if (!passwordMatches) {
             throw new BadCredentialsException("Wrong password") {};
         }
+
+        if(customUserDetails.getIsActive().equals("Y")) throw new MemberNotFoundException("탈퇴한 회원");
 
         // 인증 정보가 담긴 객체 반환
         return new UsernamePasswordAuthenticationToken(customUserDetails, password, customUserDetails.getAuthorities());

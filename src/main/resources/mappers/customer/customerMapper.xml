@@ -59,7 +59,7 @@
         where reference_code=#{referenceCode}
     </select>
 
-    <insert id="personalAnswerApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto" useGeneratedKeys="true" keyProperty="personalaNo">
+    <insert id="personalAnswerApp" parameterType="com.multi.laptellect.customer.dto.PersonalqAnswerDto" keyProperty="personalaNo" useGeneratedKeys="true">
         insert into
         personal_answer(personalq_no, title, content)
         values(#{personalqNo},#{title},#{content})
@@ -184,12 +184,13 @@
         from
         product_answer
         where productq_no=#{productqNo}
+        order by producta_no desc
     </select>
 
     <update id="updateProductq" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto">
         update
         product_question
-        set productq_categorycode=#{productqCategorycode}, title=#{title}, content=#{content}, updated_at=current_timestamp
+        set productq_categorycode=#{productqCategorycode}, title=#{title}, content=#{content}, secret=#{secret}, updated_at=current_timestamp
         where productq_no = #{productqNo}
     </update>
 
@@ -375,4 +376,34 @@
         </if>
         order by a.productq_no desc
     </select>
+
+    <select id="getNoticeList" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
+        select * from notice
+    </select>
+
+    <select id="getnotice" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
+        select * from notice
+        where notice_no = #{noticeNo}
+    </select>
+
+    <insert id="noticeApp" parameterType="com.multi.laptellect.customer.dto.NoticeListDto">
+        insert into notice
+        (member_no, title, content, main_regist)
+        values
+        (#{memberNo}, #{title}, #{content}, #{mainRegist})
+    </insert>
+
+    <delete id="deleteNotice">
+        delete from notice
+        where notice_no=#{noticeNo}
+    </delete>
+
+    <update id="updateNotice" parameterType="com.multi.laptellect.customer.dto.NoticeListDto">
+        update notice
+        set
+        title=#{title},
+        content=#{content},
+        main_regist=#{mainRegist}
+        where notice_no=#{noticeNo}
+    </update>
 </mapper>

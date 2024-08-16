@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<html layout:decorate="~{customer/layout/layout-customer}">
+<html layout:decorate="~{common/layout-customer}">
 <head>
     <meta charset="UTF-8">
     <title>공지사항</title>
@@ -30,6 +30,7 @@
     <div class="container mt-2">
         <header>
             <h1 align="left"style="font-size:40px">공지 사항</h1>
+            <a class="btn btn-custom-primary btn-sm" id="NoticeModalButton" data-bs-toggle="modal" data-bs-target="#NoticeModal" role="button">주요 공지사항</a>
         </header>
         <hr>
         <div class="fixed-table-container">
@@ -43,14 +44,48 @@
             </thead>
             <tbody id="table-body">
             <tr th:each="note : ${list}" class="align-middle">
-                <td th:text="${note.No}">번호</td>
+                <td th:text="${note.noticeNo}">번호</td>
                 <td style="text-align: center;">
-                    <a style="text-decoration: none;" th:href="@{/customer/user/notice_detail/{noticeNo}(noticeNo=${note.No})}" th:text="${note.No}"></a>
+                    <a style="text-decoration: none;" th:href="@{/customer/user/notice_detail/{noticeNo}(noticeNo=${note.noticeNo})}" th:text="${note.title}"></a>
                 </td>
-                <td th:text="${note.createdAt}">작성일</td>
+                <td th:text="${#dates.format(note.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>
             </tr>
             </tbody>
         </table>
+        </div>
+        <div class="modal fade" id="NoticeModal" tabindex="-1" aria-labelledby="NoticeModalLabel" aria-hidden="true" >
+            <div class="modal-dialog" style="max-width: 80%; width: 80%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="NoticeModalLabel">주요 공지</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="fixed-table-container">
+                            <table class="table table-striped fixed-table" style="text-align: center">
+                                <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>제목</th>
+                                    <th>작성자</th>
+                                    <th>작성일</th>
+                                </tr>
+                                </thead>
+                                <tbody id="table-body2">
+                                <tr th:each="note : ${list}" th:if="${note.mainRegist=='Y'}" class="align-middle">
+                                    <td th:text="${note.noticeNo}">번호</td>
+                                    <td style="text-align: center;">
+                                        <a style="text-decoration: none;" th:href="@{/customer/admin/admin_notice_detail/{noticeNo}(noticeNo=${note.noticeNo})}" th:text="${note.title}"></a>
+                                    </td>
+                                    <td>관리자</td>
+                                    <td th:text="${#dates.format(note.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="pagination-container">

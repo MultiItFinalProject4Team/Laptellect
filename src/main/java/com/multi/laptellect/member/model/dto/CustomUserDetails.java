@@ -26,18 +26,6 @@ public class CustomUserDetails implements UserDetails, Serializable {
         return memberDTO.getPassword();
     }
 
-    public String getTempPassword() {
-        return memberDTO.getTempPassword();
-    }
-
-    public boolean getTempPasswordIsUse() {
-        return memberDTO.getTempPasswordIsUse();
-    }
-
-    public LocalDateTime getTempExpDate() {
-        return memberDTO.getTempExpDate().toLocalDateTime();
-    }
-
     @Override
     public String getUsername() {
         return memberDTO.getMemberName();
@@ -101,5 +89,9 @@ public class CustomUserDetails implements UserDetails, Serializable {
         this.memberDTO.setEmail(updateDTO.getEmail());
         this.memberDTO.setTel(updateDTO.getTel());
         this.memberDTO.setPoint(updateDTO.getPoint());
+    }
+
+    public String getIsActive() {
+        return memberDTO.getIsActive();
     }
 }

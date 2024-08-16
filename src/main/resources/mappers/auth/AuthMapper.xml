@@ -20,19 +20,19 @@
 		(
 			  member_name
 			, email
-<!--		<if test="nickName != null">-->
-<!--			, nick_name-->
-<!--		</if>-->
 			, login_type
+		<if test='role != null'>
+			, role
+		</if>
 		)
 		VALUES
 		(
 			  #{ memberName }
 			, #{ email }
-<!--		<if test="nickName != null">-->
-<!--			, #{ nickName }-->
-<!--		</if>-->
 			, #{ loginType }
+		<if test='role != null'>
+			, #{ role }
+		</if>
 		)
 	</insert>
 
@@ -64,6 +64,24 @@
 		)
 	</insert>
 
+	<insert id="insertSeller" parameterType="memberDTO">
+		INSERT INTO
+			mem_seller_member
+		(
+			  member_no
+			, company_name
+			, representative_name
+			, business_registration_number
+		)
+		VALUES
+		(
+			  #{ memberNo }
+			, #{ companyName }
+			, #{ ownerName }
+			, #{ registrationNo }
+		)
+	</insert>
+
 	<select id="selectMemberById" parameterType="String" resultMap="memberResultMap">
 		SELECT
 			m.*,
@@ -73,7 +91,7 @@
 		JOIN
 			mem_password p ON m.member_no = p.member_no
 		WHERE
-			m.member_name = #{memberName}
+			m.member_name = #{ memberName }
 	</select>
 
 	<update id="updatePassword" parameterType="memberDTO">

@@ -28,6 +28,8 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             errorMessage = "password";
         } else if (exception instanceof UsernameNotFoundException) {
             errorMessage = "username";
+        } else if (exception instanceof MemberNotFoundException) {
+            errorMessage = "memberNotFound";
         }
 
         response.sendRedirect("/signin?error=" + errorMessage);

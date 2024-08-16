@@ -6,13 +6,12 @@ import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.service.MemberService;
 import com.multi.laptellect.util.SecurityUtil;
+import com.multi.laptellect.util.StringValidUtil;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 인증/인가 관련 API 매핑에 사용하는 클래스
@@ -262,36 +261,37 @@ public class AuthApiController {
      */
     @ResponseBody
     @PostMapping("/find-user-id")
-    public String findUserId(@RequestParam(name = "email", required = false) String email,
+    public boolean findUserId(@RequestParam(name = "email", required = false) String email,
                              @RequestParam(name = "tel", required = false) String tel) {
-        String request ="";
+        boolean result;
         MemberDTO memberDTO = new MemberDTO();
 
         try {
             memberDTO.setEmail(email);
             memberDTO.setTel(tel);
-            request = "회원님의 아이디는 " + memberService.findUserId(memberDTO) + "입니다.";
+            result = memberService.findUserId(memberDTO);
+            return result;
         } catch (Exception e) {
-            request = "존재하지 않는 회원 입니다";
+            log.error("Find ID Error = ", e);
+            return false;
         }
-        return request;
     }
 
     @ResponseBody
     @PostMapping("/send-temp-password")
-    public int sendTempPassword(@RequestParam(name = "email", required = false) String email,
-                                @RequestParam(name = "tel", required = false) String tel,
-                                @RequestParam(name = "verifyCode") String verifyCode) {
+    public int sendTempPassword(@RequestParam(name = "userId", required = false) String userId,
+                                @RequestParam(name = "email", required = false) String email) {
         int result = 0;
 
         try {
-            result = memberService.sendTempPassword(email, tel, verifyCode);
+            result = memberService.sendTempPassword(userId, email);
 
             log.info("Temp Email Send success", result);
             return result;
         } catch (Exception e) {
             log.error("sendTempPassword Error = ", e);
-            return 0;
+            result = 0;
+            return result;
         }
     }
 
@@ -323,7 +323,6 @@ public class AuthApiController {
             log.error("회원가입 에러 = " + e);
             return 3; // 회원가입 에러
         }
-
     }
 
     /**
@@ -354,5 +353,40 @@ public class AuthApiController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/delete-member")
+    public boolean deleteId(HttpSession httpSession) {
+        boolean result;
+        try {
+            result = memberService.deleteMember();
+            httpSession.invalidate();
+        } catch (Exception e) {
+            log.error("회원 탈퇴 실패 = ", e);
+            result = false;
+        }
+        return result;
+    }
 
+    @ResponseBody
+    @PostMapping("/check-registration-no")
+    public int isRegistrationNo(MemberDTO memberDTO) {
+        int result = 0;
+
+        log.info("파라미터 체크 = {}", memberDTO);
+
+        boolean isOwnerName = StringValidUtil.isValidString(memberDTO.getOwnerName());
+        boolean isBusinessDate = StringValidUtil.isValidString(memberDTO.getBusinessDate());
+        boolean isRegistrationNo = StringValidUtil.isValidString(memberDTO.getRegistrationNo());
+
+        if(!isOwnerName || !isBusinessDate || !isRegistrationNo)  {
+            return 3;
+        }
+
+        try {
+            return authService.isRegistrationNo(memberDTO);
+        } catch (Exception e) {
+            log.error("사업자 등록번호 조회 에러 = ", e);
+            return result;
+        }
+    }
 }
