@@ -10,14 +10,15 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
     .dashboard-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
+      grid-template-rows: auto auto;
       gap: 20px;
-      height: calc(100vh - 100px);
+      min-height: calc(100vh - 100px);
       padding: 20px;
       box-sizing: border-box;
     }
@@ -28,6 +29,8 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
+      height: auto;
+      min-height: 300px;
     }
     .panel-title {
       font-size: 18px;
@@ -38,15 +41,18 @@
     #curve_chart, #daily_stats, #recent_reviews_table, #recent_questions_table {
       width: 100%;
       flex-grow: 1;
+      min-height: 250px;
     }
     .table-container {
       display: flex;
       flex-direction: column;
       height: 100%;
+      min-height: 300px;
     }
     .table-content {
       flex-grow: 1;
       overflow: auto;
+      min-height: 200px;
     }
     .pagination {
       display: flex;
@@ -73,6 +79,115 @@
       color: #999;
       cursor: not-allowed;
       border-color: #eee;
+    }
+    #recent_reviews_table td {
+      text-align: center;
+    }
+    #recent_reviews_table td:first-child {
+      cursor: pointer;
+      color: #2196F3;
+    }
+    #recent_reviews_table td:first-child:hover {
+      text-decoration: underline;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 30px;
+      border: none;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      position: relative;
+      animation: slideIn 0.3s;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .close:hover,
+    .close:focus {
+      color: #333;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .modal-content h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 24px;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .modal-content p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+    .modal-content strong {
+      color: #555;
+      font-weight: 600;
+    }
+    #modalContent {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 10px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+    #modalRating {
+      font-size: 18px;
+      color: #555;
+      font-weight: bold;
+    }
+    #modalCreateDate, #modalModifyDate {
+      font-style: italic;
+      color: #666;
+    }
+    .btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      background-color: #777;
+      color: white;
+    }
+    .btn:hover {
+      background-color: #666;
+    }
+    @media (max-width: 768px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
   <script th:inline="javascript">
@@ -154,30 +269,62 @@
     }
 
     function drawRecentReviewsTable() {
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', '번호');
-      data.addColumn('string', '상품명');
-      data.addColumn('string', '작성자');
-      data.addColumn('string', '평점');
-      data.addColumn('string', '작성일자');
+      fetch('/admin/recent-reviews')
+        .then(response => response.json())
+        .then(reviews => {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', '번호');
+          data.addColumn('string', '상품명');
+          data.addColumn('string', '작성자');
+          data.addColumn('string', '평점');
+          data.addColumn('string', '작성일자');
 
-      for(let i = 1; i <= 20; i++) {
-        data.addRow([i.toString(), '상품 ' + i, '사용자 ' + i, (Math.random() * 5).toFixed(1), '2023-08-0' + (i % 9 + 1)]);
-      }
+          reviews.forEach((review) => {
+            data.addRow([
+              review.paymentProductReviewsNo.toString(),
+              review.productName,
+              review.memberName,
+              review.rating.toString(),
+              new Date(review.createdAt).toLocaleDateString()
+            ]);
+          });
 
-      var view = new google.visualization.DataView(data);
-      var startIndex = (reviewsCurrentPage - 1) * itemsPerPage;
-      view.setRows(data.getFilteredRows([{column: 0, minValue: startIndex + 1, maxValue: startIndex + itemsPerPage}]));
+          var view = new google.visualization.DataView(data);
+          var totalRows = data.getNumberOfRows();
+          var startIndex = (reviewsCurrentPage - 1) * itemsPerPage;
+          var endIndex = Math.min(startIndex + itemsPerPage, totalRows);
 
-      var table = new google.visualization.Table(document.getElementById('recent_reviews_table'));
-      table.draw(view, {
-        showRowNumber: false,
-        width: '100%',
-        height: '100%'
-      });
+          // 페이지에 표시할 행 설정
+          view.setRows(Array.from({length: endIndex - startIndex}, (_, i) => startIndex + i));
 
-      updateReviewsPagination(data.getNumberOfRows());
+          var table = new google.visualization.Table(document.getElementById('recent_reviews_table'));
+          table.draw(view, {
+            showRowNumber: false,
+            width: '100%',
+            height: '100%'
+          });
+
+          google.visualization.events.addListener(table, 'select', function() {
+            var selection = table.getSelection();
+            if (selection.length > 0) {
+              var row = selection[0].row;
+              var reviewId = view.getValue(row, 0);
+              var originalIndex = reviews.findIndex(review => review.paymentProductReviewsNo.toString() === reviewId);
+              if (originalIndex !== -1) {
+                openReviewModal(reviews[originalIndex]);
+              }
+            }
+          });
+
+          updateReviewsPagination(totalRows);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // 에러 발생 시 사용자에게 알림
+          document.getElementById('recent_reviews_table').innerHTML = '리뷰를 불러오는 중 오류가 발생했습니다.';
+        });
     }
+
 
     function drawRecentQuestionsTable() {
       var data = new google.visualization.DataTable();
@@ -208,8 +355,8 @@
     function updateReviewsPagination(totalItems) {
       const totalPages = Math.ceil(totalItems / itemsPerPage);
       document.getElementById('reviewsPrevBtn').disabled = reviewsCurrentPage === 1;
-      document.getElementById('reviewsNextBtn').disabled = reviewsCurrentPage === totalPages;
-      document.getElementById('reviewsCurrentPage').textContent = reviewsCurrentPage;
+      document.getElementById('reviewsNextBtn').disabled = reviewsCurrentPage === totalPages || totalPages === 0;
+      document.getElementById('reviewsCurrentPage').textContent = totalPages > 0 ? reviewsCurrentPage : 0;
       document.getElementById('reviewsTotalPages').textContent = totalPages;
     }
 
@@ -230,43 +377,103 @@
       questionsCurrentPage += change;
       drawRecentQuestionsTable();
     }
-  </script>
-</head>
-<body>
-<div layout:fragment="content">
-  <h3>관리자 대시보드</h3>
-  <div class="dashboard-container">
-    <div class="dashboard-panel">
-      <div class="panel-title">방문자 현황</div>
-      <div id="curve_chart"></div>
-    </div>
-    <div class="dashboard-panel">
-      <div class="panel-title">일일 지표</div>
-      <div id="daily_stats"></div>
-    </div>
-    <div class="dashboard-panel">
-      <div class="panel-title">최근 리뷰 내역</div>
-      <div class="table-container">
-        <div class="table-content" id="recent_reviews_table"></div>
-        <div class="pagination">
-          <button id="reviewsPrevBtn" onclick="changeReviewsPage(-1)">&lt; 이전</button>
-          <span>페이지 <span id="reviewsCurrentPage"></span> / <span id="reviewsTotalPages"></span></span>
-          <button id="reviewsNextBtn" onclick="changeReviewsPage(1)">다음 &gt;</button>
+
+    function openReviewModal(review) {
+      document.getElementById('modalReviewNumber').textContent = review.paymentProductReviewsNo;
+      document.getElementById('modalAuthor').textContent = review.memberName;
+      document.getElementById('modalProductName').textContent = review.productName;
+      document.getElementById('modalRating').textContent = review.rating + '점';
+      document.getElementById('modalContent').textContent = review.content;
+      document.getElementById('modalCreateDate').textContent = new Date(review.createdAt).toLocaleString();
+      document.getElementById('modalModifyDate').textContent = review.modifyAt ? new Date(review.modifyAt).toLocaleString() : '수정사항없음';
+
+      document.getElementById('reviewModal').style.display = 'block';
+    }
+
+    function closeReviewModal() {
+      document.getElementById('reviewModal').style.display = 'none';
+    }
+
+    function deleteReview() {
+          const reviewId = document.getElementById('modalReviewNumber').textContent;
+          if (confirm('이 리뷰를 삭제하시겠습니까?')) {
+            fetch('/admin/deleteReviews', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify([reviewId]),
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert('리뷰가 삭제되었습니다.');
+                closeReviewModal();
+                drawRecentReviewsTable();
+              } else {
+                alert('리뷰 삭제 중 오류가 발생했습니다.');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('리뷰 삭제 중 오류가 발생했습니다.');
+            });
+          }
+        }
+      </script>
+    </head>
+    <body>
+    <div layout:fragment="content">
+      <h3>관리자 대시보드</h3>
+      <div class="dashboard-container">
+        <div class="dashboard-panel">
+          <div class="panel-title">방문자 현황</div>
+          <div id="curve_chart"></div>
+        </div>
+        <div class="dashboard-panel">
+          <div class="panel-title">일일 지표</div>
+          <div id="daily_stats"></div>
+        </div>
+        <div class="dashboard-panel">
+          <div class="panel-title">최근 리뷰 내역</div>
+          <div class="table-container">
+            <div class="table-content" id="recent_reviews_table"></div>
+            <div class="pagination">
+              <button id="reviewsPrevBtn" onclick="changeReviewsPage(-1)">&lt; 이전</button>
+              <span>페이지 <span id="reviewsCurrentPage"></span> / <span id="reviewsTotalPages"></span></span>
+              <button id="reviewsNextBtn" onclick="changeReviewsPage(1)">다음 &gt;</button>
+            </div>
+          </div>
+        </div>
+        <div class="dashboard-panel">
+          <div class="panel-title">최근 문의 내역</div>
+          <div class="table-container">
+            <div class="table-content" id="recent_questions_table"></div>
+            <div class="pagination">
+              <button id="questionsPrevBtn" onclick="changeQuestionsPage(-1)">&lt; 이전</button>
+              <span>페이지 <span id="questionsCurrentPage"></span> / <span id="questionsTotalPages"></span></span>
+              <button id="questionsNextBtn" onclick="changeQuestionsPage(1)">다음 &gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 리뷰 모달 -->
+      <div id="reviewModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeReviewModal()">&times;</span>
+          <h2>리뷰 상세 내용</h2>
+          <p><strong>리뷰 번호:</strong> <span id="modalReviewNumber"></span></p>
+          <p><strong>작성자:</strong> <span id="modalAuthor"></span></p>
+          <p><strong>상품명:</strong> <span id="modalProductName"></span></p>
+          <p><strong>평점:</strong> <span id="modalRating"></span></p>
+          <p><strong>리뷰 내용:</strong></p>
+          <div id="modalContent"></div>
+          <p><strong>등록일자:</strong> <span id="modalCreateDate"></span></p>
+          <p><strong>수정일자:</strong> <span id="modalModifyDate"></span></p>
+          <button onclick="deleteReview()" class="btn">삭제</button>
         </div>
       </div>
     </div>
-    <div class="dashboard-panel">
-      <div class="panel-title">최근 문의 내역</div>
-      <div class="table-container">
-        <div class="table-content" id="recent_questions_table"></div>
-        <div class="pagination">
-          <button id="questionsPrevBtn" onclick="changeQuestionsPage(-1)">&lt; 이전</button>
-          <span>페이지 <span id="questionsCurrentPage"></span> / <span id="questionsTotalPages"></span></span>
-          <button id="questionsNextBtn" onclick="changeQuestionsPage(1)">다음 &gt;</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</body>
-</html>
+    </body>
+    </html>

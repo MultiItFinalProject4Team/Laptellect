@@ -22,7 +22,7 @@ function renderTable() {
       <tr>
         <td class="checkbox-column"><input type="checkbox" name="reviewCheck" value="${review.paymentProductReviewsNo}"></td>
         <td class="review-number-column"><span class="review-content" onclick="openModal(${review.paymentProductReviewsNo})">${review.paymentProductReviewsNo}</td>
-        <td class="product-name-column">${review.productName}</td>
+        <td class="product-name-column"><a href="/product/laptop/laptopDetails?productNo=${review.productNo}" class="review-content">${review.productName}</a></td>
         <td class="author-column">${review.memberName}</td>
         <td class="content-column">${review.content}</span></td>
         <td class="rating-column">${review.rating}점</td>
@@ -49,7 +49,7 @@ function renderPagination() {
   pageNumbers.innerHTML = '';
 
   for (let i = 1; i <= totalPages; i++) {
-    const pageNumber = document.createElement('span');
+    const pageNumber = document.createElement('button');
     pageNumber.textContent = i;
     pageNumber.classList.add('page-number');
     if (i === currentPage) {

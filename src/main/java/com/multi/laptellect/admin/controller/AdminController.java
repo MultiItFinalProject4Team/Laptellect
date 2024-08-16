@@ -52,4 +52,10 @@ public class AdminController {
     public List<AdminDashboardDTO> getDashboardData() {
         return adminService.getLastSevenDaysSales();
     }
+
+    @GetMapping("/recent-reviews")
+    @ResponseBody
+    public List<AdminReviewDTO> getRecentReviews() {
+        return adminService.getRecentReviews(20); // Get the 20 most recent reviews
+    }
 }
