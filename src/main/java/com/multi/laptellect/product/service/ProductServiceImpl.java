@@ -648,9 +648,9 @@ public class ProductServiceImpl implements ProductService {
 
     public Map<String, List<String>> productFilterSearch() {
 
-       List<SpecDTO> specDTOS =  productMapper.productFilterSearch();
+        List<SpecDTO> specDTOS = productMapper.productFilterSearch();
 
-       Map<String, List<String>> specMap = new HashMap<>();
+        Map<String, List<String>> specMap = new HashMap<>();
 
 
         Set<String> keysToKeep = new HashSet<>(Arrays.asList(
@@ -660,97 +660,98 @@ public class ProductServiceImpl implements ProductService {
         ));
 
 
-       for(SpecDTO spec : specDTOS){
+        for (SpecDTO spec : specDTOS) {
 
-           log.info("필터링 과정 = {}",spec.getCategoryNo());
+            log.info("필터링 과정 = {}", spec.getCategoryNo());
 
-           String key = spec.getCategoryNo();
-           String value = spec.getOptionValue();
+            String key = spec.getCategoryNo();
+            String value = spec.getOptionValue();
 
-           //-contains()함수는 대상 문자열에 특정 문자열이 포함되어 있는지 확인하는 함수이다.
-           //- 대/소문자를 구분한다.
+            //-contains()함수는 대상 문자열에 특정 문자열이 포함되어 있는지 확인하는 함수이다.
+            //- 대/소문자를 구분한다.
 
-           if (keysToKeep.contains(key)) {
-               List<String> values = specMap.get(key);
+            if (keysToKeep.contains(key)) {
+                List<String> values = specMap.get(key);
 
-               if (values == null) {
-                   values = new ArrayList<>();
-                   specMap.put(key, values);  // 생성한 리스트를 다시 Map에 추가
-               }
+                if (values == null) {
+                    values = new ArrayList<>();
+                    specMap.put(key, values);  // 생성한 리스트를 다시 Map에 추가
+                }
 
-               // 값이 리스트에 이미 포함되어 있는지 확인하고, 포함되어 있지 않으면 추가
-               if (!values.contains(value)) {
-                   values.add(value);
-               }
-           }
-       }
+                // 값이 리스트에 이미 포함되어 있는지 확인하고, 포함되어 있지 않으면 추가
+                if (!values.contains(value)) {
+                    values.add(value);
+                }
+            }
+        }
 
-        log.info("필터링 과정3 = {}",specMap);
-
-
-       return specMap;
-
-    public int updateProductVisit(String productNo, int visitCount) throws Exception {
-        return productMapper.updateProductVisit(productNo, visitCount);
-
-    }
+        log.info("필터링 과정3 = {}", specMap);
 
 
-    //상품 전체 조회
-    @Override
-    @Transactional
-    public List<ProductDTO> getStoredProducts(Integer typeNo) {
+        return specMap;
+    }}
+
+//    public int updateProductVisit(String productNo, int visitCount) throws Exception {
+//        return productMapper.updateProductVisit(productNo, visitCount);
+//
+//    }
+//
+//
+//    //상품 전체 조회
+//    @Override
+//    @Transactional
+//    public List<ProductDTO> getStoredProducts(Integer typeNo) {
+//
+//
+//        return productMapper.getProductsByType(typeNo);
+//    }
+//
+//
+//    @Override
+//    public int getTotalProducts() {
+//        return productMapper.getTotalProducts();
+//    }
+//
+//    @Override
+//    public List<ProductDTO> getTypeByProduct(int typeNo) {
+//
+//        List<ProductDTO> productDTOList = productMapper.getTypeByProduct(typeNo);
+//
+//
+//        return productDTOList;
+//    }
+//
+//    @Override
+//    public int getProductByType(int typeNo) {
+//
+//        return productMapper.getProductByType(typeNo);
+//
+//    }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//    @Override
+//    public List<SpecDTO> getProductSpec(int productNo) {
+//
+//
+//        List<SpecDTO> productSpec = productMapper.getProductSpec(productNo);
+//
+//        log.info("상품스펙 확인합니다. = {}", productSpec);
+//
+//        return productSpec;
+//
+//    }
+//    @Override
+//    public List<SpecDTO> filterSpecs(int productNo, Set<String> neededOptions) {
+//        log.info("노트북 스펙 set = {}", neededOptions);
+//        return productMapper.findProductSpecByProductNo(productNo, neededOptions);
+//    }
 
 
-        return productMapper.getProductsByType(typeNo);
-    }
-
-
-    @Override
-    public int getTotalProducts() {
-        return productMapper.getTotalProducts();
-    }
-
-    @Override
-    public List<ProductDTO> getTypeByProduct(int typeNo) {
-
-        List<ProductDTO> productDTOList = productMapper.getTypeByProduct(typeNo);
-
-
-        return productDTOList;
-    }
-
-    @Override
-    public int getProductByType(int typeNo) {
-
-        return productMapper.getProductByType(typeNo);
-
-    }
-
-
-
-
-
-
-
-
-
-    @Override
-    public List<SpecDTO> getProductSpec(int productNo) {
-
-
-        List<SpecDTO> productSpec = productMapper.getProductSpec(productNo);
-
-        log.info("상품스펙 확인합니다. = {}", productSpec);
-
-        return productSpec;
-
-    }
-    @Override
-    public List<SpecDTO> filterSpecs(int productNo, Set<String> neededOptions) {
-        log.info("노트북 스펙 set = {}", neededOptions);
-        return productMapper.findProductSpecByProductNo(productNo, neededOptions);
-    }
-
-
-}
+//}
