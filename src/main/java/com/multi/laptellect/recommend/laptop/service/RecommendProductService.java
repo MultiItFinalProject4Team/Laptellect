@@ -7,6 +7,7 @@ import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
 import com.multi.laptellect.recommend.laptop.model.dto.CurationDTO;
 import com.multi.laptellect.recommend.laptop.model.dto.ProductFilterDTO;
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,6 @@ public class RecommendProductService {
     // Product
     private final ProductMapper productMapper; // 생성자 주입시 final // ProductMapper는 노트북 상세 정보를 담는다
     private final ProductService productService; // 생성자 주입시 final // ProductService는 노트북 스펙을 담는다
-
-    // Recommend
     private final RecommendProductDAO recommendProductDAO;
 
     public ArrayList<LaptopSpecDTO> getRecommendations(CurationDTO curationDTO) {
@@ -30,12 +29,10 @@ public class RecommendProductService {
         ProductFilterDTO productFilterDTO = createSearchCriteria(curationDTO);
         log.info("큐레이션 조건 분류 완료 = {} " + productFilterDTO);
 
+
         // 조건에 따라 Product_no를 반환
         ArrayList<Integer> productNos = recommendProductDAO.findLaptopDetailByFilter(productFilterDTO);
         log.info("추천 결과 맞는 제품 번호 = {}", productNos);        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>(); // 사용자에게 추천할 노트북 리스트 // 노트북 스펙을 담음
-
-
-
 
         for(int productNo : productNos) {
             List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo); //노트북 상세 정보 조회
@@ -51,6 +48,9 @@ public class RecommendProductService {
         return laptop;
     }
 
+    public List<TaggDTO> getTagsForProduct(int productNo) {
+        return recommendProductDAO.getTagsForProduct(productNo);
+    }
 
     private ProductFilterDTO createSearchCriteria(CurationDTO curationDTO) {
         ProductFilterDTO productFilterDTO = new ProductFilterDTO(); // 사용자가 원하는 조건이 담긴 DTO
@@ -71,9 +71,6 @@ public class RecommendProductService {
             List<String> internetValues = getInternetTag(internet);
             productFilterDTO.setInternet(internetValues);
         }
-
-
-
 
       String place = curationDTO.getPlace(); // key 값이 장소일 시 무게 중심
         List<String> placeValues = getPlace(place); // 장소에 따른 무게 태그 반환

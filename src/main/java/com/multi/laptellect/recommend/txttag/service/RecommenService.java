@@ -63,6 +63,7 @@ public class RecommenService {
         log.info("태그 할당 프로세스 완료");
     }
 
+
     //제품번호별로 태그 할당
     private List<Integer> determineTagsForProduct(LaptopSpecDTO laptopSpecDTO) {
         List<Integer> assignedTags = new ArrayList<>(); //미리 선언 해두는게 나음
@@ -194,7 +195,7 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'눈부심 방지' 태그(#{}) 할당", tagNo);
         }
-        if (isRefresh(refreshName)) {
+        if (isResolution(refreshName)) {
             tagNo = findTagByData(tags, "높은 해상도");
             assignedTags.add(tagNo);
             log.info("'높은 해상도' 태그(#{}) 할당", tagNo);
@@ -207,33 +208,33 @@ public class RecommenService {
     private boolean islost(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
-        Pattern pattern2 = Pattern.compile("[\\s()]+");
-        String Key3 = pattern2.matcher("i3-6100U (2.3GHz)").replaceAll("");
-        String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
-        Integer cpuScore = cEnt.get(Key3);
-        Integer gpuScore = gEnt.get(Key4);
-        int cpuCode = -1;
-        int gpuCode = -1;
+        Pattern pattern = Pattern.compile("[\\s()]+");
+        String minCpuKey = pattern.matcher("i3-6100U (2.3GHz)").replaceAll("");
+        String minGpuKey = pattern.matcher("GTX1050 Ti").replaceAll("");
+        Integer minCpuScore = cEnt.get(minCpuKey);
+        Integer minGpuScore = gEnt.get(minGpuKey);
+        int cpuScore = -1;
+        int gpuScore = -1;
 
-        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
+        if (cpu == null || gpu == null || minCpuScore == null || minGpuScore == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
             return false;
         }
 
         for (String cpuName : cEnt.keySet()) {
-            String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
+            String cpuNameC1 = pattern.matcher(cpuName).replaceAll("");
             if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
-                cpuCode = cEnt.get(cpuName);
+                cpuScore = cEnt.get(cpuName);
                 break;
             }
         }
         for (String gpuName : gEnt.keySet()) {
-            String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+            String gpuNameClean = pattern.matcher(gpuName).replaceAll("");
             if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
-                gpuCode = gEnt.get(gpuName);
+                gpuScore = gEnt.get(gpuName);
                 break;
             }
         }
-        return cpuCode >= cpuScore && gpuCode >= gpuScore;
+        return cpuScore >= minCpuScore && gpuScore >= minGpuScore;
     }
 
     private boolean isBet(String cpu, String gpu, String gpuTypeName) {
@@ -342,7 +343,7 @@ public class RecommenService {
     private boolean isGpuSuitableForSteamOrFPS(String gpu, String gpuTypeName) {
         Map<String, Integer> ent = gpuConfig.getGpuMark();
         Pattern pattern1 = Pattern.compile("[\\s()]+");
-        String key2 = pattern1.matcher("GTX1650").replaceAll("");
+        String key2 = pattern1.matcher("GTX1050 Ti").replaceAll("");
         Integer gtxScore = ent.get(key2);
 
         if (gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
@@ -561,11 +562,11 @@ public class RecommenService {
         }
     }
 
-    private boolean isRefresh(String refresh) {
-        if (refresh == null) {
+    private boolean isResolution(String resolution) {
+        if (resolution == null) {
         } try {
-            double RefreshBig = Double.parseDouble(refresh.replaceAll("[\\\\s()a-zA-Z-]+", ""));
-            return RefreshBig > 19201080;
+            double resolutionBig = Double.parseDouble(resolution.replaceAll("[\\\\s()a-zA-Z-]+", ""));
+            return resolutionBig > 19201080;
         } catch (Exception e) {
             return false;
         }
@@ -583,4 +584,6 @@ public class RecommenService {
         log.warn("태그 '{}' 를 찾을 수 없음", tagData);
         return -1;
     }
+
 }
+

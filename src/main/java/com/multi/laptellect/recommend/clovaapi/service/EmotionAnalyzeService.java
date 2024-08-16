@@ -1,6 +1,8 @@
 package com.multi.laptellect.recommend.clovaapi.service;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.multi.laptellect.product.model.dto.ReviewDTO;
 import com.multi.laptellect.recommend.clovaapi.model.dao.SentimentDAO;
 import com.multi.laptellect.recommend.clovaapi.model.dto.SentimentDTO;
 import lombok.RequiredArgsConstructor;
@@ -13,22 +15,24 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor //이란 ? 생성자 주입을 위한 어노테이션 //생성자 주입 : 생성자를 통해 의존성 주입을 받는 방법 //생성자 주입을 사용하면 final 키워드를 사용할 수 있어서 불변성을 보장
+@RequiredArgsConstructor
 public class EmotionAnalyzeService {
     private final SentimentDAO sentimentDAO;
 
-    @Value("${spring.sentiment.clientId}") //application.properties에 있는 값을 가져옴 //yml파일에서는 @Value("${sentiment.clientId}")로 사용
+    @Value("${spring.sentiment.clientId}")
     private String clientId;
 
     @Value("${spring.sentiment.clientSecret}")
     private String clientSecret;
 
-    public HashMap<String, Object> getAnalyzeResult(String content, int productNo2) {
+    public HashMap<String, Object> getAnalyzeResult(int productNo, ReviewDTO reviewDTO) {
         String url = "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
         HashMap<String, Object> result = new HashMap<>();
+        String review = reviewDTO.getContent();
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -39,34 +43,35 @@ public class EmotionAnalyzeService {
             headers.add("X-NCP-APIGW-API-KEY", clientSecret);
 
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("content", content);
+            jsonObject.addProperty("content", review);
 
-            HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers); //HttpEntity는 HTTP 요청과 응답을 표현하는 인터페이스 //HttpEntity의 인자로는 body와 header가 들어감
-            ResponseEntity<HashMap> response = restTemplate.exchange(url, HttpMethod.POST, entity, HashMap.class); //RestTemplate의 exchange 메소드를 사용하여 API 호출을 하고 결과값을 반환함
-            //exchange 메소드를 사용하여 API 호출을 하고 결과값을 반환함
+            HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);//, Map.class);
 
-            result.put("statusCode", response.getStatusCodeValue()); // http status code를 확인 //getStatusCodeValue()는 HTTP 응답 코드를 반환
+            result.put("statusCode", response.getStatusCodeValue());
             result.put("header", response.getHeaders());
-            result.put("body", response.getBody());
+
+            // JSON 문자열을 Map으로 파싱
+            Gson gson = new Gson();
+            Map<String, Object> body = gson.fromJson(response.getBody(), Map.class);
+            result.put("body", body);
 
             // 분석 결과를 DB에 저장
-            if (response.getBody() != null) {
-                HashMap<String, Object> document = (HashMap<String, Object>) response.getBody().get("document"); // document 정보를 가져옴 //HashMap은 key와 value로 이루어져 있음//key는 중복이 안됨//value는 중복이 가능//key는 String, value는 Object로 선언//Object는 모든 데이터 타입을 담을 수 있음
-
-                HashMap<String, Double> sentiment = (HashMap<String, Double>) document.get("sentiment");
-                //HashMap<String, Double> : key는 String, value는 Double인 HashMap
+            if (body != null && body.containsKey("document")) {
+                Map<String, Object> document = (Map<String, Object>) body.get("document");
+                Map<String, Double> confidence = (Map<String, Double>) document.get("confidence");
 
                 SentimentDTO sentimentDTO = new SentimentDTO();
-                sentimentDTO.setProduct_no(productNo2);
-                sentimentDTO.setSentiment_positive(sentiment.get("positive"));
-                sentimentDTO.setSentiment_negative(sentiment.get("negative"));
-                sentimentDTO.setSentiment_neutral(sentiment.get("neutral"));
+                sentimentDTO.setProduct_no(productNo);
+                sentimentDTO.setSentiment_positive(confidence.get("positive"));
+                sentimentDTO.setSentiment_denial(confidence.get("denial"));
+                sentimentDTO.setSentiment_neutrality(confidence.get("neutral"));
 
                 sentimentDAO.insertSentiment(sentimentDTO);
             }
 
             return result;
-        } catch (HttpClientErrorException | HttpServerErrorException e) { //HttpClientErrorException : 4xx 에러 발생 시 발생하는 예외 //HttpServerErrorException : 5xx 에러 발생 시 발생하는 예외
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
             result.put("statusCode", e.getRawStatusCode());
             result.put("body", e.getStatusText());
             log.error("Error: " + e.toString());
@@ -79,10 +84,3 @@ public class EmotionAnalyzeService {
         }
     }
 }
-
-//전체 코드 흐름 : EmotionAnalyzeController에서 getAnalyzeResult 메소드를 호출하면 EmotionAnalyzeService에서 CLOVA Sentiment API를 호출하고 결과값을 반환함
-//EmotionAnalyzeService에서는 RestTemplate을 사용하여 CLOVA Sentiment API를 호출하고 결과값을 반환함
-//RestTemplate은 HTTP 통신을 위한 클래스로, API 호출을 위해 사용됨
-//RestTemplate의 exchange 메소드를 사용하여 API 호출을 하고 결과값을 반환함
-//exchange 메소드는 POST 방식으로 API를 호출하고 결과값을 반환함
-//exchange 메소드의 인자로는 URL, HttpMethod, HttpEntity, 반환값의 타입이 들어감

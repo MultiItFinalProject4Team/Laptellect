@@ -22,4 +22,7 @@ public interface ProductTagDAO {
     @Select("SELECT * FROM laptop_tag")
     List<TaggDTO> findAllTag();
 
+
+
+
 }

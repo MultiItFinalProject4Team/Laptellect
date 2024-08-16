@@ -8,6 +8,6 @@ public class SentimentDTO {
 
     private int product_no;
     private double sentiment_positive;
-    private double sentiment_negative;
-    private double sentiment_neutral;
+    private double sentiment_denial;
+    private double sentiment_neutrality;
 }
