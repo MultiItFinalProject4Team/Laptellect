@@ -688,8 +688,11 @@ public class ProductServiceImpl implements ProductService {
         log.info("필터링 과정3 = {}", specMap);
 
 
+
         return specMap;
     }
+
+
 
     public int updateProductVisit(String productNo, int visitCount) throws Exception {
         return productMapper.updateProductVisit(productNo, visitCount);
