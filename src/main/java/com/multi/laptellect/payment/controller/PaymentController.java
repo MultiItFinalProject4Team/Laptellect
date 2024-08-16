@@ -308,7 +308,7 @@ public class PaymentController {
 
 
                     paymentpointDTO.setPaymentPointChange(Math.abs(paymentpointDTO.getPaymentPointChange()));
-                    ;
+
 
                     paymentService.refundPoint(paymentpointDTO);
                     int newPoint = memberDTO.getPoint() + paymentpointDTO.getPaymentPointChange();
