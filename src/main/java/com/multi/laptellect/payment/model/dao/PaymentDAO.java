@@ -81,4 +81,8 @@ public interface PaymentDAO {
     PaymentpointDTO findUsedPoint(String imPortId);
 
     List<PaymentReviewDTO> findPaymentReviewsByProductNo(int productNo);
+
+    int updateReview(PaymentReviewDTO reviewDTO);
+
+    int deleteReview(int paymentProductReviewsNo);
 }

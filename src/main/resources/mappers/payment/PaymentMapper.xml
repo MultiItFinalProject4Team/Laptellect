@@ -409,4 +409,17 @@
         ORDER BY payment_product_reviews_no DESC;
     </select>
 
+    <update id="updateReview" parameterType="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        UPDATE payment_product_reviews
+        SET content = #{content},
+        rating = #{rating},
+        modify_at = NOW()
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </update>
+
+    <delete id="deleteReview" parameterType="int">
+        DELETE FROM payment_product_reviews
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </delete>
+
 </mapper>

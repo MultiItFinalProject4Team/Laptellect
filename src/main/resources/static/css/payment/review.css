@@ -78,10 +78,7 @@
 }
 
 /* 리뷰 내용 스타일 */
-.review-content {
-    font-weight: bold;
-    font-size: 1.0625em; /* 1pt 더 크게 (기본 16px * 1.0625 = 17px) */
-}
+
 
 /* 애니메이션 효과 */
 .modal.fade .modal-dialog {
@@ -108,3 +105,46 @@
     padding: 0;
     margin: 20px 0;
 }
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.review-item {
+    margin-bottom: 20px;
+}
+
+.review-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.review-content {
+    flex-grow: 1;
+    font-weight: bold;
+    font-size: 1.0625em;
+    margin-right: 20px;
+}
+
+.review-actions {
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.review-actions button {
+    margin-left: 5px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.review-actions button:hover {
+    background-color: #e0e0e0;
+}
+
