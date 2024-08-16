@@ -27,7 +27,7 @@ function renderTable() {
         <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" data-amount="${order.purchasePrice}" data-payment-no="${order.paymentNo}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
         <td class="order-number-column"><span class="order-content" onclick="openModal(${order.paymentNo})">${order.paymentNo}</span></td>
         <td class="username-column">${order.userName}</td>
-        <td class="product-name-column">${order.productName}</td>
+        <td class="product-name-column"><a href="/product/laptop/laptopDetails?productNo=${order.productNo}" class="order-content">${order.productName}</a></td>
         <td class="price-column">${formatPrice(order.productPrice)}</td>
         <td class="purchase-price-column">${formatPrice(order.purchasePrice)}</td>
         <td class="date-column">${order.createdAt}</td>
@@ -142,6 +142,8 @@ function openModal(orderId) {
     document.getElementById('modalProductName').textContent = order.productName;
     document.getElementById('modalProductPrice').textContent = formatPrice(order.productPrice);
     document.getElementById('modalPurchasePrice').textContent = formatPrice(order.purchasePrice);
+    document.getElementById('modalUsedPoints').textContent = formatPrice(order.usedPoints);
+    document.getElementById('modalQuantity').textContent = order.quantity;
     document.getElementById('modalOrderDate').textContent = order.createdAt;
     document.getElementById('modalimPortId').textContent = order.imPortId;
     document.getElementById('modalRefundStatus').textContent = order.refund;
