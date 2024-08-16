@@ -394,4 +394,12 @@ public class CustomerService {
     public List<NoticeListDto> getNoticeSearchList(NoticeSearchDto dto) {
         return customDao.getNoticeSearchList(dto);
     }
+
+    public List<AdminProductqList> getAdminProductqList(ProductSearchDto searchDto) {
+        return customDao.getAdminProductqList(searchDto);
+    }
+
+    public List<AdminProductqList> getAllProductList() {
+        return customDao.getAllProductList();
+    }
 }

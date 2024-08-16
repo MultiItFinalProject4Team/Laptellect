@@ -421,4 +421,39 @@
             order by created_at asc
         </if>
     </select>
+
+    <select id="getAdminProductqList" resultType="com.multi.laptellect.customer.dto.AdminProductqList">
+        <choose>
+            <when test='answer == "N"'>
+                SELECT a.product_no, b.created_at, b.price, b.product_name
+                FROM product_question a
+                JOIN product b ON a.product_no=b.product_no
+                WHERE b.product_name LIKE CONCAT('%', #{keyword}, '%')
+                AND a.answer=#{answer}
+                GROUP BY a.product_no, b.created_at, b.price, b.product_name
+                <if test='date == "recent"'>
+                    order by a.product_no desc
+                </if>
+                <if test='date == "old"'>
+                    order by a.product_no asc
+                </if>
+            </when>
+            <otherwise>
+                select product_no, created_at, price, product_name
+                from product
+                WHERE product_name LIKE CONCAT('%', #{keyword}, '%')
+                <if test='date == "recent"'>
+                    order by product_no desc
+                </if>
+                <if test='date == "old"'>
+                    order by product_no asc
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getAllProductList" resultType="com.multi.laptellect.customer.dto.AdminProductqList">
+        select product_no, created_at, price, product_name
+        from product
+    </select>
 </mapper>
