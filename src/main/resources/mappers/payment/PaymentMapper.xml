@@ -345,25 +345,16 @@
                 <if test="paginationDTO.keyword != null">
                     AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
                 </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
-                </if>
             </when>
             <when test="paginationDTO.selectType == 'productName'">
                 <if test="paginationDTO.keyword != null">
                     AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
-                </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
                 </if>
             </when>
             <when test="paginationDTO.selectType == 'all'">
                 <if test="paginationDTO.keyword != null">
                     AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
                     OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
-                </if>
-                <if test="paginationDTO.keyword == null">
-                    AND 1=1
                 </if>
             </when>
         </choose>

@@ -19,4 +19,8 @@ public class DataPortalConfig {
 
     @Value("${spring.data.api.business-registration-number.api-key}")
     private String dataPortalBusinessApiKey;
+
+    public String getApiUrl() {
+        return dataPortalURL + dataPortalBusinessApiKey;
+    }
 }

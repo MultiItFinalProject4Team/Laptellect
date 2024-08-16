@@ -6,6 +6,7 @@ import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.service.MemberService;
 import com.multi.laptellect.util.SecurityUtil;
+import com.multi.laptellect.util.StringValidUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -322,7 +323,6 @@ public class AuthApiController {
             log.error("회원가입 에러 = " + e);
             return 3; // 회원가입 에러
         }
-
     }
 
     /**
@@ -367,5 +367,26 @@ public class AuthApiController {
         return result;
     }
 
+    @ResponseBody
+    @PostMapping("/check-registration-no")
+    public int isRegistrationNo(MemberDTO memberDTO) {
+        int result = 0;
 
+        log.info("파라미터 체크 = {}", memberDTO);
+
+        boolean isOwnerName = StringValidUtil.isValidString(memberDTO.getOwnerName());
+        boolean isBusinessDate = StringValidUtil.isValidString(memberDTO.getBusinessDate());
+        boolean isRegistrationNo = StringValidUtil.isValidString(memberDTO.getRegistrationNo());
+
+        if(!isOwnerName || !isBusinessDate || !isRegistrationNo)  {
+            return 3;
+        }
+
+        try {
+            return authService.isRegistrationNo(memberDTO);
+        } catch (Exception e) {
+            log.error("사업자 등록번호 조회 에러 = ", e);
+            return result;
+        }
+    }
 }

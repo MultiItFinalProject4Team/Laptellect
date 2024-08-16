@@ -212,7 +212,7 @@ public class ProductController {
 
         ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
         List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
-        
+
         model.addAttribute("paymentDTO", paymentDTO);
         model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
         model.addAttribute("productDTO", productDTO );
