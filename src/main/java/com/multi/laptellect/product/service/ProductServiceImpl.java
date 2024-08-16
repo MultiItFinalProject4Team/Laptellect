@@ -689,69 +689,69 @@ public class ProductServiceImpl implements ProductService {
 
 
         return specMap;
-    }}
+    }
 
-//    public int updateProductVisit(String productNo, int visitCount) throws Exception {
-//        return productMapper.updateProductVisit(productNo, visitCount);
-//
-//    }
-//
-//
-//    //상품 전체 조회
-//    @Override
-//    @Transactional
-//    public List<ProductDTO> getStoredProducts(Integer typeNo) {
-//
-//
-//        return productMapper.getProductsByType(typeNo);
-//    }
-//
-//
-//    @Override
-//    public int getTotalProducts() {
-//        return productMapper.getTotalProducts();
-//    }
-//
-//    @Override
-//    public List<ProductDTO> getTypeByProduct(int typeNo) {
-//
-//        List<ProductDTO> productDTOList = productMapper.getTypeByProduct(typeNo);
-//
-//
-//        return productDTOList;
-//    }
-//
-//    @Override
-//    public int getProductByType(int typeNo) {
-//
-//        return productMapper.getProductByType(typeNo);
-//
-//    }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//    @Override
-//    public List<SpecDTO> getProductSpec(int productNo) {
-//
-//
-//        List<SpecDTO> productSpec = productMapper.getProductSpec(productNo);
-//
-//        log.info("상품스펙 확인합니다. = {}", productSpec);
-//
-//        return productSpec;
-//
-//    }
-//    @Override
-//    public List<SpecDTO> filterSpecs(int productNo, Set<String> neededOptions) {
-//        log.info("노트북 스펙 set = {}", neededOptions);
-//        return productMapper.findProductSpecByProductNo(productNo, neededOptions);
-//    }
+    public int updateProductVisit(String productNo, int visitCount) throws Exception {
+        return productMapper.updateProductVisit(productNo, visitCount);
+
+    }
 
 
-//}
+    //상품 전체 조회
+    @Override
+    @Transactional
+    public List<ProductDTO> getStoredProducts(Integer typeNo) {
+
+
+        return productMapper.getProductsByType(typeNo);
+    }
+
+
+    @Override
+    public int getTotalProducts() {
+        return productMapper.getTotalProducts();
+    }
+
+    @Override
+    public List<ProductDTO> getTypeByProduct(int typeNo) {
+
+        List<ProductDTO> productDTOList = productMapper.getTypeByProduct(typeNo);
+
+
+        return productDTOList;
+    }
+
+    @Override
+    public int getProductByType(int typeNo) {
+
+        return productMapper.getProductByType(typeNo);
+
+    }
+
+
+
+
+
+
+
+
+
+    @Override
+    public List<SpecDTO> getProductSpec(int productNo) {
+
+
+        List<SpecDTO> productSpec = productMapper.getProductSpec(productNo);
+
+        log.info("상품스펙 확인합니다. = {}", productSpec);
+
+        return productSpec;
+
+    }
+    @Override
+    public List<SpecDTO> filterSpecs(int productNo, Set<String> neededOptions) {
+        log.info("노트북 스펙 set = {}", neededOptions);
+        return productMapper.findProductSpecByProductNo(productNo, neededOptions);
+    }
+
+
+}
