@@ -60,18 +60,6 @@ th, td {
   white-space: nowrap;
 }
 
-.checkbox-column { width: 30px; }
-.order-number-column { width: 80px; }
-.username-column { width: 100px; }
-.product-name-column { width: 150px; }
-.product-info-column { width: 200px; }
-.price-column { width: 80px; }
-.purchase-price-column { width: 80px; }
-.date-column { width: 120px; }
-.imPortId-column { width: 120px; }
-.refund-column { width: 80px; }
-.refund-date-column { width: 120px; }
-
 .pagination {
   display: flex;
   justify-content: center;
