@@ -51,23 +51,26 @@ public class EmotionAnalyzeService {
             result.put("statusCode", response.getStatusCodeValue());
             result.put("header", response.getHeaders());
 
-            // JSON 문자열을 Map으로 파싱
+            //JSON 문자열을 Map으로 파싱
             Gson gson = new Gson();
             Map<String, Object> body = gson.fromJson(response.getBody(), Map.class);
             result.put("body", body);
 
-            // 분석 결과를 DB에 저장
+            //분석 결과를 DB에 저장
             if (body != null && body.containsKey("document")) {
                 Map<String, Object> document = (Map<String, Object>) body.get("document");
                 Map<String, Double> confidence = (Map<String, Double>) document.get("confidence");
 
                 SentimentDTO sentimentDTO = new SentimentDTO();
                 sentimentDTO.setProduct_no(productNo);
-                sentimentDTO.setSentiment_positive(confidence.get("positive"));
-                sentimentDTO.setSentiment_denial(confidence.get("denial"));
-                sentimentDTO.setSentiment_neutrality(confidence.get("neutral"));
+
+                sentimentDTO.setSentiment_positive(confidence != null ? confidence.getOrDefault("positive", 0.0) : 0.0);
+                sentimentDTO.setSentiment_denial(confidence != null ? confidence.getOrDefault("denial", 0.0) : 0.0);
+                sentimentDTO.setSentiment_neutrality(confidence != null ? confidence.getOrDefault("neutral", 0.0) : 0.0);
 
                 sentimentDAO.insertSentiment(sentimentDTO);
+            } else {
+                log.warn("값 확인");
             }
 
             return result;
