@@ -645,6 +645,11 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public int updateProductVisit(String productNo, int visitCount) throws Exception {
+        return productMapper.updateProductVisit(productNo, visitCount);
+    }
+
 
     //상품 전체 조회
     @Override

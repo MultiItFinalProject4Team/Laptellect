@@ -113,4 +113,6 @@ public interface ProductService {
     Page<ProductDTO> searchProducts(ProductSearchDTO searchDTO);
   
     ArrayList<Integer> getWishlistString() throws Exception;
+
+    int updateProductVisit(String productNo, int visitCount) throws Exception;
 }
