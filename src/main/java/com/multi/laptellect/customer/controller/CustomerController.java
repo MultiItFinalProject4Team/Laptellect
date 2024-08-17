@@ -251,11 +251,18 @@ public class CustomerController {
      */
     @GetMapping("/productq_detail/{productqNo}")
     public String productq_detail(@PathVariable("productqNo") int productqNo, Model model){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserNo();
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
         ProductqDto productqDto = customerService.getProductq(productqNo);
         String[] imageList = customerService.getImage(productqDto.getReferenceCode());
         System.out.println(productqDto);
         model.addAttribute("productq",productqDto);
         model.addAttribute("imageList",imageList);
+        model.addAttribute("memberNo",memberNo);
 
         if(productqDto.getAnswer().equals("Y")) {
             ProductqAnswerDto answerDto = customerService.getProducta(productqNo);
@@ -626,5 +633,56 @@ public class CustomerController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("state","search");
         return "/customer/user/customer_notice";
+    }
+    @GetMapping("/user_productqList")
+    public String user_proudctqList(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        ProductSearchDto searchDto = ProductSearchDto.builder().keyword("").date("recent").category("productq_all").answer("A").type("A").build();
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserNo();
+            searchDto.setMemberNo(memberNo);
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
+        List<UserProductqList> list = customerService.getUserProudctList(memberNo);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<UserProductqList> paginationList=pagination.productpaginate4(list, adjustPage, page_size);
+        List<ProductqCategoryDto> category = customerService.getProductqCategory();
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("dto",searchDto);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",category);
+        model.addAttribute("state","all");
+
+        return "/customer/user/user_productqList";
+    }
+
+    @GetMapping("search_user_productqList")
+    public String search_user_productqList(Model model, ProductSearchDto searchDto, @RequestParam(value = "page",defaultValue = "1") int page){
+        int memberNo;
+        try {
+            memberNo=SecurityUtil.getUserNo();
+            searchDto.setMemberNo(memberNo);
+        }catch (Exception e){
+            return "/auth/auth-sign-in";
+        }
+        List<UserProductqList> list = customerService.getUserSearchProudctList(searchDto);
+        List<ProductqCategoryDto> category = customerService.getProductqCategory();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<UserProductqList> paginationList=pagination.productpaginate4(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("dto",searchDto);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("category",category);
+        model.addAttribute("state","search");
+        return "/customer/user/user_productqList";
     }
 }

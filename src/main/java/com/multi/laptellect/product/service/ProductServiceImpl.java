@@ -692,8 +692,6 @@ public class ProductServiceImpl implements ProductService {
         return specMap;
     }
 
-
-
     public int updateProductVisit(String productNo, int visitCount) throws Exception {
         return productMapper.updateProductVisit(productNo, visitCount);
 
