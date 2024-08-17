@@ -15,4 +15,7 @@ public class AdminOrderlistDTO {
     private String imPortId;
     private String refund;
     private String refundAt;
+    private int usedPoints;
+    private int quantity;
+
 }

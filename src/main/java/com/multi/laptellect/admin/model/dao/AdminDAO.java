@@ -18,4 +18,6 @@ public interface AdminDAO {
     List<AdminOrderlistDTO> selectAllOrders();
 
     List<AdminDashboardDTO> getLastSevenDaysSales();
+
+    List<AdminReviewDTO> getRecentReviews(int limit);
 }
