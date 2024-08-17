@@ -72,18 +72,20 @@ public class RecommendProductService {
             productFilterDTO.setInternet(internetValues);
         }
 
-      String place = curationDTO.getPlace(); // key 값이 장소일 시 무게 중심
-        List<String> placeValues = getPlace(place); // 장소에 따른 무게 태그 반환
-        productFilterDTO.setPlace(placeValues); //무게 태그 설정
+        String place = curationDTO.getPlace(); // key 값이 장소일 시 무게 중심
+        int[] weightRange = getPriceRange(place); // 장소에 따른 무게 범위 반환
+        productFilterDTO.setMinPrice(weightRange[1]);
+        productFilterDTO.setMaxPrice(weightRange[2]);
 
         String performance = curationDTO.getPerformance(); // key 값이 성능일 시 가격 중심
         int[] priceRange = getPriceRange(performance); // 성능에 따른 가격 범위 반환
         productFilterDTO.setMinPrice(priceRange[0]); //최소 가격 설정
         productFilterDTO.setMaxPrice(priceRange[1]); //최대 가격 설정
 
-        String screen = curationDTO.getScreen(); // key 값이 화면일 시 화면 중심
-        List<String> screenValues = getScreenSizeTags(screen);
-        productFilterDTO.setScreen(screenValues);
+//        String screen = curationDTO.getScreen(); // key 값이 화면일 시 화면 중심
+//        int screenRange = getscreenRange(screen); // 화면 크기에 따른 태그 반환
+//        productFilterDTO.setMinscreenSize(screenRange[1]); //화면 크기 설정
+//        productFilterDTO.setMaxscreenSize(screenRange[2]); //화면 크기 설정
 
 //        String battery = curationDTO.getBattery();
 //        List<String> batteryValues = getBatteryTag(battery);

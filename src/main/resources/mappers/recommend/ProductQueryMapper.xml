@@ -9,14 +9,15 @@
         WHERE
             type_no = 1
             AND price BETWEEN #{minPrice} AND #{maxPrice}
---         WHERE
---         category_no = 'LD24'
---         AND
---         CAST( REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(option_value, '(', -1), '인치)', 1), 'cm', '') AS DECIMAL(3,1)) BETWEEN (화면 최소 인치) AND (화면 최대 인치);
---         WHERE
---         category_no = 'LBI4'
---         AND
---         CAST(REPLACE(option_value, 'kg', '') AS DECIMAL(2, 1)) BETWEEN (시작무게). AND (끝무게);
+        WHERE
+        category_no = 'LD24'
+        AND
+
+        CAST( REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(option_value, '(', -1), '인치)', 1), 'cm', '') AS DECIMAL(3,1)) BETWEEN (#minscreenSize) AND (maxscreenSize);
+        WHERE
+        category_no = 'LBI4'
+        AND
+        CAST(REPLACE(option_value, 'kg', '') AS DECIMAL(2, 1)) BETWEEN (#minWeight). AND (#maxWeight);
 
 
 

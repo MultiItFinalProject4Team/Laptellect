@@ -8,9 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
  * 스케쥴러 설정 클래스
  *
@@ -35,33 +32,34 @@ public class SchedulerConfiguration {
     public void visitorCount() {
         log.info("방문자 수 카운트 스케쥴러");
     }
-
-    @Scheduled(fixedRate = 180000) // 3분 간격으로 상품 조회수 업데이트
-    public void viewProductCount() {
-        String key = "Visit:product";
-
-        int visitCount = 0;
-
-        log.debug("상품 조회수 업데이트 시작");
-        try {
-            Map<String, String> visitProducts = redisUtil.getAllHashData(key);
-            Set<String> productNos = visitProducts.keySet();
-
-            if(!visitProducts.isEmpty()) {
-                for(String productNo : productNos) {
-                    visitCount = Integer.parseInt(visitProducts.get(productNo));
-                    log.info("상품 조회수 = {}, {}", productNo, visitCount);
-
-                    productService.updateProductVisit(productNo, visitCount);
-                    log.info("상품 조회수 업데이트 완료 = {}", visitCount);
-
-                    redisUtil.deleteHashData(key, productNo);
-                    log.info("상품 방문자 기록 삭제 완료 = {}", productNo);
-                }
-            }
-        } catch (Exception e) {
-            log.error("상품 조회수 업데이트 실패 = ", e);
-        }
-    }
-
 }
+
+//    @Scheduled(fixedRate = 180000) // 3분 간격으로 상품 조회수 업데이트
+//    public void viewProductCount() {
+//        String key = "Visit:product";
+//
+//        int visitCount = 0;
+//
+//        log.debug("상품 조회수 업데이트 시작");
+//        try {
+//            Map<String, String> visitProducts = redisUtil.getAllHashData(key);
+//            Set<String> productNos = visitProducts.keySet();
+//
+//            if(!visitProducts.isEmpty()) {
+//                for(String productNo : productNos) {
+//                    visitCount = Integer.parseInt(visitProducts.get(productNo));
+//                    log.info("상품 조회수 = {}, {}", productNo, visitCount);
+//
+//                    productService.updateProductVisit(productNo, visitCount);
+//                    log.info("상품 조회수 업데이트 완료 = {}", visitCount);
+//
+//                    redisUtil.deleteHashData(key, productNo);
+//                    log.info("상품 방문자 기록 삭제 완료 = {}", productNo);
+//                }
+//            }
+//        } catch (Exception e) {
+//            log.error("상품 조회수 업데이트 실패 = ", e);
+//        }
+//    }
+//
+//}

@@ -28,4 +28,15 @@ CREATE TABLE laptop_data(
     resolution_score INT NULL,
     FOREIGN KEY (product_no) REFERENCES product(product_no)
 )
+--감정 분석 테이블
+CREATE TABLE laptop_sentiment (
+    product_no INT NOT NULL ,
+    sentiment_positive DOUBLE NOT NULL,
+    sentiment_denial DOUBLE NOT NULL,
+    sentiment_neutrality DOUBLE NOT NULL,
+    primary key (product_no),
+    FOREIGN KEY (product_no) REFERENCES product(product_no)
+);
+
+
 
