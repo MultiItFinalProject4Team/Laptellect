@@ -72,6 +72,25 @@ CREATE TABLE mem_delivery_address (
     CONSTRAINT address_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
+-- 로그인 로그 테이블
+CREATE TABLE log_login (
+    login_log_id INT NOT NULL AUTO_INCREMENT,
+    member_no INT NOT NULL,
+    login_ip VARCHAR(45) NOT NULL,
+    user_agent VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (login_log_id),
+    CONSTRAINT log_login_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
+);
+
+-- 방문자 수 테이블
+CREATE TABLE log_count_visit (
+    visit_log INT NOT NULL AUTO_INCREMENT,
+    visit_count INT NOT NULL DEFAULT 0,
+    created_at DATE NOT NULL,
+    PRIMARY KEY (visit_log),
+    UNIQUE (created_at)
+);
 -- ================= SELECT 목록 =================
 
 

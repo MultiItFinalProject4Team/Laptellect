@@ -24,14 +24,17 @@
 }
 
 .fixed-table th:nth-child(2), .fixed-table td:nth-child(2) {
-    width: 70%; /* 제목 열 너비 */
+    width: 40%; /* 제목 열 너비 */
 }
 
 .fixed-table th:nth-child(3), .fixed-table td:nth-child(3) {
-    width: 10%; /* 답변 여부 열 너비 */
+    width: 30%; /* 답변 여부 열 너비 */
 }
 
 .fixed-table th:nth-child(4), .fixed-table td:nth-child(4) {
+    width: 10%; /* 작성일 열 너비 */
+}
+.fixed-table th:nth-child(5), .fixed-table td:nth-child(5) {
     width: 15%; /* 작성일 열 너비 */
 }
 

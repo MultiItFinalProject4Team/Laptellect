@@ -148,4 +148,5 @@ public interface MemberService {
     int sendTempPassword(String userId, String email) throws Exception;
 
     boolean deleteMember() throws Exception;
+
 }

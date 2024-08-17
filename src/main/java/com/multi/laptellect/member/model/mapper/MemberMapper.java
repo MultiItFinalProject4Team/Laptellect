@@ -1,5 +1,6 @@
 package com.multi.laptellect.member.model.mapper;
 
+import com.multi.laptellect.admin.model.dto.LoginLog;
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.dto.PointLogDTO;
@@ -23,6 +24,9 @@ public interface MemberMapper {
 
     @Select("SELECT * FROM mem_member WHERE email = #{ email } AND login_type = 'local'")
     MemberDTO findMemberByEmail(String email);
+
+    @Select("SELECT * FROM mem_member WHERE email = #{ email } AND login_type = #{ loginType }")
+    MemberDTO findMemberBySocialEmail(SocialDTO socialDTO);
 
     @Select("SELECT * FROM mem_member WHERE nick_name = #{ nickName }")
     MemberDTO findMemberByNickName(String nickName);
