@@ -73,7 +73,7 @@ public class RecommendProductService {
         }
 
         String place = curationDTO.getPlace();
-        int[] weightRange = getPriceRange(place);
+        int[] weightRange = getPriceWeughtRange(place);
         productFilterDTO.setMinWeight(weightRange[0]);
         productFilterDTO.setMaxWeight(weightRange[1]);
 
@@ -82,10 +82,10 @@ public class RecommendProductService {
         productFilterDTO.setMinPrice(priceRange[0]); //최소 가격 설정
         productFilterDTO.setMaxPrice(priceRange[1]); //최대 가격 설정
 
-//        String screen = curationDTO.getScreen(); // key 값이 화면일 시 화면 중심
-//        int screenRange = getscreenRange(screen); // 화면 크기에 따른 태그 반환
-//        productFilterDTO.setMinscreenSize(screenRange[1]); //화면 크기 설정
-//        productFilterDTO.setMaxscreenSize(screenRange[2]); //화면 크기 설정
+        String screen = curationDTO.getScreen(); // key 값이 화면일 시 화면 중심
+        int[] screenRange = getscreenRange(screen); // 화면 크기에 따른 태그 반환
+        productFilterDTO.setMinscreenSize(screenRange[0]); //화면 크기 설정
+        productFilterDTO.setMaxscreenSize(screenRange[1]); //화면 크기 설정
 
 //        String battery = curationDTO.getBattery();
 //        List<String> batteryValues = getBatteryTag(battery);
@@ -193,25 +193,22 @@ public class RecommendProductService {
     }
 //장소에 따라 무게 태그를 반환
 
-    private List<String> getPlace(String place) {
+    private int[] getPriceWeughtRange(String place) {
 
         if (place == null) {//장소가 null이면 빈 리스트 반환
-            return List.of(); //빈 리스트 반환
+            return new int[]{0, Integer.MAX_VALUE}; // 0 ~ 무한대
         }
-        switch (place) {
-            case "가지고 다닐거에요":
-                return List.of("1.1kg", "1.12kg", "1.14kg", "1.18", "1.199kg", "1.21kg", "1.25kg", "1.299kg", "1.3kg", "1.36kg", "1.39kg", "1.35kg", "1.4kg", "1.45kg",
-                        "1.5kg", "1.55kg", "1.57kg", "1.6kg", "1.65kg", "1.7kg", "1.74kg", "1.75kg", "1.8kg", "1.85kg", "1.9kg", "1.95kg", "2kg");
+            switch (place) {
+                case "가지고 다닐거에요":
+                    return new int[]{0, 2};
 
-            case "집에서 사용할거에요":
-                return List.of("2.05kg", "2.08kg", "2.1kg", "2.15kg", "2.2kg", "2.25kg",
-                        "2.3kg", "2.35kg","2.38kg", "2.4kg", "2.45kg", "2.5kg", "2.55kg", "2.6kg", "2.65kg",
-                        "2.7kg", "2.75kg", "2.8kg", "2.85kg", "2.9kg", "2.95kg","2.99kg", "3kg");
-            default:
-                return List.of();
+                case "집에서 사용할거에요":
+                    return new int []{2, 3};
+                default:
+                    return new int[]{0, Integer.MAX_VALUE};
+
+
         }
-
-
     }
 
 //성능에 따라 가격 범위를 반환
@@ -248,23 +245,23 @@ public class RecommendProductService {
 //    }
 
     //화면 크기에 따라 태그를 반환
-        private List<String> getScreenSizeTags(String screen) {
+        private int[] getscreenRange (String screen) {
 
             if (screen == null) {
-                return List.of();
+                return new int[] {0, Integer.MAX_VALUE};
             }
 
             switch (screen) {
                 case "화면 넓은게 좋아요":
-                    return List.of("(18인치)", "(17인치)", "(17.3인치)");
+                    return new int[]{17, Integer.MAX_VALUE};
 
                 case "적당한게 좋아요":
-                    return List.of("(15.6인치)", "(16인치)", "(15인치)");
+                    return new int []{15, 16};
 
                 case "작은 화면이 좋아요":
-                    return List.of("(13.3인치)", "(14인치)");
+                    return new int []{0, 14};
                 default:
-                    return List.of();
+                    return new int[] {0, Integer.MAX_VALUE};
             }
 
 
