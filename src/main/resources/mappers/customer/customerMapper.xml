@@ -456,4 +456,39 @@
         select product_no, created_at, price, product_name
         from product
     </select>
+
+    <select id="getUserProudctList" resultType="com.multi.laptellect.customer.dto.UserProductqList">
+        select a.*, b.product_name, b.price
+        from
+        product_question a
+        join product b on a.product_no = b.product_no
+        where a.member_no=#{memberNo}
+        order by a.product_no desc
+    </select>
+
+    <select id="getUserSearchProudctList" resultType="com.multi.laptellect.customer.dto.UserProductqList">
+        select a.*, b.product_name, b.price
+        from
+        product_question a
+        join product b on a.product_no = b.product_no
+        where a.member_no=#{memberNo}
+        <if test='type=="P"'>
+            and b.product_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test='type=="Q"'>
+            and a.title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test='answer!="A"'>
+            and a.answer=#{answer}
+        </if>
+        <if test="category!='productq_all'">
+            and a.productq_categorycode=#{category}
+        </if>
+        <if test='date == "recent"'>
+            order by a.product_no desc
+        </if>
+        <if test='date == "old"'>
+            order by a.product_no asc
+        </if>
+    </select>
 </mapper>

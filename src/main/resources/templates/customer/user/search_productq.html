@@ -1,12 +1,15 @@
 <!--수정안함-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout-customer}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')') ? 'common/layout-Admin' : 'common/layout-customer'}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
     <link href="/css/customer/nav.css" rel="stylesheet">
     <link href="/css/customer/table.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
         .form-container {
             display: flex;
@@ -85,9 +88,7 @@
         </table>
     </div>
     <div class="text-end">
-        <a class="btn btn-secondary btn-sm" th:href="@{/customer/user/productq_app(productNo=${productNo})}" role="button">상품 문의 등록</a>
-        <a class="btn btn-secondary btn-sm" th:if="${state=='all'}" th:href="@{/customer/user/my_productq/{productNo}(productNo=${productNo})}" role="button">내 문의 보기</a>
-        <a class="btn btn-secondary btn-sm" th:if="${state=='my'}" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productNo})}" role="button">전체 문의 보기</a>
+        <a class="btn btn-custom-primary btn-sm" th:href="@{/customer/admin/all_product_question}" role="button">전체 문의 보기</a>
     </div>
 </div>
     <div class="pagination-container">

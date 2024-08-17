@@ -230,7 +230,7 @@ public class CustomerService {
         List<ProductqCategoryDto> category = customDao.getProductqCategory();
         ProductqCategoryDto category_all  = new ProductqCategoryDto();
         category_all.setProductqCategorycode("productq_all");
-        category_all.setProductqCategoryname("전체");
+        category_all.setProductqCategoryname("카테고리");
         category.add(0,category_all);
         return category;
     }
@@ -401,5 +401,13 @@ public class CustomerService {
 
     public List<AdminProductqList> getAllProductList() {
         return customDao.getAllProductList();
+    }
+
+    public List<UserProductqList> getUserProudctList(int memberNo) {
+        return customDao.getUserProudctList(memberNo);
+    }
+
+    public List<UserProductqList> getUserSearchProudctList(ProductSearchDto searchDto) {
+        return customDao.getUserSearchProudctList(searchDto);
     }
 }

@@ -112,4 +112,8 @@ public interface CustomDao {
     List<AdminProductqList> getAdminProductqList(ProductSearchDto searchDto);
 
     List<AdminProductqList> getAllProductList();
+
+    List<UserProductqList> getUserProudctList(int memberNo);
+
+    List<UserProductqList> getUserSearchProudctList(ProductSearchDto searchDto);
 }

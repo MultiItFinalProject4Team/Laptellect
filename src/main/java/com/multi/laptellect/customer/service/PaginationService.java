@@ -35,4 +35,10 @@ public class PaginationService {
         int end = Math.min(start + pageSize, list.size());
         return list.subList(start, end);
     }
+
+    public List<UserProductqList> productpaginate4(List<UserProductqList> list, int page, int pageSize) {
+        int start = page * pageSize;
+        int end = Math.min(start + pageSize, list.size());
+        return list.subList(start, end);
+    }
 }
