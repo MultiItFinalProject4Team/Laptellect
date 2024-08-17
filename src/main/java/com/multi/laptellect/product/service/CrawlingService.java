@@ -790,14 +790,15 @@ public class CrawlingService {
 
     public void reviewCrawler() {
 
+
         List<ProductDTO> productNos = productMapper.getReviewRequired();
         int emptyReviewData = 0;
-
 
         for (ProductDTO productDTO : productNos) {
 
             int productNo = productDTO.getProductNo();
             String productCode = productDTO.getProductCode();
+
 
             try {
                 for (int totalPages = 1; totalPages <= 1000; totalPages++) {

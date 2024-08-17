@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -37,6 +35,9 @@ public class EmotionAnalyzeService {
         String review = reviewDTO.getContent(); //리뷰내용
         RestTemplate restTemplate = new RestTemplate();//RestTemplate 객체
         HttpHeaders headers = new HttpHeaders();//HttpHeaders 객체
+        double positive;
+        double negative;
+        double neutral;
 
         try {
             log.info("api요청 준비");
@@ -48,18 +49,20 @@ public class EmotionAnalyzeService {
             JsonObject jsonObject = new JsonObject();//JSON 객체
             jsonObject.addProperty("content", review);
 
-            HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);//HttpEntity 객체
-            ResponseEntity<String> ent = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);//API 호출
-            log.info("api 응답 수신: {}", ent.getStatusCodeValue());
+            HttpEntity<String> hent = new HttpEntity<>(jsonObject.toString(), headers);//HttpEntity 객체
+            ResponseEntity<String> rent = restTemplate.exchange(url, HttpMethod.POST, hent, String.class);//API 호출
+            log.info("api 응답 수신: {}", rent.getStatusCodeValue());
 
-            result.put("statusCode", ent.getStatusCodeValue()); //응답함
-            result.put("header", ent.getHeaders());//헤더
+            result.put("statusCode", rent.getStatusCodeValue()); //응답함
+            result.put("header", rent.getHeaders());//헤더
 
             //JSON 문자열을 Map으로 파싱 //gson사용
             Gson gson = new Gson();//Gson 객체
-            Map<String, Object> body = gson.fromJson(ent.getBody(), Map.class);//body에저장
+            Map<String, Object> body = gson.fromJson(rent.getBody(), Map.class);//body에저장
             result.put("body", body);
             log.info("감성 분석 결과: {}", body);//결과출력
+
+
 
             //분석 결과를 DB에 저장
             if (body != null && body.containsKey("document")) { //document키가 있따면?
@@ -69,37 +72,40 @@ public class EmotionAnalyzeService {
                 SentimentDTO sentimentDTO = new SentimentDTO();//결과 넣을 dto
                 sentimentDTO.setProduct_no(productNo);
                 //결과 저장
-                sentimentDTO.setSentiment_positive(confidence != null ? confidence.getOrDefault("positive", 0.0) : 0.0);
-                sentimentDTO.setSentiment_denial(confidence != null ? confidence.getOrDefault("denial", 0.0) : 0.0);
-                sentimentDTO.setSentiment_neutrality(confidence != null ? confidence.getOrDefault("neutral", 0.0) : 0.0);
+                 positive = confidence.get("positive");
+                 negative = confidence.get("negative");
+                 neutral = confidence.get("neutral");
+
+                //가장 높은것에 카운트
+                if (positive > negative && positive > neutral) {
+                    sentimentDTO.setSentiment_positive(1);
+                    sentimentDTO.setSentiment_denial(0);
+                    sentimentDTO.setSentiment_neutrality(0);
+                } else if (negative > positive && negative > neutral) {
+                    sentimentDTO.setSentiment_positive(0);
+                    sentimentDTO.setSentiment_denial(1);
+                    sentimentDTO.setSentiment_neutrality(0);
+                } else {
+                    sentimentDTO.setSentiment_positive(0);
+                    sentimentDTO.setSentiment_denial(0);
+                    sentimentDTO.setSentiment_neutrality(1);
+                }
+
                 log.info("DB에 감성 분석 결과 저장 시도 - DTO: {}", sentimentDTO);
                 try {
                     sentimentDAO.insertSentiment(sentimentDTO);
-                    log.info("db에 감성 분석 결과 저장");
+                    log.info("DB에 감성 분석 결과 저장 완료");
                 } catch (DataAccessException e) {
-                    log.error("db 저장 중 오류남: {}", e.getMessage());
-                    // 적절한 예외 처리 로직 추가
+                    log.error("DB 저장 중 오류 발생: {}", e.getMessage());
                 }
-
-                sentimentDAO.insertSentiment(sentimentDTO);
-                log.info("감성 분석 결과 저장");
             } else {
-                log.warn("값 확인");
+                log.warn("API 응답에서 document 키를 찾을 수 없습니다.");
             }
 
             return result;
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            log.error("HTTP 오류 발생: {}", e.getMessage());
-            result.put("statusCode", e.getRawStatusCode());
-            result.put("body", e.getStatusText());
-            log.error("Error: " + e.toString());
-            return result;
         } catch (Exception e) {
-            log.error("예외 발생: {}", e.getMessage());
-            result.put("statusCode", "999");
-            result.put("body", "exception 발생");
-            log.error("Error: " + e.toString());
-            return result;
+            log.error("감성 분석 중 오류 발생: {}", e.getMessage());
         }
+        return null;
     }
 }
