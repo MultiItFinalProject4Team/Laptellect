@@ -49,8 +49,8 @@ public class ProductSearchDTO implements Pageable {
     private Map<String,List<String>> cate1;
 
 
-    private Integer min;
-    private Integer max;
+    private Integer minPrice;
+    private Integer maxPrice;
 
 
 

@@ -97,37 +97,130 @@
     </select>
 
     <select id="findByNameSearch" resultType="productDTO">
-
         SELECT DISTINCT
-            p.product_no,
-            p.type_no,
-            p.product_name,
-            p.price,
-            p.reference_code,
-            p.created_at,
-            p.updated_at,
-            p.product_code,
-            i.upload_name
+        p.product_no,
+        p.type_no,
+        p.product_name,
+        p.price,
+        p.reference_code,
+        p.created_at,
+        p.updated_at,
+        p.product_code,
+        i.upload_name
         FROM
-            product p
+        product p
         JOIN
-            images i ON i.reference_code = p.reference_code
+        images i ON i.reference_code = p.reference_code
         JOIN
-            product_spec po ON po.product_no = p.product_no
+        product_spec po ON po.product_no = p.product_no
         WHERE
-            p.product_name LIKE CONCAT('%', #{searchDTO.keyword}, '%')
-            AND p.type_no = #{searchDTO.typeNo}
-        <if test="searchDTO.cate != null and searchDTO.cate.size() > 0">
-            AND po.option_value IN
-            <foreach item="item" index="index" collection="searchDTO.cate" open="(" separator="," close=")">
+        p.product_name LIKE CONCAT('%', #{searchDTO.keyword}, '%')
+        AND p.type_no = #{searchDTO.typeNo}
+
+        <if test="searchDTO.LBI1 != null and searchDTO.LBI1.size() > 0">
+            AND po.product_no IN (
+            SELECT po1.product_no
+            FROM product_spec po1
+            WHERE po1.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LBI1" open="(" separator="," close=")">
                 #{item}
             </foreach>
+            )
         </if>
+
+        <!-- LBI2 조건 -->
+        <if test="searchDTO.LBI2 != null and searchDTO.LBI2.size() > 0">
+            AND po.product_no IN (
+            SELECT po2.product_no
+            FROM product_spec po2
+            WHERE po2.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LBI2" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LS22 조건 -->
+        <if test="searchDTO.LS22 != null and searchDTO.LS22.size() > 0">
+            AND po.product_no IN (
+            SELECT po3.product_no
+            FROM product_spec po3
+            WHERE po3.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LS22" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LS21 조건 -->
+        <if test="searchDTO.LS21 != null and searchDTO.LS21.size() > 0">
+            AND po.product_no IN (
+            SELECT po4.product_no
+            FROM product_spec po4
+            WHERE po4.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LS21" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LG38 조건 -->
+        <if test="searchDTO.LG38 != null and searchDTO.LG38.size() > 0">
+            AND po.product_no IN (
+            SELECT po5.product_no
+            FROM product_spec po5
+            WHERE po5.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LG38" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LC13 조건 -->
+        <if test="searchDTO.LC13 != null and searchDTO.LC13.size() > 0">
+            AND po.product_no IN (
+            SELECT po6.product_no
+            FROM product_spec po6
+            WHERE po6.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LC13" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LR9 조건 -->
+        <if test="searchDTO.LR9 != null and searchDTO.LR9.size() > 0">
+            AND po.product_no IN (
+            SELECT po7.product_no
+            FROM product_spec po7
+            WHERE po7.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LR9" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LD25 조건 -->
+        <if test="searchDTO.LD25 != null and searchDTO.LD25.size() > 0">
+            AND po.product_no IN (
+            SELECT po8.product_no
+            FROM product_spec po8
+            WHERE po8.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LD25" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="searchDTO.minPrice != null and searchDTO.maxPrice != null">
+            AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
+        </if>
+
         GROUP BY
-            p.product_no, p.type_no, p.product_name, p.price,
-            p.reference_code, p.created_at, p.updated_at, p.product_code, i.upload_name
+        p.product_no, p.type_no, p.product_name, p.price,
+        p.reference_code, p.created_at, p.updated_at, p.product_code, i.upload_name
         ORDER BY
-            p.product_no
+        p.product_no
         LIMIT
         #{searchDTO.size}
         OFFSET
