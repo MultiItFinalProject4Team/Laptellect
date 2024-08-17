@@ -72,13 +72,13 @@ public class RecommendProductService {
             productFilterDTO.setInternet(internetValues);
         }
 
-        String place = curationDTO.getPlace(); // key 값이 장소일 시 무게 중심
-        int[] weightRange = getPriceRange(place); // 장소에 따른 무게 범위 반환
-        productFilterDTO.setMinPrice(weightRange[1]);
-        productFilterDTO.setMaxPrice(weightRange[2]);
+        String place = curationDTO.getPlace();
+        int[] weightRange = getPriceRange(place);
+        productFilterDTO.setMinWeight(weightRange[0]);
+        productFilterDTO.setMaxWeight(weightRange[1]);
 
-        String performance = curationDTO.getPerformance(); // key 값이 성능일 시 가격 중심
-        int[] priceRange = getPriceRange(performance); // 성능에 따른 가격 범위 반환
+        String performance = curationDTO.getPerformance();
+        int[] priceRange = getPriceRange(performance);
         productFilterDTO.setMinPrice(priceRange[0]); //최소 가격 설정
         productFilterDTO.setMaxPrice(priceRange[1]); //최대 가격 설정
 
