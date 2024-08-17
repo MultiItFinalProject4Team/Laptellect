@@ -44,84 +44,6 @@
                     return selectedFilters;
                 }
 
-                function collectFilters() {
-                    let filters = {};
-
-                    // 제조사 필터 수집 (LBI2)
-                    let selectedManufacturers = [];
-                    $("input[name='manufacturer']:checked").each(function() {
-                        selectedManufacturers.push($(this).val());
-                    });
-                    if (selectedManufacturers.length > 0) {
-                        filters['LBI2'] = selectedManufacturers; // 제조사 카테고리 코드: LBI2
-                    }
-
-                    // 운영체제(OS) 필터 수집 (LBI1)
-                    let selectedOs = [];
-                    $("input[name='os']:checked").each(function() {
-                        selectedOs.push($(this).val());
-                    });
-                    if (selectedOs.length > 0) {
-                        filters['LBI1'] = selectedOs; // 운영체제 카테고리 코드: LBI1
-                    }
-
-                    // 저장장치 종류 필터 수집 (LS22)
-                    let selectedStorageTypes = [];
-                    $("input[name='storageType']:checked").each(function() {
-                        selectedStorageTypes.push($(this).val());
-                    });
-                    if (selectedStorageTypes.length > 0) {
-                        filters['LS22'] = selectedStorageTypes; // 저장장치 종류 카테고리 코드: LS22
-                    }
-
-                    // 저장 용량 필터 수집 (LS21)
-                    let selectedStorageCapacities = [];
-                    $("input[name='storageCapacity']:checked").each(function() {
-                        selectedStorageCapacities.push($(this).val());
-                    });
-                    if (selectedStorageCapacities.length > 0) {
-                        filters['LS21'] = selectedStorageCapacities; // 저장 용량 카테고리 코드: LS21
-                    }
-
-                    // GPU 필터 수집 (LG38)
-                    let selectedGpus = [];
-                    $("input[name='gpu']:checked").each(function() {
-                        selectedGpus.push($(this).val());
-                    });
-                    if (selectedGpus.length > 0) {
-                        filters['LG38'] = selectedGpus; // GPU 카테고리 코드: LG38
-                    }
-
-                    // CPU 필터 수집 (LC13)
-                    let selectedCpus = [];
-                    $("input[name='cpu']:checked").each(function() {
-                        selectedCpus.push($(this).val());
-                    });
-                    if (selectedCpus.length > 0) {
-                        filters['LC13'] = selectedCpus; // CPU 카테고리 코드: LC13
-                    }
-
-                    // 램 용량 필터 수집 (LR9)
-                    let selectedRam = [];
-                    $("input[name='ram']:checked").each(function() {
-                        selectedRam.push($(this).val());
-                    });
-                    if (selectedRam.length > 0) {
-                        filters['LR9'] = selectedRam; // 램 용량 카테고리 코드: LR9
-                    }
-
-                    // 해상도 필터 수집 (LD25)
-                    let selectedResolution = [];
-                    $("input[name='resolution']:checked").each(function() {
-                        selectedResolution.push($(this).val());
-                    });
-                    if (selectedResolution.length > 0) {
-                        filters['LD25'] = selectedResolution; // 해상도 카테고리 코드: LD25
-                    }
-
-                    return filters;
-                }
-
                 // 제품 리스트를 로드하는 함수
                 function loadProducts(page, size, typeNo, keyword, filters = []) {
                     let data = {
@@ -172,7 +94,7 @@
 
                 // 필터 변경 시 발생하는 이벤트 핸들러
                 $("#filterForm input[type='checkbox']").on("change", function() {
-                    let filters = collectFilters();
+                    let filters = getSelectedFilters();
                     currentPage = 1;
                     loadProducts(currentPage, pageSize, typeNo, '', filters);
                 });
