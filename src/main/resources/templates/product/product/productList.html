@@ -90,43 +90,17 @@
 <script>
     $(document).ready(function() {
 
-            let currentPage = 1;
-            let pageSize = 30;
-            let typeNo = 1;
+                // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
+                $(document).on('click', '.pagination a.page-link', function(event) {
+                    event.preventDefault();
 
+                    let page = $(this).data('page');
 
-            // 제품 리스트를 로드하는 함수
-            function loadProducts(page, size, typeNo, keyword, filters = []) {
-                let data = {
-                    page: page - 1,
-                    size: size,
-                    typeNo: typeNo,
-                    keyword: keyword,
-                    cate: filters
-                };
-                console.log("Calling loadProducts with - page:", data);
-
-            $.ajax({
-                    url: "/api/product/product-list",
-                    type: "GET",
-                    data: data,
-                    success: function (response) {
-                    console.log("AJAX success:", response);
-                        $('#product-list').html(response);
-                        formatPrices();
-                        currentPage = page;
-                    },
-                    error: function (error){
-                        console.log(error);
+                    if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
+                        console.log('Link is disabled or active');
+                        return;
                     }
                 });
-            }
-
-            $(document).on('click', '.pagination a.page-link', function(event) {
-                event.preventDefault();
-                let page = $(this).data('page');
-                loadProducts(page, pageSize, typeNo, '');
-            });
 
             // 위시리스트 추가/삭제
             $(".btn-process-wishlist").on("click", function () {
