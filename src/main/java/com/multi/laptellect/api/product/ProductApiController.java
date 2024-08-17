@@ -87,7 +87,7 @@ public class ProductApiController {
         searchDTO.setPage(pageable.getPageNumber());
         searchDTO.setSize(pageable.getPageSize());
 
-        log.info("getLBI1 확인 = {},",searchDTO.getLBI1());
+        log.info("카테고리 파라미터 확인 = {},",searchDTO.getLBI1());
 
 
         // Page<> : 페이징된 결과와 관련 정보를 함께 제공하는 Spring Data JPA의 강력한 도구
