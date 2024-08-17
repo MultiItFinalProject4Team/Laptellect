@@ -37,13 +37,13 @@ public class SchedulerConfiguration {
     public void visitCount() {
         log.info("방문자 수 카운트 스케쥴러");
             String sessionKey = "Visit:" + "count";
-        int count = Integer.parseInt(redisUtil.getData(sessionKey));
 
         try {
+            int count = Integer.parseInt(redisUtil.getData(sessionKey));
             logService.insertVisitCount(count);
             redisUtil.deleteData(sessionKey);
         } catch (Exception e) {
-            log.error("방문자 없음 = {}", count);
+            log.error("방문자 없음");
         }
 
     }
