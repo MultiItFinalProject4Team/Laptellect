@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Please explain the class!!
@@ -44,6 +45,8 @@ public class ProductSearchDTO implements Pageable {
     private List<String> LC13; // CPU 종류
     private List<String> LR9; // 램 용량
     private List<String> LD25; // 해상도
+
+    private Map<String,List<String>> cate1;
 
 
     private Integer min;

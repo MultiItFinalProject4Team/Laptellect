@@ -5,179 +5,159 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/product/product.css}">
     <script th:inline="javascript">
+        $(document).ready(function() {
+            let currentPage = 1;
+            let pageSize = 20;
+            let typeNo = 1;
+            let currentKeyword = '';
 
-        function searchProducts() {
-            let filters = getSelectedFilters();
-            loadProducts(currentPage, pageSize, typeNo, currentKeyword, filters);
-        }
+            // 기본 탭에 active 클래스 추가
+            switch(typeNo) {
+                case 1:
+                    $("#laptop-tab").addClass("active");
+                    break;
+                case 2:
+                    $("#mouse-tab").addClass("active");
+                    break;
+                case 3:
+                    $("#keyboard-tab").addClass("active");
+                    break;
+                default:
+                    $("#laptop-tab").addClass("active");
+                    break;
+            }
 
-        function getSelectedFilters() {
-            let filters = [];
-
-            $("#filterForm input:checked").each(function() {
-                let category = $(this).attr('name');
-                let value = $(this).val();
-                filters.push({
-                    category: category,
-                    value: value
+            // 가격 형식을 포맷팅하는 함수
+            function formatPrices() {
+                $('.price').each(function() {
+                    let value = $(this).text().replace(' 원', '').replace(/,/g, '');
+                    let formattedValue = new Intl.NumberFormat().format(value);
+                    $(this).text(formattedValue + ' 원');
                 });
+            }
+
+            // 필터 값을 카테고리별로 수집하는 함수
+            function getSelectedFiltersByCategory(categoryName) {
+                let filters = [];
+                $("#filterForm input[name='" + categoryName + "']:checked").each(function() {
+                    filters.push($(this).val());
+                });
+                return filters;
+            }
+
+            // 필터 값이 변경될 때 호출
+            $("#filterForm input:checkbox").on("change", function() {
+                searchProducts();
             });
 
-            console.log(filters);  // 필터 값이 제대로 수집되었는지 확인
-            return filters;
-        }
+            // 검색 폼 제출 시 호출
+            $("#searchForm").on("submit", function(e) {
+                e.preventDefault();
+                searchProducts();
+            });
 
-        $(document).ready(function() {
-                let currentPage = 1;
-                let pageSize = 20;
-                let typeNo = 1;
-                let currentKeyword = '';
+            // 제품 리스트를 로드하는 함수
+            function loadProducts(page, size, typeNo, keyword, LBI1, LBI2, LS22, LS21, LG38, LC13, LR9, LD25) {
+                let data = {
+                    page: page - 1,
+                    size: size,
+                    typeNo: typeNo,
+                    keyword: keyword,
+                    LBI1: LBI1.join(','), // 운영체제
+                    LBI2: LBI2.join(','), // 제조사
+                    LS22: LS22.join(','), // 저장장치 종류
+                    LS21: LS21.join(','), // 저장 용량
+                    LG38: LG38.join(','), // GPU 종류
+                    LC13: LC13.join(','), // CPU 종류
+                    LR9: LR9.join(','),  // 램 용량
+                    LD25: LD25.join(','), // 해상도
+                    min: $("#site-search1").val(), // 최소 가격
+                    max: $("#site-search2").val()  // 최대 가격
+                };
 
+                console.log("Calling loadProducts with - data:", data);
 
-                // 기본 탭에 active 클래스 추가 기본 선택 상태로 만듦
-                switch(typeNo) {
-                    case 1:
-                        $("#laptop-tab").addClass("active");
-                        break;
-                    case 2:
-                        $("#mouse-tab").addClass("active");
-                        break;
-                    case 3:
-                        $("#keyboard-tab").addClass("active");
-                        break;
-                    default:
-                        $("#laptop-tab").addClass("active");
-                        break;
-                }
-
-                // 가격 형식을 포맷팅하는 함수
-                function formatPrices() {
-                    $('.price').each(function() {
-                        let value = $(this).text().replace(' 원', '').replace(/,/g, '');
-                        let formattedValue = new Intl.NumberFormat().format(value);
-                        $(this).text(formattedValue + ' 원');
-                    });
-                }
-
-                $("#filterForm input:checkbox").on("change", function() {
-                    let filters = getSelectedFilters();
-                    loadProducts(currentPage, pageSize, typeNo, currentKeyword, filters);
-                });
-
-                // 검색 폼 제출 시 발생하는 이벤트 핸들러
-                $("#searchForm").on("submit", function(e) {
-                    e.preventDefault();
-                    let keyword = $("#form1").val();
-                    currentPage = 1;
-                    loadProducts(currentPage, pageSize, typeNo, keyword);
-                });
-
-                // 제품 리스트를 로드하는 함수
-
-                function loadProducts(page, size, typeNo, keyword = '', filters = []) {
-                    let filterValues = filters.map(function(filter) {
-                        return `${filter.value}`;
-                    });
-
-                    let data = {
-                        page: page - 1,
-                        size: size,
-                        typeNo: typeNo,
-                        keyword: keyword,
-                        filters: filterValues.join(','),
-                        min: $("#site-search1").val(), // 최소 가격
-                        max: $("#site-search2").val()  // 최대 가격
-                    };
-                    console.log("Calling loadProducts with - page:", data);
-
-                    $.ajax({
-                        url: "/api/product/product-list",
-                        type: "GET",
-                        data: data,
-                        success: function (response) {
-                            $('#product-list').html(response);
-                            formatPrices();
-                            currentPage = page;
-                            currentKeyword = keyword;
-                        },
-                        error: function (error){
-                            console.log(error);
-                        }
-                    });
-                }
-
-
-                // 페이지 로드 시 초기 제품 리스트 로드
-                loadProducts(currentPage, pageSize, typeNo, '');
-
-                // 탭을 클릭했을 때 발생하는 이벤트 핸들러
-                $(".product-link").on("click", function (e) {
-                    e.preventDefault();
-                    typeNo = $(this).data('type-no');
-                    currentPage = 1;
-                    $(".product-link").removeClass("active");
-                    formatPrices();
-                    $(this).addClass("active");
-                    loadProducts(currentPage, pageSize, typeNo, currentKeyword);
-                    console.log(typeNo);
-                });
-
-                // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
-                $(document).on('click', '.pagination a.page-link', function(event) {
-                    event.preventDefault();
-
-                    let page = $(this).data('page');
-
-                    if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
-                        console.log('Link is disabled or active');
-                        return;
-                    }
-                    loadProducts(page, pageSize, typeNo, currentKeyword);  // 페이지 이동 시 currentPage와 typeNo를 유지
-                    formatPrices();
-                    console.log('Page:', page, 'Page Size:', pageSize, 'Type No:', typeNo);
-                });
-
-                // 카테고리 데이터를 로드하는 AJAX 요청
                 $.ajax({
-                    url: "/product/productList",
+                    url: "/api/product/product-list",
                     type: "GET",
-                    success: function (response) {
-                       formatPrices();
+                    data: data,
+                    success: function(response) {
+                        $('#product-list').html(response);
+                        formatPrices();
+                        currentPage = page;
                     },
-                    error: function (error){
+                    error: function(error) {
                         console.log(error);
                     }
                 });
+            }
+
+            // 필터와 검색어로 제품을 검색하는 함수
+            function searchProducts() {
+                let keyword = $("#form1").val();
+
+                let LBI1 = getSelectedFiltersByCategory('os');
+                let LBI2 = getSelectedFiltersByCategory('manufacturer');
+                let LS22 = getSelectedFiltersByCategory('storageType');
+                let LS21 = getSelectedFiltersByCategory('storageCapacity');
+                let LG38 = getSelectedFiltersByCategory('gpu');
+                let LC13 = getSelectedFiltersByCategory('cpu');
+                let LR9 = getSelectedFiltersByCategory('ram');
+                let LD25 = getSelectedFiltersByCategory('resolution');
+
+                loadProducts(currentPage, pageSize, typeNo, keyword, LBI1, LBI2, LS22, LS21, LG38, LC13, LR9, LD25);
+            }
+
+            // 페이지 로드 시 초기 제품 리스트 로드
+            searchProducts();
+
+            // 탭 클릭 시 발생하는 이벤트 핸들러
+            $(".product-link").on("click", function(e) {
+                e.preventDefault();
+                typeNo = $(this).data('type-no');
+                currentPage = 1;
+                $(".product-link").removeClass("active");
+                $(this).addClass("active");
+                searchProducts();
             });
-</script>
+
+            // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
+            $(document).on('click', '.pagination a.page-link', function(event) {
+                event.preventDefault();
+
+                let page = $(this).data('page');
+                if (!$(this).closest('li').hasClass('disabled') && !$(this).closest('li').hasClass('active')) {
+                    currentPage = page;
+                    searchProducts();
+                }
+            });
+        });
+    </script>
 
     <style>
-        /* 테이블 셀 안의 내용들을 왼쪽 정렬 */
+        /* 스타일 정의 */
         .left-align {
             text-align: left;
         }
-        /* 필터 항목 열의 넓이를 좁게, 선택 옵션 열의 넓이를 넓게 설정 */
         .filter-header {
             width: 100px;
         }
-        /* 선택 옵션을 나란히 표시하는 스타일 */
         .options-list {
             display: flex;
             flex-wrap: wrap;
         }
         .options-list label {
-            margin-right: 10px; /* 각 옵션 사이에 간격 추가 */
+            margin-right: 10px;
         }
         .btn-custom-price {
-            background-color: #3498DB; /* 버튼 배경색 */
-            color: white; /* 버튼 텍스트 색 */
-            border: none; /* 버튼 테두리 없애기 */
-            border-radius: 5px; /* 버튼 모서리 둥글게 */
-            padding: 10px 20px; /* 버튼 안의 여백 */
-            font-size: 0.8rem; /* 버튼 텍스트 크기 */
-            cursor: pointer; /* 마우스를 올렸을 때 포인터로 변경 */
-            transition: background-color 0.3s ease; /* 색상 전환 부드럽게 */
-
+            background-color: #3498DB;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
     </style>
 </head>
@@ -200,7 +180,6 @@
                     </div>
                 </td>
             </tr>
-
             <!-- 운영체제(OS) -->
             <tr>
                 <td class="filter-header">운영체제(OS)</td>
@@ -213,7 +192,6 @@
                     </div>
                 </td>
             </tr>
-
             <!-- 저장장치 종류 -->
             <tr>
                 <td class="filter-header">저장장치 종류</td>
@@ -226,7 +204,6 @@
                     </div>
                 </td>
             </tr>
-
             <!-- 저장 용량 -->
             <tr>
                 <td class="filter-header">저장 용량</td>
@@ -239,7 +216,6 @@
                     </div>
                 </td>
             </tr>
-
             <!-- GPU 종류 -->
             <tr>
                 <td class="filter-header">GPU 종류</td>
@@ -252,20 +228,18 @@
                     </div>
                 </td>
             </tr>
-
             <!-- CPU 종류 -->
             <tr>
                 <td class="filter-header">CPU 종류</td>
                 <td class="left-align">
                     <div class="options-list">
                         <div th:each="value : ${cate['LC13']}">
-                            <input type="checkbox" name="cpu" th:value="'LG38_'+${value}" th:id="${value}">
+                            <input type="checkbox" name="cpu" th:value="'LC13_'+${value}" th:id="${value}">
                             <label th:for="${value}" th:text="${value}"></label>
                         </div>
                     </div>
                 </td>
             </tr>
-
             <!-- 램 용량 -->
             <tr>
                 <td class="filter-header">램 용량</td>
@@ -278,7 +252,6 @@
                     </div>
                 </td>
             </tr>
-
             <!-- 해상도 -->
             <tr>
                 <td class="filter-header">해상도</td>
@@ -291,11 +264,11 @@
                     </div>
                 </td>
             </tr>
+            <!-- 가격대 -->
             <tr>
                 <td class="filter-header">가격대</td>
                 <td class="left-align">
                     <div class="options-list">
-
                         <div class="price-search">
                             <input type="number" id="site-search1" name="min" style="width: 100px;" />
                             ~
@@ -335,8 +308,6 @@
     </div>
     <br>
     <div class="row" id="product-list"></div>
-
 </div>
-
 </body>
 </html>
