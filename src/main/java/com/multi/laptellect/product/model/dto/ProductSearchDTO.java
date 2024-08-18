@@ -67,7 +67,7 @@ public class ProductSearchDTO implements Pageable {
 
     @Override
     public long getOffset() { // 페이징 시작할 위치
-        return (long) this.page * this.size;
+        return (long) (this.page) * this.size;
     }
 
     @Override

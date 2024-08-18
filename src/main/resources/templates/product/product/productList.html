@@ -72,15 +72,15 @@
         <div th:if="${!products.isEmpty()}">
             <ul class="pagination justify-content-center all-product">
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" href="#" th:data-page="${currentPage - 1}" tabindex="-1"><</a>
+                    <a class="page-link" href="#" th:data-page="${startPage - 1}" tabindex="-1"><</a>
                 </li>
-                <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
                     th:classappend="${currentPage == i} ? 'active' : ''">
                     <a class="page-link" href="#" th:data-page="${i}" th:text="${i}">1</a>
                 </li>
 
-                <li class="page-item" th:classappend="${!productPage.hasNext} ? 'disabled'">
-                    <a class="page-link btn-delete" href="#" th:data-page="${currentPage + 1}">></a>
+                <li class="page-item" th:classappend="${endPage >= totalPages} ? 'disabled'">
+                    <a class="page-link btn-delete" href="#" th:data-page="${endPage + 1}">></a>
                 </li>
             </ul>
         </div>

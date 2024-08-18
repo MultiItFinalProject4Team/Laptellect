@@ -216,6 +216,7 @@ public class ProductController {
 
                 break;
             case 2:
+                crawlingService.getMouseDetails(typeDetails);
 
                 break;
             case 3:

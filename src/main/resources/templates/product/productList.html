@@ -7,7 +7,7 @@
 <script th:inline="javascript">
     $(document).ready(function() {
         let currentPage = 0;
-        let pageSize = 20;
+        let pageSize = 12;
         let typeNo = 1;
         let currentKeyword = '';
 
@@ -101,7 +101,6 @@
         // 검색 폼 제출 시 호출
         $("#searchForm").on("submit", function(e) {
             e.preventDefault();
-            currentPage = 0;
             searchProducts();
         });
 
@@ -166,10 +165,16 @@
 <body>
 <div class="container-md" layout:fragment="content">
 <br>
-<form th:action="@{/product/test2}" method="get">
-    <input type="hidden" name="typeDetails" value="1"/>
-    <button type="submit">상품 타입 1 가져오기</button>
-</form>
+    <form th:action="@{/product/test2}" method="get">
+        <label for="typeDetails">상품 타입 선택: </label>
+        <select name="typeDetails" id="typeDetails">
+            <option value="1">상품 타입 1</option>
+            <option value="2">상품 타입 2</option>
+            <option value="3">상품 타입 3</option>
+        </select>
+        <button type="submit">선택한 상품 타입 가져오기</button>
+    </form>
+
 <form id="filterForm">
     <table border="1">
         <tbody class="table custom-table custom-table-striped custom-table-bordered custom-table-hover">

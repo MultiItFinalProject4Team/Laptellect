@@ -287,6 +287,44 @@ public class CrawlingService {
 
     }
 
+    public LaptopSpecDTO getMouseDetails(int productType) {
+
+
+        LaptopSpecDTO laptopSpecDTO = new LaptopSpecDTO();
+        ProductDTO productDTO = new ProductDTO();
+        List<ProductDTO> productNoList = productMapper.findProductsByType(productType);
+
+        for (ProductDTO no : productNoList) {
+            int prodNo = no.getProductNo();
+            String code = no.getProductCode();
+            try {
+                String referer = "https://prod.danawa.com/info/?pcode=" + code + "&cate=112758";
+                String bodyData = "pcode=" + code +
+                        "&cate1=861" +
+                        "&cate2=902";
+
+                String responseHtml = sendPostRequest(PRODUCT_DETAILS_URL, referer, bodyData); // 다나와에 Post 요청
+                log.info("responseHtml = {}", responseHtml);
+
+                Document doc = Jsoup.parse(responseHtml); // Return 받은 Json 객체
+
+                log.info("doc 확인 = {}", doc);
+
+                Map<String, List<String>> categoryMap = createMouseCategory(productType);
+                log.info("getkeyboardDetails = {}", categoryMap);
+                productDTO = getProductDetails1(code);
+                log.info("getProductDetails1 = {}", categoryMap);
+                createMouseSpec(prodNo, categoryMap, doc, productDTO);
+            } catch (IOException e) {
+                log.error("Error while getting product details", e);
+            }
+        }
+
+
+        return laptopSpecDTO;
+
+    }
+
 
     /**
      * @param productCode 제품의 코드
@@ -553,12 +591,11 @@ public class CrawlingService {
 
         Map<String, List<String>> categoryMap = new LinkedHashMap<>();
 
-        categoryMap.put("MBI", Arrays.asList("제조사", "등록월", "사이즈", "연결 방식", "인터페이스", "접점 방식"));
-        categoryMap.put("KB", Arrays.asList("키 배열", "스위치", "키 스위치", "스위치 방식", "램 교체")); //Key Build 키보드 빌더
-        categoryMap.put("KD", Arrays.asList("레인보우 백라이트", "스텝스컬쳐2", "금속하우징", "생활방수", "RGB 백라이트", "스테빌라이저", "단색 백라이트")); //키보드 구조
-        categoryMap.put("KF", Arrays.asList("동시입력", "키캡 재질", "응답속도", "키캡 각인방식", "각인 위치")); //키보드 기능
-        categoryMap.put("KDW", Arrays.asList("가로", "세로", "높이", "무게", "케이블 길이")); //키보드 크기와 무게
-        categoryMap.put("KC", Arrays.asList("키캡 리무버", "청소용 브러쉬", "장패드", "키스킨", "루프", "일체형 손목받침대")); //키보드 구성품
+        categoryMap.put("MBI", Arrays.asList("제조사(마우스)", "등록월(마우스)", "연결 방식", "연결 방식", "무선 연결", "인터페이스"));
+        categoryMap.put("MB", Arrays.asList("최대 감도(DPI)", "응답속도", "센서", "스위치 방식", "마우스 형태"));
+        categoryMap.put("MD", Arrays.asList("무한휠 지원", "스위치", "마우스 코팅"));
+        categoryMap.put("MF", Arrays.asList("멀티페어링", "매크로", "소프트웨어 지원"));
+        categoryMap.put("MDW", Arrays.asList("가로", "세로", "높이", "무게"));
 
         int categoryCount = 0;
 
@@ -763,6 +800,81 @@ public class CrawlingService {
                 }
 
                 String specValue = keyboardSpecValue.get(index);
+
+                if (specValue == null || specValue.equals("정보 없음")) {
+                    log.info("옵션 정보 없음 = {}", specValue);
+                } else {
+                    log.info("Insert 값 = {} : {}", specName, specValue);
+
+                    // 중복 확인 쿼리
+                    int exists = productMapper.checkSpecExists(productNo, category, specValue);
+                    if (exists == 0) {
+                        log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
+                        log.info("exists 값 = {}", exists);
+                        productMapper.insertProductSpec(productNo, specName, specValue);
+
+                        log.info("ProductSpec Insert 완료 = {}", productNo);
+                    }
+
+                    log.info("ProductSpec Insert 완료");
+                }
+                index++;
+            }
+        }
+
+    }
+
+    public void createMouseSpec(int productNo, Map<String, List<String>> categoryMap, Document doc, ProductDTO productDTO) {
+        ArrayList<String> mouseSpecValue = new ArrayList<>();
+        log.info("createKeyboardSpec 메서드가 호출됨: productNo = {}", productNo);
+
+        // KBI: 제조사, 등록월, 사이즈, 연결 방식, 인터페이스, 접점 방식
+        mouseSpecValue.add(productDTO.getManufacturer()); // 제조사
+        mouseSpecValue.add(productDTO.getRegistrationMonth()); // 등록월
+        mouseSpecValue.add(getSpecValue(doc, "연결 방식")); // 연결 방식
+        mouseSpecValue.add(getSpecValue(doc, "무선 연결")); // 무선 연결
+        mouseSpecValue.add(getSpecValue(doc, "인터페이스")); // 인터페이스
+
+        // 최대 감도(DPI), 응답속도, 센서, 스위치 방식, 마우스 형태
+        mouseSpecValue.add(getSpecValue(doc, "최대 감도(DPI)")); // 최대 감도(DPI)
+        mouseSpecValue.add(getSpecValue(doc, "응답속도")); // 응답속도
+        mouseSpecValue.add(getSpecValue(doc, "센서")); // 센서
+        mouseSpecValue.add(getSpecValue(doc, "스위치 방식")); // 스위치 방식
+        mouseSpecValue.add(getSpecValue(doc, "마우스 형태")); // 마우스 형태
+
+        mouseSpecValue.add(getSpecValue(doc, "무한휠 지원")); // 무한휠 지원
+        mouseSpecValue.add(getSpecValue(doc, "스위치")); // 스위치
+        mouseSpecValue.add(getSpecValue(doc, "마우스 코팅")); // 마우스 코팅
+
+
+        // 멀티페어링, 매크로, 소프트웨어 지원
+        mouseSpecValue.add(getSpecValue(doc, "멀티페어링")); // 멀티페어링
+        mouseSpecValue.add(getSpecValue(doc, "매크로")); // 매크로
+        mouseSpecValue.add(getSpecValue(doc, "소프트웨어 지원")); // 소프트웨어 지원
+
+        // 가로, 세로, 높이, 무게
+        mouseSpecValue.add(getSpecValue(doc, "가로")); // 가로
+        mouseSpecValue.add(getSpecValue(doc, "세로")); // 세로
+        mouseSpecValue.add(getSpecValue(doc, "높이")); // 높이
+        mouseSpecValue.add(getSpecValue(doc, "무게")); // 무게
+
+
+        log.debug("상품 스펙 저장 시작 = {}", mouseSpecValue);
+        int index = 0;
+
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            List<String> specs = entry.getValue();
+            String category = entry.getKey();
+            log.info("category넘버= {}", category);
+
+
+            for (String specName : specs) {
+                if (index >= mouseSpecValue.size()) {
+                    log.error("Index out of bounds: index = {}, size = {}", index, mouseSpecValue.size());
+                    return; // 인덱스가 리스트 크기를 벗어날 때 메서드 종료
+                }
+
+                String specValue = mouseSpecValue.get(index);
 
                 if (specValue == null || specValue.equals("정보 없음")) {
                     log.info("옵션 정보 없음 = {}", specValue);
