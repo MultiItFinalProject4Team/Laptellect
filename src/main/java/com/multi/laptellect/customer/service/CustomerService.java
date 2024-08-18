@@ -5,6 +5,7 @@ import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.dto.ImageDto;
 import com.multi.laptellect.util.EmailUtil;
+import com.multi.laptellect.util.FileService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,6 +28,8 @@ public class CustomerService {
     private CustomDao customDao;
     @Autowired
     private EmailUtil emailUtil;
+    @Autowired
+    private FileService fileService;
 
     public List<NoticeListDto> getNoticeList() {
         return customDao.getNoticeList();
@@ -144,10 +147,21 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            Path filePath = Paths.get(path, url);
+            //Path filePath = Paths.get(path, url);
             try {
-                Files.deleteIfExists(filePath);
-            } catch (IOException e) {
+//                Files.deleteIfExists(filePath);
+                String prefix = "4team/";
+                int prefixIndex = url.indexOf(prefix);
+
+                if (prefixIndex != -1) {
+                    url = url.substring(prefixIndex + prefix.length());
+                    System.out.println("url: "+url);
+                    int result=fileService.deleteFile(url);
+                    System.out.println("결과: "+result);
+                } else {
+                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -230,7 +244,7 @@ public class CustomerService {
         List<ProductqCategoryDto> category = customDao.getProductqCategory();
         ProductqCategoryDto category_all  = new ProductqCategoryDto();
         category_all.setProductqCategorycode("productq_all");
-        category_all.setProductqCategoryname("전체");
+        category_all.setProductqCategoryname("카테고리");
         category.add(0,category_all);
         return category;
     }
@@ -393,5 +407,21 @@ public class CustomerService {
 
     public List<NoticeListDto> getNoticeSearchList(NoticeSearchDto dto) {
         return customDao.getNoticeSearchList(dto);
+    }
+
+    public List<AdminProductqList> getAdminProductqList(ProductSearchDto searchDto) {
+        return customDao.getAdminProductqList(searchDto);
+    }
+
+    public List<AdminProductqList> getAllProductList() {
+        return customDao.getAllProductList();
+    }
+
+    public List<UserProductqList> getUserProudctList(int memberNo) {
+        return customDao.getUserProudctList(memberNo);
+    }
+
+    public List<UserProductqList> getUserSearchProudctList(ProductSearchDto searchDto) {
+        return customDao.getUserSearchProudctList(searchDto);
     }
 }

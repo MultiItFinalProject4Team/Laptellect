@@ -327,4 +327,38 @@ public class CustomerAdminController {
         model.addAttribute("state","search");
         return "/admin/customer/admin_personalq";
     }
+
+    @GetMapping("/all_product_question")
+    public String all_product_question(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
+        //List<AdminProductqList> list = customerService.getAdminProductqList(); 미답변 질문이 존재하는 리스트만
+        List<AdminProductqList> list = customerService.getAllProductList();
+        ProductSearchDto searchDto = ProductSearchDto.builder().keyword("").answer("A").date("recent").build();
+        int page_size=10;
+        int adjustPage=page-1;
+        List<AdminProductqList> paginationList=pagination.productpaginate3(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("dto",searchDto);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("state","all");
+        return "/admin/customer/admin_productqList";
+    }
+
+    @GetMapping("search_all_product_question")
+    public String search_all_product_question(Model model, @RequestParam(value = "page",defaultValue = "1") int page, ProductSearchDto  searchDto){
+        List<AdminProductqList> list = customerService.getAdminProductqList(searchDto);
+        int page_size=10;
+        int adjustPage=page-1;
+        List<AdminProductqList> paginationList=pagination.productpaginate3(list, adjustPage, page_size);
+        int totalPages = (int) Math.ceil((double) list.size() / page_size);
+        if(totalPages==0){totalPages=1;}
+        model.addAttribute("list",paginationList);
+        model.addAttribute("dto",searchDto);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("state","search");
+        return "/admin/customer/admin_productqList";
+    }
 }

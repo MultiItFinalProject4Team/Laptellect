@@ -114,6 +114,7 @@
         JOIN
         product_spec po ON po.product_no = p.product_no
         WHERE
+
         p.product_name LIKE CONCAT('%', #{searchDTO.keyword}, '%')
         AND p.type_no = #{searchDTO.typeNo}
 
@@ -124,6 +125,7 @@
             WHERE po1.option_value IN
             <foreach item="item" index="index" collection="searchDTO.LBI1" open="(" separator="," close=")">
                 #{item}
+
             </foreach>
             )
         </if>
@@ -219,12 +221,13 @@
         GROUP BY
         p.product_no, p.type_no, p.product_name, p.price,
         p.reference_code, p.created_at, p.updated_at, p.product_code, i.upload_name
+
         ORDER BY
         p.product_no
         LIMIT
-        #{searchDTO.size}
+            #{searchDTO.size}
         OFFSET
-        #{searchDTO.offset}
+            #{searchDTO.offset}
     </select>
 
     <select id="countBySearchCriteria" resultType="long">
@@ -381,7 +384,7 @@
             vw_spec_and_value
         WHERE
             product_no = #{productNo} AND options IN
-        <foreach collection="neededOptions" item="options" open="(" separator="," close=")">
+        <foreach collection="neededOptions" item="options" open="(" separator=  "," close=")">
             #{ options }
         </foreach>
     </select>

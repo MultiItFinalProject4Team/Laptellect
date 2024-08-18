@@ -108,4 +108,12 @@ public interface CustomDao {
     void updateNotice(NoticeListDto dto);
 
     List<NoticeListDto> getNoticeSearchList(NoticeSearchDto dto);
+
+    List<AdminProductqList> getAdminProductqList(ProductSearchDto searchDto);
+
+    List<AdminProductqList> getAllProductList();
+
+    List<UserProductqList> getUserProudctList(int memberNo);
+
+    List<UserProductqList> getUserSearchProudctList(ProductSearchDto searchDto);
 }

@@ -35,7 +35,7 @@ public class ProductSearchDTO implements Pageable {
 
     // 검색을 위한 변수
     private int typeNo; // 상품 카테고리 번호
-    private List<String> cate; // 카테고리 옵션
+    private Map<String, List<String>> cate; // 카테고리 옵션
     private String keyword; // 검색어
     private List<String> LBI1; // 운영체제 필터
     private List<String> LBI2; // 제조사 필터

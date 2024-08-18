@@ -8,8 +8,7 @@
     <title>고객센터 관리자 페이지</title>
     <link href="/css/customer/nav.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <style>
-    </style>
+
 </head>
 <body>
 <div layout:fragment="content">
@@ -18,8 +17,10 @@
         <h1 align="left"style="font-size:40px">고객센터 관리자페이지</h1>
     </header>
     <hr>
-    <a th:href="@{/customer/admin/all_personal_question}">1:1 문의 관리</a>
-    <a th:href="@{/customer/admin/all_product_question}">상품 문의 관리</a>
+    <div class="button-container col">
+        <a class="btn btn-primary btn-lg" th:href="@{/customer/admin/all_personal_question}">1:1 문의 관리</a>
+        <a class="btn btn-primary btn-lg" th:href="@{/customer/admin/all_product_question}">상품 문의 관리</a>
+    </div>
 </div>
 </div>
 </body>
