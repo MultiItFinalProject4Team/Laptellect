@@ -25,4 +25,10 @@ public interface AdminMemberMapper {
     ArrayList<AdminMemberDTO> findAllMember(PagebleDTO pagebleDTO);
 
     int countAllMember(PagebleDTO pagebleDTO);
+
+    void deleteMember(int memberNo);
+
+    void deleteSocialMember(int memberNo);
+
+    void deleteSellerMember(int memberNo);
 }

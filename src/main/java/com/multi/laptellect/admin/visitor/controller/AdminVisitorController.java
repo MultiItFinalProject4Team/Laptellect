@@ -1,66 +1,60 @@
-package com.multi.laptellect.admin.visitor.controller;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-/**
- * Please explain the class!!
- *
- * @author : 이강석
- * @fileName : AdminMemberController
- * @since : 2024-08-13
- */
-@Slf4j
-@Controller
-@RequiredArgsConstructor
-@RequestMapping("/admin/visitor")
-public class AdminVisitorController {
-//    private final AdminMemberService adminMemberService;
-//    private final RedisUtil redisUtil;
+//package com.multi.laptellect.admin.visitor.controller;
 //
-//    @GetMapping({""})
-//    public String showMemberManagement(Model model) {
+//import com.multi.laptellect.admin.visitor.model.dto.VisitorLogDTO;
+//import com.multi.laptellect.admin.visitor.service.AdminVisitorService;
+//import com.multi.laptellect.common.model.PagebleDTO;
+//import com.multi.laptellect.util.PaginationUtil;
+//import lombok.RequiredArgsConstructor;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.data.domain.Page;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.ui.Model;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestMapping;
 //
-//        try {
-//            int newMemberCount = adminMemberService.findNewMemberCount(); // 금일 가입자 수
-//            int memberCount = adminMemberService.findMemberCount(); // 금일 가입자 수
-//            int activeMemberCount = redisUtil.getActiveUserCount(); // 현재 접속중인 인원 수
+///**
+// * Please explain the class!!
+// *
+// * @author : 이강석
+// * @fileName : AdminMemberController
+// * @since : 2024-08-13
+// */
+//@Slf4j
+//@Controller
+//@RequiredArgsConstructor
+//@RequestMapping("/admin/visitor")
+//public class AdminVisitorController {
+//    private final AdminVisitorService adminVisitorService;
 //
-//            model.addAttribute("memberCount", memberCount);
-//            model.addAttribute("newMemberCount", newMemberCount);
-//            model.addAttribute("activeMemberCount", activeMemberCount);
-//        } catch (Exception e) {
-//            log.error("Member Mgt Error = ", e);
-//        }
+//    @GetMapping("")
+//    public String showVisit() {
 //
-//        return "/admin/member/member-manage";
+//
+//        return "";
 //    }
 //
-//    @PostMapping("/log")
-//    public String getMemberList(@RequestBody PagebleDTO pagebleDTO, Model model) {
-//
+//    @GetMapping("list")
+//    public String getVisitList(@RequestBody PagebleDTO pagebleDTO, Model model) {
 //        try {
-//            log.debug("어드민 멤버 내역 전체 조회 시작");
-//            Page<AdminMemberDTO> members = adminMemberService.getMemberList(pagebleDTO);
-//            log.info("어드민 멤버 내역 전체 조회 성공 = {}", members.getContent());
+//            Page<VisitorLogDTO> visitorLogs = adminVisitorService.getVisitorList(pagebleDTO);
+//            log.info("방문자 로그 조회 성공 = {}", visitorLogs.getContent());
 //
-//            int page = members.getPageable().getPageNumber();
-//            int size = members.getPageable().getPageSize();
+//            int page = visitorLogs.getPageable().getPageNumber();
+//            int size = visitorLogs.getPageable().getPageSize();
 //
-//            int startPage = PaginationUtil.getStartPage(members, 5);
-//            int endPage = PaginationUtil.getEndPage(members, 5);
+//            int startPage = PaginationUtil.getStartPage(visitorLogs, 5);
+//            int endPage = PaginationUtil.getEndPage(visitorLogs, 5);
 //
-//            model.addAttribute("members", members);
+//            model.addAttribute("visitorLogs", visitorLogs);
 //            model.addAttribute("page", page);
 //            model.addAttribute("size", size);
 //            model.addAttribute("startPage", startPage);
 //            model.addAttribute("endPage", endPage);
 //        } catch (Exception e) {
-//            log.error("어드민 멤버 내역 전체 조회 실패");
+//            log.error("방문자 로그 조회 실패");
 //        }
 //
-//        return "/admin/member/member-list";
+//        return "";
 //    }
-}
+//}
