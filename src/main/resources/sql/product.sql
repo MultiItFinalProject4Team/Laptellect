@@ -86,6 +86,11 @@ create table review (
 
 );
 
+
+ALTER TABLE review
+ADD COLUMN tag_answer char(1) DEFAULT 'N';
+
+
 -- 프로덕트 디테일 view
 CREATE VIEW vw_product_detail AS
 SELECT
