@@ -648,9 +648,9 @@ public class ProductServiceImpl implements ProductService {
 
     public Map<String, List<String>> productFilterSearch() {
 
-       List<SpecDTO> specDTOS =  productMapper.productFilterSearch();
+        List<SpecDTO> specDTOS = productMapper.productFilterSearch();
 
-       Map<String, List<String>> specMap = new HashMap<>();
+        Map<String, List<String>> specMap = new HashMap<>();
 
 
         Set<String> keysToKeep = new HashSet<>(Arrays.asList(
@@ -660,35 +660,36 @@ public class ProductServiceImpl implements ProductService {
         ));
 
 
-       for(SpecDTO spec : specDTOS){
+        for (SpecDTO spec : specDTOS) {
 
-           log.info("필터링 과정 = {}",spec.getCategoryNo());
+            log.info("필터링 과정 = {}", spec.getCategoryNo());
 
-           String key = spec.getCategoryNo();
-           String value = spec.getOptionValue();
+            String key = spec.getCategoryNo();
+            String value = spec.getOptionValue();
 
-           //-contains()함수는 대상 문자열에 특정 문자열이 포함되어 있는지 확인하는 함수이다.
-           //- 대/소문자를 구분한다.
+            //-contains()함수는 대상 문자열에 특정 문자열이 포함되어 있는지 확인하는 함수이다.
+            //- 대/소문자를 구분한다.
 
-           if (keysToKeep.contains(key)) {
-               List<String> values = specMap.get(key);
+            if (keysToKeep.contains(key)) {
+                List<String> values = specMap.get(key);
 
-               if (values == null) {
-                   values = new ArrayList<>();
-                   specMap.put(key, values);  // 생성한 리스트를 다시 Map에 추가
-               }
+                if (values == null) {
+                    values = new ArrayList<>();
+                    specMap.put(key, values);  // 생성한 리스트를 다시 Map에 추가
+                }
 
-               // 값이 리스트에 이미 포함되어 있는지 확인하고, 포함되어 있지 않으면 추가
-               if (!values.contains(value)) {
-                   values.add(value);
-               }
-           }
-       }
+                // 값이 리스트에 이미 포함되어 있는지 확인하고, 포함되어 있지 않으면 추가
+                if (!values.contains(value)) {
+                    values.add(value);
+                }
+            }
+        }
 
-        log.info("필터링 과정3 = {}",specMap);
+        log.info("필터링 과정3 = {}", specMap);
 
 
-       return specMap;
+
+        return specMap;
     }
 
     public int updateProductVisit(String productNo, int visitCount) throws Exception {

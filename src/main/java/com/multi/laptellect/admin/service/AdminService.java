@@ -64,4 +64,8 @@ public class AdminService {
 
         return result;
     }
+
+    public List<AdminReviewDTO> getRecentReviews(int limit) {
+        return adminDAO.getRecentReviews(limit);
+    }
 }
