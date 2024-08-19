@@ -157,10 +157,10 @@ const editorConfig = {
 		]
 	},
 	placeholder: 'Type or paste your content here!',
-        translations: [translations],
-        simpleUpload: {
-            uploadUrl: 'http://localhost:8099/customer/user/imageUpload' // 업로드 URL
-        }
+    translations: [translations],
+    simpleUpload: {
+        uploadUrl: 'http://localhost:8099/customer/user/imageUpload' // 업로드 URL
+    }
 };
 
 let editor;

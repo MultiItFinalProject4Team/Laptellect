@@ -95,7 +95,7 @@ public class ProductController {
 
 
     @GetMapping("/productList")
-    public String cate(Model model){
+    public String cate(@RequestParam(name = "typeNo") int typeNo, Model model){
 
         Map<String, List<String>> cate = productService.productFilterSearch();
 
@@ -104,9 +104,7 @@ public class ProductController {
         log.info("컨트롤러 cate 데이터 확인 = {}", cate);
 
         model.addAttribute("cate", cate);
-
-
-
+        model.addAttribute("typeNo", typeNo);
         return "/product/productList";
 
     }

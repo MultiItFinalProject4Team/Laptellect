@@ -119,9 +119,10 @@
     </delete>
 
     <select id="getProudctqList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
-        select productq_no, member_no, product_no, title, secret, answer, created_at
+        select a.productq_no, a.member_no, a.product_no, a.title, a.secret, a.answer, a.created_at, b.member_name
         from
-        product_question
+        product_question a
+        join mem_member b on a.member_no = b.member_no
         where product_no=#{productNo}
         order by productq_no desc
     </select>
@@ -250,19 +251,22 @@
 
     <select id="getAllPersonalqList" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
         select
-        personalq_no,
-        member_no,
-        title,
-        answer,
-        created_at
-        from personal_question
+        a.personalq_no,
+        a.member_no,
+        a.title,
+        a.answer,
+        a.created_at,
+        b.member_name
+        from personal_question a
+        join mem_member b on a.member_no = b.member_no
         order by personalq_no desc
     </select>
 
     <select id="getProudctqSearchList" resultType="com.multi.laptellect.customer.dto.ProuductqListDto">
-        select productq_no, member_no, product_no, title, secret, answer, created_at
+        select a.productq_no, a.member_no, a.product_no, a.title, a.secret, a.answer, a.created_at, b.member_name
         from
-        product_question
+        product_question a
+        join mem_member b on a.member_no = b.member_no
         where product_no=#{productNo}
         AND title LIKE CONCAT('%', #{keyword}, '%')
         <if test="category != 'productq_all'">
@@ -301,12 +305,14 @@
 
     <select id="getAllPersonalqSearchList" parameterType="com.multi.laptellect.customer.dto.PersonalqSearchDto" resultType="com.multi.laptellect.customer.dto.PersonalqListDto">
         select
-        personalq_no,
-        member_no,
-        title,
-        answer,
-        created_at
-        from personal_question
+        a.personalq_no,
+        a.member_no,
+        a.title,
+        a.answer,
+        a.created_at,
+        b.member_name
+        from personal_question a
+        join mem_member b on a.member_no=b.member_no
         where title LIKE CONCAT('%', #{keyword}, '%')
         <if test="category != 'personalq_all'">
             AND personalq_categorycode LIKE #{category}
@@ -378,7 +384,9 @@
     </select>
 
     <select id="getNoticeList" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
-        select * from notice
+        SELECT *
+        FROM notice
+        ORDER BY main_regist = 'Y' DESC, created_at desc;
     </select>
 
     <select id="getnotice" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
