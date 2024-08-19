@@ -168,7 +168,7 @@ function drawLineChart(dashboardData) {
               question.title,
               question.memberName,
               question.questionType === 'personal' ? '1:1 문의' : '상품 문의',
-              question.createdAt,
+              new Date(question.createdAt).toLocaleDateString(),
               question.answerStatus === 'Y' ? '답변 완료' : '미답변'
             ]);
           });

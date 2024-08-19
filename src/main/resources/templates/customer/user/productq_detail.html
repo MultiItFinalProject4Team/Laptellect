@@ -9,6 +9,7 @@
     <link href="/css/customer/nav.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
 </head>
 <body>
 <div layout:fragment="content">
@@ -21,11 +22,11 @@
         <p style="font-size: 15px; color: light-gray; line-height: 0;">질문</p>
         <h3 th:text="${productq.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</h3>
         <p th:text="${#dates.format(productq.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
-        <div class="btn-group" aria-label="Small button group">
+        <div class="d-flex justify-content-end" aria-label="Small button group">
 <!--            <a th:href="@{/customer/user/update_productq/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>-->
-            <a th:href="@{/customer/user/delete_productq/{productqNo}/{productNo}(productqNo=${productq.productqNo}, productNo=${productq.productNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 삭제</a>
+            <a th:href="@{/customer/user/delete_productq/{productqNo}/{productNo}(productqNo=${productq.productqNo}, productNo=${productq.productNo})}" class="btn crud-btn">문의 삭제</a>
 <!--            <a th:href="@{/customer/admin/update_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>-->
-            <a th:href="@{/customer/admin/delete_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 삭제</a>
+            <a th:href="@{/customer/admin/delete_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn crud-btn">답변 삭제</a>
         </div>
     </div>
 
@@ -50,10 +51,11 @@
 </div>
     <div align="center">
         <div class="btn-group" aria-label="Small button group" th:if="${productq.answer=='N'}">
-            <a th:href="@{/customer/admin/answer_productq/{productqNo}(productqNo=${productq.productqNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn bg-body-secondary">답변하기</a>
+            <a th:href="@{/customer/admin/answer_productq/{productqNo}(productqNo=${productq.productqNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn btn-custom-primary">답변하기</a>
         </div>
         <div class="btn-group" aria-label="Small button group">
-            <a th:href="@{/customer/user/user_productqList}" class="btn bg-body-secondary">목록으로</a>
+            <a sec:authorize="hasAnyAuthority('ROLE_USER')" th:href="@{/customer/user/user_productqList}" class="btn btn-custom-primary">목록으로</a>
+            <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productq.productNo})}" class="btn btn-custom-primary">목록으로</a>
         </div>
     </div>
 </div>
