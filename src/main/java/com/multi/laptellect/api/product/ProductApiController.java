@@ -199,6 +199,10 @@ public class ProductApiController {
         int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
         int endPage = Math.min(startPage + displayPages - 1, totalPages);
 
+
+
+
+
         model.addAttribute("currentPage", currentPage );
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("startPage", startPage);

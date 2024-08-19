@@ -3,6 +3,7 @@ package com.multi.laptellect.admin.product.service;
 import com.multi.laptellect.admin.product.model.mapper.AdminProductMapper;
 import com.multi.laptellect.common.model.PagebleDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,9 @@ public class AdminProductServiceImpl implements AdminProductService{
 
     private final AdminProductMapper adminProductMapper;
 
+    private final RedisUtil redisUtil;
+    private final String REDIS_KEY_PREFIX = "deleted_product:";
+
 
     @Override
     public Page<ProductDTO> getProductList(PagebleDTO pagebleDTO) throws Exception {
@@ -37,5 +41,12 @@ public class AdminProductServiceImpl implements AdminProductService{
 
         return new PageImpl<>(products, pagebleDTO, total);
 
+    }
+
+    @Override
+    public int deleteProduct(int productNo) {
+        log.info("ProductServiceImpl 삭제정보 : {}",productNo);
+
+        return adminProductMapper.deleteProduct(productNo);
     }
 }

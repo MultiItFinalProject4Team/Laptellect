@@ -45,10 +45,23 @@
         FROM product
     </select>
 
-    <delete id="deleteProduct" parameterType="productNo">
-        DELETE FROM product
+    <select id="getProductById" resultType="productDTO">
+        SELECT
+        *
+        FROM
+        product
         WHERE product_no = #{ productNo }
+    </select>
 
+    <delete id="deleteProduct" parameterType="int">
+        DELETE FROM product
+        WHERE product_no = #{productNo}
     </delete>
+
+    <insert id="insertProduct" parameterType="productDTO">
+        INSERT INTO
+        product(product_no, type_no, product_name, price, product_code, reference_code, created_at, view_count)
+        VALUES( #{productNo}, #{typeNo}, #{productName}, #{price}, #{productCode}, #{referenceCode}, #{createdAt}, #{viewCount})
+    </insert>
 
 </mapper>

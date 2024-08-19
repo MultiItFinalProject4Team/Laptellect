@@ -86,7 +86,29 @@
         </div>
     </nav>
 </div>
+<!--<div class="pagination" th:if="${!product.isEmpty()}">-->
+<!--    <div class="pagination-controls" style="display: flex; gap: 10px; align-items: center;">-->
+<!--        <button id="prevButton"-->
+<!--                th:disabled="${!product.hasPrevious}"-->
+<!--                th:data-page="${ page - 1 }"-->
+<!--                th:text="'&lt; 이전'">-->
+<!--        </button>-->
 
+<!--        <div id="pageNumbers">-->
+<!--            <button th:each="page : ${#numbers.sequence(startPage, endPage)}"-->
+<!--                    th:text="${ page + 1 }"-->
+<!--                    th:classappend="${page == product.number} ? 'active'"-->
+<!--                    th:data-page="${ page }">-->
+<!--            </button>-->
+<!--        </div>-->
+
+<!--        <button id="nextButton"-->
+<!--                th:disabled="${ !product.hasNext }"-->
+<!--                th:data-page="${ page + 1 }"-->
+<!--                th:text="'다음 &gt;'">-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</div>-->
 <script>
     $(document).ready(function() {
 

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Please explain the class!!
  *
@@ -63,6 +65,26 @@ public class AdminProductController {
 
 
         return "admin/product/product_list";
+    }
+
+    @ResponseBody
+    @PostMapping("/product/delete")
+    public int deleteProduct(@RequestBody List<Integer> productNos) {
+        log.debug("상품 삭제 시작");
+        try {
+            int deleteCount = 0;
+            for(int productNo : productNos){
+                deleteCount += adminProductService.deleteProduct(productNo);
+                log.info("AdminProductController 삭제정보 1 : {}",deleteCount);
+                log.info("AdminProductController 삭제정보 2 : {}",productNo);
+
+            }
+            return deleteCount;
+
+        } catch (Exception e) {
+            log.error("상품 삭제 실패",e);
+            return 0;
+        }
     }
 
 
