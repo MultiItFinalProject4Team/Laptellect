@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -108,6 +109,8 @@ public class EmotionAnalyzeService {
         return null;
     }
 
+
+
     public String analyzeSentiment(int productNo) {
         SentimentDTO sentiment = sentimentDAO.getSentimentByProductNo(productNo);
         log.info("상품 번호 {}: 감정 분석 결과 조회 - {}", productNo, sentiment);
@@ -148,5 +151,12 @@ public class EmotionAnalyzeService {
 
         log.info("상품 번호 {}: 최종 감정 분석 결과 - {}", productNo, result);
         return result;
+    }
+
+    public void analyzeAllUnanlyzedReviews() {
+        List<ReviewDTO> reviews = sentimentDAO.getUnanalyzedReviews();
+        for (ReviewDTO review : reviews) {
+            getAnalyzeResult(review.getProductNo(), review);
+        }
     }
 }

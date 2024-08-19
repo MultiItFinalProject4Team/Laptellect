@@ -29,6 +29,9 @@ public class EmotionAnalyzeController {
     public void onApplicationEvent() {
         log.info("서버 시작 시 자동으로 감성 분석 실행 (상품당 최대 {} 회)", MAX_ANALYSES_PER_PRODUCT);
         List<ReviewDTO> reviews = sentimentDAO.getUnanalyzedReviews();
+        log.info("서버 시작 시 자동으로 감성 분석 실행");
+        emotionAnalyzeService.analyzeAllUnanlyzedReviews();
+        log.info("모든 상품의 감성 분석 작업 완료");
 
         // 상품 번호별로 리뷰 그룹화
         Map<Integer, List<ReviewDTO>> reviewsByProduct = reviews.stream()

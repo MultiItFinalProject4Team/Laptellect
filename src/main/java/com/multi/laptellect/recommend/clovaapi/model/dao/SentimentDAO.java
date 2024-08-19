@@ -16,7 +16,10 @@ public interface SentimentDAO {
             "sentiment_neutrality = sentiment_neutrality + #{sentiment_neutrality}")
     void insertSentiment(SentimentDTO sentimentDTO);
 
-    @Select("SELECT product_no, content FROM review " +
+    @Select("SELECT product_no, content FROM payment_product_reviews " +
+            "WHERE product_no NOT IN (SELECT product_no FROM laptop_sentiment) " +
+            "UNION ALL " +
+            "SELECT product_no, content FROM review " +
             "WHERE product_no NOT IN (SELECT product_no FROM laptop_sentiment)")
     List<ReviewDTO> getUnanalyzedReviews();
 
