@@ -3,6 +3,7 @@ package com.multi.laptellect.product.service;
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.keyboard.*;
 import com.multi.laptellect.product.model.dto.laptop.*;
+import com.multi.laptellect.product.model.dto.mouse.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
@@ -134,6 +135,27 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return keyboard;
+    }
+
+
+    @Override
+    @Cacheable(value = "product", key = "#p0", cacheManager = "productCacheManager")
+    public MouseSpecDTO getMouseProductDetails(int productNo) {
+        log.info("프로덕트넘버값1 확인 = {}", productNo);
+
+        MouseSpecDTO mouse ;
+
+        List<LaptopDetailsDTO> mouseSpecDTO = productMapper.productDetails(productNo);
+        log.info("상품 스펙 조회1 = {}", mouseSpecDTO);
+
+
+        if (!mouseSpecDTO.isEmpty()) {
+            mouse = getMouseSpec(productNo, mouseSpecDTO);
+        } else {
+            return null;
+        }
+
+        return mouse;
     }
 
     @Override
@@ -430,6 +452,8 @@ public class ProductServiceImpl implements ProductService {
         String manufacturer = specDTO.getManufacturer();
         String registrationDate = specDTO.getRegistrationDate();
 
+        log.info("키보드 제조사 ={}, 등록월 = {}",manufacturer,registrationDate);
+
         KeyAccessory accessory = new KeyAccessory();
         KeyBuild build = new KeyBuild();
         KeyDesign design = new KeyDesign();
@@ -443,25 +467,17 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-            if(categoryCode.contains("LBI")){
-
-                switch (categoryCode) {
-
-                    case "LBI2":
-                        specDTO.setManufacturer(keyboard.getOptionValue());
-                        break;
-                    case "LBI3":
-                         specDTO.setRegistrationDate(keyboard.getOptionValue());
-                        break;
-
-                }
-            }
-
 
             if(categoryCode.contains("KBI")){
 
                 switch (categoryCode){
 
+                    case "KBI1":
+                        specDTO.setManufacturer(keyboard.getOptionValue());
+                        break;
+                    case "KBI2":
+                        specDTO.setRegistrationDate(keyboard.getOptionValue());
+                        break;
                     case "KBI3" :
                         specDTO.setSize(keyboard.getOptionValue());
                         break;
@@ -610,6 +626,154 @@ public class ProductServiceImpl implements ProductService {
 
 
 
+    public MouseSpecDTO getMouseSpec(int productNo, List<LaptopDetailsDTO> mouseSpec) {
+        LaptopDetailsDTO mouseDetailsDTO = mouseSpec.get(0);
+        MouseSpecDTO specDTO = new MouseSpecDTO();
+
+
+        String productName = mouseDetailsDTO.getProductName();
+        int price = mouseDetailsDTO.getPrice();
+        String image = mouseDetailsDTO.getUploadName();
+        String productCode = mouseDetailsDTO.getProductCode();
+        String manufacturer = specDTO.getManufacturer();
+        String registrationDate = specDTO.getRegistrationDate();
+
+
+        MouseDesignSpec designSpec = new MouseDesignSpec();
+        MouseDimensionSpec dimensionSpec = new MouseDimensionSpec();
+        MouseFunctionSpec functionSpec = new MouseFunctionSpec();
+        MousePerformance performance = new MousePerformance();
+
+
+
+        log.debug("상품 상세 정보 분류 시작 = {}", mouseSpec);
+        for(LaptopDetailsDTO mouse : mouseSpec){
+            String categoryCode = mouse.getCategoryNo();
+
+            if(categoryCode.contains("MBI")){
+
+                switch (categoryCode){
+
+                    case "MBI1":
+                        specDTO.setManufacturer(mouse.getOptionValue());
+                        break;
+                    case "MBI2":
+                        specDTO.setRegistrationDate(mouse.getOptionValue());
+                        break;
+                    case "MBI5":
+                        specDTO.setConnectionType(mouse.getOptionValue());
+                        break;
+
+                }
+
+            }
+            if(categoryCode.contains("MB")){
+
+                switch (categoryCode){
+
+                    case "MB10":
+                        performance.setMouseShape(mouse.getOptionValue());
+                        break;
+                    case "MB6":
+                        performance.setMaxDPI(mouse.getOptionValue());
+                        break;
+                    case "MB7":
+                        performance.setResponseTime(mouse.getOptionValue());
+                        break;
+                    case "MB8":
+                        performance.setSensorType(mouse.getOptionValue());
+                        break;
+                    case "MB9":
+                        performance.setSwitchType(mouse.getOptionValue());
+                        break;
+
+                }
+
+            }
+
+            if(categoryCode.contains("MD")){
+
+                switch (categoryCode){
+
+                    case "MD11":
+                        designSpec.setInfiniteScroll(mouse.getOptionValue());
+                        break;
+                    case "M13":
+                        designSpec.setMouseCoating(mouse.getOptionValue());
+                        break;
+
+
+                }
+
+            }
+
+            if(categoryCode.contains("MDW")){
+
+                switch (categoryCode){
+
+                    case "MDW17":
+                        dimensionSpec.setWidth(mouse.getOptionValue());
+                        break;
+                    case "MDW18":
+                        dimensionSpec.setHeight(mouse.getOptionValue());
+                        break;
+                    case "MDW19":
+                        dimensionSpec.setDepth(mouse.getOptionValue());
+                        break;
+                    case "MDW20":
+                        dimensionSpec.setWeight(mouse.getOptionValue());
+                        break;
+
+
+                }
+
+            }
+            if(categoryCode.contains("MF")){
+
+                switch (categoryCode){
+
+                    case "MF14":
+                        functionSpec.setMultiPairing(mouse.getOptionValue());
+                        break;
+                    case "MF15":
+                        functionSpec.setMacroSupport(mouse.getOptionValue());
+                        break;
+                    case "MF16":
+                        functionSpec.setSoftwareSupport(mouse.getOptionValue());
+                        break;
+
+
+                }
+
+            }
+
+
+
+            log.info("상품 상세 정보 분류 = {}", categoryCode);
+        }
+        log.info("상품 상세 정보 분류 완료");
+
+        specDTO.setProductNo(productNo);
+        specDTO.setProductName(productName);
+        specDTO.setPrice(price);
+        specDTO.setImage(image);
+        specDTO.setProductCode(productCode);
+
+        specDTO.setMouseDesignSpec(designSpec);
+        specDTO.setMouseDimensionSpec(dimensionSpec);
+        specDTO.setMousePerformance(performance);
+        specDTO.setMouseFunctionSpec(functionSpec);
+
+
+
+
+        log.info("상품 상세 정보 분류 완료 = {}", specDTO);
+
+        return specDTO;
+    }
+
+
+
     @Override
     public Page<ProductDTO> searchProducts(ProductSearchDTO searchDTO) {
 
@@ -728,12 +892,6 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.getProductByType(typeNo);
 
     }
-
-
-
-
-
-
 
 
 

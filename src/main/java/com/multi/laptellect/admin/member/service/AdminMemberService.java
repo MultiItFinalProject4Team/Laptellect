@@ -16,4 +16,6 @@ public interface AdminMemberService {
     int findMemberCount() throws Exception;
 
     Page<AdminMemberDTO> getMemberList(PagebleDTO pagebleDTO) throws Exception;
+
+
 }

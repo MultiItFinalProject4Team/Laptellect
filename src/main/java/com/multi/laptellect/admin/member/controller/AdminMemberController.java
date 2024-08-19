@@ -64,6 +64,7 @@ public class AdminMemberController {
             model.addAttribute("size", size);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
+
         } catch (Exception e) {
             log.error("어드민 멤버 내역 전체 조회 실패");
         }
