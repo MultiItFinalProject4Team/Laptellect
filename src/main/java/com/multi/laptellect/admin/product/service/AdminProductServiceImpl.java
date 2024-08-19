@@ -33,6 +33,7 @@ public class AdminProductServiceImpl implements AdminProductService{
         ArrayList<ProductDTO> products = adminProductMapper.getAllProducts(pagebleDTO);
         log.info("서비스 파라미터 확인 = {}",products);
         long total = adminProductMapper.countAllProduct(pagebleDTO);
+        log.info("총수량 확인 = {}",total);
 
         return new PageImpl<>(products, pagebleDTO, total);
 
