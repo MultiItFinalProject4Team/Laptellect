@@ -70,7 +70,7 @@
             font-size: 1.5rem;
         }
 
-        /* 제품 간략 스펙 css */
+        /* 제품 간략 정보 */
         .prodinfo_spec {
             list-style-type: none;
             padding: 0;
@@ -92,6 +92,21 @@
                 let value = $(this).text().replace(' 원', '');
                 let formattedValue = new Intl.NumberFormat().format(value);
                 $(this).text(formattedValue + ' 원');
+            });
+
+            // 리뷰 더보기 클릭 시 리뷰탭으로 이동
+            $('#review-scroll').on('click', function(event) {
+                event.preventDefault();
+                $('#customer-tab').removeClass('active');
+                $('#customer-box').removeClass('show active');
+
+                $('#review-tab').addClass('active');
+                $('#review-box').addClass('show active');
+
+                $('#custmer-review-box')[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             });
 
             // 위시리스트 추가/삭제
@@ -307,14 +322,12 @@
                     </div>
                 </div>
 
-
-
                 <div class="col-md-5">
                     <div class="review-group">
                         <div class="review-list">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span style="font-size: 20px;"><strong>상품 리뷰 <span th:text="${'(' + paymentReviewDTOList.size() + '건)'}"></span></strong></span>
-                                <a href="#review-section" class="text-decoration-none ms-2" style="position: relative; top: -3px; font-size: 17px;">더보기 ></a>
+                                <a href="#" id="review-scroll" class="text-decoration-none ms-2" style="position: relative; top: -3px; font-size: 17px;">더보기 ></a>
                             </div>
                             <div>
                                 <i class="bi bi-star-fill" style=""></i>
@@ -593,7 +606,7 @@
             <br> <br>
 
             <div class="col-12 mt-4">
-                <h4><strong>문의/리뷰</strong></h4>
+                <h4 id="custmer-review-box"><strong>문의/리뷰</strong></h4>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box"
