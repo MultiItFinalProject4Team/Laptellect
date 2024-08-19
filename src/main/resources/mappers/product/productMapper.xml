@@ -374,6 +374,7 @@
             images img ON img.reference_code = p.reference_code
         WHERE
             p.product_no = #{ productNo }
+         limit 1
     </select>
 
     <select id="findProductSpecByProductNo">

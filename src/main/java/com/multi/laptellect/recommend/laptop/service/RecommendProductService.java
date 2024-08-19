@@ -32,9 +32,10 @@ public class RecommendProductService {
 
         // 조건에 따라 Product_no를 반환
         ArrayList<Integer> productNos = recommendProductDAO.findLaptopDetailByFilter(productFilterDTO);
-        log.info("추천 결과 맞는 제품 번호 = {}", productNos);        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>(); // 사용자에게 추천할 노트북 리스트 // 노트북 스펙을 담음
+        log.info("추천 결과 맞는 제품 번호 = {}", productNos);
+        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>(); // 사용자에게 추천할 노트북 리스트 // 노트북 스펙을 담음
 
-        for(int productNo : productNos) {
+        for (int productNo : productNos) {
             List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo); //노트북 상세 정보 조회
 
             log.info("상품 스펙 조회 = {}", laptopDetails); // 로그
@@ -51,6 +52,7 @@ public class RecommendProductService {
     public List<TaggDTO> getTagsForProduct(int productNo) {
         return recommendProductDAO.getTagsForProduct(productNo);
     }
+
     public ArrayList<LaptopSpecDTO> getAllProducts(int productNo) {
         return recommendProductDAO.getAllProducts(productNo); //제품 태그 넣을 예정
     }
@@ -67,7 +69,7 @@ public class RecommendProductService {
             productFilterDTO.setGpu(gpuValues); //gpu태그 설정
         } else if (mainOption.equals("작업 할거에요")) { // key 값이 사무용일 시 cpu 중심
             String cpu = curationDTO.getCpu(); // 사용 목적 (코드 작업, AI 작업)
-            List<String>cpuValues = getCpuTags(cpu);
+            List<String> cpuValues = getCpuTags(cpu);
             productFilterDTO.setCpu(cpuValues);
 //        }else if (mainOption.equals("문서나 인강 볼거에요")){
 //            String internet = curationDTO.getInternet();
@@ -109,6 +111,7 @@ public class RecommendProductService {
 
         return productFilterDTO;
     }
+
     private List<String> getsomoWeight(String somoweight) {
         log.info("무게 태그 설정 시작. 무게: {}", somoweight);
         if (somoweight == null) {
@@ -140,7 +143,8 @@ public class RecommendProductService {
                 return List.of();
         }
     }
-// 게임 타입에 따라 gpu태그를 반환
+
+    // 게임 타입에 따라 gpu태그를 반환
     private List<String> getGpuTags(String gameType) {
         //게임 타입이 null이면 빈 리스트 반환
         if (gameType == null) {
@@ -164,7 +168,8 @@ public class RecommendProductService {
                 return List.of();
         }
     }
-//사용 목적에 따라 cpu 태그를 반환
+
+    //사용 목적에 따라 cpu 태그를 반환
     private List<String> getCpuTags(String purpose) {
         //사용 목적이 null이면 빈 리스트 반환
         if (purpose == null) {
@@ -211,112 +216,46 @@ public class RecommendProductService {
 //    }
 
 
-////성능에 따라 가격 범위를 반환
-private List<String> getGamingTags(String gameperformance) {
-    log.info("게이밍 성능/가격 태그 설정 시작. 선택된 성능: {}", gameperformance);
-    if (gameperformance == null) {
-        return List.of();
-    }
-    switch (gameperformance) {
-        case "성능용":
-            return List.of("사무용 고성능");
-
-        case "타협":
-            return List.of("사무용 착한 가격");
-        case "밸런스용":
-            return List.of("사무용 가성비");
-        default:
+    ////성능에 따라 가격 범위를 반환
+    private List<String> getGamingTags(String gameperformance) {
+        log.info("게이밍 성능/가격 태그 설정 시작. 선택된 성능: {}", gameperformance);
+        if (gameperformance == null) {
             return List.of();
-    }
-}
+        }
+        switch (gameperformance) {
+            case "성능용":
+                return List.of("사무용 고성능");
 
-//    private int[] getGameperformance(String gameperformance) {
-//        if (gameperformance == null) {
-//            return new int[]{0, Integer.MAX_VALUE};
-//        }
-//        switch (gameperformance) {
-//            case "성능용":
-//                return new int[]{2000000, Integer.MAX_VALUE};  // 150만원 이상
-//            case "타협":
-//                return new int[]{1000000, 1400000};  // 70만원 ~ 150만원
-//            case "밸런스용":
-//                return new int[]{1500000, 2500000};  // 150만원 ~ 250만원
-//            default:
-//                return new int[]{0, Integer.MAX_VALUE};
-//        }
-//    }
+            case "타협":
+                return List.of("사무용 착한 가격");
+            case "밸런스용":
+                return List.of("사무용 가성비");
+            default:
+                return List.of();
+        }
+    }
 
     //화면 크기에 따라 태그를 반환
-        private List<String> getScreenTags (String screen) {
+    private List<String> getScreenTags(String screen) {
 
-            if (screen == null) {
+        if (screen == null) {
+            return List.of();
+        }
+
+        switch (screen) {
+            case "화면 넓은게 좋아요":
+                return List.of("넓은 화면");
+
+            case "적당한게 좋아요":
+                return List.of("적당한 화면");
+
+            case "작은 화면이 좋아요":
+                return List.of("작은 화면");
+            default:
                 return List.of();
-            }
-
-            switch (screen) {
-                case "화면 넓은게 좋아요":
-                    return List.of("넓은 화면");
-
-                case "적당한게 좋아요":
-                    return List.of("적당한 화면");
-
-                case "작은 화면이 좋아요":
-                    return List.of("작은 화면");
-                default:
-                    return List.of();
-            }
-
-
         }
 
 
-//    private List<String> getBatteryTag(String batteryTag) {
-//        if (batteryTag == null) {
-//            return List.of();
-//        }
-//
-//        // "WH" 제거 및 소문자 "wh" 고려
-//        String numericPart = batteryTag.replaceAll("(?i)Wh$", "").trim();
-//
-//        try {
-//            double batteryCapacity = Double.parseDouble(numericPart);
-//
-//            if (batteryCapacity >= 70.0 && batteryCapacity <= 99.9) {
-//                return List.of("70Wh~99.9Wh");
-//            } else if (batteryCapacity >= 30.0 && batteryCapacity <= 68.0) {
-//                return List.of("30Wh~68Wh");
-//            } else {
-//                return List.of();
-//            }
-//        } catch (NumberFormatException e) {
-//            // 숫자로 변환할 수 없는 경우 처리
-//            return List.of();
-        }
-//    }
-//    }
-//}
-//
-//    private String getBatteryTag(String priority) {
-//        return "무게를 우선해주세요".equals(priority) ? "짧은 배터리" : "오래 가는 배터리";
-//    }
-//
-//    private String getDesignTag(String priority) {
-//        return "화면을 우선해 주세요".equals(priority) ? "예쁜 디자인" : null;
-//    }
-//
-//    private String getScreenSizeTag(String screen) {
-//        if (screen == null) {
-//            return null;
-//        }
-//        switch (screen) {
-//            case "화면 넓은게 좋아요":
-//                return "17인치 이상";
-//            case "적당한게 좋아요":
-//                return "15인치";
-//            case "알아서":
-//                return "13인치 이하";
-//            default:
-//                return null;
-//        }
+    }
 
-//}
+}
