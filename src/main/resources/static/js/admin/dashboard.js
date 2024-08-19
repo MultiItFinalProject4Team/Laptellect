@@ -318,3 +318,15 @@ function openQuestionModal(question) {
             });
           }
         }
+
+    function openQuestion(){
+        const questionId = document.getElementById('modalQuestionNumber').textContent;
+        const questionType = document.getElementById('modalQuestionType').textContent;
+        console.log(questionId+"로이동");
+        console.log(questionType);
+        if(questionType==='1:1 문의'){
+            window.location.href = `/customer/user/personalq_detail/${questionId}`;
+        }else if(questionType==='상품 문의'){
+            window.location.href = `/customer/user/productq_detail/${questionId}`;
+        }
+    }

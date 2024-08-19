@@ -384,7 +384,9 @@
     </select>
 
     <select id="getNoticeList" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
-        select * from notice
+        SELECT *
+        FROM notice
+        ORDER BY main_regist = 'Y' DESC, created_at desc;
     </select>
 
     <select id="getnotice" resultType="com.multi.laptellect.customer.dto.NoticeListDto">
