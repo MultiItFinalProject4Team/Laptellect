@@ -7,8 +7,7 @@ public class AdminDashboardDTO {
     private String date;
     private int visitCount;
     private int saleCount;
-    private int userCount;
-    private int signupCount;
+    private int newMemberCount;
     private int reviewCount;
-    private int inquireCount;
+    private int inquiryCount;
 }

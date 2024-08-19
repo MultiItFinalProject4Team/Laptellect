@@ -1,7 +1,9 @@
 package com.multi.laptellect.admin.member.service;
 
 import com.multi.laptellect.admin.member.model.dto.AdminMemberDTO;
+import com.multi.laptellect.admin.model.dto.LoginLog;
 import com.multi.laptellect.common.model.PagebleDTO;
+import com.multi.laptellect.member.model.dto.MemberDTO;
 import org.springframework.data.domain.Page;
 
 /**
@@ -17,5 +19,11 @@ public interface AdminMemberService {
 
     Page<AdminMemberDTO> getMemberList(PagebleDTO pagebleDTO) throws Exception;
 
+
+    int deleteMember(int memberNo) throws Exception;
+
+    MemberDTO findMemberByMemberNo(int memberNo) throws Exception;
+
+    LoginLog findLoginLogByMemberNo(int memberNo) throws Exception;
 
 }

@@ -3,15 +3,13 @@ package com.multi.laptellect.admin.service;
 import com.multi.laptellect.admin.model.dao.AdminDAO;
 import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
 import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
+import com.multi.laptellect.admin.model.dto.AdminQuestionDTO;
 import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class AdminService {
@@ -42,31 +40,65 @@ public class AdminService {
 
     public List<AdminDashboardDTO> getLastSevenDaysSales() {
         List<AdminDashboardDTO> salesData = adminDAO.getLastSevenDaysSales();
+        List<AdminDashboardDTO> visitsData = adminDAO.getLastSevenDaysVisits();
 
-        Map<LocalDate, AdminDashboardDTO> salesMap = salesData.stream()
-                .collect(Collectors.toMap(
-                        dto -> LocalDate.parse(dto.getDate()),
-                        dto -> dto
-                ));
+        Map<String, AdminDashboardDTO> resultMap = new HashMap<>();
 
-        List<AdminDashboardDTO> result = new ArrayList<>();
+        for (AdminDashboardDTO sale : salesData) {
+            resultMap.put(sale.getDate(), sale);
+        }
+
+        for (AdminDashboardDTO visit : visitsData) {
+            AdminDashboardDTO dto = resultMap.get(visit.getDate());
+            if (dto != null) {
+                dto.setVisitCount(visit.getVisitCount());
+            } else {
+                resultMap.put(visit.getDate(), visit);
+            }
+        }
+
+        List<AdminDashboardDTO> result = new ArrayList<>(resultMap.values());
+        Collections.sort(result, Comparator.comparing(AdminDashboardDTO::getDate));
+
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
 
+        List<AdminDashboardDTO> finalResult = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {
             LocalDate date = today.minusDays(i);
-            AdminDashboardDTO dto = salesMap.getOrDefault(date, new AdminDashboardDTO());
-            dto.setDate(date.format(formatter));
-            dto.setSaleCount(dto.getSaleCount());
-            dto.setVisitCount(0); // 방문자 수는 현재 구현되어 있지 않으므로 0으로 설정
-            result.add(dto);
+            String formattedDate = date.format(formatter);
+            AdminDashboardDTO adminDashboardDTO = resultMap.getOrDefault(formattedDate, new AdminDashboardDTO());
+            adminDashboardDTO.setDate(formattedDate);
+            if (adminDashboardDTO.getSaleCount() == 0) {
+                adminDashboardDTO.setSaleCount(0);
+            }
+            if (adminDashboardDTO.getVisitCount() == 0) {
+                adminDashboardDTO.setVisitCount(0);
+            }
+            finalResult.add(adminDashboardDTO);
         }
 
-        return result;
+        // 오늘의 추가 데이터 가져오기
+        AdminDashboardDTO todayData = adminDAO.getTodayStats();
+
+        // 결과의 마지막 항목(오늘)에 추가 데이터 설정
+        if (!finalResult.isEmpty()) {
+            AdminDashboardDTO todayDTO = finalResult.get(finalResult.size() - 1);
+            todayDTO.setNewMemberCount(todayData.getNewMemberCount());
+            todayDTO.setReviewCount(todayData.getReviewCount());
+            todayDTO.setInquiryCount(todayData.getInquiryCount());
+        }
+
+        return finalResult;
     }
 
     public List<AdminReviewDTO> getRecentReviews(int limit) {
         return adminDAO.getRecentReviews(limit);
+    }
+
+
+    public List<AdminQuestionDTO> getRecentQuestions(int limit) {
+        return adminDAO.getRecentQuestions(limit);
     }
 
 

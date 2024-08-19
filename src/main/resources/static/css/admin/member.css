@@ -4,7 +4,6 @@
   height: calc(100vh - 100px);
 }
 
-
 .search-group {
   display: flex;
   gap: 10px;
@@ -179,4 +178,12 @@ th, td {
   color: #333;
   font-size: 24px
   }
+
+.modal { z-index: 1050; }
+.modal-backdrop { z-index: 1040; }
+
+.nav-tabs { display: flex; width: 100%;}
+.nav-item { flex: 1; text-align: center; }
+.nav-link { width: 100%; }
+
   body { font-family: 'Noto Sans KR', sans-serif; }

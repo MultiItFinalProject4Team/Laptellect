@@ -3,7 +3,13 @@ spring:
     import:
       - api.yml
       - database.yml
-
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  thymeleaf:
+    cache: false
 
 server:
   port: 8099

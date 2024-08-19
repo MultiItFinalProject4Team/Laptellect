@@ -38,6 +38,7 @@
 
     <!-- css + js 파일 Load-->
       <link rel="stylesheet" th:href="@{/css/common.css}"/>
+      <script type="text/javascript" th:src="@{/js/auth/signin.js}"></script>
       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -204,13 +205,13 @@
                 <h3 class="modal-title w-100 text-center" id="loginModalLabel" style="color: #3498DB;">Laptellect</h3>
                 <br> <br>
                 <div class="image-container">
-                    <a href="/signin/kakao">
+                    <a href="#" id="kakao-login">
                         <img th:src="@{/img/common/kakao-talk-icon.png}" alt="Image 1" class="img-fluid mb-2 modal-img">
                         <div>카카오</div>
                     </a>
                 </div>
                 <div class="image-container">
-                    <a href="/signin/google">
+                    <a href="#" id="google-login">
                         <img th:src="@{/img/common/google-icon.png}" alt="Image 2" class="img-fluid mb-2 modal-img">
                         <div>구글</div>
                     </a>
@@ -224,7 +225,7 @@
 
                 <br> <br>
                 <div>
-                    <button type="button" onclick="location.href='/signup/seller'" class="btn btn-primary w-100">판매자 회원 가입</button>
+                    <button type="button" onclick="location.href='/signup/seller'" class="btn btn-primary w-100" disabled>판매자 회원 가입</button>
                 </div>
               </ul>
             </div>
