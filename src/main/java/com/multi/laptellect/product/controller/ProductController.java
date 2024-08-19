@@ -10,6 +10,7 @@ import com.multi.laptellect.payment.service.PaymentService;
 import com.multi.laptellect.product.model.dto.KeyBoardSpecDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
+import com.multi.laptellect.product.model.dto.mouse.MouseSpecDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
@@ -180,21 +181,132 @@ public class ProductController {
 
     @GetMapping("/keyboard/keyboardDetails")
     public String productKeyboardDetails(@RequestParam(name = "productNo") int productNo,
-                                 Model model) {
+                                         Model model) throws Exception {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
-        //customer 문의 부분
-        List<ProductqList> productqList = customerService.getAllProductqList(productNo);
-        model.addAttribute("productqList",productqList);
+
+        // 장바구니 및 위시리스트 변수 선언
+        ArrayList<Integer> carts = new ArrayList<>();
+        ArrayList<Integer> wishlist = new ArrayList<>();
+        PaymentDTO paymentDTO = new PaymentDTO();
+        int memberNo = 0;
+        String memberName = "";
+
+        try {
+            if (SecurityUtil.isAuthenticated()) {
+
+                if (cartService.getCartList() != null) {
+                    ArrayList<ProductDTO> cartInfo = cartService.getCartList().getProducts();
+                    for (ProductDTO cartProduct : cartInfo) {
+                        int productNo2 = cartProduct.getProductNo();
+                        carts.add(productNo2);
+                    }
+                }
+
+                wishlist = productService.getWishlistString();
+                paymentDTO = paymentService.selectOrderItems(SecurityUtil.getUserNo(), productNo);
+                memberNo = SecurityUtil.getUserNo();
+                memberName = SecurityUtil.getUserDetails().getMemberName();
+            }
+            model.addAttribute("carts", carts);
+            model.addAttribute("wishlist", wishlist);
 
 
-        // 제품 상세 정보 가져오기
-        KeyBoardSpecDTO keyboard = productService.getKeyboardProductDetails(productNo);
+            //customer 문의 부분
+            List<ProductqList> productqList = customerService.getAllProductqList(productNo);
+            model.addAttribute("productqList", productqList);
+            model.addAttribute("memberName", memberName);
+            model.addAttribute("memberNo", memberNo);
 
-        model.addAttribute("productNo",keyboard.getProductNo());
-        model.addAttribute("keyboard", keyboard);
+            // 제품 상세 정보 가져오기
+            KeyBoardSpecDTO keyboard = productService.getKeyboardProductDetails(productNo);
+
+            log.info("키보드 조회 목록 = {}",keyboard);
+
+            model.addAttribute("productNo", keyboard.getProductNo());
+            model.addAttribute("keyboard", keyboard);
+        } catch (Exception e) {
+            log.error("상품 상세 조회 에러 = ", e);
+        }
+
+
+        ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
+        List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+
+
+        model.addAttribute("paymentDTO", paymentDTO);
+        model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
+        model.addAttribute("productDTO", productDTO);
+        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("memberName", memberName);
 
         return "product/keyboard/keyboardDetails";
+    }
+
+
+    @GetMapping("/mouse/mouseDetails")
+    public String productMouseDetails(@RequestParam(name = "productNo") int productNo,
+                                         Model model)throws Exception  {
+
+        // 장바구니 및 위시리스트 변수 선언
+        ArrayList<Integer> carts = new ArrayList<>();
+        ArrayList<Integer> wishlist = new ArrayList<>();
+        PaymentDTO paymentDTO = new PaymentDTO();
+        int memberNo = 0;
+        String memberName = "";
+
+        try {
+            if (SecurityUtil.isAuthenticated()) {
+
+                if (cartService.getCartList() != null) {
+                    ArrayList<ProductDTO> cartInfo = cartService.getCartList().getProducts();
+                    for (ProductDTO cartProduct : cartInfo) {
+                        int productNo2 = cartProduct.getProductNo();
+                        carts.add(productNo2);
+                    }
+                }
+
+                wishlist = productService.getWishlistString();
+                paymentDTO = paymentService.selectOrderItems(SecurityUtil.getUserNo(), productNo);
+                memberNo = SecurityUtil.getUserNo();
+                memberName = SecurityUtil.getUserDetails().getMemberName();
+            }
+            model.addAttribute("carts", carts);
+            model.addAttribute("wishlist", wishlist);
+
+
+            //customer 문의 부분
+            List<ProductqList> productqList = customerService.getAllProductqList(productNo);
+            model.addAttribute("productqList", productqList);
+            model.addAttribute("memberName", memberName);
+            model.addAttribute("memberNo", memberNo);
+
+
+
+            // 제품 상세 정보 가져오기
+
+        MouseSpecDTO mouse = productService.getMouseProductDetails(productNo);
+
+            log.info("마우스 조회 목록 = {}",mouse);
+
+        model.addAttribute("productNo",mouse.getProductNo());
+        model.addAttribute("mouse", mouse);
+    } catch (Exception e) {
+        log.error("상품 상세 조회 에러 = ", e);
+    }
+
+
+        ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
+        List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+
+
+        model.addAttribute("paymentDTO", paymentDTO);
+        model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
+        model.addAttribute("productDTO", productDTO);
+        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("memberName", memberName);
+
+        return "product/mouse/mouseDetails";
     }
 
     @GetMapping("/review")

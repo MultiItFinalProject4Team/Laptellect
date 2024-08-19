@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.laptellect.product.model.mapper.ProductMapper">
 
+
     <resultMap id="productResultMap" type="productDTO">
         <result property="productNo" column="product_no"/>
         <result property="typeNo" column="type_no"/>
@@ -60,6 +61,8 @@
         ORDER BY p.product_no
 
     </select>
+
+
 
     <select id="checkSpecExists"  parameterType="map" resultType="int" >
         SELECT COUNT(*)
@@ -236,6 +239,14 @@
         WHERE p.product_name LIKE CONCAT('%', #{keyword}, '%')
         AND p.type_no = #{typeNo}
     </select>
+
+    <select id="countAllProduct" resultType="long">
+        SELECT COUNT(*)
+        FROM product p
+        WHERE p.product_name LIKE CONCAT('%', #{keyword}, '%')
+        AND p.type_no = #{typeNo}
+    </select>
+
 
     <!--리뷰 저장-->
     <insert id="inputReviewDate" parameterType="reviewDTO">

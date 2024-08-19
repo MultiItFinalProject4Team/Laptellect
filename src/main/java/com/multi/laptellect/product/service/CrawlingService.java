@@ -591,11 +591,11 @@ public class CrawlingService {
 
         Map<String, List<String>> categoryMap = new LinkedHashMap<>();
 
-        categoryMap.put("MBI", Arrays.asList("제조사(마우스)", "등록월(마우스)", "연결 방식", "연결 방식", "무선 연결", "인터페이스"));
-        categoryMap.put("MB", Arrays.asList("최대 감도(DPI)", "응답속도", "센서", "스위치 방식", "마우스 형태"));
+        categoryMap.put("MBI", Arrays.asList("제조사(마우스)", "등록월(마우스)", "연결 방식", "무선 연결(M)", "인터페이스(M)"));
+        categoryMap.put("MB", Arrays.asList("최대 감도(DPI)", "응답속도(M)", "센서", "스위치 방식(M)", "마우스 형태"));
         categoryMap.put("MD", Arrays.asList("무한휠 지원", "스위치", "마우스 코팅"));
         categoryMap.put("MF", Arrays.asList("멀티페어링", "매크로", "소프트웨어 지원"));
-        categoryMap.put("MDW", Arrays.asList("가로", "세로", "높이", "무게"));
+        categoryMap.put("MDW", Arrays.asList("가로(M)", "세로(M)", "높이(M)", "무게(M)"));
 
         int categoryCount = 0;
 

@@ -109,8 +109,16 @@
             e.preventDefault();
             typeNo = $(this).data('type-no');
             currentPage = 0;
+
             $(".product-link").removeClass("active");
             $(this).addClass("active");
+
+            if (typeNo === 1) { // 노트북 탭에서만 필터 폼을 보이게 하는 예시
+                $("#filterForm").show();
+            } else {
+                $("#filterForm").hide();
+            }
+
             searchProducts();
         });
 
@@ -154,7 +162,7 @@
         color: white;
         border: none;
         border-radius: 5px;
-        padding: 10px 20px;
+        padding: 5.4px 20px;
         font-size: 0.8rem;
         cursor: pointer;
         transition: background-color 0.3s ease;
@@ -283,8 +291,7 @@
                         <input type="number" id="site-search1" name="min" style="width: 100px;" />
                         ~
                         <input type="number" id="site-search2" name="max" style="width: 100px;" />
-                        <button type="button" id="priceSearch" name="prices" class="btn-custom-price">검색</button>
-                    </div>
+                        <button type="button" id="priceSearch" name="prices" class="btn-custom-price ms-2" style="position: relative; top: -2px;">검색</button>                    </div>
                 </div>
             </td>
         </tr>

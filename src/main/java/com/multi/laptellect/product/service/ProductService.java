@@ -2,6 +2,7 @@ package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
+import com.multi.laptellect.product.model.dto.mouse.MouseSpecDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -56,6 +57,8 @@ public interface ProductService {
 
 
     KeyBoardSpecDTO getKeyboardProductDetails(int productNo);
+
+    MouseSpecDTO getMouseProductDetails(int productNo);
 
 
     /**
@@ -119,5 +122,6 @@ public interface ProductService {
     Map<String, List<String>> productFilterSearch();
 
     int updateProductVisit(String productNo, int visitCount) throws Exception;
+
 
 }

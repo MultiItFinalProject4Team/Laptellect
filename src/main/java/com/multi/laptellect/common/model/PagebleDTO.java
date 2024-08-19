@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @Data
 public class PagebleDTO implements Pageable {
+
     // 페이징을 위한 기본 변수
     private int page = 0; // 페이지 번호
 

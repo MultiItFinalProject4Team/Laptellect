@@ -94,4 +94,8 @@ public class CustomUserDetails implements UserDetails, Serializable {
     public String getIsActive() {
         return memberDTO.getIsActive();
     }
+
+    public String getRole() {
+        return memberDTO.getRole();
+    }
 }

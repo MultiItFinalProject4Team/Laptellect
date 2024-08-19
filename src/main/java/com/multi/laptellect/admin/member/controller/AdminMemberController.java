@@ -68,6 +68,7 @@ public class AdminMemberController {
             model.addAttribute("size", size);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
+
         } catch (Exception e) {
             log.error("어드민 멤버 내역 전체 조회 실패");
         }
@@ -75,17 +76,17 @@ public class AdminMemberController {
         return "/admin/member/member-list";
     }
 
-    @PostMapping("/selectMember")
-    public String selectMember(@RequestParam(name = "memberNo") int memberNo, Model model) {
+    @PostMapping("/member-info")
+    public String getMember(@RequestParam(name = "memberNo") int memberNo, Model model) {
         try {
             MemberDTO member = adminMemberService.findMemberByMemberNo(memberNo);
             LoginLog loginLog = adminMemberService.findLoginLogByMemberNo(memberNo);
-            model.addAttribute("member", member);
+            model.addAttribute("userInfo", member);
             model.addAttribute("loginLog", loginLog);
         } catch (Exception e) {
             log.info("멤버 조회 실패 = {}", memberNo);
         }
-        return "/admin/member/member-modal";
+        return "/admin/member/member-info";
     }
 
     @ResponseBody

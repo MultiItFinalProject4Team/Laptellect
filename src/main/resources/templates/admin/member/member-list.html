@@ -15,15 +15,15 @@
                 </thead>
                 <tbody>
                         <tr th:each="member, loop : ${ members }">
-                                <th><a href="#" th:text="${ page * size + loop.index + 1 }" scope="row"></a></th>
-                                <td><a href="#" th:text="${ member.memberName }" data-bs-toggle="modal" data-bs-target="#memberModal"></a></td>
-                                <td th:text="${ member.email }"></td>
-                                <td th:text="${ member.nickName }"></td>
+                                <th th:text="${ page * size + loop.index + 1 }" scope="row"></th>
+                                <td><a href="#" th:text="${ member.memberName }" class="btn-modal" data-bs-toggle="modal" data-bs-target="#memberModal" th:data-memberno="${ member.memberNo }"></a></td>
+                                <td th:text="${ member.email != null ? member.email : '정보 없음'}"></td>
+                                <td th:text="${ member.nickName != null ? member.nickName : '정보 없음'}"></td>
                                 <td th:text="${ member.loginType }"></td>
-                                <td th:text="${ member.tel }"></td>
-                                <td th:text="${ member.createdAt }"></td>
-                                <td th:text="${ member.isActive }"></td>
-                                <td th:text="${ member.isActiveAt }"></td>
+                                <td th:text="${ member.tel != null ? member.tel : '정보 없음'}"></td>
+                                <td th:text="${#dates.format(member.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                                <td th:text="${ member.isActive == 'Y' ? '탈퇴 회원' : (member.isActive == 'N' ? '활동 회원' : '정보 없음') }"></td>
+                                <td th:text="${#dates.format(member.isActiveAt, 'yyyy-MM-dd HH:mm') != null ? #dates.format(member.isActiveAt, 'yyyy-MM-dd HH:mm') : '정보 없음'}"></td>
                         </tr>
                 </tbody>
         </table>

@@ -50,4 +50,20 @@ $(document).ready(function () {
     $("#endDate").val(setEndDate());
 
     loadList(0);
+
+    $(document).on("click", ".btn-modal", function () {
+        let memberNo = $(this).data("memberno");
+        console.log(memberNo);
+        
+        $.ajax({
+            url: "/admin/member/member-info",
+            type: "POST",
+            data: { memberNo: memberNo },
+            success: function (response) {
+                console.log("사용자 정보 로드 완료");
+                $("#myTabContent").html(response);
+            },
+            error: function() { console.log("사용자 정보 로드 실패"); }
+        })
+    });
 });
