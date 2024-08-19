@@ -103,10 +103,9 @@
                 $('#review-tab').addClass('active');
                 $('#review-box').addClass('show active');
 
-                $('#custmer-review-box')[0].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                $('html, body').animate({
+                    scrollTop: $('#custmer-review-box').offset().top
+                }, 250);
             });
 
             // 위시리스트 추가/삭제
