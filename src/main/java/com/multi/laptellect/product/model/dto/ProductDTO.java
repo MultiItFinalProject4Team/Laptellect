@@ -25,6 +25,7 @@ public class ProductDTO {
     private int totalPrice;
     private String url;
     private String optionValue;
+    private List<String> tags;
 
     public int getTotalPrice() {
         return this.price * this.quantity;

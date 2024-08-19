@@ -5,6 +5,7 @@ import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
 import com.multi.laptellect.recommend.laptop.model.dto.CurationDTO;
 import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -31,24 +32,15 @@ public class RecommendationController {
     }
 
     @PostMapping("/recommendpage")
-    public String getRecommendations(CurationDTO curationDTO, Model model) {
+    public String getRecommendations(CurationDTO curationDTO, Model model, HttpSession session) {
         log.info("사용자 선택지 값 = {}", curationDTO);
         try {
             ArrayList<LaptopSpecDTO> recommendations = recommendProductService.getRecommendations(curationDTO);
-            Map<Integer, List<TaggDTO>> productTags = new HashMap<>();
-            Map<Integer, String> sentiments = new HashMap<>();
+            String cacheKey = recommendProductService.saveCurationResult(curationDTO, recommendations);
 
-            for (LaptopSpecDTO laptop : recommendations) {
-                int productNo = laptop.getProductNo();
-                List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
-                productTags.put(productNo, tags);
-                String sentiment = emotionAnalyzeService.analyzeSentiment(productNo);
-                sentiments.put(productNo, sentiment);
-            }
+            session.setAttribute("lastCurationKey", cacheKey);
 
-            model.addAttribute("recommendations", recommendations);
-            model.addAttribute("productTags", productTags);
-            model.addAttribute("sentiments", sentiments);
+            addRecommendationsToModel(recommendations, model);
             return "recommend/recommendpage";
         } catch (Exception e) {
             log.error("에러 발생", e);
@@ -56,15 +48,34 @@ public class RecommendationController {
             return "error";
         }
     }
-//    @PostMapping("/productList") //어떻게 해야할까
-//    public String getProductList(Model model) {
-//        try {
-//            ArrayList<LaptopSpecDTO> products = recommendProductService.getAllProducts();
-//            model.addAttribute("products", products);
-//            return "recommend/productList";
-//        } catch (Exception e) {
-//            log.error("에러 발생", e);
-//            model.addAttribute("에러", "에러 밸상.");
-//            return "에러";
-//        }
+
+    @GetMapping("/recommendpage")
+    public String getLastRecommendations(Model model, HttpSession session) {
+        String cacheKey = (String) session.getAttribute("lastCurationKey");
+        if (cacheKey != null) {
+            ArrayList<LaptopSpecDTO> recommendations = recommendProductService.getCachedCurationResult(cacheKey);
+            if (recommendations != null) {
+                addRecommendationsToModel(recommendations, model);
+                return "recommend/recommendpage";
+            }
+        }
+        return "redirect:/recommend";
     }
+
+    private void addRecommendationsToModel(ArrayList<LaptopSpecDTO> recommendations, Model model) {
+        Map<Integer, List<TaggDTO>> productTags = new HashMap<>();
+        Map<Integer, String> sentiments = new HashMap<>();
+
+        for (LaptopSpecDTO laptop : recommendations) {
+            int productNo = laptop.getProductNo();
+            List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
+            productTags.put(productNo, tags);
+            String sentiment = emotionAnalyzeService.analyzeSentiment(productNo);
+            sentiments.put(productNo, sentiment);
+        }
+
+        model.addAttribute("recommendations", recommendations);
+        model.addAttribute("productTags", productTags);
+        model.addAttribute("sentiments", sentiments);
+    }
+}

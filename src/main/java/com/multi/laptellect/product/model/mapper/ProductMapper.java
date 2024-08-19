@@ -1,7 +1,6 @@
 package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.*;
-import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +16,7 @@ public interface ProductMapper {
     int countByProductCode(int productNo); //상품코드 계수
 
 
-    List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo);
+    List<ProductDTO> getProductsByType(@Param("typeNo") Integer typeNo);
 
 
     int getTotalProducts();
@@ -39,12 +38,12 @@ public interface ProductMapper {
     @Select("SELECT * FROM product WHERE type_no = #{ typeNo }")
     List<ProductDTO> findProductsByType(@Param("typeNo") int typeNo);
 
-    List<ProductDTO> getReviewRequired ();
+    List<ProductDTO> getReviewRequired();
 
     List<LaptopDetailsDTO> laptopProductDetails(int productNo);
 
 
-    int checkSpecExists(@Param("productNo") int productNo,@Param("category")String category,@Param("specValue") String specValue);
+    int checkSpecExists(@Param("productNo") int productNo, @Param("category") String category, @Param("specValue") String specValue);
 
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
@@ -69,7 +68,7 @@ public interface ProductMapper {
 
     @Select("SELECT COUNT(*) FROM wishlist WHERE member_no = #{ memberNo }")
     int countAllWishlistByMemberNo(int memberNo);
-    
+
     ProductDTO findProductByProductNo(String productNo);
 
     long countBySearchCriteria(ProductSearchDTO searchDTO);
@@ -84,14 +83,14 @@ public interface ProductMapper {
 
     @Delete("DELETE FROM product WHERE product_no = #{ productNo }")
     void deleteproduct(@Param("productNo") String productNo);
-    
+
 
     @Update("UPDATE product SET view_count = view_count + #{ visitCount }, updated_at = updated_at WHERE product_no = #{ productNo }")
     int updateProductVisit(@Param("productNo") String productNo, @Param("visitCount") int visitCount);
 
 
-    @Select("SELECT pt.tag_no, lt.tag_data FROM machine_tagkey pt JOIN laptop_tag lt ON pt.tag_no = lt.tag_no WHERE pt.product_no = #{productNo}")
-    List<TaggDTO> getTagsForProduct(@Param("productNo") int productNo);
+    @Select("SELECT p.*, GROUP_CONCAT(lt.tag_data) as tags " + "FROM product p " + "LEFT JOIN machine_tagkey mt ON p.product_no = mt.product_no " + "LEFT JOIN laptop_tag lt ON mt.tag_no = lt.tag_no " + "WHERE p.type_no = #{typeNo} " + "GROUP BY p.product_no")
+    List<ProductDTO> getProductsByTypeWithTags(@Param("typeNo") Integer typeNo);
 
 
 }

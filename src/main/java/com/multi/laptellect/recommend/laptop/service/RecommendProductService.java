@@ -1,5 +1,7 @@
 package com.multi.laptellect.recommend.laptop.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multi.laptellect.product.model.dto.LaptopDetailsDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
@@ -7,13 +9,16 @@ import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
 import com.multi.laptellect.recommend.laptop.model.dto.CurationDTO;
 import com.multi.laptellect.recommend.laptop.model.dto.ProductFilterDTO;
+import com.multi.laptellect.recommend.service.RedisCacheService;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,38 +28,56 @@ public class RecommendProductService {
     private final ProductMapper productMapper; // 생성자 주입시 final // ProductMapper는 노트북 상세 정보를 담는다
     private final ProductService productService; // 생성자 주입시 final // ProductService는 노트북 스펙을 담는다
     private final RecommendProductDAO recommendProductDAO;
+    private final RedisCacheService redisCacheService;
+    private final ObjectMapper objectMapper;
 
     public ArrayList<LaptopSpecDTO> getRecommendations(CurationDTO curationDTO) {
-        //surveyResults는 사용자가 선택한 설문 결과를 담고 있는 맵
         ProductFilterDTO productFilterDTO = createSearchCriteria(curationDTO);
-        log.info("큐레이션 조건 분류 완료 = {} " + productFilterDTO);
+        log.info("큐레이션 조건 분류 완료 = {} ", productFilterDTO);
 
-
-        // 조건에 따라 Product_no를 반환
         ArrayList<Integer> productNos = recommendProductDAO.findLaptopDetailByFilter(productFilterDTO);
         log.info("추천 결과 맞는 제품 번호 = {}", productNos);
-        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>(); // 사용자에게 추천할 노트북 리스트 // 노트북 스펙을 담음
 
-        for (int productNo : productNos) {
-            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo); //노트북 상세 정보 조회
+        ArrayList<LaptopSpecDTO> laptop = new ArrayList<>();
 
-            log.info("상품 스펙 조회 = {}", laptopDetails); // 로그
+        for(int productNo : productNos) {
+            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNo);
+            log.info("상품 스펙 조회 = {}", laptopDetails);
 
-            if (!laptopDetails.isEmpty()) { //상세 정보 여부
-                laptop.add(productService.getLaptopSpec(productNo, laptopDetails)); //노트북 스팩을 담는다
-            } else {
-                return null;
+            if (!laptopDetails.isEmpty()) {
+                laptop.add(productService.getLaptopSpec(productNo, laptopDetails));
             }
         }
         return laptop;
     }
+    //JSON : 객체를 문자열로 변환하여 저장하고 다시 객체로 변환하여 사용할려고
+    //캐시에다 저장하고
+    public String saveCurationResult(CurationDTO curationDTO, ArrayList<LaptopSpecDTO> recommendations) {
+        String cacheKey = UUID.randomUUID().toString(); //랜덤 UUID만듬
+        try {
+            String jsonRecommendations = objectMapper.writeValueAsString(recommendations); //추천 결과를 JSON으로 직렬화
+            redisCacheService.setCurationResult(cacheKey, jsonRecommendations);//캐시에 저장
+        } catch (JsonProcessingException e) {
+            log.error("JSON 직렬화 오류", e);
+            return null;
+        }
+        return cacheKey;
+    }
+    //뒤로 가기시 캐시에 저장 된 걸 가져온다
+    public ArrayList<LaptopSpecDTO> getCachedCurationResult(String cacheKey) { //캐시키를 받아서 캐시된 추천 결과를 반환
+        String jsonRecommendations = (String) redisCacheService.getCurationResult(cacheKey);
+        if (jsonRecommendations != null) {
+            try {
+                return objectMapper.readValue(jsonRecommendations, new TypeReference<ArrayList<LaptopSpecDTO>>() {}); //JSON 역직렬화
+            } catch (JsonProcessingException e) {
+                log.error("JSON 역직렬화 오류", e);
+            }
+        }
+        return null;
+    }
 
     public List<TaggDTO> getTagsForProduct(int productNo) {
         return recommendProductDAO.getTagsForProduct(productNo);
-    }
-
-    public ArrayList<LaptopSpecDTO> getAllProducts(int productNo) {
-        return recommendProductDAO.getAllProducts(productNo); //제품 태그 넣을 예정
     }
 
     private ProductFilterDTO createSearchCriteria(CurationDTO curationDTO) {
@@ -69,7 +92,7 @@ public class RecommendProductService {
             productFilterDTO.setGpu(gpuValues); //gpu태그 설정
         } else if (mainOption.equals("작업 할거에요")) { // key 값이 사무용일 시 cpu 중심
             String cpu = curationDTO.getCpu(); // 사용 목적 (코드 작업, AI 작업)
-            List<String> cpuValues = getCpuTags(cpu);
+            List<String>cpuValues = getCpuTags(cpu);
             productFilterDTO.setCpu(cpuValues);
 //        }else if (mainOption.equals("문서나 인강 볼거에요")){
 //            String internet = curationDTO.getInternet();
@@ -111,7 +134,6 @@ public class RecommendProductService {
 
         return productFilterDTO;
     }
-
     private List<String> getsomoWeight(String somoweight) {
         log.info("무게 태그 설정 시작. 무게: {}", somoweight);
         if (somoweight == null) {
@@ -143,8 +165,7 @@ public class RecommendProductService {
                 return List.of();
         }
     }
-
-    // 게임 타입에 따라 gpu태그를 반환
+// 게임 타입에 따라 gpu태그를 반환
     private List<String> getGpuTags(String gameType) {
         //게임 타입이 null이면 빈 리스트 반환
         if (gameType == null) {
@@ -168,8 +189,7 @@ public class RecommendProductService {
                 return List.of();
         }
     }
-
-    //사용 목적에 따라 cpu 태그를 반환
+//사용 목적에 따라 cpu 태그를 반환
     private List<String> getCpuTags(String purpose) {
         //사용 목적이 null이면 빈 리스트 반환
         if (purpose == null) {
@@ -216,46 +236,112 @@ public class RecommendProductService {
 //    }
 
 
-    ////성능에 따라 가격 범위를 반환
-    private List<String> getGamingTags(String gameperformance) {
-        log.info("게이밍 성능/가격 태그 설정 시작. 선택된 성능: {}", gameperformance);
-        if (gameperformance == null) {
-            return List.of();
-        }
-        switch (gameperformance) {
-            case "성능용":
-                return List.of("사무용 고성능");
-
-            case "타협":
-                return List.of("사무용 착한 가격");
-            case "밸런스용":
-                return List.of("사무용 가성비");
-            default:
-                return List.of();
-        }
+////성능에 따라 가격 범위를 반환
+private List<String> getGamingTags(String gameperformance) {
+    log.info("게이밍 성능/가격 태그 설정 시작. 선택된 성능: {}", gameperformance);
+    if (gameperformance == null) {
+        return List.of();
     }
+    switch (gameperformance) {
+        case "성능용":
+            return List.of("사무용 고성능");
+
+        case "타협":
+            return List.of("사무용 착한 가격");
+        case "밸런스용":
+            return List.of("사무용 가성비");
+        default:
+            return List.of();
+    }
+}
+
+//    private int[] getGameperformance(String gameperformance) {
+//        if (gameperformance == null) {
+//            return new int[]{0, Integer.MAX_VALUE};
+//        }
+//        switch (gameperformance) {
+//            case "성능용":
+//                return new int[]{2000000, Integer.MAX_VALUE};  // 150만원 이상
+//            case "타협":
+//                return new int[]{1000000, 1400000};  // 70만원 ~ 150만원
+//            case "밸런스용":
+//                return new int[]{1500000, 2500000};  // 150만원 ~ 250만원
+//            default:
+//                return new int[]{0, Integer.MAX_VALUE};
+//        }
+//    }
 
     //화면 크기에 따라 태그를 반환
-    private List<String> getScreenTags(String screen) {
+        private List<String> getScreenTags (String screen) {
 
-        if (screen == null) {
-            return List.of();
-        }
-
-        switch (screen) {
-            case "화면 넓은게 좋아요":
-                return List.of("넓은 화면");
-
-            case "적당한게 좋아요":
-                return List.of("적당한 화면");
-
-            case "작은 화면이 좋아요":
-                return List.of("작은 화면");
-            default:
+            if (screen == null) {
                 return List.of();
+            }
+
+            switch (screen) {
+                case "화면 넓은게 좋아요":
+                    return List.of("넓은 화면");
+
+                case "적당한게 좋아요":
+                    return List.of("적당한 화면");
+
+                case "작은 화면이 좋아요":
+                    return List.of("작은 화면");
+                default:
+                    return List.of();
+            }
+
+
         }
 
 
-    }
+//    private List<String> getBatteryTag(String batteryTag) {
+//        if (batteryTag == null) {
+//            return List.of();
+//        }
+//
+//        // "WH" 제거 및 소문자 "wh" 고려
+//        String numericPart = batteryTag.replaceAll("(?i)Wh$", "").trim();
+//
+//        try {
+//            double batteryCapacity = Double.parseDouble(numericPart);
+//
+//            if (batteryCapacity >= 70.0 && batteryCapacity <= 99.9) {
+//                return List.of("70Wh~99.9Wh");
+//            } else if (batteryCapacity >= 30.0 && batteryCapacity <= 68.0) {
+//                return List.of("30Wh~68Wh");
+//            } else {
+//                return List.of();
+//            }
+//        } catch (NumberFormatException e) {
+//            // 숫자로 변환할 수 없는 경우 처리
+//            return List.of();
+        }
+//    }
+//    }
+//}
+//
+//    private String getBatteryTag(String priority) {
+//        return "무게를 우선해주세요".equals(priority) ? "짧은 배터리" : "오래 가는 배터리";
+//    }
+//
+//    private String getDesignTag(String priority) {
+//        return "화면을 우선해 주세요".equals(priority) ? "예쁜 디자인" : null;
+//    }
+//
+//    private String getScreenSizeTag(String screen) {
+//        if (screen == null) {
+//            return null;
+//        }
+//        switch (screen) {
+//            case "화면 넓은게 좋아요":
+//                return "17인치 이상";
+//            case "적당한게 좋아요":
+//                return "15인치";
+//            case "알아서":
+//                return "13인치 이하";
+//            default:
+//                return null;
+//        }
 
-}
+//}

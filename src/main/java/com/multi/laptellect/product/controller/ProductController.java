@@ -99,6 +99,9 @@ public class ProductController {
 
         Map<String, List<String>> cate = productService.productFilterSearch();
 
+        List<ProductDTO> products = productService.getStoredProducts(typeNo);
+        model.addAttribute("products", products);
+
 
 
         log.info("컨트롤러 cate 데이터 확인 = {}", cate);
