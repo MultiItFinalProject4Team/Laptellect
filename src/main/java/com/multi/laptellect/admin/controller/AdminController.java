@@ -60,9 +60,11 @@ public class AdminController {
         return adminService.getRecentReviews(20); // Get the 20 most recent reviews
     }
 
+
     @GetMapping("/recent-questions")
     @ResponseBody
     public List<AdminQuestionDTO> getRecentQuestions() {
         return adminService.getRecentQuestions(20); // Get the 20 most recent questions
     }
+
 }

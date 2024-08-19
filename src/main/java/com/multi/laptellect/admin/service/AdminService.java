@@ -96,8 +96,10 @@ public class AdminService {
         return adminDAO.getRecentReviews(limit);
     }
 
+
     public List<AdminQuestionDTO> getRecentQuestions(int limit) {
         return adminDAO.getRecentQuestions(limit);
     }
+
 
 }

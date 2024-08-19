@@ -151,6 +151,20 @@ public class ProductApiController {
                         break;
                     case 2: // 마우스
                         log.info("Mouse Get Spec = {}", searchDTO.getTypeNo());
+                        Set<String> neededOptions2 = Set.of("최대 감도(DPI)", "응답 속도(M)", "가로(M)", "세로(M)", "높이(M)", "무게(M)", "인터페이스(M)");
+                        List<SpecDTO> filteredSpecs2 = productService.filterSpecs(productNo, neededOptions2);
+                        productDTO.setSpecs(filteredSpecs2);
+                        log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs2);
+
+                        String specsString2 = filteredSpecs2.stream()
+                                .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
+                                .collect(Collectors.joining(" | "));
+
+                        productDTO.setSpecsString(specsString2);
+
+
+                        detailUrl = "/product/mouse/mouseDetails?productNo=" + productNo;
+                        productDTO.setUrl(detailUrl);
                         break;
                     case 3: // 키보드
                         log.info("keyboard Get Spec = {}", searchDTO.getTypeNo());
