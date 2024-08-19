@@ -16,14 +16,15 @@
     <header>
         <h1 align="left"style="font-size:40px">상품 문의</h1>
     </header>
+    <hr>
     <div>
         <p style="font-size: 15px; color: light-gray; line-height: 0;">질문</p>
         <h3 th:text="${productq.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</h3>
         <p th:text="${#dates.format(productq.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
         <div class="btn-group" aria-label="Small button group">
-            <a th:href="@{/customer/user/update_productq/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>
+<!--            <a th:href="@{/customer/user/update_productq/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 수정</a>-->
             <a th:href="@{/customer/user/delete_productq/{productqNo}/{productNo}(productqNo=${productq.productqNo}, productNo=${productq.productNo})}" th:if="${productq.answer=='N'}" class="btn bg-body-secondary">문의 삭제</a>
-            <a th:href="@{/customer/admin/update_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>
+<!--            <a th:href="@{/customer/admin/update_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 수정</a>-->
             <a th:href="@{/customer/admin/delete_producta/{productqNo}(productqNo=${productq.productqNo})}" th:if="${productq.answer=='Y'}" class="btn bg-body-secondary">답변 삭제</a>
         </div>
     </div>

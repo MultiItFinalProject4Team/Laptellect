@@ -73,6 +73,7 @@
                 <th>No</th>
                 <th>제목</th>
                 <th>답변 여부</th>
+                <th>작성자</th>
                 <th>작성일</th>
             </tr>
             </thead>
@@ -97,6 +98,7 @@
 
                 </td>
                 <td th:text="${each.answer=='Y'}?'답변 완료':'답변 대기'">답변 여부</td>
+                <td th:text="${each.memberName}">작성자</td>
                 <td th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>
             </tr>
             </tbody>

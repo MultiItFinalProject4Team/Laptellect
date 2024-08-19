@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
-    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <style>
         .file-input-wrapper {
             margin-bottom: 10px;
@@ -15,21 +13,11 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-5">
+<div class="container mt-2">
     <header>
-        <h1 align="center">고객센터</h1>
-        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_notice">공지사항</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
-            </li>
-        </ul>
+        <h1 align="left"style="font-size:40px">상품 문의 수정</h1>
     </header>
+    <hr>
     <form action="/customer/user/update_productq" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">
         <label class="input-group-text" for="title">제목:</label>
@@ -51,16 +39,6 @@
         <input type="hidden" id="productqNo" name="productqNo" th:value="${dto.productqNo}">
         <button type="submit">수정하기</button>
     </form>
-
-    <script type="importmap">
-        {
-            "imports": {
-                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.js",
-                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.2/"
-            }
-        }
-    </script>
-    <script type="module" src="/js/customer/ckeditor.js"></script>
     <script>
         $(document).ready(function() {
             var maxLength = 100;
