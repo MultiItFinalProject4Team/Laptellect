@@ -861,21 +861,27 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-
-    //상품 전체 조회
     @Override
     @Transactional
     public List<ProductDTO> getStoredProducts(Integer typeNo) {
-        List<ProductDTO> products = productMapper.getProductsByTypeWithTags(typeNo);
-
-        log.info("타입 {}에 대해 총 {}개의 제품을 조회", typeNo, products.size());
-
-        for (ProductDTO product : products) {
-            log.info("제품: {}, 태그: {}", product.getProductName(), product.getTags());
-        }
-
-        return products;
+        return productMapper.getProductsByType(typeNo);
     }
+
+
+    //상품 전체 조회
+//    @Override
+//    @Transactional
+//    public List<ProductDTO> getStoredProducts(Integer typeNo) {
+//        List<ProductDTO> products = productMapper.getProductsByTypeWithTags(typeNo);
+//
+//        log.info("타입 {}에 대해 총 {}개의 제품을 조회", typeNo, products.size());
+//
+//        for (ProductDTO product : products) {
+//            log.info("제품: {}, 태그: {}", product.getProductName(), product.getTags());
+//        }
+//
+//        return products;
+//    }
 
 
     @Override

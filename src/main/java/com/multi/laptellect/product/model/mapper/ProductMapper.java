@@ -89,8 +89,5 @@ public interface ProductMapper {
     int updateProductVisit(@Param("productNo") String productNo, @Param("visitCount") int visitCount);
 
 
-    @Select("SELECT p.*, GROUP_CONCAT(lt.tag_data) as tags " + "FROM product p " + "LEFT JOIN machine_tagkey mt ON p.product_no = mt.product_no " + "LEFT JOIN laptop_tag lt ON mt.tag_no = lt.tag_no " + "WHERE p.type_no = #{typeNo} " + "GROUP BY p.product_no")
-    List<ProductDTO> getProductsByTypeWithTags(@Param("typeNo") Integer typeNo);
-
 
 }

@@ -99,8 +99,8 @@ public class ProductController {
 
         Map<String, List<String>> cate = productService.productFilterSearch();
 
-        List<ProductDTO> products = productService.getStoredProducts(typeNo);
-        model.addAttribute("products", products);
+//        List<ProductDTO> products = productService.getStoredProducts(typeNo);
+//        model.addAttribute("products", products);
 
 
 
