@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.laptellect.product.model.mapper.ProductMapper">
 
-
     <resultMap id="productResultMap" type="productDTO">
         <result property="productNo" column="product_no"/>
         <result property="typeNo" column="type_no"/>
@@ -61,8 +60,6 @@
         ORDER BY p.product_no
 
     </select>
-
-
 
     <select id="checkSpecExists"  parameterType="map" resultType="int" >
         SELECT COUNT(*)
@@ -240,14 +237,6 @@
         AND p.type_no = #{typeNo}
     </select>
 
-    <select id="countAllProduct" resultType="long">
-        SELECT COUNT(*)
-        FROM product p
-        WHERE p.product_name LIKE CONCAT('%', #{keyword}, '%')
-        AND p.type_no = #{typeNo}
-    </select>
-
-
     <!--리뷰 저장-->
     <insert id="inputReviewDate" parameterType="reviewDTO">
         INSERT INTO review(product_no, rating, title, content)
@@ -286,7 +275,7 @@
         product
         WHERE =#{productNo}
     </delete>
-    
+
     <!--제품 카테고리를 옵션으로 조회-->
     <select id="findByOptions" parameterType="map" resultType="productCategoryDTO">
         SELECT *
@@ -385,7 +374,7 @@
             images img ON img.reference_code = p.reference_code
         WHERE
             p.product_no = #{ productNo }
-         limit 1
+         limit 1;
     </select>
 
     <select id="findProductSpecByProductNo">
@@ -400,5 +389,4 @@
             #{ options }
         </foreach>
     </select>
-
 </mapper>
