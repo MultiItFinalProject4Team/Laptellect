@@ -3,16 +3,14 @@ package com.multi.laptellect.admin.product.controller;
 import com.multi.laptellect.admin.product.service.AdminProductService;
 import com.multi.laptellect.common.model.PagebleDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
+import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Please explain the class!!
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminProductController {
     private final AdminProductService adminProductService;
+    private final ProductService productService;
 
 
     @GetMapping("/product/product_manage")
@@ -41,6 +40,7 @@ public class AdminProductController {
         try {
 
             Page<ProductDTO> products = adminProductService.getProductList(pagebleDTO);
+
 
             log.info("어드민페이지 = {}", products);
             int page = products.getPageable().getPageNumber();
@@ -64,4 +64,6 @@ public class AdminProductController {
 
         return "admin/product/product_list";
     }
+
+
 }
