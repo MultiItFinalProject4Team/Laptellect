@@ -92,16 +92,28 @@
 
     <select id="getLastSevenDaysSales" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
         SELECT
-        DATE(created_at) as date,
+        DATE_FORMAT(created_at, '%m-%d') as date,
         COUNT(*) as saleCount
         FROM
         payment
         WHERE
         created_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
         GROUP BY
-        DATE(created_at)
+        DATE_FORMAT(created_at, '%m-%d')
         ORDER BY
         date ASC
+    </select>
+
+    <select id="getLastSevenDaysVisits" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
+        SELECT
+        DATE_FORMAT(created_at, '%m-%d') as date,
+        visit_count as visitCount
+        FROM
+        log_count_visit
+        WHERE
+        created_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        ORDER BY
+        created_at ASC
     </select>
 
     <select id="getRecentReviews" resultMap="AdminReviewResultMap">
@@ -124,6 +136,59 @@
         JOIN
         product p ON pr.product_no = p.product_no
         ORDER BY pr.created_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getTodayStats" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
+        SELECT
+        (SELECT COUNT(*) FROM payment_product_reviews WHERE DATE(created_at) = CURDATE()) as reviewCount,
+        (SELECT COUNT(*) FROM mem_member WHERE DATE(created_at) = CURDATE()) as newMemberCount,
+        (SELECT COUNT(*) FROM (
+        SELECT personalq_no FROM personal_question WHERE DATE(created_at) = CURDATE()
+        UNION ALL
+        SELECT productq_no FROM product_question WHERE DATE(created_at) = CURDATE()
+        ) as combined_inquiries) as inquiryCount
+    </select>
+
+    <select id="getRecentQuestions" resultType="com.multi.laptellect.admin.model.dto.AdminQuestionDTO">
+        SELECT * FROM (
+        SELECT
+        personalq_no as questionNo,
+        'personal' as questionType,
+        title,
+        m.member_name as memberName,
+        pc.personalq_categoryname as categoryName,
+        p.created_at as createdAt,
+        p.answer as answerStatus,
+        NULL as productName,
+        p.content as content
+        FROM
+        personal_question p
+        JOIN
+        mem_member m ON p.member_no = m.member_no
+        JOIN
+        personalquestion_category pc ON p.personalq_categorycode = pc.personalq_categorycode
+        UNION ALL
+        SELECT
+        productq_no as questionNo,
+        'product' as questionType,
+        title,
+        m.member_name as memberName,
+        pc.productq_categoryname as categoryName,
+        p.created_at as createdAt,
+        p.answer as answerStatus,
+        pr.product_name as productName,
+        p.content as content
+        FROM
+        product_question p
+        JOIN
+        mem_member m ON p.member_no = m.member_no
+        JOIN
+        productquestion_category pc ON p.productq_categorycode = pc.productq_categorycode
+        JOIN
+        product pr ON p.product_no = pr.product_no
+        ) as combined_questions
+        ORDER BY createdAt DESC
         LIMIT #{limit}
     </select>
 
