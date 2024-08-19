@@ -86,6 +86,7 @@ BEGIN
     SET confirm = 'Y',
         confirm_at = CURRENT_TIMESTAMP
     WHERE im_port_id = NEW.im_port_id
+    AND product_no = NEW.product_no
     AND confirm = 'N';
 END;
 
