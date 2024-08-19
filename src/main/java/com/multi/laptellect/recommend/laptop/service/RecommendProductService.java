@@ -69,10 +69,10 @@ public class RecommendProductService {
             String cpu = curationDTO.getCpu(); // 사용 목적 (코드 작업, AI 작업)
             List<String>cpuValues = getCpuTags(cpu);
             productFilterDTO.setCpu(cpuValues);
-        }else if (mainOption.equals("문서나 인강 볼거에요")){
-            String internet = curationDTO.getInternet();
-            List<String> internetValues = getInternetTag(internet);
-            productFilterDTO.setInternet(internetValues);
+//        }else if (mainOption.equals("문서나 인강 볼거에요")){
+//            String internet = curationDTO.getInternet();
+//            List<String> internetValues = getInternetTag(internet);
+//            productFilterDTO.setInternet(internetValues);
         }
 
         String weight = curationDTO.getWeight();
@@ -119,6 +119,8 @@ public class RecommendProductService {
                 return List.of("경량화");
             case "무거움":
                 return List.of("무거움");
+            case "초경량화":
+                return List.of("초경량화");
             default:
                 return List.of();
         }
@@ -182,31 +184,31 @@ public class RecommendProductService {
     }
 
 //인터넷 사용 목적에 따라 cpu 태그를 반환
-    private List<String> getInternetTag(String internet){
-
-        if (internet == null) {
-            return List.of();
-        }
-
-        switch (internet) {
-
-            case "인터넷 강의 볼거에요":
-                return List.of("i3-1115G4", "i3-1125G4", "i5-10210U", "i5-10300H", "i5-1135G7", "i5-11300H", "i5-11320H",
-                        "i5-11400H", "i5-1155G7", "i5-12450H", "i5-12500H", "i7-10510U", "i7-10750H", "i7-1165G7", "i7-11370H", "i7-11390H",
-                        "i7-11600H", "i7-1185G7", "i7-12650H", "i7-12700H", "i9-11900H", "i9-12900H",  "4300U", "5300U", "4500U", "4600H", "5500U",
-                        "5600H", "5600U", "6600H", "6600U", "4700U", "4800H", "5700U", "5800H", "5800U", "6800H", "6800U", "5900HX", "5980HS", "6900HX");//cpu 중간
-
-            case "문서 작업 할거에요": //cpu 최하위군 펜티엄
-                return List.of("i3-10110U", "i3-1005G1", "i3-1115G4", "i3-1125G4", "i3-1215U", "i5-10210U",
-                        "i5-1035G1", "i5-1135G7", "i5-1155G7", "i5-1235U", "i5-1240P", "i5-11300H", "i5-11320H", "i5-12450H",
-                        "i5-1340P", "i7-10510U", "i7-1065G7", "i7-1165G7", "i7-1185G7", "i7-1195G7", "i7-1255U", "i7-1260P", "i7-11370H", "i7-11390H",
-                        "i7-12650H", "Pentium Gold 6405U", "Pentium Gold 7505", "Pentium Gold 7505T", "Pentium Gold 7505U", "Pentium Silver N5030","Celeron N4020",
-                        "Celeron N4500", "Celeron N5100");
-
-            default:
-                return List.of();
-        }
-    }
+//    private List<String> getInternetTag(String internet){
+//
+//        if (internet == null) {
+//            return List.of();
+//        }
+//
+//        switch (internet) {
+//
+//            case "인터넷 강의 볼거에요":
+//                return List.of("i3-1115G4", "i3-1125G4", "i5-10210U", "i5-10300H", "i5-1135G7", "i5-11300H", "i5-11320H",
+//                        "i5-11400H", "i5-1155G7", "i5-12450H", "i5-12500H", "i7-10510U", "i7-10750H", "i7-1165G7", "i7-11370H", "i7-11390H",
+//                        "i7-11600H", "i7-1185G7", "i7-12650H", "i7-12700H", "i9-11900H", "i9-12900H",  "4300U", "5300U", "4500U", "4600H", "5500U",
+//                        "5600H", "5600U", "6600H", "6600U", "4700U", "4800H", "5700U", "5800H", "5800U", "6800H", "6800U", "5900HX", "5980HS", "6900HX");//cpu 중간
+//
+//            case "문서 작업 할거에요": //cpu 최하위군 펜티엄
+//                return List.of("i3-10110U", "i3-1005G1", "i3-1115G4", "i3-1125G4", "i3-1215U", "i5-10210U",
+//                        "i5-1035G1", "i5-1135G7", "i5-1155G7", "i5-1235U", "i5-1240P", "i5-11300H", "i5-11320H", "i5-12450H",
+//                        "i5-1340P", "i7-10510U", "i7-1065G7", "i7-1165G7", "i7-1185G7", "i7-1195G7", "i7-1255U", "i7-1260P", "i7-11370H", "i7-11390H",
+//                        "i7-12650H", "Pentium Gold 6405U", "Pentium Gold 7505", "Pentium Gold 7505T", "Pentium Gold 7505U", "Pentium Silver N5030","Celeron N4020",
+//                        "Celeron N4500", "Celeron N5100");
+//
+//            default:
+//                return List.of();
+//        }
+//    }
 
 
 ////성능에 따라 가격 범위를 반환

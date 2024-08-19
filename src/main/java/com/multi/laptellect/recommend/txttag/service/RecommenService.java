@@ -141,7 +141,7 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'최신 제품' 태그(#{}) 할당", tagNo);
         }
-        if (isWeight(weightName)) {
+        if (isWeightSuitable(weightName)) {
             tagNo = findTagByData(tags, "가벼움");
             assignedTags.add(tagNo);
             log.info("'가벼움' 태그(#{}) 할당", tagNo);
@@ -238,9 +238,9 @@ public class RecommenService {
             log.info("'인터넷 강의' 태그(#{}) 할당", tagNo);
         }
         if (isSomoWeight(weightName)) {
-            tagNo = findTagByData(tags, "경량화");
+            tagNo = findTagByData(tags, "초경량화");
             assignedTags.add(tagNo);
-            log.info("'경량화' 태그(#{}) 할당", tagNo);
+            log.info("'초경량화' 태그(#{}) 할당", tagNo);
         }
 
         return assignedTags;
@@ -283,7 +283,7 @@ public class RecommenService {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
         Pattern pattern2 = Pattern.compile("[\\s()]+");
-        String Key3 = pattern2.matcher("i5-7300U (2.6GHz)").replaceAll("");
+        String Key3 = pattern2.matcher("i5-8200Y (1.3GHz)").replaceAll("");
         String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
         Integer cpuScore = cEnt.get(Key3);
         Integer gpuScore = gEnt.get(Key4);
@@ -336,8 +336,8 @@ public class RecommenService {
     private boolean isWork(String cpu, String gpuTypeName) {
         Map<String, Integer> ent5 = cpuConfig.getCpuMark();
         Pattern pattern3 = Pattern.compile("[\\s()]+");
-        String key4 = pattern3.matcher("i7-1165G7 (2.8GHz)").replaceAll("");
-        String key5 = pattern3.matcher("i3-1005G1 (1.2GHz)").replaceAll("");
+        String key4 = pattern3.matcher("i5-1130G7 (1.8GHz)").replaceAll("");
+        String key5 = pattern3.matcher("m3-6Y30 (0.9GHz)").replaceAll("");
         Integer cpuScoer5 = ent5.get(key4);
         Integer cpuScoer6 = ent5.get(key5);
 
@@ -366,7 +366,7 @@ public class RecommenService {
         Map<String, Integer> ent5 = cpuConfig.getCpuMark();
         Pattern pattern3 = Pattern.compile("[\\s()]+");
         String key4 = pattern3.matcher("i7-1165G7 (2.8GHz)").replaceAll("");
-        String key5 = pattern3.matcher("i3-1315U (1.2GHz)").replaceAll("");
+        String key5 = pattern3.matcher("m3-6Y30 (0.9GHz)").replaceAll("");
 
         Integer cpuScoer5 = ent5.get(key4);
         Integer cpuScoer6 = ent5.get(key5);
@@ -451,38 +451,68 @@ public class RecommenService {
         return cpuCode >= cpuScore1 && gpuCode >= gpuScore1;
     }
 
-    private boolean isScreenSuitableForCoding(String screena) {
-        if (screena == null) {
+    private boolean isScreenSuitableForCoding(String screenSize) {
+        if (screenSize == null || screenSize.isEmpty()) {
             return false;
-        } try {
-            String point = screena.replaceAll("[^0-9.]", "");
-            double screenaa = Double.parseDouble(point);
-            return screenaa >= 16;
-        } catch (Exception e){
+        }
+        try {
+            // 괄호 안의 인치 값을 추출
+            int startIndex = screenSize.lastIndexOf("(");
+            int endIndex = screenSize.lastIndexOf("인치)");
+            if (startIndex == -1 || endIndex == -1) {
+                return false;
+            }
+            String inchesStr = screenSize.substring(startIndex + 1, endIndex);
+            double inches = Double.parseDouble(inchesStr);
+
+            // 16인치 이상인지 확인
+            return inches >= 16.0;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return false;
         }
     }
 
-    private boolean isScreenSuitableForDocuments(String screenb) {
-        if (screenb == null) {
+    private boolean isScreenSuitableForDocuments(String screenSize) {
+        // 1. 입력값 검증
+        if (screenSize == null || screenSize.isEmpty()) {
             return false;
-        } try {
-            String point2 = screenb.replaceAll("[^0-9.]", "");
-            double screenbb = Double.parseDouble(point2);
-            return screenbb >= 13 && screenbb < 16;
-        } catch (Exception e) {
+        }
+        try {
+            // 2. 인치 값 추출
+            int startIndex = screenSize.lastIndexOf("(");
+            int endIndex = screenSize.lastIndexOf("인치)");
+            if (startIndex == -1 || endIndex == -1) {
+                return false;
+            }
+            String inchesStr = screenSize.substring(startIndex + 1, endIndex);
+
+            // 3. 문자열을 숫자로 변환
+            double inches = Double.parseDouble(inchesStr);
+
+            // 4. 조건 확인
+            return inches >= 13.0 && inches < 16.0;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return false;
         }
     }
 
-    private boolean isScreenSuitableForStudents(String screenc) {
-        if (screenc == null) {
+    private boolean isScreenSuitableForStudents(String screenSize) {
+        if (screenSize == null || screenSize.isEmpty()) {
             return false;
-        } try {
-            String point3 = screenc.replaceAll("[^0-9.]", "");
-            double screencc = Double.parseDouble(point3);
-            return screencc < 13;
-        } catch (Exception e) {
+        }
+        try {
+            // 괄호 안의 인치 값을 추출
+            int startIndex = screenSize.lastIndexOf("(");
+            int endIndex = screenSize.lastIndexOf("인치)");
+            if (startIndex == -1 || endIndex == -1) {
+                return false;
+            }
+            String inchesStr = screenSize.substring(startIndex + 1, endIndex);
+            double inches = Double.parseDouble(inchesStr);
+
+            // 13인치 미만인지 확인
+            return inches < 13.0;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -563,35 +593,50 @@ public class RecommenService {
         return true;
 
     }
-    private boolean isWeight(String weight) {
-        if (weight == null) {
+    private boolean isWeightSuitable(String weight) {
+        if (weight == null || weight.isEmpty()) {
             return false;
-        } try {
-            double weighta = Double.parseDouble(weight.replace("kg", ""));
-            return weighta < 2.1;
-        } catch (Exception e) {
+        }
+        try {
+            // "kg" 앞의 숫자 부분만 추출
+            String numericPart = weight.replaceAll("[^0-9.]", "");
+            double weightInKg = Double.parseDouble(numericPart);
+
+            // 2.1kg 미만인지 확인
+            return weightInKg < 2.1;
+        } catch (NumberFormatException e) {
             return false;
         }
     }
 
     private boolean isWeighte(String weighte) {
-        if (weighte == null){
+        if (weighte == null || weighte.isEmpty()) {
             return false;
-    } try {
-            double weightee = Double.parseDouble(weighte.replace("kg", ""));
-            return weightee > 2.1;
-        } catch (Exception e) {
+        }
+        try {
+            // "kg" 앞의 숫자 부분만 추출
+            String numericPart = weighte.replaceAll("[^0-9.]", "");
+            double weightInKg = Double.parseDouble(numericPart);
+
+            // 2.1kg 초과인지 확인
+            return weightInKg > 2.1;
+        } catch (NumberFormatException e) {
             return false;
         }
     }
 
     private boolean isSomoWeight (String weight) {
-        if (weight == null) {
+        if (weight == null || weight.isEmpty()) {
             return false;
-        } try {
-            double weighta = Double.parseDouble(weight.replace("kg", ""));
-            return weighta < 1.5;
-        } catch (Exception e) {
+        }
+        try {
+            // "kg" 앞의 숫자 부분만 추출
+            String numericPart = weight.replaceAll("[^0-9.]", "");
+            double weightInKg = Double.parseDouble(numericPart);
+
+            // 1.5kg 미만인지 확인
+            return weightInKg < 1.7;
+        } catch (NumberFormatException e) {
             return false;
         }
     }
