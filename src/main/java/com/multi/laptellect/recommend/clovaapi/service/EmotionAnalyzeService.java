@@ -70,7 +70,7 @@ public class EmotionAnalyzeService {
                 Map<String, Double> confidence = (Map<String, Double>) document.get("confidence");//confidence키를 confidence에 저장
 
                 SentimentDTO sentimentDTO = new SentimentDTO();//결과 넣을 dto
-                sentimentDTO.setProduct_no(productNo);
+                sentimentDTO.setProductNo(productNo);
                 //결과 저장
                 positive = (int) confidence.get("positive").doubleValue();
                 negative = (int) confidence.get("negative").doubleValue();
@@ -78,17 +78,17 @@ public class EmotionAnalyzeService {
 
                 //가장 높은것에 카운트
                 if (positive > negative && positive > neutral) {
-                    sentimentDTO.setSentiment_positive(1);
-                    sentimentDTO.setSentiment_denial(0);
-                    sentimentDTO.setSentiment_neutrality(0);
+                    sentimentDTO.setSentimentPositive(1);
+                    sentimentDTO.setSentimentDenial(0);
+                    sentimentDTO.setSentimentNeutrality(0);
                 } else if (negative > positive && negative > neutral) {
-                    sentimentDTO.setSentiment_positive(0);
-                    sentimentDTO.setSentiment_denial(1);
-                    sentimentDTO.setSentiment_neutrality(0);
+                    sentimentDTO.setSentimentPositive(0);
+                    sentimentDTO.setSentimentDenial(1);
+                    sentimentDTO.setSentimentNeutrality(0);
                 } else {
-                    sentimentDTO.setSentiment_positive(0);
-                    sentimentDTO.setSentiment_denial(0);
-                    sentimentDTO.setSentiment_neutrality(1);
+                    sentimentDTO.setSentimentPositive(0);
+                    sentimentDTO.setSentimentDenial(0);
+                    sentimentDTO.setSentimentNeutrality(1);
                 }
 
                 log.info("DB에 감성 분석 결과 저장 시도 - DTO: {}", sentimentDTO);
@@ -120,7 +120,7 @@ public class EmotionAnalyzeService {
             return "분석 결과 없음";
         }
 
-        int total = sentiment.getSentiment_positive() + sentiment.getSentiment_denial() + sentiment.getSentiment_neutrality();
+        int total = sentiment.getSentimentPositive() + sentiment.getSentimentDenial() + sentiment.getSentimentNeutrality();
         log.info("상품 번호 {}: 총 감정 분석 카운트 - {}", productNo, total);
 
         if (total == 0) {
@@ -128,8 +128,8 @@ public class EmotionAnalyzeService {
             return "분석 결과 없음";
         }
 
-        int positivePercentage = (sentiment.getSentiment_positive() * 100) / total;
-        int negativePercentage = (sentiment.getSentiment_denial() * 100) / total;
+        int positivePercentage = (sentiment.getSentimentPositive() * 100) / total;
+        int negativePercentage = (sentiment.getSentimentDenial() * 100) / total;
         log.info("상품 번호 {}: 긍정 비율 - {}%, 부정 비율 - {}%", productNo, positivePercentage, negativePercentage);
 
         String result;
