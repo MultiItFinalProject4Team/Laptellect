@@ -3,8 +3,8 @@ package com.multi.laptellect.recommend.txttag.controller;
 import com.multi.laptellect.recommend.txttag.service.RecommenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,18 +22,15 @@ public class ProductTagAssignmentController {
         this.recommenService = recommenService;
     }
 
-    @GetMapping("/assign")
-    public ResponseEntity<String> assignTags() {
-        log.info("Manual product tag assignment requested");
+    @EventListener(ApplicationReadyEvent.class)
+    public void onApplicationReady() {
+        log.info("Automatic product tag assignment started");
         try {
             recommenService.assignTagsToProducts();
-            log.info("Manual product tag assignment completed successfully");
-            return ResponseEntity.ok("Product tag assignment completed successfully");
+            log.info("Automatic product tag assignment completed successfully");
         } catch (Exception e) {
-            log.error("Error during manual product tag assignment: {}", e.getMessage());
-            return ResponseEntity.internalServerError().body("Error occurred during product tag assignment");
+            log.error("Error during automatic product tag assignment: {}", e.getMessage());
         }
     }
-
 
     }

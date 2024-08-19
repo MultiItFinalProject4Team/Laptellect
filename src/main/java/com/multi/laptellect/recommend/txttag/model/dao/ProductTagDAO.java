@@ -1,5 +1,6 @@
 package com.multi.laptellect.recommend.txttag.model.dao;
 
+import com.multi.laptellect.recommend.txttag.model.dto.ProductTagDTO;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,5 +22,14 @@ public interface ProductTagDAO {
 
     @Select("SELECT * FROM laptop_tag")
     List<TaggDTO> findAllTag();
+
+    @Select("SELECT * FROM machine_tagkey")
+    List<ProductTagDTO> getAllProductTags();
+
+    @Select("SELECT * FROM laptop_tag WHERE tag_no = #{tagNo}")
+    TaggDTO getTagById(@Param("tagNo") int tagNo);
+
+
+
 
 }
