@@ -2,6 +2,7 @@ package com.multi.laptellect.admin.controller;
 
 import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
 import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
+import com.multi.laptellect.admin.model.dto.AdminQuestionDTO;
 import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
 import com.multi.laptellect.admin.service.AdminService;
 import org.springframework.stereotype.Controller;
@@ -57,5 +58,11 @@ public class AdminController {
     @ResponseBody
     public List<AdminReviewDTO> getRecentReviews() {
         return adminService.getRecentReviews(20); // Get the 20 most recent reviews
+    }
+
+    @GetMapping("/recent-questions")
+    @ResponseBody
+    public List<AdminQuestionDTO> getRecentQuestions() {
+        return adminService.getRecentQuestions(20); // Get the 20 most recent questions
     }
 }
