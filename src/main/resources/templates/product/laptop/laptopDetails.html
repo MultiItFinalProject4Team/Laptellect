@@ -70,6 +70,20 @@
             font-size: 1.5rem;
         }
 
+        /* 제품 간략 정보 */
+        .prodinfo_spec {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #666;
+        }
+        .prodinfo_spec li { margin-right: 10px; }
+        .prodinfo_spec li::after { content: "|"; margin-left: 10px; }
+        .prodinfo_spec li:last-child::after { content: ""; }
+
         hr { opacity: 1 !important;}
     </style>
     <script>
@@ -78,6 +92,20 @@
                 let value = $(this).text().replace(' 원', '');
                 let formattedValue = new Intl.NumberFormat().format(value);
                 $(this).text(formattedValue + ' 원');
+            });
+
+            // 리뷰 더보기 클릭 시 리뷰탭으로 이동
+            $('#review-scroll').on('click', function(event) {
+                event.preventDefault();
+                $('#customer-tab').removeClass('active');
+                $('#customer-box').removeClass('show active');
+
+                $('#review-tab').addClass('active');
+                $('#review-box').addClass('show active');
+
+                $('html, body').animate({
+                    scrollTop: $('#custmer-review-box').offset().top
+                }, 250);
             });
 
             // 위시리스트 추가/삭제
@@ -204,13 +232,13 @@
                 <div class="col-12 mb-1" id="product-name">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 th:text="${ laptop.productName }"></h4>
-
                         <div class="d-flex justify-content-end align-items-center">
                             <div style="margin-left: 1rem !important;">
                                 <div th:if="${wishlist != null}">
                                     <a class="btn-process-wishlist"
                                        th:if="${#lists.contains(wishlist, productNo)}"
-                                       th:attr="data-product-no=${productNo}">
+                                       th:attr="data-product-no=${productNo}"
+                                       style="position: relative; top: -4px;">
                                     <span id="icon-wishlist" style="color: #FF0000;">
                                         <i class="fa-solid fa-heart fa-1.5x"></i>
                                     </span>
@@ -219,7 +247,8 @@
 
                                     <a class="btn-process-wishlist"
                                        th:unless="${#lists.contains(wishlist, productNo)}"
-                                       th:attr="data-product-no=${productNo}">
+                                       th:attr="data-product-no=${productNo}"
+                                       style="position: relative; top: -4px;">
                                     <span id="icon-wishlist">
                                         <i class="fa-solid fa-heart fa-1.5x"></i>
                                     </span>
@@ -231,7 +260,8 @@
                             <div th:if="${carts != null}" style="margin-left: 1rem !important;">
                                 <a class="btn-process-cart"
                                    th:if="${#lists.contains(carts, productNo)}"
-                                   th:attr="data-product-no=${productNo}">
+                                   th:attr="data-product-no=${productNo}"
+                                   style="position: relative; top: -4px;">
                                     <span id="icon-cart" style="color: #32CD32;"><i
                                             class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
                                     <span>장바구니</span>
@@ -239,7 +269,8 @@
 
                                 <a class="btn-process-cart"
                                    th:unless="${#lists.contains(carts, productNo)}"
-                                   th:attr="data-product-no=${productNo}">
+                                   th:attr="data-product-no=${productNo}"
+                                   style="position: relative; top: -4px;">
                                     <span id="icon-cart"><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
                                     <span>장바구니</span>
                                 </a>
@@ -247,6 +278,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="mb-2">
+                    <ul class="prodinfo_spec">
+                        <li>제조사: <span th:text="${ laptop.company }"></span></li>
+                        <li>등록일: <span th:text="${ laptop.registrationDate }"></span></li>
+                        <li>출시가: <span class="price" th:text="${ laptop.price }"></span></li>
+                    </ul>
+                </div>
+
                 <hr>
             </div>
             <div class="row mt-2">
@@ -276,14 +315,24 @@
                         <li><strong>코어개수 : </strong><span class="spec" th:text="${ laptop.cpu.cpuCore }"> CPU</span>
                         </li>
                     </ul>
+                    <br>
+                    <div> <!-- 태그 공간 -->
+                        <span>#게이밍</span> <span>#펠월드</span> <span>#무거운</span>
+                    </div>
                 </div>
-
 
                 <div class="col-md-5">
                     <div class="review-group">
-                        <div class="review-list mt-4">
-                            <h5>상품 리뷰</h5>
-                            <a href="#review-section" class="text-decoration-none ms-2">리뷰 보러가기</a>
+                        <div class="review-list">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span style="font-size: 20px;"><strong>상품 리뷰 <span th:text="${'(' + paymentReviewDTOList.size() + '건)'}"></span></strong></span>
+                                <a href="#" id="review-scroll" class="text-decoration-none ms-2" style="position: relative; top: -3px; font-size: 17px;">더보기 ></a>
+                            </div>
+                            <div>
+                                <i class="bi bi-star-fill" style=""></i>
+                                <span>4.8</span>점
+                            </div>
+
                             <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                 <p>아직 작성된 리뷰가 없습니다.</p>
                             </div>
@@ -297,8 +346,13 @@
                                     <span class="review-date" th:text="${#strings.substring(review.createdAt, 0, 10)}">날짜</span>
                                     <br>
                                     <span> 평점 : </span>
-                                    <span class="review-star" th:text="${'★'.repeat(review.rating)}">★★★★★</span>
-                                </div>
+                                    <span class="review-star">
+                                        <th:block th:if="${review.rating != null}">
+                                            <th:block th:each="star : ${#numbers.sequence(1, review.rating)}">
+                                                <i class="bi bi-star-fill"></i>
+                                            </th:block>
+                                        </th:block>
+                                    </span>                                </div>
                                 <div class="review-content-wrapper">
                                     <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>
                                 </div>
@@ -306,10 +360,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
         </div>
 
@@ -555,7 +605,7 @@
             <br> <br>
 
             <div class="col-12 mt-4">
-                <h4><strong>문의/리뷰</strong></h4>
+                <h4 id="custmer-review-box"><strong>문의/리뷰</strong></h4>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box"

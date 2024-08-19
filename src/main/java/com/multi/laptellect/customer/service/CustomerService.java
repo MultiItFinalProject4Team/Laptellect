@@ -3,7 +3,6 @@ package com.multi.laptellect.customer.service;
 import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
-import com.multi.laptellect.customer.dto.ImageDto;
 import com.multi.laptellect.util.EmailUtil;
 import com.multi.laptellect.util.FileService;
 import org.jsoup.Jsoup;
@@ -15,9 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -140,16 +136,13 @@ public class CustomerService {
     }
 
     public int deletePersonalq(int personalqNo, String code) {
-        String path = System.getProperty("user.dir");
         List<String> urls = new ArrayList<>();
         Document document = Jsoup.parse(customDao.getPersonalqDetail(personalqNo).getContent());
         for (Element img : document.select("img")) {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            //Path filePath = Paths.get(path, url);
             try {
-//                Files.deleteIfExists(filePath);
                 String prefix = "4team/";
                 int prefixIndex = url.indexOf(prefix);
 
@@ -219,17 +212,25 @@ public class CustomerService {
     }
 
     public void deletePersonala(int personalqNo,String code) {
-        String path = System.getProperty("user.dir");
         List<String> urls = new ArrayList<>();
         Document document = Jsoup.parse(customDao.getPersonala(personalqNo).getContent());
         for (Element img : document.select("img")) {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            Path filePath = Paths.get(path, url);
             try {
-                Files.deleteIfExists(filePath);
-            } catch (IOException e) {
+                String prefix = "4team/";
+                int prefixIndex = url.indexOf(prefix);
+
+                if (prefixIndex != -1) {
+                    url = url.substring(prefixIndex + prefix.length());
+                    System.out.println("url: "+url);
+                    int result=fileService.deleteFile(url);
+                    System.out.println("결과: "+result);
+                } else {
+                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -302,17 +303,25 @@ public class CustomerService {
     }
 
     public int deleteProductq(int productqNo, String code) {
-        String path = System.getProperty("user.dir");
         List<String> urls = new ArrayList<>();
         Document document = Jsoup.parse(customDao.getProductq(productqNo).getContent());
         for (Element img : document.select("img")) {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            Path filePath = Paths.get(path, url);
             try {
-                Files.deleteIfExists(filePath);
-            } catch (IOException e) {
+                String prefix = "4team/";
+                int prefixIndex = url.indexOf(prefix);
+
+                if (prefixIndex != -1) {
+                    url = url.substring(prefixIndex + prefix.length());
+                    System.out.println("url: "+url);
+                    int result=fileService.deleteFile(url);
+                    System.out.println("결과: "+result);
+                } else {
+                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -328,17 +337,25 @@ public class CustomerService {
     }
 
     public void deleteProducta(int productqNo, String code) {
-        String path = System.getProperty("user.dir");
         List<String> urls = new ArrayList<>();
         Document document = Jsoup.parse(customDao.getProducta(productqNo).getContent());
         for (Element img : document.select("img")) {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            Path filePath = Paths.get(path, url);
             try {
-                Files.deleteIfExists(filePath);
-            } catch (IOException e) {
+                String prefix = "4team/";
+                int prefixIndex = url.indexOf(prefix);
+
+                if (prefixIndex != -1) {
+                    url = url.substring(prefixIndex + prefix.length());
+                    System.out.println("url: "+url);
+                    int result=fileService.deleteFile(url);
+                    System.out.println("결과: "+result);
+                } else {
+                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -398,6 +415,28 @@ public class CustomerService {
     }
 
     public void deleteNotice(int noticeNo) {
+        List<String> urls = new ArrayList<>();
+        Document document = Jsoup.parse(customDao.getnotice(noticeNo).getContent());
+        for (Element img : document.select("img")) {
+            urls.add(img.attr("src"));
+        }
+        for(String url : urls){
+            try {
+                String prefix = "4team/";
+                int prefixIndex = url.indexOf(prefix);
+
+                if (prefixIndex != -1) {
+                    url = url.substring(prefixIndex + prefix.length());
+                    System.out.println("url: "+url);
+                    int result=fileService.deleteFile(url);
+                    System.out.println("결과: "+result);
+                } else {
+                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         customDao.deleteNotice(noticeNo);
     }
 

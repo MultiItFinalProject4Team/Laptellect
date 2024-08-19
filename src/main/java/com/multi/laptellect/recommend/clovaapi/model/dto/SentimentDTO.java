@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class SentimentDTO {
 
-    private int product_no;
-    private int sentiment_positive;
-    private int sentiment_denial;
-    private int sentiment_neutrality;
+    private int productNo;
+    private int sentimentPositive;
+    private int sentimentDenial;
+    private int sentimentNeutrality;
 }
