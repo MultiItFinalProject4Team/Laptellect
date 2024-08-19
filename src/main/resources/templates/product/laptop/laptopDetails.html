@@ -208,7 +208,7 @@
 <div class="container mt-5" layout:fragment="content">
     <hr>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" style="height: 612px;">
             <!-- 상품 이미지 -->
             <img th:src="@{'/img/product/' + ${ laptop.image }}" class="card-img-top" alt="상품 이미지"
                  style="height: 400px; object-fit: contain;">
@@ -292,7 +292,7 @@
 
 
                 <div class="col-7">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
                         <span><strong>가격 : <span class="price" style="font-size: 25px;"
                                                  th:text="${laptop.price}"></span></strong></span>
                         <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
@@ -304,7 +304,6 @@
                             </button>
                         </form>
                     </div>
-                    <br>
                     <ul id="list-simple-spec">
                         <li><strong>제조사 : </strong><span class="spec" th:text="${ laptop.company }"> 삼성전자</span></li>
                         <li><strong>등록월 : </strong><span class="spec"
@@ -329,33 +328,48 @@
                                 <a href="#" id="review-scroll" class="text-decoration-none ms-2" style="position: relative; top: -3px; font-size: 17px;">더보기 ></a>
                             </div>
                             <div>
-                                <i class="bi bi-star-fill" style=""></i>
-                                <span>4.8</span>점
-                            </div>
+                                <i class="bi bi-star-fill review-star" style="font-size: 25px;"></i>
+                                <span style="font-size: 20px;">
+                                    <strong style="font-size: 23px;"
+                                            th:text="${paymentReviewDTOList != null
+                                            and !paymentReviewDTOList.isEmpty()
+                                            and paymentReviewDTOList[0].avgRating != null ? paymentReviewDTOList[0].avgRating : 0}">
+                                    </strong>점
+                                </span>
+                            </div> <hr>
 
                             <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                 <p>아직 작성된 리뷰가 없습니다.</p>
                             </div>
-                            <div th:each="review : ${paymentReviewDTOList}" class="review-item">
+                            <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
                                 <div class="review-header">
-                                    <span class="review-author" th:text="'구매자 : ' +
-                                        (${#strings.length(review.memberName)} > 1 ?
-                                        ${#strings.substring(review.memberName,0,1)} + '*' +
-                                        ${#strings.substring(review.memberName,2)} :
-                                        ${review.memberName})">사용자</span>
-                                    <span class="review-date" th:text="${#strings.substring(review.createdAt, 0, 10)}">날짜</span>
-                                    <br>
-                                    <span> 평점 : </span>
+                                    <div class="review-content-wrapper">
+                                        <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
+                                            리뷰 내용
+                                        </span>
+                                    </div>
                                     <span class="review-star">
                                         <th:block th:if="${review.rating != null}">
                                             <th:block th:each="star : ${#numbers.sequence(1, review.rating)}">
                                                 <i class="bi bi-star-fill"></i>
                                             </th:block>
                                         </th:block>
-                                    </span>                                </div>
-                                <div class="review-content-wrapper">
-                                    <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>
+                                    </span>
+                                    <span th:text="${ review.rating }"></span>
                                 </div>
+                                <ul class="prodinfo_spec">
+                                    <li>아이디 :
+                                        <span th:text="(${#strings.length(review.memberName)} > 1 ?
+                                                                             ${#strings.substring(review.memberName,0,1)} + '*' +
+                                                                             ${#strings.substring(review.memberName,2)} :
+                                                                             ${review.memberName})">
+                                        </span>
+                                    </li>
+                                    <li>등록일 :
+                                        <span th:text="${#strings.substring(review.createdAt, 0, 10)}"></span>
+                                    </li>
+                                </ul>
+                                <hr>
                             </div>
                         </div>
                     </div>
@@ -697,17 +711,6 @@
                                         </button>
                                     </div>
                                 </div>
-                                <!--                                <div class="d-flex justify-content-between align-items-center mb-3">-->
-                                <!--                                    <span>상품평</span>-->
-                                <!--                                    <div>-->
-                                <!--                                        <button type="button" class="btn btn-outline-secondary btn-sm">로그인</button>-->
-                                <!--                                        <button type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
-                                <!--                                <div class="input-group">-->
-                                <!--                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성하시려면 로그인을 해주세요." readonly></textarea>-->
-                                <!--                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;" disabled>등록</button>-->
-                                <!--                                </div>-->
                             </th:block>
                             <th:block sec:authorize="isAuthenticated()">
                                 <span><strong>상품평</strong></span>
@@ -742,7 +745,9 @@
                                     <span class="review-date" th:text="${#strings.substring(review.createdAt, 0, 10)}">날짜</span>
                                     <br>
                                     <span> 평점 : </span>
-                                    <span class="review-star" th:text="${'★'.repeat(review.rating)}">★★★★★</span>
+                                    <th:block th:each="star : ${#numbers.sequence(1, review.rating)}">
+                                        <i class="review-star bi bi-star-fill"></i>
+                                    </th:block>
                                 </div>
                                 <div class="review-content-wrapper">
                                     <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>

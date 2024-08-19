@@ -15,4 +15,5 @@ public class PaymentReviewDTO {
     private String modifyAt;
     private String productName;
     private String memberName;
+    private double avgRating;
 }

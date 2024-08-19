@@ -86,7 +86,7 @@ public class LogAspect {
         // Redis 리스트 형태로 저장
         redisUtil.setListData("VisitLog", visitLog);
 
-        log.info("방문 로그 기록 = {}" , redisUtil.getListData("VisitLog"));
+//        log.info("방문 로그 기록 = {}" , redisUtil.getListData("VisitLog"));
     }
 
     // 상품 조회수 AOP
