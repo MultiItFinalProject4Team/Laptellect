@@ -43,6 +43,7 @@ public class ProductController {
     private final PaginationService paginationService;
     private final PaymentService paymentService;
 
+
     /**
      * 크롤링을 시작합니다.
      *
@@ -164,6 +165,8 @@ public class ProductController {
         log.info("컨트롤러 cate 데이터 확인 = {}", cate);
 
         model.addAttribute("cate", cate);
+
+
 
         return "/product/productList";
 

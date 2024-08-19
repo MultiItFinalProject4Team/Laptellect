@@ -28,5 +28,10 @@ public class ProductFilterDTO { //
     private List<String> screen;
     private List<String> battery;
     private List<String> internet;
+    private List<String> gamingTags;
+    private List<String> weightTags;
+    private List<String> purposeTags;
+    private List<String> somoweightTags;
+
 
 }

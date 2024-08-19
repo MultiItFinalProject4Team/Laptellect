@@ -51,6 +51,9 @@ public class RecommendProductService {
     public List<TaggDTO> getTagsForProduct(int productNo) {
         return recommendProductDAO.getTagsForProduct(productNo);
     }
+    public ArrayList<LaptopSpecDTO> getAllProducts(int productNo) {
+        return recommendProductDAO.getAllProducts(productNo); //제품 태그 넣을 예정
+    }
 
     private ProductFilterDTO createSearchCriteria(CurationDTO curationDTO) {
         ProductFilterDTO productFilterDTO = new ProductFilterDTO(); // 사용자가 원하는 조건이 담긴 DTO
@@ -59,50 +62,81 @@ public class RecommendProductService {
         String mainOption = curationDTO.getMainOption(); // key 값이 게임, 사무용, 장소 등 구분 공통 요소
 
         if (mainOption.equals("게임 할거에요")) { //키 값이 게임일 시 Gpu 중심
-            String game = curationDTO.getGame(); // 게임 타입
-            List<String> gpuValues = getGpuTags(game); // 게임 타입에 따라 gpu 태그 반환
+            String gpu = curationDTO.getGpu(); // 게임 타입
+            List<String> gpuValues = getGpuTags(gpu); // 게임 타입에 따라 gpu 태그 반환
             productFilterDTO.setGpu(gpuValues); //gpu태그 설정
         } else if (mainOption.equals("작업 할거에요")) { // key 값이 사무용일 시 cpu 중심
-            String purpose = curationDTO.getPurpose(); // 사용 목적 (코드 작업, AI 작업)
-            List<String> cpuValues = getCpuTags(purpose);
-            productFilterDTO.setGpu(cpuValues);
+            String cpu = curationDTO.getCpu(); // 사용 목적 (코드 작업, AI 작업)
+            List<String>cpuValues = getCpuTags(cpu);
+            productFilterDTO.setCpu(cpuValues);
         }else if (mainOption.equals("문서나 인강 볼거에요")){
             String internet = curationDTO.getInternet();
             List<String> internetValues = getInternetTag(internet);
             productFilterDTO.setInternet(internetValues);
         }
 
-        String place = curationDTO.getPlace();
-        int[] weightRange = getPriceWeughtRange(place);
-        productFilterDTO.setMinWeight(weightRange[0]);
-        productFilterDTO.setMaxWeight(weightRange[1]);
+        String weight = curationDTO.getWeight();
+        List<String> weightTags = getWeightTags(weight);
+        productFilterDTO.setWeightTags(weightTags);
 
         String performance = curationDTO.getPerformance();
-        int[] priceRange = getPriceRange(performance);
-        productFilterDTO.setMinPrice(priceRange[0]); //최소 가격 설정
-        productFilterDTO.setMaxPrice(priceRange[1]); //최대 가격 설정
+        List<String> gamingTags = getGamingTags(performance);
+        productFilterDTO.setGamingTags(gamingTags);
 
-        String screen = curationDTO.getScreen(); // key 값이 화면일 시 화면 중심
-        int[] screenRange = getscreenRange(screen); // 화면 크기에 따른 태그 반환
-        productFilterDTO.setMinscreenSize(screenRange[0]); //화면 크기 설정
-        productFilterDTO.setMaxscreenSize(screenRange[1]); //화면 크기 설정
+        String screen = curationDTO.getScreen();
+        List<String> screenTags = getScreenTags(screen);
+        productFilterDTO.setScreen(screenTags);
+
+        String somoweight = curationDTO.getSomoweight();
+        List<String> somoWeightt = getsomoWeight(somoweight);
+        productFilterDTO.setSomoweightTags(somoWeightt);
+
 
 //        String battery = curationDTO.getBattery();
 //        List<String> batteryValues = getBatteryTag(battery);
 //        productFilterDTO.setBattery(batteryValues);
 
 
-
+//
 //        criteria.put("batteryTag", getBatteryTag(surveyResults.get("priority")));
 //        criteria.put("designTag", getDesignTag(surveyResults.get("priority")));
 //        criteria.put("performanceTag", getPerformanceTag(surveyResults.get("performance")));
-
+//
 //        String gameperformance = curationDTO.getGameperformance();
 //        int[] gamepriceRange = getGameperformance(gameperformance);
 //        productFilterDTO.setMinGamePrice(gamepriceRange[0]);
 //        productFilterDTO.setMaxGamePrice(gamepriceRange[1]);
 
         return productFilterDTO;
+    }
+    private List<String> getsomoWeight(String somoweight) {
+        log.info("무게 태그 설정 시작. 무게: {}", somoweight);
+        if (somoweight == null) {
+            return List.of();
+        }
+        switch (somoweight) {
+            case "경량화":
+                return List.of("경량화");
+            case "무거움":
+                return List.of("무거움");
+            default:
+                return List.of();
+        }
+    }
+
+    private List<String> getWeightTags(String weight) {
+        log.info("무게 태그 설정 시작. 무게: {}", weight);
+        if (weight == null) {
+            return List.of();
+        }
+        switch (weight) {
+            case "가지고 다닐거에요":
+                return List.of("가벼움");
+            case "집에만 둘거에요":
+                return List.of("무거움");
+            default:
+                return List.of();
+        }
     }
 // 게임 타입에 따라 gpu태그를 반환
     private List<String> getGpuTags(String gameType) {
@@ -114,25 +148,15 @@ public class RecommendProductService {
         switch (gameType) {
             case "스팀게임/FPS 게임":
                 return List.of(
-                        "RTX4080", "RTX 4080", "라데온 RX 7900M", "라데온 610M Ryzen 9 7845HX",
-                        "RTX3080 Ti", "RTX4070", "RTX3070 Ti", "RTX4060",
-                        "라데온 RX 6850M XT", "RTX3080", "RTX A5000", "RTX3070",
-                        "라데온 RX 6800S", "RTX A4000", "RTX2080, 라데온 RX 6700M"
+                        "펠월드", "로스트 아크"
                 );
             case "온라인 게임":
                 return List.of(
-                        "라데온 RX 6650M", "라데온 RX 6700S", "쿼드로 RTX 5000", "RTX4050",
-                        "라데온 RX 7600S", "라데온 RX 6850M XT", "RTX2080 SUPER", "RTX2070 SUPER",
-                        "라데온 RX 6600M", "라데온 RX 6600S", "라데온 Pro W6600M", "라데온 RX 6700M",
-                        "RTX3060", "라데온 RX 6800M", "RTX2080", "쿼드로 RTX 4000",
-                        "RTX A3000", "RTX2070"
+                        "배틀그라운드"
                 );
             case "AOS게임":
                 return List.of(
-                        "쿼드로 P5200", "라데온 RX 6850M", "RTX2070", "GTX1080",
-                        "라데온 RX 7600M XT", "인텔 Arc A770M", "RTX2060", "쿼드로 RTX 3000",
-                        "GTX1070", "RTX3050", "GTX1660 Ti", "RTX A2000",
-                        "라데온 RX 6550M", "라데온 Pro 5600M", "쿼드로 P4000", "라데온 RX 5600M"
+                        "리그오브레전드", "게이밍"
                 );
             default:
                 return List.of();
@@ -147,18 +171,10 @@ public class RecommendProductService {
         //사용 목적에 따라 CPU 태그를 반환
         switch (purpose) { //
             case "코드 작업할거에요": //맥북 시리즈 추가 예정
-                return List.of("7945HX", "7940HX", "I9-13980HX",
-                        "I9-14900HX", "7845HX", "I9-13900HX", "I9-13950HX",
-                        "I7-14650HX", "I7-13850HX", "I7-14700HX", "I9-12900HX", "I7-13700HX",
-                        "7745HX", "I9-12950HX", "I7-12800HX", "8945HS",
-                        "I9-13900HK", "I7-13650HX", "I7-12850HX", "I5-1340P"
+                return List.of("작업용"
                 );
-            case "AI 작업할거에요": //테스트를 위해 임시 Intel Xeon 라인 및 엔디비아 Quadro 라인 추가 될 예정
-                return List.of("I5-12500H", "5600H", "I5-11400H",
-                        "4600H", "I5-10300H", "4500U",
-                        "I5-1135G7", "5500U", "I5-10210U",
-                        "3500U", "I7-1165G7", "4700U",
-                        "I7-10510U", "5700U", "I7-1185G7", "I5-1340P"
+            case "일반 사무용 작업할거에요": //테스트를 위해 임시 Intel Xeon 라인 및 엔디비아 Quadro 라인 추가 될 예정
+                return List.of("인터넷 강의"
                 );
             default:
                 return List.of();
@@ -191,42 +207,26 @@ public class RecommendProductService {
                 return List.of();
         }
     }
-//장소에 따라 무게 태그를 반환
-
-    private int[] getPriceWeughtRange(String place) {
-
-        if (place == null) {//장소가 null이면 빈 리스트 반환
-            return new int[]{0, Integer.MAX_VALUE}; // 0 ~ 무한대
-        }
-            switch (place) {
-                case "가지고 다닐거에요":
-                    return new int[]{0, 2};
-
-                case "집에서 사용할거에요":
-                    return new int []{2, 3};
-                default:
-                    return new int[]{0, Integer.MAX_VALUE};
 
 
-        }
+////성능에 따라 가격 범위를 반환
+private List<String> getGamingTags(String gameperformance) {
+    log.info("게이밍 성능/가격 태그 설정 시작. 선택된 성능: {}", gameperformance);
+    if (gameperformance == null) {
+        return List.of();
     }
+    switch (gameperformance) {
+        case "성능용":
+            return List.of("사무용 고성능");
 
-//성능에 따라 가격 범위를 반환
-    private int[] getPriceRange(String performance) {
-        if (performance == null) {
-            return new int[]{0, Integer.MAX_VALUE};
-        }
-        switch (performance) { //성능에 따라 가격 범위 반환
-            case "성능용":
-                return new int[]{1500000, Integer.MAX_VALUE};  // 150만원 이상
-            case "타협":
-                return new int[]{700000, 1500000};  // 70만원 ~ 150만원
-            case "밸런스용":
-                return new int[]{1000000, 2000000};  // 100만원 ~ 200만원
-            default:
-                return new int[]{0, Integer.MAX_VALUE};
-        }
-        }
+        case "타협":
+            return List.of("사무용 착한 가격");
+        case "밸런스용":
+            return List.of("사무용 가성비");
+        default:
+            return List.of();
+    }
+}
 
 //    private int[] getGameperformance(String gameperformance) {
 //        if (gameperformance == null) {
@@ -245,27 +245,29 @@ public class RecommendProductService {
 //    }
 
     //화면 크기에 따라 태그를 반환
-        private int[] getscreenRange (String screen) {
+        private List<String> getScreenTags (String screen) {
 
             if (screen == null) {
-                return new int[] {0, Integer.MAX_VALUE};
+                return List.of();
             }
 
             switch (screen) {
                 case "화면 넓은게 좋아요":
-                    return new int[]{17, Integer.MAX_VALUE};
+                    return List.of("넓은 화면");
 
                 case "적당한게 좋아요":
-                    return new int []{15, 16};
+                    return List.of("적당한 화면");
 
                 case "작은 화면이 좋아요":
-                    return new int []{0, 14};
+                    return List.of("작은 화면");
                 default:
-                    return new int[] {0, Integer.MAX_VALUE};
+                    return List.of();
             }
 
 
         }
+
+
 //    private List<String> getBatteryTag(String batteryTag) {
 //        if (batteryTag == null) {
 //            return List.of();

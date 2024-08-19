@@ -8,32 +8,105 @@
         vw_product_detail
         WHERE
         type_no = 1
-        AND price BETWEEN #{minPrice} AND #{maxPrice}
-        AND category_no = 'LD24'
-        AND CAST(REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(option_value, '(', -1), '인치)', 1), 'cm', '') AS DECIMAL(3,1)) BETWEEN #{minscreenSize} AND #{maxscreenSize}
-        AND category_no = 'LBI4'
-        AND CAST(REPLACE(option_value, 'kg', '') AS DECIMAL(2, 1)) BETWEEN #{minWeight} AND #{maxWeight}
-
         <if test="gpu != null and gpu.size() > 0">
-            <foreach item="item" index="index" collection="gpu" open="AND (" separator=" OR " close=")">
-                option_value LIKE CONCAT('%', #{ item }, '%')
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="gpu" open="(" separator="," close=")">
+                #{tag}
             </foreach>
-        </if>
-        <if test="cpu != null and cpu.size() > 0">
-            <foreach item="item" index="index" collection="cpu" open="AND (" separator=" OR " close=")">
-                option_value LIKE CONCAT('%', #{ item }, '%')
-            </foreach>
+            )
         </if>
         <if test="place != null and place.size() > 0">
-            <foreach item="item" index="index" collection="place" open="AND (" separator=" OR " close=")">
-                option_value LIKE CONCAT('%', #{ item }, '%')
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="place" open="(" separator="," close=")">
+                #{tag}
             </foreach>
+            )
         </if>
-       <if test="screen != null and screen.size() > 0">
-           <foreach item="item" index="index" collection="screen" open="AND(" separator=" OR " close=")">
-               option_value LIKE CONCAT('%', #{ item }, '%')
-           </foreach>
-       </if>
+        <if test="screen != null and screen.size() > 0">
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="screen" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
+        <if test="gamingTags != null and gamingTags.size() > 0">
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="gamingTags" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
+        <if test="weightTags != null and weightTags.size() > 0">
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="weightTags" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
+
+        <if test="purposeTags != null and purposeTags.size() > 0">
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="purposeTags" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
+
+        <if test="somoweightTags != null and somoweightTags.size() > 0">
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="somoweightTags" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
+
+        <if test="cpu != null and cpu.size() > 0">
+            AND EXISTS (
+            SELECT 1
+            FROM machine_tagkey mt
+            JOIN laptop_tag lt ON mt.tag_no = lt.tag_no
+            WHERE mt.product_no = vw_product_detail.product_no
+            AND lt.tag_data IN
+            <foreach item="tag" collection="cpu" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+            )
+        </if>
 
 
 

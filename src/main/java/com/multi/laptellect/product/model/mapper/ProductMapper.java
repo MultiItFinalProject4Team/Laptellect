@@ -87,4 +87,6 @@ public interface ProductMapper {
 
     @Update("UPDATE product SET view_count = view_count + #{ visitCount }, updated_at = updated_at WHERE product_no = #{ productNo }")
     int updateProductVisit(@Param("productNo") String productNo, @Param("visitCount") int visitCount);
+
+
 }

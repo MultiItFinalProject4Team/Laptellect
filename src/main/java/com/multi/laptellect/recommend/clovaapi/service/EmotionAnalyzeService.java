@@ -35,9 +35,9 @@ public class EmotionAnalyzeService {
         String review = reviewDTO.getContent(); //리뷰내용
         RestTemplate restTemplate = new RestTemplate();//RestTemplate 객체
         HttpHeaders headers = new HttpHeaders();//HttpHeaders 객체
-        double positive;
-        double negative;
-        double neutral;
+        int positive;
+        int negative;
+        int neutral;
 
         try {
             log.info("api요청 준비");
@@ -63,7 +63,6 @@ public class EmotionAnalyzeService {
             log.info("감성 분석 결과: {}", body);//결과출력
 
 
-
             //분석 결과를 DB에 저장
             if (body != null && body.containsKey("document")) { //document키가 있따면?
                 Map<String, Object> document = (Map<String, Object>) body.get("document"); //document키를 document에 저장
@@ -72,9 +71,9 @@ public class EmotionAnalyzeService {
                 SentimentDTO sentimentDTO = new SentimentDTO();//결과 넣을 dto
                 sentimentDTO.setProduct_no(productNo);
                 //결과 저장
-                 positive = confidence.get("positive");
-                 negative = confidence.get("negative");
-                 neutral = confidence.get("neutral");
+                positive = (int) confidence.get("positive").doubleValue();
+                negative = (int) confidence.get("negative").doubleValue();
+                neutral = (int) confidence.get("neutral").doubleValue();
 
                 //가장 높은것에 카운트
                 if (positive > negative && positive > neutral) {
@@ -107,5 +106,47 @@ public class EmotionAnalyzeService {
             log.error("감성 분석 중 오류 발생: {}", e.getMessage());
         }
         return null;
+    }
+
+    public String analyzeSentiment(int productNo) {
+        SentimentDTO sentiment = sentimentDAO.getSentimentByProductNo(productNo);
+        log.info("상품 번호 {}: 감정 분석 결과 조회 - {}", productNo, sentiment);
+
+        if (sentiment == null) {
+            log.warn("상품 번호 {}: 감정 분석 결과 없음", productNo);
+            return "분석 결과 없음";
+        }
+
+        int total = sentiment.getSentiment_positive() + sentiment.getSentiment_denial() + sentiment.getSentiment_neutrality();
+        log.info("상품 번호 {}: 총 감정 분석 카운트 - {}", productNo, total);
+
+        if (total == 0) {
+            log.warn("상품 번호 {}: 총 감정 분석 카운트가 0입니다", productNo);
+            return "분석 결과 없음";
+        }
+
+        int positivePercentage = (sentiment.getSentiment_positive() * 100) / total;
+        int negativePercentage = (sentiment.getSentiment_denial() * 100) / total;
+        log.info("상품 번호 {}: 긍정 비율 - {}%, 부정 비율 - {}%", productNo, positivePercentage, negativePercentage);
+
+        String result;
+        if (positivePercentage >= 90) {
+            result = "압도적 긍정적";
+        } else if (positivePercentage >= 70) {
+            result = "매우 긍정적";
+        } else if (positivePercentage >= 50) {
+            result = "조금 긍정적";
+        } else if (negativePercentage >= 90) {
+            result = "압도적 부정적";
+        } else if (negativePercentage >= 70) {
+            result = "매우 부정적";
+        } else if (negativePercentage >= 50) {
+            result = "조금 부정적";
+        } else {
+            result = "중립적";
+        }
+
+        log.info("상품 번호 {}: 최종 감정 분석 결과 - {}", productNo, result);
+        return result;
     }
 }

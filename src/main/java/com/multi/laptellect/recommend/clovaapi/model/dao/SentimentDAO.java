@@ -20,4 +20,7 @@ public interface SentimentDAO {
             "WHERE product_no NOT IN (SELECT product_no FROM laptop_sentiment)")
     List<ReviewDTO> getUnanalyzedReviews();
 
+    @Select("SELECT * FROM laptop_sentiment WHERE product_no = #{productNo}")
+    SentimentDTO getSentimentByProductNo(@Param("productNo") int productNo);
+
 }

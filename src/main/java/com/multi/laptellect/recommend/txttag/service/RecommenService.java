@@ -85,6 +85,7 @@ public class RecommenService {
         String cpuName = laptopSpecDTO.getCpu().getCpuNumber(); //cpu
         String panelSurName = laptopSpecDTO.getDisplay().getPanelSurface(); //패널 표면 처리
         String refreshName = laptopSpecDTO.getDisplay().getResolution(); //해상도
+        String priceName = laptopSpecDTO.getPrice(); //가격
 
 
         //gpuName, screenSize 변수명 변경
@@ -165,12 +166,12 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'넉넉한 저장 공간' 태그(#{}) 할당", tagNo);
         }
-        if (isCoding(cpuName)) {
+        if (isCoding(cpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "코딩");
             assignedTags.add(tagNo);
             log.info("'코딩용' 태그(#{}) 할당", tagNo);
         }
-        if (isWork(cpuName)) {
+        if (isWork(cpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "작업용");
             assignedTags.add(tagNo);
             log.info("'작업용' 태그(#{}) 할당", tagNo);
@@ -200,10 +201,51 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'높은 해상도' 태그(#{}) 할당", tagNo);
         }
+        if (isPrice(priceName, gpuName)) {
+            tagNo = findTagByData(tags, "게이밍 착한 가격");
+            assignedTags.add(tagNo);
+            log.info("'게이밍 착한 가격' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceEff(priceName, gpuName)) {
+            tagNo = findTagByData(tags, "게이밍 가성비");
+            assignedTags.add(tagNo);
+            log.info("'게이밍 가성비' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceSmo(priceName, cpuName)) {
+            tagNo = findTagByData(tags, "사무용 착한 가격");
+            assignedTags.add(tagNo);
+            log.info("'사무용 착한 가격' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceSmoGod(priceName, gpuTypeName)) {
+            tagNo = findTagByData(tags, "사무용 가성비");
+            assignedTags.add(tagNo);
+            log.info("'사무용 가성비' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceSmoGo(priceName, gpuTypeName)) {
+            tagNo = findTagByData(tags, "사무용 고성능");
+            assignedTags.add(tagNo);
+            log.info("'사무용 고성능' 태그(#{}) 할당", tagNo);
 
+        }
+        if (isPriceGo(priceName, gpuName)) {
+            tagNo = findTagByData(tags, "게이밍 고성능");
+            assignedTags.add(tagNo);
+            log.info("'게이밍 고성능' 태그(#{}) 할당", tagNo);
+        }
+        if (isInten(cpuName, gpuTypeName)) {
+            tagNo = findTagByData(tags, "인터넷 강의");
+            assignedTags.add(tagNo);
+            log.info("'인터넷 강의' 태그(#{}) 할당", tagNo);
+        }
+        if (isSomoWeight(weightName)) {
+            tagNo = findTagByData(tags, "경량화");
+            assignedTags.add(tagNo);
+            log.info("'경량화' 태그(#{}) 할당", tagNo);
+        }
 
         return assignedTags;
     }
+
 
     private boolean islost(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
@@ -291,49 +333,60 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isWork(String gpu) {
+    private boolean isWork(String cpu, String gpuTypeName) {
         Map<String, Integer> ent5 = cpuConfig.getCpuMark();
         Pattern pattern3 = Pattern.compile("[\\s()]+");
-        String key4 = pattern3.matcher( "i7-1165G7 (2.8GHz)").replaceAll("");
+        String key4 = pattern3.matcher("i7-1165G7 (2.8GHz)").replaceAll("");
         String key5 = pattern3.matcher("i3-1005G1 (1.2GHz)").replaceAll("");
         Integer cpuScoer5 = ent5.get(key4);
         Integer cpuScoer6 = ent5.get(key5);
 
-        if (gpu == null) {
+        if (cpu == null || gpuTypeName == null) {
             return false;
         }
         if (cpuScoer5 == null || cpuScoer6 == null) {
             return false;
         }
-            for (String cpuName2 : ent5.keySet()) {
-                String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
-                if (gpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
-                    int cpuCode2 = ent5.get(cpuName2);
-                    return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6;
-                }
-            }
-            return false;
-        }
 
-    private boolean isCoding(String gpu) {
+        // 내장 그래픽 카드 여부 확인
+        boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+        for (String cpuName2 : ent5.keySet()) {
+            String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
+                int cpuCode2 = ent5.get(cpuName2);
+                // CPU 성능 조건과 내장 그래픽 조건을 모두 만족해야 함
+                return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6 && isIntegratedGraphics;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCoding(String cpu, String gpuTypeName) {
         Map<String, Integer> ent5 = cpuConfig.getCpuMark();
         Pattern pattern3 = Pattern.compile("[\\s()]+");
-        String key4 = pattern3.matcher( "i7-1165G7 (2.8GHz)").replaceAll("");
+        String key4 = pattern3.matcher("i7-1165G7 (2.8GHz)").replaceAll("");
         String key5 = pattern3.matcher("i3-1315U (1.2GHz)").replaceAll("");
+
         Integer cpuScoer5 = ent5.get(key4);
         Integer cpuScoer6 = ent5.get(key5);
 
-        if (gpu == null) {
+        if (cpu == null || gpuTypeName == null) {
             return false;
         }
         if (cpuScoer5 == null || cpuScoer6 == null) {
             return false;
         }
+
+        // 내장 그래픽 카드 여부 확인
+        boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
         for (String cpuName2 : ent5.keySet()) {
             String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
-            if (gpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
                 int cpuCode2 = ent5.get(cpuName2);
-                return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6;
+                // CPU 성능 조건과 내장 그래픽 조건을 모두 만족해야 함
+                return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6 && isIntegratedGraphics;
             }
         }
         return false;
@@ -532,6 +585,17 @@ public class RecommenService {
         }
     }
 
+    private boolean isSomoWeight (String weight) {
+        if (weight == null) {
+            return false;
+        } try {
+            double weighta = Double.parseDouble(weight.replace("kg", ""));
+            return weighta < 1.5;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private boolean isPower(String power) {
         if (power == null) {
         } try {
@@ -572,7 +636,158 @@ public class RecommenService {
         }
     }
 
+    private boolean isPrice (String price, String gpu) {
+        if (price == null || gpu == null) {
+            return false;
+        }
+        try {
+            double priceValue = Double.parseDouble(price.replace(",", ""));
+            boolean isPriceInRange = priceValue < 1000000;
 
+            Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+            Pattern pattern = Pattern.compile("[\\s()]+");
+            String gpuKey = pattern.matcher(gpu).replaceAll("");
+            Integer gpuScore = gEnt.get(gpuKey);
+
+            // GPU 성능이 RTX4060 이상인지 확인 (RTX4060의 점수는 17000)
+            boolean isHighPerformanceGPU = gpuScore != null && gpuScore >= 8500;
+
+            // 가격 조건과 GPU 성능 조건 모두 만족해야 함
+            return isPriceInRange && isHighPerformanceGPU;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceEff(String priceEff, String gpu) {
+        if (priceEff == null || gpu == null) {
+            return false;
+        }
+        try {
+            double priceValueEff = Double.parseDouble(priceEff.replace(",", ""));
+            boolean isPriceInRange = priceValueEff >= 1000000 && priceValueEff < 2600000;
+
+            Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+            Pattern pattern = Pattern.compile("[\\s()]+");
+            String gpuKey = pattern.matcher(gpu).replaceAll("");
+            Integer gpuScore = gEnt.get(gpuKey);
+
+            // GPU 성능이 RTX4060 이상인지 확인 (RTX4060의 점수는 17000)
+            boolean isHighPerformanceGPU = gpuScore != null && gpuScore >= 12000;
+
+            // 가격 조건과 GPU 성능 조건 모두 만족해야 함
+            return isPriceInRange && isHighPerformanceGPU;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceSmo(String priceSmo, String gpuTypeName) {
+        if (priceSmo == null || gpuTypeName == null) {
+            return false;
+        }
+        try {
+            double priceValueSmo = Double.parseDouble(priceSmo.replaceAll(",", ""));
+            boolean isPriceInRange = priceValueSmo < 1000000;
+
+            // 내장 그래픽 카드 여부 확인
+            boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+            // 가격 조건과 내장 그래픽 조건 모두 만족해야 함
+            return isPriceInRange && isIntegratedGraphics;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceSmoGo(String priceSmoGo, String gpuTypeName) {
+        if (priceSmoGo == null || gpuTypeName == null) {
+            return false;
+        }
+        try {
+            double priceValueSmoGo = Double.parseDouble(priceSmoGo.replaceAll(",", ""));
+            boolean isPriceInRange = priceValueSmoGo > 2000000;
+
+            // 내장 그래픽 카드 여부 확인
+            boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+            // 가격 조건과 내장 그래픽 조건 모두 만족해야 함
+            return isPriceInRange && isIntegratedGraphics;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isInten(String inten, String gpuTypeName) {
+        Map<String, Integer> ent5 = cpuConfig.getCpuMark();
+        Pattern pattern3 = Pattern.compile("[\\s()]+");
+        String cpukey = pattern3.matcher("i5-4200U (1.6GHz)").replaceAll("");
+        Integer cpuScoer = ent5.get(cpukey);
+
+        if (inten == null || gpuTypeName == null) {
+            return false;
+        }
+        if (cpuScoer == null) {
+            return false;
+        }
+
+        // 내장 그래픽 카드 여부 확인
+        boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+        for (String cpuName : ent5.keySet()) {
+            String cpuNameC = pattern3.matcher(cpuName).replaceAll("");
+            if (inten.replaceAll("[\\s()]+", "").contains(cpuNameC)) {
+                int cpuCode = ent5.get(cpuName);
+                // CPU 성능이 기준점(cpuScoer)보다 낮으면서, 내장 그래픽일 경우
+                if (cpuCode > cpuScoer && isIntegratedGraphics) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    private boolean isPriceSmoGod(String priceSmoGod, String gpuTypeName) {
+        if (priceSmoGod == null || gpuTypeName == null) {
+            return false;
+        }
+        try {
+            double priceValueSmoGod = Double.parseDouble(priceSmoGod.replaceAll(",", ""));
+            boolean isPriceInRange = priceValueSmoGod >= 1000000 && priceValueSmoGod < 1500000;
+
+            // 내장 그래픽 카드 여부 확인
+            boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+            //내장 가격 모두만족
+            return isPriceInRange && isIntegratedGraphics;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceGo(String priceGo, String gpu) {
+        if (priceGo == null || gpu == null) {
+            return false;
+        }
+        try {
+            double priceValueGo = Double.parseDouble(priceGo.replace(",", ""));
+            boolean isPriceInRange = priceValueGo >= 2300000;
+
+            Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+            Pattern pattern = Pattern.compile("[\\s()]+");
+            String gpuKey = pattern.matcher(gpu).replaceAll("");
+            Integer gpuScore = gEnt.get(gpuKey);
+
+            // GPU 성능이 RTX4060 이상인지 확인 (RTX4060의 점수는 17000)
+            boolean isHighPerformanceGPU = gpuScore != null && gpuScore >= 17000;
+
+            // 가격 조건과 GPU 성능 조건 모두 만족해야 함
+            return isPriceInRange && isHighPerformanceGPU;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     private int findTagByData(List<TaggDTO> tags, String tagData ) {
         for (TaggDTO tag : tags) {
