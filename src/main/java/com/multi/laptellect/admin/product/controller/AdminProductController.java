@@ -46,8 +46,8 @@ public class AdminProductController {
             int page = products.getPageable().getPageNumber();
             int size = products.getPageable().getPageSize();
 
-            int startPage = PaginationUtil.getStartPage(products, 5);
-            int endPage = PaginationUtil.getEndPage(products, 5);
+            int startPage = PaginationUtil.getStartPage(products, 10);
+            int endPage = PaginationUtil.getEndPage(products, 10);
 
             model.addAttribute("products", products);
             model.addAttribute("page", page);

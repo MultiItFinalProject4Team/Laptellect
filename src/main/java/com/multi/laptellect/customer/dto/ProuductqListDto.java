@@ -20,4 +20,5 @@ public class ProuductqListDto {
     private String secret;
     private String answer;
     private Date createdAt;
+    private String memberName;
 }

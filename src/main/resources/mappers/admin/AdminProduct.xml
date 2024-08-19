@@ -5,6 +5,44 @@
 <mapper namespace="com.multi.laptellect.admin.product.model.mapper.AdminProductMapper">
 
 
+    <resultMap id="productResultMap" type="productDTO">
+        <result property="productNo" column="product_no"/>
+        <result property="typeNo" column="type_no"/>
+        <result property="productName" column="product_name"/>
+        <result property="price" column="price"/>
+        <result property="referenceCode" column="reference_code"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="productCode" column="product_code"/>
+        <result property="image" column="upload_name"/>
+    </resultMap>
 
+
+    <select id="getAllProducts" resultType="productDTO" resultMap="productResultMap">
+        SELECT
+        p.product_no,
+        p.type_no,
+        p.product_name,
+        p.price,
+        p.reference_code,
+        p.created_at,
+        p.updated_at,
+        p.product_code,
+        i.upload_name
+        FROM
+        product p
+        JOIN
+        images i
+        on
+        i.reference_code = p.reference_code
+        ORDER BY p.product_no DESC
+        LIMIT #{ pageSize } OFFSET #{ offset }
+
+    </select>
+
+    <select id="countAllProduct" resultType="long">
+        SELECT COUNT(*)
+        FROM product
+    </select>
 
 </mapper>

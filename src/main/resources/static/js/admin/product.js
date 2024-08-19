@@ -6,6 +6,29 @@ $(document).ready(function () {
             return value.trim() === "" ? null : value;
         }
 
+    function formatPrices() {
+        $('.price').each(function() {
+            let value = $(this).text().replace(' 원', '').replace(/,/g, '');
+            let formattedValue = new Intl.NumberFormat().format(value);
+            $(this).text(formattedValue + ' 원');
+        });
+    }
+    function checkBoxSelect(){
+        $("#select-all").click(function(){
+            $(".select-item").prop('checked', $(this).prop('checked'));
+        });
+
+        $(".select-item").click(function(){
+            if($(".select-item:checked").length === $(".select-item").length) {
+                $("#select-all").prop('checked',true);
+            } else {
+                $("#select-all").prop('checked',false);
+            }
+        });
+    }
+
+    
+
 
     function loadList(page) {
         let cate = convertEmptyToNull($(".form-select").val());
@@ -23,6 +46,8 @@ $(document).ready(function () {
             }),
             success: function (response) {
                 $("#product-list-box").html(response);
+                formatPrices();
+                checkBoxSelect();
             },
             error: function (xhr, status, error) {
                 console.error("조회 실패:", error);

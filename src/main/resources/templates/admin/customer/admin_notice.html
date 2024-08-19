@@ -67,7 +67,7 @@
             <tr th:each="note : ${list}" class="align-middle">
                 <td th:text="${note.noticeNo}">번호</td>
                 <td style="text-align: center;">
-                    <a style="text-decoration: none;" th:href="@{/customer/admin/admin_notice_detail/{noticeNo}(noticeNo=${note.noticeNo})}" th:text="${note.mainRegist == 'Y' ? '❕'+note.title : note.title}"></a>
+                    <a style="text-decoration: none;" th:href="@{/customer/admin/admin_notice_detail/{noticeNo}(noticeNo=${note.noticeNo})}" th:text="${note.mainRegist == 'Y' ? '🌟'+note.title : note.title}"></a>
                 </td>
                 <td>관리자</td>
                 <td th:text="${#dates.format(note.createdAt, 'YY/MM/dd HH:mm')}">작성일</td>

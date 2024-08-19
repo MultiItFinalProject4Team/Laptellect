@@ -83,7 +83,7 @@ public class CrawlingService {
                         "&categoryCode=758" +
                         "&physicsCate1=860" +
                         "&physicsCate2=869" +
-                        "&sortMethod=NEW" +
+                        "&sortMethod=BoardCount" +
                         "&viewMethod=LIST" +
                         "&listCount=90");
                 log.info("laptopType {}", productType);
@@ -902,14 +902,15 @@ public class CrawlingService {
 
     public void reviewCrawler() {
 
+
         List<ProductDTO> productNos = productMapper.getReviewRequired();
         int emptyReviewData = 0;
-
 
         for (ProductDTO productDTO : productNos) {
 
             int productNo = productDTO.getProductNo();
             String productCode = productDTO.getProductCode();
+
 
             try {
                 for (int totalPages = 1; totalPages <= 1000; totalPages++) {
