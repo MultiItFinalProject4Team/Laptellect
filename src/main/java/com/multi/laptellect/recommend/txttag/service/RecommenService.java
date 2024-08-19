@@ -107,14 +107,14 @@ public class RecommenService {
             log.info("'넓은 화면' 태그(#{}) 할당", tagNo);
         }
         if (isScreenSuitableForDocuments(screenSize)) {
-            tagNo = findTagByData(tags, "작은 화면");
-            assignedTags.add(tagNo);
-            log.info("'작은 화면' 태그(#{}) 할당", tagNo);
-        }
-        if (isScreenSuitableForStudents(screenSize)) {
             tagNo = findTagByData(tags, "적당한 화면");
             assignedTags.add(tagNo);
             log.info("'적당한 화면' 태그(#{}) 할당", tagNo);
+        }
+        if (isScreenSuitableForStudents(screenSize)) {
+            tagNo = findTagByData(tags, "작은 화면");
+            assignedTags.add(tagNo);
+            log.info("'작은 화면' 태그(#{}) 할당", tagNo);
         }
         if (isWindowsOS(osName)) {
             tagNo = findTagByData(tags, "윈도우 있음");
