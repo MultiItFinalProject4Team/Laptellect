@@ -1,5 +1,6 @@
 package com.multi.laptellect.config.Scheduler;
 
+import com.multi.laptellect.common.service.LogService;
 import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.txttag.service.RecommenService;
 import com.multi.laptellect.util.RedisUtil;
@@ -23,6 +24,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SchedulerConfiguration {
     private final RedisUtil redisUtil;
+    private final LogService logService;
     private final ProductService productService;
     private final RecommenService recommenService;
 
@@ -32,8 +34,18 @@ public class SchedulerConfiguration {
 //    }
 
     @Scheduled(fixedRate = 300000) // 5분 간격으로 방문자 수 카운트
-    public void visitorCount() {
+    public void visitCount() {
         log.info("방문자 수 카운트 스케쥴러");
+            String sessionKey = "Visit:" + "count";
+
+        try {
+            int count = Integer.parseInt(redisUtil.getData(sessionKey));
+            logService.insertVisitCount(count);
+            redisUtil.deleteData(sessionKey);
+        } catch (Exception e) {
+            log.error("방문자 없음");
+        }
+
     }
 
     @Scheduled(fixedRate = 180000) // 3분 간격으로 상품 조회수 업데이트

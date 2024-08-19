@@ -23,6 +23,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationFailureHandler customFailureHandler;
+
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final RedisUtil redisUtil;
 
     @Bean // 비밀번호 암호화
@@ -71,6 +73,7 @@ public class SecurityConfig {
         http
                 .formLogin((auth) -> auth.loginPage("/signin")
                         .loginProcessingUrl("/signin").permitAll()
+                        .successHandler(customAuthenticationSuccessHandler)
                         .failureHandler(customFailureHandler));
         http
                 .rememberMe() // 아이디 저장

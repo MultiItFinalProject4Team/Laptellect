@@ -1,372 +1,323 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{common/layout}">
+  layout:decorate="~{common/layout}">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/product/product.css}">
-    <script th:inline="javascript">
-        $(document).ready(function() {
-                let currentPage = 1;
-                let pageSize = 30;
-                let typeNo = 1;
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/product/product.css}">
+<script th:inline="javascript">
+    $(document).ready(function() {
+        let currentPage = 0;
+        let pageSize = 12;
+        let typeNo = 1;
+        let currentKeyword = '';
 
-                // 기본 탭에 active 클래스 추가 기본 선택 상태로 만듦
-                switch(typeNo) {
-                    case 1:
-                        $("#laptop-tab").addClass("active");
-                        break;
-                    case 2:
-                        $("#mouse-tab").addClass("active");
-                        break;
-                    case 3:
-                        $("#keyboard-tab").addClass("active");
-                        break;
-                    default:
-                        $("#laptop-tab").addClass("active");
-                        break;
-                }
+        // 기본 탭에 active 클래스 추가
+        switch(typeNo) {
+            case 1:
+                $("#laptop-tab").addClass("active");
+                break;
+            case 2:
+                $("#mouse-tab").addClass("active");
+                break;
+            case 3:
+                $("#keyboard-tab").addClass("active");
+                break;
+            default:
+                $("#laptop-tab").addClass("active");
+                break;
+        }
 
-                // 가격 형식을 포맷팅하는 함수
-                function formatPrices() {
-                    $('.price').each(function() {
-                        let value = $(this).text().replace(' 원', '').replace(/,/g, '');
-                        let formattedValue = new Intl.NumberFormat().format(value);
-                        $(this).text(formattedValue + ' 원');
-                    });
-                }
-
-                // 선택된 필터를 가져오는 함수
-                function getSelectedFilters() {
-                    let selectedFilters = [];
-                    $("#filterForm input[type='checkbox']:checked").each(function(){
-                        selectedFilters.push($(this).val()); // 선택된 값만 리스트에 추가
-                    });
-                    return selectedFilters;
-                }
-
-                function collectFilters() {
-                    let filters = {};
-
-                    // 제조사 필터 수집 (LBI2)
-                    let selectedManufacturers = [];
-                    $("input[name='manufacturer']:checked").each(function() {
-                        selectedManufacturers.push($(this).val());
-                    });
-                    if (selectedManufacturers.length > 0) {
-                        filters['LBI2'] = selectedManufacturers; // 제조사 카테고리 코드: LBI2
-                    }
-
-                    // 운영체제(OS) 필터 수집 (LBI1)
-                    let selectedOs = [];
-                    $("input[name='os']:checked").each(function() {
-                        selectedOs.push($(this).val());
-                    });
-                    if (selectedOs.length > 0) {
-                        filters['LBI1'] = selectedOs; // 운영체제 카테고리 코드: LBI1
-                    }
-
-                    // 저장장치 종류 필터 수집 (LS22)
-                    let selectedStorageTypes = [];
-                    $("input[name='storageType']:checked").each(function() {
-                        selectedStorageTypes.push($(this).val());
-                    });
-                    if (selectedStorageTypes.length > 0) {
-                        filters['LS22'] = selectedStorageTypes; // 저장장치 종류 카테고리 코드: LS22
-                    }
-
-                    // 저장 용량 필터 수집 (LS21)
-                    let selectedStorageCapacities = [];
-                    $("input[name='storageCapacity']:checked").each(function() {
-                        selectedStorageCapacities.push($(this).val());
-                    });
-                    if (selectedStorageCapacities.length > 0) {
-                        filters['LS21'] = selectedStorageCapacities; // 저장 용량 카테고리 코드: LS21
-                    }
-
-                    // GPU 필터 수집 (LG38)
-                    let selectedGpus = [];
-                    $("input[name='gpu']:checked").each(function() {
-                        selectedGpus.push($(this).val());
-                    });
-                    if (selectedGpus.length > 0) {
-                        filters['LG38'] = selectedGpus; // GPU 카테고리 코드: LG38
-                    }
-
-                    // CPU 필터 수집 (LC13)
-                    let selectedCpus = [];
-                    $("input[name='cpu']:checked").each(function() {
-                        selectedCpus.push($(this).val());
-                    });
-                    if (selectedCpus.length > 0) {
-                        filters['LC13'] = selectedCpus; // CPU 카테고리 코드: LC13
-                    }
-
-                    // 램 용량 필터 수집 (LR9)
-                    let selectedRam = [];
-                    $("input[name='ram']:checked").each(function() {
-                        selectedRam.push($(this).val());
-                    });
-                    if (selectedRam.length > 0) {
-                        filters['LR9'] = selectedRam; // 램 용량 카테고리 코드: LR9
-                    }
-
-                    // 해상도 필터 수집 (LD25)
-                    let selectedResolution = [];
-                    $("input[name='resolution']:checked").each(function() {
-                        selectedResolution.push($(this).val());
-                    });
-                    if (selectedResolution.length > 0) {
-                        filters['LD25'] = selectedResolution; // 해상도 카테고리 코드: LD25
-                    }
-
-                    return filters;
-                }
-
-                // 제품 리스트를 로드하는 함수
-                function loadProducts(page, size, typeNo, keyword, filters = []) {
-                    let data = {
-                        page: page - 1,
-                        size: size,
-                        typeNo: typeNo,
-                        keyword: keyword,
-                        cate: filters
-                    };
-                    console.log("Calling loadProducts with - page:", data);
-
-                    $.ajax({
-                        url: "/api/product/product-list",
-                        type: "GET",
-                        data: data,
-                        success: function (response) {
-                            $('#product-list').html(response);
-                            formatPrices();
-                            currentPage = page;
-                        },
-                        error: function (error){
-                            console.log(error);
-                        }
-                    });
-                }
-
-                // 페이지 로드 시 초기 제품 리스트 로드
-                loadProducts(currentPage, pageSize, typeNo, '');
-
-                // 탭을 클릭했을 때 발생하는 이벤트 핸들러
-                $(".product-link").on("click", function (e) {
-                    e.preventDefault();
-                    typeNo = $(this).data('type-no');
-                    currentPage = 1;
-                    $(".product-link").removeClass("active");
-                    $(this).addClass("active");
-                    loadProducts(currentPage, pageSize, typeNo, '');
-                    console.log(typeNo);
-                });
-
-                // 검색 폼 제출 시 발생하는 이벤트 핸들러
-                $("#searchForm").on("submit", function(e) {
-                    e.preventDefault();
-                    let keyword = $("#form1").val();
-                    currentPage = 1;
-                    loadProducts(currentPage, pageSize, typeNo, keyword);
-                });
-
-                // 필터 변경 시 발생하는 이벤트 핸들러
-                $("#filterForm input[type='checkbox']").on("change", function() {
-                    let filters = collectFilters();
-                    currentPage = 1;
-                    loadProducts(currentPage, pageSize, typeNo, '', filters);
-                });
-
-
-                // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
-                $(document).on('click', '.pagination a.page-link', function(event) {
-                    event.preventDefault();
-
-                    let page = $(this).data('page');
-
-                    if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
-                        console.log('Link is disabled or active');
-                        return;
-                    }
-                    loadProducts(page, pageSize, typeNo, '');  // 페이지 이동 시 currentPage와 typeNo를 유지
-                    console.log('Page:', page, 'Page Size:', pageSize, 'Type No:', typeNo);
-                });
-
-                // 카테고리 데이터를 로드하는 AJAX 요청
-                $.ajax({
-                    url: "/product/productList",
-                    type: "GET",
-                    success: function (response) {
-                        // 카테고리 데이터를 사용해 동적 콘텐츠를 업데이트하는 코드가 필요합니다.
-                    },
-                    error: function (error){
-                        console.log(error);
-                    }
-                });
+        // 가격 형식을 포맷팅하는 함수
+        function formatPrices() {
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '').replace(/,/g, '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue + ' 원');
             });
+        }
+
+        // 필터 값을 카테고리별로 수집하는 함수
+        function getSelectedFiltersByCategory(categoryName) {
+            let filters = [];
+            $("#filterForm input[name='" + categoryName + "']:checked").each(function() {
+                filters.push($(this).val());
+            });
+            return filters;
+        }
+
+
+
+        // 제품 리스트를 로드하는 함수
+        function loadProducts(page, size, typeNo) {
+
+            let data = {
+                page: page,
+                size: size,
+                typeNo: typeNo,
+                keyword: $("#form1").val(),
+                LBI1: getSelectedFiltersByCategory('os'),
+                LBI2: getSelectedFiltersByCategory('manufacturer'),
+                LS22: getSelectedFiltersByCategory('storageType'),
+                LS21: getSelectedFiltersByCategory('storageCapacity'),
+                LG38: getSelectedFiltersByCategory('gpu'),
+                LC13: getSelectedFiltersByCategory('cpu'),
+                LR9: getSelectedFiltersByCategory('ram'),
+                LD25: getSelectedFiltersByCategory('resolution'),
+                minPrice: $("#site-search1").val(),  // 여기서 값을 직접 할당
+                maxPrice: $("#site-search2").val()
+            };
+
+            console.log("Calling loadProducts with - data:", data);
+
+            $.ajax({
+                url: "/api/product/product-list",
+                type: "GET",
+                data: data,
+                success: function(response) {
+                    $('#product-list').html(response);
+                    formatPrices();
+                    currentPage = page;
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+        function searchProducts() {
+            currentPage = 0;
+            loadProducts(currentPage, pageSize, typeNo);
+        }
+
+        // 페이지 로드 시 초기 제품 리스트 로드
+        loadProducts(currentPage, pageSize, typeNo);
+
+                // 필터 값이 변경될 때 호출
+        $("#filterForm input:checkbox").on("change", function() {
+           currentPage = 0;
+           searchProducts();
+        });
+        // 검색 폼 제출 시 호출
+        $("#searchForm").on("submit", function(e) {
+            e.preventDefault();
+            searchProducts();
+        });
+
+        // 탭 클릭 시 발생하는 이벤트 핸들러
+        $(".product-link").on("click", function(e) {
+            e.preventDefault();
+            typeNo = $(this).data('type-no');
+            currentPage = 0;
+            $(".product-link").removeClass("active");
+            $(this).addClass("active");
+            searchProducts();
+        });
+
+        // 검색 버튼 클릭 시 searchProducts 호출
+        $("#priceSearch").on("click", function() {
+            searchProducts();  // 검색 실행
+        });
+
+
+
+        // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
+        $(document).on('click', '.pagination a.page-link', function(event) {
+            event.preventDefault();
+
+            let page = $(this).data('page');
+            if (!$(this).closest('li').hasClass('disabled') && !$(this).closest('li').hasClass('active')) {
+                currentPage = page;
+                loadProducts(currentPage, pageSize, typeNo)
+            }
+        });
+    });
 </script>
 
-    <style>
-        /* 테이블 셀 안의 내용들을 왼쪽 정렬 */
-        .left-align {
-            text-align: left;
-        }
-        /* 필터 항목 열의 넓이를 좁게, 선택 옵션 열의 넓이를 넓게 설정 */
-        .filter-header {
-            width: 100px;
-        }
-        /* 선택 옵션을 나란히 표시하는 스타일 */
-        .options-list {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .options-list label {
-            margin-right: 10px; /* 각 옵션 사이에 간격 추가 */
-        }
-    </style>
+<style>
+    /* 스타일 정의 */
+    .left-align {
+        text-align: left;
+    }
+    .filter-header {
+        width: 100px;
+    }
+    .options-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .options-list label {
+        margin-right: 10px;
+    }
+    .btn-custom-price {
+        background-color: #3498DB;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+</style>
 </head>
 
 <body>
 <div class="container-md" layout:fragment="content">
-    <br>
-    <form id="filterForm">
-        <table border="1">
-            <tbody class="table custom-table custom-table-striped custom-table-bordered custom-table-hover">
-            <!-- 제조사 -->
-            <tr>
-                <td class="filter-header">제조사</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="manufacturer : ${cate['LBI2']}">
-                            <input type="checkbox" name="manufacturer" th:value="${manufacturer}" th:id="${manufacturer}">
-                            <label th:for="${manufacturer}" th:text="${manufacturer}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- 운영체제(OS) -->
-            <tr>
-                <td class="filter-header">운영체제(OS)</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="osOption : ${cate['LBI1']}">
-                            <input type="checkbox" name="os" th:value="${osOption}" th:id="${osOption}">
-                            <label th:for="${osOption}" th:text="${osOption}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- 저장장치 종류 -->
-            <tr>
-                <td class="filter-header">저장장치 종류</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="storageType : ${cate['LS22']}">
-                            <input type="checkbox" name="storageType" th:value="${storageType}" th:id="${storageType}">
-                            <label th:for="${storageType}" th:text="${storageType}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- 저장 용량 -->
-            <tr>
-                <td class="filter-header">저장 용량</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="value : ${cate['LS21']}">
-                            <input type="checkbox" name="storageCapacity" th:value="${value}" th:id="${value}">
-                            <label th:for="${value}" th:text="${value}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- GPU 종류 -->
-            <tr>
-                <td class="filter-header">GPU 종류</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="value : ${cate['LG38']}">
-                            <input type="checkbox" name="gpu" th:value="${value}" th:id="${value}">
-                            <label th:for="${value}" th:text="${value}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- CPU 종류 -->
-            <tr>
-                <td class="filter-header">CPU 종류</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="value : ${cate['LC13']}">
-                            <input type="checkbox" name="cpu" th:value="${value}" th:id="${value}">
-                            <label th:for="${value}" th:text="${value}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- 램 용량 -->
-            <tr>
-                <td class="filter-header">램 용량</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="value : ${cate['LR9']}">
-                            <input type="checkbox" name="ram" th:value="${value}" th:id="${value}">
-                            <label th:for="${value}" th:text="${value}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- 해상도 -->
-            <tr>
-                <td class="filter-header">해상도</td>
-                <td class="left-align">
-                    <div class="options-list">
-                        <div th:each="value : ${cate['LD25']}">
-                            <input type="checkbox" name="resolution" th:value="${value}" th:id="${value}">
-                            <label th:for="${value}" th:text="${value}"></label>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+<br>
+    <form th:action="@{/product/test2}" method="get">
+        <label for="typeDetails">상품 타입 선택: </label>
+        <select name="typeDetails" id="typeDetails">
+            <option value="1">상품 타입 1</option>
+            <option value="2">상품 타입 2</option>
+            <option value="3">상품 타입 3</option>
+        </select>
+        <button type="submit">선택한 상품 타입 가져오기</button>
     </form>
-    <br>
-    <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
-        <div class="product-search">
-            <div class="form-outline" data-mdb-input-init>
-                <input type="search" id="form1" class="form-control search-input" placeholder="검색어를 입력하세요." name="keyword"/>
-            </div>
-            <button type="submit" class="btn btn-primary-input" data-mdb-ripple-init>
-                <i class="fas fa-search"></i>
-            </button>
+
+<form id="filterForm">
+    <table border="1">
+        <tbody class="table custom-table custom-table-striped custom-table-bordered custom-table-hover">
+        <!-- 제조사 -->
+        <tr>
+            <td class="filter-header">제조사</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LBI2']}">
+                        <input type="checkbox" name="manufacturer" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- 운영체제(OS) -->
+        <tr>
+            <td class="filter-header">운영체제(OS)</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LBI1']}">
+                        <input type="checkbox" name="os" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- 저장장치 종류 -->
+        <tr>
+            <td class="filter-header">저장장치 종류</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LS22']}">
+                        <input type="checkbox" name="storageType" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- 저장 용량 -->
+        <tr>
+            <td class="filter-header">저장 용량</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LS21']}">
+                        <input type="checkbox" name="storageCapacity" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- GPU 종류 -->
+        <tr>
+            <td class="filter-header">GPU 종류</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LG38']}">
+                        <input type="checkbox" name="gpu" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- CPU 종류 -->
+        <tr>
+            <td class="filter-header">CPU 종류</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LC13']}">
+                        <input type="checkbox" name="cpu" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- 램 용량 -->
+        <tr>
+            <td class="filter-header">램 용량</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LR9']}">
+                        <input type="checkbox" name="ram" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- 해상도 -->
+        <tr>
+            <td class="filter-header">해상도</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div th:each="value : ${cate['LD25']}">
+                        <input type="checkbox" name="resolution" th:value="${value}" th:id="${value}">
+                        <label th:for="${value}" th:text="${value}"></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <!-- 가격대 -->
+        <tr>
+            <td class="filter-header">가격대</td>
+            <td class="left-align">
+                <div class="options-list">
+                    <div class="price-search">
+                        <input type="number" id="site-search1" name="min" style="width: 100px;" />
+                        ~
+                        <input type="number" id="site-search2" name="max" style="width: 100px;" />
+                        <button type="button" id="priceSearch" name="prices" class="btn-custom-price">검색</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<br>
+<form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
+    <div class="product-search">
+        <div class="form-outline" data-mdb-input-init>
+            <input type="search" id="form1" class="form-control search-input" placeholder="검색어를 입력하세요." name="keyword"/>
         </div>
-        <input type="hidden" id="typeNo" name="typeNo" value="1"/>
-    </form>
-    <div>
-        <ul class="nav nav-tab product-taps flex-grow-1">
-            <li class="nav-item product-item">
-                <a class="nav-link product-link" id="laptop-tab" data-type-no="1" href="#">노트북</a>
-            </li>
-            <li class="nav-item product-item">
-                <a class="nav-link product-link" id="mouse-tab" data-type-no="2" href="#">마우스</a>
-            </li>
-            <li class="nav-item product-item">
-                <a class="nav-link product-link" id="keyboard-tab" data-type-no="3" href="#">키보드</a>
-            </li>
-        </ul>
+        <button type="submit" class="btn btn-primary-input" data-mdb-ripple-init>
+            <i class="fas fa-search"></i>
+        </button>
     </div>
-    <br>
-    <div class="row" id="product-list"></div>
-
+    <input type="hidden" id="typeNo" name="typeNo" value="1"/>
+</form>
+<div>
+    <ul class="nav nav-tab product-taps flex-grow-1">
+        <li class="nav-item product-item">
+            <a class="nav-link product-link" id="laptop-tab" data-type-no="1" href="#">노트북</a>
+        </li>
+        <li class="nav-item product-item">
+            <a class="nav-link product-link" id="mouse-tab" data-type-no="2" href="#">마우스</a>
+        </li>
+        <li class="nav-item product-item">
+            <a class="nav-link product-link" id="keyboard-tab" data-type-no="3" href="#">키보드</a>
+        </li>
+    </ul>
 </div>
-
+<br>
+<div class="row" id="product-list"></div>
+</div>
 </body>
 </html>

@@ -16,7 +16,7 @@
                 <tbody>
                         <tr th:each="member, loop : ${ members }">
                                 <th><a href="#" th:text="${ page * size + loop.index + 1 }" scope="row"></a></th>
-                                <td th:text="${ member.memberName }"></td>
+                                <td><a href="#" th:text="${ member.memberName }" data-bs-toggle="modal" data-bs-target="#memberModal"></a></td>
                                 <td th:text="${ member.email }"></td>
                                 <td th:text="${ member.nickName }"></td>
                                 <td th:text="${ member.loginType }"></td>
