@@ -37,6 +37,20 @@ public class ProductSearchDTO implements Pageable {
     private int typeNo; // 상품 카테고리 번호
     private Map<String, List<String>> cate; // 카테고리 옵션
     private String keyword; // 검색어
+    private List<String> LBI1; // 운영체제 필터
+    private List<String> LBI2; // 제조사 필터
+    private List<String> LS22; // 저장장치 종류
+    private List<String> LS21; // 저장 용량
+    private List<String> LG38; // GPU 종류
+    private List<String> LC13; // CPU 종류
+    private List<String> LR9; // 램 용량
+    private List<String> LD25; // 해상도
+
+    private Map<String,List<String>> cate1;
+
+
+    private Integer minPrice;
+    private Integer maxPrice;
 
 
 
@@ -53,7 +67,7 @@ public class ProductSearchDTO implements Pageable {
 
     @Override
     public long getOffset() { // 페이징 시작할 위치
-        return (long) this.page * this.size;
+        return (long) (this.page) * this.size;
     }
 
     @Override

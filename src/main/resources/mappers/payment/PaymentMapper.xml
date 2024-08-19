@@ -246,7 +246,7 @@
         FROM payment p
         JOIN mem_member m ON p.member_no = m.member_no
         JOIN product pr ON p.product_no = pr.product_no
-        LEFT JOIN payment_product_reviews ppr ON p.im_port_id = ppr.im_port_id
+        LEFT JOIN payment_product_reviews ppr ON p.im_port_id = ppr.im_port_id AND p.product_no = ppr.product_no
         WHERE p.refund = 'N'
         AND p.member_no = #{memberNo}
         AND p.product_no = #{productNo}

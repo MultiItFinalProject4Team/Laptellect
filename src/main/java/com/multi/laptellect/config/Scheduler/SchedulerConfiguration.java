@@ -36,7 +36,7 @@ public class SchedulerConfiguration {
     @Scheduled(fixedRate = 300000) // 5분 간격으로 방문자 수 카운트
     public void visitCount() {
         log.info("방문자 수 카운트 스케쥴러");
-        String sessionKey = "Visit:" + "count";
+            String sessionKey = "Visit:" + "count";
 
         try {
             int count = Integer.parseInt(redisUtil.getData(sessionKey));

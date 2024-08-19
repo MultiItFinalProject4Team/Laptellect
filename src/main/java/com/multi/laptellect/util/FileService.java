@@ -12,8 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -31,12 +29,9 @@ public class FileService {
     }
 
     //NOTICE: filePath의 맨 앞에 /는 안붙여도됨. ex) image/customer
-    public List<FileDto> uploadFiles(List<MultipartFile> multipartFiles, String filePath) {  
+    public FileDto uploadFiles(MultipartFile multipartFile, String filePath) {
   
-        List<FileDto> s3files = new ArrayList<>();
-  
-        for (MultipartFile multipartFile : multipartFiles) {  
-  
+            FileDto s3files;
             String originalFileName = multipartFile.getOriginalFilename();  
             String uploadFileName = getUuidFileName(originalFileName);  
             String uploadFileUrl = "";  
@@ -61,15 +56,21 @@ public class FileService {
                 e.printStackTrace();  
             }  
   
-            s3files.add(  
-                    FileDto.builder()  
+            s3files = FileDto.builder()
                             .originalFileName(originalFileName)  
                             .uploadFileName(uploadFileName)  
                             .uploadFilePath(filePath)  
                             .uploadFileUrl(uploadFileUrl)  
-                            .build());  
-        }  
-  
+                            .build();
         return s3files;  
-    }  
+    }
+
+    public int deleteFile(String url){
+        try {
+            amazonS3Client.deleteObject(bucketName, url);
+        }catch (Exception e){
+            return 0;
+        }
+        return 1;
+    }
 }

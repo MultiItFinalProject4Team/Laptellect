@@ -87,13 +87,19 @@ public class ProductApiController {
         searchDTO.setPage(pageable.getPageNumber());
         searchDTO.setSize(pageable.getPageSize());
 
+
+        log.info("카테고리 파라미터 확인 = {},",searchDTO.getLBI1());
+
         log.info("파라미터 = {}", searchDTO.getCate());
+
 
 
         // Page<> : 페이징된 결과와 관련 정보를 함께 제공하는 Spring Data JPA의 강력한 도구
         Page<ProductDTO> productPage = productService.searchProducts(searchDTO);
         // getContent() : 페이징된 데이터를 얻을 수 있음
+
         log.info( "페이징 데이터 = {}", productPage);
+
 
 
 
@@ -170,8 +176,19 @@ public class ProductApiController {
             log.error("Product find fail = ", e);
             model.addAttribute("wishlist", wishlist); // 예외 발생 시에도 빈 리스트 추가
         }
-        model.addAttribute("currentPage", pageable.getPageNumber() + 1);
-        model.addAttribute("totalPages", productPage.getTotalPages());
+
+        int displayPages = 10;
+        int currentPage = pageable.getPageNumber();
+        int totalPages = productPage.getTotalPages();
+
+
+        int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
+        int endPage = Math.min(startPage + displayPages - 1, totalPages);
+
+        model.addAttribute("currentPage", currentPage );
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("size", searchDTO.getSize());
         model.addAttribute("sort", searchDTO.getSort());
         model.addAttribute("products", productPage.getContent());
@@ -179,7 +196,15 @@ public class ProductApiController {
         model.addAttribute("typeNo", searchDTO.getTypeNo());
         model.addAttribute("keyword", searchDTO.getKeyword());
 
-        log.info("컨트롤러 model 데이터 확인 {},{},{},{},{},{},{}",pageable.getPageNumber() + 1, productPage.getTotalPages(), searchDTO.getSize(), searchDTO.getSort(),productPage, searchDTO.getTypeNo(), searchDTO.getKeyword());
+        log.info("컨트롤러 model 데이터 확인 페이지번호={},페이지총수량={},페이지사이즈={},페이지정렬={},페이지타입={},{},{}",
+                currentPage,
+                totalPages,
+                searchDTO.getSize(),
+                searchDTO.getSort(),
+                productPage,
+                searchDTO.getTypeNo(),
+                searchDTO.getKeyword());
+        log.info( "페이징 데이터 = {},{}",currentPage, totalPages);
 
         return "product/product/productList";
     }

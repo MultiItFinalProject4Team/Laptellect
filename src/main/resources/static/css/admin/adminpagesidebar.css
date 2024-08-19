@@ -1,68 +1,65 @@
+#adminLogo {
+    width: 80px;
+    height: 80px;
+}
 
+ul {
+  list-style: none;
+  padding-left:0px
+}
 
+#adminLogo {
+    width: 80px;
+    height: 80px;
+}
 
-        #adminLogo {
-            width: 80px;
-            height: 80px;
-        }
+.sidebar {
+    width: 240px;
+    height: auto;
+    box-sizing: border-box;
+    text-color: black;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+}
+.sidebar a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+.sidebar a:hover {
+    background-color: #495057;
+}
+.sidebar .profile {
+    padding: 15px;
+    text-align: center;
+}
 
-        ul {
-          list-style: none;
-          padding-left:0px
-        }
+.sidebar .profile p {
+    margin: 0;
+    color: white;
+}
 
-        #adminLogo {
-            width: 80px;
-            height: 80px;
-        }
+.profile-box {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 700px;
+}
 
-        .sidebar {
-            width: 240px;
-            height: auto;
-            box-sizing: border-box;
-            text-color: black;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 15px;
-        }
-        .sidebar a {
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-        .sidebar .profile {
-            padding: 15px;
-            text-align: center;
-        }
-
-        .sidebar .profile p {
-            margin: 0;
-            color: white;
-        }
-
-        .profile-box {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            height: 700px;
-        }
-
-        .profile-point {
-            width: 100%;
-            margin: 10px 0;
-            padding: 5px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            box-sizing: border-box;
-            text-align: right;
-        }
+.profile-point {
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-align: right;
+}
 
 body { font-family: 'Noto Sans KR', sans-serif; }

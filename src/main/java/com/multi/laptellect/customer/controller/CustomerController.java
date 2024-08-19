@@ -1,8 +1,10 @@
 package com.multi.laptellect.customer.controller;
 
+import com.multi.laptellect.common.model.FileDto;
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.service.CustomerService;
 import com.multi.laptellect.customer.service.PaginationService;
+import com.multi.laptellect.util.FileService;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +29,8 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private PaginationService pagination;
+    @Autowired
+    private FileService fileService;
 
     //공지사항 페이지(메인)
     @GetMapping({"/customer_notice",""})
@@ -504,35 +506,35 @@ public class CustomerController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        try {
-            // 파일 확장자와 파일 이름 처리
-            String uploadDir = System.getProperty("user.dir") + "/uploads/";
-            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-            String uuid = UUID.randomUUID().toString();
-            String extension = fileName.substring(fileName.lastIndexOf("."));
-            String storeFileName = uuid + extension;
+        FileDto dto = fileService.uploadFiles(image, "customer");
+        System.out.println("url: "+dto.getUploadFileUrl());
+        System.out.println("path: "+dto.getUploadFilePath());
+        System.out.println("name: "+dto.getUploadFileName());
+        // 파일 확장자와 파일 이름 처리 기존방식
+//            String uploadDir = System.getProperty("user.dir") + "/uploads/";
+//            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+//            String uuid = UUID.randomUUID().toString();
+//            String extension = fileName.substring(fileName.lastIndexOf("."));
+//            String storeFileName = uuid + extension;
+//
+//            // 업로드 디렉토리 설정 및 파일 저장
+//            Path filePath = Paths.get(uploadDir, storeFileName);
+//            Files.createDirectories(filePath.getParent());
+//            image.transferTo(filePath.toFile());
+//
+//            // 파일 접근 URL 반환
+//            String fileUrl = "/uploads/" + storeFileName;
+//            response.put("url", fileUrl);
+        //오브젝트 스토리지
+        String fileUrl = dto.getUploadFileUrl();
+        response.put("url",fileUrl);
+        return ResponseEntity.ok(response);
 
-            // 업로드 디렉토리 설정 및 파일 저장
-            Path filePath = Paths.get(uploadDir, storeFileName);
-            Files.createDirectories(filePath.getParent());
-            image.transferTo(filePath.toFile());
-
-            // 파일 접근 URL 반환
-            String fileUrl = "/uploads/" + storeFileName;
-            response.put("url", fileUrl);
-            return ResponseEntity.ok(response);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            response.put("error", "Failed to upload file");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
     //파일 업로드 사용 예제
-    //public void uploadFilesSample(
-    //            @RequestPart(value = "files") List<MultipartFile> multipartFiles) {
-    //        FileService.uploadFiles(multipartFiles, "customer");
-    //    }
+//    public void uploadFilesSample(@RequestPart(value = "files") List<MultipartFile> multipartFiles) {
+//            fileService.uploadFiles(multipartFiles, "customer");
+//        }
 
     @GetMapping("/get_AllproductqList")
     public ResponseEntity<PageResponse<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo, @RequestParam("page") int page){

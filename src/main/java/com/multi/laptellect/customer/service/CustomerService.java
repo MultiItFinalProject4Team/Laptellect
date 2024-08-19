@@ -5,6 +5,7 @@ import com.multi.laptellect.customer.dao.CustomDao;
 import com.multi.laptellect.customer.dto.*;
 import com.multi.laptellect.customer.dto.ImageDto;
 import com.multi.laptellect.util.EmailUtil;
+import com.multi.laptellect.util.FileService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,6 +28,8 @@ public class CustomerService {
     private CustomDao customDao;
     @Autowired
     private EmailUtil emailUtil;
+    @Autowired
+    private FileService fileService;
 
     public List<NoticeListDto> getNoticeList() {
         return customDao.getNoticeList();
@@ -144,10 +147,21 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            Path filePath = Paths.get(path, url);
+            //Path filePath = Paths.get(path, url);
             try {
-                Files.deleteIfExists(filePath);
-            } catch (IOException e) {
+//                Files.deleteIfExists(filePath);
+                String prefix = "4team/";
+                int prefixIndex = url.indexOf(prefix);
+
+                if (prefixIndex != -1) {
+                    url = url.substring(prefixIndex + prefix.length());
+                    System.out.println("url: "+url);
+                    int result=fileService.deleteFile(url);
+                    System.out.println("결과: "+result);
+                } else {
+                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
