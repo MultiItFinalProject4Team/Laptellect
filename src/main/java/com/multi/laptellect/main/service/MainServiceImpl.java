@@ -7,5 +7,6 @@ package com.multi.laptellect.main.service;
  * @fileName : MainServiceImpl
  * @since : 2024-08-20
  */
+
 public class MainServiceImpl implements MainService{
 }
