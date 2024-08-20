@@ -6,7 +6,7 @@
 <link rel="stylesheet" th:href="@{/css/product/product.css}">
 <script th:inline="javascript">
     $(document).ready(function() {
-        let currentPage = 0;
+        let currentPage = 1;
         let pageSize = 12;
         let typeNo = [[${ typeNo }]];
         let currentKeyword = '';
@@ -61,7 +61,6 @@
                 success: function(response) {
                     $('#product-list').html(response);
                     formatPrices();
-                    currentPage = page;
                 },
                 error: function(error) {
                     console.log(error);
@@ -71,7 +70,6 @@
 
 
         function searchProducts() {
-            currentPage = 0;
             loadProducts(currentPage, pageSize, typeNo);
         }
 
@@ -80,7 +78,6 @@
 
                 // 필터 값이 변경될 때 호출
         $("#filterForm input:checkbox").on("change", function() {
-           currentPage = 0;
            searchProducts();
         });
         // 검색 폼 제출 시 호출
@@ -93,7 +90,6 @@
         $(".product-link").on("click", function(e) {
             e.preventDefault();
             typeNo = $(this).data('type-no');
-            currentPage = 0;
 
             $(".product-link").removeClass("active");
             $(this).addClass("active");
@@ -118,11 +114,11 @@
         $(document).on('click', '.pagination a.page-link', function(event) {
             event.preventDefault();
 
-            let page = $(this).data('page') ;
-            if (!$(this).closest('li').hasClass('disabled') && !$(this).closest('li').hasClass('active')) {
-                currentPage = page;
-                loadProducts(currentPage, pageSize, typeNo)
-            }
+            let page = $(this).data('page') - 1;
+             if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
+                        return;
+             }
+                loadProducts(page, pageSize, typeNo)
         });
     });
 </script>

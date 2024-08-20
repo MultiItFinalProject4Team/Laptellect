@@ -100,15 +100,10 @@ public class ProductApiController {
 
         log.info( "페이징 데이터 = {}", productPage);
 
-
-
-
-
         ArrayList<Integer> carts = new ArrayList<>();
         ArrayList<Integer> wishlist = new ArrayList<>();
 
             String detailUrl;
-
 
         try {
 
@@ -209,19 +204,12 @@ public class ProductApiController {
             model.addAttribute("wishlist", wishlist); // 예외 발생 시에도 빈 리스트 추가
         }
 
-
-
-
-
         model.addAttribute("size", searchDTO.getSize());
         model.addAttribute("sort", searchDTO.getSort());
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("productPage", productPage);
         model.addAttribute("typeNo", searchDTO.getTypeNo());
         model.addAttribute("keyword", searchDTO.getKeyword());
-
-
-
 
         return "product/product/productList";
     }
