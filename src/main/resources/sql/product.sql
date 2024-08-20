@@ -131,8 +131,13 @@ JOIN
  drop view vw_spec_and_value
  drop view vw_product_detail
 
-
-
+-- 이미지 테이블 삭제 트리거
+CREATE TRIGGER delete_related_images
+AFTER DELETE ON product
+FOR EACH ROW
+BEGIN
+    DELETE FROM images WHERE reference_code = OLD.reference_code;
+END;
 
 
 -- 테이블 데이터 삭제

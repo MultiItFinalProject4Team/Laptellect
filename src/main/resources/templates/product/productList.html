@@ -11,21 +11,6 @@
         let typeNo = [[${ typeNo }]];
         let currentKeyword = '';
 
-        // 기본 탭에 active 클래스 추가
-        switch(typeNo) {
-            case 1:
-                $("#laptop-tab").addClass("active");
-                break;
-            case 2:
-                $("#mouse-tab").addClass("active");
-                break;
-            case 3:
-                $("#keyboard-tab").addClass("active");
-                break;
-            default:
-                $("#laptop-tab").addClass("active");
-                break;
-        }
 
         // 가격 형식을 포맷팅하는 함수
         function formatPrices() {
@@ -133,7 +118,7 @@
         $(document).on('click', '.pagination a.page-link', function(event) {
             event.preventDefault();
 
-            let page = $(this).data('page');
+            let page = $(this).data('page') ;
             if (!$(this).closest('li').hasClass('disabled') && !$(this).closest('li').hasClass('active')) {
                 currentPage = page;
                 loadProducts(currentPage, pageSize, typeNo)

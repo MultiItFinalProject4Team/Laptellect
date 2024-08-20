@@ -4,6 +4,7 @@ import com.multi.laptellect.admin.member.model.dto.AdminMemberDTO;
 import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
 import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
 import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
+import com.multi.laptellect.main.model.dto.ProductMainDTO;
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.dto.PointLogDTO;
@@ -96,6 +97,7 @@ public class MybatisConfig {
 
 
         configuration.getTypeAliasRegistry().registerAlias("adminMemberDTO", AdminMemberDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("productMainDTO", ProductMainDTO.class);
 
 
 
