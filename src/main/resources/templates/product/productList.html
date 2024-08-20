@@ -157,15 +157,25 @@
 <div class="container-md" layout:fragment="content">
 <br>
     <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-        <form th:action="@{/product/test2}" method="get">
-            <label for="typeDetails">상품 타입 선택 : </label>
-            <select name="typeDetails" id="typeDetails">
+        <form th:action="@{/product/test}" method="get">
+            <label for="products">상품 기본 정보 크롤링 : </label>
+            <select name="products">
                 <option value="1">노트북</option>
                 <option value="2">마우스</option>
                 <option value="3">키보드</option>
             </select>
             <button class="btn btn-sm btn-custom-primary ms-1" style="margin-top: -5px; padding: 3px;" type="submit">선택한 상품 타입 가져오기</button>
         </form> <br>
+
+        <form th:action="@{/product/test2}" method="get">
+            <label for="typeDetails">상품 상세 정보 크롤링 : </label>
+            <select name="typeDetails" id="typeDetails">
+                <option value="1">노트북</option>
+                <option value="2">마우스</option>
+                <option value="3">키보드</option>
+            </select>
+            <button class="btn btn-sm btn-custom-primary ms-1" style="margin-top: -5px; padding: 3px;" type="submit">선택한 상품 타입 가져오기</button>
+        </form> <hr> <br>
     </th:block>
 
 <th:block th:if="${ typeNo == 1}">

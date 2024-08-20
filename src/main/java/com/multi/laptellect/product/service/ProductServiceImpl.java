@@ -83,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
         String filePath = "src/main/resources/static/img/product";
         String uuid = UUID.randomUUID().toString();
         String uploadName = uuid + ".jpg";
+        String referenceCode = productDTO.getReferenceCode();
 
         crawlingService.downloadImage(url, filePath, uploadName);
 
@@ -91,10 +92,14 @@ public class ProductServiceImpl implements ProductService {
         log.info("저장위치 확인 = {}", filePath);
 
         imageDTO.setOriginName(url);
-        imageDTO.setReferenceCode(productDTO.getReferenceCode());
+        imageDTO.setReferenceCode(referenceCode);
         imageDTO.setUploadName(uploadName);
 
-        productMapper.inputImage(imageDTO);
+        if(productMapper.findImageByReferenceCode(referenceCode)) {
+            log.debug("이미 저장된 이미지입니다.");
+        } else {
+            productMapper.inputImage(imageDTO);
+        }
     }
 
 

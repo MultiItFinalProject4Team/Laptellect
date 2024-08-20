@@ -11,8 +11,8 @@ CREATE TABLE machine_tagkey(
     product_no INT NOT NULL ,
     tag_no INT NOT NULL,
     PRIMARY KEY (product_no, tag_no),
-   CONSTRAINT  product_FK FOREIGN KEY(product_no) REFERENCES product(product_no),
-    CONSTRAINT tag_FK FOREIGN KEY(tag_no) REFERENCES laptop_tag(tag_no)
+   CONSTRAINT  product_FK FOREIGN KEY(product_no) REFERENCES product(product_no) ON DELETE CASCADE,
+    CONSTRAINT tag_FK FOREIGN KEY(tag_no) REFERENCES laptop_tag(tag_no) ON DELETE CASCADE
 );
 
 --스팩 점수화 테이블
@@ -26,7 +26,7 @@ CREATE TABLE laptop_data(
     weight_score INT NULL,
     screen_size_score INT NULL,
     resolution_score INT NULL,
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
+    FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE
 )
 --감정 분석 테이블
 CREATE TABLE laptop_sentiment (
@@ -35,7 +35,7 @@ CREATE TABLE laptop_sentiment (
     sentiment_denial INT NOT NULL,
     sentiment_neutrality INT NOT NULL,
     primary key (product_no),
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
+    FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE
 );
 
 
