@@ -6,6 +6,7 @@ import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.util.PaginationUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,16 +108,19 @@ public class ProductApiController {
         try {
 
 
-            int displayPages = 10;
+//            int displayPages = 10;
             int currentPage = pageable.getPageNumber();
             int totalPages = productPage.getTotalPages() -1 ;
 
 
-            int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
-            int endPage = Math.min(startPage + displayPages - 1, totalPages);
+//            int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
+//            int endPage = Math.min(startPage + displayPages - 1, totalPages);
+
+            int startPage = PaginationUtil.getStartPage(productPage, 9);
+            int endPage = PaginationUtil.getEndPage(productPage, 9);
 
 
-            model.addAttribute("currentPage", currentPage );
+            model.addAttribute("page", currentPage );
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
@@ -223,8 +227,7 @@ public class ProductApiController {
 
         model.addAttribute("size", searchDTO.getSize());
         model.addAttribute("sort", searchDTO.getSort());
-        model.addAttribute("products", productPage.getContent());
-        model.addAttribute("productPage", productPage);
+        model.addAttribute("products", productPage);
         model.addAttribute("typeNo", searchDTO.getTypeNo());
         model.addAttribute("keyword", searchDTO.getKeyword());
 
