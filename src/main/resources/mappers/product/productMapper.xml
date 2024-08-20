@@ -214,9 +214,20 @@
             )
         </if>
 
-        <if test="searchDTO.minPrice != null and searchDTO.maxPrice != null">
-            AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
-        </if>
+        <choose>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &gt;= searchDTO.minPrice">
+                AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
+            </when>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &lt; searchDTO.minPrice">
+                AND 1 = 0
+            </when>
+            <when test="searchDTO.minPrice != null">
+                AND p.price &gt;= #{ searchDTO.minPrice }
+            </when>
+            <when test="searchDTO.maxPrice != null">
+                AND p.price &lt;= #{ searchDTO.maxPrice }
+            </when>
+        </choose>
 
         GROUP BY
         p.product_no, p.type_no, p.product_name, p.price,
@@ -335,9 +346,20 @@
         </if>
 
         <!-- 가격 범위 조건 -->
-        <if test="searchDTO.minPrice != null and searchDTO.maxPrice != null">
-            AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
-        </if>
+        <choose>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &gt;= searchDTO.minPrice">
+                AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
+            </when>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &lt; searchDTO.minPrice">
+                AND 1 = 0
+            </when>
+            <when test="searchDTO.minPrice != null">
+                AND p.price &gt;= #{ searchDTO.minPrice }
+            </when>
+            <when test="searchDTO.maxPrice != null">
+                AND p.price &lt;= #{ searchDTO.maxPrice }
+            </when>
+        </choose>
     </select>
 
     <!--리뷰 저장-->

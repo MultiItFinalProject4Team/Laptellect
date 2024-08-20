@@ -6,6 +6,7 @@
 <link rel="stylesheet" th:href="@{/css/product/product.css}">
 <script th:inline="javascript">
     $(document).ready(function() {
+        let currentPage = 0;
         let pageSize = 12;
         let typeNo = [[${ typeNo }]];
         let currentKeyword = '';
