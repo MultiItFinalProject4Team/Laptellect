@@ -291,7 +291,9 @@ $(function () {
             success: function (response) {
               if (response === true) {
                 swal("회원 탈퇴 성공", "", "success");
-                window.location.href='/';
+                setTimeout(function() {
+                    window.location.href='/';
+                }, 1500);
               } else {
                 swal("회원 탈퇴 실패", "", "error");
               }

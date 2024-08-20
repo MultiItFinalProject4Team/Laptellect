@@ -53,7 +53,7 @@
                         <span class="tag">#넓은 화면</span>
                     </div>
                     <div class="product-name mb-2">
-                        <h5 class="card-title"><span th:text="${product.productName}">상품명</span></h5>
+                        <h5 class="card-title"><span style="font-size: 17px;" th:text="${product.productName.length() > 43 ? product.productName.substring(0, 43) + '...' : product.productName}">상품명</span></h5>
                     </div>
                     <div class="product-specs mb-2">
                         <span class="small-text" th:text="${product.specsString}"></span>
