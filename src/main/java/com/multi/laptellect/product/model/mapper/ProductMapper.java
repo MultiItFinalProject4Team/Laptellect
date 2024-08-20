@@ -72,7 +72,7 @@ public interface ProductMapper {
     
     ProductDTO findProductByProductNo(String productNo);
 
-    long countBySearchCriteria(ProductSearchDTO searchDTO);
+    long countBySearchCriteria(@Param("searchDTO") ProductSearchDTO searchDTO);
 
     List<SpecDTO> findProductSpecByProductNo(@Param("productNo") int productNo, @Param("neededOptions") Set<String> neededOptions);
 
