@@ -86,7 +86,7 @@ public class CustomerAdminController {
      */
     @PostMapping("/answer_productq")
     @ResponseBody
-    public int answer_producta(ProductqAnswerDto answerDto){
+    public int answer_productq(ProductqAnswerDto answerDto){
         System.out.println(answerDto);
         customerService.productAnwerApp(answerDto);
         String state = "Y";
@@ -94,6 +94,17 @@ public class CustomerAdminController {
         String code = "producta"+answerDto.getProductaNo();
         customerService.setproductaCode(answerDto.getProductaNo(),code);
         return 1;
+    }
+
+    @PostMapping("/answer_productQ")
+    public String answer_productQ(ProductqAnswerDto answerDto){
+        customerService.productAnwerApp(answerDto);
+        String state = "Y";
+        customerService.productAnwerChange(answerDto.getProductqNo(),state);
+        String code = "producta"+answerDto.getProductaNo();
+        customerService.setproductaCode(answerDto.getProductaNo(),code);
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", answerDto.getProductqNo());
+        return "redirect:"+redirectUrl;
     }
 
     /**
@@ -133,6 +144,13 @@ public class CustomerAdminController {
         System.out.println("수정: "+ appDto);
         customerService.updateProducta(appDto);
         return 1;
+    }
+
+    @PostMapping("/update_productA")
+    public String update_proudctA(ProductqAnswerDto appDto){
+        customerService.updateProducta(appDto);
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", appDto.getProductqNo());
+        return "redirect:"+redirectUrl;
     }
 
 
