@@ -14,6 +14,7 @@ import com.multi.laptellect.product.model.dto.mouse.MouseSpecDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
 import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import com.multi.laptellect.util.SecurityUtil;
@@ -46,6 +47,7 @@ public class ProductController {
     private final PaginationService paginationService;
     private final PaymentService paymentService;
     private final RecommendProductService recommendProductService;
+    private final EmotionAnalyzeService emotionAnalyzeService;
 
 
     /**
@@ -175,8 +177,10 @@ public class ProductController {
         ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
         List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
         List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
+        String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
 
+        model.addAttribute("sentimentResult", sentimentResult);
         model.addAttribute("tags", tags);
         model.addAttribute("paymentDTO", paymentDTO);
         model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);

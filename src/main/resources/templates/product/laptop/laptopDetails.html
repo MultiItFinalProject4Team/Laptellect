@@ -80,9 +80,28 @@
             font-size: 14px;
             color: #666;
         }
+
+        .sentiment-result {
+            flex: 1;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 200px;
+        }
+
         .prodinfo_spec li { margin-right: 10px; }
         .prodinfo_spec li::after { content: "|"; margin-left: 10px; }
         .prodinfo_spec li:last-child::after { content: ""; }
+        .sentiment-positive { background-color: #d4edda; color: #155724; }
+        .sentiment-neutral { background-color: #fff3cd; color: #856404; }
+        .sentiment-negative { background-color: #f8d7da; color: #721c24; }
+
 
         hr { opacity: 1 !important;}
     </style>
@@ -303,6 +322,16 @@
                                     style="width: 200px; font-size: 17px">구매하기
                             </button>
                         </form>
+                    </div>
+                    <div class="sentiment-result" th:if="${sentimentResult != null}"
+                         th:text="${sentimentResult}"
+                         th:classappend="${sentimentResult == '압도적 긍정적' or
+                          sentimentResult == '매우 긍정적' or
+                          sentimentResult == '조금 긍정적'} ? 'sentiment-positive' :
+                         (${sentimentResult == '압도적 부정적' or
+                           sentimentResult == '매우 부정적' or
+                           sentimentResult == '조금 부정적'} ? 'sentiment-negative' :
+                          'sentiment-neutral')">
                     </div>
                     <br>
                     <ul id="list-simple-spec">
