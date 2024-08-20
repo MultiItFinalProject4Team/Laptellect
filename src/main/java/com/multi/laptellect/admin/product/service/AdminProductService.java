@@ -15,4 +15,7 @@ public interface AdminProductService {
 
 
     Page<ProductDTO> getProductList(PagebleDTO pagebleDTO) throws Exception;
+
+
+    int deleteProduct(int productNo);
 }

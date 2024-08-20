@@ -69,6 +69,7 @@ public class PaymentController {
                               @RequestParam("productName") String productName,
                               @RequestParam("price") int price,
                               Model model) throws Exception {
+        log.info("파라미터 = {} {} {}", img, productName, price);
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
         paymentpageDTO.setPrice(400);

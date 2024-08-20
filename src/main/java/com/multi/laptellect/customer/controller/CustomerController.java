@@ -356,6 +356,22 @@ public class CustomerController {
         return text_result;
     }
 
+    @PostMapping("/update_productQ")
+    public String update_productQ(ProductqAppDto appDto){
+        int memberNo = 0;
+        try {
+            memberNo=SecurityUtil.getUserNo();
+        }catch (Exception e){
+            System.out.println("미로그인");
+        }
+        System.out.println("수정: "+ appDto);
+        appDto.setMemberNo(memberNo);
+        int text_result=customerService.updateProductq(appDto);
+        String code = customerService.getproductqCode(appDto.getProductqNo());
+        String redirectUrl = String.format("/customer/user/productq_detail/%s", appDto.getProductqNo());
+        return "redirect:"+redirectUrl;
+    }
+
     /**
      * 상품 문의 삭제
      * @param productqNo

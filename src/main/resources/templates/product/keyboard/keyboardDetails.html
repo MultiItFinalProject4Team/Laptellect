@@ -70,9 +70,21 @@
             font-size: 1.5rem;
         }
 
-        <!-- 공통 -->
-        hr { border: 0; }
+        /* 제품 간략 정보 */
+        .prodinfo_spec {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #666;
+        }
+        .prodinfo_spec li { margin-right: 10px; }
+        .prodinfo_spec li::after { content: "|"; margin-left: 10px; }
+        .prodinfo_spec li:last-child::after { content: ""; }
 
+        hr { opacity: 1 !important;}
     </style>
     <script>
         $(document).ready(function() {
@@ -180,25 +192,21 @@
 <div class="container mt-5" layout:fragment="content">
     <hr>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" style="height: 612px;">
             <!-- 상품 이미지 -->
             <img th:src="@{'/img/product/' + ${ keyboard.image }}" class="card-img-top" alt="상품 이미지"
                  style="height: 400px; object-fit: contain;">
             <div class="spec-box mt-3">
                 <!-- 상품 기본 정보 -->
                 <ul class="list-unstyled">
-                    <li><strong>사이즈<span class="float-end" th:text="${ keyboard.size }">Window 11</span></strong></li>
+                    <li><strong>사이즈<span class="float-end" th:text="${ keyboard.size }"></span></strong></li>
                     <li><strong>연결 방식<span class="float-end"
-                                           th:text="${ keyboard.connectionType }">15.6인치</span></strong></li>
+                                           th:text="${ keyboard.connectionType }"></span></strong></li>
                     <li><strong>인터페이스<span class="float-end"
-                                        th:text="${ keyboard.interfaceType }">1.86kg</span></strong></li>
+                                        th:text="${ keyboard.interfaceType != null ? keyboard.interfaceType : 'X'  }"></span></strong></li>
                     <li><strong>접점 방식<span class="float-end"
-                                         th:text="${ keyboard.switchType }">1920x1080(FHD)</span></strong></li>
-
+                                         th:text="${ keyboard.switchType != null ? keyboard.switchType : 'X'  }"></span></strong></li>
                 </ul>
-            </div>
-            <div class="mt-2">
-
             </div>
         </div>
 
@@ -209,72 +217,147 @@
                         <h4 th:text="${ keyboard.productName }"></h4>
                         <div class="d-flex justify-content-end align-items-center">
                             <div style="margin-left: 1rem !important;">
-                                <a class="btn-process-wishlist" href="#" th:attr="data-product-no=${productNo}">
-                                    <span><i class="fa-solid fa-heart fa-1.5x"></i></span>
-                                    <span>위시리스트</span>
-                                </a>
+                                <div th:if="${wishlist != null}">
+                                    <a class="btn-process-wishlist"
+                                       th:if="${#lists.contains(wishlist, productNo)}"
+                                       th:attr="data-product-no=${productNo}"
+                                       style="position: relative; top: -4px;">
+                                    <span id="icon-wishlist" style="color: #FF0000;">
+                                        <i class="fa-solid fa-heart fa-1.5x"></i>
+                                    </span>
+                                        <span>위시리스트</span>
+                                    </a>
+
+                                    <a class="btn-process-wishlist"
+                                       th:unless="${#lists.contains(wishlist, productNo)}"
+                                       th:attr="data-product-no=${productNo}"
+                                       style="position: relative; top: -4px;">
+                                    <span id="icon-wishlist">
+                                        <i class="fa-solid fa-heart fa-1.5x"></i>
+                                    </span>
+                                        <span>위시리스트</span>
+                                    </a>
+                                </div>
                             </div>
-                            <div style="margin-left: 1rem !important;">
-                                <a class="btn-process-cart" href="#" th:attr="data-product-no=${productNo}">
-                                    <span><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
+
+                            <div th:if="${carts != null}" style="margin-left: 1rem !important;">
+                                <a class="btn-process-cart"
+                                   th:if="${#lists.contains(carts, productNo)}"
+                                   th:attr="data-product-no=${productNo}"
+                                   style="position: relative; top: -4px;">
+                                    <span id="icon-cart" style="color: #32CD32;"><i
+                                            class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
+                                    <span>장바구니</span>
+                                </a>
+
+                                <a class="btn-process-cart"
+                                   th:unless="${#lists.contains(carts, productNo)}"
+                                   th:attr="data-product-no=${productNo}"
+                                   style="position: relative; top: -4px;">
+                                    <span id="icon-cart"><i class="fa-solid fa-cart-shopping fa-1.5x"></i></span>
                                     <span>장바구니</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="mb-2">
+                    <ul class="prodinfo_spec">
+                        <li>제조사: <span th:text="${ keyboard.manufacturer }"></span></li>
+                        <li>등록일: <span th:text="${ keyboard.registrationDate }"></span></li>
+                        <li>출시가: <span class="price" th:text="${ keyboard.price }"></span></li>
+                    </ul>
+                </div>
+
                 <hr>
             </div>
             <div class="row mt-2">
-                <div class="col-7">
-                    <br>
-                    <ul id="list-simple-spec">
-                        <li><strong>제조사 : </strong><span class="spec" th:text="${ keyboard.manufacturer }"> 제조사</span></li>
-                        <li><strong>등록월 : </strong><span class="spec" th:text="${ keyboard.registrationDate }"> 0000.00</span></li>
-                        <li><strong>연결방식 : </strong><span class="spec" th:text="${ keyboard.size }"> 연결방식</span></li>
-                        <li><strong>스위치 : </strong><span class="spec" th:text="${ keyboard.connectionType }"> 스위치</span></li>
-                    </ul>
 
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span><strong>가격 : <span class="price" th:text="${keyboard.price}"></span></strong></span>
+
+                <div class="col-7">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span><strong><span class="price" style="font-size: 30px;"
+                                                 th:text="${keyboard.price}"></span></strong></span>
                         <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
                             <input type="hidden" name="productName" th:value="${keyboard.productName}">
                             <input type="hidden" name="imageUrl" th:value="${keyboard.image}">
                             <input type="hidden" name="price" th:value="${keyboard.price}">
-                            <button type="submit" class="btn btn-custom-primary ms-4">구매하기</button>
+                            <button type="submit" class="btn btn-custom-primary ms-4"
+                                    style="width: 200px; font-size: 17px">구매하기
+                            </button>
                         </form>
                     </div>
+                    <ul id="list-simple-spec">
+                        <li><strong>제조사 : </strong><span class="spec" th:text="${ keyboard.manufacturer }"> 삼성전자</span></li>
+                        <li><strong>등록월 : </strong><span class="spec"
+                                                         th:text="${ keyboard.registrationDate }"> 0000.00</span></li>
+                        <li><strong>가로 : </strong><span class="spec" th:text="${ keyboard.keyDimensions.width != null ? keyboard.keyDimensions.width : 'X' }"></span>
+                        </li>
+                        <li><strong>세로 : </strong><span class="spec" th:text="${ keyboard.keyDimensions.height != null ? keyboard.keyDimensions.height : 'X' }"></span>
+                        </li>
+
+                    </ul>
+                    <br>
+
                 </div>
 
                 <div class="col-md-5">
                     <div class="review-group">
-                        <div class="review-list mt-4">
-                            <h5>상품 리뷰</h5>
-                            <a href="#review-section" class="text-decoration-none ms-2">리뷰 보러가기</a>
+                        <div class="review-list">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span style="font-size: 20px;"><strong>상품 리뷰 <span th:text="${'(' + paymentReviewDTOList.size() + '건)'}"></span></strong></span>
+                                <a href="#" id="review-scroll" class="text-decoration-none ms-2" style="position: relative; top: -3px; font-size: 17px;">더보기 ></a>
+                            </div>
+                            <div>
+                                <i class="bi bi-star-fill review-star" style="font-size: 25px;"></i>
+                                <span style="font-size: 20px;">
+                                    <strong style="font-size: 23px;"
+                                            th:text="${paymentReviewDTOList != null
+                                            and !paymentReviewDTOList.isEmpty()
+                                            and paymentReviewDTOList[0].avgRating != null ? paymentReviewDTOList[0].avgRating : 0}">
+                                    </strong>점
+                                </span>
+                            </div> <hr>
+
                             <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                 <p>아직 작성된 리뷰가 없습니다.</p>
                             </div>
-                            <div th:each="review : ${paymentReviewDTOList}" class="review-item">
+                            <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
                                 <div class="review-header">
-                                    <span class="review-author" th:text="'구매자 : ' +
-                                        (${#strings.length(review.memberName)} > 1 ?
-                                        ${#strings.substring(review.memberName,0,1)} + '*' +
-                                        ${#strings.substring(review.memberName,2)} :
-                                        ${review.memberName})">사용자</span>
-                                    <span class="review-date" th:text="${#strings.substring(review.createdAt, 0, 10)}">날짜</span>
-                                    <br>
-                                    <span> 평점 : </span>
-                                    <span class="review-star" th:text="${'★'.repeat(review.rating)}">★★★★★</span>
+                                    <div class="review-content-wrapper">
+                                        <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
+                                            리뷰 내용
+                                        </span>
+                                    </div>
+                                    <span class="review-star">
+                                        <th:block th:if="${review.rating != null}">
+                                            <th:block th:each="star : ${#numbers.sequence(1, review.rating)}">
+                                                <i class="bi bi-star-fill"></i>
+                                            </th:block>
+                                        </th:block>
+                                    </span>
+                                    <span th:text="${ review.rating }"></span>
                                 </div>
-                                <div class="review-content-wrapper">
-                                    <div class="review-content" th:text="'리뷰내용 : ' + ${review.content}">리뷰 내용</div>
-                                </div>
+                                <ul class="prodinfo_spec">
+                                    <li>아이디 :
+                                        <span th:text="(${#strings.length(review.memberName)} > 1 ?
+                                                                             ${#strings.substring(review.memberName,0,1)} + '*' +
+                                                                             ${#strings.substring(review.memberName,2)} :
+                                                                             ${review.memberName})">
+                                        </span>
+                                    </li>
+                                    <li>등록일 :
+                                        <span th:text="${#strings.substring(review.createdAt, 0, 10)}"></span>
+                                    </li>
+                                </ul>
+                                <hr>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div class="row">
             <div class="col-12 mt-4">
@@ -502,17 +585,6 @@
                                         </button>
                                     </div>
                                 </div>
-                                <!--                                <div class="d-flex justify-content-between align-items-center mb-3">-->
-                                <!--                                    <span>상품평</span>-->
-                                <!--                                    <div>-->
-                                <!--                                        <button type="button" class="btn btn-outline-secondary btn-sm">로그인</button>-->
-                                <!--                                        <button type="button" class="btn btn-outline-secondary btn-sm">회원가입</button>-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
-                                <!--                                <div class="input-group">-->
-                                <!--                                    <textarea class="form-control" rows="3" placeholder="상품평을 작성하시려면 로그인을 해주세요." readonly></textarea>-->
-                                <!--                                    <button type="button" class="btn btn-secondary" style="height: 85px; width: 100px;" disabled>등록</button>-->
-                                <!--                                </div>-->
                             </th:block>
                             <th:block sec:authorize="isAuthenticated()">
                                 <span><strong>상품평</strong></span>
@@ -717,10 +789,9 @@
                 </div>
             </th:block>
         </div>
-
     </div>
 </div>
-</div>
+
 
 </body>
 </html>

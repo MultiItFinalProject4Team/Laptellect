@@ -27,7 +27,7 @@ function renderTable() {
         <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" data-amount="${order.purchasePrice}" data-payment-no="${order.paymentNo}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
         <td class="order-number-column"><span class="order-content" onclick="openModal(${order.paymentNo})">${order.paymentNo}</span></td>
         <td class="username-column">${order.userName}</td>
-        <td class="product-name-column"><a href="/product/laptop/laptopDetails?productNo=${order.productNo}" class="order-content">${order.productName}</a></td>
+        <td class="product-name-column"><a href="/product/productDetail?productNo=${order.productNo}" class="order-content">${order.productName}</a></td>
         <td class="price-column">${formatPrice(order.productPrice)}</td>
         <td class="purchase-price-column">${formatPrice(order.purchasePrice)}</td>
         <td class="date-column">${order.createdAt}</td>

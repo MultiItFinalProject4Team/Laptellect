@@ -41,7 +41,7 @@
                         <input type="checkbox" class="form-check-input wishlist-checkbox" th:attr="data-product-no=${wishlist.productNo}">
                     </div>
                     <div class="col-md-2">
-                        <a th:href="@{/product/laptop/laptopDetails(productNo=${wishlist.productNo})}">
+                        <a th:href="@{/product/productDetail(productNo=${wishlist.productNo})}">
                             <img th:src="@{'/img/product/' + ${wishlist.uploadName}}" class="img-fluid rounded-start" alt="Product Image">
                         </a>
                     </div>

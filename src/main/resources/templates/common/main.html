@@ -4,63 +4,25 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <style>
-        .showcase {
-            width: 100%;
-            height: 400px;
-            background: url(https://kr.object.ncloudstorage.com/4team/common/main.png) no-repeat center center / contain;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            justify-content: flex-end;
-            padding-bottom: 50px;
-            margin-bottom: 20px;
-        }
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 
-a {
-    color: #262626;
-    text-decoration: none;
-}
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-
-        .carousel-inner {
-            width: auto;
-            height: 350px;
-        }
-        .category-icons img {
-            width: 50px;
-            height: 50px;
-        }
-        .recommended-section, .popular-products, .custom-recommendations {
-            background-color: #f8f9fa;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .product-image {
-            width: 100px;
-            height: 100px;
-            background-color: #e9ecef;
-            display: inline-block;
-            border-radius: 10px;
-        }
-
-        .services-icon-wap {
-            width: 150px;
-            height: 150px;
-        }
-
-        /* Services */
-        .services-icon-wap {transition: .3s;}
-        .services-icon-wap:hover, .services-icon-wap:hover i {color: #fff;}
-        .services-icon-wap:hover h5 {color: #fff;}
-        .services-icon-wap:hover {background: #3498DB;}
-    </style>
+    <script>
+        $(document).ready(function(){
+            $('.product-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                arrows: false,
+                dots: true,
+                customPaging: function(slider, i) {
+                    return '<button class="custom-dot">○</button>';
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <div layout:fragment="content">
@@ -113,39 +75,100 @@ a {
                 <div class="row">
                     <div class="col-12 text-center">
                         <div class="recommended-section">
-                            <button class="btn btn-dark">추천 받기</button>
+                            <button class="btn btn-custom-primary" onclick="window.location.href='/recommend';">추천 받기</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <h3>Laptop</h3>
-                    <hr>
+                <div class="product-slider">
+                    <div class="slide">
+                        <h3>Laptop</h3>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3" th:each="laptop : ${laptops}">
+                                <div class="card" style="width: 18rem;">
+                                    <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${laptop.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${laptop.productName}">상품명</p>
+                                            <p class="card-text"><strong th:text="${laptop.price}">가격대</strong><span>원</span></p>
+                                        </a>
+                                        <ul class="prodinfo_spec">
+                                            <li>
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${laptop.avgScore}"></span>점
+                                            </li>
+                                            <li>
+                                                <span><a>구매하기</a></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <br>
-                </div>
+                    <div class="slide">
+                        <h3>Mouse</h3>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3" th:each="mouse : ${ mouses }">
+                                <div class="card" style="width: 18rem;">
+                                    <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${mouse.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${mouse.productName}">상품명</p>
+                                            <p class="card-text"><strong th:text="${mouse.price}">가격대</strong><span>원</span></p>
+                                        </a>
+                                        <ul class="prodinfo_spec">
+                                            <li>
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${mouse.avgScore}"></span>점
+                                            </li>
+                                            <li>
+                                                <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
+                                                    <input type="hidden" name="productName" th:value="${mouse.productName}">
+                                                    <input type="hidden" name="imageUrl" th:value="${mouse.image}">
+                                                    <input type="hidden" name="price" th:value="${mouse.price}">
+                                                    <button type="submit" class="btn btn-custom-primary ms-4"
+                                                            style="width: 200px; font-size: 17px">구매하기
+                                                    </button>
+                                                </form>
+                                                <span><a>구매하기</a></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="row">
-                    <h3>Mouse</h3>
-                    <hr>
-
-                    <br>
-                </div>
-
-                <div class="row">
-                    <h3>Keyboard</h3>
-                    <hr>
-
-                    <br>
-                </div>
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <div class="popular-products">
-                            <h3>인기 상품</h3>
-                            <div class="d-flex justify-content-center">
-                                <div class="product-image mx-2"></div>
-                                <div class="product-image mx-2"></div>
-                                <div class="product-image mx-2"></div>
+                    <div class="slide">
+                        <h3>Keyboard</h3>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3" th:each="keyboard : ${ keyboards }">
+                                <div class="card" style="width: 18rem;">
+                                    <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${keyboard.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${keyboard.productName}">상품명</p>
+                                            <p class="card-text"><strong th:text="${keyboard.price}">가격대</strong><span>원</span></p>
+                                        </a>
+                                        <ul class="prodinfo_spec">
+                                            <li>
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${keyboard.avgScore}"></span>점
+                                            </li>
+                                            <li>
+                                                <span><a>구매하기</a></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,7 +176,5 @@ a {
             </div>
         </div>
     </div>
-</div>
-
 </body>
 </html>

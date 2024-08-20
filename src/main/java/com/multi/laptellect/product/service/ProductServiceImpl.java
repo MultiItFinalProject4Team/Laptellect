@@ -451,10 +451,9 @@ public class ProductServiceImpl implements ProductService {
         int price = keyboardDetailsDTO.getPrice();
         String image = keyboardDetailsDTO.getUploadName();
         String productCode = keyboardDetailsDTO.getProductCode();
-        String manufacturer = specDTO.getManufacturer();
-        String registrationDate = specDTO.getRegistrationDate();
 
-        log.info("키보드 제조사 ={}, 등록월 = {}",manufacturer,registrationDate);
+
+
 
         KeyAccessory accessory = new KeyAccessory();
         KeyBuild build = new KeyBuild();
@@ -611,8 +610,7 @@ public class ProductServiceImpl implements ProductService {
         specDTO.setPrice(price);
         specDTO.setImage(image);
         specDTO.setProductCode(productCode);
-        specDTO.setManufacturer(manufacturer);
-        specDTO.setRegistrationDate(registrationDate);
+
 
         specDTO.setKeyAccessory(accessory);
         specDTO.setKeyBuild(build);
@@ -828,7 +826,6 @@ public class ProductServiceImpl implements ProductService {
 
         for (SpecDTO spec : specDTOS) {
 
-            log.info("필터링 과정 = {}", spec.getCategoryNo());
 
             String key = spec.getCategoryNo();
             String value = spec.getOptionValue();

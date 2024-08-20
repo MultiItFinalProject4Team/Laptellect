@@ -83,9 +83,9 @@ public class CrawlingService {
                         "&categoryCode=758" +
                         "&physicsCate1=860" +
                         "&physicsCate2=869" +
-                        "&sortMethod=BoardCount" +
+                        "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
-                        "&listCount=90");
+                        "&listCount=30");
                 log.info("laptopType {}", productType);
                 break;
 
