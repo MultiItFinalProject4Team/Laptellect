@@ -6,7 +6,6 @@ import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.dto.mouse.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
-import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -868,15 +867,13 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public List<ProductDTO> getStoredProducts(Integer typeNo) {
         List<ProductDTO> products = productMapper.getProductsByType(typeNo);
-        log.info("타입 {}에 대해 총 {}개의 제품을 조회", typeNo, products.size());
-        for (ProductDTO product : products) {
-            List<TaggDTO> tags = recommendProductDAO.getTagsForProduct(product.getProductNo());
-            log.info("제품: {}, 태그: {}", product.getProductName(), tags);
-            product.setTags(tags);
-            log.info("제품: {}, 태그: {}", product.getProductName(), product.getTags());
-        }
+
         return products;
     }
+
+
+
+
 
 
     @Override
@@ -920,5 +917,5 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    }
 
-}

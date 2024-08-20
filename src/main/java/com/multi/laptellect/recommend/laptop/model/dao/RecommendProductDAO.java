@@ -32,5 +32,7 @@ public interface RecommendProductDAO {
     @Select("SELECT pt.tag_no, lt.tag_data FROM machine_tagkey pt JOIN laptop_tag lt ON pt.tag_no = lt.tag_no WHERE pt.product_no = #{productNo}")
     ArrayList<LaptopSpecDTO> getAllProducts(@Param("productNo") int productNo);
 
-    
+
+
+
 }

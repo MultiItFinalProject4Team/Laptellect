@@ -39,7 +39,7 @@ public class RecommendProductService {
         return laptop;
     }
 
-    public List<TaggDTO> getTagsForProduct(int productNo) {
+    public List<TaggDTO> getTagsForProduct(int productNo) {//상품번호에 해당하는 태그 조회
         return recommendProductDAO.getTagsForProduct(productNo);
     }
 

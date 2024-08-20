@@ -125,6 +125,7 @@ public class RecommenService {
             tagNo = findTagByData(tags, "슬림");
             assignedTags.add(tagNo);
             log.info("'슬림' 태그(#{}) 할당", tagNo);
+
         }
         if (isUsb(usbNo)) {
             tagNo = findTagByData(tags, "많은 USB 단자");
@@ -186,12 +187,12 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'배틀 그라운드' 태그(#{}) 할당", tagNo);
         }
-        if (islost(cpuName, gpuName, gpuTypeName)){
+        if (islost(cpuName, gpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "로스트 아크");
             assignedTags.add(tagNo);
             log.info("'로스트 아크' 태그(#{}) 할당", tagNo);
         }
-        if(ispaneSur(panelSurName)) {
+        if (ispaneSur(panelSurName)) {
             tagNo = findTagByData(tags, "눈부심 방지");
             assignedTags.add(tagNo);
             log.info("'눈부심 방지' 태그(#{}) 할당", tagNo);
@@ -419,6 +420,7 @@ public class RecommenService {
         }
         return gpuCode >= gtxScore;
     }
+
     private boolean isGpuSuitableForOnlineGames(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
@@ -437,7 +439,7 @@ public class RecommenService {
         for (String cpuName : cEnt.keySet()) {
             String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
             if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
-                 cpuCode = cEnt.get(cpuName);
+                cpuCode = cEnt.get(cpuName);
                 break;
             }
         }
@@ -490,7 +492,7 @@ public class RecommenService {
             double inches = Double.parseDouble(inchesStr);
 
             // 4. 조건 확인
-            return inches >= 13.0 && inches < 16.0;
+            return inches > 13.0 && inches < 16.0;
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return false;
         }
@@ -533,10 +535,11 @@ public class RecommenService {
     private boolean isSlim(String thickness) {
         if (thickness == null) {
             return false;
-        } try {
+        }
+        try {
             double thicknesValuee = Double.parseDouble(thickness.replace("mm", ""));
             return thicknesValuee < 20.0;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -549,9 +552,9 @@ public class RecommenService {
         for (String suitabletUsbs : suitableteUsb) {
             if (usb.contains(suitabletUsbs)) {
                 return true;
-                }
             }
-            return false;
+        }
+        return false;
     }
 
     private boolean isUsbe(String usbe) {
@@ -593,6 +596,7 @@ public class RecommenService {
         return true;
 
     }
+
     private boolean isWeightSuitable(String weight) {
         if (weight == null || weight.isEmpty()) {
             return false;
@@ -625,7 +629,7 @@ public class RecommenService {
         }
     }
 
-    private boolean isSomoWeight (String weight) {
+    private boolean isSomoWeight(String weight) {
         if (weight == null || weight.isEmpty()) {
             return false;
         }
@@ -643,7 +647,8 @@ public class RecommenService {
 
     private boolean isPower(String power) {
         if (power == null) {
-        } try {
+        }
+        try {
             double powerWh = Double.parseDouble(power.replace("W", ""));
             return powerWh > 80;
         } catch (Exception e) {
@@ -653,7 +658,8 @@ public class RecommenService {
 
     private boolean isPowerSmall(String powersmall) {
         if (powersmall == null) {
-        } try {
+        }
+        try {
             double powerWhSmall = Double.parseDouble(powersmall.replace("W", ""));
             return powerWhSmall < 80;
         } catch (Exception e) {
@@ -663,7 +669,8 @@ public class RecommenService {
 
     private boolean isStorage(String storage) {
         if (storage == null) {
-        } try {
+        }
+        try {
             double storageBig = Double.parseDouble(storage.replace("GB", ""));
             return storageBig > 511;
         } catch (Exception e) {
@@ -673,7 +680,8 @@ public class RecommenService {
 
     private boolean isResolution(String resolution) {
         if (resolution == null) {
-        } try {
+        }
+        try {
             double resolutionBig = Double.parseDouble(resolution.replaceAll("[\\\\s()a-zA-Z-]+", ""));
             return resolutionBig > 19201080;
         } catch (Exception e) {
@@ -681,7 +689,7 @@ public class RecommenService {
         }
     }
 
-    private boolean isPrice (String price, String gpu) {
+    private boolean isPrice(String price, String gpu) {
         if (price == null || gpu == null) {
             return false;
         }
@@ -834,7 +842,7 @@ public class RecommenService {
         }
     }
 
-    private int findTagByData(List<TaggDTO> tags, String tagData ) {
+    private int findTagByData(List<TaggDTO> tags, String tagData) {
         for (TaggDTO tag : tags) {
             if (tag.getTagData().equals(tagData)) {
                 log.info("태그 '{}' 찾음: #{}", tagData, tag.getTagNo());
@@ -844,6 +852,5 @@ public class RecommenService {
         log.warn("태그 '{}' 를 찾을 수 없음", tagData);
         return -1;
     }
-
 }
 

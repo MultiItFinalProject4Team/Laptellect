@@ -14,6 +14,8 @@ import com.multi.laptellect.product.model.dto.mouse.MouseSpecDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,7 @@ public class ProductController {
     private final CustomerService customerService;
     private final PaginationService paginationService;
     private final PaymentService paymentService;
+    private final RecommendProductService recommendProductService;
 
 
     /**
@@ -99,10 +102,6 @@ public class ProductController {
 
         Map<String, List<String>> cate = productService.productFilterSearch();
 
-//        List<ProductDTO> products = productService.getStoredProducts(typeNo);
-//        model.addAttribute("products", products);
-
-
 
         log.info("컨트롤러 cate 데이터 확인 = {}", cate);
 
@@ -125,12 +124,16 @@ public class ProductController {
                                  Model model, @RequestParam(value = "page",defaultValue = "1") int page) throws Exception {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
+
+
+
         // 장바구니 및 위시리스트 변수 선언
         ArrayList<Integer> carts = new ArrayList<>();
         ArrayList<Integer> wishlist = new ArrayList<>();
         PaymentDTO paymentDTO = new PaymentDTO();
         int memberNo = 0;
         String memberName = "";
+
 
         try {
             if (SecurityUtil.isAuthenticated()) {
@@ -163,13 +166,18 @@ public class ProductController {
 
             model.addAttribute("productNo",laptop.getProductNo());
             model.addAttribute("laptop", laptop);
+
+
         } catch (Exception e) {
             log.error("상품 상세 조회 에러 = ", e);
         }
 
         ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
         List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+        List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
 
+
+        model.addAttribute("tags", tags);
         model.addAttribute("paymentDTO", paymentDTO);
         model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
         model.addAttribute("productDTO", productDTO );
