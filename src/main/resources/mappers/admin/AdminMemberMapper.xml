@@ -91,4 +91,32 @@
         <include refid="memberSearch"/>
     </select>
 
+    <update id="updateMember">
+        UPDATE
+            mem_member
+        SET
+        <choose>
+            <when test="type == 'nickName'">
+                nick_name = #{ memberDTO.nickName}
+            </when>
+            <when test="type == 'email'">
+                email = #{ memberDTO.email}
+            </when>
+            <when test="type == 'tel'">
+                tel = #{ memberDTO.tel}
+            </when>
+        </choose>
+        WHERE
+            member_no = #{ memberDTO.memberNo }
+    </update>
+
+    <update id="updateMemberPassword">
+        UPDATE
+            mem_password
+        SET
+            member_password = #{ password }
+        WHERE
+            member_no = #{ memberNo }
+    </update>
+
 </mapper>
