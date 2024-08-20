@@ -111,6 +111,23 @@ public class ProductApiController {
 
 
         try {
+
+
+            int displayPages = 10;
+            int currentPage = pageable.getPageNumber();
+            int totalPages = productPage.getTotalPages();
+
+
+            int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
+            int endPage = Math.min(startPage + displayPages - 1, totalPages);
+
+
+            model.addAttribute("currentPage", currentPage );
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+            log.info( "페이징 데이터 = {},{}",currentPage, totalPages);
+
             // 사용자가 로그인한 상태인지 확인하여 로그인한 상태면 위시리스트와 장바구니 정보가 담긴 model을 넘김
             if (SecurityUtil.isAuthenticated()) {
 
@@ -191,22 +208,10 @@ public class ProductApiController {
             model.addAttribute("wishlist", wishlist); // 예외 발생 시에도 빈 리스트 추가
         }
 
-        int displayPages = 10;
-        int currentPage = pageable.getPageNumber();
-        int totalPages = productPage.getTotalPages();
-
-
-        int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
-        int endPage = Math.min(startPage + displayPages - 1, totalPages);
 
 
 
 
-
-        model.addAttribute("currentPage", currentPage );
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
         model.addAttribute("size", searchDTO.getSize());
         model.addAttribute("sort", searchDTO.getSort());
         model.addAttribute("products", productPage.getContent());
@@ -214,15 +219,8 @@ public class ProductApiController {
         model.addAttribute("typeNo", searchDTO.getTypeNo());
         model.addAttribute("keyword", searchDTO.getKeyword());
 
-        log.info("컨트롤러 model 데이터 확인 페이지번호={},페이지총수량={},페이지사이즈={},페이지정렬={},페이지타입={},{},{}",
-                currentPage,
-                totalPages,
-                searchDTO.getSize(),
-                searchDTO.getSort(),
-                productPage,
-                searchDTO.getTypeNo(),
-                searchDTO.getKeyword());
-        log.info( "페이징 데이터 = {},{}",currentPage, totalPages);
+
+
 
         return "product/product/productList";
     }
