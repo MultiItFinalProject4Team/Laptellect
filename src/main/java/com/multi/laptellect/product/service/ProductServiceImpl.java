@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
         imageDTO.setReferenceCode(referenceCode);
         imageDTO.setUploadName(uploadName);
 
-        if(productMapper.findImageByReferenceCode(referenceCode)) {
+        if(productMapper.findImageByReferenceCode(referenceCode) > 0) {
             log.debug("이미 저장된 이미지입니다.");
         } else {
             productMapper.inputImage(imageDTO);
