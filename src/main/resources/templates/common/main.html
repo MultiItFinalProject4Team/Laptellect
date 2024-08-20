@@ -87,11 +87,11 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="laptop : ${laptops}">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/laptop/laptopDetails(productNo=${laptop.productNo})}">
+                                    <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
                                         <img th:src="@{'/img/product/' + ${laptop.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/laptop/laptopDetails(productNo=${laptop.productNo})}">
+                                        <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
                                             <p class="card-text" content="product-name" th:text="${laptop.productName}">상품명</p>
                                             <p class="card-text"><strong th:text="${laptop.price}">가격대</strong><span>원</span></p>
                                         </a>
@@ -115,11 +115,11 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="mouse : ${ mouses }">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/mouse/mouseDetails(productNo=${mouse.productNo})}">
+                                    <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
                                         <img th:src="@{'/img/product/' + ${mouse.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/mouse/mouseDetails(productNo=${mouse.productNo})}">
+                                        <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
                                             <p class="card-text" content="product-name" th:text="${mouse.productName}">상품명</p>
                                             <p class="card-text"><strong th:text="${mouse.price}">가격대</strong><span>원</span></p>
                                         </a>
@@ -128,6 +128,14 @@
                                                 <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${mouse.avgScore}"></span>점
                                             </li>
                                             <li>
+                                                <form th:action="@{/payment/payment}" method="post" class="d-flex align-items-center">
+                                                    <input type="hidden" name="productName" th:value="${mouse.productName}">
+                                                    <input type="hidden" name="imageUrl" th:value="${mouse.image}">
+                                                    <input type="hidden" name="price" th:value="${mouse.price}">
+                                                    <button type="submit" class="btn btn-custom-primary ms-4"
+                                                            style="width: 200px; font-size: 17px">구매하기
+                                                    </button>
+                                                </form>
                                                 <span><a>구매하기</a></span>
                                             </li>
                                         </ul>
@@ -143,11 +151,11 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="keyboard : ${ keyboards }">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/keyboard/keyboardDetails(productNo=${keyboard.productNo})}">
+                                    <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
                                         <img th:src="@{'/img/product/' + ${keyboard.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/keyboard/keyboardDetails(productNo=${keyboard.productNo})}">
+                                        <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
                                             <p class="card-text" content="product-name" th:text="${keyboard.productName}">상품명</p>
                                             <p class="card-text"><strong th:text="${keyboard.price}">가격대</strong><span>원</span></p>
                                         </a>

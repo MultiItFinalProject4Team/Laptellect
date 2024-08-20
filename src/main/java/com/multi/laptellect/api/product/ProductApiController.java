@@ -158,7 +158,7 @@ public class ProductApiController {
 
                         productDTO.setSpecsString(specsString);
 
-                        detailUrl = "/product/laptop/laptopDetails?productNo=" + productNo;
+                        detailUrl = "/product/productDetail?productNo=" + productNo;
                         productDTO.setUrl(detailUrl);
 
                         break;
@@ -176,7 +176,7 @@ public class ProductApiController {
                         productDTO.setSpecsString(specsString2);
 
 
-                        detailUrl = "/product/mouse/mouseDetails?productNo=" + productNo;
+                        detailUrl = "/product/productDetail?productNo=" + productNo;
                         productDTO.setUrl(detailUrl);
                         break;
                     case 3: // 키보드
@@ -193,7 +193,7 @@ public class ProductApiController {
                         productDTO.setSpecsString(specsString1);
 
 
-                        detailUrl = "/product/keyboard/keyboardDetails?productNo=" + productNo;
+                        detailUrl = "/product/productDetail?productNo=" + productNo;
                         productDTO.setUrl(detailUrl);
                         break;
                 }
