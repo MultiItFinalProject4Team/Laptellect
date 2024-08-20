@@ -86,7 +86,11 @@ a {
     background: none;
     border: none;
     font-size: 20px;
-    color: #ccc;
+    color: #95a5a6;
     cursor: pointer;
 }
-.slick-dots li.slick-active button { color: #000; }
+.slick-dots li.slick-active button { color: #3498DB; }
+
+.product-image { width: 280px; height: 280px; }
+
+.card { height: 430px; }
