@@ -202,11 +202,9 @@ public class ProductController {
                     log.info("키보드 조회 목록 = {}",keyboard);
                     log.info("키보드 조회 목록 = {}",keyboard.getImage());
 
-
                     model.addAttribute("productNo", keyboard.getProductNo());
                     model.addAttribute("keyboard", keyboard);
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
-
 
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
@@ -216,8 +214,6 @@ public class ProductController {
                     model.addAttribute("memberName", memberName);
                 }
             }
-
-
         } catch (Exception e) {
             log.error("상품 상세 조회 에러 = ", e);
         }

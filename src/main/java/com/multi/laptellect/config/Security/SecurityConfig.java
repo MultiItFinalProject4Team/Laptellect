@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .successHandler(customAuthenticationSuccessHandler)
                         .failureHandler(customFailureHandler));
         http
-                .rememberMe() // 아이디 저장
+                .rememberMe() // 자동 로그인
                 .rememberMeParameter("remember-me")
                 .tokenValiditySeconds(604800) // 14일
                 .alwaysRemember(false) // 항상 실행 false

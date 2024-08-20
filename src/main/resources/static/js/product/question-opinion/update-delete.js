@@ -24,7 +24,7 @@ function updateQuestion(productqNo){
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("AJAX 요청 오류:", textStatus, errorThrown);
-            alert("데이터를 로드하는 중 오류가 발생했습니다.");
+            swal("데이터를 로드하는 중 오류가 발생했습니다.", "", "error");
         }
     });
 }
@@ -53,7 +53,7 @@ function updateQuestionReply(productqNo){
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("AJAX 요청 오류:", textStatus, errorThrown);
-            alert("데이터를 로드하는 중 오류가 발생했습니다.");
+            swal("데이터를 로드하는 중 오류가 발생했습니다.", "", "error");
         }
     });
 }
@@ -110,17 +110,17 @@ buttons.forEach(button => {
                 processData: false,
                 success: function(response) {
                     if (response == 1) {
-                        alert("상품 문의 답변 수정 성공"); // 성공 메시지 표시
+                        swal("상품 문의 답변 수정 성공", "", "success");
                         $('#updateAForm')[0].reset(); // 폼 필드 초기화
                         $('#productAnswerModal').modal('hide'); // 모달 닫기
                         loadComments(1); // 댓글 로드 함수 호출
                     } else {
-                        alert('답변 수정에 실패했습니다: ' + response.message); // 실패 메시지 표시
+                        swal('답변 수정에 실패했습니다: ' + response.message, '', 'error');
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error:', textStatus, errorThrown);
-                    alert('문제 발생! 다시 시도해 주세요.'); // 오류 메시지 표시
+                    swal('문제 발생! 다시 시도해 주세요.', '', 'error');
                 }
             });
     const buttons = document.querySelectorAll('.btn-category');
@@ -202,7 +202,7 @@ function deleteQuestionReply(productqNo) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("AJAX 요청 오류:", textStatus, errorThrown);
-            alert("댓글을 삭제하는 중 오류가 발생했습니다.");
+            swal("댓글을 삭제하는 중 오류가 발생했습니다.", "", "error");
         }
     });
 }

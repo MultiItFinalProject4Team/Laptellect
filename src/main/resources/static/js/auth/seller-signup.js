@@ -167,15 +167,17 @@ $(document).ready(function() {
         if (response === true) {
           console.log("이메일 전송 완료");
           $('#emailInput').removeClass('is-invalid');
+          swal("이메일 전송 완료", "", "success");
           alert("이메일 전송 완료");
         } else {
           console.log("이메일 전송 실패");
           $('#emailInput').addClass('is-invalid');
+          swal("이메일 전송 실패", "", "error");
           alert("이메일 전송 실패");
         }
       },
       error: function () {
-        console.log("이메일 연결 실패");
+        swal("이메일 연결 실패");
       },
     });
   });
@@ -300,17 +302,17 @@ $(document).ready(function() {
       success: function (response) {
         switch (response) {
           case 0:
-            alert("판매자 회원 가입 완료.");
+            swal("판매자 회원 가입 완료.", "", "success");
             window.location.href = "/";
             break;
           case 1:
-            alert("중복된 아이디입니다.");
+            swal("중복된 아이디입니다.", "", "warning");
             break;
           case 2:
-            alert("중복된 이메일입니다.");
+            swal("중복된 이메일입니다.", "", "warning");
             break;
           default:
-            alert("회원 가입 중 오류가 발생했습니다.");
+            swal("회원 가입 중 오류가 발생했습니다.");
         }
       },
       error: function () {

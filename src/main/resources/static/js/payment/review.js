@@ -84,7 +84,7 @@ function submitReview() {
     const isPurchased = document.getElementById('isPurchased').value === 'true';
 
     if (!isPurchased) {
-        alert("구매하신 상품이 아니거나, 이미 리뷰 등록을 완료하신 상품입니다.");
+        swal("구매하신 상품이 아니거나, 이미 리뷰 등록을 완료하신 상품입니다.", "", "info");
         bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
         return;
     }
@@ -114,16 +114,16 @@ function submitReview() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('리뷰가 성공적으로 등록되었습니다.');
+                swal('리뷰가 성공적으로 등록되었습니다.', "", "success");
                 bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
                 window.location.reload();
             } else {
-                alert(data.message || '리뷰 제출에 실패했습니다.');
+                swal(data.message || '리뷰 제출에 실패했습니다.', '', 'error');
             }
         })
         .catch((error) => {
             console.error('Error:', error);
-            alert('리뷰 제출 중 오류가 발생했습니다.');
+            swal("리뷰 제출 중 오류가 발생했습니다.", "", "error");
         });
     }
 }
@@ -149,16 +149,16 @@ function updateReview(paymentProductReviewsNo) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('리뷰가 성공적으로 수정되었습니다.');
+            swal('리뷰가 성공적으로 수정되었습니다.', "", "success");
             bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
             window.location.reload();
         } else {
-            alert(data.message || '리뷰 수정에 실패했습니다.');
+            swal(data.message || '리뷰 수정에 실패했습니다.', '', 'error');
         }
     })
     .catch((error) => {
         console.error('Error:', error);
-        alert('리뷰 수정 중 오류가 발생했습니다.');
+        swal("리뷰 수정 중 오류가 발생했습니다.", "", "error");
     });
 }
 
@@ -174,15 +174,15 @@ function deleteReview(paymentProductReviewsNo) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('리뷰가 성공적으로 삭제되었습니다.');
+            swal('리뷰가 성공적으로 삭제되었습니다.', "", "success");
             window.location.reload();
         } else {
-            alert(data.message || '리뷰 삭제에 실패했습니다.');
+            swal(data.message || '리뷰 삭제에 실패했습니다.', '', 'error');
         }
     })
     .catch((error) => {
         console.error('Error:', error);
-        alert('리뷰 삭제 중 오류가 발생했습니다.');
+        swal("리뷰 삭제 중 오류가 발생했습니다.", "", "error");
     });
 }
 
