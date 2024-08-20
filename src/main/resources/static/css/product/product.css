@@ -72,6 +72,11 @@
   transition: .3s;
 }
 
+.page-item.disabled .page-link {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
 
 .product-wap:hover .card .product-overlay {
   visibility: visible;

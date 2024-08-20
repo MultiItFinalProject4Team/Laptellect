@@ -77,10 +77,9 @@
 
             <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
                 th:classappend="${currentPage == i} ? 'active' : ''">
-                <a class="page-link" href="#" th:data-page="${i}" th:text="${i}">1</a>
-            </li>
+                <a class="page-link" href="#" th:data-page="${i}" th:text="${i}"></a></li>
 
-            <li class="page-item" th:classappend="${currentPage  == totalPages} ? 'disabled'">
+            <li class="page-item" th:classappend="${currentPag  == totalPages} ? 'disabled'">
                 <a class="page-link btn-delete" href="#" th:data-page="${currentPage + 1}">>
                 </a>
             </li>
