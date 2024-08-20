@@ -148,6 +148,7 @@ public class ProductApiController {
                 int productNo = productDTO.getProductNo();
 
 
+
                 switch (searchDTO.getTypeNo()) {
                     case 1: // 노트북
                         log.info("laptop Get Spec = {}", searchDTO.getTypeNo());
