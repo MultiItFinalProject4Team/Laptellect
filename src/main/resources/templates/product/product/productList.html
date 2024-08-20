@@ -68,23 +68,27 @@
             </a>
         </div>
     </div>
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center all-product">
-            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a class="page-link" href="#" th:data-page="${currentPage - 1}" tabindex="-1"><
-                </a>
-            </li>
+    <div th:if="${!products.isEmpty()}">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center all-product">
+                <li class="page-item" th:classappend="${ !products.hasPrevious } ? 'disabled'">
+                    <a class="page-link" href="#" th:data-page="${ page - 1 }" tabindex="-1"><
+                    </a>
+                </li>
 
-            <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
-                th:classappend="${currentPage == i} ? 'active' : ''">
-                <a class="page-link" href="#" th:data-page="${i}" th:text="${i}"></a></li>
+                <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
+                    th:classappend="${page == products.number } ? 'active' : ''">
+                    <a class="page-link" href="#" th:data-page="${ page }" th:text="${ page + 1 }"></a>
+                </li>
 
-            <li class="page-item" th:classappend="${currentPag  == totalPages} ? 'disabled'">
-                <a class="page-link btn-delete" href="#" th:data-page="${currentPage + 1}">>
-                </a>
-            </li>
-        </ul>
-    </nav>
+                <li class="page-item" th:classappend="${ !products.hasNext } ? 'disabled'">
+                    <a class="page-link btn-delete" href="#" th:data-page="${ page + 1 }">>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
 </div>
 
 <script>
@@ -109,7 +113,7 @@
                                 product.removeClass('text-white');
                                 break;
                             case 2:
-                                swal('위시리스트 삭제 완료.', '', 'success');
+                                swal('위시리스트 삭제 완료.', '', 'info');
                                 product.addClass('text-white');
                                 break;
                             case 3:
@@ -142,7 +146,7 @@
                                 product.removeClass('text-white');
                                 break;
                             case 2:
-                                swal('장바구니 삭제 완료.', '', 'success');
+                                swal('장바구니 삭제 완료.', '', 'info');
                                 product.addClass('text-white');
                                 break;
                             case 3:

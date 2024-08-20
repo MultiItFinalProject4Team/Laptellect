@@ -219,8 +219,10 @@ $(document).ready(function() {
       success: function (response) {
         switch (response) {
           case 0:
-            swal("성공", "회원 가입 완료", "success");
-            window.location.href = "/";
+            swal('성공', '회원 가입 완료', 'success');
+            setTimeout(function() {
+                window.location.href = '/';
+            }, 1500);
             break;
           case 1:
             swal("오류", "중복된 아이디입니다.", "error");

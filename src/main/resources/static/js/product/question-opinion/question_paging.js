@@ -48,7 +48,7 @@ function loadComments(page) {
             }
         },
         error: function () {
-            alert("댓글을 로드하는 중 오류가 발생했습니다.");
+            swal("댓글을 로드하는 중 오류가 발생했습니다.", "", "error");
         }
     });
 }

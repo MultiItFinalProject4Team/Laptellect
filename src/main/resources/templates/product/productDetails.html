@@ -124,7 +124,7 @@
                             $("#icon-wishlist").css("color", "#FF0000");
                             break;
                           case 2:
-                            swal('위시리스트 삭제 완료.', '', 'success');
+                            swal('위시리스트 삭제 완료.', '', 'info');
                             $("#icon-wishlist").css("color", "");
                             break;
                           case 3:
@@ -156,7 +156,7 @@
                             $("#icon-cart").css("color", "#32CD32");
                             break;
                           case 2:
-                            swal('장바구니 삭제 완료', '', 'success');
+                            swal('장바구니 삭제 완료', '', 'info');
                             $("#icon-cart").css("color", "");
                             break;
                           case 3:
@@ -187,10 +187,10 @@
                             swal('장바구니 추가 완료', '', 'success');
                             break;
                           case 2:
-                            swal('장바구니 삭제 완료', '', 'success');
+                            swal('장바구니 삭제 완료', '', 'info');
                             break;
                           case 3:
-                            swal('장바구니 삭제 완료', '', 'success');
+                            swal('장바구니 삭제 완료', '', 'info');
                             break;
                           default:
                             swal('장바구니 Ajax Error', '', 'error');
@@ -213,6 +213,7 @@
                 <!-- 상품 이미지 -->
                 <img th:src="@{'/img/product/' + ${ laptop.image }}" class="card-img-top" alt="상품 이미지"
                      style="height: 400px; object-fit: contain;">
+
                 <div class="spec-box mt-3">
                     <!-- 상품 기본 정보 -->
                     <ul class="list-unstyled">
@@ -281,7 +282,7 @@
                     </div>
                     <div class="mb-2">
                         <ul class="prodinfo_spec">
-                            <li>제조사: <span th:text="${ laptop.company }"></span></li>
+                            <li>제조사: <span th:te    xt="${ laptop.company }"></span></li>
                             <li>등록일: <span th:text="${ laptop.registrationDate }"></span></li>
                             <li>출시가: <span class="price" th:text="${ laptop.price }"></span></li>
                         </ul>

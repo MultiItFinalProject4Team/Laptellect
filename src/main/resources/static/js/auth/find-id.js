@@ -39,7 +39,14 @@ $(function () {
                 success: function (response) {
                     if (response === true) {
                         console.log("이메일 전송 완료");
-                        swal('이메일 전송 완료', '', 'success');
+                        swal('이메일 전송 완료!', '', 'success');
+
+                        setTimeout(function() {
+                            if (window.opener) {
+                                window.opener.postMessage('closeAndRedirect', '*');
+                            }
+                            window.close();
+                        }, 1500);
                         window.close();
                     } else {
                         console.log("이메일 전송 실패");

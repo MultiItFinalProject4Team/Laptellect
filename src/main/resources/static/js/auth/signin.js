@@ -7,11 +7,11 @@ function openKakaoLogin() {
     }
 
     function openFindId() {
-        window.open("/find-id", '_blank', 'width=300,height=300');
+        window.open("/find-id", '_blank', 'width=300,height=350');
     }
 
     function openFindPw() {
-        window.open("/find-pw", '_blank', 'width=300,height=300');
+        window.open("/find-pw", '_blank', 'width=300,height=350');
     }
 
     $(document).ready(function(){

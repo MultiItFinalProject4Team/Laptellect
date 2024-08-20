@@ -26,7 +26,7 @@ public class ProductSearchDTO implements Pageable {
 
 
 
-    private int page; // 페이지 번호
+    private int page = 0; // 페이지 번호
 
 
     private int size; // 페이징 할 개수 (10개, 20개, 30개 등)

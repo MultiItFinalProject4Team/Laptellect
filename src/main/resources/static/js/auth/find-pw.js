@@ -80,7 +80,13 @@ $(function () {
                     switch (response) {
                         case 1:
                             swal('임시 비밀번호 전송 완료', '', 'success');
-                            window.close();
+
+                            setTimeout(function() {
+                                if (window.opener) {
+                                    window.opener.postMessage('closeAndRedirect', '*');
+                                }
+                                window.close();
+                            }, 1500);
                             break;
                         case 2:
                             swal('이메일 전송 실패', '', 'error');

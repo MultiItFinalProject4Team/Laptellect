@@ -102,10 +102,10 @@ $(document).ready(function () {
                             getModal(memberNo);
                             break;
                         case 2:
-                            swal("닉네임 길이가 너무 깁니다", "", "warning");
+                            swal("닉네임 길이가 너무 깁니다", "", "info");
                             break;
                         case 3:
-                            swal("중복된 닉네임입니다", "", "warning");
+                            swal("중복된 닉네임입니다", "", "info");
                             break;
                         case 0:
                             swal("닉네임 변경 실패", "", "error");
@@ -115,7 +115,7 @@ $(document).ready(function () {
                 error: function() { console.log("닉네임 변경 에러"); }
             })
          } else {
-            alert("닉네임을 입력해 주세요.");
+            swal("닉네임을 입력해 주세요.", "", "info");
          }
     });
 
