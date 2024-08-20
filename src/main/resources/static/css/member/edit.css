@@ -1,0 +1,22 @@
+    .edit-tap { background-color: #3498DB; color: white !important;}
+    .profile-box { text-align: center; }
+    .profile-box form {
+      text-align: left;
+      display: inline-block;
+      width: 50%
+    }
+    .input-group > .form-control {
+        border-radius: 5px !important;
+    }
+
+    /* 경고 모달 */
+    .modal-dialog.modal-lg { max-width: 450px; }
+    .modal-body2 { white-space: pre-line; }
+    .warning-message {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      border-radius: 5px;
+      padding: 5px;
+      color: #721c24;
+    }
+    #warningModal .modal-dialog { transform: translateY(-25%); }

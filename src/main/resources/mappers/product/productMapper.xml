@@ -247,7 +247,7 @@
     <select id="getReviewRequired" resultType="productDTO">
         SELECT product_no, product_code
         FROM product
-        WHERE type_no IN(2,3);
+        WHERE type_no IN(1);
     </select>
 
 
@@ -275,7 +275,7 @@
         product
         WHERE =#{productNo}
     </delete>
-    
+
     <!--제품 카테고리를 옵션으로 조회-->
     <select id="findByOptions" parameterType="map" resultType="productCategoryDTO">
         SELECT *
@@ -374,6 +374,7 @@
             images img ON img.reference_code = p.reference_code
         WHERE
             p.product_no = #{ productNo }
+         limit 1;
     </select>
 
     <select id="findProductSpecByProductNo">
@@ -388,5 +389,4 @@
             #{ options }
         </foreach>
     </select>
-
 </mapper>

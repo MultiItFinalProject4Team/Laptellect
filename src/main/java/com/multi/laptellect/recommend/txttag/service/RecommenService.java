@@ -63,6 +63,7 @@ public class RecommenService {
         log.info("태그 할당 프로세스 완료");
     }
 
+
     //제품번호별로 태그 할당
     private List<Integer> determineTagsForProduct(LaptopSpecDTO laptopSpecDTO) {
         List<Integer> assignedTags = new ArrayList<>(); //미리 선언 해두는게 나음
@@ -84,6 +85,7 @@ public class RecommenService {
         String cpuName = laptopSpecDTO.getCpu().getCpuNumber(); //cpu
         String panelSurName = laptopSpecDTO.getDisplay().getPanelSurface(); //패널 표면 처리
         String refreshName = laptopSpecDTO.getDisplay().getResolution(); //해상도
+        String priceName = laptopSpecDTO.getPrice(); //가격
 
 
         //gpuName, screenSize 변수명 변경
@@ -105,14 +107,14 @@ public class RecommenService {
             log.info("'넓은 화면' 태그(#{}) 할당", tagNo);
         }
         if (isScreenSuitableForDocuments(screenSize)) {
-            tagNo = findTagByData(tags, "작은 화면");
-            assignedTags.add(tagNo);
-            log.info("'작은 화면' 태그(#{}) 할당", tagNo);
-        }
-        if (isScreenSuitableForStudents(screenSize)) {
             tagNo = findTagByData(tags, "적당한 화면");
             assignedTags.add(tagNo);
             log.info("'적당한 화면' 태그(#{}) 할당", tagNo);
+        }
+        if (isScreenSuitableForStudents(screenSize)) {
+            tagNo = findTagByData(tags, "작은 화면");
+            assignedTags.add(tagNo);
+            log.info("'작은 화면' 태그(#{}) 할당", tagNo);
         }
         if (isWindowsOS(osName)) {
             tagNo = findTagByData(tags, "윈도우 있음");
@@ -139,7 +141,7 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'최신 제품' 태그(#{}) 할당", tagNo);
         }
-        if (isWeight(weightName)) {
+        if (isWeightSuitable(weightName)) {
             tagNo = findTagByData(tags, "가벼움");
             assignedTags.add(tagNo);
             log.info("'가벼움' 태그(#{}) 할당", tagNo);
@@ -164,12 +166,12 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'넉넉한 저장 공간' 태그(#{}) 할당", tagNo);
         }
-        if (isCoding(cpuName)) {
+        if (isCoding(cpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "코딩");
             assignedTags.add(tagNo);
             log.info("'코딩용' 태그(#{}) 할당", tagNo);
         }
-        if (isWork(cpuName)) {
+        if (isWork(cpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "작업용");
             assignedTags.add(tagNo);
             log.info("'작업용' 태그(#{}) 할당", tagNo);
@@ -194,53 +196,94 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'눈부심 방지' 태그(#{}) 할당", tagNo);
         }
-        if (isRefresh(refreshName)) {
+        if (isResolution(refreshName)) {
             tagNo = findTagByData(tags, "높은 해상도");
             assignedTags.add(tagNo);
             log.info("'높은 해상도' 태그(#{}) 할당", tagNo);
         }
+        if (isPrice(priceName, gpuName)) {
+            tagNo = findTagByData(tags, "게이밍 착한 가격");
+            assignedTags.add(tagNo);
+            log.info("'게이밍 착한 가격' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceEff(priceName, gpuName)) {
+            tagNo = findTagByData(tags, "게이밍 가성비");
+            assignedTags.add(tagNo);
+            log.info("'게이밍 가성비' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceSmo(priceName, cpuName)) {
+            tagNo = findTagByData(tags, "사무용 착한 가격");
+            assignedTags.add(tagNo);
+            log.info("'사무용 착한 가격' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceSmoGod(priceName, gpuTypeName)) {
+            tagNo = findTagByData(tags, "사무용 가성비");
+            assignedTags.add(tagNo);
+            log.info("'사무용 가성비' 태그(#{}) 할당", tagNo);
+        }
+        if (isPriceSmoGo(priceName, gpuTypeName)) {
+            tagNo = findTagByData(tags, "사무용 고성능");
+            assignedTags.add(tagNo);
+            log.info("'사무용 고성능' 태그(#{}) 할당", tagNo);
 
+        }
+        if (isPriceGo(priceName, gpuName)) {
+            tagNo = findTagByData(tags, "게이밍 고성능");
+            assignedTags.add(tagNo);
+            log.info("'게이밍 고성능' 태그(#{}) 할당", tagNo);
+        }
+        if (isInten(cpuName, gpuTypeName)) {
+            tagNo = findTagByData(tags, "인터넷 강의");
+            assignedTags.add(tagNo);
+            log.info("'인터넷 강의' 태그(#{}) 할당", tagNo);
+        }
+        if (isSomoWeight(weightName)) {
+            tagNo = findTagByData(tags, "초경량화");
+            assignedTags.add(tagNo);
+            log.info("'초경량화' 태그(#{}) 할당", tagNo);
+        }
 
         return assignedTags;
     }
 
+
     private boolean islost(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
-        Pattern pattern2 = Pattern.compile("[\\s()]+");
-        String Key3 = pattern2.matcher("i3-6100U (2.3GHz)").replaceAll("");
-        String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
-        Integer cpuScore = cEnt.get(Key3);
-        Integer gpuScore = gEnt.get(Key4);
-        int cpuCode = -1;
-        int gpuCode = -1;
+        Pattern pattern = Pattern.compile("[\\s()]+");
+        String minCpuKey = pattern.matcher("i3-6100U (2.3GHz)").replaceAll("");
+        String minGpuKey = pattern.matcher("GTX1050 Ti").replaceAll("");
+        Integer minCpuScore = cEnt.get(minCpuKey);
+        Integer minGpuScore = gEnt.get(minGpuKey);
+        int cpuScore = -1;
+        int gpuScore = -1;
 
-        if (cpu == null || gpu == null || cpuScore == null || gpuScore == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
+        if (cpu == null || gpu == null || minCpuScore == null || minGpuScore == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
             return false;
         }
 
         for (String cpuName : cEnt.keySet()) {
-            String cpuNameC1 = pattern2.matcher(cpuName).replaceAll("");
+            String cpuNameC1 = pattern.matcher(cpuName).replaceAll("");
             if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
-                cpuCode = cEnt.get(cpuName);
+                cpuScore = cEnt.get(cpuName);
                 break;
             }
         }
         for (String gpuName : gEnt.keySet()) {
-            String gpuNameClean = pattern2.matcher(gpuName).replaceAll("");
+            String gpuNameClean = pattern.matcher(gpuName).replaceAll("");
             if (gpu.replaceAll("[\\s()]+", "").contains(gpuNameClean)) {
-                gpuCode = gEnt.get(gpuName);
+                gpuScore = gEnt.get(gpuName);
                 break;
             }
         }
-        return cpuCode >= cpuScore && gpuCode >= gpuScore;
+        return cpuScore >= minCpuScore && gpuScore >= minGpuScore;
     }
 
     private boolean isBet(String cpu, String gpu, String gpuTypeName) {
         Map<String, Integer> cEnt = cpuConfig.getCpuMark();
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
         Pattern pattern2 = Pattern.compile("[\\s()]+");
-        String Key3 = pattern2.matcher("i5-7300U (2.6GHz)").replaceAll("");
+        String Key3 = pattern2.matcher("i5-8200Y (1.3GHz)").replaceAll("");
         String Key4 = pattern2.matcher("GTX1050 Ti").replaceAll("");
         Integer cpuScore = cEnt.get(Key3);
         Integer gpuScore = gEnt.get(Key4);
@@ -290,49 +333,60 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isWork(String gpu) {
+    private boolean isWork(String cpu, String gpuTypeName) {
         Map<String, Integer> ent5 = cpuConfig.getCpuMark();
         Pattern pattern3 = Pattern.compile("[\\s()]+");
-        String key4 = pattern3.matcher( "i7-1165G7 (2.8GHz)").replaceAll("");
-        String key5 = pattern3.matcher("i3-1005G1 (1.2GHz)").replaceAll("");
+        String key4 = pattern3.matcher("i5-1130G7 (1.8GHz)").replaceAll("");
+        String key5 = pattern3.matcher("m3-6Y30 (0.9GHz)").replaceAll("");
         Integer cpuScoer5 = ent5.get(key4);
         Integer cpuScoer6 = ent5.get(key5);
 
-        if (gpu == null) {
+        if (cpu == null || gpuTypeName == null) {
             return false;
         }
         if (cpuScoer5 == null || cpuScoer6 == null) {
             return false;
         }
-            for (String cpuName2 : ent5.keySet()) {
-                String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
-                if (gpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
-                    int cpuCode2 = ent5.get(cpuName2);
-                    return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6;
-                }
-            }
-            return false;
-        }
 
-    private boolean isCoding(String gpu) {
-        Map<String, Integer> ent5 = cpuConfig.getCpuMark();
-        Pattern pattern3 = Pattern.compile("[\\s()]+");
-        String key4 = pattern3.matcher( "i7-1165G7 (2.8GHz)").replaceAll("");
-        String key5 = pattern3.matcher("i3-1315U (1.2GHz)").replaceAll("");
-        Integer cpuScoer5 = ent5.get(key4);
-        Integer cpuScoer6 = ent5.get(key5);
+        // 내장 그래픽 카드 여부 확인
+        boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
 
-        if (gpu == null) {
-            return false;
-        }
-        if (cpuScoer5 == null || cpuScoer6 == null) {
-            return false;
-        }
         for (String cpuName2 : ent5.keySet()) {
             String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
-            if (gpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
                 int cpuCode2 = ent5.get(cpuName2);
-                return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6;
+                // CPU 성능 조건과 내장 그래픽 조건을 모두 만족해야 함
+                return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6 && isIntegratedGraphics;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCoding(String cpu, String gpuTypeName) {
+        Map<String, Integer> ent5 = cpuConfig.getCpuMark();
+        Pattern pattern3 = Pattern.compile("[\\s()]+");
+        String key4 = pattern3.matcher("i7-1165G7 (2.8GHz)").replaceAll("");
+        String key5 = pattern3.matcher("m3-6Y30 (0.9GHz)").replaceAll("");
+
+        Integer cpuScoer5 = ent5.get(key4);
+        Integer cpuScoer6 = ent5.get(key5);
+
+        if (cpu == null || gpuTypeName == null) {
+            return false;
+        }
+        if (cpuScoer5 == null || cpuScoer6 == null) {
+            return false;
+        }
+
+        // 내장 그래픽 카드 여부 확인
+        boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+        for (String cpuName2 : ent5.keySet()) {
+            String cpuNameC2 = pattern3.matcher(cpuName2).replaceAll("");
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC2)) {
+                int cpuCode2 = ent5.get(cpuName2);
+                // CPU 성능 조건과 내장 그래픽 조건을 모두 만족해야 함
+                return cpuCode2 < cpuScoer5 && cpuCode2 > cpuScoer6 && isIntegratedGraphics;
             }
         }
         return false;
@@ -342,7 +396,7 @@ public class RecommenService {
     private boolean isGpuSuitableForSteamOrFPS(String gpu, String gpuTypeName) {
         Map<String, Integer> ent = gpuConfig.getGpuMark();
         Pattern pattern1 = Pattern.compile("[\\s()]+");
-        String key2 = pattern1.matcher("GTX1650").replaceAll("");
+        String key2 = pattern1.matcher("GTX1050 Ti").replaceAll("");
         Integer gtxScore = ent.get(key2);
 
         if (gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
@@ -397,38 +451,68 @@ public class RecommenService {
         return cpuCode >= cpuScore1 && gpuCode >= gpuScore1;
     }
 
-    private boolean isScreenSuitableForCoding(String screena) {
-        if (screena == null) {
+    private boolean isScreenSuitableForCoding(String screenSize) {
+        if (screenSize == null || screenSize.isEmpty()) {
             return false;
-        } try {
-            String point = screena.replaceAll("[^0-9.]", "");
-            double screenaa = Double.parseDouble(point);
-            return screenaa >= 16;
-        } catch (Exception e){
+        }
+        try {
+            // 괄호 안의 인치 값을 추출
+            int startIndex = screenSize.lastIndexOf("(");
+            int endIndex = screenSize.lastIndexOf("인치)");
+            if (startIndex == -1 || endIndex == -1) {
+                return false;
+            }
+            String inchesStr = screenSize.substring(startIndex + 1, endIndex);
+            double inches = Double.parseDouble(inchesStr);
+
+            // 16인치 이상인지 확인
+            return inches >= 16.0;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return false;
         }
     }
 
-    private boolean isScreenSuitableForDocuments(String screenb) {
-        if (screenb == null) {
+    private boolean isScreenSuitableForDocuments(String screenSize) {
+        // 1. 입력값 검증
+        if (screenSize == null || screenSize.isEmpty()) {
             return false;
-        } try {
-            String point2 = screenb.replaceAll("[^0-9.]", "");
-            double screenbb = Double.parseDouble(point2);
-            return screenbb >= 13 && screenbb < 16;
-        } catch (Exception e) {
+        }
+        try {
+            // 2. 인치 값 추출
+            int startIndex = screenSize.lastIndexOf("(");
+            int endIndex = screenSize.lastIndexOf("인치)");
+            if (startIndex == -1 || endIndex == -1) {
+                return false;
+            }
+            String inchesStr = screenSize.substring(startIndex + 1, endIndex);
+
+            // 3. 문자열을 숫자로 변환
+            double inches = Double.parseDouble(inchesStr);
+
+            // 4. 조건 확인
+            return inches >= 13.0 && inches < 16.0;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return false;
         }
     }
 
-    private boolean isScreenSuitableForStudents(String screenc) {
-        if (screenc == null) {
+    private boolean isScreenSuitableForStudents(String screenSize) {
+        if (screenSize == null || screenSize.isEmpty()) {
             return false;
-        } try {
-            String point3 = screenc.replaceAll("[^0-9.]", "");
-            double screencc = Double.parseDouble(point3);
-            return screencc < 13;
-        } catch (Exception e) {
+        }
+        try {
+            // 괄호 안의 인치 값을 추출
+            int startIndex = screenSize.lastIndexOf("(");
+            int endIndex = screenSize.lastIndexOf("인치)");
+            if (startIndex == -1 || endIndex == -1) {
+                return false;
+            }
+            String inchesStr = screenSize.substring(startIndex + 1, endIndex);
+            double inches = Double.parseDouble(inchesStr);
+
+            // 13인치 미만인지 확인
+            return inches < 13.0;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -509,24 +593,50 @@ public class RecommenService {
         return true;
 
     }
-    private boolean isWeight(String weight) {
-        if (weight == null) {
+    private boolean isWeightSuitable(String weight) {
+        if (weight == null || weight.isEmpty()) {
             return false;
-        } try {
-            double weighta = Double.parseDouble(weight.replace("kg", ""));
-            return weighta < 2.1;
-        } catch (Exception e) {
+        }
+        try {
+            // "kg" 앞의 숫자 부분만 추출
+            String numericPart = weight.replaceAll("[^0-9.]", "");
+            double weightInKg = Double.parseDouble(numericPart);
+
+            // 2.1kg 미만인지 확인
+            return weightInKg < 2.1;
+        } catch (NumberFormatException e) {
             return false;
         }
     }
 
     private boolean isWeighte(String weighte) {
-        if (weighte == null){
+        if (weighte == null || weighte.isEmpty()) {
             return false;
-    } try {
-            double weightee = Double.parseDouble(weighte.replace("kg", ""));
-            return weightee > 2.1;
-        } catch (Exception e) {
+        }
+        try {
+            // "kg" 앞의 숫자 부분만 추출
+            String numericPart = weighte.replaceAll("[^0-9.]", "");
+            double weightInKg = Double.parseDouble(numericPart);
+
+            // 2.1kg 초과인지 확인
+            return weightInKg > 2.1;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean isSomoWeight (String weight) {
+        if (weight == null || weight.isEmpty()) {
+            return false;
+        }
+        try {
+            // "kg" 앞의 숫자 부분만 추출
+            String numericPart = weight.replaceAll("[^0-9.]", "");
+            double weightInKg = Double.parseDouble(numericPart);
+
+            // 1.5kg 미만인지 확인
+            return weightInKg < 1.7;
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -561,17 +671,168 @@ public class RecommenService {
         }
     }
 
-    private boolean isRefresh(String refresh) {
-        if (refresh == null) {
+    private boolean isResolution(String resolution) {
+        if (resolution == null) {
         } try {
-            double RefreshBig = Double.parseDouble(refresh.replaceAll("[\\\\s()a-zA-Z-]+", ""));
-            return RefreshBig > 19201080;
+            double resolutionBig = Double.parseDouble(resolution.replaceAll("[\\\\s()a-zA-Z-]+", ""));
+            return resolutionBig > 19201080;
         } catch (Exception e) {
             return false;
         }
     }
 
+    private boolean isPrice (String price, String gpu) {
+        if (price == null || gpu == null) {
+            return false;
+        }
+        try {
+            double priceValue = Double.parseDouble(price.replace(",", ""));
+            boolean isPriceInRange = priceValue < 1000000;
 
+            Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+            Pattern pattern = Pattern.compile("[\\s()]+");
+            String gpuKey = pattern.matcher(gpu).replaceAll("");
+            Integer gpuScore = gEnt.get(gpuKey);
+
+            // GPU 성능이 RTX4060 이상인지 확인 (RTX4060의 점수는 17000)
+            boolean isHighPerformanceGPU = gpuScore != null && gpuScore >= 8500;
+
+            // 가격 조건과 GPU 성능 조건 모두 만족해야 함
+            return isPriceInRange && isHighPerformanceGPU;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceEff(String priceEff, String gpu) {
+        if (priceEff == null || gpu == null) {
+            return false;
+        }
+        try {
+            double priceValueEff = Double.parseDouble(priceEff.replace(",", ""));
+            boolean isPriceInRange = priceValueEff >= 1000000 && priceValueEff < 2600000;
+
+            Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+            Pattern pattern = Pattern.compile("[\\s()]+");
+            String gpuKey = pattern.matcher(gpu).replaceAll("");
+            Integer gpuScore = gEnt.get(gpuKey);
+
+            // GPU 성능이 RTX4060 이상인지 확인 (RTX4060의 점수는 17000)
+            boolean isHighPerformanceGPU = gpuScore != null && gpuScore >= 12000;
+
+            // 가격 조건과 GPU 성능 조건 모두 만족해야 함
+            return isPriceInRange && isHighPerformanceGPU;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceSmo(String priceSmo, String gpuTypeName) {
+        if (priceSmo == null || gpuTypeName == null) {
+            return false;
+        }
+        try {
+            double priceValueSmo = Double.parseDouble(priceSmo.replaceAll(",", ""));
+            boolean isPriceInRange = priceValueSmo < 1000000;
+
+            // 내장 그래픽 카드 여부 확인
+            boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+            // 가격 조건과 내장 그래픽 조건 모두 만족해야 함
+            return isPriceInRange && isIntegratedGraphics;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceSmoGo(String priceSmoGo, String gpuTypeName) {
+        if (priceSmoGo == null || gpuTypeName == null) {
+            return false;
+        }
+        try {
+            double priceValueSmoGo = Double.parseDouble(priceSmoGo.replaceAll(",", ""));
+            boolean isPriceInRange = priceValueSmoGo > 2000000;
+
+            // 내장 그래픽 카드 여부 확인
+            boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+            // 가격 조건과 내장 그래픽 조건 모두 만족해야 함
+            return isPriceInRange && isIntegratedGraphics;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isInten(String inten, String gpuTypeName) {
+        Map<String, Integer> ent5 = cpuConfig.getCpuMark();
+        Pattern pattern3 = Pattern.compile("[\\s()]+");
+        String cpukey = pattern3.matcher("i5-4200U (1.6GHz)").replaceAll("");
+        Integer cpuScoer = ent5.get(cpukey);
+
+        if (inten == null || gpuTypeName == null) {
+            return false;
+        }
+        if (cpuScoer == null) {
+            return false;
+        }
+
+        // 내장 그래픽 카드 여부 확인
+        boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+        for (String cpuName : ent5.keySet()) {
+            String cpuNameC = pattern3.matcher(cpuName).replaceAll("");
+            if (inten.replaceAll("[\\s()]+", "").contains(cpuNameC)) {
+                int cpuCode = ent5.get(cpuName);
+                // CPU 성능이 기준점(cpuScoer)보다 낮으면서, 내장 그래픽일 경우
+                if (cpuCode > cpuScoer && isIntegratedGraphics) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    private boolean isPriceSmoGod(String priceSmoGod, String gpuTypeName) {
+        if (priceSmoGod == null || gpuTypeName == null) {
+            return false;
+        }
+        try {
+            double priceValueSmoGod = Double.parseDouble(priceSmoGod.replaceAll(",", ""));
+            boolean isPriceInRange = priceValueSmoGod >= 1000000 && priceValueSmoGod < 1500000;
+
+            // 내장 그래픽 카드 여부 확인
+            boolean isIntegratedGraphics = gpuTypeName.equals("내장그래픽");
+
+            //내장 가격 모두만족
+            return isPriceInRange && isIntegratedGraphics;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isPriceGo(String priceGo, String gpu) {
+        if (priceGo == null || gpu == null) {
+            return false;
+        }
+        try {
+            double priceValueGo = Double.parseDouble(priceGo.replace(",", ""));
+            boolean isPriceInRange = priceValueGo >= 2300000;
+
+            Map<String, Integer> gEnt = gpuConfig.getGpuMark();
+            Pattern pattern = Pattern.compile("[\\s()]+");
+            String gpuKey = pattern.matcher(gpu).replaceAll("");
+            Integer gpuScore = gEnt.get(gpuKey);
+
+            // GPU 성능이 RTX4060 이상인지 확인 (RTX4060의 점수는 17000)
+            boolean isHighPerformanceGPU = gpuScore != null && gpuScore >= 17000;
+
+            // 가격 조건과 GPU 성능 조건 모두 만족해야 함
+            return isPriceInRange && isHighPerformanceGPU;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     private int findTagByData(List<TaggDTO> tags, String tagData ) {
         for (TaggDTO tag : tags) {
@@ -583,4 +844,6 @@ public class RecommenService {
         log.warn("태그 '{}' 를 찾을 수 없음", tagData);
         return -1;
     }
+
 }
+

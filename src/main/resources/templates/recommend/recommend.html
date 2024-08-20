@@ -121,10 +121,10 @@ $(document).ready(function() {
         let additionalHTML = '';
         if (option === '게임 할거에요') {
             additionalHTML = generateGamingOptions();
-            requiredCategories = ['mainOption', 'game', 'place', 'screen']; //'priority'
+            requiredCategories = ['mainOption', 'gpu', 'weight', 'screen']; //'priority'
         } else if (option === '작업 할거에요') {
             additionalHTML = generateOfficeOptions();
-            requiredCategories = ['mainOption', 'purpose', 'performance', 'place'];
+            requiredCategories = ['mainOption', 'cpu', 'performance', 'somoweight'];
         }
         $('#additionalOptions').html(additionalHTML);
 
@@ -153,17 +153,17 @@ $(document).ready(function() {
             <div class="section">
                 <h3>게임 종류</h3>
                 <div class="option-container">
-                    <div class="option"><input type="radio" name="game" value="스팀게임/FPS 게임" id="game-1"><label for="game-1">사양 높은 게임 할거에요</label></div>
-                    <div class="option"><input type="radio" name="game" value="온라인 게임" id="game-2"><label for="game-2">예전 명작 게임 할거에요</label></div>
-                    <div class="option"><input type="radio" name="game" value="AOS게임" id="game-3"><label for="game-3">롤이나 온라인 게임 할거에요</label></div>
+                    <div class="option"><input type="radio" name="gpu" value="스팀게임/FPS 게임" id="gpu-1"><label for="gpu-1">사양 높은 게임 할거에요</label></div>
+                    <div class="option"><input type="radio" name="gpu" value="온라인 게임" id="gpu-2"><label for="gpu-2">예전 명작 게임 할거에요</label></div>
+                    <div class="option"><input type="radio" name="gpu" value="AOS게임" id="gpu-3"><label for="gpu-3">롤이나 온라인 게임 할거에요</label></div>
                 </div>
             </div>
             <div class="section">
                 <h3>무게</h3>
                 <div class="option-container">
-                    <div class="option"><input type="radio" name="place" value="집에만 둘거에요" id="place-1"><label for="place-1">집에만 둘거에요</label></div>
-                    <div class="option"><input type="radio" name="place" value="가져 다닐거에요" id="place-2"><label for="place-2">가져 다닐거에요</label></div>
-                    <div class="option"><input type="radio" name="place" value="알아서" id="place-3"><label for="place-3">알아서</label></div>
+                    <div class="option"><input type="radio" name="weight" value="집에만 둘거에요" id="weight-1"><label for="weight-1">집에만 둘거에요</label></div>
+                    <div class="option"><input type="radio" name="weight" value="가지고 다닐거에요" id="weight-2"><label for="weight-2">가방에 넣고 다닐거에요</label></div>
+                    <div class="option"><input type="radio" name="weight" value="알아서" id="weight-3"><label for="weight-3">알아서</label></div>
                 </div>
             </div>
             <div class="section">
@@ -191,8 +191,8 @@ $(document).ready(function() {
             <div class="section">
                 <h3>용도</h3>
                 <div class="option-container">
-                    <div class="option"><input type="radio" name="purpose" value="코딩 작업할거에요" id="purpose-1"><label for="purpose-1">코딩 작업할거에요</label></div>
-                    <div class="option"><input type="radio" name="purpose" value="AI 작업할거에요" id="purpose-2"><label for="purpose-2">AI 작업할거에요</label></div>
+                    <div class="option"><input type="radio" name="cpu" value="코드 작업할거에요" id="cpu-1"><label for="cpu-1">코드 작업할거에요</label></div>
+                    <div class="option"><input type="radio" name="cpu" value="일반 사무용 작업할거에요" id="cpu-2"><label for="cpu-2">사무용 작업할거에요</label></div>
                 </div>
             </div>
             <div class="section">
@@ -207,8 +207,9 @@ $(document).ready(function() {
             <div class="section">
                 <h3>무게</h3>
                 <div class="option-container">
-                    <div class="option"><input type="radio" name="place" value="집에만 사용할거에요" id="place-1"><label for="place-1">집에만 사용할거에요</label></div>
-                    <div class="option"><input type="radio" name="place" value="가져고 다닐거에요" id="place-2"><label for="place-2">가지고 다닐거에요</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="경량화" id="somoweight-1"><label for="somoweight-1">사무실에서 사용할거에요</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="무거움" id="somoweight-2"><label for="somoweight-2">가지고 다닐거에요</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="초경량화" id="somoweight-3"><label for="somoweight-3">무조건 가벼운것</label></div>
                 </div>
             </div>
 <!--            <div class="section">-->

@@ -14,6 +14,7 @@
     <!-- css + js 파일 Load-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/auth/signin.css}">
+    <script type="text/javascript" th:src="@{/js/auth/signin.js}"></script>
 </head>
 <body>
 <div id="container">
@@ -63,46 +64,5 @@
         </div>
     </div>
 </div>
-<script th:inline="javascript">
-    function openKakaoLogin() {
-        window.open("/signin/kakao", '_blank', 'width=600,height=425');
-    }
-
-    function openGoogleLogin() {
-        window.open("/signin/google", '_blank', 'width=600,height=425');
-    }
-
-    function openFindId() {
-        window.open("/find-id", '_blank', 'width=300,height=300');
-    }
-
-    function openFindPw() {
-        window.open("/find-pw", '_blank', 'width=300,height=300');
-    }
-
-    $(document).ready(function(){
-        window.addEventListener('message', function(event) {
-            if (event.data === 'closeAndRedirect') {
-                window.location.href = '/';
-            }
-        });
-
-        $("#kakao-login").on("click", function() {
-            openKakaoLogin();
-        });
-
-        $("#google-login").on("click", function() {
-            openGoogleLogin();
-        });
-
-        $("#find-id").on("click", function() {
-            openFindId();
-        });
-
-        $("#find-pw").on("click", function() {
-            openFindPw();
-        });
-    });
-</script>
 </body>
 </html>

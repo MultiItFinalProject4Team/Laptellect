@@ -1,6 +1,7 @@
 package com.multi.laptellect.product.model.mapper;
 
 import com.multi.laptellect.product.model.dto.*;
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Pageable;
 
@@ -87,4 +88,10 @@ public interface ProductMapper {
 
     @Update("UPDATE product SET view_count = view_count + #{ visitCount }, updated_at = updated_at WHERE product_no = #{ productNo }")
     int updateProductVisit(@Param("productNo") String productNo, @Param("visitCount") int visitCount);
+
+
+    @Select("SELECT pt.tag_no, lt.tag_data FROM machine_tagkey pt JOIN laptop_tag lt ON pt.tag_no = lt.tag_no WHERE pt.product_no = #{productNo}")
+    List<TaggDTO> getTagsForProduct(@Param("productNo") int productNo);
+
+
 }

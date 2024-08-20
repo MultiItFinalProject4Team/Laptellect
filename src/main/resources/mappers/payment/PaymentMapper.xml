@@ -393,7 +393,7 @@
     </select>
 
     <select id="findPaymentReviewsByProductNo" resultType="paymentReviewDTO">
-        SELECT ppr.*, mm.member_name AS memberName
+        SELECT ppr.*, mm.member_name AS memberName, AVG(ppr.rating) OVER (PARTITION BY ppr.product_no) AS avg_rating
         FROM payment_product_reviews ppr
         JOIN mem_member mm ON ppr.member_no = mm.member_no
         WHERE ppr.product_no = #{productNo}

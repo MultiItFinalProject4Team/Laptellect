@@ -8,9 +8,11 @@ import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.service.MemberService;
 import com.multi.laptellect.util.PaginationUtil;
 import com.multi.laptellect.util.RedisUtil;
+import com.multi.laptellect.util.StringValidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminMemberController {
     private final AdminMemberService adminMemberService;
     private final MemberService memberService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RedisUtil redisUtil;
 
     @GetMapping({""})
@@ -68,6 +71,7 @@ public class AdminMemberController {
             model.addAttribute("size", size);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
+
         } catch (Exception e) {
             log.error("어드민 멤버 내역 전체 조회 실패");
         }
@@ -75,32 +79,69 @@ public class AdminMemberController {
         return "/admin/member/member-list";
     }
 
-    @PostMapping("/selectMember")
-    public String selectMember(@RequestParam(name = "memberNo") int memberNo, Model model) {
+    @PostMapping("/member-info")
+    public String getMember(@RequestParam(name = "memberNo") int memberNo, Model model) {
         try {
             MemberDTO member = adminMemberService.findMemberByMemberNo(memberNo);
             LoginLog loginLog = adminMemberService.findLoginLogByMemberNo(memberNo);
-            model.addAttribute("member", member);
+            model.addAttribute("userInfo", member);
             model.addAttribute("loginLog", loginLog);
         } catch (Exception e) {
             log.info("멤버 조회 실패 = {}", memberNo);
         }
-        return "/admin/member/member-modal";
+        return "/admin/member/member-info";
     }
 
     @ResponseBody
-    @PostMapping("/update")
-    public int updateMember(@RequestParam MemberDTO memberDTO) {
+    @PostMapping("member-update")
+    public int updateMember(@RequestBody MemberDTO memberDTO) {
+        log.info("파라미터 확인 = {}", memberDTO);
+
+        int result = 0;
+        String type = "";
+        String nickName = memberDTO.getNickName();
+        String email = memberDTO.getEmail();
+        String password = memberDTO.getPassword();
+        String tel = memberDTO.getTel();
+
+        // null과 빈 문자열 검증 후 업데이트 할 type 설정
+        if(nickName != null && !nickName.equals("")) type = "nickName";
+        if(email != null && !email.equals("")) type = "email";
+        if(password != null && !password.equals("")) type = "password";
+        if(tel != null && !tel.equals("")) type = "tel";
+
+        log.debug("회원 정보 변경 시작 = {}", type);
         try {
+            // 조건에 아무것도 안 맞을 시 0을 리턴
+            if(type.equals("")) return 0;
+
+            // 길이 검증
+            switch (type) {
+                case "nickName" -> {
+                    if(!StringValidUtil.isVarcharSizeWithinString(nickName, 11)) return 2;
+                }
+                case "email" -> {
+                    if(!StringValidUtil.isVarcharSizeWithinString(email, 51)) return 2;
+                }
+                case "password" -> {
+                    if(!StringValidUtil.isVarcharSizeWithinString(password, 16)) return 2;
+                    memberDTO.setPassword(bCryptPasswordEncoder.encode(password));
+                }
+                case "tel" -> {
+                    if(!StringValidUtil.isVarcharSizeWithinString(tel, 12)) return 2;
+                }
+            }
+            result = adminMemberService.updateMember(memberDTO, type);
 
         } catch (Exception e) {
-
+            log.warn("회원 정보 변경 실패 = {}", type);
+            return 0;
         }
-        return 0;
+        return result;
     }
 
     @ResponseBody
-    @PostMapping("/delete")
+    @PostMapping("/member-delete")
     public int deleteMember(@RequestParam(name = "memberNo") int memberNo) {
         log.debug("회원 삭제 시작");
         try {

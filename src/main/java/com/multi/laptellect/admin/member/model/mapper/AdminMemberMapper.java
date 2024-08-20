@@ -2,7 +2,10 @@ package com.multi.laptellect.admin.member.model.mapper;
 
 import com.multi.laptellect.admin.member.model.dto.AdminMemberDTO;
 import com.multi.laptellect.common.model.PagebleDTO;
+import com.multi.laptellect.member.model.dto.MemberDTO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.ArrayList;
@@ -26,9 +29,13 @@ public interface AdminMemberMapper {
 
     int countAllMember(PagebleDTO pagebleDTO);
 
-    void deleteMember(int memberNo);
-
+    @Delete("DELETE FROM mem_social_member WHERE member_no = #{ memberNo }")
     void deleteSocialMember(int memberNo);
 
+    @Delete("DELETE FROM mem_seller_member WHERE member_no = #{ memberNo }")
     void deleteSellerMember(int memberNo);
+
+    int updateMember(@Param("memberDTO") MemberDTO memberDTO, @Param("type") String type);
+
+    int updateMemberPassword(MemberDTO memberDTO);
 }

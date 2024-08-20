@@ -14,6 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+/**
+ * 오브젝트 스토리지 파일 업로드 유틸클래스
+ *
+ * @author 안진원
+ */
 @Component
 @RequiredArgsConstructor
 public class FileService {  
@@ -28,6 +33,13 @@ public class FileService {
         return UUID.randomUUID().toString() + "." + ext;
     }
 
+    /**
+     * MultipartFile을 오브젝트 스토리지에 업로드하는 메소드
+     *
+     * @param multipartFile 파일
+     * @param filePath 경로
+     * @return 업로드한 파일의 정보를 담은 dto 반환
+     */
     //NOTICE: filePath의 맨 앞에 /는 안붙여도됨. ex) image/customer
     public FileDto uploadFiles(MultipartFile multipartFile, String filePath) {
   
@@ -65,6 +77,13 @@ public class FileService {
         return s3files;  
     }
 
+    /**
+     * 오브젝트 스토리지 파일 삭제 메소드
+     *
+     * @param url 파일경로를 포함한 파일명
+     * @return 성공시 1을 반환 예외발생 시 0을 반환
+     */
+    //bucketName이 team4이므로 team4/이후의 경로를 url에 지정해주어야함
     public int deleteFile(String url){
         try {
             amazonS3Client.deleteObject(bucketName, url);

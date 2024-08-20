@@ -19,9 +19,12 @@ public interface AdminMemberService {
 
     Page<AdminMemberDTO> getMemberList(PagebleDTO pagebleDTO) throws Exception;
 
+
     int deleteMember(int memberNo) throws Exception;
 
     MemberDTO findMemberByMemberNo(int memberNo) throws Exception;
 
     LoginLog findLoginLogByMemberNo(int memberNo) throws Exception;
+
+    int updateMember(MemberDTO memberDTO, String type) throws Exception;
 }

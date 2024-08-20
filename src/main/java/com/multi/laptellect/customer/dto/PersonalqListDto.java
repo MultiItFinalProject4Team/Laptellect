@@ -1,20 +1,21 @@
 package com.multi.laptellect.customer.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PersonalqListDto {
     private int personalqNo;
     private int memberNo;
     private String title;
     private String answer;
     private Date createdAt;
+    private String memberName;
 }
