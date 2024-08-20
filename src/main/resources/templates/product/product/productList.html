@@ -47,10 +47,10 @@
             <a th:href="@{${product.Url}}">
                 <div class="card-body">
                     <div class="tags mb-2">
-                        <span class="tag">#게이밍</span>
-                        <span class="tag">#펠월드</span>
-                        <span class="tag">#가성비</span>
-                        <span class="tag">#넓은 화면</span>
+                        <div class="tag" th:each="tag : ${product.tags}" >
+                            <span th:text="${tag.tagData}">태그</span>
+                        </div>
+
                     </div>
                     <div class="product-name mb-2">
                         <h5 class="card-title"><span th:text="${product.productName}">상품명</span></h5>

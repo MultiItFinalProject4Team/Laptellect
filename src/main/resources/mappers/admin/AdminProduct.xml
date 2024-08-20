@@ -45,10 +45,10 @@
         FROM product
     </select>
 
-    <delete id="deleteProduct" parameterType="productNo">
-        DELETE FROM product
-        WHERE product_no = #{ productNo }
+<!--    <delete id="deleteProduct" parameterType="productNo">-->
+<!--        DELETE FROM product-->
+<!--        WHERE product_no = #{ productNo }-->
 
-    </delete>
+<!--    </delete>-->
 
 </mapper>

@@ -1,9 +1,11 @@
 package com.multi.laptellect.recommend.laptop.controller;
 
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
+import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
 import com.multi.laptellect.recommend.laptop.model.dto.CurationDTO;
 import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
+import com.multi.laptellect.recommend.service.RedisCacheService;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,22 @@ public class RecommendationController {
 
     private final RecommendProductService recommendProductService;
     private final EmotionAnalyzeService emotionAnalyzeService;
+    private final RedisCacheService redisCacheService;
+    private final ProductService productService;
 
     @GetMapping("/recommend")
-    public String showRecommendationForm() {
+    public String showRecommendationForm(Model model, HttpSession session) {
+        String cacheKey = (String) session.getAttribute("lastCurationKey");
+        if (cacheKey != null) {
+            try {
+                CurationDTO lastCuration = redisCacheService.getCurationResult(cacheKey);
+                if (lastCuration != null) {
+                    model.addAttribute("curationDTO", lastCuration);
+                }
+            } catch (Exception e) {
+                log.error("Error retrieving last curation", e);
+            }
+        }
         return "recommend/recommend";
     }
 
@@ -36,11 +51,12 @@ public class RecommendationController {
         log.info("사용자 선택지 값 = {}", curationDTO);
         try {
             ArrayList<LaptopSpecDTO> recommendations = recommendProductService.getRecommendations(curationDTO);
-            String cacheKey = recommendProductService.saveCurationResult(curationDTO, recommendations);
+            String cacheKey = redisCacheService.saveCurationResult(curationDTO);
 
             session.setAttribute("lastCurationKey", cacheKey);
 
             addRecommendationsToModel(recommendations, model);
+            model.addAttribute("curationDTO", curationDTO);
             return "recommend/recommendpage";
         } catch (Exception e) {
             log.error("에러 발생", e);
@@ -78,4 +94,5 @@ public class RecommendationController {
         model.addAttribute("productTags", productTags);
         model.addAttribute("sentiments", sentiments);
     }
+
 }
