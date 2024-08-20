@@ -16,12 +16,12 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-5">
+<div class="container mt-2">
     <header>
         <h1 align="left"style="font-size:40px">상품 문의 답변 수정</h1>
     </header>
     <hr>
-    <form action="/customer/admin/update_producta" method="post" enctype="multipart/form-data">
+    <form action="/customer/admin/update_productA" method="post" enctype="multipart/form-data">
         <label for="productqNo">번호</label>
         <input type="text" th:value="${productqNo}" readonly="true" id="productqNo" name="productqNo">
         <label for="title">제목:</label>
@@ -31,9 +31,10 @@
             <div class="editor-container__editor" aria-required="true"><textarea id="content" name="content" th:text="${dto.content}"></textarea></div>
         </div>
 
-        <button type="button" onclick="addFileInput()">이미지 추가</button>
         <input type="hidden" id="productaNo" name="productaNo" th:value="${dto.productaNo}">
-        <button type="submit">답변 수정</button>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-custom-primary">답변 수정</button>
+        </div>
     </form>
 
     <script type="importmap">
