@@ -88,9 +88,8 @@ public class ProductApiController {
         searchDTO.setSize(pageable.getPageSize());
 
 
-        log.info("카테고리 파라미터 확인 = {},",searchDTO.getLBI1());
+        log.info("카테고리 파라미터 확인 = {},",searchDTO);
 
-        log.info("파라미터 = {}", searchDTO.getCate());
 
 
 
@@ -110,7 +109,7 @@ public class ProductApiController {
 
             int displayPages = 10;
             int currentPage = pageable.getPageNumber();
-            int totalPages = productPage.getTotalPages();
+            int totalPages = productPage.getTotalPages() -1 ;
 
 
             int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
@@ -122,6 +121,21 @@ public class ProductApiController {
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
             log.info( "페이징 데이터 = {},{}",currentPage, totalPages);
+            log.info("시작페이지 = {} , 종료페이지 = {}", startPage, endPage);
+
+
+            int pageSize = pageable.getPageSize();
+            int totalItems = (int) productPage.getTotalElements();
+
+            int loadedItems = currentPage * pageSize;
+            if (loadedItems > totalItems) {
+                loadedItems = totalItems; // 총 항목 수를 초과하지 않도록 조정
+            }
+
+            log.info("로드된 페이지당 제품 수량: {}", loadedItems);
+
+            List<ProductDTO> products = productPage.getContent();
+            log.info("현재 페이지에 로드된 제품 수: {}", products.size());
 
             // 사용자가 로그인한 상태인지 확인하여 로그인한 상태면 위시리스트와 장바구니 정보가 담긴 model을 넘김
             if (SecurityUtil.isAuthenticated()) {

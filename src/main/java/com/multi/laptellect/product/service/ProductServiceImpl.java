@@ -781,6 +781,9 @@ public class ProductServiceImpl implements ProductService {
 
         ArrayList<ProductDTO> productList = productMapper.findByNameSearch(searchDTO);
 
+      long offset =  searchDTO.getOffset();
+      long size = searchDTO.getSize();
+        log.info("Executing product search with LIMIT {} OFFSET {}", size, offset);
         long total = productMapper.countBySearchCriteria(searchDTO);
 
         log.info("PageImpl searchProducts 확인 = {}, {}, \n 총 수량 : {}", pageable, productList, total );

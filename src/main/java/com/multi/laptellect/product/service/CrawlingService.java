@@ -394,10 +394,15 @@ public class CrawlingService {
         for (Element element : imageFromElements) {
             String text = element.text();
             if (text.contains("이미지출처:")) {
-                String imageSource = text.split("이미지출처:")[1].trim();
-                // 제조사 값이 아직 설정되지 않았을 때만 이미지 출처를 제조사로 설정
-                if (!manufacturerFound) {
-                    productDTO.setManufacturer(imageSource);
+                String[] parts = text.split("이미지출처:");
+                if (parts.length >= 2) {  // 배열 크기 확인
+                    String imageSource = parts[1].trim();
+                    // 제조사 값이 아직 설정되지 않았을 때만 이미지 출처를 제조사로 설정
+                    if (!manufacturerFound) {
+                        productDTO.setManufacturer(imageSource);
+                    }
+                } else {
+                    log.warn("Unexpected format in image source text: " + text);
                 }
                 break;
             }

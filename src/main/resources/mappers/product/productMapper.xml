@@ -109,9 +109,9 @@
         i.upload_name
         FROM
         product p
-        JOIN
+        LEFT JOIN
         images i ON i.reference_code = p.reference_code
-        JOIN
+        LEFT JOIN
         product_spec po ON po.product_no = p.product_no
         WHERE
 

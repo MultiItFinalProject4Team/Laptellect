@@ -6,7 +6,7 @@
 <link rel="stylesheet" th:href="@{/css/product/product.css}">
 <script th:inline="javascript">
     $(document).ready(function() {
-        let currentPage = 1;
+        let currentPage = 0;
         let pageSize = 12;
         let typeNo = [[${ typeNo }]];
         let currentKeyword = '';
@@ -91,6 +91,8 @@
             e.preventDefault();
             typeNo = $(this).data('type-no');
 
+            currentPage = 1;
+
             $(".product-link").removeClass("active");
             $(this).addClass("active");
 
@@ -107,14 +109,11 @@
         $("#priceSearch").on("click", function() {
             searchProducts();  // 검색 실행
         });
-
-
-
         // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
         $(document).on('click', '.pagination a.page-link', function(event) {
             event.preventDefault();
 
-            let page = $(this).data('page') - 1;
+            let page = $(this).data('page');
              if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
                         return;
              }
