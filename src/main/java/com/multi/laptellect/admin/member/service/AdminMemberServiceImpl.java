@@ -58,21 +58,22 @@ public class AdminMemberServiceImpl implements AdminMemberService{
 
         switch (loginType) {
             case "local" -> {
-                adminMemberMapper.deleteMember(memberNo);
+                memberMapper.deleteMember(memberNo);
                 log.info("일반 회원 삭제 성공 = {}", loginType);
                 return 1;
             }
 
             case "kakao", "google" -> {
                 adminMemberMapper.deleteSocialMember(memberNo);
-                adminMemberMapper.deleteMember(memberNo);
+                memberMapper.deleteMember(memberNo);
                 log.info("소셜 회원 삭제 성공 = {}", loginType);
                 return 2;
             }
 
             default -> {
+                log.info("판매자 회원 = {}", loginType);
                 adminMemberMapper.deleteSellerMember(memberNo);
-                adminMemberMapper.deleteMember(memberNo);
+                memberMapper.deleteMember(memberNo);
                 log.info("판매자 회원 삭제 성공 = {}", loginType);
                 return 3;
             }
@@ -91,5 +92,25 @@ public class AdminMemberServiceImpl implements AdminMemberService{
         LoginLog loginLog = logMapper.findLoginLogByMemberNo(memberNo);
         log.info("로그인 로그 조회 완료 = {}", loginLog);
         return loginLog;
+    }
+
+    @Override
+    public int updateMember(MemberDTO memberDTO, String type) throws Exception{
+        switch (type) {
+            case "email" -> {
+                String email = memberDTO.getEmail();
+                if(memberMapper.findMemberByEmail(email) != null) return 3;
+                return adminMemberMapper.updateMember(memberDTO, type);
+            }
+            case "nickName" -> {
+                String nickName = memberDTO.getNickName();
+                if(memberMapper.findMemberByNickName(nickName) != null) return 3;
+                return adminMemberMapper.updateMember(memberDTO, type);
+            }
+            case "password" -> {
+                return adminMemberMapper.updateMemberPassword(memberDTO);
+            }
+        }
+        return adminMemberMapper.updateMember(memberDTO, type);
     }
 }

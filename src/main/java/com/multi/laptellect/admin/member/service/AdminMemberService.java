@@ -26,4 +26,5 @@ public interface AdminMemberService {
 
     LoginLog findLoginLogByMemberNo(int memberNo) throws Exception;
 
+    int updateMember(MemberDTO memberDTO, String type) throws Exception;
 }

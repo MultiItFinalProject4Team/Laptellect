@@ -92,7 +92,7 @@ th, td {
   cursor: not-allowed;
 }
 
-.btn {
+.btn-success {
   padding: 8px 16px;
   font-size: 14px;
   border: none;
@@ -103,7 +103,7 @@ th, td {
   color: white;
 }
 
-.btn:hover {
+.btn-success:hover {
   background-color: #666;
 }
 
