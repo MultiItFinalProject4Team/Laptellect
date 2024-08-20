@@ -27,12 +27,28 @@ $(document).ready(function () {
         });
     }
 
-    
-
+    $("#btn-search").on("click", function () {
+        loadList(0);
+    });
 
     function loadList(page) {
-        let cate = convertEmptyToNull($(".form-select").val());
-        let keyword = convertEmptyToNull($("#keyword").val());
+        let cate = convertEmptyToNull($("#searchCategory").val());
+        let keyword = convertEmptyToNull($("#searchInput").val());
+
+        switch(keyword) {
+            case "노트북":
+                keyword = 1;
+                break;
+            case "마우스":
+                keyword = 2;
+                break;
+            case "키보드":
+                keyword = 3;
+                break;
+            default:
+                keyword = keyword;
+                break;
+        }
 
         $.ajax({
             url: "/admin/product/list",

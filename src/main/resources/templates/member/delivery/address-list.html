@@ -211,8 +211,10 @@ $(".updateAddressBtn").on("click", function () {
             switch(response) {
                 case 1:
                     swal('배송지 수정 성공', '', 'success');
-                    $('#update-delivery-modal').modal('hide');
-                    location.reload();
+                    setTimeout(function() {
+                        $('#update-delivery-modal').modal('hide');
+                        location.reload();
+                    }, 1500);
                     break;
                 case 0:
                     swal('배송지 이름을 입력해주세요.', '', 'info');
@@ -250,9 +252,12 @@ $('.deleteAddressBtn').on('click', function() {
             console.log(response);
             if(response) {
               swal('배송지 삭제 완료', '', 'success');
-              $('#delete-delivery-modal').modal('hide');
-              getAddressList()
-              location.reload();
+
+              setTimeout(function() {
+                  $('#delete-delivery-modal').modal('hide');
+                  getAddressList()
+                  location.reload();
+              }, 1500);
             } else {
               swal('사용자가 일치하지 않습니다.', '', 'warning');
             }

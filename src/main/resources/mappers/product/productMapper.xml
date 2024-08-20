@@ -57,6 +57,8 @@
             images i
         on
             i.reference_code = p.reference_code
+
+
         ORDER BY p.product_no
 
     </select>

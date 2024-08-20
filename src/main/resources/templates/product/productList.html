@@ -9,8 +9,10 @@
         let currentPage = 0;
         let pageSize = 12;
         let typeNo = [[${ typeNo }]];
-        let currentKeyword = '';
 
+        function convertEmptyToNull(value) {
+            return value.trim() === "" ? null : value;
+        }
 
         // 가격 형식을 포맷팅하는 함수
         function formatPrices() {
@@ -34,12 +36,13 @@
 
         // 제품 리스트를 로드하는 함수
         function loadProducts(page, size, typeNo) {
+            let keyword = convertEmptyToNull($("#form1").val());
 
             let data = {
                 page: page,
                 size: size,
                 typeNo: typeNo,
-                keyword: $("#form1").val(),
+                keyword: keyword,
                 LBI1: getSelectedFiltersByCategory('os'),
                 LBI2: getSelectedFiltersByCategory('manufacturer'),
                 LS22: getSelectedFiltersByCategory('storageType'),
@@ -76,10 +79,11 @@
         // 페이지 로드 시 초기 제품 리스트 로드
         loadProducts(currentPage, pageSize, typeNo);
 
-                // 필터 값이 변경될 때 호출
+        // 필터 값이 변경될 때 호출
         $("#filterForm input:checkbox").on("change", function() {
            searchProducts();
         });
+
         // 검색 폼 제출 시 호출
         $("#searchForm").on("submit", function(e) {
             e.preventDefault();
@@ -107,6 +111,7 @@
         $("#priceSearch").on("click", function() {
             searchProducts();  // 검색 실행
         });
+
         // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
         $(document).on('click', '.pagination a.page-link', function(event) {
             event.preventDefault();
@@ -151,15 +156,17 @@
 <body>
 <div class="container-md" layout:fragment="content">
 <br>
-    <form th:action="@{/product/test2}" method="get">
-        <label for="typeDetails">상품 타입 선택: </label>
-        <select name="typeDetails" id="typeDetails">
-            <option value="1">상품 타입 1</option>
-            <option value="2">상품 타입 2</option>
-            <option value="3">상품 타입 3</option>
-        </select>
-        <button type="submit">선택한 상품 타입 가져오기</button>
-    </form>
+    <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+        <form th:action="@{/product/test2}" method="get">
+            <label for="typeDetails">상품 타입 선택 : </label>
+            <select name="typeDetails" id="typeDetails">
+                <option value="1">노트북</option>
+                <option value="2">마우스</option>
+                <option value="3">키보드</option>
+            </select>
+            <button class="btn btn-sm btn-custom-primary ms-1" style="margin-top: -5px; padding: 3px;" type="submit">선택한 상품 타입 가져오기</button>
+        </form> <br>
+    </th:block>
 
 <th:block th:if="${ typeNo == 1}">
 <form id="filterForm">
