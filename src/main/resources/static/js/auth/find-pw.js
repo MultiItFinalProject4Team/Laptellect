@@ -79,11 +79,11 @@ $(function () {
                 success: function (response) {
                     switch (response) {
                         case 1:
-                            alert("임시 비밀번호 전송 완료");
+                            swal('임시 비밀번호 전송 완료', '', 'success');
                             window.close();
                             break;
                         case 2:
-                            alert("이메일 전송 실패");
+                            swal('이메일 전송 실패', '', 'error');
                             break;
                     }
                 }

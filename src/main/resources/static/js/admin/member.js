@@ -97,18 +97,18 @@ $(document).ready(function () {
                 success: function (response) {
                     switch(response) {
                         case 1:
-                            alert("닉네임 변경 성공");
+                            swal("닉네임 변경 성공", "", "success");
                             loadList(0);
                             getModal(memberNo);
                             break;
                         case 2:
-                            alert("닉네임 길이가 너무 깁니다.");
+                            swal("닉네임 길이가 너무 깁니다", "", "warning");
                             break;
                         case 3:
-                            alert("중복된 닉네임 입니다.");
+                            swal("중복된 닉네임입니다", "", "warning");
                             break;
                         case 0:
-                            alert("닉네임 변경 실패");
+                            swal("닉네임 변경 실패", "", "error");
                             break;
                     }
                 },
@@ -131,7 +131,7 @@ $(document).ready(function () {
 
         if (email != "" && email != "정보 없음") {
             if(!isValid) {
-                alert("유효하지 않은 이메일입니다.");
+                swal("유효하지 않은 이메일입니다", "", "warning");
                 return;
             }
 
@@ -146,24 +146,24 @@ $(document).ready(function () {
                 success: function (response) {
                     switch(response) {
                         case 1:
-                            alert("이메일 변경 성공");
+                            swal("이메일 변경 성공", "", "success");
                             loadList(0);
                             getModal(memberNo);
                             break;
                         case 2:
-                            alert("이메일 길이가 너무 깁니다.");
+                            swal("이메일 길이가 너무 깁니다", "", "warning");
                             break;
                         case 3:
-                            alert("중복된 이메일 입니다.");
+                            swal("중복된 이메일입니다", "", "warning");
                         case 0:
-                            alert("이메일 변경 실패");
+                            swal("이메일 변경 실패", "", "error");
                             break;
                     }
                 },
                 error: function() { console.log("이메일 변경 에러"); }
             })
          } else {
-            alert("이메일을 입력해 주세요.");
+            swal("이메일을 입력해 주세요", "", "warning");
          }
     });
 
@@ -177,7 +177,7 @@ $(document).ready(function () {
 
         if (tel != "" && tel != "정보 없음") {
             if(!isValid) {
-                alert("유효하지 않은 연락처입니다.");
+                swal("유효하지 않은 연락처입니다", "", "warning");
                 return;
             }
 
@@ -192,22 +192,22 @@ $(document).ready(function () {
                 success: function (response) {
                     switch(response) {
                         case 1:
-                            alert("연락처 변경 성공");
+                            swal("연락처 변경 성공", "", "success");
                             loadList(0);
                             getModal(memberNo);
                             break;
                         case 2:
-                            alert("연락처 길이가 너무 깁니다.");
+                            swal("연락처 길이가 너무 깁니다", "", "warning");
                             break;
                         case 0:
-                            alert("연락처 변경 실패");
+                            swal("연락처 변경 실패", "", "error");
                             break;
                     }
                 },
                 error: function() { console.log("연락처 변경 에러"); }
             })
          } else {
-            alert("전화번호을 입력해 주세요.");
+            swal("전화번호를 입력해 주세요", "", "info");
          }
     });
 
@@ -230,68 +230,68 @@ $(document).ready(function () {
                     success: function (response) {
                         switch(response) {
                             case 1:
-                                alert("비밀번호 변경 성공");
+                                swal("비밀번호 변경 성공", "", "success");
                                 loadList(0);
                                 getModal(memberNo);
                                 break;
                             case 2:
-                                alert("비밀번호 길이가 너무 깁니다.");
+                                swal("비밀번호 길이가 너무 깁니다", "", "warning");
                                 break;
                             case 0:
-                                alert("비밀번호 변경 실패");
+                                swal("비밀번호 변경 실패", "", "error");
                                 break;
                         }
                     },
                     error: function() { console.log("사용자 정보 로드 실패"); }
                 })
              } else {
-                alert("비밀번호을 입력해 주세요.");
+                swal("비밀번호를 입력해 주세요", "", "warning");
              }
         } else {
-            alert("비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.");
+            swal("비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다", "", "info");
         }
         
     });
 
-    $(document).on("click", "#btn-change-password", function () {
-        let memberNo = $(this).data("memberno");
-        let password = $('#password').val().trim();
-        console.log(memberNo);
-
-        if (reg.test(password)) {
-            if (password != "") { 
-                $.ajax({
-                    url: "/admin/member/member-update",
-                    type: "POST",
-                    contentType: 'application/json',
-                    data: JSON.stringify ({
-                         memberNo: memberNo,
-                         password: password 
-                        }),
-                    success: function (response) {
-                        switch(response) {
-                            case 1:
-                                alert("비밀번호 변경 성공");
-                                loadList(0);
-                                getModal(memberNo);
-                                break;
-                            case 2:
-                                alert("비밀번호 길이가 너무 깁니다.");
-                                break;
-                            case 0:
-                                alert("비밀번호 변경 실패");
-                                break;
-                        }
-                    },
-                    error: function() { console.log("사용자 정보 로드 실패"); }
-                })
-             } else {
-                alert("비밀번호을 입력해 주세요.");
-             }
-        } else {
-            alert("비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.");
-        }
-    });
+//    $(document).on("click", "#btn-change-password", function () {
+//        let memberNo = $(this).data("memberno");
+//        let password = $('#password').val().trim();
+//        console.log(memberNo);
+//
+//        if (reg.test(password)) {
+//            if (password != "") {
+//                $.ajax({
+//                    url: "/admin/member/member-update",
+//                    type: "POST",
+//                    contentType: 'application/json',
+//                    data: JSON.stringify ({
+//                         memberNo: memberNo,
+//                         password: password
+//                        }),
+//                    success: function (response) {
+//                        switch(response) {
+//                            case 1:
+//                                alert("비밀번호 변경 성공");
+//                                loadList(0);
+//                                getModal(memberNo);
+//                                break;
+//                            case 2:
+//                                alert("비밀번호 길이가 너무 깁니다.");
+//                                break;
+//                            case 0:
+//                                alert("비밀번호 변경 실패");
+//                                break;
+//                        }
+//                    },
+//                    error: function() { console.log("사용자 정보 로드 실패"); }
+//                })
+//             } else {
+//                alert("비밀번호을 입력해 주세요.");
+//             }
+//        } else {
+//            alert("비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.");
+//        }
+//    });
 
     $(document).on("click", "#btn-delete", function () {
             let memberNo = $(this).data("memberno");
@@ -304,22 +304,22 @@ $(document).ready(function () {
                 success: function (response) {
                     switch(response) {
                         case 1:
-                            alert("일반 회원 탈퇴 성공");
+                            swal("일반 회원 탈퇴 성공", "", "success");
                             loadList(0);
                             $('#memberModal').modal('hide');
                             break;
                         case 2:
-                            alert("소셜 회원 탈퇴 성공.");
+                            swal("소셜 회원 탈퇴 성공.", "", "success");
                             loadList(0);
                             $('#memberModal').modal('hide');
                             break;
                         case 3:
-                            alert("판매자 회원 탈퇴 성공");
+                            swal("판매자 회원 탈퇴 성공", "", "success");
                             loadList(0);
                             $('#memberModal').modal('hide');
                             break;
                         default:
-                            alert("회원 탈퇴 실패")
+                            swal("회원 탈퇴 실패", "", "error");
                     }
                 },
                 error: function() { console.log("회원 탈퇴 에러"); }

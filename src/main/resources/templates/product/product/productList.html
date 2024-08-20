@@ -105,19 +105,19 @@
                     data: { productNo: productNo },
                     success: function (response) {
                         switch (response) {
-                          case 1:
-                            alert("위시리스트 추가 완료.");
-                            product.removeClass('text-white');
-                            break;
-                          case 2:
-                            alert("위시리스트 삭제 완료.");
-                            product.addClass('text-white');
-                            break;
-                          case 3:
-                            alert("로그인이 필요합니다.");
-                            break;
-                          default:
-                            alert("위시리스트 Ajax Error");
+                            case 1:
+                                swal('위시리스트 추가 완료.', '', 'success');
+                                product.removeClass('text-white');
+                                break;
+                            case 2:
+                                swal('위시리스트 삭제 완료.', '', 'success');
+                                product.addClass('text-white');
+                                break;
+                            case 3:
+                                swal('로그인이 필요합니다.', '', 'info');
+                                break;
+                            default:
+                                swal('위시리스트 Ajax Error', '', 'error');
                         }
                     },
                     error: function () {
@@ -138,19 +138,19 @@
                     data: { productNo: productNo },
                     success: function (response) {
                         switch (response) {
-                          case 1:
-                            alert("장바구니 추가 완료.");
-                            product.removeClass('text-white');
-                            break;
-                          case 2:
-                            alert("장바구니 삭제 완료.");
-                            product.addClass('text-white');
-                            break;
-                          case 3:
-                            alert("로그인이 필요합니다.");
-                            break;
-                          default:
-                            alert("장바구니 Ajax Error");
+                            case 1:
+                                swal('장바구니 추가 완료.', '', 'success');
+                                product.removeClass('text-white');
+                                break;
+                            case 2:
+                                swal('장바구니 삭제 완료.', '', 'success');
+                                product.addClass('text-white');
+                                break;
+                            case 3:
+                                swal('로그인이 필요합니다.', '', 'info');
+                                break;
+                            default:
+                                swal('장바구니 Ajax Error', '', 'error');
                         }
                     },
                     error: function () {

@@ -305,16 +305,16 @@ function openQuestionModal(question) {
             .then(response => response.json())
             .then(data => {
               if (data.success) {
-                alert('리뷰가 삭제되었습니다.');
+                swal('리뷰가 삭제되었습니다.', '', 'success');
                 closeReviewModal();
                 drawRecentReviewsTable();
               } else {
-                alert('리뷰 삭제 중 오류가 발생했습니다.');
+                swal('리뷰 삭제 중 오류가 발생했습니다.', '', 'error');
               }
             })
             .catch(error => {
               console.error('Error:', error);
-              alert('리뷰 삭제 중 오류가 발생했습니다.');
+              swal('리뷰 삭제 중 오류가 발생했습니다.', '', 'error');
             });
           }
         }

@@ -39,11 +39,11 @@ $(function () {
                 success: function (response) {
                     if (response === true) {
                         console.log("이메일 전송 완료");
-                        alert("이메일 전송 완료");
+                        swal('이메일 전송 완료', '', 'success');
                         window.close();
                     } else {
                         console.log("이메일 전송 실패");
-                        alert("이메일 전송 실패");
+                        swal('이메일 전송 실패', '', 'error');
                     }
                 }
             });

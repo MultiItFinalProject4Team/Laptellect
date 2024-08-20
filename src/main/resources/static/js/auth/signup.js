@@ -44,7 +44,7 @@ $(document).ready(function() {
                   }
               },
               error: function () {
-                  alert("아이디 중복 확인 실패");
+                  swal("실패", "아이디 중복 확인 실패", "error");
                   $("#idError").hide();
                   isId = false;
                   $("#insertBtn").prop("disabled", true);
@@ -158,11 +158,11 @@ $(document).ready(function() {
         if (response === true) {
           console.log("이메일 전송 완료");
           $('#emailInput').removeClass('is-invalid');
-          alert("이메일 전송 완료");
+          swal("완료", "이메일 전송 완료", "success");
         } else {
           console.log("이메일 전송 실패");
           $('#emailInput').addClass('is-invalid');
-          alert("이메일 전송 실패");
+          swal("실패", "이메일 전송 실패", "error");
         }
       },
       error: function () {
@@ -219,17 +219,17 @@ $(document).ready(function() {
       success: function (response) {
         switch (response) {
           case 0:
-            alert("회원 가입 완료.");
+            swal("성공", "회원 가입 완료", "success");
             window.location.href = "/";
             break;
           case 1:
-            alert("중복된 아이디입니다.");
+            swal("오류", "중복된 아이디입니다.", "error");
             break;
           case 2:
-            alert("중복된 이메일입니다.");
+            swal("오류", "중복된 이메일입니다.", "error");
             break;
           default:
-            alert("회원 가입 중 오류가 발생했습니다.");
+            swal("오류", "회원 가입 중 오류가 발생했습니다.", "error");
         }
       },
       error: function () {

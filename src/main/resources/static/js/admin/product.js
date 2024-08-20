@@ -62,7 +62,7 @@ $(document).ready(function () {
         });
         console.log(selectProduct);
         if(selectProduct.length == 0) {
-            alert("삭제할 항목을 선택하세요.");
+            swal("알림", "삭제할 항목을 선택하세요.", "info");
             return;
         }
 
@@ -81,7 +81,7 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify(selectProduct),
             success: function(response){
-                alert("삭제가 완료되었습니다.");
+                swal("완료", "삭제가 완료되었습니다.", "success");
                 loadList(0);
             },
             error: function (xhr, status, error) {

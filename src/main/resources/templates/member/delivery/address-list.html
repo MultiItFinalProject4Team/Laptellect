@@ -128,7 +128,7 @@ function getAddressList() {
             $('#address-box').html(response);
         },
         error: function() {
-            alert('서버 오류 실패');
+            swal('서버 오류', '작업을 완료할 수 없습니다. 다시 시도해 주세요.', 'error');
         }
     });
 }
@@ -155,7 +155,7 @@ $('.btn-success').on('click', function() {
             
         },
         error: function() {
-            alert('서버 오류 실패');
+            swal('서버 오류', '작업을 완료할 수 없습니다. 다시 시도해 주세요.', 'error');
         }
     });
     // 수정 모달에 배송지 id 삽입
@@ -210,21 +210,21 @@ $(".updateAddressBtn").on("click", function () {
         success: function (response) {
             switch(response) {
                 case 1:
-                    alert("배송지 수정 성공");
+                    swal('배송지 수정 성공', '', 'success');
                     $('#update-delivery-modal').modal('hide');
                     location.reload();
                     break;
                 case 0:
-                    alert("배송지 이름을 입력해주세요.");
+                    swal('배송지 이름을 입력해주세요.', '', 'info');
                 case 401:
-                    alert("유저 불일치.");
+                    swal('유저 불일치', '', 'warning');
                 case 500:
-                    alert("배송지 수정 실패.");
+                    swal('배송지 수정 실패', '', 'error');
             }
             getAddressList()
         },
         error: function () {
-            alert("배송지 수정 실패");
+            swal('배송지 수정 실패', '', 'error');
         }
         // 수정 작업 수행
     });
@@ -249,16 +249,16 @@ $('.deleteAddressBtn').on('click', function() {
         success: function(response) {
             console.log(response);
             if(response) {
-              alert("배송지 삭제 완료");
+              swal('배송지 삭제 완료', '', 'success');
               $('#delete-delivery-modal').modal('hide');
               getAddressList()
               location.reload();
             } else {
-              alert("사용자가 일치하지 않습니다.");
+              swal('사용자가 일치하지 않습니다.', '', 'warning');
             }
         },
         error: function() {
-            alert('서버 오류 실패');
+            swal('서버 오류 실패', '', 'error');
         }
     });
 
