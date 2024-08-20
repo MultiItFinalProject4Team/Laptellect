@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{common/layout-Admin}">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 관리</title>
+    <link rel="stylesheet" href="/css/customer/ckeditor.css">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <link href="/css/customer/nav.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <style>
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container mt-2">
+    <header>
+        <h1 align="left"style="font-size:40px">공지사항 수정</h1>
+    </header>
+    <hr>
+    <form action="/customer/admin/update_notice" method="post" enctype="multipart/form-data">
+        <div class="input-group form-row">
+            <label class="input-group-text" for="title">제목:</label>
+            <input class="col-md-9" type="text" id="title" name="title" th:value="${dto.title}" required><br><br>
+            <div class="d-flex row justify-content-center" style="margin-left:10px; border: 2px solid #000000;" th:if="${dto.mainRegist}=='N'">
+                <label class="input-group-text">메인 공지 여부 </label>
+                <label>
+                    <input type="radio" name="mainRegist" value="Y"> Yes
+                </label>
+                <label>
+                    <input type="radio" name="mainRegist" value="N" checked> No
+                </label>
+            </div>
+            <div class="d-flex row justify-content-center" style="margin-left:10px; border: 2px solid #000000;" th:if="${dto.mainRegist}=='Y'">
+                <label class="input-group-text">메인 공지 여부 </label>
+                <label>
+                    <input type="radio" name="mainRegist" value="Y"checked> Yes
+                </label>
+                <label>
+                    <input type="radio" name="mainRegist" value="N"> No
+                </label>
+            </div>
+        </div>
+
+        <div class="editor-container editor-container_classic-editor" id="editor-container">
+            <div class="editor-container__editor" aria-required="true">
+                <textarea id="content" name="content" th:text="${dto.content}"></textarea>
+            </div>
+        </div>
+        <input type="hidden" id="noticeNo" name="noticeNo" th:value="${dto.noticeNo}">
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-custom-primary">수정</button>
+        </div>
+    </form>
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.2/"
+            }
+        }
+    </script>
+    <script type="module" src="/js/customer/ckeditor.js"></script>
+    <script>
+        $(document).ready(function() {
+            var maxLength = 100;
+
+            $('#title').on('input', function() {
+                var length = $(this).val().length;
+                if (length > maxLength) {
+                    swal('입력 제한', '최대 100자까지 입력 가능합니다.', 'info');
+                    $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
+                }
+            });
+        });
+    </script>
+</div>
+</div>
+</body>
+</html>

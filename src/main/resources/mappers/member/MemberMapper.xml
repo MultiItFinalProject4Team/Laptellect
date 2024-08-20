@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.multi.laptellect.member.model.mapper.MemberMapper">
+
+	<resultMap id="addressResultMap" type="addressDTO">
+		<result property="rowNum" column="row_num"/>
+		<result property="addressId" column="address_id"/>
+		<result property="memberNo" column="member_no"/>
+		<result property="addressName" column="address_name"/>
+		<result property="recipientName" column="recipient_name"/>
+		<result property="postalCode" column="postal_code"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="recipientPhone" column="recipient_phone"/>
+		<result property="request" column="request"/>
+	</resultMap>
+
+	<insert id="insertAddress" parameterType="addressDTO" useGeneratedKeys="true" keyProperty="addressId">
+		INSERT INTO
+			mem_delivery_address
+		(
+			  member_no
+			, address_name
+		<if test="recipientName != null">
+			, recipient_name
+		</if>
+		<if test="postalCode != null">
+			, postal_code
+		</if>
+		<if test="address != null">
+			, address
+		</if>
+		<if test="detailAddress != null">
+			, detail_address
+		</if>
+		<if test="recipientPhone != null">
+			, recipient_phone
+		</if>
+		<if test="request != null">
+			, request
+		</if>
+		)
+		VALUES
+		(
+			  #{ memberNo }
+			, #{ addressName }
+		<if test="recipientName != null">
+			, #{ recipientName }
+		</if>
+		<if test="postalCode != null">
+			, #{ postalCode }
+		</if>
+		<if test="address != null">
+			, #{ address }
+		</if>
+		<if test="detailAddress != null">
+			, #{ detailAddress }
+		</if>
+		<if test="recipientPhone != null">
+			, #{ recipientPhone }
+		</if>
+		<if test="request != null">
+			, #{ request }
+		</if>
+		)
+	</insert>
+
+	<select id="findAllAddressByMemberNo" parameterType="int" resultMap="addressResultMap">
+		SELECT
+			  ROW_NUMBER() OVER (ORDER BY address_id DESC) AS row_num
+			, a.*
+		FROM
+			mem_delivery_address a
+		WHERE
+			member_no = #{ memberNo }
+	</select>
+
+	<update id="updateAddress" parameterType="addressDTO">
+		UPDATE
+			mem_delivery_address
+		<set>
+				  address_name = #{ addressName }
+			<if test="recipientName != null">
+				, recipient_name = #{ recipientName }
+			</if>
+			<if test="postalCode != null">
+				, postal_code = #{ postalCode }
+			</if>
+			<if test="address != null">
+				, address = #{ address }
+			</if>
+			<if test="detailAddress != null">
+				, detail_address = #{ detailAddress }
+			</if>
+			<if test="recipientPhone != null">
+				, recipient_phone = #{ recipientPhone }
+			</if>
+			<if test="request != null">
+				, request = #{ request }
+			</if>
+		</set>
+		WHERE address_id = #{ addressId }
+	</update>
+
+
+	<update id="updatePoint" parameterType="memberDTO">
+		UPDATE mem_member
+		SET point = #{point}
+		WHERE member_no = #{memberNo}
+	</update>
+
+	<select id="countAllPointLogByMemberNo">
+		SELECT
+			COUNT(*)
+		FROM
+			payment_point
+		WHERE
+			member_no = #{memberNo}
+		<if test="type == 'use'">
+			AND payment_point_change <![CDATA[< 0]]>
+		</if>
+		<if test="type == 'save'">
+			AND payment_point_change > 0
+		</if>
+	</select>
+
+</mapper>

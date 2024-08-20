@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="${#authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')') ? 'common/layout-Admin' : 'common/layout-customer'}">
+<head>
+    <meta charset="UTF-8">
+    <title>1:1 문의</title>
+    <link href="/css/customer/nav.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <style>
+        .crud-btn{
+            background-color: transparent !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container mt-2">
+    <header>
+        <h1 align="left"style="font-size:40px">1:1 문의</h1>
+    </header>
+    <hr>
+    <div>
+        <p style="font-size: 15px; color: light-gray; line-height: 0;">질문</p>
+        <p th:text="${personalq.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</p>
+        <p th:text="${#dates.format(personalq.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
+        <div class="d-flex justify-content-end" aria-label="Small button group">
+            <a th:href="@{/customer/user/update_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" th:if="${personalq.answer=='N'}" class="btn crud-btn">문의 수정</a>
+            <a th:href="@{/customer/user/delete_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" th:if="${personalq.answer=='N'}" class="btn crud-btn">문의 삭제</a>
+            <a th:href="@{/customer/user/delete_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:if="${personalq.answer=='Y'}" class="btn crud-btn">문의 삭제</a>
+            <a th:href="@{/customer/admin/update_personala/{personalqNo}(personalqNo=${personalq.personalqNo})}"
+               sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:if="${personalq.answer=='Y'}" class="btn crud-btn">답변 수정</a>
+            <a th:href="@{/customer/admin/delete_personala/{personalqNo}(personalqNo=${personalq.personalqNo})}"
+               sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:if="${personalq.answer=='Y'}" class="btn crud-btn">답변 삭제</a>
+        </div>
+    </div>
+    <hr class="border border-dark">
+    <div id="content" name="content" th:utext="${personalq.content}" readonly="true">내용</div>
+
+    <hr class="border border-dark">
+
+<div  th:if="${personalq.answer=='Y'}">
+    <hr class="border border-dark">
+    <div>
+        <p style="font-size: 15px; color: light-gray; line-height: 0;">답변</p>
+        <h3 th:text="${personala.title}" style="font-size: 40px; font-weight: bold;">제목</h3>
+        <p th:text="${#dates.format(personala.createdAt, 'YY/MM/dd HH:mm')}" class="text-end">작성일</p>
+    </div>
+
+    <hr class="border border-dark">
+    <div id="content2" name="content2" th:utext="${personala.content}" readonly="true">내용</div>
+
+    <hr class="border border-dark">
+</div>
+    <div align="center">
+    <div class="btn-group" aria-label="Small button group" th:if="${personalq.answer=='N'}">
+        <a th:href="@{/customer/admin/answer_personalq/{personalqNo}(personalqNo=${personalq.personalqNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn btn-custom-primary">답변하기</a>
+    </div>
+    <div class="btn-group" aria-label="Small button group">
+        <a sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/customer_personalq" class="btn btn-custom-primary">목록으로</a>
+        <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:href="@{/customer/admin/all_personal_question}" class="btn btn-custom-primary">목록으로</a>
+    </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

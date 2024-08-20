@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.product.model.mapper.ProductMapper">
+
+    <resultMap id="productResultMap" type="productDTO">
+        <result property="productNo" column="product_no"/>
+        <result property="typeNo" column="type_no"/>
+        <result property="productName" column="product_name"/>
+        <result property="price" column="price"/>
+        <result property="referenceCode" column="reference_code"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="productCode" column="product_code"/>
+        <result property="image" column="upload_name"/>
+    </resultMap>
+
+    <!-- 제품 삽입 쿼리-->
+    <insert id="insertProduct" parameterType="productDTO" useGeneratedKeys="true" keyProperty="productNo">
+        INSERT IGNORE INTO product(type_no, product_name, price, product_code)
+        values(#{typeNo}, #{productName}, #{price}, #{productCode})
+    </insert>
+
+    <!-- 이미지 레퍼런트 코드 업데이트 -->
+    <update id="updateReferenceCode" parameterType="productDTO">
+        UPDATE product SET
+        reference_code = #{referenceCode},
+        updated_at = updated_at
+        WHERE product_no = #{productNo}
+    </update>
+
+    <select id="findTypeNameByNo" resultType="string" parameterType="int">
+        SELECT type_name FROM product_type WHERE type_no = #{typeNo}
+    </select>
+
+    <!-- 중복 확인-->
+    <select id="countByProductCode" resultType="int" parameterType="int">
+        SELECT COUNT(*) FROM product WHERE product_no = #{productNo}
+    </select>
+
+    <!-- 전체 제품 조회-->
+    <select id="getAllProducts" resultType="productDTO" resultMap="productResultMap">
+        SELECT
+            p.product_no,
+            p.type_no,
+            p.product_name,
+            p.price,
+            p.reference_code,
+            p.created_at,
+            p.updated_at,
+            p.product_code,
+            i.upload_name
+        FROM
+            product p
+        JOIN
+            images i
+        on
+            i.reference_code = p.reference_code
+        ORDER BY p.product_no
+
+    </select>
+
+    <select id="checkSpecExists"  parameterType="map" resultType="int" >
+        SELECT COUNT(*)
+        FROM
+        product_spec
+        WHERE
+        product_no = #{productNo}
+        AND  category_no = #{category}
+        AND option_value = #{specValue}
+    </select>
+
+    <select id="getProductsByType" resultType="productDTO" resultMap="productResultMap">
+        SELECT
+        p.product_no,
+        p.type_no,
+        p.product_name,
+        p.price,
+        p.reference_code,
+        p.created_at,
+        p.updated_at,
+        p.product_code,
+        i.upload_name
+        FROM
+        product p
+        JOIN
+        images i
+        ON
+        i.reference_code = p.reference_code
+        WHERE
+        p.type_no = #{typeNo}
+        ORDER BY
+        p.product_no
+<!--        LIMIT #{ } OFFSET #{ }-->
+
+    </select>
+
+    <select id="findByNameSearch" resultType="productDTO">
+        SELECT DISTINCT
+        p.product_no,
+        p.type_no,
+        p.product_name,
+        p.price,
+        p.reference_code,
+        p.created_at,
+        p.updated_at,
+        p.product_code,
+        i.upload_name
+        FROM
+        product p
+        LEFT JOIN
+        images i ON i.reference_code = p.reference_code
+        LEFT JOIN
+        product_spec po ON po.product_no = p.product_no
+        WHERE
+
+        p.product_name LIKE CONCAT('%', #{searchDTO.keyword}, '%')
+        AND p.type_no = #{searchDTO.typeNo}
+
+        <if test="searchDTO.LBI1 != null and searchDTO.LBI1.size() > 0">
+            AND po.product_no IN (
+            SELECT po1.product_no
+            FROM product_spec po1
+            WHERE po1.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LBI1" open="(" separator="," close=")">
+                #{item}
+
+            </foreach>
+            )
+        </if>
+
+        <!-- LBI2 조건 -->
+        <if test="searchDTO.LBI2 != null and searchDTO.LBI2.size() > 0">
+            AND po.product_no IN (
+            SELECT po2.product_no
+            FROM product_spec po2
+            WHERE po2.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LBI2" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LS22 조건 -->
+        <if test="searchDTO.LS22 != null and searchDTO.LS22.size() > 0">
+            AND po.product_no IN (
+            SELECT po3.product_no
+            FROM product_spec po3
+            WHERE po3.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LS22" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LS21 조건 -->
+        <if test="searchDTO.LS21 != null and searchDTO.LS21.size() > 0">
+            AND po.product_no IN (
+            SELECT po4.product_no
+            FROM product_spec po4
+            WHERE po4.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LS21" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LG38 조건 -->
+        <if test="searchDTO.LG38 != null and searchDTO.LG38.size() > 0">
+            AND po.product_no IN (
+            SELECT po5.product_no
+            FROM product_spec po5
+            WHERE po5.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LG38" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LC13 조건 -->
+        <if test="searchDTO.LC13 != null and searchDTO.LC13.size() > 0">
+            AND po.product_no IN (
+            SELECT po6.product_no
+            FROM product_spec po6
+            WHERE po6.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LC13" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LR9 조건 -->
+        <if test="searchDTO.LR9 != null and searchDTO.LR9.size() > 0">
+            AND po.product_no IN (
+            SELECT po7.product_no
+            FROM product_spec po7
+            WHERE po7.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LR9" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LD25 조건 -->
+        <if test="searchDTO.LD25 != null and searchDTO.LD25.size() > 0">
+            AND po.product_no IN (
+            SELECT po8.product_no
+            FROM product_spec po8
+            WHERE po8.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LD25" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="searchDTO.minPrice != null and searchDTO.maxPrice != null">
+            AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
+        </if>
+
+        GROUP BY
+        p.product_no, p.type_no, p.product_name, p.price,
+        p.reference_code, p.created_at, p.updated_at, p.product_code, i.upload_name
+
+        ORDER BY
+        p.product_no
+        LIMIT
+            #{searchDTO.size}
+        OFFSET
+            #{searchDTO.offset}
+    </select>
+
+    <select id="countBySearchCriteria" resultType="long">
+        SELECT COUNT(DISTINCT p.product_no)
+        FROM product p
+        LEFT JOIN images i ON i.reference_code = p.reference_code
+        LEFT JOIN product_spec po ON po.product_no = p.product_no
+        WHERE p.product_name LIKE CONCAT('%', #{searchDTO.keyword}, '%')
+        AND p.type_no = #{searchDTO.typeNo}
+
+        <!-- LBI1 조건 -->
+        <if test="searchDTO.LBI1 != null and searchDTO.LBI1.size() > 0">
+            AND po.product_no IN (
+            SELECT po1.product_no
+            FROM product_spec po1
+            WHERE po1.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LBI1" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LBI2 조건 -->
+        <if test="searchDTO.LBI2 != null and searchDTO.LBI2.size() > 0">
+            AND po.product_no IN (
+            SELECT po2.product_no
+            FROM product_spec po2
+            WHERE po2.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LBI2" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LS22 조건 -->
+        <if test="searchDTO.LS22 != null and searchDTO.LS22.size() > 0">
+            AND po.product_no IN (
+            SELECT po3.product_no
+            FROM product_spec po3
+            WHERE po3.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LS22" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LS21 조건 -->
+        <if test="searchDTO.LS21 != null and searchDTO.LS21.size() > 0">
+            AND po.product_no IN (
+            SELECT po4.product_no
+            FROM product_spec po4
+            WHERE po4.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LS21" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LG38 조건 -->
+        <if test="searchDTO.LG38 != null and searchDTO.LG38.size() > 0">
+            AND po.product_no IN (
+            SELECT po5.product_no
+            FROM product_spec po5
+            WHERE po5.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LG38" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LC13 조건 -->
+        <if test="searchDTO.LC13 != null and searchDTO.LC13.size() > 0">
+            AND po.product_no IN (
+            SELECT po6.product_no
+            FROM product_spec po6
+            WHERE po6.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LC13" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LR9 조건 -->
+        <if test="searchDTO.LR9 != null and searchDTO.LR9.size() > 0">
+            AND po.product_no IN (
+            SELECT po7.product_no
+            FROM product_spec po7
+            WHERE po7.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LR9" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- LD25 조건 -->
+        <if test="searchDTO.LD25 != null and searchDTO.LD25.size() > 0">
+            AND po.product_no IN (
+            SELECT po8.product_no
+            FROM product_spec po8
+            WHERE po8.option_value IN
+            <foreach item="item" index="index" collection="searchDTO.LD25" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!-- 가격 범위 조건 -->
+        <if test="searchDTO.minPrice != null and searchDTO.maxPrice != null">
+            AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
+        </if>
+    </select>
+
+    <!--리뷰 저장-->
+    <insert id="inputReviewDate" parameterType="reviewDTO">
+        INSERT INTO review(product_no, rating, title, content)
+        values(#{productNo}, #{rating}, #{title}, #{content})
+    </insert>
+
+    <!-- 리뷰 조회 -->
+    <select id="getReviewRequired" resultType="productDTO">
+        SELECT product_no, product_code
+        FROM product
+        WHERE type_no IN(1);
+    </select>
+
+
+    <!-- db 저장된 제품 계수 확인 -->
+    <select id="getTotalProducts" resultType="int">
+        SELECT COUNT(*) FROM product
+    </select>
+
+
+    <!-- 선택 제품 조회-->
+    <select id="getProductByCode" parameterType="String" resultType="laptopSpecDTO">
+        SELECT * FROM product WHERE product_no = #{productNo}
+    </select>
+
+    <!-- 상품 리스트에서 기본상세 정보 출력 -->
+    <select id="getProductSpec" resultType="specDTO">
+        SELECT  options , option_value
+        FROM vw_spec_and_value
+        WHERE = #{productNo}
+
+    </select>
+
+    <delete id="productDelete">
+        DELETE FROM
+        product
+        WHERE =#{productNo}
+    </delete>
+
+    <!--제품 카테고리를 옵션으로 조회-->
+    <select id="findByOptions" parameterType="map" resultType="productCategoryDTO">
+        SELECT *
+        FROM product_category
+        WHERE options = #{specName}
+    </select>
+
+    <insert id="insertProductCategory" parameterType="map">
+        INSERT INTO product_category (category_no, type_no, options)
+        VALUES (#{categoryCode}, #{typeNo}, #{options})
+    </insert>
+
+    <insert id="insertProductSpec">
+        INSERT INTO product_spec (product_no, category_no, option_value)
+        VALUES (
+        #{productNo},
+        (SELECT category_no FROM product_category WHERE options = #{specName}),
+        #{specValue}
+        )
+    </insert>
+
+<!--    <select id="findProduct" parameterType="productDTO">-->
+<!--        SELECT *-->
+<!--        FROM-->
+<!--        product-->
+<!--    </select>-->
+<!--    -->
+    <select id="productFilterSearch" resultType="specDTO">
+        SELECT options, option_value, category_no
+        FROM
+        vw_spec_and_value
+    </select>
+
+    <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
+        SELECT *
+        FROM
+        vw_product_detail
+        WHERE
+        product_no = #{productNo}
+    </select>
+
+    <!--제품의 상세 조회 -->
+    <select id="productDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">
+        SELECT *
+        FROM
+        vw_product_detail
+        WHERE
+        product_no = #{productNo}
+    </select>
+
+
+    <!--이미지를 저장시키는 쿼리-->
+    <insert id="inputImage" parameterType="imageDTO" useGeneratedKeys="true">
+        INSERT INTO
+        images( reference_code, origin_name, upload_name)
+        VALUES ( #{referenceCode}, #{originName}, #{uploadName})
+    </insert>
+
+    <!--저장된 이미지를 불러오는 쿼리-->
+    <select id="getImage" resultType="string">
+        SELECT upload_name
+        FROM
+        images
+        WHERE reference_code=#{referenceCode}
+    </select>
+
+    <select id="findAllWishlistByMemberNo">
+        SELECT
+              w.*
+            , p.product_name
+            , p.price
+            , img.upload_name
+        FROM
+            wishlist w
+        JOIN
+            product p ON p.product_no = w.product_no
+        JOIN
+            images img ON img.reference_code = p.reference_code
+        WHERE
+            w.member_no = #{ memberNo }
+        ORDER BY
+            w.wishlist_no DESC
+        LIMIT
+            #{ pageable.pageSize }
+        OFFSET
+            #{ pageable.offset }
+    </select>
+
+    <select id="findProductByProductNo" parameterType="String" resultMap="productResultMap">
+        SELECT
+              p.*
+            , img.upload_name
+        FROM
+            product p
+        JOIN
+            images img ON img.reference_code = p.reference_code
+        WHERE
+            p.product_no = #{ productNo }
+         limit 1;
+    </select>
+
+    <select id="findProductSpecByProductNo">
+        SELECT
+              options
+            , option_value
+        FROM
+            vw_spec_and_value
+        WHERE
+            product_no = #{productNo} AND options IN
+        <foreach collection="neededOptions" item="options" open="(" separator=  "," close=")">
+            #{ options }
+        </foreach>
+    </select>
+</mapper>

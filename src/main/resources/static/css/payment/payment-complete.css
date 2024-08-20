@@ -1,0 +1,87 @@
+.payment-complete-container {
+    max-width: 1000px; /* 컨테이너 너비를 더 늘림 */
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.payment-complete-title {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.payment-info {
+    margin-top: 30px;
+    overflow-x: auto; /* 필요시 가로 스크롤 허용 */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    word-wrap: break-word; /* 긴 단어의 경우 줄바꿈 허용 */
+    min-width: 100px; /* 최소 너비 설정 */
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* 각 열의 너비 조정 */
+th:nth-child(1), td:nth-child(1) { width: 15%; } /* 상품 이미지 */
+th:nth-child(2), td:nth-child(2) { width: 30%; } /* 상품명 */
+th:nth-child(3), td:nth-child(3) { width: 10%; } /* 수량 */
+th:nth-child(4), td:nth-child(4) { width: 22.5%; } /* 가격 */
+th:nth-child(5), td:nth-child(5) { width: 22.5%; } /* 총 가격 */
+
+.product-image img {
+    max-width: 80px;
+    height: auto;
+    border-radius: 4px;
+}
+
+.summary-info {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.summary-info p {
+    margin: 10px 0;
+}
+
+.summary-info strong {
+    margin-right: 10px;
+    color: #2c3e50;
+}
+
+.btn-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}

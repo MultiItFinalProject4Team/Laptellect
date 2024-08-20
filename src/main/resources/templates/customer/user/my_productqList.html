@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{common/layout-customer}">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 문의</title>
+    <link href="/css/customer/table.css" rel="stylesheet">
+    <link href="/css/customer/nav.css" rel="stylesheet">
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .form-select {
+            flex: 0 0 20%;
+        }
+        #categorySelect3 {
+            flex: 0 0 15%;
+        }
+        .form-control {
+            flex: 1;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container mt-2">
+    <header>
+        <h1 align="left"style="font-size:40px">상품문의 내역</h1>
+    </header>
+    <hr>
+<!--    여기에 내가 작성한 상품문의 전체 보기// 내문의 보기에 상품명만 추가해서 리스트업, 검색기능 추가-->
+    <div class="form-container">
+        <form class="d-flex" role="search" th:action="@{/customer/user/search_myproductqList}">
+
+            <select class="form-select" id="categorySelect2" name="answer">
+                <option value="A" th:selected="${answer == 'A'}">답변 여부</option>
+                <option value="N" th:selected="${answer == 'N'}">답변 대기</option>
+                <option value="Y" th:selected="${answer == 'Y'}">답변 완료</option>
+            </select>
+
+            <select class="form-select" id="categorySelect" name="category">
+                <option value="productName" th:selected="${answer == 'productName'}">상품명</option>
+                <option value="title" th:selected="${answer == 'title'}">문의 제목</option>
+            </select>
+
+            <input class="form-control me-2" type="search" placeholder="" aria-label="Search" style="width: 300px;" name="keyword" th:value="${page_keyword}">
+            <select class="form-select" id="categorySelect3" name="date">
+                <option value="recent" th:selected="${date == 'recent'}">최신순</option>
+                <option value="old" th:selected="${date == 'old'}">오래된순</option>
+            </select>
+            <button id="searchButton" class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+    <hr>
+    <div class="fixed-table-container">
+    <table class="table table-striped" style="text-align: center">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>등록일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="each : ${plist}" class="align-middle">
+            <td th:text="${each}">번호</td>
+            <td style="text-align: center;">
+                <a style="text-decoration: none;" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${each})}" th:text="노트북">상품명</a>
+            </td>
+            <td th:text="999">가격</td>
+            <td th:text="2024-07-19">날짜</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</div>
+</body>
+</html>

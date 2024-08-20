@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+
+<head>
+    <title>장바구니 결제하기</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/payment/payment.css">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var addressList = /*[[${addressList}]]*/ [];
+        /*]]>*/
+    </script>
+    <script src="/js/payment/cart-payment.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" th:src="@{/js/common/kakao-post-api.js}"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="payment-container">
+        <h1 class="payment-title">장바구니 주문 및 결제</h1>
+
+        <!-- 상품 정보 섹션 (테이블 형식 유지) -->
+        <div class="product-info-section">
+            <h2 class="section-title">상품 정보</h2>
+            <table class="product-info-table">
+                <thead>
+                <tr>
+                    <th>상품 이미지</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${cartList}" th:attr="data-product-no=${product.productNo}">
+                    <td>
+                        <img th:src="@{'/img/product/' + ${product.image}}" alt="Product Image"
+                             class="payment-product-image">
+                    </td>
+                    <td th:text="${product.productName}">상품명</td>
+                    <td>
+                        <div class="quantity-selector">
+                            <span class="quantity-value mx-2">
+                                <span th:text="${product.quantity}">1</span>
+                                <span> 개</span>
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="price"
+                              th:text="${#numbers.formatDecimal(product.totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 주문 정보 섹션 -->
+        <div class="order-info-section">
+            <h2 class="section-title">주문 정보</h2>
+            <h3 align="center">구매자 정보</h3>
+            <div class="payment-form-group">
+                <label for="name">구매자 성함</label>
+                <input type="text" id="name" name="name" th:value="${memberDTO.memberName}" readonly>
+            </div>
+            <div class="payment-form-group">
+                <label for="email">구매자 이메일</label>
+                <input type="text" id="email" name="email" th:value="${memberDTO.email}" readonly>
+            </div>
+            <div class="payment-form-group">
+                <label for="tel">연락처</label>
+                <input type="tel" id="tel" name="tel" th:value="${memberDTO.tel}" readonly>
+            </div>
+            <br>
+            <hr>
+            <div class="recipient-info-header">
+                <h3>받는사람 정보</h3>
+                <button id="changeAddressBtn" class="btn btn-primary change-address-btn">배송지 변경</button>
+            </div>
+            <div id="recipientInfo">
+                <div class="payment-form-group">
+                    <label for="recipientName">받는사람 성함</label>
+                    <input type="text" id="recipientName" name="recipientName" th:value="${userAddress.recipientName}" readonly>
+                </div>
+                <div class="payment-form-group">
+                    <label for="recipientPhone">받는사람 연락처</label>
+                    <input type="text" id="recipientPhone" name="recipientPhone" th:value="${userAddress.recipientPhone}" readonly>
+                </div>
+                <div class="payment-form-group">
+                    <label for="address">배송지 주소</label>
+                    <input type="text" id="address" name="address" th:value="${userAddress.address} + ' ' + ${userAddress.detailAddress}" readonly>
+                </div>
+                <div class="payment-form-group">
+                    <label for="delivery_request">배송시 요청사항</label>
+                    <input type="text" id="delivery_request" name="delivery_request" th:value="${userAddress.request}" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- 결제 정보 섹션 -->
+        <div class="payment-price-info">
+            <div class="payment-price-row">
+                <span>총 판매가</span>
+                <span id="originalPrice" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+            </div>
+            <div class="payment-price-row">
+                <span>보유포인트</span>
+                <span id="possessionPoint"
+                      th:text="${#numbers.formatDecimal(memberDTO.point, 0, 'COMMA', 0, 'POINT') + 'p'}"></span>
+            </div>
+            <div class="payment-price-row">
+                <span>포인트 사용</span>
+                <div class="point-input-container">
+                    <input type="text" id="pointInput" placeholder="포인트로 할인받기">
+                    <span id="pointUsageDisplay">0원</span>
+                </div>
+            </div>
+            <div class="payment-price-row payment-total-price">
+                <span>총 결제금액</span>
+                <span id="amount"
+                      th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + '원'}">0원</span>
+            </div>
+            <button class="payment-order-button" onclick="mypayment()">결제하기</button>
+        </div>
+    </div>
+
+    <!-- 배송지 선택 모달 -->
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <h2>배송지 선택</h2>
+            <div id="addressList">
+                <!-- 여기에 주소 목록이 동적으로 추가됩니다 -->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

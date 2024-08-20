@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+    <!-- SweetAlert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</head>
+<body>
+    <script th:inline="javascript">
+        let loginSuccess = /*[[${loginSuccess}]]*/ 'false';
+
+        $(document).ready(function() {
+            if (loginSuccess === 'success') {
+                swal('로그인 성공!', '', 'success');
+
+                setTimeout(function() {
+                    if (window.opener) {
+                        window.opener.postMessage('closeAndRedirect', '*');
+                    }
+                    window.close();
+            }, 1500);
+            } else {
+                swal('로그인 실패. 다시 시도하세요.', '', 'error');
+
+                setTimeout(function() {
+                    window.close();
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>

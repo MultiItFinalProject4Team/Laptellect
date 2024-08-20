@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 목록</title>
+    <link rel="stylesheet" href="/css/payment/orderlist.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/payment/orderlist.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <h1>주문 목록</h1>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="검색">
+        <button id="searchButton">검색</button>
+    </div>
+
+    <div>
+        주문한 상품 개수: <span id="totalItemsCount">0</span>개
+    </div>
+
+    <div th:if="${not #lists.isEmpty(orderItems)}">
+        <div class="order-item" th:each="item : ${orderItems}" th:data-username="${item.userName}">
+            <div class="order-info">
+                <img th:src="@{'/img/product/' + ${item.productName} + '.jpg'}" alt="Product Image" onerror="this.src='/img/payment/notebooktest.PNG';">
+                <div class="order-details">
+                    <p th:text="${item.createdAt != null ? #temporals.format(item.createdAt, 'yyyy-MM-dd') : '날짜 없음'}"></p>
+                    <h3 th:text="${item.productName}"></h3>
+                    <br><br>
+                    <p th:text="'가격: ' + ${#numbers.formatDecimal(item.purchasePrice, 0, 'COMMA', 0, 'POINT')} + '원 · 1개'"></p>
+                </div>
+            </div>
+            <div class="order-actions">
+                <button class="cancel-button"
+                        th:classappend="${reviewedOrders.contains(item.imPortId)} ? 'disabled' : ''"
+                        th:attr="onclick=${!reviewedOrders.contains(item.imPortId)} ? 'cancelOrder(\'' + item.imPortId + '\', ' + item.purchasePrice + ')' : 'void(0)'"
+                        th:disabled="${reviewedOrders.contains(item.imPortId)}">
+                    주문 취소하기
+                </button>
+                <button class="review-button"
+                        th:classappend="${reviewedOrders.contains(item.imPortId)} ? 'reviewed' : ''"
+                        th:attr="onclick=${!reviewedOrders.contains(item.imPortId)} ? 'openReviewModal(\'' + item.productName + '\', \'' + item.userName + '\', \'' + item.imPortId + '\')' : 'void(0)'"
+                        th:disabled="${reviewedOrders.contains(item.imPortId)}">
+                    리뷰 작성하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(orderItems)}">
+        주문 정보가 없습니다.
+    </div>
+
+    <div class="pagination"></div>
+
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>리뷰 작성하기</h2>
+            <p>작성자: <span id="reviewUsername"></span></p>
+            <p>상품명: <span id="reviewProductName"></span></p>
+            <p>평점:
+                <select id="reviewRating">
+                    <option value="5">5점</option>
+                    <option value="4">4점</option>
+                    <option value="3">3점</option>
+                    <option value="2">2점</option>
+                    <option value="1">1점</option>
+                </select>
+            </p>
+            <p>리뷰 내용: <textarea id="reviewContent"></textarea></p>
+            <button id="submitReviewButton" onclick="submitReview()" disabled>리뷰 제출</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

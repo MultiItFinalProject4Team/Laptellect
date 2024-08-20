@@ -1,0 +1,228 @@
+        //customer
+        #customer-list {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+        }
+
+        .question {
+            padding: 15px;
+            margin-bottom: -10px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            margin-top: -30px;
+        }
+
+        .question-author {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .author-name {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .question-date {
+            color: #888;
+            margin-top:4px;
+            padding: 4px;
+            font-size: 12px;
+        }
+        .question-update{
+            margin-left: 15px;
+            font-size: 12px;
+        }
+        .question-delete{
+            font-size: 12px;
+        }
+
+        .question-body {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .question-bodytop {
+            display: flex;
+            align-items: center;
+        }
+
+        .opinion-class {
+            font-size: 12px;
+            margin-right: 10px;
+            color: #333;
+            border: 1px solid #04B404; /* 테두리 색상과 두께 */
+            padding: 3px 10px; /* 내부 여백 */
+            border-radius: 50px; /* 타원 모양 */
+            text-align: center;
+            font-weight: bold;
+            display: inline-block; /* 컨텐츠가 타원 안에 맞게 조정되도록 */
+        }
+        .question-class {
+            border: 1px solid #FF8000; /* 문의에 대한 파란색 */
+            font-size: 12px;
+            margin-right: 10px;
+            color: #333;
+            padding: 3px 10px; /* 내부 여백 */
+            border-radius: 50px; /* 타원 모양 */
+            text-align: center;
+            font-weight: bold;
+            display: inline-block; /* 컨텐츠가 타원 안에 맞게 조정되도록 */
+        }
+
+        .question-title {
+            font-size: 1.2em;
+            margin-top: -8px;
+            color: #333;
+        }
+
+        .question-content {
+            margin-left: 3px;
+            margin-bottom: -5px;
+            color: #555;
+        }
+
+        .question-reply {
+            margin-top: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .reply {
+            margin-top: 50px;
+            margin-bottom: -10px;
+        }
+
+        .reply-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            margin-top: -30px;
+        }
+
+        .reply-author {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .reply-name {
+            margin-left: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .reply-date {
+            color: #888;
+            margin-top:4px;
+            padding: 4px;
+            font-size: 12px;
+        }
+        .reply-update{
+            margin-left: 15px;
+            font-size: 12px;
+        }
+        .reply-delete{
+            font-size: 12px;
+        }
+
+        .reply-body {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .reply-bodytop {
+            display: flex;
+            align-items: center;
+        }
+
+        .reply-class {
+            font-size: 12px;
+            margin-right: 10px;
+            color: #333;
+            border: 1px solid #04B404; /* 테두리 색상과 두께 */
+            padding: 3px 10px; /* 내부 여백 */
+            border-radius: 50px; /* 타원 모양 */
+            text-align: center;
+            font-weight: bold;
+            display: inline-block; /* 컨텐츠가 타원 안에 맞게 조정되도록 */
+        }
+        .reply-class {
+            border: 1px solid #FF8000; /* 문의에 대한 파란색 */
+            font-size: 12px;
+            margin-right: 10px;
+            color: #333;
+            padding: 3px 10px; /* 내부 여백 */
+            border-radius: 50px; /* 타원 모양 */
+            text-align: center;
+            font-weight: bold;
+            display: inline-block; /* 컨텐츠가 타원 안에 맞게 조정되도록 */
+        }
+
+        .reply-title {
+            font-size: 1.2em;
+            margin-top: -8px;
+            color: #333;
+        }
+
+        .reply-content {
+            margin-left: 3px;
+            margin-bottom: 0px;
+            color: #555;
+        }
+
+        .question-hr{
+            width: 105%;
+            margin-left: -25px
+        }
+
+        .btn-category {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        /* 기본 버튼 색상 */
+        .btn-category {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        /* 버튼 활성화 상태 스타일 */
+        .btn-category.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* 버튼 호버 상태 스타일 */
+        .btn-category:hover {
+            background-color: #e0e0e0;
+        }
+        .question_container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* 요소 사이의 간격 조정 */
+        }
+        .form-select, .form-control {
+            margin-right: 10px; /* 폼 요소 사이의 간격 조정 */
+        }
+        .btn-category-div{
+            margin-right: 100px;
+        }
+
+
+/* 페이지 스타일링 */
+#pagination {
+    padding: 0;
+    margin: 20px 0; /* 상하 여백 */
+}

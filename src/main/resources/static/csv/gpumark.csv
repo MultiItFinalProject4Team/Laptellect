@@ -1,0 +1,589 @@
+﻿gpu_name,g3d_mark,tdp,category
+GeForce RTX 4090 Laptop GPU,"27,871",150,Mobile
+GeForce RTX 4080 Laptop GPU,"25,340",150,Mobile
+Radeon RX 7900M,"22,112",NA,Mobile
+Radeon 610M Ryzen 9 7845HX,"21,623",NA,Mobile
+GeForce RTX 3080 Ti Laptop GPU,"19,875",115,Mobile
+GeForce RTX 4070 Laptop GPU,"19,626",115,Mobile
+GeForce RTX 3070 Ti Laptop GPU,"18,079",115,Mobile
+GeForce RTX 4060 Laptop GPU,"17,697",115,Mobile
+Radeon RX 6850M XT,"17,192",NA,Mobile
+GeForce RTX 3080 Laptop GPU,"16,471",115,Mobile
+RTX A5000 Laptop GPU,"16,041",165,Workstation
+GeForce RTX 3070 Laptop GPU,"15,490",115,Mobile
+Radeon RX 6800S,"15,446",100,Mobile
+RTX A4000 Laptop GPU,"15,440",140,Workstation
+GeForce RTX 2080 (Mobile),"15,107",150,Mobile
+Radeon RX 6650M,"15,004",NA,Mobile
+Radeon RX 6700S,"14,923",80,Mobile
+Quadro RTX 5000 (Mobile),"14,832",110,Workstation
+GeForce RTX 4050 Laptop GPU,"14,411",115,Mobile
+Radeon RX 7600S,"14,172",75,Mobile
+RadeonT RX 6850M XT,"13,848",165,Mobile
+GeForce RTX 2080 Super with Max-Q Design,"13,802",80,Mobile
+GeForce RTX 2070 Super with Max-Q Design,"13,779",80,Mobile
+Radeon RX 6600M,"13,690",100,Mobile
+Radeon RX 6600S,"13,678",80,Mobile
+Quadro RTX 5000 with Max-Q Design,"13,644",80,Workstation
+Radeon PRO W6600M,"13,549",NA,Mobile
+Radeon RX 6700M,"13,465",135,Mobile
+GeForce RTX 3060 Laptop GPU,"13,371",115,Mobile
+Radeon RX 6800M,"13,288",145,Mobile
+GeForce RTX 2080 with Max-Q Design,"13,139",90,Mobile
+Quadro RTX 4000 with Max-Q Design,"12,663",80,Mobile
+RTX A3000 Laptop GPU,"12,538",130,Workstation
+Quadro RTX 4000 (Mobile),"12,474",110,Mobile
+GeForce RTX 2070 (Mobile),"12,354",115,Mobile
+Quadro P5200,"12,304",NA,Mobile
+Radeon RX 6850M,"12,274",NA,Mobile
+GeForce RTX 2070 with Max-Q Design,"11,712",80,Mobile
+GeForce GTX 1080 with Max-Q Design,"11,584",110,Mobile
+Radeon RX 7600M XT,"11,531",120,Mobile
+Intel Arc A770M,"11,513",150,Mobile
+GeForce RTX 2060 (Mobile),"11,355",80,Mobile
+Quadro RTX 3000,"11,155",80,Workstation
+GeForce GTX 1070 (Mobile),"10,465",NA,Mobile
+GeForce RTX 3050 6GB Laptop GPU,"10,446",80,Mobile
+GeForce GTX 1660 Ti (Mobile),"10,184",80,Mobile
+GeForce RTX 3050 Ti Laptop GPU,"10,163",80,Mobile
+RTX A2000 Laptop GPU,"9,971",95,Workstation
+GeForce GTX 1070 with Max-Q Design,"9,894",90,Mobile
+GeForce RTX 2060 with Max-Q Design,"9,747",65,Mobile
+GeForce RTX 3050 Laptop GPU,"9,453",75,Mobile
+Radeon RX 6550M,"9,360",NA,Mobile
+Radeon Pro 5600M,"9,233",50,Mobile
+Quadro P4000 with Max-Q Design,"9,083",80,Mobile
+Radeon RX 5600M,"8,718",150,Mobile
+GeForce GTX 1660 Ti with Max-Q Design,"8,615",60,Mobile
+Quadro RTX 3000 with Max-Q Design,"8,350",60,Mobile
+GeForce GTX 1060 (Mobile),"8,161",80,Mobile
+Quadro M5500,"7,915",150,Workstation
+GeForce GTX 1060 with Max-Q Design,"7,899",80,Mobile
+Radeon RX 6500M,"7,860",50,Mobile
+GeForce RTX 2050,"7,676",45,Mobile
+GeForce GTX 1650 Ti,"7,571",55,Mobile
+GeForce GTX 980M,"7,349",100,Mobile
+Quadro T2000,"7,184",NA,Mobile
+Radeon 780M,"7,084",NA,Mobile
+RadeonT 780M,"7,078",NA,Mobile
+GeForce GTX 1650 (Mobile),"6,969",50,Mobile
+Quadro M5000M,"6,933",100,Workstation
+Quadro T2000 with Max-Q Design,"6,900",NA,Mobile
+Radeon Pro 5500M,"6,813",85,Mobile
+GeForce RTX 3050 4GB Laptop GPU,"6,747",80,Mobile
+Quadro T1000 with Max-Q Design,"6,721",NA,Mobile
+Radeon Pro WX 7130,"6,715",130,Mobile
+Quadro P3000,"6,564",75,Workstation
+Quadro T1000,"6,490",NA,Mobile
+GeForce GTX 1650 Ti with Max-Q Design,"6,419",35,Mobile
+Radeon 660M Ryzen 5 6600H,"6,286",NA,Mobile
+Quadro M4000M,"6,210",100,Workstation
+GeForce GTX 1650 with Max-Q Design,"6,170",35,Mobile
+Radeon 680M Ryzen 7 7735HS,"6,167",NA,Mobile
+Radeon Pro 5300M,"5,967",85,Mobile
+GeForce GTX 1050 Ti (Mobile),"5,919",NA,Mobile
+Radeon 760M,"5,919",NA,Mobile
+Radeon PRO W6300,"5,898",25,Workstation
+RadeonT 760M,"5,846",NA,Mobile
+GeForce GTX 970M,"5,740",75,Mobile
+RadeonT 680M Ryzen 7 7735HS,"5,651",NA,Mobile
+Quadro M3000M,"5,530",75,Workstation
+Radeon RX 5500M,"5,503",85,Mobile
+GeForce GTX 1050 Ti with Max-Q Design,"5,363",NA,Mobile
+Radeon R9 M395X,"5,195",125,Mobile
+Radeon R9 M295X,"5,150",125,Mobile
+Radeon R9 M395,"4,949",125,Mobile
+Radeon Pro WX Vega M GL,"4,643",65,Mobile
+GeForce GTX 1050 (Mobile),"4,462",NA,Mobile
+Radeon RX 5300M,"4,307",85,Mobile
+Quadro M2200,"4,249",55,Workstation
+GeForce GTX 680MX,"4,142",122,Mobile
+GeForce GTX 1050 with Max-Q Design,"4,078",NA,Mobile
+Radeon 660M Ryzen 5 7535HS,"4,078",NA,Mobile
+RadeonT 660M Ryzen 5 7535HS,"4,051",NA,Mobile
+Radeon RX 7600M,"3,940",NA,Mobile
+Radeon HD 8970M,"3,876",100,Mobile
+GeForce GTX 780M,"3,848",122,Mobile
+GeForce GTX 880M,"3,804",130,Mobile
+GeForce GTX 965M,"3,794",60,Mobile
+GeForce GTX 775M,"3,600",NA,Mobile
+Radeon R9 M390X,"3,597",100,Mobile
+GeForce GTX 680M KY_Bullet Edition,"3,569",NA,Mobile
+Radeon HD 7970M,"3,529",75,Mobile
+Quadro M2000M,"3,458",55,Workstation
+Radeon 740M,"3,458",NA,Mobile
+GeForce GTX 870M,"3,450",110,Mobile
+GeForce GTX 960M,"3,396",65,Mobile
+Radeon HD8970M,"3,369",NA,Mobile
+Radeon R9 M290X,"3,263",100,Mobile
+GeForce 770M,"3,246",NA,Mobile
+Radeon R9 M470X,"3,244",75,Mobile
+Quadro M1200,"3,235",45,Workstation
+GeForce GTX 680M,"3,216",100,Mobile
+GeForce GTX 860M,"3,037",45,Mobile
+Quadro M1000M,"2,865",40,Workstation
+GeForce GTX 770M,"2,802",75,Mobile
+Quadro M620,"2,801",30,Workstation
+Radeon R9 M380,"2,763",NA,Mobile
+GeForce GTX 675MX,"2,642",100,Mobile
+MONSTER GeForce GTX 675M,"2,637",NA,Mobile
+Radeon Pro WX 4150,"2,588",50,Mobile
+GeForce GTX 950M,"2,585",75,Mobile
+GeForce GTX 850M,"2,517",40,Mobile
+Radeon Pro WX 3200,"2,433",65,Mobile
+GeForce GTX 485M,"2,360",100,Mobile
+Radeon R9 M470,"2,331",75,Mobile
+GeForce MX150,"2,280",25,Mobile
+Radeon HD 6970M,"2,270",75,Mobile
+Quadro M600M,"2,177",30,Workstation
+GeForce 945M,"2,109",NA,Mobile
+GeForce GTX 580M,"2,074",100,Mobile
+Radeon R9 M385,"2,061",70,Mobile
+Radeon Pro W5500M,"2,010",85,Mobile
+Radeon R9 M385X,"1,994",75,Mobile
+GeForce GTX 765M,"1,993",65,Mobile
+Radeon Pro WX 4130,"1,967",50,Mobile
+Radeon RX 640,"1,962",50,Mobile
+GeForce GTX 470M,"1,953",50,Mobile
+GeForce GTX 670MX,"1,951",75,Mobile
+GeForce GTX 675M,"1,929",100,Mobile
+Quadro M520,"1,886",25,Workstation
+GeForce GTX 570M,"1,864",75,Mobile
+Radeon Pro WX 2100,"1,831",35,Mobile
+Radeon HD 8870M / R9 M270X / M370X,"1,800",NA,Mobile
+Firepro W5170M,"1,761",NA,Workstation
+GeForce GTX 670M,"1,743",75,Mobile
+Radeon R9 M375X,"1,728",NA,Mobile
+GeForce GTX 760M,"1,720",55,Mobile
+Radeon HD 6900M,"1,703",NA,Mobile
+GeForce GT 755M,"1,689",50,Mobile
+Radeon HD HD7850M,"1,652",NA,Mobile
+Radeon HD 8870M,"1,638",NA,Mobile
+GeForce GTX 480M,"1,617",100,Mobile
+Intel Iris Plus 650,"1,586",NA,Mobile
+Radeon Vega 8,"1,583",NA,Mobile
+Radeon R9 M275X / M375,"1,575",50,Mobile
+Radeon R9 M370X,"1,544",50,Mobile
+GeForce 845M,"1,524",NA,Mobile
+Radeon 610M Ryzen 9 7945HX,"1,524",NA,Mobile
+Radeon HD 7870M,"1,507",45,Mobile
+Radeon R9 M365X,"1,482",50,Mobile
+GeForce GTX 660M,"1,436",50,Mobile
+Radeon R7 M370,"1,418",NA,Mobile
+Radeon Pro WX 4170,"1,409",50,Mobile
+Radeon HD 7850M,"1,373",40,Mobile
+Intel Iris Plus 640,"1,346",NA,Mobile
+GeForce GT 750M,"1,328",50,Mobile
+Radeon HD 8790M,"1,306",NA,Mobile
+GeForce 930MX,"1,290",17,Mobile
+GeForce GTX 460M,"1,246",50,Mobile
+GeForce GTX 560M,"1,245",75,Mobile
+Radeon HD 8790M / R9 M290X,"1,211",NA,Mobile
+GeForce GT 650M,"1,205",45,Mobile
+Radeon R9 M270X,"1,204",NA,Mobile
+Radeon HD 7750M,"1,191",28,Mobile
+GeForce GPU,"1,188",NA,Mobile
+Quadro M500M,"1,164",30,Workstation
+Radeon HD 8850M / R9 M265X,"1,140",NA,Mobile
+Radeon R9 M265X,"1,138",NA,Mobile
+Radeon HD 8650G + 7700M Dual,"1,126",NA,Mobile
+GeForce 940M,"1,122",33,Mobile
+RadeonT 610M,"1,121",NA,Mobile
+Radeon R9 M275,"1,115",NA,Mobile
+Radeon 610M,"1,099",NA,Mobile
+GeForce GT 745M,"1,095",45,Mobile
+GeForce GTX 850M - MODDED,"1,092",NA,Mobile
+GeForce 840M,"1,088",30,Mobile
+Mobility Radeon HD 5870,"1,076",50,Mobile
+Radeon HD 8450G + 8600/8700M Dual,"1,070",NA,Mobile
+Radeon HD 7520G + 7700M Dual,"1,061",NA,Mobile
+Radeon HD 8600/8700M,"1,030",NA,Mobile
+Radeon HD 6700M,"1,017",NA,Mobile
+GeForce 930M,"1,014",NA,Mobile
+Radeon HD 7690M XT,"1,009",25,Mobile
+GeForce 830M,"1,008",25,Mobile
+Radeon HD 7660G + HD 7500M/7600M Dual,999,NA,Mobile
+Radeon HD 7640G + HD 8750M Dual,997,NA,Mobile
+Radeon HD 8750M,993,NA,Mobile
+Radeon R7 M260X,991,NA,Mobile
+Radeon HD 8690M,984,NA,Mobile
+Radeon R9 M375,980,NA,Mobile
+Radeon HD 8850M,973,NA,Mobile
+Radeon HD 7660G N HD 7660G + HD 7700M N HD 7700M D,967,NA,Mobile
+Radeon HD 6770M,964,NA,Mobile
+Radeon HD 7640G + 7690M Dual,946,NA,Mobile
+Radeon HD 6750M,937,NA,Mobile
+Radeon HD 7660G + 7730M Dual,931,NA,Mobile
+GeForce GT 645M,930,32,Mobile
+GeForce GT 640M,919,32,Mobile
+Radeon 6750M,911,NA,Mobile
+Radeon HD 7690M,909,20,Mobile
+Radeon HD 8550G + 7600M Dual,901,NA,Mobile
+Radeon HD 8650G + 7670M Dual,884,NA,Mobile
+Radeon HD 7660G + HD 7730M Dual,882,NA,Mobile
+Mobility Radeon HD 4850,866,NA,Mobile
+Radeon HD 8500M/8700M,853,NA,Mobile
+Radeon HD 7660G + 7600M Dual,832,NA,Mobile
+Radeon HD 8650G + 8600/8700M Dual,832,NA,Mobile
+Radeon HD 7640G N HD 7640G + HD 7600M N HD 7600M D,824,NA,Mobile
+Radeon HD 8650G + HD 7600M Dual,820,NA,Mobile
+Radeon HD 8550G + HD 8750M Dual,819,NA,Mobile
+GeForce GT 730M,815,33,Mobile
+Radeon R9 M280X,814,75,Mobile
+GeForce GT 445M,811,35,Mobile
+Radeon HD 8550G + 8600/8700M Dual,803,NA,Mobile
+Radeon HD 8650G + HD 8790M Dual,800,NA,Mobile
+Radeon HD 6800M,799,NA,Mobile
+Radeon HD 8550G + 8750M Dual,796,NA,Mobile
+Radeon HD 8650G N HD 8650G + HD 8600/8700M Dual,796,NA,Mobile
+GeForce GT 740M,792,NA,Mobile
+Radeon HD 8650G + 8750M Dual,787,NA,Mobile
+GeForce 825M,782,33,Mobile
+Radeon HD 7660G + HD 7700M Dual,777,NA,Mobile
+Radeon HD 7640G + 7500M/7600M Dual,776,NA,Mobile
+Radeon HD 7600M + 7600M Dual,773,NA,Mobile
+Radeon HD 8650G N HD 8650G + HD 8570M Dual,773,NA,Mobile
+Radeon HD 7730M,766,25,Mobile
+Radeon HD 8650G + HD 8600/8700M Dual,764,NA,Mobile
+Mobility Radeon HD 5850,763,31,Mobile
+Radeon HD 8730M,761,NA,Mobile
+Radeon HD 7660G + HD 8500M Dual,758,NA,Mobile
+Radeon HD 8650G + HD 8600M N HD 8600M Dual,758,NA,Mobile
+Radeon HD 7660G + 7700M Dual,757,NA,Mobile
+Radeon HD 7640G + 7450M Dual,754,NA,Mobile
+Radeon HD 6650M,753,NA,Mobile
+Radeon HD 7640G + 7650M Dual,747,NA,Mobile
+Radeon HD 7660G + HD 8600/8700M Dual,747,NA,Mobile
+Radeon HD 7660G + 7610M Dual,746,NA,Mobile
+Radeon HD 7660G + 7670M Dual,743,NA,Mobile
+Radeon HD 8650G + 7600M Dual,742,NA,Mobile
+Radeon HD 7670M + 7670M Dual,738,NA,Mobile
+Radeon HD 7550M/7650M,729,13,Mobile
+Radeon HD 7660G N HD 7660G + HD 7600M N HD 7600M D,723,NA,Mobile
+GeForce 920M,722,NA,Mobile
+Mobility Radeon HD 4870,720,NA,Mobile
+Radeon HD 8650G + HD 8570M Dual,716,NA,Mobile
+Radeon HD 7660G + HD 8670M Dual,711,NA,Mobile
+Radeon HD 7660G + HD 7670M Dual,707,NA,Mobile
+Radeon HD 7640G + 7600M Dual,706,NA,Mobile
+Radeon HD 7660G N HD 7660G + HD 7670M Dual,705,NA,Mobile
+Radeon HD 7640G + HD 7600M Dual,704,NA,Mobile
+GeForce GT 640M LE,700,32,Mobile
+Radeon HD 7570M/HD 7670M,699,25,Mobile
+Radeon HD 7640G + 7700M Dual,691,NA,Mobile
+Radeon HD 7640G + 8600/8700M Dual,689,NA,Mobile
+Radeon HD 6630M,685,NA,Mobile
+Radeon HD 7640G N HD 7640G + HD 7670M Dual,680,NA,Mobile
+Radeon HD 8650G N HD 8650G + HD 8600M N HD 8600M D,680,NA,Mobile
+GeForce GTS 160M,679,60,Mobile
+Radeon HD 7640G + HD 8670M Dual,677,NA,Mobile
+Radeon HD 7640G + HD 8500M N HD 8500M Dual,666,NA,Mobile
+Radeon HD 8550G + 8690M Dual,664,NA,Mobile
+Radeon R7 M340,658,NA,Mobile
+GeForce GT 555M,655,30,Mobile
+Radeon HD 7640G + 8750M Dual,655,NA,Mobile
+Radeon HD 8550G + HD 8600/8700M Dual,655,NA,Mobile
+GeForce GTS 360M,654,38,Mobile
+Radeon HD 8650G + 8570M Dual,654,NA,Mobile
+Radeon HD 8650G + HD 8750M Dual,652,NA,Mobile
+Radeon HD 7520G + HD 8750M Dual,651,NA,Mobile
+Radeon HD 8610G + HD 8500M Dual,646,NA,Mobile
+Radeon HD 7640G + 7670M Dual,645,NA,Mobile
+GeForce GT 735M,639,NA,Mobile
+Radeon HD 7640G + 7400M Dual,637,NA,Mobile
+Radeon HD 8450G + 8750M Dual,637,NA,Mobile
+GeForce GTX 285M,636,75,Mobile
+Radeon HD 8650G + 8670M Dual,635,NA,Mobile
+Radeon HD 8650G + HD 7670M Dual,634,NA,Mobile
+Radeon HD 7610M,632,20,Mobile
+Radeon HD 7640G + HD 7700M N HD 7700M Dual,631,NA,Mobile
+Radeon HD 7660G + 7470M Dual,631,NA,Mobile
+Radeon HD 8510G + HD 8500M Dual,630,NA,Mobile
+Radeon HD 8650G + 8500M Dual,627,NA,Mobile
+Radeon HD 7520G + HD 8600/8700M Dual,624,NA,Mobile
+Radeon HD 7640G + HD 7400M Dual,621,NA,Mobile
+Radeon HD 8550G + 8600M Dual,618,NA,Mobile
+Radeon R6,618,15,Mobile
+Radeon HD 7500G + 7500M/7600M Dual,617,NA,Mobile
+Radeon HD 8650G + 8600M Dual,613,NA,Mobile
+Radeon HD 8550G N HD 8550G + HD 8600M N HD 8600M D,612,NA,Mobile
+Radeon HD 8610G + 8500M Dual,610,NA,Mobile
+Radeon HD 7640G + HD 8500M Dual,607,NA,Mobile
+Radeon HD 8650G + HD 8600M Dual,606,NA,Mobile
+Radeon HD 8550G + 8500M Dual,603,NA,Mobile
+GeForce 910M,601,NA,Mobile
+Radeon HD 8610G + 8670M Dual,600,NA,Mobile
+Radeon HD 8510G + 8500M Dual,596,NA,Mobile
+Radeon R5 M330,596,18,Mobile
+Radeon HD 7640G + 7470M Dual,595,NA,Mobile
+Radeon HD 8550G + HD 8600M Dual,594,NA,Mobile
+Radeon HD 7520G + 7600M Dual,591,NA,Mobile
+Radeon HD 7640G + HD 7700M Dual,589,NA,Mobile
+Radeon HD 8610G + 8600M Dual,589,NA,Mobile
+Radeon HD 7520G + 7610M Dual,588,NA,Mobile
+Radeon HD 7660G + 7400M Dual,588,NA,Mobile
+Radeon HD 7660G + 8670M Dual,588,NA,Mobile
+Radeon HD 7640G + HD 8600/8700M Dual,587,NA,Mobile
+Radeon HD 7640G + 8500M Dual,586,NA,Mobile
+Radeon HD 8650G + HD 8670M Dual,585,NA,Mobile
+Radeon HD 8550G + 8670M Dual,579,NA,Mobile
+Radeon HD 8610G + HD 8670M Dual,578,NA,Mobile
+Radeon HD 7620G + 8670M Dual,577,NA,Mobile
+GeForce GTX 280M,576,75,Mobile
+Radeon HD 7520G + HD 7700M Dual,575,NA,Mobile
+GeForce GT 550M,573,32,Mobile
+Radeon R7 M360,570,NA,Mobile
+GeForce GT 820M,568,NA,Mobile
+Radeon HD 6610M,565,NA,Mobile
+GeForce GT 635M,562,35,Mobile
+Radeon HD 8550G + HD 8500M Dual,559,NA,Mobile
+Radeon HD 7640G + 8570M Dual,558,NA,Mobile
+Radeon HD 7640G + 8670M Dual,558,NA,Mobile
+GeForce 9800M GS,555,60,Mobile
+GeForce GTS 250M,554,28,Mobile
+Radeon R5 M335,549,NA,Mobile
+Mobility Radeon HD 3870,548,NA,Mobile
+Radeon HD 8550G + HD 7600M Dual,548,NA,Mobile
+Radeon HD 8550G + HD 8670M Dual,546,NA,Mobile
+Radeon R7 M265,546,NA,Mobile
+Radeon HD 7520G + HD 7400M Dual,545,NA,Mobile
+Radeon HD 8450G + 8600M Dual,545,NA,Mobile
+Radeon HD 7600G + HD 8670M Dual,544,NA,Mobile
+Radeon HD 7520G + 7470M Dual,543,NA,Mobile
+GeForce GT 630M,541,33,Mobile
+GeForce GT 435M,536,35,Mobile
+Radeon R5 M255,534,NA,Mobile
+Radeon HD 8550G + 8570M Dual,533,NA,Mobile
+Radeon HD 8550G + HD 8570M Dual,529,NA,Mobile
+GeForce GT 425M,528,23,Mobile
+Radeon HD 7640G + 6400M Dual,527,NA,Mobile
+Radeon 6600M,524,NA,Mobile
+Radeon HD 7520G + 7670M Dual,523,NA,Mobile
+Radeon HD 7660G + HD 7600M Dual,523,NA,Mobile
+Radeon HD 8670M,520,NA,Mobile
+Radeon HD 7640G + HD 7670M Dual,519,NA,Mobile
+Mobility Radeon HD 4830,512,NA,Mobile
+Radeon HD 7640G + 7610M Dual,510,NA,Mobile
+Radeon HD 7600G + HD 7550M Dual,509,NA,Mobile
+Radeon HD 7620G + 8600M Dual,509,NA,Mobile
+Radeon HD 7620G + HD 8670M Dual,507,NA,Mobile
+GeForce GTS 150M,504,NA,Mobile
+Radeon HD 8450G + HD 8750M Dual,504,NA,Mobile
+Mobility Radeon HD 5730,501,26,Mobile
+GeForce 820M,497,15,Mobile
+Radeon HD 7500G + 7550M Dual,497,NA,Mobile
+Radeon R7 M260,497,NA,Mobile
+Radeon HD 7520G + HD 7670M Dual,495,NA,Mobile
+Radeon HD8530M,490,NA,Mobile
+Radeon HD 7520G + 7400M Dual,487,NA,Mobile
+Radeon HD 8610G + HD 8600M Dual,481,NA,Mobile
+GeForce GT 540M,479,32,Mobile
+GeForce GT 625M,479,15,Mobile
+Mobility Radeon HD 3870 X2,478,NA,Mobile
+Radeon HD 8450G + HD 8670M Dual,478,NA,Mobile
+Radeon HD 7600G + HD 7500M/7600M Dual,477,NA,Mobile
+Radeon HD 7640G + HD 8570M Dual,475,NA,Mobile
+Radeon HD 7670M,475,20,Mobile
+Radeon HD 8450G + 8670M Dual,475,NA,Mobile
+Radeon HD 7550M,465,13,Mobile
+Mobility Radeon HD 4670,463,NA,Mobile
+GeForce 8800M GTX,462,65,Mobile
+GeForce GT 720M,461,NA,Mobile
+GeForce 710M,460,12,Mobile
+GeForce GT 525M,460,20,Mobile
+Radeon HD 7660G + HD 7600M N HD 7600M Dual,460,NA,Mobile
+GeForce 800M,457,NA,Mobile
+GeForce GT625M,457,NA,Mobile
+GeForce 705M,456,NA,Mobile
+GeForce 9800M GTX,454,75,Mobile
+Radeon HD 7520G + 7650M Dual,453,NA,Mobile
+Radeon HD 7620G N HD 7620G + HD 8600M N HD 8600M D,452,NA,Mobile
+Radeon HD 8450G + HD 8600M Dual,452,NA,Mobile
+Mobility Radeon HD 5650,449,15,Mobile
+Radeon HD 7520G + HD 7600M Dual,447,NA,Mobile
+GeForce GT 710M,446,NA,Mobile
+Radeon HD 7660G + 8600M Dual,446,NA,Mobile
+Radeon HD 7620G + HD 8600M Dual,443,NA,Mobile
+Radeon HD 7650M,442,20,Mobile
+Radeon HD 8570M,441,NA,Mobile
+GeForce GT 620M,434,15,Mobile
+Radeon HD 7570M,428,13,Mobile
+Radeon HD 7600G + 7550M Dual,423,NA,Mobile
+Radeon HD 7640G N HD 7640G + HD 8570M Dual,423,NA,Mobile
+Radeon HD 8500M,420,NA,Mobile
+Radeon R5 M230,413,NA,Mobile
+GeForce 810M,411,NA,Mobile
+GeForce GTS 350M,408,28,Mobile
+Radeon HD 7470M,408,7,Mobile
+Radeon HD 7640G + HD 7600M N HD 7600M Dual,407,NA,Mobile
+Radeon HD 7600G + 7500M/7600M Dual,406,NA,Mobile
+GeForce GT 420M,405,23,Mobile
+Mobility Radeon HD 4650,401,NA,Mobile
+Radeon HD 7600G + 7450M Dual,390,NA,Mobile
+GeForce 8800M GTS,382,50,Mobile
+GeForce GT 335M,382,28,Mobile
+GeForce 9800M GT,381,65,Mobile
+GeForce GTX 260M,379,65,Mobile
+Radeon HD 6490M,378,NA,Mobile
+Radeon HD 7520G + 8750M Dual,377,NA,Mobile
+Radeon HD 7600G + 6400M Dual,377,NA,Mobile
+GeForce 9800M GTS,376,75,Mobile
+GeForce GT 610M / GT 620M / GT 710M / GT 720M / GT,369,NA,Mobile
+Mobility Radeon HD 3850,366,NA,Mobile
+Radeon HD 7520G N HD 7520G + HD 7600M N HD 7600M D,365,NA,Mobile
+Radeon HD 7660G + HD 8600M Dual,364,NA,Mobile
+Radeon HD 7500G + HD 7500M/7600M Dual,356,NA,Mobile
+Mobility Radeon HD 565v,353,NA,Mobile
+Radeon HD 6480M,353,NA,Mobile
+Radeon HD 6620G,341,45,Mobile
+Radeon HD 7600G + 8500M/8700M Dual,334,NA,Mobile
+Radeon HD 7450M,330,7,Mobile
+Radeon HD 7600G + HD 7400M Dual,329,NA,Mobile
+GeForce 240M GT,320,NA,Mobile
+Mobility Radeon HD 560v,318,NA,Mobile
+Radeon HD 7520G + 8600/8700M Dual,311,NA,Mobile
+Radeon HD 8350G,304,35,Mobile
+Radeon HD 6520G,300,45,Mobile
+GeForce 9600M GT / GeForce GT 220M,293,NA,Mobile
+GeForce 610M,292,NA,Mobile
+GeForce GT 415M,286,12,Mobile
+Mobility Radeon HD 5165,284,35,Mobile
+GeForce GT 520M,281,12,Mobile
+GeForce GT 520MX,281,20,Mobile
+GeForce 9700M GTS,278,60,Mobile
+Radeon HD 6370M,276,11,Mobile
+GeForce 9650M GS,270,29,Mobile
+GeForce Go 7900 GTX,270,45,Mobile
+Mobility Radeon HD 550v,266,NA,Mobile
+GeForce Go 7950 GTX,264,45,Mobile
+GeForce 410M,257,12,Mobile
+Radeon HD 6480G,257,45,Mobile
+Radeon HD 7640G + 8600M Dual,250,NA,Mobile
+Mobility Radeon HD 5470,236,13,Mobile
+Mobility Radeon HD 3670,232,NA,Mobile
+Radeon HD 6470M,227,NA,Mobile
+Radeon HD 7340M,221,NA,Mobile
+Mobility Radeon. HD 5470,215,13,Mobile
+GeForce GT 330M,214,23,Mobile
+Mobility Radeon HD 5450,214,11,Mobile
+GeForce GT 240M,213,23,Mobile
+GeForce GT 230M,212,23,Mobile
+GeForce 320M,210,20,Mobile
+GeForce Go 7600 GT,210,NA,Mobile
+GeForce Go 7800 GTX,210,65,Mobile
+GeForce 9700M GT,209,45,Mobile
+Radeon HD 6380G,201,35,Mobile
+Mobility Radeon HD 545v,200,NA,Mobile
+Radeon HD 6320M,198,NA,Mobile
+Radeon HD 6430M,193,NA,Mobile
+Mobility Radeon HD 2600 XT,192,NA,Mobile
+Mobility Radeon HD 4550,191,NA,Mobile
+Mobility Radeon HD 5430,181,7,Mobile
+GeForce Go 7900 GS,176,20,Mobile
+Mobility Radeon HD 530v,175,NA,Mobile
+GeForce GT 325M,170,23,Mobile
+GeForce G102M,168,NA,Mobile
+Mobility Radeon HD 2600,168,NA,Mobile
+Radeon HD 7310M,166,NA,Mobile
+GeForce 305M,151,14,Mobile
+GeForce GT 120M,151,23,Mobile
+GeForce Go 7700,148,NA,Mobile
+Radeon HD 6320,148,45,Mobile
+GeForce GT 130M,146,23,Mobile
+GeForce 9200M GE,144,NA,Mobile
+Radeon HD 6300M,144,NA,Mobile
+Mobility Radeon HD 4570,142,NA,Mobile
+Mobility Radeon HD 3650,140,NA,Mobile
+Radeon HD 6290M,140,NA,Mobile
+GeForce Go 6800 Ultra,138,NA,Mobile
+GeForce 9650M GT,137,23,Mobile
+GeForce 9600M GT,136,23,Mobile
+Mobility Radeon HD 4330,135,NA,Mobile
+Mobility Radeon X1900,135,NA,Mobile
+GeForce 9500M GS,134,20,Mobile
+MOBILITY RADEON X1800,130,NA,Mobile
+GeForce Go 7600,128,NA,Mobile
+GeForce 8700M GT,124,29,Mobile
+GeForce G105M,124,NA,Mobile
+Radeon HD 7290M,123,NA,Mobile
+GeForce 9500M G,122,20,Mobile
+GeForce GT 220M,122,14,Mobile
+Radeon HD 6310,122,45,Mobile
+GeForce 9600M GS,118,20,Mobile
+GeForce G210M,117,14,Mobile
+GeForce 310M,116,14,Mobile
+GeForce 315M,115,14,Mobile
+GeForce Go 7800,115,35,Mobile
+GeForce 9200M GS,111,13,Mobile
+GeForce 8400M GS,109,11,Mobile
+GeForce Go 6800,106,NA,Mobile
+GeForce GT 320M,106,14,Mobile
+GeForce9400M,106,NA,Mobile
+Mobility Radeon X1700,105,NA,Mobile
+Radeon HD 6290,105,45,Mobile
+GeForce 9500M,104,NA,Mobile
+Mobility Radeon HD 2400 XT,102,NA,Mobile
+GeForce 9400M,101,NA,Mobile
+Mobility Radeon HD 3430,98,NA,Mobile
+Mobility Radeon HD 4250,98,NA,Mobile
+GeForce 9300M GS,94,13,Mobile
+Radeon HD 6250,94,35,Mobile
+Mobility Radeon HD 3470,93,NA,Mobile
+Mobility Radeon HD 4270,93,NA,Mobile
+GeForce G205M,92,NA,Mobile
+Mobility Radeon X1600,92,NA,Mobile
+Mobility Radeon HD 3450,91,NA,Mobile
+Mobility Radeon HD 4200,91,NA,Mobile
+GeForce 8600M GT,90,20,Mobile
+Mobility Radeon HD 2400,90,NA,Mobile
+GeForce 9300M G,85,13,Mobile
+Mobility Radeon X2500,82,NA,Mobile
+GeForce 8600M GS,70,20,Mobile
+GeForce Go 6600,69,NA,Mobile
+GeForce 9100M G,68,NA,Mobile
+GeForce 9400M G,68,12,Mobile
+GeForce 8400M GT,67,14,Mobile
+MOBILITY RADEON X700,67,NA,Mobile
+GeForce Go 7400,66,NA,Mobile
+Mobility Radeon HD 4225,66,NA,Mobile
+GeForce G 103M,63,14,Mobile
+GeForce G 105M,63,14,Mobile
+Mobility Radeon HD 3410,63,NA,Mobile
+GeForce 8400M G,59,10,Mobile
+GeForce 8200M G,58,19.2,Mobile
+GeForce Go 7300,52,NA,Mobile
+Mobility Radeon HD 2300,51,NA,Mobile
+MOBILITY RADEON X600,50,NA,Mobile
+Mobility Radeon X2300,48,NA,Mobile
+MOBILITY RADEON 9800,46,NA,Mobile
+GeForce Go 7200,45,NA,Mobile
+Mobility Radeon X1400,43,NA,Mobile
+Mobility Radeon X1300,40,NA,Mobile
+Mobility Radeon X1350,40,NA,Mobile
+Radeon Xpress 1300M,40,NA,Mobile
+MOBILITY RADEON 9600/9700,39,NA,Mobile
+MOBILITY RADEON 9600,36,NA,Mobile
+MOBILITY RADEON X300,34,NA,Mobile
+Mobility Radeon X1450,33,NA,Mobile
+MOBILITY RADEON 9550,30,NA,Mobile
+MOBILITY RADEON 9700,27,NA,Mobile
+GeForce Go 6400,24,NA,Mobile
+RADEON XPRESS 200M,23,NA,Mobile
+GeForce 7150M / nForce 630M,18,NA,Mobile
+GeForce FX Go 5600,18,NA,Mobile
+GeForce Go 6200,15,NA,Mobile
+GeForce 7000M,13,NA,Mobile
+GeForce 7000M / nForce 610M,13,NA,Mobile
+GeForce FX Go 5200,8,NA,Mobile
+RADEON IGP 350M,6,NA,Mobile
+GeForce2 Go,4,NA,Mobile
+GeForce4 4200 Go,4,NA,Mobile
+GeForce4 440 Go,4,NA,Mobile
+MOBILITY RADEON 7500,4,NA,Mobile
+Radeon IGP 320M,4,NA,Mobile
+GeForce4 420 Go,3,NA,Mobile
+MOBILITY RADEON 9000,3,NA,Mobile
+MOBILITY RADEON 9200,3,NA,Mobile
+Radeon IGP 340M,3,NA,Mobile
+RADEON IGP 345M,3,NA,Mobile
+RADEON IGP 34xM,2,NA,Mobile

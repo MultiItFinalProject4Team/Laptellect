@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.admin.model.dao.AdminDAO">
+
+    <resultMap id="AdminReviewResultMap"
+               type="com.multi.laptellect.admin.model.dto.AdminReviewDTO">
+        <result column="payment_product_reviews_no" property="paymentProductReviewsNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="product_no" property="productNo"/>
+        <result column="tag_answer" property="tagAnswer"/>
+        <result column="content" property="content"/>
+        <result column="rating" property="rating"/>
+        <result column="member_name" property="memberName"/>
+        <result column="im_port_id" property="imPortId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="modify_at" property="modifyAt"/>
+        <result column="product_name" property="productName"/>
+    </resultMap>
+
+    <resultMap id="AdminOrdersResultMap"
+               type="com.multi.laptellect.admin.model.dto.AdminOrderlistDTO">
+        <result column="payment_no" property="paymentNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="product_no" property="productNo"/>
+        <result column="member_name" property="memberName"/>
+        <result column="product_name" property="productName"/>
+        <result column="price" property="productPrice"/>
+        <result column="purchase_price" property="purchasePrice"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="im_port_id" property="imPortId"/>
+        <result column="refund" property="refund"/>
+        <result column="refund_at" property="refundAt"/>
+    </resultMap>
+
+    <select id="selectAllReviews" resultMap="AdminReviewResultMap">
+        SELECT
+        pr.payment_product_reviews_no,
+        pr.member_no,
+        pr.product_no,
+        pr.tag_answer,
+        pr.content,
+        pr.rating,
+        m.member_name,
+        pr.im_port_id,
+        pr.created_at,
+        pr.modify_at,
+        p.product_name
+        FROM
+        payment_product_reviews pr
+        JOIN
+        mem_member m ON pr.member_no = m.member_no
+        JOIN
+        product p ON pr.product_no = p.product_no
+        ORDER BY pr.payment_product_reviews_no DESC
+    </select>
+
+    <delete id="deleteReviews" parameterType="list">
+        DELETE FROM payment_product_reviews
+        WHERE payment_product_reviews_no IN
+        <foreach collection="reviewIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectAllOrders" resultMap="AdminOrdersResultMap">
+        SELECT
+        p.payment_no,
+        p.member_no,
+        p.product_no,
+        m.member_name AS username,
+        pr.product_name,
+        pr.price,
+        p.purchase_price,
+        p.created_at,
+        p.im_port_id,
+        p.refund,
+        p.refund_at,
+        p.quantity,
+        COALESCE(ABS(pp.payment_point_change), 0) as used_points
+        FROM
+        payment p
+        JOIN
+        mem_member m ON p.member_no = m.member_no
+        JOIN
+        product pr ON p.product_no = pr.product_no
+        LEFT JOIN
+        payment_point pp ON p.im_port_id = pp.im_port_id AND pp.payment_point_info = '구매 시 포인트사용'
+        ORDER BY p.payment_no DESC
+    </select>
+
+    <select id="getLastSevenDaysSales" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
+        SELECT
+        DATE_FORMAT(created_at, '%m-%d') as date,
+        COUNT(*) as saleCount
+        FROM
+        payment
+        WHERE
+        created_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        GROUP BY
+        DATE_FORMAT(created_at, '%m-%d')
+        ORDER BY
+        date ASC
+    </select>
+
+    <select id="getLastSevenDaysVisits" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
+        SELECT
+        DATE_FORMAT(created_at, '%m-%d') as date,
+        visit_count as visitCount
+        FROM
+        log_count_visit
+        WHERE
+        created_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        ORDER BY
+        created_at ASC
+    </select>
+
+    <select id="getRecentReviews" resultMap="AdminReviewResultMap">
+        SELECT
+        pr.payment_product_reviews_no,
+        pr.member_no,
+        pr.product_no,
+        pr.tag_answer,
+        pr.content,
+        pr.rating,
+        m.member_name,
+        pr.im_port_id,
+        pr.created_at,
+        pr.modify_at,
+        p.product_name
+        FROM
+        payment_product_reviews pr
+        JOIN
+        mem_member m ON pr.member_no = m.member_no
+        JOIN
+        product p ON pr.product_no = p.product_no
+        ORDER BY pr.created_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getTodayStats" resultType="com.multi.laptellect.admin.model.dto.AdminDashboardDTO">
+        SELECT
+        (SELECT COUNT(*) FROM payment_product_reviews WHERE DATE(created_at) = CURDATE()) as reviewCount,
+        (SELECT COUNT(*) FROM mem_member WHERE DATE(created_at) = CURDATE()) as newMemberCount,
+        (SELECT COUNT(*) FROM (
+        SELECT personalq_no FROM personal_question WHERE DATE(created_at) = CURDATE()
+        UNION ALL
+        SELECT productq_no FROM product_question WHERE DATE(created_at) = CURDATE()
+        ) as combined_inquiries) as inquiryCount
+    </select>
+
+    <select id="getRecentQuestions" resultType="com.multi.laptellect.admin.model.dto.AdminQuestionDTO">
+        SELECT * FROM (
+        SELECT
+        personalq_no as questionNo,
+        'personal' as questionType,
+        title,
+        m.member_name as memberName,
+        pc.personalq_categoryname as categoryName,
+        p.created_at as createdAt,
+        p.answer as answerStatus,
+        NULL as productName,
+        p.content as content
+        FROM
+        personal_question p
+        JOIN
+        mem_member m ON p.member_no = m.member_no
+        JOIN
+        personalquestion_category pc ON p.personalq_categorycode = pc.personalq_categorycode
+        UNION ALL
+        SELECT
+        productq_no as questionNo,
+        'product' as questionType,
+        title,
+        m.member_name as memberName,
+        pc.productq_categoryname as categoryName,
+        p.created_at as createdAt,
+        p.answer as answerStatus,
+        pr.product_name as productName,
+        p.content as content
+        FROM
+        product_question p
+        JOIN
+        mem_member m ON p.member_no = m.member_no
+        JOIN
+        productquestion_category pc ON p.productq_categorycode = pc.productq_categorycode
+        JOIN
+        product pr ON p.product_no = pr.product_no
+        ) as combined_questions
+        ORDER BY createdAt DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

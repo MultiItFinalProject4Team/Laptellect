@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{common/layout-Admin}">
+<head>
+    <meta charset="UTF-8">
+    <title>고객센터 관리자 페이지</title>
+    <link href="/css/customer/nav.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container mt-2">
+    <header>
+        <h1 align="left"style="font-size:40px">고객센터 관리자페이지</h1>
+    </header>
+    <hr>
+    <div class="button-container col">
+        <a class="btn btn-primary btn-lg" th:href="@{/customer/admin/all_personal_question}">1:1 문의 관리</a>
+        <a class="btn btn-primary btn-lg" th:href="@{/customer/admin/all_product_question}">상품 문의 관리</a>
+    </div>
+</div>
+</div>
+</body>
+</html>

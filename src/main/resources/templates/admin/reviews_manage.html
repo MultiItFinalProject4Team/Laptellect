@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout-Admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>리뷰 관리</title>
+  <link rel="stylesheet" href="/css/admin/reviews_manage.css">
+</head>
+<body>
+<div layout:fragment="content" class="content-wrapper">
+  <div class="profile-box" style="height: auto; width: auto">
+  <h1>리뷰 관리</h1>
+  <div class="controls">
+    <div class="search-group">
+      <select id="searchCategory">
+        <option value="all">전체</option>
+        <option value="paymentProductReviewsNo">리뷰번호</option>
+        <option value="productName">상품명</option>
+        <option value="memberName">작성자</option>
+        <option value="content">리뷰내용</option>
+        <option value="rating">평점</option>
+        <option value="createdAt">등록일자</option>
+        <option value="modifyAt">수정일자</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="검색">
+      <button class="btn" onclick="searchReviews()">검색</button>
+    </div>
+    <button class="btn" onclick="deleteSelectedReviews()">삭제</button>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+      <tr>
+        <th class="checkbox-column"><input type="checkbox" id="selectAll"></th>
+        <th class="review-number-column">리뷰번호</th>
+        <th class="product-name-column">상품명</th>
+        <th class="author-column">작성자</th>
+        <th class="content-column">리뷰내용</th>
+        <th class="rating-column">평점</th>
+        <th class="date-column">등록일자</th>
+        <th class="date-column">수정일자</th>
+      </tr>
+      </thead>
+      <tbody id="reviewTableBody">
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    <button id="prevButton" onclick="changePage('prev')">&lt; 이전</button>
+    <div id="pageNumbers"></div>
+    <button id="nextButton" onclick="changePage('next')">다음 &gt;</button>
+  </div>
+
+  <!-- 모달 -->
+  <div id="reviewModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>리뷰 상세 내용</h2>
+      <p><strong>리뷰 번호:</strong> <span id="modalReviewNumber"></span></p>
+      <p><strong>작성자:</strong> <span id="modalAuthor"></span></p>
+      <p><strong>상품명:</strong> <span id="modalProductName"></span></p>
+      <p><strong>평점:</strong> <span id="modalRating"></span></p>
+      <p><strong>리뷰 내용:</strong></p>
+      <div id="modalContent"></div>
+      <p><strong>등록일자:</strong> <span id="modalCreateDate"></span></p>
+      <p><strong>수정일자:</strong> <span id="modalModifyDate"></span></p>
+      <button id="modalDeleteButton" class="btn">삭제</button>
+    </div>
+  </div>
+
+  <script th:inline="javascript">
+    const reviews = /*[[${reviewsAllList}]]*/ [];
+  </script>
+  <script src="/js/admin/reviews_manage.js"></script>
+  </div>
+</div>
+</body>
+</html>

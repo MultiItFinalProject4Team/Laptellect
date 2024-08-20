@@ -1,0 +1,162 @@
+<body>
+<div class="row" id="product-list">
+    <div class="col-md-4 mb-4" th:each="product : ${products}">
+        <div class="card h-100 product-wap rounded-0">
+            <div class="card rounded-0">
+                <img th:src="@{'/img/product/' + ${product.uploadName}}"
+                     class="card-img-top card-img rounded-0 img-fluid" alt="상품 이미지"
+                     style="height: 200px; object-fit: contain;">
+                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                    <ul class="list-unstyled">
+                        <li>
+                            <div th:if="${wishlist != null}">
+                                <a class="btn btn-custom btn-process-wishlist"
+                                   th:if="${#lists.contains(wishlist, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="far fa-heart"></i>
+                                </a>
+
+                                <a class="btn btn-custom text-white btn-process-wishlist"
+                                   th:unless="${#lists.contains(wishlist, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="far fa-heart"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <li><a class="btn btn-custom text-white mt-2 mb-2"
+                               th:href="@{${product.Url}}"><i
+                                class="far fa-eye"></i></a></li>
+                        <li>
+                            <div th:if="${carts != null}">
+                                <a class="btn btn-custom btn-process-basket"
+                                   th:if="${#lists.contains(carts, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="fas fa-cart-plus"></i>
+                                </a>
+
+                                <a class="btn btn-custom text-white btn-process-basket"
+                                   th:unless="${#lists.contains(carts, product.productNo)}"
+                                   th:attr="data-product-no=${product.productNo}">
+                                    <i class="fas fa-cart-plus"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <a th:href="@{${product.Url}}">
+                <div class="card-body">
+                    <div class="tags mb-2">
+                        <span class="tag">#게이밍</span>
+                        <span class="tag">#펠월드</span>
+                        <span class="tag">#가성비</span>
+                        <span class="tag">#넓은 화면</span>
+                    </div>
+                    <div class="product-name mb-2">
+                        <h5 class="card-title"><span th:text="${product.productName}">상품명</span></h5>
+                    </div>
+                    <div class="product-specs mb-2">
+                        <span class="small-text" th:text="${product.specsString}"></span>
+                    </div>
+                    <div class="product-price">
+                        <p class="card-text">
+                            <strong></strong> <span class="price"
+                                                    th:text="${product.price} + ' 원'">가격</span><br>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center all-product">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" href="#" th:data-page="${currentPage - 1}" tabindex="-1"><
+                </a>
+            </li>
+
+            <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                th:classappend="${currentPage == i} ? 'active' : ''">
+                <a class="page-link" href="#" th:data-page="${i}" th:text="${i}"></a></li>
+
+            <li class="page-item" th:classappend="${currentPag  == totalPages} ? 'disabled'">
+                <a class="page-link btn-delete" href="#" th:data-page="${currentPage + 1}">>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+    $(document).ready(function() {
+
+
+
+            // 위시리스트 추가/삭제
+            $(".btn-process-wishlist").on("click", function () {
+                let productNo = $(this).data('product-no');
+                let product = $(this);
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-wishlist",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                            case 1:
+                                swal('위시리스트 추가 완료.', '', 'success');
+                                product.removeClass('text-white');
+                                break;
+                            case 2:
+                                swal('위시리스트 삭제 완료.', '', 'info');
+                                product.addClass('text-white');
+                                break;
+                            case 3:
+                                swal('로그인이 필요합니다.', '', 'info');
+                                break;
+                            default:
+                                swal('위시리스트 Ajax Error', '', 'error');
+                        }
+                    },
+                    error: function () {
+                        console.log("위시리스트 Ajax Error");
+                    },
+                });
+            })
+
+            // 장바구니 추가/삭제
+            $(".btn-process-basket").on("click", function () {
+                let productNo = $(this).data('product-no');
+                let product = $(this);
+                console.log(productNo);
+
+                $.ajax({
+                    url: "/api/product/process-cart",
+                    type: "POST",
+                    data: { productNo: productNo },
+                    success: function (response) {
+                        switch (response) {
+                            case 1:
+                                swal('장바구니 추가 완료.', '', 'success');
+                                product.removeClass('text-white');
+                                break;
+                            case 2:
+                                swal('장바구니 삭제 완료.', '', 'info');
+                                product.addClass('text-white');
+                                break;
+                            case 3:
+                                swal('로그인이 필요합니다.', '', 'info');
+                                break;
+                            default:
+                                swal('장바구니 Ajax Error', '', 'error');
+                        }
+                    },
+                    error: function () {
+                        console.log("장바구니 Ajax Error");
+                    },
+                });
+            });
+        });
+</script>
+</body>

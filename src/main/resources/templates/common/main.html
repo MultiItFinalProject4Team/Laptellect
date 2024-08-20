@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
+    <script>
+        $(document).ready(function(){
+            $('.product-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                arrows: false,
+                dots: true,
+                customPaging: function(slider, i) {
+                    return '<button class="custom-dot">○</button>';
+                }
+            });
+
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div layout:fragment="content">
+        <br>
+        <div class="container-fluid">
+            <div class="row">
+            <header class="showcase">
+            </header>
+            </div>
+            <div class="container">
+
+                <div class="row text-center pt-5 pb-3">
+                    <div class="col-lg-6 m-auto">
+                        <h2>카테고리</h2>
+                    </div>
+                </div>
+                <hr>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-3 pb-5 d-flex justify-content-center">
+                        <div class=" py-5 services-icon-wap shadow">
+                            <a href="/product/productList?typeNo=3">
+                                <div class="h3 text-center"><i class="fa-regular fa-keyboard"></i></div>
+                                <h5 class="mt-4 text-center services-item">키보드</h5>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 pb-5 d-flex justify-content-center">
+                        <div class=" py-5 services-icon-wap shadow">
+                            <a href="/product/productList?typeNo=1">
+                                <div class="h3 text-center"><i class="fa-solid fa-laptop"></i></div>
+                                <h5 class="mt-4 text-center services-item">노트북</h5>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 pb-5 d-flex justify-content-center">
+                        <div class=" py-5 services-icon-wap shadow">
+                            <a href="/product/productList?typeNo=2">
+                                <div class="h3 text-center"><i class="fa-solid fa-computer-mouse"></i></div>
+                                <h5 class="mt-4 text-center services-item">마우스</h5>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row text-center pt-5 pb-3">
+                    <div class="col-lg-6 m-auto">
+                        <h3>Laptellect가 추천해드립니다.</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="recommended-section">
+                            <button class="btn btn-custom-primary" onclick="window.location.href='/recommend';">추천 받기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-slider">
+                    <div class="slide">
+                        <h3>Laptop</h3>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3" th:each="laptop : ${laptops}">
+                                <div class="card" style="width: 18rem;">
+                                    <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${laptop.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${laptop.productName}">상품명</p>
+                                            <p class="card-text"><strong class="price" th:text="${laptop.price}">가격대</strong><span style="font-size: 14px">원</span></p>
+                                        </a>
+                                        <ul class="prodinfo_spec">
+                                            <li>
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${laptop.avgScore}"></span>점
+                                            </li>
+                                            <li>
+                                                <span>등록일 : </span><spans th:text="${#dates.format(laptop.createdAt, 'yyyy.MM.dd')}"></spans>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide">
+                        <h3>Mouse</h3>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3" th:each="mouse : ${ mouses }">
+                                <div class="card" style="width: 18rem;">
+                                    <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${mouse.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${mouse.productName}">상품명</p>
+                                            <p class="card-text"><strong class="price" th:text="${mouse.price}">가격대</strong><span style="font-size: 14px">원</span></p>
+                                        </a>
+                                        <ul class="prodinfo_spec">
+                                            <li>
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${mouse.avgScore}"></span>점
+                                            </li>
+                                            <li>
+                                                <span>등록일 : </span><spans th:text="${#dates.format(mouse.createdAt, 'yyyy.MM.dd')}"></spans>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide">
+                        <h3>Keyboard</h3>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3" th:each="keyboard : ${ keyboards }">
+                                <div class="card" style="width: 18rem;">
+                                    <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${keyboard.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                    </a>
+                                    <div class="card-body">
+                                        <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${keyboard.productName}">상품명</p>
+                                            <p class="card-text"><strong class="price" th:text="${keyboard.price}">가격대</strong><span style="font-size: 14px">원</span></p>
+                                        </a>
+                                        <ul class="prodinfo_spec">
+                                            <li>
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${keyboard.avgScore}"></span>점
+                                            </li>
+                                            <li>
+                                                <span>등록일 : </span><spans th:text="${#dates.format(keyboard.createdAt, 'yyyy.MM.dd')}"></spans>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

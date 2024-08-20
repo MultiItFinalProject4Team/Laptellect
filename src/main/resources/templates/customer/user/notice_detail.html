@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html layout:decorate="~{common/layout-customer}">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <link href="/css/customer/nav.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <style>
+        .crud-btn{
+            background-color: transparent !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container mt-2">
+    <header>
+        <header>
+            <h1 align="left"style="font-size:40px">공지사항</h1>
+        </header>
+        <hr>
+    </header>
+    <div>
+        <p th:text="${notice.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</p>
+        <p th:text="${#dates.format(notice.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
+    </div>
+    <hr class="border border-dark">
+    <div id="content" name="content" th:utext="${notice.content}" readonly="true">내용</div>
+
+    <hr class="border border-dark">
+</div>
+<div align="center">
+    <div class="btn-group" aria-label="Small button group">
+        <a href="/customer/user/customer_notice" class="btn btn-custom-primary">목록으로</a>
+    </div>
+</div>
+</div>
+</body>
+</html>

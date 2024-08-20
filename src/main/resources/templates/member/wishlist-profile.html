@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout-profile}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!--  <script type="text/javascript" th:src="@{/js/member/edit-profile.js}"></script>-->
+  <style>
+    .wishlist-tap {
+      background-color: #3498DB;
+      color: white !important;
+    }
+    .product-name {
+      text-decoration-line: none;
+      color: #000;
+    }
+
+    .btn-wishlist {
+      font-size: 15px; width: 150px; height: 35px;
+    }
+  </style>
+  <script>
+  function loadWishlist() {
+    $.ajax({
+        url: '/api/product/get-wishlist',
+        type: 'GET',
+        success: function(response) {
+            $('#wishlist-box').html(response);
+        },
+        error: function(xhr, status, error) {
+            console.error('조회 실패:', error);
+        }
+    });
+  }
+
+  $(document).ready(function() {
+     loadWishlist();
+  });
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="profile-box" id="wishlist-box" style="height: auto;"></div>
+</div>
+
+</body>
+</html>

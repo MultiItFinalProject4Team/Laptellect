@@ -1,0 +1,53 @@
+<div class="table-container">
+        <table>
+                <thead>
+                        <tr>
+                                <th style="width: 5%;">번호</th>
+                                <th style="width: 10%;">ID</th>
+                                <th style="width: 15%;">Email</th>
+                                <th style="width: 10%;">NickName</th>
+                                <th style="width: 5%;">회원 타입</th>
+                                <th style="width: 10%;">연락처</th>
+                                <th style="width: 10%;">생성일자</th>
+                                <th style="width: 5%;">탈퇴여부</th>
+                                <th style="width: 10%;">탈퇴일자</th>
+                        </tr>
+                </thead>
+                <tbody>
+                        <tr th:each="member, loop : ${ members }">
+                                <th th:text="${ page * size + loop.index + 1 }" scope="row"></th>
+                                <td><a href="#" th:text="${ member.memberName }" class="btn-modal" data-bs-toggle="modal" data-bs-target="#memberModal" th:data-memberno="${ member.memberNo }"></a></td>
+                                <td th:text="${ member.email != null ? member.email : '정보 없음'}"></td>
+                                <td th:text="${ member.nickName != null ? member.nickName : '정보 없음'}"></td>
+                                <td th:text="${ member.loginType }"></td>
+                                <td th:text="${ member.tel != null ? member.tel : '정보 없음'}"></td>
+                                <td th:text="${#dates.format(member.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                                <td th:text="${ member.isActive == 'Y' ? '탈퇴 회원' : (member.isActive == 'N' ? '활동 회원' : '정보 없음') }"></td>
+                                <td th:text="${#dates.format(member.isActiveAt, 'yyyy-MM-dd HH:mm') != null ? #dates.format(member.isActiveAt, 'yyyy-MM-dd HH:mm') : '정보 없음'}"></td>
+                        </tr>
+                </tbody>
+        </table>
+</div>
+<div class="pagination" th:if="${!members.isEmpty()}">
+        <div class="pagination-controls" style="display: flex; gap: 10px; align-items: center;">
+                <button id="prevButton"
+                        th:disabled="${!members.hasPrevious}"
+                        th:data-page="${ page - 1 }"
+                        th:text="'&lt; 이전'">
+                </button>
+
+                <div id="pageNumbers">
+                        <button th:each="page : ${#numbers.sequence(startPage, endPage)}"
+                                th:text="${ page + 1 }"
+                                th:classappend="${page == members.number} ? 'active'"
+                                th:data-page="${ page }">
+                        </button>
+                </div>
+
+                <button id="nextButton"
+                        th:disabled="${ !members.hasNext }"
+                        th:data-page="${ page + 1 }"
+                        th:text="'다음 &gt;'">
+                </button>
+        </div>
+</div>

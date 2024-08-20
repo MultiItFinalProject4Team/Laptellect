@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.laptellect.payment.model.dao.PaymentDAO">
+
+    <resultMap id="PaymentResultMap" type="com.multi.laptellect.payment.model.dto.PaymentDTO">
+        <id column="payment_no" property="paymentNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="product_no" property="productNo"/>
+        <result column="address_id" property="addressId"/>
+        <result column="purchase_price" property="purchasePrice"/>
+        <result column="quantity" property="quantity"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="im_port_id" property="imPortId"/>
+        <result column="refund" property="refund"/>
+        <result column="refund_at" property="refundAt" jdbcType="TIMESTAMP"/>
+        <result column="member_name" property="userName"/>
+        <result column="product_name" property="productName"/>
+        <result column="price" property="productPrice"/>
+        <result column="confirm" property="confirm"/>
+        <result column="confirm_at" property="confirmAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="PointResultMap" type="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        <result column="payment_point_no" property="paymentPointNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="im_port_id" property="imPortId"/>
+        <result column="payment_point_change" property="paymentPointChange"/>
+        <result column="payment_point_info" property="paymentPointInfo"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <resultMap id="addressResultMap" type="com.multi.laptellect.member.model.dto.AddressDTO">
+        <result property="rowNum" column="row_num"/>
+        <result property="addressId" column="address_id"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="addressName" column="address_name"/>
+        <result property="recipientName" column="recipient_name"/>
+        <result property="postalCode" column="postal_code"/>
+        <result property="address" column="address"/>
+        <result property="detailAddress" column="detail_address"/>
+        <result property="recipientPhone" column="recipient_phone"/>
+        <result property="request" column="request"/>
+    </resultMap>
+
+    <resultMap id="PaymentReviewsResultMap" type="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        <result property="paymentProductReviewsNo" column="payment_product_reviews_no"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="productNo" column="product_no"/>
+        <result property="tagAnswer" column="tag_answer"/>
+        <result property="content" column="content"/>
+        <result property="rating" column="rating"/>
+        <result property="imPortId" column="im_port_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="modifyAt" column="modify_at"/>
+    </resultMap>
+
+    <insert id="insertPayment" parameterType="com.multi.laptellect.payment.model.dto.PaymentDTO">
+        INSERT INTO payment (
+        member_no,
+        product_no,
+        address_id,
+        purchase_price,
+        quantity,
+        im_port_id
+        ) VALUES (
+        #{memberNo},
+        #{productNo},
+        #{addressId},
+        #{purchasePrice},
+        #{quantity},
+        #{imPortId}
+        )
+    </insert>
+
+    <select id="selectOrders" resultMap="PaymentResultMap">
+        SELECT p.*, m.member_name, pr.product_name, pr.price
+        FROM payment p
+        JOIN mem_member m ON p.member_no = m.member_no
+        JOIN product pr ON p.product_no = pr.product_no
+        WHERE p.refund = 'N'
+        AND m.member_name = #{memberName}
+        ORDER BY p.created_at DESC
+    </select>
+
+    <update id="updateRefundStatus" parameterType="com.multi.laptellect.payment.model.dto.VerificationRequestDTO">
+        UPDATE payment
+        SET refund = 'Y',
+        refund_at = NOW()
+        WHERE im_port_id = #{imPortId}
+        AND payment_no = #{paymentNo}
+    </update>
+
+    <insert id="saveReview" parameterType="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        INSERT INTO payment_product_reviews (
+        member_no,
+        product_no,
+        tag_answer,
+        content,
+        rating,
+        im_port_id,
+        created_at
+        ) VALUES (
+        #{memberNo},
+        #{productNo},
+        DEFAULT,
+        #{content},
+        #{rating},
+        #{imPortId},
+        NOW()
+        )
+    </insert>
+
+    <select id="getReviewedOrders" resultType="string">
+        SELECT im_port_id FROM payment_product_reviews
+    </select>
+
+    <select id="selectpoint" resultMap="PointResultMap">
+        SELECT * FROM payment_point
+        WHERE member_no = #{memberNo}
+        ORDER BY payment_point_no DESC LIMIT 1
+    </select>
+
+    <insert id="usepoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        member_no,
+        im_port_id,
+        payment_point_change,
+        payment_point_info,
+        created_at
+        )
+        SELECT
+        #{memberNo},
+        #{imPortId},
+        CONCAT('-', #{usedPoints}),
+        '구매 시 포인트사용',
+        NOW()
+    </insert>
+
+    <insert id="givepoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        member_no,
+        im_port_id,
+        payment_point_change,
+        payment_point_info,
+        created_at
+        )
+        SELECT
+        #{memberNo},
+        #{imPortId},
+        CONCAT('+', 500),
+        '구매 후 리뷰작성 포인트지급',
+        NOW()
+    </insert>
+
+    <insert id="refundPoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        member_no,
+        im_port_id,
+        payment_point_change,
+        payment_point_info,
+        created_at
+        )
+        SELECT
+        #{memberNo},
+        #{imPortId},
+        CONCAT('+', #{paymentPointChange}),
+        '상품환불로인한 사용포인트 환불',
+        NOW()
+    </insert>
+
+    <insert id="refundReviewdPoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        member_no,
+        im_port_id,
+        payment_point_change,
+        payment_point_info,
+        created_at
+        )
+        SELECT
+        #{memberNo},
+        #{imPortId},
+        -500,
+        '상품환불로인한 리뷰작성 포인트 환불',
+        NOW()
+    </insert>
+
+    <insert id="newMemberPoint" parameterType="com.multi.laptellect.payment.model.dto.PaymentpointDTO">
+        INSERT INTO payment_point (
+        member_no,
+        im_port_id,
+        payment_point_change,
+        payment_point_info,
+        created_at
+        )
+        SELECT
+        #{memberNo},
+        #{imPortId},
+        0,
+        '신규회원',
+        NOW()
+    </insert>
+
+    <select id="select_refundpoint" resultMap="PointResultMap">
+        SELECT * FROM payment_point
+        WHERE im_port_id = #{imPortId}
+        AND payment_point_change LIKE '-%'
+        ORDER BY payment_point_no DESC LIMIT 1
+    </select>
+
+    <select id="findRefundStatus" resultType="int">
+        SELECT COUNT(*) FROM payment
+        WHERE im_port_id = #{imPortId}
+        AND refund = 'N'
+    </select>
+
+    <select id="findReview" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1
+        FROM payment_product_reviews
+        WHERE im_port_id = #{imPortId}
+        ) as exists_flag
+    </select>
+
+    <select id="findReviewedPoint" parameterType="string" resultType="int">
+        SELECT payment_point_change
+        FROM payment_point
+        WHERE im_port_id = #{imPortId}
+        ORDER BY payment_point_no ASC LIMIT 1
+    </select>
+
+    <select id="findProduct" parameterType="string" resultType="com.multi.laptellect.payment.model.dto.PaymentpageDTO">
+        SELECT product_no, product_name, product_code, type_no, price, upload_name
+        FROM vw_paymentpage
+        WHERE product_name = #{productName}
+    </select>
+
+    <select id="findPaymentByImPortId" resultType="com.multi.laptellect.payment.model.dto.PaymentDTO">
+        SELECT * FROM payment WHERE im_port_id = #{imPortId}
+    </select>
+
+
+    <select id="selectOrderItems" resultMap="PaymentResultMap">
+        SELECT p.*, m.member_name, pr.product_name, pr.price
+        FROM payment p
+        JOIN mem_member m ON p.member_no = m.member_no
+        JOIN product pr ON p.product_no = pr.product_no
+        LEFT JOIN payment_product_reviews ppr ON p.im_port_id = ppr.im_port_id AND p.product_no = ppr.product_no
+        WHERE p.refund = 'N'
+        AND p.member_no = #{memberNo}
+        AND p.product_no = #{productNo}
+        AND ppr.payment_product_reviews_no IS NULL
+        ORDER BY p.created_at DESC
+        LIMIT 1
+    </select>
+
+    <select id="findPaymentsByImPortId" resultMap="PaymentResultMap">
+        SELECT * FROM payment WHERE im_port_id = #{imPortId}
+    </select>
+
+    <select id="findAllPaymentByMemberNo" resultMap="PaymentResultMap">
+        SELECT
+              pay.*
+            , m.member_name
+            , prod.product_name
+            , prod.price
+        FROM
+            payment pay
+        JOIN
+            mem_member m ON m.member_no = pay.member_no
+        JOIN
+            product prod ON prod.product_no = pay.product_no
+        WHERE
+            pay.member_no = #{ memberNo }
+        <choose>
+            <when test="paginationDTO.startDate != null and paginationDTO.endDate != null">
+                AND pay.created_at BETWEEN #{ paginationDTO.startDate }
+                AND DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+            </when>
+            <when test="paginationDTO.startDate != null">
+                AND pay.created_at >= #{ paginationDTO.startDate }
+            </when>
+            <when test="paginationDTO.endDate != null">
+                AND pay.created_at &lt; DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY)
+            </when>
+        </choose>
+
+        <choose>
+            <when test="paginationDTO.selectType == 'orderNumber'">
+                <if test="paginationDTO.keyword != null">
+                    AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'productName'">
+                <if test="paginationDTO.keyword != null">
+                    AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'all'">
+                <if test="paginationDTO.keyword != null">
+                    AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                    OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
+                </if>
+                <if test="paginationDTO.keyword == null">
+                    AND 1=1
+                </if>
+            </when>
+        </choose>
+        ORDER BY
+            pay.payment_no DESC
+        LIMIT #{ pageable.pageSize } OFFSET #{ pageable.offset }
+    </select>
+
+    <select id="countPaymentByMemberNo">
+        SELECT
+            COUNT(*)
+        FROM
+            payment pay
+        JOIN
+            product prod ON prod.product_no = pay.product_no
+        WHERE
+            pay.member_no = #{ memberNo }
+        <choose>
+            <when test="paginationDTO.startDate != null and paginationDTO.endDate != null">
+                AND pay.created_at BETWEEN #{ paginationDTO.startDate }
+                AND DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY) - INTERVAL 1 SECOND
+            </when>
+            <when test="paginationDTO.startDate != null">
+                AND pay.created_at >= #{ paginationDTO.startDate }
+            </when>
+            <when test="paginationDTO.endDate != null">
+                AND pay.created_at &lt; DATE_ADD(#{ paginationDTO.endDate }, INTERVAL 1 DAY)
+            </when>
+        </choose>
+
+        <choose>
+            <when test="paginationDTO.selectType == 'orderNumber'">
+                <if test="paginationDTO.keyword != null">
+                    AND pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'productName'">
+                <if test="paginationDTO.keyword != null">
+                    AND prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                </if>
+            </when>
+            <when test="paginationDTO.selectType == 'all'">
+                <if test="paginationDTO.keyword != null">
+                    AND (prod.product_name LIKE CONCAT('%', #{ paginationDTO.keyword }, '%')
+                    OR pay.payment_no LIKE CONCAT('%', #{ paginationDTO.keyword }, '%'))
+                </if>
+            </when>
+        </choose>
+    </select>
+
+    <select id="selectPaymentDetail" resultMap="PaymentResultMap">
+        SELECT
+        p.*,
+        m.member_name,
+        pr.product_name,
+        pr.price,
+        p.purchase_price as purchasePrice
+        FROM
+        payment p
+        JOIN
+        mem_member m ON p.member_no = m.member_no
+        JOIN
+        product pr ON p.product_no = pr.product_no
+        WHERE
+        p.payment_no = #{paymentNo}
+    </select>
+
+
+    <select id="selectPaymentAddress" resultMap="addressResultMap">
+        SELECT mda.*
+        FROM payment p
+        JOIN mem_delivery_address mda ON p.address_id = mda.address_id
+        WHERE p.payment_no = #{paymentNo};
+    </select>
+
+    <select id="findUsedPoint" resultMap="PointResultMap">
+        SELECT *
+        FROM payment_point
+        WHERE im_port_id = #{imPortId}
+        AND payment_point_info = '구매 시 포인트사용'
+    </select>
+
+    <select id="findPaymentReviewsByProductNo" resultType="paymentReviewDTO">
+        SELECT ppr.*, mm.member_name AS memberName, AVG(ppr.rating) OVER (PARTITION BY ppr.product_no) AS avg_rating
+        FROM payment_product_reviews ppr
+        JOIN mem_member mm ON ppr.member_no = mm.member_no
+        WHERE ppr.product_no = #{productNo}
+        ORDER BY payment_product_reviews_no DESC;
+    </select>
+
+    <update id="updateReview" parameterType="com.multi.laptellect.payment.model.dto.PaymentReviewDTO">
+        UPDATE payment_product_reviews
+        SET content = #{content},
+        rating = #{rating},
+        modify_at = NOW()
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </update>
+
+    <delete id="deleteReview" parameterType="int">
+        DELETE FROM payment_product_reviews
+        WHERE payment_product_reviews_no = #{paymentProductReviewsNo}
+    </delete>
+
+</mapper>

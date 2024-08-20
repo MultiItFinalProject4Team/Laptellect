@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{common/layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>노트북 추천 시스템</title>
+    <style>
+        h1, h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .option-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .option {
+            padding: 12px 20px;
+            background-color: #ffffff;
+            border: 2px solid #3498db;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        .option:hover {
+            background-color: #e8f4fd;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .option.selected {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        #recommendButton {
+            padding: 15px 30px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #recommendButton:hover {
+            background-color: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        #recommendButton:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <br>
+
+    <h1>맞춤형 노트북 추천 시스템</h1>
+
+    <form th:action="@{/recommendpage}" method="post">
+        <div class="section">
+            <h3>용도 선택</h3>
+            <div class="option-container">
+                <div class="option" th:each="option : ${'게임 할거에요,작업 할거에요'.split(',')}">
+                    <input type="radio" name="mainOption" th:value="${option}" th:id="${'main-' + option}">
+                    <label th:for="${'main-' + option}" th:text="${option}"></label>
+                </div>
+            </div>
+        </div>
+
+        <div id="additionalOptions"></div>
+
+        <div class="button-container">
+            <button type="submit" id="recommendButton" disabled>나에게 맞는 노트북 추천받기</button>
+        </div>
+    </form>
+
+    <script th:inline="javascript">
+$(document).ready(function() {
+    let selectedOptions = {};
+    let requiredCategories = ['mainOption'];
+
+    $('.option').click(function() {
+        // 옵션 선택 시 'selected' 클래스 처리
+        $(this).closest('.option-container').find('.option').removeClass('selected');
+        $(this).addClass('selected');
+
+        let input = $(this).find('input');
+        input.prop('checked', true);
+
+        let value = input.val();
+        let category = input.attr('name');
+        selectedOptions[category] = value;
+
+        updateAdditionalOptions(value);
+        checkAllOptionsSelected();
+    });
+
+    function updateAdditionalOptions(option) {
+        let additionalHTML = '';
+        if (option === '게임 할거에요') {
+            additionalHTML = generateGamingOptions();
+            requiredCategories = ['mainOption', 'gpu', 'weight', 'screen']; //'priority'
+        } else if (option === '작업 할거에요') {
+            additionalHTML = generateOfficeOptions();
+            requiredCategories = ['mainOption', 'cpu', 'performance', 'somoweight'];
+        }
+        $('#additionalOptions').html(additionalHTML);
+
+        // 새롭게 추가된 옵션에 대해서도 click 이벤트를 설정
+        $('#additionalOptions .option').click(function() {
+            $(this).closest('.option-container').find('.option').removeClass('selected');
+            $(this).addClass('selected');
+
+            let input = $(this).find('input');
+            input.prop('checked', true);
+
+            let category = input.attr('name');
+            selectedOptions[category] = input.val();
+
+            checkAllOptionsSelected();
+        });
+    }
+
+    function checkAllOptionsSelected() {
+        let allSelected = requiredCategories.every(category => selectedOptions[category]);
+        $('#recommendButton').prop('disabled', !allSelected);
+    }
+
+    function generateGamingOptions() {
+        return `
+            <div class="section">
+                <h3>게임 종류</h3>
+                <div class="option-container">
+                    <div class="option"><input type="radio" name="gpu" value="스팀게임/FPS 게임" id="gpu-1"><label for="gpu-1">사양 높은 게임 할거에요</label></div>
+                    <div class="option"><input type="radio" name="gpu" value="온라인 게임" id="gpu-2"><label for="gpu-2">예전 명작 게임 할거에요</label></div>
+                    <div class="option"><input type="radio" name="gpu" value="AOS게임" id="gpu-3"><label for="gpu-3">롤이나 온라인 게임 할거에요</label></div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>무게</h3>
+                <div class="option-container">
+                    <div class="option"><input type="radio" name="weight" value="집에만 둘거에요" id="weight-1"><label for="weight-1">집에만 둘거에요</label></div>
+                    <div class="option"><input type="radio" name="weight" value="가지고 다닐거에요" id="weight-2"><label for="weight-2">가방에 넣고 다닐거에요</label></div>
+                    <div class="option"><input type="radio" name="weight" value="알아서" id="weight-3"><label for="weight-3">알아서</label></div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>화면 크기</h3>
+                <div class="option-container">
+                    <div class="option"><input type="radio" name="screen" value="화면 넓은게 좋아요" id="screen-1"><label for="screen-1">화면 넓은게 좋아요</label></div>
+                    <div class="option"><input type="radio" name="screen" value="적당한게 좋아요" id="screen-2"><label for="screen-2">적당한게 좋아요</label></div>
+                    <div class="option"><input type="radio" name="screen" value="작은 화면이 좋아요" id="screen-3"><label for="screen-3">작은 화면이 좋아요</label></div>
+                </div>
+            </div>
+<!--            <div class="section">-->
+<!--                <h3>가성비</h3>-->
+<!--                <div class="option-container">-->
+<!--                    <div class="option"><input type="radio" name="priority" value="하고 싶은 게임을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 게임을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>-->
+<!--                </div>-->
+            </div>
+        `;
+    }
+
+    function generateOfficeOptions() {
+        return `
+            <div class="section">
+                <h3>용도</h3>
+                <div class="option-container">
+                    <div class="option"><input type="radio" name="cpu" value="코드 작업할거에요" id="cpu-1"><label for="cpu-1">코드 작업할거에요</label></div>
+                    <div class="option"><input type="radio" name="cpu" value="일반 사무용 작업할거에요" id="cpu-2"><label for="cpu-2">사무용 작업할거에요</label></div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>가격</h3>
+                <div class="option-container">
+                    <div class="option"><input type="radio" name="performance" value="성능용" id="performance-1"><label for="performance-1">성능을 중시해요</label></div>
+                    <div class="option"><input type="radio" name="performance" value="타협" id="performance-2"><label for="performance-2">중저가를 원해요</label></div>
+                    <div class="option"><input type="radio" name="performance" value="밸런스용" id="performance-3"><label for="performance-3">가성비를 원해요</label></div>
+                    <div class="option"><input type="radio" name="performance" value="알아서" id="performance-4"><label for="performance-4">알아서</label></div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>무게</h3>
+                <div class="option-container">
+                    <div class="option"><input type="radio" name="somoweight" value="경량화" id="somoweight-1"><label for="somoweight-1">사무실에서 사용할거에요</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="무거움" id="somoweight-2"><label for="somoweight-2">가지고 다닐거에요</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="초경량화" id="somoweight-3"><label for="somoweight-3">무조건 가벼운것</label></div>
+                </div>
+            </div>
+<!--            <div class="section">-->
+<!--                <h3>우선순위</h3>-->
+<!--                <div class="option-container">-->
+<!--                    <div class="option"><input type="radio" name="priority" value="하고 싶은 작업을 우선해 주세요" id="priority-1"><label for="priority-1">하고 싶은 작업을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="화면을 우선해 주세요" id="priority-2"><label for="priority-2">화면을 우선해 주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="무게를 우선해주세요" id="priority-3"><label for="priority-3">무게를 우선해주세요</label></div>-->
+<!--                    <div class="option"><input type="radio" name="priority" value="없으면 알아서 추천해주세요" id="priority-4"><label for="priority-4">없으면 알아서 추천해주세요</label></div>-->
+<!--                </div>-->
+            </div>
+        `;
+    }
+});
+</script>
+</div>
+
+</body>
+</html>

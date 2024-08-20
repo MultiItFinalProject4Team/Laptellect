@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout-customer}">
+<head>
+    <meta charset="UTF-8">
+    <title>1:1 문의</title>
+    <style>
+        .file-input-wrapper {
+            margin-bottom: 10px;
+        }
+        .editor-container__editor textarea {
+        width: 100%; /* 부모 요소의 너비에 맞게 설정 */
+        height: 200px; /* 높이를 300px로 설정 */
+        box-sizing: border-box; /* 패딩과 테두리 포함 크기 조절 */
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container mt-2">
+    <header>
+        <h1 align="left"style="font-size:40px">상품 문의 답변</h1>
+    </header>
+    <hr>
+    <form action="/customer/user/productq_app" method="post" enctype="multipart/form-data">
+        <div class="input-group form-row">
+        <label class="input-group-text" for="title">제목:</label>
+        <input class="col-md-9" type="text" id="title" name="title" required><br><br>
+
+        <label class="input-group-text" for="inputGroupSelect01" >카테고리</label>
+        <select class="form-select col-md-3" id="inputGroupSelect01" name="productqCategorycode">
+            <option th:each="categories : ${category}"
+                    th:value="${categories.productqCategorycode}"
+                    th:text="${categories.productqCategoryname}">
+            </option>
+        </select>
+        </div>
+
+        <div class="editor-container editor-container_classic-editor" id="editor-container">
+            <div class="editor-container__editor" aria-required="true"><textarea id="content" name="content"></textarea></div>
+        </div>
+
+        <div>
+            <label>비밀글: </label>
+            <label>
+                <input type="radio" name="secret" value="Y"> Yes
+            </label>
+            <label>
+                <input type="radio" name="secret" value="N" checked> No
+            </label>
+        </div>
+        <input type="hidden" id="productNo" name="productNo" th:value="${productNo}">
+        <button type="submit">등록</button>
+    </form>
+</div>
+</div>
+</body>
+</html>

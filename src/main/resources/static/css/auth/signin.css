@@ -1,0 +1,91 @@
+        * { padding: 0; margin: 0; }
+
+        html, body {
+          height: 100%;
+          background: #ffffff;
+        }
+
+        #container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+        }
+
+        #loginBox {
+          height: 475px;
+          width: 400px;
+          text-align: center;
+          background-color: #ffffff;
+          padding: 20px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+        }
+        .input-form-box {
+          display: flex;
+          margin-bottom: 15px;
+        }
+        .input-form-box > span {
+          display: block;
+          text-align: left;
+          padding-top: 5px;
+          min-width: 65px;
+        }
+        .button-login-box {
+          margin: 20px 0;
+        }
+        #signupTitle {
+          color: #3498DB;
+          font-weight: bold;
+          font-size: 32px;
+          text-transform: uppercase;
+          padding: 5px;
+          margin-bottom: 20px;
+        }
+        #inputBox {
+          margin: 10px;
+        }
+
+        #inputBox button {
+          padding: 3px 5px;
+        }
+
+        .login-content2 {
+          font-size: 15px;
+        }
+        .separator {
+        margin: 0 10px;
+        color: #333;
+        }
+    .login-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 75%;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    .login-content {
+        text-decoration: none;
+        color: black;
+        font-size: 15px;
+    }
+
+    .find-content {
+        text-decoration: none;
+        color: black;
+        font-size: 11px;
+    }
+    .remember-me-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .remember-me-container input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    body { font-family: 'Noto Sans KR', sans-serif; }

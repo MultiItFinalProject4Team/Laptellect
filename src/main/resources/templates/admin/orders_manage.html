@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout-Admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 관리</title>
+  <link rel="stylesheet" href="/css/admin/orders_manage.css">
+</head>
+<body>
+<div layout:fragment="content" class="content-wrapper">
+  <div class="profile-box" style="height: auto; width: auto">
+  <h1>주문 관리</h1>
+  <div class="controls">
+    <div class="search-group">
+      <select id="searchCategory">
+        <option value="all">전체</option>
+        <option value="userName">사용자명</option>
+        <option value="productName">상품명</option>
+        <option value="productPrice">상품가격</option>
+        <option value="purchasePrice">구매가격</option>
+        <option value="createdAt">주문일자</option>
+        <option value="imPortId">결제번호</option>
+        <option value="refund">환불상태</option>
+        <option value="refundAt">환불일자</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="검색">
+      <button class="btn" onclick="searchOrders()">검색</button>
+    </div>
+    <button class="btn" onclick="refundSelectedOrders()">선택주문 환불</button>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+      <tr>
+        <th class="checkbox-column"><input type="checkbox" id="selectAll"></th>
+        <th class="order-number-column">주문번호</th>
+        <th class="username-column">사용자명</th>
+        <th class="product-name-column">상품명</th>
+        <th class="price-column">상품가격</th>
+        <th class="purchase-price-column">구매가격</th>
+        <th class="date-column">주문일자</th>
+        <th class="imPortId-column">결제번호</th>
+        <th class="refund-column">환불상태</th>
+        <th class="refund-date-column">환불일자</th>
+      </tr>
+      </thead>
+      <tbody id="orderTableBody">
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    <button id="prevButton" onclick="changePage('prev')">&lt; 이전</button>
+    <div id="pageNumbers"></div>
+    <button id="nextButton" onclick="changePage('next')">다음 &gt;</button>
+  </div>
+
+  <!-- 모달 -->
+  <div id="orderModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>주문 상세 내용</h2>
+      <p><strong>주문 번호:</strong> <span id="modalOrderNumber"></span></p>
+      <p><strong>구매자명:</strong> <span id="modalUsername"></span></p>
+      <p><strong>상품명:</strong> <span id="modalProductName"></span></p>
+      <p><strong>상품 가격:</strong> <span id="modalProductPrice"></span></p>
+      <p><strong>구매 가격:</strong> <span id="modalPurchasePrice"></span></p>
+      <p><strong>할인 금액:</strong> <span id="modalUsedPoints"></span></p>
+      <p><strong>구매 수량:</strong> <span id="modalQuantity"></span></p>
+      <p><strong>주문 일자:</strong> <span id="modalOrderDate"></span></p>
+      <p><strong>결제 번호:</strong> <span id="modalimPortId"></span></p>
+      <p><strong>환불 상태:</strong> <span id="modalRefundStatus"></span></p>
+      <p><strong>환불 일자:</strong> <span id="modalRefundDate"></span></p>
+      <button id="modalRefundButton" class="btn" style="display: none;">환불하기</button>
+    </div>
+  </div>
+
+  <script th:inline="javascript">
+    const orders = /*[[${selectAllOrders}]]*/ [];
+  </script>
+  <script src="/js/admin/orders_manage.js"></script>
+  </div>
+</div>
+</body>
+</html>
