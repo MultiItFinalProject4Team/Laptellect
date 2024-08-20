@@ -1,6 +1,7 @@
 function createCommentItem(productqList, memberNo) {
     const categoryText = productqList.productqCategoryCode === 'productq_opinion' ? '의견' : '문의';
     const categoryClass = productqList.productqCategoryCode === 'productq_opinion' ? 'opinion-class' : 'question-class';
+    const curauth = $('#curauth').val();
     return `
         <div class="question">
             <div class="question-header">
@@ -25,7 +26,7 @@ function createCommentItem(productqList, memberNo) {
                 </div>
                 <div class="question-reply">
                     <a class="question-reply" onclick="appReply(${productqList.productqNo})">
-                        답글
+                        ${(curauth == 'ADMIN') ? '답글':''}
                     </a>
                 </div>
             </div>

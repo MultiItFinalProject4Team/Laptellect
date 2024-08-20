@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
-<html layout:decorate="~{common/layout}">
+<html layout:decorate="~{common/layout-customer}">
 <head>
     <meta charset="UTF-8">
     <title>1:1 문의</title>
@@ -18,6 +18,10 @@
 <body>
 <div layout:fragment="content">
 <div class="container mt-2">
+    <header>
+        <h1 align="left"style="font-size:40px">상품 문의 답변</h1>
+    </header>
+    <hr>
     <form action="/customer/user/productq_app" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">
         <label class="input-group-text" for="title">제목:</label>
