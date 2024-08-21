@@ -5,8 +5,6 @@ import com.multi.laptellect.recommend.clovaapi.model.dao.SentimentDAO;
 import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +23,7 @@ public class EmotionAnalyzeController {
 
     private static final int MAX_ANALYSES_PER_PRODUCT = 50;
 
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void onApplicationEvent() {
         log.info("서버 시작 시 자동으로 감성 분석 실행 (상품당 최대 {} 회)", MAX_ANALYSES_PER_PRODUCT);
         List<ReviewDTO> reviews = sentimentDAO.getUnanalyzedReviews();

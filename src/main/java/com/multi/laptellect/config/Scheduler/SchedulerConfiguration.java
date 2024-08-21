@@ -89,16 +89,16 @@ public class SchedulerConfiguration {
 //            log.error("태그 할당 중 오류:", e);
 //        }
 //    }
-//
-    @Scheduled (fixedRate = 6000) // 1분 간격으로 감정 분석
-    public void scheduleEmotionAnalysis() {
-        log.info("감정 분석 스케쥴러 시작");
-        try {
-            emotionAnalyzeService.analyzeAllUnanlyzedReviews();
-            log.info("감정 분석 스케쥴러 완료");
-        } catch (Exception e) {
-            log.error("감정 분석 중 오류:", e);
-        }
 
-    }
+//    @Scheduled (fixedRate = 6000) // 1분 간격으로 감정 분석
+//    public void scheduleEmotionAnalysis() {
+//        log.info("감정 분석 스케쥴러 시작");
+//        try {
+//            emotionAnalyzeService.analyzeAllUnanlyzedReviews();
+//            log.info("감정 분석 스케쥴러 완료");
+//        } catch (Exception e) {
+//            log.error("감정 분석 중 오류:", e);
+//        }
+//
+//    }
 }
