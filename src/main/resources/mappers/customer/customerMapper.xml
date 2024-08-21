@@ -423,10 +423,10 @@
             AND main_regist=#{mainRegist}
         </if>
         <if test='date == "old"'>
-            order by created_at desc
+            order by created_at asc
         </if>
         <if test='date == "recent"'>
-            order by created_at asc
+            order by created_at desc
         </if>
     </select>
 
@@ -463,6 +463,7 @@
     <select id="getAllProductList" resultType="com.multi.laptellect.customer.dto.AdminProductqList">
         select product_no, created_at, price, product_name
         from product
+        order by product_no desc
     </select>
 
     <select id="getUserProudctList" resultType="com.multi.laptellect.customer.dto.UserProductqList">
@@ -471,7 +472,7 @@
         product_question a
         join product b on a.product_no = b.product_no
         where a.member_no=#{memberNo}
-        order by a.product_no desc
+        order by a.created_at desc
     </select>
 
     <select id="getUserSearchProudctList" resultType="com.multi.laptellect.customer.dto.UserProductqList">
@@ -493,10 +494,10 @@
             and a.productq_categorycode=#{category}
         </if>
         <if test='date == "recent"'>
-            order by a.product_no desc
+            order by a.created_at desc
         </if>
         <if test='date == "old"'>
-            order by a.product_no asc
+            order by a.created_at asc
         </if>
     </select>
 </mapper>

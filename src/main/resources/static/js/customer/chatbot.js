@@ -51,7 +51,7 @@ function disconnect() {
 function sendMessage() {
     // 빈 칸일 때
     if ($('#msg').val().trim() === "") {
-        alert("질문을 입력하세요");
+        swal("알림", "질문을 입력하세요.", "info");
         $("#msg").focus();
         return false;
     }

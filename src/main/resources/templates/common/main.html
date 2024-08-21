@@ -14,12 +14,18 @@
                 slidesToShow: 1,
                 slidesToScroll: 1,
                 autoplay: true,
-                autoplaySpeed: 10000,
+                autoplaySpeed: 5000,
                 arrows: false,
                 dots: true,
                 customPaging: function(slider, i) {
                     return '<button class="custom-dot">○</button>';
                 }
+            });
+
+            $('.price').each(function() {
+                let value = $(this).text().replace(' 원', '');
+                let formattedValue = new Intl.NumberFormat().format(value);
+                $(this).text(formattedValue);
             });
         });
     </script>
@@ -75,7 +81,7 @@
                 <div class="row">
                     <div class="col-12 text-center">
                         <div class="recommended-section">
-                            <button class="btn btn-dark">추천 받기</button>
+                            <button class="btn btn-custom-primary" onclick="window.location.href='/recommend';">추천 받기</button>
                         </div>
                     </div>
                 </div>
@@ -87,20 +93,20 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="laptop : ${laptops}">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/laptop/laptopDetails(productNo=${laptop.productNo})}">
-                                        <img th:src="@{'/img/product/' + ${laptop.image}}" class="card-img-top" alt="상품 이미지">
+                                    <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${laptop.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/laptop/laptopDetails(productNo=${laptop.productNo})}">
-                                            <p class="card-text" th:text="${laptop.productName}">상품명</p>
-                                            <p class="card-text"><strong th:text="${laptop.price}">가격대</strong><span>원</span></p>
+                                        <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${laptop.productName.length() > 17 ? laptop.productName.substring(0, 17) + '...' : laptop.productName}">상품명</p>
+                                            <p class="card-text"><strong class="price" th:text="${laptop.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
                                         <ul class="prodinfo_spec">
                                             <li>
-                                                <i class="bi bi-star-fill"></i>&nbsp;<span th:text="${laptop.avgScore}"></span>점
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${laptop.avgScore}"></span>점
                                             </li>
                                             <li>
-                                                <span><a>구매하기</a></span>
+                                                <span>등록일 : </span><spans th:text="${#dates.format(laptop.createdAt, 'yyyy.MM.dd')}"></spans>
                                             </li>
                                         </ul>
                                     </div>
@@ -115,20 +121,20 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="mouse : ${ mouses }">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/mouse/mouseDetails(productNo=${mouse.productNo})}">
-                                        <img th:src="@{'/img/product/' + ${mouse.image}}" class="card-img-top" alt="상품 이미지">
+                                    <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${mouse.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/mouse/mouseDetails(productNo=${mouse.productNo})}">
-                                            <p class="card-text" th:text="${mouse.productName}">상품명</p>
-                                            <p class="card-text"><strong th:text="${mouse.price}">가격대</strong><span>원</span></p>
+                                        <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${mouse.productName.length() > 17 ? mouse.productName.substring(0, 17) + '...' : mouse.productName}">상품명</p>
+                                            <p class="card-text"><strong class="price" th:text="${mouse.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
                                         <ul class="prodinfo_spec">
                                             <li>
-                                                <i class="bi bi-star-fill"></i>&nbsp;<span th:text="${mouse.avgScore}"></span>점
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${mouse.avgScore}"></span>점
                                             </li>
                                             <li>
-                                                <span><a>구매하기</a></span>
+                                                <span>등록일 : </span><spans th:text="${#dates.format(mouse.createdAt, 'yyyy.MM.dd')}"></spans>
                                             </li>
                                         </ul>
                                     </div>
@@ -143,20 +149,20 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="keyboard : ${ keyboards }">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/keyboard/keyboardDetails(productNo=${keyboard.productNo})}">
-                                        <img th:src="@{'/img/product/' + ${keyboard.image}}" class="card-img-top" alt="상품 이미지">
+                                    <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                        <img th:src="@{'/img/product/' + ${keyboard.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/keyboard/keyboardDetails(productNo=${keyboard.productNo})}">
-                                            <p class="card-text" th:text="${keyboard.productName}">상품명</p>
-                                            <p class="card-text"><strong th:text="${keyboard.price}">가격대</strong><span>원</span></p>
+                                        <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                            <p class="card-text" content="product-name" th:text="${keyboard.productName.length() > 17 ? keyboard.productName.substring(0, 17) + '...' : keyboard.productName}">상품명</p>
+                                            <p class="card-text"><strong class="price" th:text="${keyboard.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
                                         <ul class="prodinfo_spec">
                                             <li>
-                                                <i class="bi bi-star-fill"></i>&nbsp;<span th:text="${keyboard.avgScore}"></span>점
+                                                <i class="bi bi-star-fill" style="color: #FFD700;"></i>&nbsp;<span th:text="${keyboard.avgScore}"></span>점
                                             </li>
                                             <li>
-                                                <span><a>구매하기</a></span>
+                                                <span>등록일 : </span><spans th:text="${#dates.format(keyboard.createdAt, 'yyyy.MM.dd')}"></spans>
                                             </li>
                                         </ul>
                                     </div>

@@ -79,11 +79,17 @@ $(function () {
                 success: function (response) {
                     switch (response) {
                         case 1:
-                            alert("임시 비밀번호 전송 완료");
-                            window.close();
+                            swal('임시 비밀번호 전송 완료', '', 'success');
+
+                            setTimeout(function() {
+                                if (window.opener) {
+                                    window.opener.postMessage('closeAndRedirect', '*');
+                                }
+                                window.close();
+                            }, 1500);
                             break;
                         case 2:
-                            alert("이메일 전송 실패");
+                            swal('이메일 전송 실패', '', 'error');
                             break;
                     }
                 }

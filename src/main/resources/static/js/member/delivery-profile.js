@@ -9,7 +9,7 @@ $(function () {
                     $('#address-box').html(response);
                 },
                 error: function() {
-                    alert('서버 오류 실패');
+                    swal("오류", "서버 오류가 발생했습니다.", "error");
                 }
             });
         }
@@ -64,24 +64,28 @@ $(function () {
               success: function (response) {
                   switch(response) {
                     case 1:
-                        alert("배송지 등록 성공");
-                        $('#add-delivery-modal').modal('hide');  // 모달 닫기
-                        getAddressList();  // 배송지 목록 새로고침
-                        location.reload();
+                        swal("성공", "배송지가 성공적으로 등록되었습니다.", "success");
+
+                        setTimeout(function() {
+                            $('#add-delivery-modal').modal('hide');
+                            getAddressList();
+                            location.reload();
+                        }, 1500);
+
                         break;
                     case 0:
-                        alert("배송지 이름을 입력해주세요.");
+                        swal("경고", "배송지 이름을 입력해주세요.", "warning");
                         break;
                     case 101:
-                        alert("배송지는 최대 10개만 등록 가능합니다.");
+                        swal("경고", "배송지는 최대 10개만 등록 가능합니다.", "warning");
                         break;
                     case 500:
-                        alert("배송지 등록 실패.");
+                        swal("오류", "배송지 등록에 실패했습니다.", "error");
                         break;
                   }
               },
               error: function () {
-                  alert("배송지 등록 실패");
+                  swal("오류", "배송지 등록에 실패했습니다.", "error");
               }
           });
         });

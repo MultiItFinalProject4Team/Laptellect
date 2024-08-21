@@ -154,12 +154,12 @@ function mypayment() {
                     });
 
                     if (data.success) {
-                        alert("결제 및 검증 성공");
+                        swal("결제 및 검증 성공", "", "success");
                         window.location.href = data.redirectUrl;
                     } else {
                         // 검증 실패 시 결제 취소 로직 추가
                         await cancelPayment(rsp.imp_uid, myAmount);
-                        alert("결제 검증 실패로 인해 결제가 취소되었습니다.");
+                        swal("결제 검증 실패로 인해 결제가 취소되었습니다.", "", "error");
                     }
                 } catch (error) {
                     // 검증 요청 자체가 실패한 경우 결제 취소
@@ -168,10 +168,10 @@ function mypayment() {
                     console.log("Used points:", usedPoints);
                     console.log("Products:", products);
                     console.log("Address ID:", selectedAddressId);
-                    alert("검증 실패로 인해 결제가 취소되었습니다: " + (error.response ? error.response.data.message : error.message));
+                    swal("검증 실패로 인해 결제가 취소되었습니다", error.response ? error.response.data.message : error.message, "error");
                 }
             } else {
-                alert("결제 실패: " + rsp.error_msg);
+                swal("결제 실패", rsp.error_msg, "error");
             }
         }
     );

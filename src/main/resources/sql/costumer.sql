@@ -19,8 +19,8 @@ CREATE TABLE personal_question (
     updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     answer VARCHAR(2) DEFAULT 'N',
     reference_code VARCHAR(100),
-    FOREIGN KEY (member_no) REFERENCES mem_member(member_no),
-    FOREIGN KEY (personalq_categorycode) REFERENCES personalquestion_category(personalq_categorycode)
+    FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE,
+    FOREIGN KEY (personalq_categorycode) REFERENCES personalquestion_category(personalq_categorycode) ON DELETE CASCADE
 );
 -- 상품 문의 테이블
 CREATE TABLE product_question (
@@ -35,9 +35,9 @@ CREATE TABLE product_question (
     answer VARCHAR(2) DEFAULT 'N',
     secret VARCHAR(2) DEFAULT 'N',
     reference_code VARCHAR(100),
-    FOREIGN KEY (member_no) REFERENCES mem_member(member_no),
-    FOREIGN KEY (productq_categorycode) REFERENCES productquestion_category(productq_categorycode),
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
+    FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE,
+    FOREIGN KEY (productq_categorycode) REFERENCES productquestion_category(productq_categorycode) ON DELETE CASCADE,
+    FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE
 );
 -- 1:1 문의 답변 테이블
 CREATE TABLE personal_answer(
@@ -48,7 +48,7 @@ CREATE TABLE personal_answer(
 	created_at timestamp DEFAULT current_timestamp,
 	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
 	reference_code varchar(100),
-	FOREIGN KEY (personalq_no) REFERENCES personal_question(personalq_no)
+	FOREIGN KEY (personalq_no) REFERENCES personal_question(personalq_no) ON DELETE CASCADE
 );
 -- 상품 문의 답변 테이블
 CREATE TABLE product_answer(
@@ -81,7 +81,7 @@ CREATE TABLE notice(
 	create_at timestamp DEFAULT current_timestamp,
 	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
 	reference_code varchar(100),
-	FOREIGN KEY (member_no) REFERENCES mem_member(member_no)
+	FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
 -- 임시 카테고리

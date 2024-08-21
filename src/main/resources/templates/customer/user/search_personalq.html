@@ -81,7 +81,6 @@
         </div>
         <div class="text-end">
             <a class="btn btn-custom-primary btn-sm" sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/personalq_app" role="button">문의 등록</a>
-            <a class="btn btn-custom-primary btn-sm" href="/customer/user/product" role="button">상품 문의(임시)</a>
             <a class="btn btn-custom-primary btn-sm" href="/customer/admin/all_personal_question" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" role="button">전체 문의(관리자)</a>
         </div>
         <script>
@@ -89,7 +88,7 @@
             const titleInput = document.getElementById('title');
             var maxLength = 100;
             if (titleInput.value.length > maxLength) {
-                alert('최대 100자까지 입력 가능합니다.');
+                swal('입력 제한', '최대 100자까지 입력 가능합니다.', 'info');
                 $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
             }
         });

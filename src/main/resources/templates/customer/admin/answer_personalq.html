@@ -15,21 +15,11 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-5">
+<div class="container mt-2">
     <header>
-        <h1 align="center">고객센터</h1>
-        <ul class="nav nav-pills justify-content-center" id="customer_nav-pills">
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_notice">공지사항</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active cus_nav" aria-current="page" href="/customer/user/customer_personalq">1:1 문의</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cus_nav" href="/customer/user/customer_chatbot">챗 봇</a>
-            </li>
-        </ul>
+        <h1 align="left"style="font-size:40px">1:1 문의 답변</h1>
     </header>
+    <hr>
     <form action="/customer/admin/answer_personalq" method="post" enctype="multipart/form-data">
         <label for="personalqNo">번호</label>
         <input type="text" th:value="${personalqNo}" readonly="true" id="personalqNo" name="personalqNo">
@@ -61,7 +51,7 @@
             $('#title').on('input', function() {
                 var length = $(this).val().length;
                 if (length > maxLength) {
-                    alert('최대 100자까지 입력 가능합니다.');
+                    swal('입력 제한', '최대 100자까지 입력 가능합니다.', 'info');
                     $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
                 }
             });

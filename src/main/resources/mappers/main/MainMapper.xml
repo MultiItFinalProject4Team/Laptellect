@@ -29,10 +29,8 @@
 			product p
 		JOIN
 			images i ON i.reference_code = p.reference_code
-		JOIN
-			product_spec po ON po.product_no = p.product_no
 		LEFT JOIN
-			review r ON r.product_no = p.product_no
+			payment_product_reviews r ON r.product_no = p.product_no
 		WHERE
 			p.type_no = #{ typeNo }
 		GROUP BY
@@ -42,6 +40,8 @@
 			, p.price
 			, i.upload_name
 			, p.created_at
+		ORDER BY
+			p.product_no DESC
 		LIMIT 4
 	</select>
 </mapper>

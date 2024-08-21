@@ -93,5 +93,6 @@ public interface ProductMapper {
     @Select("SELECT pt.tag_no, lt.tag_data FROM machine_tagkey pt JOIN laptop_tag lt ON pt.tag_no = lt.tag_no WHERE pt.product_no = #{productNo}")
     List<TaggDTO> getTagsForProduct(@Param("productNo") int productNo);
 
-
+    @Select("SELECT COUNT(*) FROM images WHERE reference_code = #{ referenceCode }")
+    int findImageByReferenceCode(String referenceCode);
 }

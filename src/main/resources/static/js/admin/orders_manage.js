@@ -27,7 +27,7 @@ function renderTable() {
         <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" data-amount="${order.purchasePrice}" data-payment-no="${order.paymentNo}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
         <td class="order-number-column"><span class="order-content" onclick="openModal(${order.paymentNo})">${order.paymentNo}</span></td>
         <td class="username-column">${order.userName}</td>
-        <td class="product-name-column"><a href="/product/laptop/laptopDetails?productNo=${order.productNo}" class="order-content">${order.productName}</a></td>
+        <td class="product-name-column"><a href="/product/productDetail?productNo=${order.productNo}" class="order-content">${order.productName}</a></td>
         <td class="price-column">${formatPrice(order.productPrice)}</td>
         <td class="purchase-price-column">${formatPrice(order.purchasePrice)}</td>
         <td class="date-column">${order.createdAt}</td>
@@ -109,7 +109,7 @@ function refundSelectedOrders() {
     }));
 
   if (selectedOrders.length === 0) {
-    alert('환불할 주문을 선택해주세요.');
+    swal('환불할 주문을 선택해주세요.', '', 'info');
     return;
   }
 
@@ -120,15 +120,19 @@ function refundSelectedOrders() {
         const failCount = results.length - successCount;
 
         if (successCount > 0) {
-          alert(`${successCount}개의 주문이 성공적으로 환불되었습니다.${failCount > 0 ? `\n${failCount}개의 주문 환불에 실패했습니다.` : ''}`);
+          swal({
+              title: '환불 처리 결과',
+              text: `${successCount}개의 주문이 성공적으로 환불되었습니다.${failCount > 0 ? `\n${failCount}개의 주문 환불에 실패했습니다.` : ''}`,
+              icon: failCount > 0 ? 'warning' : 'success'
+          });
           location.reload();
         } else {
-          alert('환불 처리 중 오류가 발생했습니다.');
+          swal('환불 처리 중 오류가 발생했습니다.', '', 'warning');
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('환불 처리 중 오류가 발생했습니다.');
+        swal('환불 처리 중 오류가 발생했습니다.', '', 'error')
       });
   }
 }
@@ -163,21 +167,34 @@ function openModal(orderId) {
 }
 
 function refundSingleOrder(imPortId, amount, paymentNo) {
-  if (confirm('이 주문을 환불하시겠습니까?')) {
-    refundOrder(imPortId, amount, paymentNo)
-      .then(result => {
-        if (result.success) {
-          alert('주문이 성공적으로 환불되었습니다.');
-          location.reload();
-        } else {
-          alert('환불 처리 중 오류가 발생했습니다: ' + result.message);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('환불 처리 중 오류가 발생했습니다.');
-      });
-  }
+  swal({
+    title: '이 주문을 환불하시겠습니까?',
+    text: "이 작업은 되돌릴 수 없습니다!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: '예, 환불합니다!',
+    cancelButtonText: '취소'
+  }).then(function(isConfirm) {
+    if (isConfirm) {
+      refundOrder(imPortId, amount, paymentNo)
+        .then(result => {
+          if (result.success) {
+            swal('성공', '주문이 성공적으로 환불되었습니다.', 'success')
+              .then(() => {
+                location.reload();
+              });
+          } else {
+            swal('오류', '환불 처리 중 오류가 발생했습니다. ' + result.message, 'warning');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          swal('오류', '환불 처리 중 오류가 발생했습니다.', 'error');
+        });
+    }
+  });
 }
 
 function refundOrder(imPortId, amount, paymentNo) {

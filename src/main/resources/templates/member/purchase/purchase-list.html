@@ -14,10 +14,13 @@
   </tr>
   </thead>
   <tbody>
+  <tr th:if="${ orders == null or orders.isEmpty() }">
+    <td colspan="7" class="text-center">조회 정보가 없습니다</td>
+  </tr>
   <tr th:each="order, loop : ${ orders }">
     <th th:text="${page * size + loop.index + 1}" scope="row"></th>
     <td><a href="#" class="order-detail" th:data-payment-no="${ order.paymentNo }" style="color: blue;" th:text="${ order.paymentNo }"></a></td>
-    <td><a th:href="@{/product/laptop/laptopDetails(productNo=${ order.productNo })}" style="color: blue;" th:text="${ order.productName }"></a></td>
+    <td><a th:href="@{/product/productDetail(productNo=${ order.productNo })}" style="color: blue;" th:text="${ order.productName }"></a></td>
     <td th:text="${ order.purchasePrice }"></td>
     <td th:text="${ order.refund == 'Y' } ? '환불완료' : ${ order.getFormatConfirm }"></td>
     <td th:text="${ order.getFormatCreatedAt }"></td>

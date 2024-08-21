@@ -22,7 +22,7 @@ function renderTable() {
       <tr>
         <td class="checkbox-column"><input type="checkbox" name="reviewCheck" value="${review.paymentProductReviewsNo}"></td>
         <td class="review-number-column"><span class="review-content" onclick="openModal(${review.paymentProductReviewsNo})">${review.paymentProductReviewsNo}</td>
-        <td class="product-name-column"><a href="/product/laptop/laptopDetails?productNo=${review.productNo}" class="review-content">${review.productName}</a></td>
+        <td class="product-name-column"><a href="/product/productDetail?productNo=${review.productNo}" class="review-content">${review.productName}</a></td>
         <td class="author-column">${review.memberName}</td>
         <td class="content-column">${review.content}</span></td>
         <td class="rating-column">${review.rating}점</td>
@@ -107,32 +107,45 @@ function deleteSelectedReviews() {
     .map(checkbox => checkbox.value);
 
   if (selectedReviews.length === 0) {
-    alert('삭제할 리뷰를 선택해주세요.');
+    swal('삭제할 리뷰를 선택해주세요.', '', 'info');
     return;
   }
 
-  if (confirm('선택한 리뷰를 삭제하시겠습니까?')) {
-    fetch('/admin/deleteReviews', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedReviews),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('선택한 리뷰가 삭제되었습니다.');
-        location.reload();
-      } else {
-        alert('리뷰 삭제 중 오류가 발생했습니다.');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('리뷰 삭제 중 오류가 발생했습니다.');
-    });
-  }
+  swal({
+    title: '선택한 리뷰를 삭제하시겠습니까?',
+    text: "이 작업은 되돌릴 수 없습니다!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: '예, 삭제합니다!',
+    cancelButtonText: '취소'
+  }).then(function(isConfirm) {
+    if (isConfirm) {
+      fetch('/admin/deleteReviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedReviews),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          swal('삭제 완료', '선택한 리뷰가 삭제되었습니다.', 'success')
+            .then(() => {
+              location.reload();
+            });
+        } else {
+          swal('오류', '리뷰 삭제 중 오류가 발생했습니다.', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        swal('오류', '리뷰 삭제 중 오류가 발생했습니다.', 'error');
+      });
+    }
+  });
 }
 
 function openModal(reviewId) {
@@ -156,27 +169,42 @@ function closeModal() {
 }
 
 function deleteSingleReview() {
-  if (currentReviewId && confirm('이 리뷰를 삭제하시겠습니까?')) {
-    fetch('/admin/deleteReviews', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([currentReviewId]),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('리뷰가 삭제되었습니다.');
-        closeModal();
-        location.reload();
-      } else {
-        alert('리뷰 삭제 중 오류가 발생했습니다.');
+  if (currentReviewId) {
+    swal({
+      title: '이 리뷰를 삭제하시겠습니까?',
+      text: "이 작업은 되돌릴 수 없습니다!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '예, 삭제합니다!',
+      cancelButtonText: '취소'
+    }).then(function(isConfirm) {
+      if (isConfirm) {
+        fetch('/admin/deleteReviews', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify([currentReviewId]),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            swal('삭제 완료', '리뷰가 삭제되었습니다.', 'success')
+              .then(() => {
+                closeModal();
+                location.reload();
+              });
+          } else {
+            swal('오류', '리뷰 삭제 중 오류가 발생했습니다.', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          swal('오류', '리뷰 삭제 중 오류가 발생했습니다.', 'error');
+        });
       }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('리뷰 삭제 중 오류가 발생했습니다.');
     });
   }
 }

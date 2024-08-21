@@ -53,7 +53,7 @@
                         <span class="tag">#넓은 화면</span>
                     </div>
                     <div class="product-name mb-2">
-                        <h5 class="card-title"><span th:text="${product.productName}">상품명</span></h5>
+                        <h5 class="card-title"><span style="font-size: 17px;" th:text="${product.productName.length() > 43 ? product.productName.substring(0, 43) + '...' : product.productName}">상품명</span></h5>
                     </div>
                     <div class="product-specs mb-2">
                         <span class="small-text" th:text="${product.specsString}"></span>
@@ -68,61 +68,33 @@
             </a>
         </div>
     </div>
-    <nav aria-label="Page navigation">
-        <div th:if="${!products.isEmpty()}">
+    <div th:if="${!products.isEmpty()}">
+        <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center all-product">
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" href="#" th:data-page="${startPage - 1}" tabindex="-1"><</a>
-                </li>
-                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
-                    th:classappend="${currentPage == i} ? 'active' : ''">
-                    <a class="page-link" href="#" th:data-page="${i}" th:text="${i}">1</a>
+                <li class="page-item" th:classappend="${ !products.hasPrevious } ? 'disabled'">
+                    <a class="page-link" href="#" th:data-page="${ page - 1 }" tabindex="-1"><
+                    </a>
                 </li>
 
-                <li class="page-item" th:classappend="${endPage >= totalPages} ? 'disabled'">
-                    <a class="page-link btn-delete" href="#" th:data-page="${endPage + 1}">></a>
+                <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
+                    th:classappend="${page == products.number } ? 'active' : ''">
+                    <a class="page-link" href="#" th:data-page="${ page }" th:text="${ page + 1 }"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${ !products.hasNext } ? 'disabled'">
+                    <a class="page-link btn-delete" href="#" th:data-page="${ page + 1 }">>
+                    </a>
                 </li>
             </ul>
-        </div>
-    </nav>
+        </nav>
+    </div>
+
 </div>
-<!--<div class="pagination" th:if="${!product.isEmpty()}">-->
-<!--    <div class="pagination-controls" style="display: flex; gap: 10px; align-items: center;">-->
-<!--        <button id="prevButton"-->
-<!--                th:disabled="${!product.hasPrevious}"-->
-<!--                th:data-page="${ page - 1 }"-->
-<!--                th:text="'&lt; 이전'">-->
-<!--        </button>-->
 
-<!--        <div id="pageNumbers">-->
-<!--            <button th:each="page : ${#numbers.sequence(startPage, endPage)}"-->
-<!--                    th:text="${ page + 1 }"-->
-<!--                    th:classappend="${page == product.number} ? 'active'"-->
-<!--                    th:data-page="${ page }">-->
-<!--            </button>-->
-<!--        </div>-->
-
-<!--        <button id="nextButton"-->
-<!--                th:disabled="${ !product.hasNext }"-->
-<!--                th:data-page="${ page + 1 }"-->
-<!--                th:text="'다음 &gt;'">-->
-<!--        </button>-->
-<!--    </div>-->
-<!--</div>-->
 <script>
     $(document).ready(function() {
 
-                // 페이지 링크 클릭 시 발생하는 이벤트 핸들러
-                $(document).on('click', '.pagination a.page-link', function(event) {
-                    event.preventDefault();
 
-                    let page = $(this).data('page');
-
-                    if ($(this).closest('li').hasClass('disabled') || $(this).closest('li').hasClass('active')) {
-                        console.log('Link is disabled or active');
-                        return;
-                    }
-                });
 
             // 위시리스트 추가/삭제
             $(".btn-process-wishlist").on("click", function () {
@@ -136,19 +108,19 @@
                     data: { productNo: productNo },
                     success: function (response) {
                         switch (response) {
-                          case 1:
-                            alert("위시리스트 추가 완료.");
-                            product.removeClass('text-white');
-                            break;
-                          case 2:
-                            alert("위시리스트 삭제 완료.");
-                            product.addClass('text-white');
-                            break;
-                          case 3:
-                            alert("로그인이 필요합니다.");
-                            break;
-                          default:
-                            alert("위시리스트 Ajax Error");
+                            case 1:
+                                swal('위시리스트 추가 완료.', '', 'success');
+                                product.removeClass('text-white');
+                                break;
+                            case 2:
+                                swal('위시리스트 삭제 완료.', '', 'info');
+                                product.addClass('text-white');
+                                break;
+                            case 3:
+                                swal('로그인이 필요합니다.', '', 'info');
+                                break;
+                            default:
+                                swal('위시리스트 Ajax Error', '', 'error');
                         }
                     },
                     error: function () {
@@ -169,19 +141,19 @@
                     data: { productNo: productNo },
                     success: function (response) {
                         switch (response) {
-                          case 1:
-                            alert("장바구니 추가 완료.");
-                            product.removeClass('text-white');
-                            break;
-                          case 2:
-                            alert("장바구니 삭제 완료.");
-                            product.addClass('text-white');
-                            break;
-                          case 3:
-                            alert("로그인이 필요합니다.");
-                            break;
-                          default:
-                            alert("장바구니 Ajax Error");
+                            case 1:
+                                swal('장바구니 추가 완료.', '', 'success');
+                                product.removeClass('text-white');
+                                break;
+                            case 2:
+                                swal('장바구니 삭제 완료.', '', 'info');
+                                product.addClass('text-white');
+                                break;
+                            case 3:
+                                swal('로그인이 필요합니다.', '', 'info');
+                                break;
+                            default:
+                                swal('장바구니 Ajax Error', '', 'error');
                         }
                     },
                     error: function () {
@@ -190,5 +162,5 @@
                 });
             });
         });
-    </script>
+</script>
 </body>

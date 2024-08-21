@@ -20,7 +20,7 @@
             data: { productNo: productNo },
             success: function(response) {
                 if(response === true) {
-                    alert('상품 삭제 완료');
+                    swal('상품 삭제 완료', '', 'success');
                     loadCartList();
                 } else {
                     console.log('삭제에 실패하였습니다.');
@@ -39,7 +39,7 @@
         });
 
         if (selectedProducts.length === 0) {
-            alert('삭제할 상품을 선택해주세요.');
+            swal('삭제할 상품을 선택해주세요.', '', 'info');
             return;
         }
 
@@ -52,7 +52,7 @@
             },
             success: function(response) {
                 if(response === true) {
-                    alert('상품 삭제 완료');
+                    swal('상품 삭제 완료', '', 'success');
                     loadCartList();
                 } else {
                     console.log('삭제에 실패하였습니다.');
@@ -155,7 +155,7 @@
                     <input type="checkbox" class="form-check-input cartlist-checkbox" th:attr="data-product-no=${product.productNo}">
                 </div>
                 <div class="col-md-2">
-                    <a th:href="@{/product/laptop/laptopDetails(productNo=${product.productNo})}">
+                    <a th:href="@{/product/productDetail(productNo=${product.productNo})}">
                         <img th:src="@{'/img/product/' + ${product.image}}" class="img-fluid rounded-start" alt="Product Image">
                     </a>
                 </div>

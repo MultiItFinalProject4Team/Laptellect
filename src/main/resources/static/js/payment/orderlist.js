@@ -18,15 +18,15 @@ function cancelOrder(imPortId, amount) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                swal(data.message, '', 'info');
                 location.reload();
             } else {
-                alert(data.message || '주문 취소에 실패했습니다.');
+                swal(data.message || '주문 취소에 실패했습니다.', '', 'error');
             }
         })
         .catch((error) => {
             console.error('Error:', error);
-            alert('주문 취소 중 오류가 발생했습니다.');
+            swal('주문 취소 중 오류가 발생했습니다.', '', 'error');
         });
     }
 }
@@ -170,7 +170,7 @@ function submitReview() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                swal(data.message, '', 'info');
                 closeReviewModal();
 
                 // 리뷰 버튼과 취소 버튼 상태 업데이트
@@ -189,12 +189,12 @@ function submitReview() {
 
                 window.location.reload();
             } else {
-                alert(data.message || '리뷰 제출에 실패했습니다.');
+                swal(data.message || '리뷰 제출에 실패했습니다.', '', 'error');
             }
         })
         .catch((error) => {
             console.error('Error:', error);
-            alert('리뷰 제출 중 오류가 발생했습니다.');
+            swal('리뷰 제출 중 오류가 발생했습니다.', '', 'error');
         });
     }
 }

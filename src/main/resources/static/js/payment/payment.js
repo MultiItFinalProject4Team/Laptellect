@@ -216,7 +216,7 @@ function updateTotalPrice() {
 
     // 총 결제금액이 100원 미만이 되지 않도록 제한
     if (totalPrice < 100) {
-        alert("총 결제금액이 100원보다 작아질 수 없습니다");
+        swal('총 결제금액이 100원보다 작아질 수 없습니다', '', 'info');
         totalPrice = 100;
         pointValue = originalPrice * quantity - 100;
         pointInput.val(formatNumber(pointValue));
@@ -259,12 +259,12 @@ function mypayment() {
                     });
 
                     if (data.success) {
-                        alert("결제 및 검증 성공");
+                        swal('결제 및 검증 성공', '', 'success');
                         window.location.href = data.redirectUrl;
                     } else {
                         // 검증 실패 시 결제 취소 로직 추가
                         await cancelPayment(rsp.imp_uid, myAmount);
-                        alert("결제 검증 실패로 인해 결제가 취소되었습니다.");
+                        swal('결제 검증 실패로 인해 결제가 취소되었습니다.', '', 'error');
                     }
                 } catch (error) {
                     // 검증 요청 자체가 실패한 경우 결제 취소
@@ -274,10 +274,10 @@ function mypayment() {
                     console.log("Product name:", productName);
                     console.log("Address ID:", selectedAddressId);
                     console.log("quantity:", quantity);
-                    alert("검증 실패로 인해 결제가 취소되었습니다: " + error.response.data);
+                    swal('검증 실패로 인해 결제가 취소되었습니다.', error.response.data, 'error');
                 }
             } else {
-                alert("결제 실패: " + rsp.error_msg);
+                swal('결제 실패', rsp.error_msg, 'error');
             }
         }
     );

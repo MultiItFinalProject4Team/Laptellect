@@ -83,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
         String filePath = "src/main/resources/static/img/product";
         String uuid = UUID.randomUUID().toString();
         String uploadName = uuid + ".jpg";
+        String referenceCode = productDTO.getReferenceCode();
 
         crawlingService.downloadImage(url, filePath, uploadName);
 
@@ -91,10 +92,14 @@ public class ProductServiceImpl implements ProductService {
         log.info("저장위치 확인 = {}", filePath);
 
         imageDTO.setOriginName(url);
-        imageDTO.setReferenceCode(productDTO.getReferenceCode());
+        imageDTO.setReferenceCode(referenceCode);
         imageDTO.setUploadName(uploadName);
 
-        productMapper.inputImage(imageDTO);
+        if(productMapper.findImageByReferenceCode(referenceCode) > 0) {
+            log.debug("이미 저장된 이미지입니다.");
+        } else {
+            productMapper.inputImage(imageDTO);
+        }
     }
 
 
@@ -449,10 +454,9 @@ public class ProductServiceImpl implements ProductService {
         int price = keyboardDetailsDTO.getPrice();
         String image = keyboardDetailsDTO.getUploadName();
         String productCode = keyboardDetailsDTO.getProductCode();
-        String manufacturer = specDTO.getManufacturer();
-        String registrationDate = specDTO.getRegistrationDate();
 
-        log.info("키보드 제조사 ={}, 등록월 = {}",manufacturer,registrationDate);
+
+
 
         KeyAccessory accessory = new KeyAccessory();
         KeyBuild build = new KeyBuild();
@@ -609,8 +613,7 @@ public class ProductServiceImpl implements ProductService {
         specDTO.setPrice(price);
         specDTO.setImage(image);
         specDTO.setProductCode(productCode);
-        specDTO.setManufacturer(manufacturer);
-        specDTO.setRegistrationDate(registrationDate);
+
 
         specDTO.setKeyAccessory(accessory);
         specDTO.setKeyBuild(build);
@@ -783,6 +786,9 @@ public class ProductServiceImpl implements ProductService {
 
         ArrayList<ProductDTO> productList = productMapper.findByNameSearch(searchDTO);
 
+      long offset =  searchDTO.getOffset();
+      long size = searchDTO.getSize();
+        log.info("Executing product search with LIMIT {} OFFSET {}", size, offset);
         long total = productMapper.countBySearchCriteria(searchDTO);
 
         log.info("PageImpl searchProducts 확인 = {}, {}, \n 총 수량 : {}", pageable, productList, total );
@@ -826,7 +832,6 @@ public class ProductServiceImpl implements ProductService {
 
         for (SpecDTO spec : specDTOS) {
 
-            log.info("필터링 과정 = {}", spec.getCategoryNo());
 
             String key = spec.getCategoryNo();
             String value = spec.getOptionValue();
