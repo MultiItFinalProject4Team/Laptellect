@@ -22,9 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -202,7 +200,11 @@ public class ProductController {
                     model.addAttribute("mouse", mouse);
 
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
+
+
+                    model.addAttribute("sentimentResult", sentimentResult);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
@@ -220,8 +222,11 @@ public class ProductController {
                     model.addAttribute("productNo", keyboard.getProductNo());
                     model.addAttribute("keyboard", keyboard);
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
 
+
+                    model.addAttribute("sentimentResult", sentimentResult);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
@@ -407,7 +412,6 @@ public class ProductController {
 
 
     }
-
 
 
 }
