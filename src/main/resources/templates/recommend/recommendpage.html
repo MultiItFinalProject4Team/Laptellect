@@ -45,13 +45,28 @@
         .price-tag-container .price {
             margin-right: 10px;
         }
-        /* 감정 분석 결과 스타일 */
+        .review-evaluation-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+
+        }
+        .review-evaluation {
+            font-weight: bold;
+            padding: 3px 8px;
+            background-color: #e9ecef;
+            color: #495057;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            font-size: 0.9em    ;
+        }
         .sentiment-result {
             font-weight: bold;
-            padding: 5px 10px;
+            padding: 10px 15px;
             border-radius: 5px;
             text-align: center;
-            margin-bottom: 10px;
+
         }
         .sentiment-positive { background-color: #d4edda; color: #155724; }
         .sentiment-neutral { background-color: #fff3cd; color: #856404; }
@@ -90,6 +105,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
+                                <div class="review-evaluation">리뷰 평가</div>
                                 <p class="sentiment-result" th:text="${sentiments.get(product.productNo)}"
                                    th:classappend="${sentiments.get(product.productNo) == '압도적 긍정적' or
                                                     sentiments.get(product.productNo) == '매우 긍정적' or
@@ -100,8 +116,8 @@
                                                    'sentiment-neutral')">
                                 </p>
                             </div>
-                            <div class="col-md-2 text-end btn-wishlist">
-                                <button class="btn btn-outline-primary mb-2 btn-process-cart" th:attr="data-product-no=${product.productNo}">장바구니 담기</button>
+<!--                            <div class="col-md-2 text-end btn-wishlist">-->
+<!--                                <button class="btn btn-outline-primary mb-2 btn-process-cart" th:attr="data-product-no=${product.productNo}">장바구니 담기</button>-->
                             </div>
                         </div>
                     </div>
@@ -117,6 +133,22 @@
             let value = $(this).text().replace('원', '').replace(',', '');
             let formattedValue = new Intl.NumberFormat('ko-KR').format(value);
             $(this).text(formattedValue + '원');
+        });
+    });
+    $(document).ready(function() {
+        $('.btn-process-cart').click(function() {
+            var productNo = $(this).data('product-no');
+            $.post('/product/cart/add', { productNo: productNo }, function(response) {
+                if (response === "1") {
+                    alert("상품이 장바구니에 추가되었습니다.");
+                } else if (response === "2") {
+                    alert("상품이 장바구니에서 제거되었습니다.");
+                } else if (response === "3") {
+                    alert("로그인이 필요합니다.");
+                } else {
+                    alert("장바구니 처리 중 오류가 발생했습니다.");
+                }
+            });
         });
     });
 </script>

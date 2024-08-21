@@ -80,9 +80,21 @@
             font-size: 14px;
             color: #666;
         }
+
+        .sentiment-result {
+            max-width: 400px;
+            margin: 10px auto 0;
+            font-weight: 600;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
         .prodinfo_spec li { margin-right: 10px; }
         .prodinfo_spec li::after { content: "|"; margin-left: 10px; }
         .prodinfo_spec li:last-child::after { content: ""; }
+        .sentiment-positive { background-color: #d4edda; color: #155724; }
+        .sentiment-neutral { background-color: #fff3cd; color: #856404; }
+        .sentiment-negative { background-color: #f8d7da; color: #721c24; }
 
         hr { opacity: 1 !important;}
     </style>
@@ -213,7 +225,16 @@
                 <!-- 상품 이미지 -->
                 <img th:src="@{'/img/product/' + ${ laptop.image }}" class="card-img-top" alt="상품 이미지"
                      style="height: 400px; object-fit: contain;">
-
+                <div class="sentiment-result w-100" th:if="${sentimentResult != null}"
+                     th:text="${sentimentResult}"
+                     th:classappend="${sentimentResult == '압도적 긍정적' or
+                          sentimentResult == '매우 긍정적' or
+                          sentimentResult == '조금 긍정적'} ? 'sentiment-positive' :
+                         (${sentimentResult == '압도적 부정적' or
+                           sentimentResult == '매우 부정적' or
+                           sentimentResult == '조금 부정적'} ? 'sentiment-negative' :
+                          'sentiment-neutral')">
+                </div>
                 <div class="spec-box mt-3">
                     <!-- 상품 기본 정보 -->
                     <ul class="list-unstyled">
@@ -318,10 +339,12 @@
                         </ul>
                         <br>
                         <div> <!-- 태그 공간 -->
-                            <span>#게이밍</span> <span>#펠월드</span> <span>#무거운</span>
+                            <span class="tag" th:each="tag : ${tags}" style="background-color: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-size: 0.8em; margin-right: 5px;">
+                                <span th:text="${'#' + tag.tagData}"></span>
+                            </span>
                         </div>
                     </div>
-
+                    <br>
                     <div class="col-md-5">
                         <div class="review-group">
                             <div class="review-list">
