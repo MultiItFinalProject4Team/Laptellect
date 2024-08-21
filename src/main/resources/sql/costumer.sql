@@ -78,7 +78,7 @@ CREATE TABLE notice(
 	title varchar(100),
 	content text,
 	main_regist varchar(10) DEFAULT 'N',
-	create_at timestamp DEFAULT current_timestamp,
+	created_at timestamp DEFAULT current_timestamp,
 	updated_at timestamp ON UPDATE CURRENT_TIMESTAMP,
 	reference_code varchar(100),
 	FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
