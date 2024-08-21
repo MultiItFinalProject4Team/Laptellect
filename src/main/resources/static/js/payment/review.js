@@ -58,9 +58,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.delete-review').forEach(button => {
         button.addEventListener('click', function() {
             const paymentProductReviewsNo = this.getAttribute('data-review-id');
-            if (confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
-                deleteReview(paymentProductReviewsNo);
-            }
+            swal({
+                title: "리뷰 삭제",
+                text: "정말로 이 리뷰를 삭제하시겠습니까?",
+                icon: "warning",
+                buttons: ["취소", "삭제"],
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    deleteReview(paymentProductReviewsNo);
+                }
+            });
         });
     });
 
@@ -103,29 +112,38 @@ function submitReview() {
         imPortId: imPortId
     };
 
-    if (confirm("리뷰를 작성하게 되면 주문 취소가 불가능해집니다. \n리뷰를 등록하시겠습니까?")) {
-        fetch('/payment/reviews', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reviewData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                swal('리뷰가 성공적으로 등록되었습니다.', "", "success");
-                bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
-                window.location.reload();
-            } else {
-                swal(data.message || '리뷰 제출에 실패했습니다.', '', 'error');
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            swal("리뷰 제출 중 오류가 발생했습니다.", "", "error");
-        });
-    }
+    swal({
+        title: "리뷰 등록",
+        text: "리뷰를 작성하게 되면 주문 취소가 불가능해집니다. \n리뷰를 등록하시겠습니까?",
+        icon: "warning",
+        buttons: ["취소", "등록"],
+        dangerMode: true,
+    })
+    .then((willSubmit) => {
+        if (willSubmit) {
+            fetch('/payment/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reviewData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    swal('리뷰가 성공적으로 등록되었습니다.', "", "success");
+                    bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
+                    window.location.reload();
+                } else {
+                    swal(data.message || '리뷰 제출에 실패했습니다.', '', 'error');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                swal("리뷰 제출 중 오류가 발생했습니다.", "", "error");
+            });
+        }
+    });
 }
 
 // 리뷰 수정 함수
@@ -149,9 +167,14 @@ function updateReview(paymentProductReviewsNo) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            swal('리뷰가 성공적으로 수정되었습니다.', "", "success");
-            bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
-            window.location.reload();
+            swal({
+                title: '리뷰가 성공적으로 수정되었습니다.',
+                icon: "success",
+                button: "확인",
+            }).then((value) => {
+                bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
+                window.location.reload();
+            });
         } else {
             swal(data.message || '리뷰 수정에 실패했습니다.', '', 'error');
         }
@@ -174,8 +197,13 @@ function deleteReview(paymentProductReviewsNo) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            swal('리뷰가 성공적으로 삭제되었습니다.', "", "success");
-            window.location.reload();
+            swal({
+                title: '리뷰가 성공적으로 삭제되었습니다.',
+                icon: "success",
+                button: "확인",
+            }).then((value) => {
+                window.location.reload();
+            });
         } else {
             swal(data.message || '리뷰 삭제에 실패했습니다.', '', 'error');
         }
