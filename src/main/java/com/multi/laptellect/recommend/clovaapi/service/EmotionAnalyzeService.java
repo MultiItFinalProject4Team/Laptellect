@@ -30,7 +30,7 @@ public class EmotionAnalyzeService {
     private String clientSecret;
 
     public HashMap<String, Object> getAnalyzeResult(int productNo, ReviewDTO reviewDTO) {
-        log.info("감성 분석 시작 - 상품 번호: {}, 리뷰 내용: {}", productNo, reviewDTO.getContent());
+
         String url = "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
         HashMap<String, Object> result = new HashMap<>(); // 결과
         String review = reviewDTO.getContent(); //리뷰내용

@@ -14,14 +14,15 @@ import com.multi.laptellect.product.model.dto.mouse.MouseSpecDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.CrawlingService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
+import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public class ProductController {
     private final CustomerService customerService;
     private final PaginationService paginationService;
     private final PaymentService paymentService;
+    private final RecommendProductService recommendProductService;
+    private final EmotionAnalyzeService emotionAnalyzeService;
 
 
     /**
@@ -100,7 +103,6 @@ public class ProductController {
         Map<String, List<String>> cate = productService.productFilterSearch();
 
 
-
         log.info("컨트롤러 cate 데이터 확인 = {}", cate);
 
         model.addAttribute("cate", cate);
@@ -123,6 +125,9 @@ public class ProductController {
                                  Model model, @RequestParam(value = "page",defaultValue = "1") int page) throws Exception {
         log.info("1. 제품 세부정보 요청을 받았습니다.: {}", productNo);
 
+
+
+
         // 장바구니 및 위시리스트 변수 선언
         ArrayList<Integer> carts = new ArrayList<>();
         ArrayList<Integer> wishlist = new ArrayList<>();
@@ -132,6 +137,7 @@ public class ProductController {
         ProductDTO productDTO = productService.findProductByProductNo(String.valueOf(productNo));
 
         int typeNo = productDTO.getTypeNo();
+
 
         try {
             if (SecurityUtil.isAuthenticated()) {
@@ -169,7 +175,13 @@ public class ProductController {
                     model.addAttribute("laptop", laptop);
 
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
+                    String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
+
+
+                    model.addAttribute("sentimentResult", sentimentResult);
+                    model.addAttribute("tags", tags);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
@@ -188,7 +200,11 @@ public class ProductController {
                     model.addAttribute("mouse", mouse);
 
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
+
+
+                    model.addAttribute("sentimentResult", sentimentResult);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
@@ -205,7 +221,11 @@ public class ProductController {
                     model.addAttribute("productNo", keyboard.getProductNo());
                     model.addAttribute("keyboard", keyboard);
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
+
+
+                    model.addAttribute("sentimentResult", sentimentResult);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
@@ -389,6 +409,7 @@ public class ProductController {
 
 
     }
+
 
 }
 
