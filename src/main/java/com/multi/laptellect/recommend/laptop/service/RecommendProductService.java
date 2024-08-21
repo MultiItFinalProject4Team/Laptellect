@@ -9,12 +9,15 @@ import com.multi.laptellect.recommend.laptop.model.dto.CurationDTO;
 import com.multi.laptellect.recommend.laptop.model.dto.ProductFilterDTO;
 import com.multi.laptellect.recommend.service.RedisCacheService;
 import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
+import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class RecommendProductService {
     private final ProductService productService;
     private final RecommendProductDAO recommendProductDAO;
     private final RedisCacheService redisCacheService;
+    private final EmotionAnalyzeService emotionAnalyzeService;
 
     public ArrayList<LaptopSpecDTO> getRecommendations(CurationDTO curationDTO) {
         ProductFilterDTO productFilterDTO = createSearchCriteria(curationDTO);
@@ -39,7 +43,7 @@ public class RecommendProductService {
         return laptop;
     }
 
-    public List<TaggDTO> getTagsForProduct(int productNo) {//상품번호에 해당하는 태그 조회
+    public List<TaggDTO> getTagsForProduct(int productNo) {
         return recommendProductDAO.getTagsForProduct(productNo);
     }
 
@@ -80,7 +84,7 @@ public class RecommendProductService {
         }
         switch (somoweight) {
             case "가벼움":
-                return List.of("가벼움"); //가방에 넣고 다닐거에요
+                return List.of("가벼움");
             case "무거움":
                 return List.of("무거움");
             case "초경량":
@@ -111,7 +115,7 @@ public class RecommendProductService {
         }
         switch (gameType) {
             case "스팀게임/FPS 게임":
-                return List.of("펠월드", "로스트 아크");
+                return List.of("펠월드", "로스트아크");
             case "온라인 게임":
                 return List.of("배틀그라운드");
             case "AOS게임":
@@ -166,5 +170,46 @@ public class RecommendProductService {
             default:
                 return List.of();
         }
+    }
+
+    public void processRecommendations(CurationDTO curationDTO, Map<String, Object> model) {
+        log.info("사용자 선택지 값 = {}", curationDTO);
+        try {
+            ArrayList<LaptopSpecDTO> recommendations = getRecommendations(curationDTO);
+            String cacheKey = redisCacheService.saveCurationResult(curationDTO);
+
+            model.put("cacheKey", cacheKey);
+            addRecommendationsToModel(recommendations, model);
+            model.put("curationDTO", curationDTO);
+        } catch (Exception e) {
+            log.error("에러 발생", e);
+            model.put("error", "An error occurred while processing your request.");
+        }
+    }
+
+    public void getLastRecommendations(String cacheKey, Map<String, Object> model) {
+        if (cacheKey != null) {
+            ArrayList<LaptopSpecDTO> recommendations = getCachedCurationResult(cacheKey);
+            if (recommendations != null) {
+                addRecommendationsToModel(recommendations, model);
+            }
+        }
+    }
+
+    private void addRecommendationsToModel(ArrayList<LaptopSpecDTO> recommendations, Map<String, Object> model) {
+        Map<Integer, List<TaggDTO>> productTags = new HashMap<>();
+        Map<Integer, String> sentiments = new HashMap<>();
+
+        for (LaptopSpecDTO laptop : recommendations) {
+            int productNo = laptop.getProductNo();
+            List<TaggDTO> tags = getTagsForProduct(productNo);
+            productTags.put(productNo, tags);
+            String sentiment = emotionAnalyzeService.analyzeSentiment(productNo);
+            sentiments.put(productNo, sentiment);
+        }
+
+        model.put("recommendations", recommendations);
+        model.put("productTags", productTags);
+        model.put("sentiments", sentiments);
     }
 }
