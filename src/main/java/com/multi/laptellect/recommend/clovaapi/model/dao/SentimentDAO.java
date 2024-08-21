@@ -13,11 +13,11 @@ import java.util.List;
 @Mapper
 public interface SentimentDAO {
     @Insert("INSERT INTO laptop_sentiment(product_no, sentiment_positive, sentiment_denial, sentiment_neutrality) " +
-            "VALUES (#{product_no}, #{sentiment_positive}, #{sentiment_denial}, #{sentiment_neutrality}) " +
+            "VALUES (#{ productNo }, #{ sentimentPositive }, #{sentimentDenial}, #{sentimentNeutrality}) " +
             "ON DUPLICATE KEY UPDATE " +
-            "sentiment_positive = sentiment_positive + #{sentiment_positive}, " +
-            "sentiment_denial = sentiment_denial + #{sentiment_denial}, " +
-            "sentiment_neutrality = sentiment_neutrality + #{sentiment_neutrality}")
+            "sentiment_positive = sentiment_positive + #{sentimentPositive}, " +
+            "sentiment_denial = sentiment_denial + #{sentimentDenial}, " +
+            "sentiment_neutrality = sentiment_neutrality + #{sentimentNeutrality}")
     void insertSentiment(SentimentDTO sentimentDTO);
 
     @Select("SELECT product_no, content FROM payment_product_reviews " +
