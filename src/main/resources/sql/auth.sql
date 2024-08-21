@@ -46,7 +46,7 @@ CREATE TABLE mem_social_member (
     CONSTRAINT social_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
--- 판매자 테이블
+-- 판매자 테이블 미사용
 CREATE TABLE mem_seller_member (
     seller_id INT NOT NULL AUTO_INCREMENT,
     member_no INT NOT NULL,
