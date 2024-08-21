@@ -89,7 +89,7 @@ public class ProductController {
         } catch (Exception e) {
             log.error("2.에러발생", e);
         }
-        return "product/productList";
+        return "redirect:product/productList?typeNo=1";
 
     }
 
@@ -385,7 +385,7 @@ public class ProductController {
                 break;
         }
 
-    return "product/product/productList";
+    return "redirect:product/productList?typeNo=1";
 
 
     }
