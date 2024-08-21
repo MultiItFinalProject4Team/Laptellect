@@ -46,6 +46,8 @@ public interface ProductMapper {
 
     int checkSpecExists(@Param("productNo") int productNo,@Param("specName") String specName);
 
+    int checkCategory(@Param("productNo") int productNo,@Param("categoryNo") String categoryNo);
+
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
 

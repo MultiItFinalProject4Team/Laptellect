@@ -705,11 +705,18 @@ public class CrawlingService {
             log.info("category넘버= {}", category);
 
 
+            if(productMapper.checkCategory(productNo,category) > 0){
+                log.info("카테고리 중복 확인 = {},{}", productNo, category );
+                continue;
+            }
+
+
             for (String specName : specs) {
                 if (index >= laptopSpecValue.size()) {
                     log.error("Index out of bounds: index = {}, size = {}", index, laptopSpecValue.size());
                     return; // 인덱스가 리스트 크기를 벗어날 때 메서드 종료
                 }
+
 
                 String specValue = laptopSpecValue.get(index);
 
@@ -730,6 +737,7 @@ public class CrawlingService {
                         log.info("ProductSpec Insert 완료 = {}", productNo);
                     }else {
                         log.info("중복 이미 들어간 정보입니다");
+                        break;
                     }
 
                     log.info("ProductSpec Insert 완료");
@@ -799,6 +807,11 @@ public class CrawlingService {
             String category = entry.getKey();
             log.info("category넘버= {}", category);
 
+            if(productMapper.checkCategory(productNo,category) > 0){
+                log.info("카테고리 중복 확인 = {},{}", productNo, category );
+                continue;
+            }
+
 
             for (String specName : specs) {
                 if (index >= keyboardSpecValue.size()) {
@@ -823,6 +836,7 @@ public class CrawlingService {
                         log.info("ProductSpec Insert 완료 = {}", productNo);
                     }else {
                         log.info("중복 확인");
+                        break;
                     }
 
                     log.info("ProductSpec Insert 완료");
@@ -876,6 +890,11 @@ public class CrawlingService {
             String category = entry.getKey();
             log.info("category넘버= {}", category);
 
+            if(productMapper.checkCategory(productNo,category) > 0){
+                log.info("카테고리 중복 확인 = {},{}", productNo, category );
+                continue;
+            }
+
 
             for (String specName : specs) {
                 if (index >= mouseSpecValue.size()) {
@@ -902,6 +921,7 @@ public class CrawlingService {
                         log.info("ProductSpec Insert 완료 = {}", productNo);
                     }else {
                         log.info("중복 확인");
+                        break;
                     }
                 }
                 index++;

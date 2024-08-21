@@ -70,6 +70,15 @@
         AND  category_no = (SELECT category_no FROM product_category WHERE options = #{specName}  limit 1)
     </select>
 
+    <select id="checkCategory">
+        SELECT COUNT(*)
+        FROM
+            product_spec
+        WHERE
+            product_no = #{productNo}
+        AND category_no LIKE CONCAT('%', #{categoryNo}, '%')
+    </select>
+
     <select id="getProductsByType" resultType="productDTO" resultMap="productResultMap">
         SELECT
         p.product_no,
