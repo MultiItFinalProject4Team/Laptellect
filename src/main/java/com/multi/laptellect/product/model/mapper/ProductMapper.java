@@ -44,7 +44,7 @@ public interface ProductMapper {
     List<LaptopDetailsDTO> laptopProductDetails(int productNo);
 
 
-    int checkSpecExists(@Param("productNo") int productNo,@Param("category")String category,@Param("specValue") String specValue);
+    int checkSpecExists(@Param("productNo") int productNo,@Param("specName") String specName);
 
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 

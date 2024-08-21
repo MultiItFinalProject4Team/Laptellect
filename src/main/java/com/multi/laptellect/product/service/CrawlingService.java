@@ -2,7 +2,6 @@ package com.multi.laptellect.product.service;
 
 import com.multi.laptellect.product.model.dto.ProductCategoryDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
-import com.multi.laptellect.product.model.dto.ReviewDTO;
 import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
@@ -284,7 +283,6 @@ public class CrawlingService {
 
 
         return laptopSpecDTO;
-
     }
 
     public LaptopSpecDTO getMouseDetails(int productType) {
@@ -721,13 +719,17 @@ public class CrawlingService {
                     log.info("Insert 값 = {} : {}", specName, specValue);
 
                     // 중복 확인 쿼리
-                    int exists = productMapper.checkSpecExists(productNo, category, specValue);
-                    if (exists == 0) {
+                     int check = productMapper.checkSpecExists(productNo, specName);
+                     log.info("checkcheck{}",check);
+
+                    if (check == 0) {
                         log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
-                        log.info("exists 값 = {}", exists);
+                        log.info("exists 값 = {}", check);
                         productMapper.insertProductSpec(productNo, specName, specValue);
 
                         log.info("ProductSpec Insert 완료 = {}", productNo);
+                    }else {
+                        log.info("중복 이미 들어간 정보입니다");
                     }
 
                     log.info("ProductSpec Insert 완료");
@@ -812,13 +814,15 @@ public class CrawlingService {
                     log.info("Insert 값 = {} : {}", specName, specValue);
 
                     // 중복 확인 쿼리
-                    int exists = productMapper.checkSpecExists(productNo, category, specValue);
+                    int exists = productMapper.checkSpecExists(productNo, specName);
                     if (exists == 0) {
                         log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
                         log.info("exists 값 = {}", exists);
                         productMapper.insertProductSpec(productNo, specName, specValue);
 
                         log.info("ProductSpec Insert 완료 = {}", productNo);
+                    }else {
+                        log.info("중복 확인");
                     }
 
                     log.info("ProductSpec Insert 완료");
@@ -885,18 +889,20 @@ public class CrawlingService {
                     log.info("옵션 정보 없음 = {}", specValue);
                 } else {
                     log.info("Insert 값 = {} : {}", specName, specValue);
+                    log.info("파라미터값 = {} {} {}", productNo, specName, specValue);
 
                     // 중복 확인 쿼리
-                    int exists = productMapper.checkSpecExists(productNo, category, specValue);
+                    int exists = productMapper.checkSpecExists(productNo, specName);
+                    log.info("exists 값 = {}", exists);
                     if (exists == 0) {
                         log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
                         log.info("exists 값 = {}", exists);
                         productMapper.insertProductSpec(productNo, specName, specValue);
 
                         log.info("ProductSpec Insert 완료 = {}", productNo);
+                    }else {
+                        log.info("중복 확인");
                     }
-
-                    log.info("ProductSpec Insert 완료");
                 }
                 index++;
             }
@@ -905,88 +911,88 @@ public class CrawlingService {
     }
 
 
-    public void reviewCrawler() {
+//    public void reviewCrawler() {
+//
+//
+//        List<ProductDTO> productNos = productMapper.getReviewRequired();
+//        int emptyReviewData = 0;
+//
+//        for (ProductDTO productDTO : productNos) {
+//
+//            int productNo = productDTO.getProductNo();
+//            String productCode = productDTO.getProductCode();
+//
+//
+//            try {
+//                for (int totalPages = 1; totalPages <= 1000; totalPages++) {
+//                    String url =
+//                            "https://prod.danawa.com/info/dpg/ajax/companyProductReview.ajax.php?" +
+//                                    "t=0.8990118455164167" +
+//                                    "&prodCode=" + productCode +
+//                                    "&cate1Code=861" +
+//                                    "&page=" + totalPages +
+//                                    "&limit=100" +
+//                                    "&score=0" +
+//                                    "&sortType=" +
+//                                    "&onlyPhotoReview=" +
+//                                    "&usefullScore=Y" +
+//                                    "&innerKeyword=" +
+//                                    "&subjectWord=0" +
+//                                    "&subjectWordString=" +
+//                                    "&subjectSimilarWordString=" +
+//                                    "&_=1722562970811";
+//
+//                    Document doc = Jsoup.connect(url).get();
+//                    Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
+//
+//                    if (reviews.isEmpty()) {
+//                        emptyReviewData++;
+//                        log.info("조회된 리뷰가 없습니다. 페이지: {}", totalPages);
+//                        if (emptyReviewData >= 3) {
+//                            log.info("데이터 조회를 끝마쳤습니다 크롤링을 종료합니다.");
+//                            break;
+//                        }
+//                        continue;
+//                    }
+//
+//                    int reviewCount = 0;
+//                    for (Element review : reviews) {
+//                        String ratingStyle = review.select(".star_mask").attr("style");
+//                        String rating = ratingStyle.replace("width:", "").replace("%", "").trim();
+//
+//                        int starRating = convertRatingToStars(Integer.parseInt(rating));
+//
+//                        String title = review.select(".tit_W .tit").text();
+//                        String content = review.select(".atc").text();
+//
+//                        reviewCount++;
+//
+//                        log.info("상품 별점 = {}, 상품 리뷰 제목 = {}, 상품 리뷰 내용 = {}", starRating, title, content);
+//
+//
+//                        ReviewDTO reviewDTO = new ReviewDTO();
+//                        reviewDTO.setProductNo(productNo);
+//                        reviewDTO.setRating(starRating);
+//                        reviewDTO.setTitle(title);
+//                        reviewDTO.setContent(content);
+//
+//                        productMapper.inputReviewDate(reviewDTO);
+//
+//
+//                    }
+//                    log.info("페이지 {}에서 조회된 리뷰 계수 = {}", totalPages, reviewCount);
+//                }
+//            } catch (Exception e) {
+//                log.error("Error during crawling reviews", e);
+//            }
+//        }
+//
+//
+//    }
 
-
-        List<ProductDTO> productNos = productMapper.getReviewRequired();
-        int emptyReviewData = 0;
-
-        for (ProductDTO productDTO : productNos) {
-
-            int productNo = productDTO.getProductNo();
-            String productCode = productDTO.getProductCode();
-
-
-            try {
-                for (int totalPages = 1; totalPages <= 1000; totalPages++) {
-                    String url =
-                            "https://prod.danawa.com/info/dpg/ajax/companyProductReview.ajax.php?" +
-                                    "t=0.8990118455164167" +
-                                    "&prodCode=" + productCode +
-                                    "&cate1Code=861" +
-                                    "&page=" + totalPages +
-                                    "&limit=100" +
-                                    "&score=0" +
-                                    "&sortType=" +
-                                    "&onlyPhotoReview=" +
-                                    "&usefullScore=Y" +
-                                    "&innerKeyword=" +
-                                    "&subjectWord=0" +
-                                    "&subjectWordString=" +
-                                    "&subjectSimilarWordString=" +
-                                    "&_=1722562970811";
-
-                    Document doc = Jsoup.connect(url).get();
-                    Elements reviews = doc.select("#danawa-prodBlog-companyReview-content-list .danawa-prodBlog-companyReview-clazz-more");
-
-                    if (reviews.isEmpty()) {
-                        emptyReviewData++;
-                        log.info("조회된 리뷰가 없습니다. 페이지: {}", totalPages);
-                        if (emptyReviewData >= 3) {
-                            log.info("데이터 조회를 끝마쳤습니다 크롤링을 종료합니다.");
-                            break;
-                        }
-                        continue;
-                    }
-
-                    int reviewCount = 0;
-                    for (Element review : reviews) {
-                        String ratingStyle = review.select(".star_mask").attr("style");
-                        String rating = ratingStyle.replace("width:", "").replace("%", "").trim();
-
-                        int starRating = convertRatingToStars(Integer.parseInt(rating));
-
-                        String title = review.select(".tit_W .tit").text();
-                        String content = review.select(".atc").text();
-
-                        reviewCount++;
-
-                        log.info("상품 별점 = {}, 상품 리뷰 제목 = {}, 상품 리뷰 내용 = {}", starRating, title, content);
-
-
-                        ReviewDTO reviewDTO = new ReviewDTO();
-                        reviewDTO.setProductNo(productNo);
-                        reviewDTO.setRating(starRating);
-                        reviewDTO.setTitle(title);
-                        reviewDTO.setContent(content);
-
-                        productMapper.inputReviewDate(reviewDTO);
-
-
-                    }
-                    log.info("페이지 {}에서 조회된 리뷰 계수 = {}", totalPages, reviewCount);
-                }
-            } catch (Exception e) {
-                log.error("Error during crawling reviews", e);
-            }
-        }
-
-
-    }
-
-    private static int convertRatingToStars(int rating) {
-        return rating / 20;
-    }
+//    private static int convertRatingToStars(int rating) {
+//        return rating / 20;
+//    }
 
 
 }

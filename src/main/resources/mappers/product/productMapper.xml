@@ -61,14 +61,13 @@
 
     </select>
 
-    <select id="checkSpecExists"  parameterType="map" resultType="int" >
+    <select id="checkSpecExists">
         SELECT COUNT(*)
         FROM
-        product_spec
+            product_spec
         WHERE
-        product_no = #{productNo}
-        AND  category_no = #{category}
-        AND option_value = #{specValue}
+            product_no = #{productNo}
+        AND  category_no = (SELECT category_no FROM product_category WHERE options = #{specName}  limit 1)
     </select>
 
     <select id="getProductsByType" resultType="productDTO" resultMap="productResultMap">

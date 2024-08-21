@@ -355,12 +355,12 @@ public class ProductController {
 //        return "product/productDetail";
 //    }
 
-    @GetMapping("/review")
-    public void review() {
-        ProductDTO productDTO = new ProductDTO();
-
-        crawlingService.reviewCrawler();
-    }
+//    @GetMapping("/review")
+//    public void review() {
+//        ProductDTO productDTO = new ProductDTO();
+//
+//        crawlingService.reviewCrawler();
+//    }
 
     @GetMapping("/cart")
     public String showCartList() {
