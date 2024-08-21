@@ -231,7 +231,7 @@ $(document).ready(function() {
           case 0:
             swal('성공', '회원 가입 완료', 'success');
             setTimeout(function() {
-                window.location.href = '/';
+                window.location.href = '/signin';
             }, 1500);
             break;
           case 1:

@@ -59,6 +59,17 @@
             return value.trim() === "" ? null : value;
         }
 
+        // 날짜 검색 현재 날짜 set
+        function setEndDate() {
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = String(today.getMonth() + 1).padStart(2, '0');
+            let day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        $("#endDate").val(setEndDate());
+
         function loadOrderList(page) {
             let startDate = convertEmptyToNull($("#startDate").val());
             let endDate = convertEmptyToNull($("#endDate").val());

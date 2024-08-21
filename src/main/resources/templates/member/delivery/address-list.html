@@ -194,46 +194,60 @@ $(".updateAddressBtn").on("click", function () {
     let recipientPhone = convertEmptyToNull($('#recipient-phone2').val());
     let request = convertEmptyToNull($('#request2').val());
 
-    console.log(addressId, memberNo, addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
+    if (!addressName) {
+          swal("필수 입력 항목", "저장할 배송지 이름을 입력해주세요.", "info");
+      } else if (!recipientName) {
+          swal("필수 입력 항목", "수령인 이름을 입력해주세요.", "info");
+      } else if (!postalCode) {
+          swal("필수 입력 항목", "우편번호를 입력해주세요.", "info");
+      } else if (!address) {
+          swal("필수 입력 항목", "주소를 입력해주세요.", "info");
+      } else if (!detailAddress) {
+          swal("필수 입력 항목", "상세 주소를 입력해주세요.", "info");
+      } else if (!recipientPhone) {
+          swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
+      } else {
+        console.log(addressId, memberNo, addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
 
-    $.ajax({
-        url: "/api/member/update-address",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            addressId: addressId,
-            memberNo: memberNo,
-            addressName: addressName,
-            recipientName: recipientName,
-            postalCode: postalCode,
-            address: address,
-            detailAddress: detailAddress,
-            recipientPhone: recipientPhone,
-            request: request
-        }),
-        success: function (response) {
-            switch(response) {
-                case 1:
-                    swal('배송지 수정 성공', '', 'success');
-                    setTimeout(function() {
-                        $('#update-delivery-modal').modal('hide');
-                        location.reload();
-                    }, 1000);
-                    break;
-                case 0:
-                    swal('배송지 이름을 입력해주세요.', '', 'info');
-                case 401:
-                    swal('유저 불일치', '', 'warning');
-                case 500:
-                    swal('배송지 수정 실패', '', 'error');
+        $.ajax({
+            url: "/api/member/update-address",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                addressId: addressId,
+                memberNo: memberNo,
+                addressName: addressName,
+                recipientName: recipientName,
+                postalCode: postalCode,
+                address: address,
+                detailAddress: detailAddress,
+                recipientPhone: recipientPhone,
+                request: request
+            }),
+            success: function (response) {
+                switch(response) {
+                    case 1:
+                        swal('배송지 수정 성공', '', 'success');
+                        setTimeout(function() {
+                            $('#update-delivery-modal').modal('hide');
+                            location.reload();
+                        }, 1000);
+                        break;
+                    case 0:
+                        swal('배송지 이름을 입력해주세요.', '', 'info');
+                    case 401:
+                        swal('유저 불일치', '', 'warning');
+                    case 500:
+                        swal('배송지 수정 실패', '', 'error');
+                }
+                getAddressList()
+            },
+            error: function () {
+                swal('배송지 수정 실패', '', 'error');
             }
-            getAddressList()
-        },
-        error: function () {
-            swal('배송지 수정 실패', '', 'error');
-        }
-        // 수정 작업 수행
-    });
+            // 수정 작업 수행
+        });
+      }
 });
 
 $('.btn-danger').on('click', function() {
