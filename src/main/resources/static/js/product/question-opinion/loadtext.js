@@ -16,12 +16,12 @@ function createCommentItem(productqList, memberNo) {
                 <div class="question-bodytop">
                     <p class="question-category ${categoryClass}">${categoryText}</p>
                     <h4 class="question-title">
-                        ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '비밀글입니다 🔒' : productqList.title}
+                        ${((productqList.secret === 'Y' && productqList.memberNo != memberNo) && curauth != 'ADMIN') ? '비밀글입니다 🔒' : productqList.title}
                     </h4>
                 </div>
                 <div class="question-content">
                     <p class="question-content">
-                        ${(productqList.secret === 'Y' && productqList.memberNo != memberNo) ? '본인만 확인 가능합니다' : productqList.content}
+                        ${((productqList.secret === 'Y' && productqList.memberNo != memberNo)&& curauth != 'ADMIN') ? '본인만 확인 가능합니다' : productqList.content}
                     </p>
                 </div>
                 <div class="question-reply">
@@ -68,7 +68,7 @@ function createCommentItem2(productqList, productaList, memberNo) {
         <div class="reply-header">
             <div class="reply-author">
                 <h2>↪</h2>
-                <span class="reply-name">${curauth=='관리자'? '관리자' : memberName}</span>
+                <span class="reply-name">관리자</span>
                 <span class="reply-date">${formatDate(productaList.createdAt)}</span>
                 <a class="reply-update" onclick="updateQuestionReply(${productqList.productqNo})">${(curauth == 'ADMIN') ? '수정/':''}</a>
                 <a class="reply-delete" onclick="confirmDeleteReply(${productqList.productqNo})">${(curauth == 'ADMIN') ? '삭제':''}</a>

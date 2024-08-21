@@ -500,4 +500,11 @@
             order by a.created_at asc
         </if>
     </select>
+
+    <select id="getEmail">
+        SELECT a.email
+        FROM mem_member a
+        JOIN personal_question b ON b.member_no = a.member_no
+        WHERE b.personalq_no = #{personalqNo}
+    </select>
 </mapper>

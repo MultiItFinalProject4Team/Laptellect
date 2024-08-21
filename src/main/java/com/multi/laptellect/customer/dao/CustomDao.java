@@ -116,4 +116,6 @@ public interface CustomDao {
     List<UserProductqList> getUserProudctList(int memberNo);
 
     List<UserProductqList> getUserSearchProudctList(ProductSearchDto searchDto);
+
+    String getEmail(int personalqNo);
 }

@@ -73,7 +73,21 @@
 </div>
     <div class="pagination-container">
         <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center"
+                th:with="startPage=${T(java.lang.Math).max(1, ((currentPage - 1) / 10) * 10 + 1)},
+                      endPage=${T(java.lang.Math).min(startPage + 9, totalPages)}">
+
+                <!-- Previous 10 pages button -->
+                <li class="page-item" th:if="${startPage > 1}">
+                    <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/admin/all_product_question(page=${startPage - 1})}" aria-label="Previous 10">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                    <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/admin/search_all_product_question(page=${startPage - 1}, keyword=${dto.keyword}, answer=${dto.answer}, date=${dto.date})}" aria-label="Previous 10">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+
+                <!-- Previous page button -->
                 <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
                     <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/admin/all_product_question(page=${currentPage - 1})}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
@@ -82,16 +96,30 @@
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+
+                <!-- Page numbers -->
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:class="${currentPage == pageNum} ? 'active' : ''">
                     <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/admin/all_product_question(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
                     <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/admin/search_all_product_question(page=${pageNum}, keyword=${dto.keyword}, answer=${dto.answer}, date=${dto.date})}" th:text="${pageNum}">현재페이지</a>
                 </li>
+
+                <!-- Next page button -->
                 <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
                     <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/admin/all_product_question(page=${currentPage + 1})}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                     <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/admin/search_all_product_question(page=${currentPage + 1}, keyword=${dto.keyword}, answer=${dto.answer}, date=${dto.date})}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+
+                <!-- Next 10 pages button -->
+                <li class="page-item" th:if="${endPage < totalPages}">
+                    <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/admin/all_product_question(page=${endPage + 1})}" aria-label="Next 10">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                    <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/admin/search_all_product_question(page=${endPage + 1}, keyword=${dto.keyword}, answer=${dto.answer}, date=${dto.date})}" aria-label="Next 10">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
                 </li>
             </ul>
