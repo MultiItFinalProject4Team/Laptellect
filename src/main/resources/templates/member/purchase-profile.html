@@ -122,7 +122,7 @@
                     $("#confirm-modal").modal("hide");
                     switch (response) {
                         case 1:
-                            alert("구매가 확정되었습니다.");
+                            swal("구매가 확정되었습니다.", "", "success");
                             loadOrderList(0);
                             $.get("/api/payment/point", function(response) {
                                 console.log(response);
@@ -130,18 +130,18 @@
                             });
                             break;
                         case 2:
-                            alert("사용자가 일치하지 않습니다.");
+                            swal("사용자가 일치하지 않습니다.", "", "warning");
                             break;
                         case 3:
-                            alert("이미 확정된 상품입니다.");
+                            swal("이미 확정된 상품입니다.", "", "info");
                             break;
                         default:
-                            alert("구매 확정 실패");
+                            swal("구매 확정 실패", "", "error");
                             break;
                     }
                 },
                 error: function (xhr, status, error) {
-                    alert("구매 확정 실패");
+                    swal("구매 확정 실패", "", "error");
                 },
             });
         });
@@ -197,7 +197,7 @@
                 },
                 error: function (xhr, status, error) {
                     console.error("주문 상세 정보 조회 실패:", error);
-                    alert("주문 상세 정보를 불러오는데 실패했습니다.");
+                    swal("주문 상세 정보 불러오기 실패", "주문 상세 정보를 불러오는데 실패했습니다.", "error");
                 },
             });
         });
@@ -209,34 +209,59 @@
                 .text()
                 .replace(/[^0-9]/g, "");
 
-            if (confirm("이 주문을 환불하시겠습니까?")) {
-                $.ajax({
-                    url: "/payment/cancel",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        paymentNo: paymentNo,
-                        imPortId: imPortId,
-                        amount: purchasePrice,
-                    }),
-                    success: function (response) {
-                        if (response.success) {
-                            alert("환불이 성공적으로 처리되었습니다.");
-                            $("#orderModal").modal("hide");
-                            loadOrderList(0);
-                            window.location.href = "/profile";
-                        } else {
-                            alert(
-                                "환불 처리 중 오류가 발생했습니다: " + response.message
-                            );
-                        }
+            swal({
+                title: '이 주문을 환불하시겠습니까?',
+                text: "이 작업은 되돌릴 수 없습니다!",
+                icon: 'warning',
+                buttons: {
+                    cancel: {
+                        text: "취소",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
                     },
-                    error: function (xhr, status, error) {
-                        console.error("환불 처리 실패:", error);
-                        alert("환불 처리 중 오류가 발생했습니다.");
-                    },
-                });
-            }
+                    confirm: {
+                        text: "예, 환불합니다!",
+                        value: true,
+                        visible: true,
+                        className: "btn-danger",
+                        closeModal: true
+                    }
+                }
+            }).then((willRefund) => {
+                if (willRefund) {
+                    $.ajax({
+                        url: "/payment/cancel",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            paymentNo: paymentNo,
+                            imPortId: imPortId,
+                            amount: purchasePrice,
+                        }),
+                        success: function (response) {
+                            if (response.success) {
+                                swal({
+                                    title: "환불이 성공적으로 처리되었습니다.",
+                                    icon: "success",
+                                    button: "확인",
+                                }).then((value) => {
+                                    $("#orderModal").modal("hide");
+                                    loadOrderList(0);
+                                    window.location.href = "/profile";
+                                });
+                            } else {
+                                swal("환불 처리 중 오류가 발생했습니다.", response.message, "warning");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("환불 처리 실패:", error);
+                            swal("환불 처리 중 오류가 발생했습니다.", "", "error");
+                        },
+                    });
+                }
+            });
         });
     });
 

@@ -120,9 +120,9 @@ $(document).ready(function() {
             data: { productNo: productNo },
             success: function(response) {
                 if(response === 500) {
-                    alert('삭제에 실패했습니다.');
+                    swal('삭제에 실패했습니다.', '', 'error');
                 } else {
-                    alert('삭제가 완료되었습니다.');
+                    swal('삭제가 완료되었습니다.', '', 'success');
                     loadWishlist();
                 }
             },
@@ -139,7 +139,7 @@ $(document).ready(function() {
         });
 
         if (selectedProducts.length === 0) {
-            alert('삭제할 상품을 선택해주세요.');
+            swal('삭제할 상품을 선택해주세요.', '', 'info');
             return;
         }
 
@@ -152,9 +152,9 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if(response === 500) {
-                    alert('삭제에 실패했습니다.');
+                    swal('삭제에 실패했습니다.', '', 'error');
                 } else {
-                    alert('삭제가 완료되었습니다.');
+                    swal('삭제가 완료되었습니다.', '', 'success');
                     loadWishlist();
                 }
             },
@@ -175,14 +175,14 @@ $(document).ready(function() {
             data: { productNo: productNo },
             success: function (response) {
                 switch (response) {
-                  case 1:
-                    alert("장바구니 추가 완료.");
-                    break;
-                  case 2:
-                    alert("장바구니 삭제 완료.");
-                    break;
-                  default:
-                    alert("장바구니 Ajax Error");
+                    case 1:
+                        swal('장바구니 추가 완료.', '', 'success');
+                        break;
+                    case 2:
+                        swal('장바구니 삭제 완료.', '', 'info');
+                        break;
+                    default:
+                        swal('장바구니 Ajax Error', '', 'error');
                 }
             },
             error: function () {

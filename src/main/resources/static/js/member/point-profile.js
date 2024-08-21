@@ -47,7 +47,7 @@ $(function () {
             data: { nickName: nickName},
             success: function (response) {
               if (response === true) {
-                alert("닉네임 변경 완료");
+                swal("닉네임 변경 완료", "", "success");
                 $('#nickNameModal').modal('hide');
 
                 $("#nickName").prop("readonly", false);
@@ -57,12 +57,12 @@ $(function () {
 
               } else {
                 console.log("닉네임 변경 실패");
-                alert("닉네임 변경 실패")
+                swal("닉네임 변경 실패", "", "error");
               }
 
             },
             error: function () {
-              alert("닉네임 변경 실패")
+              swal("닉네임 변경 실패", "", "error");
             },
           });
         });
@@ -106,10 +106,10 @@ $(function () {
             success: function (response) {
               if (response === true) {
                 console.log("이메일 전송 완료");
-                alert("이메일 전송 완료");
+                swal("이메일 전송 완료", "", "success");
               } else {
                 console.log("이메일 전송 실패");
-                alert("이메일 전송 실패");
+                swal("이메일 전송 실패", "", "error");
               }
             }
           })
@@ -159,7 +159,7 @@ $(function () {
             data: { email: afterEmail, verifyCode: verifyCode },
             success: function (response) {
               if (response === true) {
-                alert("이메일 변경 완료");
+                swal("이메일 변경 완료", "", "success");
                 $('#emailModal').modal('hide');
 
                 $("#email").prop("readonly", false);
@@ -169,12 +169,12 @@ $(function () {
                 $("#emailChangeBtn").prop("disabled", true);
               } else {
                 console.log("이메일 변경 실패");
-                alert("이메일 변경 실패")
+                swal("이메일 변경 실패", "", "error");
               }
 
             },
             error: function () {
-              alert("이메일 변경 확인 실패")
+              swal("이메일 변경 확인 실패", "", "error");
             },
           });
         });
@@ -296,7 +296,7 @@ $(function () {
             data: { beforePassword: beforePassword, afterPassword: afterPassword2 },
             success: function (response) {
               if (response === true) {
-                alert("비밀번호 변경 완료");
+                swal("비밀번호 변경 완료", "", "success");
                 $('#passwordModal').modal('hide');
 
                 $("#password").prop("readonly", false);
@@ -306,12 +306,12 @@ $(function () {
                 $("#passwordChangeBtn").prop("disabled", true);
               } else {
                 console.log("비밀번호 변경 실패");
-                alert("비밀번호 변경 실패")
+                swal("비밀번호 변경 실패", "", "error");
               }
 
             },
             error: function () {
-              alert("비밀번호 변경 확인 실패")
+              swal("비밀번호 변경 확인 실패", "", "error");
             },
           });
         });
@@ -327,10 +327,10 @@ $(function () {
             success: function (response) {
               if (response === true) {
                 console.log("SMS 전송 완료");
-                alert("SMS 전송 완료");
+                swal("SMS 전송 완료", "", "success");
               } else {
                 console.log("SMS 전송 실패");
-                alert("SMS 전송 실패");
+                swal("SMS 전송 실패", "", "error");
               }
             }
           })
@@ -379,7 +379,7 @@ $(function () {
             data: { tel: tel, verifyCode: verifyCode },
             success: function (response) {
               if (response === true) {
-                alert("휴대폰 번호 변경 완료");
+                swal("휴대폰 번호 변경 완료", "", "success");
                 $('#phoneModal').modal('hide');
 
                 $("#phoneNumber").prop("readonly", false);
@@ -389,12 +389,12 @@ $(function () {
                 $("#telChangeBtn").prop("disabled", true);
               } else {
                 console.log("휴대폰 번호 변경 실패");
-                alert("휴대폰 번호 변경 실패")
+                swal("휴대폰 번호 변경 실패", "", "error");
               }
 
             },
             error: function () {
-              alert("휴대폰 번호 변경 확인 실패")
+              swal("휴대폰 번호 변경 확인 실패", "", "error");
             },
           });
         });

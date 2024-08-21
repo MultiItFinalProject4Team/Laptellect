@@ -85,6 +85,7 @@ public class ProductServiceImpl implements ProductService {
         String filePath = "src/main/resources/static/img/product";
         String uuid = UUID.randomUUID().toString();
         String uploadName = uuid + ".jpg";
+        String referenceCode = productDTO.getReferenceCode();
 
         crawlingService.downloadImage(url, filePath, uploadName);
 
@@ -93,10 +94,14 @@ public class ProductServiceImpl implements ProductService {
         log.info("저장위치 확인 = {}", filePath);
 
         imageDTO.setOriginName(url);
-        imageDTO.setReferenceCode(productDTO.getReferenceCode());
+        imageDTO.setReferenceCode(referenceCode);
         imageDTO.setUploadName(uploadName);
 
-        productMapper.inputImage(imageDTO);
+        if(productMapper.findImageByReferenceCode(referenceCode) > 0) {
+            log.debug("이미 저장된 이미지입니다.");
+        } else {
+            productMapper.inputImage(imageDTO);
+        }
     }
 
 
@@ -783,6 +788,9 @@ public class ProductServiceImpl implements ProductService {
 
         ArrayList<ProductDTO> productList = productMapper.findByNameSearch(searchDTO);
 
+      long offset =  searchDTO.getOffset();
+      long size = searchDTO.getSize();
+        log.info("Executing product search with LIMIT {} OFFSET {}", size, offset);
         long total = productMapper.countBySearchCriteria(searchDTO);
 
         log.info("PageImpl searchProducts 확인 = {}, {}, \n 총 수량 : {}", pageable, productList, total );

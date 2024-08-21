@@ -52,7 +52,7 @@
             $('#title').on('input', function() {
                 var length = $(this).val().length;
                 if (length > maxLength) {
-                    alert('최대 100자까지 입력 가능합니다.');
+                    swal('입력 제한', '최대 100자까지 입력 가능합니다.', 'info');
                     $(this).val($(this).val().substring(0, maxLength)); // 100자를 초과하는 입력 제거
                 }
             });

@@ -43,7 +43,9 @@ public interface ProductMapper {
     List<LaptopDetailsDTO> laptopProductDetails(int productNo);
 
 
-    int checkSpecExists(@Param("productNo") int productNo, @Param("category") String category, @Param("specValue") String specValue);
+    int checkSpecExists(@Param("productNo") int productNo,@Param("specName") String specName);
+
+    int checkCategory(@Param("productNo") int productNo,@Param("categoryNo") String categoryNo);
 
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
@@ -90,6 +92,6 @@ public interface ProductMapper {
 
 
 
-
-
+    @Select("SELECT COUNT(*) FROM images WHERE reference_code = #{ referenceCode }")
+    int findImageByReferenceCode(String referenceCode);
 }

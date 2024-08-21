@@ -132,18 +132,18 @@
                     success: function (response) {
                         switch (response) {
                           case 1:
-                            alert("위시리스트 추가 완료.");
+                            swal('위시리스트 추가 완료.', '', 'success');
                             $("#icon-wishlist").css("color", "#FF0000");
                             break;
                           case 2:
-                            alert("위시리스트 삭제 완료.");
+                            swal('위시리스트 삭제 완료.', '', 'info');
                             $("#icon-wishlist").css("color", "");
                             break;
                           case 3:
-                            alert("로그인이 필요합니다.");
+                            swal('로그인이 필요합니다.', '', 'info');
                             break;
                           default:
-                            alert("위시리스트 Ajax Error");
+                            swal('위시리스트 Ajax Error', '', 'error');
                         }
                     },
                     error: function () {
@@ -164,18 +164,18 @@
                     success: function (response) {
                         switch (response) {
                           case 1:
-                            alert("장바구니 추가 완료.");
+                            swal('장바구니 추가 완료', '', 'success');
                             $("#icon-cart").css("color", "#32CD32");
                             break;
                           case 2:
-                            alert("장바구니 삭제 완료.");
+                            swal('장바구니 삭제 완료', '', 'info');
                             $("#icon-cart").css("color", "");
                             break;
                           case 3:
-                            alert("로그인이 필요합니다.");
+                            swal('로그인이 필요합니다.', '', 'info');
                             break;
                           default:
-                            alert("장바구니 Ajax Error");
+                            swal('장바구니 Ajax Error', '', 'error');
                         }
                     },
                     error: function () {
@@ -196,16 +196,16 @@
                     success: function (response) {
                         switch (response) {
                           case 1:
-                            alert("장바구니 추가 완료.");
+                            swal('장바구니 추가 완료', '', 'success');
                             break;
                           case 2:
-                            alert("장바구니 삭제 완료.");
+                            swal('장바구니 삭제 완료', '', 'info');
                             break;
                           case 3:
-                            alert("장바구니 삭제 완료.");
+                            swal('장바구니 삭제 완료', '', 'info');
                             break;
                           default:
-                            alert("장바구니 Ajax Error");
+                            swal('장바구니 Ajax Error', '', 'error');
                         }
                     },
                     error: function () {
@@ -303,7 +303,7 @@
                     </div>
                     <div class="mb-2">
                         <ul class="prodinfo_spec">
-                            <li>제조사: <span th:text="${ laptop.company }"></span></li>
+                            <li>제조사: <span th:te    xt="${ laptop.company }"></span></li>
                             <li>등록일: <span th:text="${ laptop.registrationDate }"></span></li>
                             <li>출시가: <span class="price" th:text="${ laptop.price }"></span></li>
                         </ul>

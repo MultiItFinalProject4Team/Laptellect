@@ -92,7 +92,7 @@ public class ProductController {
         } catch (Exception e) {
             log.error("2.에러발생", e);
         }
-        return "product/productList";
+        return "redirect:product/productList?typeNo=1";
 
     }
 
@@ -218,7 +218,6 @@ public class ProductController {
                     log.info("키보드 조회 목록 = {}",keyboard);
                     log.info("키보드 조회 목록 = {}",keyboard.getImage());
 
-
                     model.addAttribute("productNo", keyboard.getProductNo());
                     model.addAttribute("keyboard", keyboard);
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
@@ -235,8 +234,6 @@ public class ProductController {
                     model.addAttribute("memberName", memberName);
                 }
             }
-
-
         } catch (Exception e) {
             log.error("상품 상세 조회 에러 = ", e);
         }
@@ -378,12 +375,12 @@ public class ProductController {
 //        return "product/productDetail";
 //    }
 
-    @GetMapping("/review")
-    public void review() {
-        ProductDTO productDTO = new ProductDTO();
-
-        crawlingService.reviewCrawler();
-    }
+//    @GetMapping("/review")
+//    public void review() {
+//        ProductDTO productDTO = new ProductDTO();
+//
+//        crawlingService.reviewCrawler();
+//    }
 
     @GetMapping("/cart")
     public String showCartList() {
@@ -408,7 +405,7 @@ public class ProductController {
                 break;
         }
 
-    return "product/product/productList";
+    return "redirect:product/productList?typeNo=1";
 
 
     }

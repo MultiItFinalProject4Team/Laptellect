@@ -20,22 +20,22 @@
                     processData: false,
                     success: function(response) {
                         if (response == 1) {
-                            alert("상품 문의 등록"); // 성공 메시지 표시
+                            swal("상품 문의 등록", '', "success");
                             $('#productqForm')[0].reset(); // 폼 필드 초기화
                             $('#productModal').modal('hide'); // 모달 닫기
                             loadComments(1);
 
                         } else if(response==0){
-                            alert('로그인후 이용가능합니다.');
+                            swal('로그인 후 이용 가능합니다.', '', 'info');
                             window.location.href = '/signin';
                         }
                         else {
-                            alert('문의 제출에 실패했습니다: ' + response.message);
+                            swal('문의 제출에 실패했습니다: ' + response.message, '', 'error');
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error('Error:', textStatus, errorThrown);
-                        alert('문제 발생! 다시 시도해 주세요.');
+                        swal('문제 발생! 다시 시도해 주세요.', '', 'error');
                     }
                 });
 
@@ -71,22 +71,22 @@
             processData: false,
             success: function(response) {
                 if (response == 1) {
-                    alert("상품 문의 답변 등록"); // 성공 메시지 표시
+                    swal("상품 문의 답변 등록", '', "success");
                     $('#productAForm')[0].reset(); // 폼 필드 초기화
                     $('#productAnswerModal').modal('hide'); // 모달 닫기
                     loadComments(1);
 
                 } else if(response==0){
-                    alert('로그인후 이용가능합니다.');
+                    swal('로그인 후 이용 가능합니다.', '', 'info');
                     window.location.href = '/signin';
                 }
                 else {
-                    alert('문의 제출에 실패했습니다: ' + response.message);
+                    swal('문의 제출에 실패했습니다: ' + response.message, '', 'error');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error:', textStatus, errorThrown);
-                alert('문제 발생! 다시 시도해 주세요.');
+                swal('문제 발생! 다시 시도해 주세요.', '', 'error');
             }
         });
 
@@ -108,7 +108,7 @@ function QuestionApp(){
     $('#content').val('');
     $("input[name='secret'][value='N']").prop('checked', true);
     if($('#curmemname').val()===''){
-        alert('로그인 후 이용 가능합니다.')
+        swal('로그인 후 이용 가능합니다.', '', 'info');
     }
     else{
         var button = $('#save_update');
@@ -126,7 +126,7 @@ function appReply(productqNo){
     $('#Acontent').val('');
     $('#AproductqNo').val(productqNo);
     if($('#curmemname').val()===''){
-        alert('로그인 후 이용 가능합니다.')
+        swal('로그인 후 이용 가능합니다.', '', 'info');
     }
     else{
         var button = $('#Asave_update');

@@ -48,23 +48,38 @@ function loadComments(page) {
             }
         },
         error: function () {
-            alert("댓글을 로드하는 중 오류가 발생했습니다.");
+            swal("댓글을 로드하는 중 오류가 발생했습니다.", "", "error");
         }
     });
 }
 
-function makePagination(page, totalPages){
+function makePagination(page, totalPages) {
     let pagination = $('#pagination');
     pagination.empty();
-    startPage = 1;
 
+    const pageSize = 10; // 한 번에 표시할 페이지 번호 개수
+    const currentGroup = Math.floor((page - 1) / pageSize); // 현재 페이지 그룹 (0부터 시작)
+    const startPage = currentGroup * pageSize + 1;
+    const endPage = Math.min(startPage + pageSize - 1, totalPages);
+    console.log(startPage);
+    console.log(endPage);
+
+    // 이전 10페이지 버튼
+    if (startPage > 1) {
+        pagination.append(`<li class="page-item"><a class="page-link prev_btn" onclick="loadComments(${startPage - 1})"><<</a></li>`);
+    } else {
+        pagination.append(`<li class="page-item"><a class="page-link prev_btn disabled"><<</a></li>`);
+    }
+
+    // 이전 페이지 버튼
     if (page > 1) {
-            pagination.append(`<li class="page-item"><a class="page-link prev_btn" onclick="loadComments(${page - 1})">이전</a></li>`);
-        } else {
-            pagination.append(`<li class="page-item"><a class="page-link prev_btn disabled">이전</a></li>`);
-        }
+        pagination.append(`<li class="page-item"><a class="page-link prev_btn" onclick="loadComments(${page - 1})">이전</a></li>`);
+    } else {
+        pagination.append(`<li class="page-item"><a class="page-link prev_btn disabled">이전</a></li>`);
+    }
 
-    for(let i=startPage; i<=totalPages; i++) { // 페이지네이션
+    // 페이지 번호
+    for (let i = startPage; i <= endPage; i++) {
         if (i === page) {
             pagination.append(`<li class="page-item active"><a class="page-link">${i}</a></li>`);
         } else {
@@ -72,12 +87,21 @@ function makePagination(page, totalPages){
         }
     }
 
+    // 다음 페이지 버튼
     if (page < totalPages) {
         pagination.append(`<li class="page-item"><a class="page-link next_btn" onclick="loadComments(${page + 1})">다음</a></li>`);
     } else {
         pagination.append(`<li class="page-item"><a class="page-link next_btn disabled">다음</a></li>`);
     }
+
+    // 다음 10페이지 버튼
+    if (endPage < totalPages) {
+        pagination.append(`<li class="page-item"><a class="page-link next_btn" onclick="loadComments(${endPage + 1})">>></a></li>`);
+    } else {
+        pagination.append(`<li class="page-item"><a class="page-link next_btn disabled">>></a></li>`);
+    }
 }
+
 
 function formatDate(dateString) {
     var date = new Date(dateString);

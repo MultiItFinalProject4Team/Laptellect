@@ -48,6 +48,8 @@ public class AuthController {
                 errorMessage = "존재하지 않는 사용자 입니다.";
             } else if (error.equals("memberNotFound")) {
                 errorMessage = "탈퇴한 사용자 입니다.";
+            } else if (error.equals("AccessDenied")) {
+                errorMessage = "권한이 없는 사용자 입니다";
             }
             model.addAttribute("errorMessage", errorMessage);
         }

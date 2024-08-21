@@ -20,7 +20,7 @@
             data: { productNo: productNo },
             success: function(response) {
                 if(response === true) {
-                    alert('상품 삭제 완료');
+                    swal('상품 삭제 완료', '', 'success');
                     loadCartList();
                 } else {
                     console.log('삭제에 실패하였습니다.');
@@ -39,7 +39,7 @@
         });
 
         if (selectedProducts.length === 0) {
-            alert('삭제할 상품을 선택해주세요.');
+            swal('삭제할 상품을 선택해주세요.', '', 'info');
             return;
         }
 
@@ -52,7 +52,7 @@
             },
             success: function(response) {
                 if(response === true) {
-                    alert('상품 삭제 완료');
+                    swal('상품 삭제 완료', '', 'success');
                     loadCartList();
                 } else {
                     console.log('삭제에 실패하였습니다.');
