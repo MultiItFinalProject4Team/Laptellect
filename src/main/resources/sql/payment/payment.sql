@@ -66,11 +66,12 @@ SELECT
     pd.product_code,
     pd.type_no,
     pd.price,
+--     GROUP_CONCAT(CONCAT(pd.options, ' : ', pd.option_value) SEPARATOR ' / ') AS product_info,
     MAX(pd.upload_name) AS upload_name
 FROM
     product p
 JOIN
-    product_detail pd ON p.product_name = pd.product_name
+    vw_product_detail pd ON p.product_name = pd.product_name
 GROUP BY
     p.product_no, pd.product_name, pd.product_code, pd.type_no, pd.price;
 SELECT * FROM view_paymentpage;
