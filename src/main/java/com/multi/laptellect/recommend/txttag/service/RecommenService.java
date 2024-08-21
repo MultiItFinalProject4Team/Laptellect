@@ -49,7 +49,6 @@ public class RecommenService {
                 log.info("제품 {}에 할당된 태그 = {}", productNO, tags);
 
                 for (int tag : tags) {
-
                     tagMapper.insertProductTag(productNO, tag);
                 }
 
@@ -89,8 +88,6 @@ public class RecommenService {
 
 
         //gpuName, screenSize 변수명 변경
-
-
         if (isGpuSuitableForSteamOrFPS(gpuName, gpuTypeName)) {
             tagNo = findTagByData(tags, "게이밍");
             assignedTags.add(tagNo);

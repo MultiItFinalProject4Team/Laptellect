@@ -22,6 +22,17 @@
                 }
             });
 
+            let urlParams = new URLSearchParams(window.location.search);
+            let success = urlParams.get('success');
+
+            if (success === 'true') {
+                swal("로그인 성공", "", "success");
+
+                setTimeout(function() {
+                    swal.close(); //
+                }, 1500);
+            }
+
             $('.price').each(function() {
                 let value = $(this).text().replace(' 원', '');
                 let formattedValue = new Intl.NumberFormat().format(value);

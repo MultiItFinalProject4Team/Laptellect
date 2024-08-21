@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -17,13 +18,15 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/sentiment")
 public class EmotionAnalyzeController {
     private final EmotionAnalyzeService emotionAnalyzeService;
     private final SentimentDAO sentimentDAO;
 
     private static final int MAX_ANALYSES_PER_PRODUCT = 50;
 
-//    @EventListener(ApplicationReadyEvent.class)
+
+    @GetMapping("")
     public void onApplicationEvent() {
         log.info("서버 시작 시 자동으로 감성 분석 실행 (상품당 최대 {} 회)", MAX_ANALYSES_PER_PRODUCT);
         List<ReviewDTO> reviews = sentimentDAO.getUnanalyzedReviews();
@@ -66,10 +69,9 @@ public class EmotionAnalyzeController {
 
 
         log.info("모든 상품의 감성 분석 작업 완료");
-
     }
 
-    @GetMapping("/api/sentiment/{productNo}")
+    @GetMapping("/{productNo}")
     public String getProductSentiment(@PathVariable int productNo) {
         return emotionAnalyzeService.analyzeSentiment(productNo);
     }

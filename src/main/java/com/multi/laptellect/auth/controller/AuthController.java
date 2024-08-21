@@ -103,11 +103,12 @@ public class AuthController {
         try {
             String token = oAuthService.getKakaoAccessToken(code);
             SocialDTO socialDTO = oAuthService.getKaKaoProfileInfo(token);
-            oAuthService.processKakaoUser(socialDTO);
-            model.addAttribute("loginSuccess", "success");
+            String message = oAuthService.processKakaoUser(socialDTO);
+
+            model.addAttribute("message", message);
         } catch (Exception e) {
             log.error("카카오 로그인 에러 = ", e);
-            model.addAttribute("loginSuccess", "fail");
+            model.addAttribute("message", "fail");
         }
         return "/auth/auth-sign-in-success";
     }
@@ -144,11 +145,12 @@ public class AuthController {
             String token = oAuthService.getGoogleAccessToken(code);
             SocialDTO SocialDTO = oAuthService.getGoogleProfileInfo(token);
 
-            oAuthService.processGoogleUser(SocialDTO);
-            model.addAttribute("loginSuccess", "success");
+            String message = oAuthService.processGoogleUser(SocialDTO);
+            model.addAttribute("message", message);
+            log.info("메시지 리턴 확인 {}", message);
         } catch (Exception e) {
             log.error("Google Login Error = ", e);
-            model.addAttribute("loginSuccess", "fail");
+            model.addAttribute("message", "fail");
         }
         
         return "/auth/auth-sign-in-success";
