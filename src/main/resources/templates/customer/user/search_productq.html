@@ -134,7 +134,7 @@
                     <a class="page-link" th:if="${state}=='all'" th:href="@{/customer/user/search_productq/{productNo}(category=${page_category}, keyword=${page_keyword}, productNo=${productNo}, answer=${answer}, date=${date}, page=${endPage + 1})}" aria-label="Next 10">
                         <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
-                    <a class="page-link" th:if="${state=='search'}" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(category=${page_category}, keyword=${page_keyword},productNo=${productNo}, answer=${answer}, date=${date}, page=${endPage + 1})}" aria-label="Next 10">
+                    <a class="page-link" th:if="${state}=='my'" th:href="@{/customer/user/my_productq/{productNo}(category=${page_category}, keyword=${page_keyword},productNo=${productNo}, answer=${answer}, date=${date}, page=${endPage + 1})}" aria-label="Next 10">
                         <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
                 </li>
