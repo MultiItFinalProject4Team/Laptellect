@@ -42,7 +42,7 @@
           <div class="form-floating">
             <input type="text" class="form-control" id="address-name2" placeholder="address-name" value="">
             <label for="address-name2">배송지 이름</label>
-            <div class="error-message" id="addressError" style="color: red">
+            <div class="error-message" id="addressError2" style="color: red">
               저장할 배송지 이름을 입력해주세요.
             </div>
             <br>
@@ -162,17 +162,21 @@ $('.btn-success').on('click', function() {
 });
 
 $("#address-name2").on("blur", function () {
-    let addressName = $(this).val();
-    console.log(addressName);
+    let addressName = $(this).val().trim();
+    let regId = /[^a-zA-Z0-9]/g;
 
-    if(addressName !== "") {
-        $(".addAddressBtn").prop("disabled", false);
-        $("#addressError").hide();
+    if (addressName === "") {
+        $("#addressError2").text("저장할 배송지 이름을 입력해주세요.");
+        $(".updateAddressBtn").prop("disabled", true);
+        $("#addressError2").show();
+    } else if (regId.test(addressName)) {
+        $("#addressError2").text("특수문자를 사용할 수 없습니다.");
+        $(".updateAddressBtn").prop("disabled", true);
+        $("#addressError2").show();
     } else {
-        $(".addAddressBtn").prop("disabled", true);
-        $("#addressError").show();
+        $("#addressError2").hide();
+        $(".updateAddressBtn").prop("disabled", false);
     }
-    // 배송지 이름 빈칸 검증
 });
 
 $(".updateAddressBtn").on("click", function () {
@@ -214,7 +218,7 @@ $(".updateAddressBtn").on("click", function () {
                     setTimeout(function() {
                         $('#update-delivery-modal').modal('hide');
                         location.reload();
-                    }, 1500);
+                    }, 1000);
                     break;
                 case 0:
                     swal('배송지 이름을 입력해주세요.', '', 'info');
@@ -257,7 +261,7 @@ $('.deleteAddressBtn').on('click', function() {
                   $('#delete-delivery-modal').modal('hide');
                   getAddressList()
                   location.reload();
-              }, 1500);
+              }, 1000);
             } else {
               swal('사용자가 일치하지 않습니다.', '', 'warning');
             }

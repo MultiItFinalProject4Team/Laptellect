@@ -20,15 +20,23 @@ $(function () {
         $(".addAddressBtn").prop("disabled", true);
 
         $("#address-name").on("blur", function () {
-          let addressName = $(this).val();
+          let addressName = $(this).val().trim();
+          let regId = /[^a-zA-Z0-9]/g;
           console.log(addressName);
 
-          if(addressName !== "") {
-            $(".addAddressBtn").prop("disabled", false);
-            $("#addressError").hide();
+          if (addressName !== "") {
+              if (regId.test(addressName)) {
+                  $("#addressError").text("특수문자를 사용할 수 없습니다.");
+                  $(".addAddressBtn").prop("disabled", true);
+                  $("#addressError").show();
+              } else {
+                  $("#addressError").hide();
+                  $(".addAddressBtn").prop("disabled", false);
+              }
           } else {
-            $(".addAddressBtn").prop("disabled", true);
-            $("#addressError").show();
+              $("#addressError").text("저장할 배송지 이름을 입력해주세요.");
+              $("#addressError").show();
+              $(".addAddressBtn").prop("disabled", true);
           }
           // 배송지 이름 빈칸 검증
         });
@@ -70,7 +78,7 @@ $(function () {
                             $('#add-delivery-modal').modal('hide');
                             getAddressList();
                             location.reload();
-                        }, 1500);
+                        }, 1000);
 
                         break;
                     case 0:
