@@ -40,6 +40,8 @@
 			, p.price
 			, i.upload_name
 			, p.created_at
+		ORDER BY
+			p.product_no DESC
 		LIMIT 4
 	</select>
 </mapper>

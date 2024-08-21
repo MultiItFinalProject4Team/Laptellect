@@ -65,9 +65,13 @@ $(function () {
                   switch(response) {
                     case 1:
                         swal("성공", "배송지가 성공적으로 등록되었습니다.", "success");
-                        $('#add-delivery-modal').modal('hide');  // 모달 닫기
-                        getAddressList();  // 배송지 목록 새로고침
-                        location.reload();
+
+                        setTimeout(function() {
+                            $('#add-delivery-modal').modal('hide');
+                            getAddressList();
+                            location.reload();
+                        }, 1500);
+
                         break;
                     case 0:
                         swal("경고", "배송지 이름을 입력해주세요.", "warning");

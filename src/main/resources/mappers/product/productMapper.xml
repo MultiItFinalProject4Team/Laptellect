@@ -57,7 +57,7 @@
             images i
         on
             i.reference_code = p.reference_code
-        ORDER BY p.product_no
+        ORDER BY p.product_no DESC
 
     </select>
 
@@ -90,7 +90,7 @@
         WHERE
         p.type_no = #{typeNo}
         ORDER BY
-        p.product_no
+        p.product_no DESC
 <!--        LIMIT #{ } OFFSET #{ }-->
 
     </select>
@@ -233,7 +233,7 @@
         p.reference_code, p.created_at, p.updated_at, p.product_code, i.upload_name
 
         ORDER BY
-        p.product_no
+        p.product_no DESC
         LIMIT
             #{searchDTO.size}
         OFFSET

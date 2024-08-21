@@ -14,6 +14,9 @@
   </tr>
   </thead>
   <tbody>
+  <tr th:if="${ orders == null or orders.isEmpty() }">
+    <td colspan="7" class="text-center">조회 정보가 없습니다</td>
+  </tr>
   <tr th:each="order, loop : ${ orders }">
     <th th:text="${page * size + loop.index + 1}" scope="row"></th>
     <td><a href="#" class="order-detail" th:data-payment-no="${ order.paymentNo }" style="color: blue;" th:text="${ order.paymentNo }"></a></td>

@@ -58,7 +58,7 @@ CREATE TABLE wishlist (
 	member_no INT NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT wishlist_PK PRIMARY KEY(wishlist_no),
-    CONSTRAINT wishlist_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no),
+    CONSTRAINT wishlist_product_no_fk FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE,
 	CONSTRAINT wishlist_member_no_fk FOREIGN KEY (member_no) REFERENCES mem_member(member_no) ON DELETE CASCADE
 );
 
