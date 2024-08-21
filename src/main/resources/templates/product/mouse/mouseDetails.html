@@ -211,6 +211,16 @@
         <div class="col-md-4" style="height: 612px;">
             <img th:src="@{'/img/product/' + ${ mouse.image }}" class="card-img-top" alt="상품 이미지"
                  style="height: 400px; object-fit: contain;">
+            <div class="sentiment-result btn w-100" th:if="${sentimentResult != null}"
+                 th:text="${sentimentResult}"
+                 th:classappend="${sentimentResult == '압도적 긍정적' or
+                          sentimentResult == '매우 긍정적' or
+                          sentimentResult == '조금 긍정적'} ? 'sentiment-positive' :
+                         (${sentimentResult == '압도적 부정적' or
+                           sentimentResult == '매우 부정적' or
+                           sentimentResult == '조금 부정적'} ? 'sentiment-negative' :
+                          'sentiment-neutral')">
+            </div>
             <div class="spec-box mt-3">
                 <!-- 상품 기본 정보 -->
                 <ul class="list-unstyled">

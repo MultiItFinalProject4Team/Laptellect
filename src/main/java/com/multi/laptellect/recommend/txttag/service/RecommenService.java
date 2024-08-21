@@ -107,9 +107,9 @@ public class RecommenService {
             log.info("'넓은 화면' 태그(#{}) 할당", tagNo);
         }
         if (isScreenSuitableForDocuments(screenSize)) {
-            tagNo = findTagByData(tags, "적당한 화면");
+            tagNo = findTagByData(tags, "중간 화면 사이즈");
             assignedTags.add(tagNo);
-            log.info("'적당한 화면' 태그(#{}) 할당", tagNo);
+            log.info("'중간 화면 사이즈' 태그(#{}) 할당", tagNo);
         }
         if (isScreenSuitableForStudents(screenSize)) {
             tagNo = findTagByData(tags, "작은 화면");
@@ -137,11 +137,11 @@ public class RecommenService {
             assignedTags.add(tagNo);
             log.info("'적은 Usb' 태그(#{}) 할당", tagNo);
         }
-        if (isRecent(recentNo)) {
-            tagNo = findTagByData(tags, "최신제품");
-            assignedTags.add(tagNo);
-            log.info("'최신 제품' 태그(#{}) 할당", tagNo);
-        }
+//        if (isRecent(recentNo)) {
+//            tagNo = findTagByData(tags, "최신제품");
+//            assignedTags.add(tagNo);
+//            log.info("'최신 제품' 태그(#{}) 할당", tagNo);
+//        }
         if (isWeightSuitable(weightName)) {
             tagNo = findTagByData(tags, "가벼움");
             assignedTags.add(tagNo);
@@ -203,45 +203,45 @@ public class RecommenService {
             log.info("'높은 해상도' 태그(#{}) 할당", tagNo);
         }
         if (isPrice(priceName, gpuName)) {
-            tagNo = findTagByData(tags, "게이밍 착한 가격");
+            tagNo = findTagByData(tags, "착한 가격 겜트북");
             assignedTags.add(tagNo);
             log.info("'게이밍 착한 가격' 태그(#{}) 할당", tagNo);
         }
         if (isPriceEff(priceName, gpuName)) {
-            tagNo = findTagByData(tags, "게이밍 가성비");
+            tagNo = findTagByData(tags, "가성비 겜트북");
             assignedTags.add(tagNo);
             log.info("'게이밍 가성비' 태그(#{}) 할당", tagNo);
         }
         if (isPriceSmo(priceName, cpuName)) {
-            tagNo = findTagByData(tags, "사무용 착한 가격");
+            tagNo = findTagByData(tags, "착한 가격");
             assignedTags.add(tagNo);
             log.info("'사무용 착한 가격' 태그(#{}) 할당", tagNo);
         }
         if (isPriceSmoGod(priceName, gpuTypeName)) {
-            tagNo = findTagByData(tags, "사무용 가성비");
+            tagNo = findTagByData(tags, "가성비");
             assignedTags.add(tagNo);
             log.info("'사무용 가성비' 태그(#{}) 할당", tagNo);
         }
         if (isPriceSmoGo(priceName, gpuTypeName)) {
-            tagNo = findTagByData(tags, "사무용 고성능");
+            tagNo = findTagByData(tags, "비즈니스 모델");
             assignedTags.add(tagNo);
             log.info("'사무용 고성능' 태그(#{}) 할당", tagNo);
 
         }
         if (isPriceGo(priceName, gpuName)) {
-            tagNo = findTagByData(tags, "게이밍 고성능");
+            tagNo = findTagByData(tags, "고성능");
             assignedTags.add(tagNo);
             log.info("'게이밍 고성능' 태그(#{}) 할당", tagNo);
         }
         if (isInten(cpuName, gpuTypeName)) {
-            tagNo = findTagByData(tags, "인터넷 강의");
+            tagNo = findTagByData(tags, "사무용");
             assignedTags.add(tagNo);
             log.info("'인터넷 강의' 태그(#{}) 할당", tagNo);
         }
         if (isSomoWeight(weightName)) {
-            tagNo = findTagByData(tags, "초경량화");
+            tagNo = findTagByData(tags, "초경량");
             assignedTags.add(tagNo);
-            log.info("'초경량화' 태그(#{}) 할당", tagNo);
+            log.info("'초경량' 태그(#{}) 할당", tagNo);
         }
 
         return assignedTags;
@@ -570,18 +570,18 @@ public class RecommenService {
         return false;
     }
 
-    private boolean isRecent(String recent) {
-        if (recent == null) {
-            return false;
-        }
-        List<String> suitableRecent = List.of("2024");
-        for (String suitableRecents : suitableRecent) {
-            if (recent.contains(suitableRecents)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private boolean isRecent(String recent) {
+//        if (recent == null) {
+//            return false;
+//        }
+//        List<String> suitableRecent = List.of("2024");
+//        for (String suitableRecents : suitableRecent) {
+//            if (recent.contains(suitableRecents)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     private boolean ispaneSur(String panel) {
         if (panel == null) {

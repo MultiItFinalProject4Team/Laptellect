@@ -2,6 +2,7 @@ package com.multi.laptellect.config.Scheduler;
 
 import com.multi.laptellect.common.service.LogService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
 import com.multi.laptellect.recommend.txttag.service.RecommenService;
 import com.multi.laptellect.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class SchedulerConfiguration {
     private final LogService logService;
     private final ProductService productService;
     private final RecommenService recommenService;
+    private final EmotionAnalyzeService emotionAnalyzeService;
 
     @Scheduled(fixedRate = 50000) // fixedRate(서버 작동하자마자 시작) fixedDelay(종료 시점부터 시작, 1000 = 1초)
     public void run() {
@@ -76,4 +78,27 @@ public class SchedulerConfiguration {
             log.error("상품 조회수 업데이트 실패 = ", e);
         }
     }
+
+//    @Scheduled(fixedRate = 60000)
+//    public void scheduleTagAssignment() {
+//        log.info("태그 할당 스케줄러 시작");
+//        try {
+//            recommenService.assignTagsToProducts();
+//            log.info("태그 할당 스케줄러 완료");
+//        } catch (Exception e) {
+//            log.error("태그 할당 중 오류:", e);
+//        }
+//    }
+//
+//    @Scheduled (fixedRate = 60000) // 1분 간격으로 감정 분석
+//    public void scheduleEmotionAnalysis() {
+//        log.info("감정 분석 스케쥴러 시작");
+//        try {
+//            emotionAnalyzeService.analyzeAllUnanlyzedReviews();
+//            log.info("감정 분석 스케쥴러 완료");
+//        } catch (Exception e) {
+//            log.error("감정 분석 중 오류:", e);
+//        }
+
+//    }
 }

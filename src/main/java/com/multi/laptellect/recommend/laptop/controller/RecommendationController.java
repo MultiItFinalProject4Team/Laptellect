@@ -40,7 +40,7 @@ public class RecommendationController {
                     model.addAttribute("curationDTO", lastCuration);
                 }
             } catch (Exception e) {
-                log.error("Error retrieving last curation", e);
+                log.error("에러", e);
             }
         }
         return "recommend/recommend";

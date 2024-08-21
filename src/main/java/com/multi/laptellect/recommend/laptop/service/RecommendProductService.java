@@ -79,12 +79,12 @@ public class RecommendProductService {
             return List.of();
         }
         switch (somoweight) {
-            case "경량화":
-                return List.of("경량화");
+            case "가벼움":
+                return List.of("가벼움"); //가방에 넣고 다닐거에요
             case "무거움":
                 return List.of("무거움");
-            case "초경량화":
-                return List.of("초경량화");
+            case "초경량":
+                return List.of("초경량");
             default:
                 return List.of();
         }
@@ -129,7 +129,7 @@ public class RecommendProductService {
             case "코드 작업할거에요":
                 return List.of("작업용");
             case "일반 사무용 작업할거에요":
-                return List.of("인터넷 강의");
+                return List.of("사무용");
             default:
                 return List.of();
         }
@@ -142,11 +142,11 @@ public class RecommendProductService {
         }
         switch (gameperformance) {
             case "성능용":
-                return List.of("사무용 고성능");
+                return List.of("비즈니스 모델");
             case "타협":
-                return List.of("사무용 착한 가격");
+                return List.of("착한 가격");
             case "밸런스용":
-                return List.of("사무용 가성비");
+                return List.of("가성비");
             default:
                 return List.of();
         }
@@ -160,7 +160,7 @@ public class RecommendProductService {
             case "화면 넓은게 좋아요":
                 return List.of("넓은 화면");
             case "적당한게 좋아요":
-                return List.of("적당한 화면");
+                return List.of("중간 화면 사이즈");
             case "작은 화면이 좋아요":
                 return List.of("작은 화면");
             default:
