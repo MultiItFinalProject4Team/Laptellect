@@ -154,10 +154,10 @@
                     <a href="/customer/user/customer_chatbot" class="nav-link text-dark purchase-tap">챗 봇</a>
                 </li>
                 <hr>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_USER')">
                     <a href="/customer/user/personalq_app" class="nav-link text-dark purchase-tap">1:1 문의하기</a>
+                    <hr>
                 </li>
-                <hr>
             </ul>
         </div>
 
