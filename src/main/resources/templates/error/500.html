@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{common/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+
+    <link rel="stylesheet" href="/css/error/error.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="notfound">
+        <div class="notfound">
+            <div class="notfound-404">
+                <h1>500</h1>
+            </div>
+            <h2>죄송합니다, 서버에 문제가 발생했습니다!</h2>
+            <p>현재 요청을 처리하는 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주시기 바랍니다.</p>
+            <p>문제가 계속된다면, 사이트 관리자에게 문의해 주십시오.</p>
+            <a href="/home">홈페이지로 돌아가기</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
