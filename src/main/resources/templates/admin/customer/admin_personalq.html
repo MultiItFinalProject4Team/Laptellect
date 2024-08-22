@@ -28,10 +28,8 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container mt-2">
-        <header>
-            <h1 align="left"style="font-size:40px">1:1 문의</h1>
-        </header>
+<div class="profile-box" style="height: auto;">
+        <h1 align="left"style="font-size:40px">1:1 문의</h1>
         <hr>
         <div class="form-container">
             <form class="d-flex" role="search" th:action="@{/customer/admin/search_all_personal_question}">
@@ -94,7 +92,6 @@
             }
         });
         </script>
-    </div>
     <div class="pagination-container">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center"
@@ -142,6 +139,8 @@
             </ul>
         </nav>
     </div>
+    </div>
+
 </div>
 </body>
 </html>

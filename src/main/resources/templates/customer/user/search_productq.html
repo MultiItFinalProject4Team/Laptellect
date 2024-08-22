@@ -29,10 +29,8 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">상품 문의 내역</h1>
-    </header>
+<div class="profile-box">
+    <h1 align="left"style="font-size:40px">상품 문의 내역</h1>
     <hr>
     <div class="form-container">
         <form class="d-flex" role="search" th:action="${state=='all'} ?
@@ -92,7 +90,6 @@
     <div class="text-end">
         <a class="btn btn-custom-primary btn-sm" th:href="@{/customer/admin/all_product_question}" role="button">전체 문의 보기</a>
     </div>
-</div>
     <div class="pagination-container">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center"
@@ -141,6 +138,8 @@
             </ul>
         </nav>
     </div>
+</div>
+
 </div>
 </body>
 </html>

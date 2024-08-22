@@ -13,10 +13,8 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">상품 문의</h1>
-    </header>
+<div class="profile-box" style="min-height: 560px;">
+    <h1 align="left"style="font-size:40px">상품 문의</h1>
     <hr>
     <div>
         <p style="font-size: 15px; color: light-gray; line-height: 0;">질문</p>
@@ -47,8 +45,6 @@
 
     <hr class="border border-dark">
 </div>
-
-</div>
     <div align="center">
         <div class="btn-group" aria-label="Small button group" th:if="${productq.answer=='N'}">
             <a th:href="@{/customer/admin/answer_productq/{productqNo}(productqNo=${productq.productqNo})}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn btn-custom-primary">답변하기</a>
@@ -58,6 +54,9 @@
             <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productq.productNo})}" class="btn btn-custom-primary">목록으로</a>
         </div>
     </div>
+</div>
+
+
 </div>
 </body>
 </html>

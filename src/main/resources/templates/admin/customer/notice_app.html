@@ -13,30 +13,33 @@
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
 
     <script>
-        $('style').append('.ck-content { height: 500px; }');
+        $('style').append('.ck-content { height: 480px; }');
         objEditor = editor;
     </script>
+    <style>
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">공지사항 등록</h1>
-    </header>
+<div class="profile-box" style="height: auto;">
+    <h1 align="left"style="font-size:40px">공지사항 등록</h1>
     <hr>
     <form action="/customer/admin/notice_app" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">
             <input type="text" id="memberNo" name="memberNo" th:value="${memberNo}" hidden="true"><br><br>
-            <label class="input-group-text" for="title">제목:</label>
-            <input class="col-md-9" type="text" id="title" name="title" required><br><br>
-            <div class="d-flex row justify-content-center" style="margin-left:10px; border: 2px solid #000000;">
-                <label class="input-group-text">메인 공지 여부 </label>
-                <label>
-                    <input type="radio" name="mainRegist" value="Y"> Yes
-                </label>
-                <label>
-                    <input type="radio" name="mainRegist" value="N" checked> No
-                </label>
+            <div class="input-group form-row">
+                <label class="input-group-text" for="title">제목:</label>
+                <input class="col-md-8" type="text" id="title" name="title" required>
+
+                <div class="d-flex align-items-center ms-3">
+                    <label class="input-group-text me-2">메인 공지 여부 :</label>
+                    <label class="me-2">
+                        <input type="radio" name="mainRegist" value="Y"> Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="mainRegist" value="N" checked> No
+                    </label>
+                </div>
             </div>
         </div>
 
