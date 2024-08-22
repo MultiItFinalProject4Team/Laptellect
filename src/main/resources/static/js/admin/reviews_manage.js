@@ -3,6 +3,13 @@ const itemsPerPage = 12;
 let filteredReviews = [];
 let currentReviewId = null;
 
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function renderTable() {
   const tableBody = document.getElementById('reviewTableBody');
   const reviewsToShow = filteredReviews.length > 0 ? filteredReviews : reviews;
@@ -18,6 +25,9 @@ function renderTable() {
   }
 
   pageReviews.forEach(review => {
+    const createdAtFormatted = formatDate(new Date(review.createdAt));
+    const modifyAtFormatted = review.modifyAt != null ? formatDate(new Date(review.modifyAt)) : '수정사항없음';
+
     const row = `
       <tr>
         <td class="checkbox-column"><input type="checkbox" name="reviewCheck" value="${review.paymentProductReviewsNo}"></td>
@@ -26,8 +36,8 @@ function renderTable() {
         <td class="author-column">${review.memberName}</td>
         <td class="content-column">${review.content}</span></td>
         <td class="rating-column">${review.rating}점</td>
-        <td class="date-column">${review.createdAt}</td>
-        <td class="date-column">${review.modifyAt != null ? review.modifyAt : '수정사항없음'}</td>
+        <td class="date-column">${createdAtFormatted}</td>
+        <td class="date-column">${modifyAtFormatted}</td>
       </tr>
     `;
     tableBody.innerHTML += row;
