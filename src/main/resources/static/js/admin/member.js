@@ -5,6 +5,7 @@ $(document).ready(function () {
     function convertEmptyToNull(value) {
         return value.trim() === "" ? null : value;
     }
+
     // 날짜 검색 현재 날짜 set
     function setEndDate() {
         let today = new Date();

@@ -9,9 +9,13 @@ import com.multi.laptellect.util.PasswordValidator;
 import com.multi.laptellect.util.SecurityUtil;
 import com.multi.laptellect.util.StringValidUtil;
 import com.multi.laptellect.util.UserValidator;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -373,11 +377,16 @@ public class AuthApiController {
 
     @ResponseBody
     @GetMapping("/delete-member")
-    public boolean deleteId(HttpSession httpSession) {
+    public boolean deleteId(HttpSession httpSession, HttpServletRequest request, HttpServletResponse response) {
         boolean result;
         try {
             result = memberService.deleteMember();
             httpSession.invalidate();
+            Cookie cookie = new Cookie("remember-me", null);
+            cookie.setPath("/");
+            cookie.setMaxAge(0); // 쿠키를 만료시킴
+            response.addCookie(cookie);
+            SecurityContextHolder.clearContext();
         } catch (Exception e) {
             log.error("회원 탈퇴 실패 = ", e);
             result = false;
