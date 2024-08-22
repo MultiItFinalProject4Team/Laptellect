@@ -203,11 +203,12 @@ public class AuthApiController {
     public boolean updatePassword(@RequestParam("beforePassword") String beforePassword,
                                   @RequestParam("afterPassword") String afterPassword) {
         try {
-            if(memberService.updatePassword(beforePassword, afterPassword)) {
-                return true;
-            } else {
-                return false;
+            if(!PasswordValidator.validatePassword(afterPassword)) {
+                log.warn("비밀번호 유효성 검증 실패 = {}", afterPassword);
+                throw new RuntimeException("비밀번호 유효성 검증 실패 = " + afterPassword);
             }
+
+            return memberService.updatePassword(beforePassword, afterPassword);
         } catch (Exception e) {
             log.error("Password Update Code Error = ", e);
             return false;
