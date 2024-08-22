@@ -7,6 +7,13 @@ function formatPrice(price) {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원';
 }
 
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function renderTable() {
   const tableBody = document.getElementById('orderTableBody');
   const ordersToShow = filteredOrders.length > 0 ? filteredOrders : orders;
@@ -22,6 +29,9 @@ function renderTable() {
   }
 
   pageOrders.forEach(order => {
+  const formattedCreatedAt = formatDate(new Date(order.createdAt));
+  const formattedRefundAt = order.refundAt ? formatDate(new Date(order.refundAt)) : '환불되지 않음';
+
     const row = `
       <tr>
         <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" data-amount="${order.purchasePrice}" data-payment-no="${order.paymentNo}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
@@ -30,10 +40,10 @@ function renderTable() {
         <td class="product-name-column"><a href="/product/productDetail?productNo=${order.productNo}" class="order-content">${order.productName}</a></td>
         <td class="price-column">${formatPrice(order.productPrice)}</td>
         <td class="purchase-price-column">${formatPrice(order.purchasePrice)}</td>
-        <td class="date-column">${order.createdAt}</td>
+        <td class="date-column">${formattedCreatedAt}</td>
         <td class="imPortId-column">${order.imPortId}</td>
         <td class="refund-column">${order.refund}</td>
-        <td class="refund-date-column">${order.refundAt || '환불되지 않음'}</td>
+        <td class="refund-date-column">${formattedRefundAt}</td>
       </tr>
     `;
     tableBody.innerHTML += row;
@@ -113,28 +123,37 @@ function refundSelectedOrders() {
     return;
   }
 
-  if (confirm(`선택한 ${selectedOrders.length}개의 주문을 환불하시겠습니까?`)) {
-    Promise.all(selectedOrders.map(order => refundOrder(order.imPortId, order.amount, order.paymentNo)))
-      .then(results => {
-        const successCount = results.filter(result => result.success).length;
-        const failCount = results.length - successCount;
+  swal({
+    title: '선택한 주문을 환불하시겠습니까?',
+    text: `${selectedOrders.length}개의 주문이 환불됩니다.`,
+    icon: 'warning',
+    buttons: ['취소', '환불'],
+    dangerMode: true,
+  }).then((willRefund) => {
+    if (willRefund) {
+      Promise.all(selectedOrders.map(order => refundOrder(order.imPortId, order.amount, order.paymentNo)))
+        .then(results => {
+          const successCount = results.filter(result => result.success).length;
+          const failCount = results.length - successCount;
 
-        if (successCount > 0) {
-          swal({
+          if (successCount > 0) {
+            swal({
               title: '환불 처리 결과',
               text: `${successCount}개의 주문이 성공적으로 환불되었습니다.${failCount > 0 ? `\n${failCount}개의 주문 환불에 실패했습니다.` : ''}`,
               icon: failCount > 0 ? 'warning' : 'success'
-          });
-          location.reload();
-        } else {
-          swal('환불 처리 중 오류가 발생했습니다.', '', 'warning');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        swal('환불 처리 중 오류가 발생했습니다.', '', 'error')
-      });
-  }
+            }).then(() => {
+              location.reload();
+            });
+          } else {
+            swal('환불 처리 중 오류가 발생했습니다.', '', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          swal('환불 처리 중 오류가 발생했습니다.', '', 'error');
+        });
+    }
+  });
 }
 
 function openModal(orderId) {
@@ -170,14 +189,11 @@ function refundSingleOrder(imPortId, amount, paymentNo) {
   swal({
     title: '이 주문을 환불하시겠습니까?',
     text: "이 작업은 되돌릴 수 없습니다!",
-    type: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: '예, 환불합니다!',
-    cancelButtonText: '취소'
-  }).then(function(isConfirm) {
-    if (isConfirm) {
+    icon: 'warning',
+    buttons: ['취소', '환불'],
+    dangerMode: true,
+  }).then((willRefund) => {
+    if (willRefund) {
       refundOrder(imPortId, amount, paymentNo)
         .then(result => {
           if (result.success) {
@@ -186,7 +202,7 @@ function refundSingleOrder(imPortId, amount, paymentNo) {
                 location.reload();
               });
           } else {
-            swal('오류', '환불 처리 중 오류가 발생했습니다. ' + result.message, 'warning');
+            swal('오류', '환불 처리 중 오류가 발생했습니다. ' + result.message, 'error');
           }
         })
         .catch(error => {

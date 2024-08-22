@@ -12,15 +12,16 @@
     <link rel="stylesheet" href="/css/customer/ckeditor.css">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script>
+        $('style').append('.ck-content { height: 500px; }');
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">1:1 문의 답변</h1>
-    </header>
+<div class="profile-box">
+    <h1 align="left"style="font-size:40px">1:1 문의 답변</h1>
     <hr>
-    <form action="/customer/admin/answer_personalq" method="post" enctype="multipart/form-data">
+    <form action="/customer/admin/answer_personalq" method="post" enctype="multipart/form-data" onsubmit="disableButton(this);">
         <label for="personalqNo">번호</label>
         <input type="text" th:value="${personalqNo}" readonly="true" id="personalqNo" name="personalqNo">
         <label for="title">제목:</label>
@@ -31,7 +32,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-custom-primary">등록</button>
+            <button type="submit" id="submitButton" class="btn btn-custom-primary mt-2">등록</button>
         </div>
     </form>
 
@@ -56,6 +57,12 @@
                 }
             });
         });
+    </script>
+    <script>
+        function disableButton(form) {
+            const button = form.querySelector('#submitButton');
+            button.disabled = true;
+        }
     </script>
 </div>
 </div>

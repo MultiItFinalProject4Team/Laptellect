@@ -27,10 +27,11 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container mt-2">
-        <header>
-            <h1 align="left"style="font-size:40px">1:1 문의</h1>
-        </header>
+    <div class="profile-box">
+        <div class="d-flex align-items-center justify-content-between">
+            <h1 style="font-size: 40px;">1:1 문의</h1>
+            <a class="btn btn-custom-primary" sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/personalq_app" role="button">문의 등록</a>
+        </div>
         <hr>
         <div class="form-container">
             <form class="d-flex" role="search" th:action="${role=='user'} ? @{/customer/user/search_personalq} : @{/customer/admin/search_all_personalq}">
@@ -81,7 +82,6 @@
         </table>
         </div>
         <div class="text-end">
-            <a class="btn btn-custom-primary btn-sm" sec:authorize="hasAnyAuthority('ROLE_USER')" href="/customer/user/personalq_app" role="button">문의 등록</a>
 <!--            <a class="btn btn-secondary btn-sm" href="/upload" role="button">업로드테스트</a>-->
             <a class="btn btn-custom-primary btn-sm" href="/customer/admin/all_personal_question" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" role="button">전체 문의(관리자)</a>
         </div>
@@ -95,33 +95,57 @@
             }
         });
         </script>
+        <div class="pagination-container">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center"
+                    th:with="startPage=${T(java.lang.Math).max(1, ((currentPage - 1) / 10) * 10 + 1)},
+                      endPage=${T(java.lang.Math).min(startPage + 9, totalPages)}">
+
+                    <!-- Previous 10 pages button -->
+                    <li class="page-item" th:if="${startPage > 1}">
+                        <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${startPage - 1})}" aria-label="Previous 10">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${startPage - 1})}" aria-label="Previous 10">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+
+                    <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                        <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${currentPage - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${currentPage - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+                        <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                        <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                    </li>
+                    <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                        <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${currentPage + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${currentPage + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Next 10 pages button -->
+                    <li class="page-item" th:if="${endPage < totalPages}">
+                        <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${endPage + 1})}" aria-label="Next 10">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${endPage + 1})}" aria-label="Next 10">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
-    <div class="pagination-container">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
-                    <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${currentPage - 1})}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${currentPage - 1})}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
-                    <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
-                    <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
-                </li>
-                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
-                    <a class="page-link" th:if="${role}=='user'" th:href="@{/customer/user/customer_personalq(page=${currentPage + 1})}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                    <a class="page-link" th:if="${role}=='admin'" th:href="@{/customer/admin/all_personal_question(page=${currentPage + 1})}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+
 </div>
 </body>
 </html>

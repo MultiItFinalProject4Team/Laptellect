@@ -15,5 +15,6 @@ public class FileDto {
     private String uploadFileName;
     private String uploadFilePath;
     private String uploadFileUrl;
+    private String referenceCode;
 
 }

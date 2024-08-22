@@ -83,13 +83,27 @@ public class FileService {
      * @param url 파일경로를 포함한 파일명
      * @return 성공시 1을 반환 예외발생 시 0을 반환
      */
-    //bucketName이 team4이므로 team4/이후의 경로를 url에 지정해주어야함
     public int deleteFile(String url){
         try {
-            amazonS3Client.deleteObject(bucketName, url);
+            try {
+                String prefix = "4team/";
+                int prefixIndex = url.indexOf(prefix);
+
+                if (prefixIndex != -1) {
+                    url = url.substring(prefixIndex + prefix.length());
+                    amazonS3Client.deleteObject(bucketName, url);
+                } else {
+                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }catch (Exception e){
             return 0;
         }
         return 1;
     }
+
+
+
 }

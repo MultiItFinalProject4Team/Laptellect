@@ -57,18 +57,26 @@
             images i
         on
             i.reference_code = p.reference_code
-        ORDER BY p.product_no
+        ORDER BY p.product_no DESC
 
     </select>
 
-    <select id="checkSpecExists"  parameterType="map" resultType="int" >
+    <select id="checkSpecExists">
         SELECT COUNT(*)
         FROM
-        product_spec
+            product_spec
         WHERE
-        product_no = #{productNo}
-        AND  category_no = #{category}
-        AND option_value = #{specValue}
+            product_no = #{productNo}
+        AND  category_no = (SELECT category_no FROM product_category WHERE options = #{specName}  limit 1)
+    </select>
+
+    <select id="checkCategory">
+        SELECT COUNT(*)
+        FROM
+            product_spec
+        WHERE
+            product_no = #{productNo}
+        AND category_no LIKE CONCAT('%', #{categoryNo}, '%')
     </select>
 
     <select id="getProductsByType" resultType="productDTO" resultMap="productResultMap">
@@ -91,7 +99,7 @@
         WHERE
         p.type_no = #{typeNo}
         ORDER BY
-        p.product_no
+        p.product_no DESC
 <!--        LIMIT #{ } OFFSET #{ }-->
 
     </select>
@@ -109,9 +117,9 @@
         i.upload_name
         FROM
         product p
-        LEFT JOIN
+        INNER JOIN
         images i ON i.reference_code = p.reference_code
-        LEFT JOIN
+        INNER JOIN
         product_spec po ON po.product_no = p.product_no
         WHERE
 
@@ -214,16 +222,27 @@
             )
         </if>
 
-        <if test="searchDTO.minPrice != null and searchDTO.maxPrice != null">
-            AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
-        </if>
+        <choose>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &gt;= searchDTO.minPrice">
+                AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
+            </when>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &lt; searchDTO.minPrice">
+                AND 1 = 0
+            </when>
+            <when test="searchDTO.minPrice != null">
+                AND p.price &gt;= #{ searchDTO.minPrice }
+            </when>
+            <when test="searchDTO.maxPrice != null">
+                AND p.price &lt;= #{ searchDTO.maxPrice }
+            </when>
+        </choose>
 
         GROUP BY
         p.product_no, p.type_no, p.product_name, p.price,
         p.reference_code, p.created_at, p.updated_at, p.product_code, i.upload_name
 
         ORDER BY
-        p.product_no
+        p.product_no DESC
         LIMIT
             #{searchDTO.size}
         OFFSET
@@ -335,9 +354,20 @@
         </if>
 
         <!-- 가격 범위 조건 -->
-        <if test="searchDTO.minPrice != null and searchDTO.maxPrice != null">
-            AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
-        </if>
+        <choose>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &gt;= searchDTO.minPrice">
+                AND p.price BETWEEN #{searchDTO.minPrice} AND #{searchDTO.maxPrice}
+            </when>
+            <when test="searchDTO.maxPrice != null and searchDTO.minPrice != null and searchDTO.maxPrice &lt; searchDTO.minPrice">
+                AND 1 = 0
+            </when>
+            <when test="searchDTO.minPrice != null">
+                AND p.price &gt;= #{ searchDTO.minPrice }
+            </when>
+            <when test="searchDTO.maxPrice != null">
+                AND p.price &lt;= #{ searchDTO.maxPrice }
+            </when>
+        </choose>
     </select>
 
     <!--리뷰 저장-->
@@ -431,10 +461,10 @@
 
 
     <!--이미지를 저장시키는 쿼리-->
-    <insert id="inputImage" parameterType="imageDTO" useGeneratedKeys="true">
+    <insert id="inputImage" parameterType="fileDto" useGeneratedKeys="true">
         INSERT INTO
         images( reference_code, origin_name, upload_name)
-        VALUES ( #{referenceCode}, #{originName}, #{uploadName})
+        VALUES ( #{referenceCode}, #{originalFileName}, #{uploadFileUrl})
     </insert>
 
     <!--저장된 이미지를 불러오는 쿼리-->

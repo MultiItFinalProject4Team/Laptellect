@@ -17,32 +17,69 @@
         <result property="image" column="upload_name"/>
     </resultMap>
 
+    <sql id="productSearch">
+        <choose>
+            <when test="cate == 'all'">
+                <if test="keyword != null">
+                    AND (p.product_name LIKE CONCAT('%', #{ keyword }, '%')
+                    OR p.product_no LIKE CONCAT('%', #{ keyword }, '%'))
+                </if>
+            </when>
+            <when test="cate == 'productName'">
+                <if test="keyword != null">
+                    AND p.product_name LIKE CONCAT('%', #{ keyword }, '%')
+                </if>
+            </when>
+            <when test="cate == 'productNo'">
+                <if test="keyword != null">
+                    AND p.product_no LIKE CONCAT('%', #{ keyword }, '%')
+                </if>
+            </when>
+            <when test="cate == 'productType'">
+                <if test="keyword != null">
+                    AND p.type_no LIKE CONCAT('%', #{ keyword }, '%')
+                </if>
+            </when>
+        </choose>
+    </sql>
 
     <select id="getAllProducts" resultType="productDTO" resultMap="productResultMap">
         SELECT
-        p.product_no,
-        p.type_no,
-        p.product_name,
-        p.price,
-        p.reference_code,
-        p.created_at,
-        p.updated_at,
-        p.product_code,
-        i.upload_name
+              p.product_no
+            , p.type_no
+            , p.product_name
+            , p.price
+            , p.reference_code
+            , p.created_at
+            , p.updated_at
+            , p.product_code
+            , i.upload_name
         FROM
-        product p
+            product p
         JOIN
-        images i
+            images i
         on
-        i.reference_code = p.reference_code
-        ORDER BY p.product_no DESC
+            i.reference_code = p.reference_code
+        WHERE
+            1 = 1
+        <include refid="productSearch"/>
+        ORDER BY
+            p.product_no DESC
         LIMIT #{ pageSize } OFFSET #{ offset }
-
     </select>
 
     <select id="countAllProduct" resultType="long">
-        SELECT COUNT(*)
-        FROM product
+        SELECT
+            COUNT(*)
+        FROM
+            product p
+        JOIN
+            images i
+        on
+            i.reference_code = p.reference_code
+        WHERE
+            1 = 1
+        <include refid="productSearch"/>
     </select>
 
     <select id="getProductById" resultType="productDTO">
@@ -63,5 +100,13 @@
         product(product_no, type_no, product_name, price, product_code, reference_code, created_at, view_count)
         VALUES( #{productNo}, #{typeNo}, #{productName}, #{price}, #{productCode}, #{referenceCode}, #{createdAt}, #{viewCount})
     </insert>
+    
+    
+    <select id="findUploadName">
+        SELECT b.upload_name
+        FROM product a
+        JOIN images b ON a.reference_code = b.reference_code
+        WHERE a.product_no =#{productNo}
+    </select>
 
 </mapper>

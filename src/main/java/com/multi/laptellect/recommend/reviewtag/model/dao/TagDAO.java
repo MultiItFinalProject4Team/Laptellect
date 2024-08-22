@@ -7,7 +7,10 @@ import java.util.List;
 
 @Mapper
 public interface TagDAO {
+
     void insertTag(TagDTO tag);
+
+
     List<TagDTO> getAllTags();
     List<String> getAllReviews();
 }

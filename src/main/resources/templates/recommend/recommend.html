@@ -70,7 +70,42 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        #loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner {
+           width: 56px;
+           height: 56px;
+           border-radius: 50%;
+           background: conic-gradient(#0000 10%,#3498db);
+           -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 0);
+           animation: spinner-zp9dbg 0.8s infinite linear;
+}
+
+        @keyframes spinner-zp9dbg {
+           to {
+              transform: rotate(1turn);
+           }
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 9998;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css">
 </head>
 <body>
 <div layout:fragment="content">
@@ -78,7 +113,7 @@
 
     <h1>맞춤형 노트북 추천 시스템</h1>
 
-    <form th:action="@{/recommendpage}" method="post">
+    <form th:action="@{/recommendpage}" id="recommendForm" method="post">
         <div class="section">
             <h3>용도 선택</h3>
             <div class="option-container">
@@ -95,6 +130,10 @@
             <button type="submit" id="recommendButton" disabled>나에게 맞는 노트북 추천받기</button>
         </div>
     </form>
+    <div id="overlay"></div>
+    <div id="loading-spinner">
+        <div class="spinner"></div>
+    </div>
 
     <script th:inline="javascript">
 $(document).ready(function() {
@@ -148,6 +187,11 @@ $(document).ready(function() {
         $('#recommendButton').prop('disabled', !allSelected);
     }
 
+    $('#recommendForm').submit(function(event) {
+        $('#overlay').show();
+        $('#loading-spinner').show();
+    });
+
     function generateGamingOptions() {
         return `
             <div class="section">
@@ -162,7 +206,7 @@ $(document).ready(function() {
                 <h3>무게</h3>
                 <div class="option-container">
                     <div class="option"><input type="radio" name="weight" value="집에만 둘거에요" id="weight-1"><label for="weight-1">집에만 둘거에요</label></div>
-                    <div class="option"><input type="radio" name="weight" value="가지고 다닐거에요" id="weight-2"><label for="weight-2">가방에 넣고 다닐거에요</label></div>
+                    <div class="option"><input type="radio" name="weight" value="가지고 다닐거에요" id="weight-2"><label for="weight-2">들고 다닐거에요</label></div>
                     <div class="option"><input type="radio" name="weight" value="알아서" id="weight-3"><label for="weight-3">알아서</label></div>
                 </div>
             </div>
@@ -207,9 +251,9 @@ $(document).ready(function() {
             <div class="section">
                 <h3>무게</h3>
                 <div class="option-container">
-                    <div class="option"><input type="radio" name="somoweight" value="경량화" id="somoweight-1"><label for="somoweight-1">사무실에서 사용할거에요</label></div>
-                    <div class="option"><input type="radio" name="somoweight" value="무거움" id="somoweight-2"><label for="somoweight-2">가지고 다닐거에요</label></div>
-                    <div class="option"><input type="radio" name="somoweight" value="초경량화" id="somoweight-3"><label for="somoweight-3">무조건 가벼운것</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="초경량" id="somoweight-1"><label for="somoweight-1">사무실에서 사용할거에요</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="무거움" id="somoweight-2"><label for="somoweight-2">정말 가벼운걸 원해요</label></div>
+                    <div class="option"><input type="radio" name="somoweight" value="가벼움" id="somoweight-3"><label for="somoweight-3">가방에 넣고 다닐거에요</label></div>
                 </div>
             </div>
 <!--            <div class="section">-->

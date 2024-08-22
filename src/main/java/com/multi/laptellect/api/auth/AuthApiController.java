@@ -5,8 +5,10 @@ import com.multi.laptellect.common.model.Email;
 import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.service.MemberService;
+import com.multi.laptellect.util.PasswordValidator;
 import com.multi.laptellect.util.SecurityUtil;
 import com.multi.laptellect.util.StringValidUtil;
+import com.multi.laptellect.util.UserValidator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -201,11 +203,12 @@ public class AuthApiController {
     public boolean updatePassword(@RequestParam("beforePassword") String beforePassword,
                                   @RequestParam("afterPassword") String afterPassword) {
         try {
-            if(memberService.updatePassword(beforePassword, afterPassword)) {
-                return true;
-            } else {
-                return false;
+            if(!PasswordValidator.validatePassword(afterPassword)) {
+                log.warn("비밀번호 유효성 검증 실패 = {}", afterPassword);
+                throw new RuntimeException("비밀번호 유효성 검증 실패 = " + afterPassword);
             }
+
+            return memberService.updatePassword(beforePassword, afterPassword);
         } catch (Exception e) {
             log.error("Password Update Code Error = ", e);
             return false;
@@ -308,14 +311,29 @@ public class AuthApiController {
         log.info("회원가입 실행 = {}", memberDTO);
 
         try {
-            if (authService.isMemberById(memberDTO.getMemberName())) {
-                log.error("아이디 중복 = {}", memberDTO.getMemberName());
+            String userId = memberDTO.getMemberName();
+            String userEmail = memberDTO.getEmail();
+            String password = memberDTO.getPassword();
+
+            if(!UserValidator.validateUserId(userId).equals("success")) {
+                log.warn("아이디 유효성 검증 실패 = {}", userId);
+                throw new RuntimeException("아이디 유효성 검증 실패 = " + userId);
+            }
+
+            if(!PasswordValidator.validatePassword(password)) {
+                log.warn("비밀번호 유효성 검증 실패 = {}", password);
+                throw new RuntimeException("비밀번호 유효성 검증 실패 = " + password);
+            }
+
+            if (authService.isMemberById(userId)) {
+                log.error("아이디 중복 = {}", userId);
                 return 1; // ID 중복
             }
-            if (authService.isMemberByEmail(memberDTO.getEmail())) {
-                log.error("이메일 중복 = {}", memberDTO.getEmail());
+            if (authService.isMemberByEmail(userEmail)) {
+                log.error("이메일 중복 = {}", userEmail);
                 return 2; // 이메일 중복
             }
+
             authService.createMember(memberDTO);
             log.info("회원가입 완료 = {}", memberDTO);
             return 0; // 회원 가입 완료

@@ -107,6 +107,9 @@
             </foreach>
             )
         </if>
+        ORDER BY
+            product_no DESC
+        LIMIT 10
 
 
 

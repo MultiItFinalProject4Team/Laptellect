@@ -4,6 +4,7 @@ import com.multi.laptellect.admin.product.service.AdminProductService;
 import com.multi.laptellect.common.model.PagebleDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.util.FileService;
 import com.multi.laptellect.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import java.util.List;
 public class AdminProductController {
     private final AdminProductService adminProductService;
     private final ProductService productService;
+    private final FileService fileService;
 
 
     @GetMapping("/product/product_manage")
@@ -70,10 +72,15 @@ public class AdminProductController {
     @ResponseBody
     @PostMapping("/product/delete")
     public int deleteProduct(@RequestBody List<Integer> productNos) {
-        log.debug("상품 삭제 시작");
+        log.debug("상품 삭제 시작 = {}", productNos);
+
         try {
+
             int deleteCount = 0;
             for(int productNo : productNos){
+                String uploadFileName = adminProductService.findUploadName(productNo);
+                fileService.deleteFile(uploadFileName);
+
                 deleteCount += adminProductService.deleteProduct(productNo);
                 log.info("AdminProductController 삭제정보 1 : {}",deleteCount);
                 log.info("AdminProductController 삭제정보 2 : {}",productNo);

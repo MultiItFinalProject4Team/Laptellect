@@ -9,14 +9,15 @@
             margin-bottom: 10px;
         }
     </style>
+    <script>
+        $('style').append('.ck-content { height: 500px; }');
+    </script>
     <link href="/css/customer/nav.css" rel="stylesheet">
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">상품 문의 수정</h1>
-    </header>
+<div class="profile-box">
+    <h1 align="left"style="font-size:40px">상품 문의 수정</h1>
     <hr>
     <form action="/customer/user/update_productQ" method="post" enctype="multipart/form-data">
         <div class="input-group form-row">

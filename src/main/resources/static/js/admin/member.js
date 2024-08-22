@@ -83,37 +83,41 @@ $(document).ready(function () {
     $(document).on("click", "#btn-change-nickname", function () {
         let memberNo = $(this).data("memberno");
         let nickName = $('#nickName').val().trim();
+        let regId = /[^a-zA-Z0-9가-힣ㄱ-ㅎ]/g;
         console.log(memberNo);
-
-        if (nickName != "" && nickName != "정보 없음") {
-            $.ajax({
-                url: "/admin/member/member-update",
-                type: "POST",
-                contentType: 'application/json',
-                data: JSON.stringify ({
-                     memberNo: memberNo,
-                     nickName: nickName 
-                    }),
-                success: function (response) {
-                    switch(response) {
-                        case 1:
-                            swal("닉네임 변경 성공", "", "success");
-                            loadList(0);
-                            getModal(memberNo);
-                            break;
-                        case 2:
-                            swal("닉네임 길이가 너무 깁니다", "", "info");
-                            break;
-                        case 3:
-                            swal("중복된 닉네임입니다", "", "info");
-                            break;
-                        case 0:
-                            swal("닉네임 변경 실패", "", "error");
-                            break;
-                    }
-                },
-                error: function() { console.log("닉네임 변경 에러"); }
-            })
+            if (nickName != "" && nickName != "정보 없음") {
+                if (regId.test(nickName)) {
+                    swal("특수문자를 사용할 수 없습니다", "", "info");
+                } else {
+                    $.ajax({
+                        url: "/admin/member/member-update",
+                        type: "POST",
+                        contentType: 'application/json',
+                        data: JSON.stringify ({
+                             memberNo: memberNo,
+                             nickName: nickName 
+                            }),
+                        success: function (response) {
+                            switch(response) {
+                                case 1:
+                                    swal("닉네임 변경 성공", "", "success");
+                                    loadList(0);
+                                    getModal(memberNo);
+                                    break;
+                                case 2:
+                                    swal("닉네임 길이가 너무 깁니다", "", "info");
+                                    break;
+                                case 3:
+                                    swal("중복된 닉네임입니다", "", "info");
+                                    break;
+                                case 0:
+                                    swal("닉네임 변경 실패", "", "error");
+                                    break;
+                            }
+                        },
+                        error: function() { console.log("닉네임 변경 에러"); }
+                    })
+                }
          } else {
             swal("닉네임을 입력해 주세요.", "", "info");
          }
@@ -170,7 +174,7 @@ $(document).ready(function () {
     // 연락처 변경
     $(document).on("click", "#btn-change-tel", function () {
         let memberNo = $(this).data("memberno");
-        let tel = $('#tel').val().trim();
+        let tel = $('#phoneNumInput').val().replace(/-/g, '').trim();
         let phoneReg = /^01[016789]\d{3,4}\d{4}$/;
         let isValid = phoneReg.test(tel);
         console.log(tel);
@@ -252,46 +256,6 @@ $(document).ready(function () {
         }
         
     });
-
-//    $(document).on("click", "#btn-change-password", function () {
-//        let memberNo = $(this).data("memberno");
-//        let password = $('#password').val().trim();
-//        console.log(memberNo);
-//
-//        if (reg.test(password)) {
-//            if (password != "") {
-//                $.ajax({
-//                    url: "/admin/member/member-update",
-//                    type: "POST",
-//                    contentType: 'application/json',
-//                    data: JSON.stringify ({
-//                         memberNo: memberNo,
-//                         password: password
-//                        }),
-//                    success: function (response) {
-//                        switch(response) {
-//                            case 1:
-//                                alert("비밀번호 변경 성공");
-//                                loadList(0);
-//                                getModal(memberNo);
-//                                break;
-//                            case 2:
-//                                alert("비밀번호 길이가 너무 깁니다.");
-//                                break;
-//                            case 0:
-//                                alert("비밀번호 변경 실패");
-//                                break;
-//                        }
-//                    },
-//                    error: function() { console.log("사용자 정보 로드 실패"); }
-//                })
-//             } else {
-//                alert("비밀번호을 입력해 주세요.");
-//             }
-//        } else {
-//            alert("비밀번호는 8-15자 사이여야 하며, 알파벳, 숫자, 특수문자를 포함해야 합니다.");
-//        }
-//    });
 
     $(document).on("click", "#btn-delete", function () {
             let memberNo = $(this).data("memberno");

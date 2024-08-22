@@ -18,4 +18,6 @@ public interface AdminProductService {
 
 
     int deleteProduct(int productNo);
+
+    String findUploadName(int productNo);
 }

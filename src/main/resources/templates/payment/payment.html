@@ -40,7 +40,7 @@
                 <tbody>
                 <tr>
                     <td>
-                        <img th:src="@{'/img/product/' + ${paymentpageDTO.image}}" alt="Product Image" class="payment-product-image">
+                        <img th:src="@{${paymentpageDTO.image}}" alt="Product Image" class="payment-product-image">
                     </td>
                     <td th:text="${paymentpageDTO.productName}">상품명</td>
                     <td>

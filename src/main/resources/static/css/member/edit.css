@@ -8,6 +8,13 @@
     .input-group > .form-control {
         border-radius: 5px !important;
     }
+.profile-box form {
+    margin: 0 auto; /* 가로 방향 중앙 정렬 */
+    display: block; /* form 요소는 기본적으로 block이지만, 명시적으로 설정 */
+    width: 50%;
+    text-align: left;
+}
+
 
     /* 경고 모달 */
     .modal-dialog.modal-lg { max-width: 450px; }

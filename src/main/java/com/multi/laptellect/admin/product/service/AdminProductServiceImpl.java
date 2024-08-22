@@ -49,4 +49,10 @@ public class AdminProductServiceImpl implements AdminProductService{
 
         return adminProductMapper.deleteProduct(productNo);
     }
+
+    @Override
+    public String findUploadName(int productNo) {
+
+       return adminProductMapper.findUploadName(productNo);
+    }
 }

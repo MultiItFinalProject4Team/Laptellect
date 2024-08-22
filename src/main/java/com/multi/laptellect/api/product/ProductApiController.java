@@ -6,6 +6,9 @@ import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
+import com.multi.laptellect.util.PaginationUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ import java.util.stream.Collectors;
 public class ProductApiController {
     private final ProductService productService;
     private final CartService cartService;
+    private final RecommendProductService recommendProductService;
 
     /**
      * 위시리스트 추가
@@ -93,6 +97,8 @@ public class ProductApiController {
 
 
 
+
+
         // Page<> : 페이징된 결과와 관련 정보를 함께 제공하는 Spring Data JPA의 강력한 도구
         Page<ProductDTO> productPage = productService.searchProducts(searchDTO);
         // getContent() : 페이징된 데이터를 얻을 수 있음
@@ -107,16 +113,19 @@ public class ProductApiController {
         try {
 
 
-            int displayPages = 10;
+//            int displayPages = 10;
             int currentPage = pageable.getPageNumber();
             int totalPages = productPage.getTotalPages() -1 ;
 
 
-            int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
-            int endPage = Math.min(startPage + displayPages - 1, totalPages);
+//            int startPage = ((currentPage - 1) / displayPages) * displayPages + 1;
+//            int endPage = Math.min(startPage + displayPages - 1, totalPages);
+
+            int startPage = PaginationUtil.getStartPage(productPage, 9);
+            int endPage = PaginationUtil.getEndPage(productPage, 9);
 
 
-            model.addAttribute("currentPage", currentPage );
+            model.addAttribute("page", currentPage );
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
@@ -162,10 +171,27 @@ public class ProductApiController {
                     case 1: // 노트북
                         log.info("laptop Get Spec = {}", searchDTO.getTypeNo());
 //                        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
-                        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "CPU 넘버");
+                        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "화면 크기", "CPU 넘버");
                         List<SpecDTO> filteredSpecs = productService.filterSpecs(productNo, neededOptions);
                         productDTO.setSpecs(filteredSpecs);
                         log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs);
+
+                        //태그 가져 오는 서비스 만들고 list<taggs>??
+
+
+                        List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
+                        if (tags.size() > 3) {
+                            tags = tags.subList(0, 3);
+                        }
+                        // 현재는 태그가많아서 앞에서 3개를 짜른거임
+                        // 태그별 우선순위를 정해서 우선순위로 정렬을하고
+                        // 그다음 앞에서 짜르면 중요한 3개 태그만 나옴
+                        productDTO.setTags(tags);
+
+
+
+
+
 
                         String specsString = filteredSpecs.stream()
                                 .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
@@ -213,6 +239,8 @@ public class ProductApiController {
                         detailUrl = "/product/productDetail?productNo=" + productNo;
                         productDTO.setUrl(detailUrl);
                         break;
+
+
                 }
 
             }
@@ -223,8 +251,7 @@ public class ProductApiController {
 
         model.addAttribute("size", searchDTO.getSize());
         model.addAttribute("sort", searchDTO.getSort());
-        model.addAttribute("products", productPage.getContent());
-        model.addAttribute("productPage", productPage);
+        model.addAttribute("products", productPage);
         model.addAttribute("typeNo", searchDTO.getTypeNo());
         model.addAttribute("keyword", searchDTO.getKeyword());
 

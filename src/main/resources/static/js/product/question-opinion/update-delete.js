@@ -172,6 +172,7 @@ function deleteQuestion(productqNo) {
             console.log("서버 응답: ", response);
             if (response === 1) {
                 loadComments(1);
+                swal("삭제 성공","","success");
             } else {
                 console.error("서버에서 예상하지 못한 응답을 받았습니다.");
             }
@@ -196,6 +197,7 @@ function deleteQuestionReply(productqNo) {
             console.log("서버 응답: ", response);
             if (response === 1) {
                 loadComments(1);
+                swal("삭제 성공","","success");
             } else {
                 console.error("서버에서 예상하지 못한 응답을 받았습니다.");
             }

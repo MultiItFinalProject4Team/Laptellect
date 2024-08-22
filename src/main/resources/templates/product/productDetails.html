@@ -80,9 +80,21 @@
             font-size: 14px;
             color: #666;
         }
+
+        .sentiment-result {
+            max-width: 400px;
+            margin: 10px auto 0;
+            font-weight: 600;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
         .prodinfo_spec li { margin-right: 10px; }
         .prodinfo_spec li::after { content: "|"; margin-left: 10px; }
         .prodinfo_spec li:last-child::after { content: ""; }
+        .sentiment-positive { background-color: #d4edda; color: #155724; }
+        .sentiment-neutral { background-color: #fff3cd; color: #856404; }
+        .sentiment-negative { background-color: #f8d7da; color: #721c24; }
 
         hr { opacity: 1 !important;}
     </style>
@@ -211,9 +223,18 @@
         <div class="row">
             <div class="col-md-4" style="height: 612px;">
                 <!-- 상품 이미지 -->
-                <img th:src="@{'/img/product/' + ${ laptop.image }}" class="card-img-top" alt="상품 이미지"
+                <img th:src="@{${ laptop.image }}" class="card-img-top" alt="상품 이미지"
                      style="height: 400px; object-fit: contain;">
-
+                <div class="sentiment-result w-100" th:if="${sentimentResult != null}"
+                     th:text="${sentimentResult}"
+                     th:classappend="${sentimentResult == '압도적 긍정적' or
+                          sentimentResult == '매우 긍정적' or
+                          sentimentResult == '조금 긍정적'} ? 'sentiment-positive' :
+                         (${sentimentResult == '압도적 부정적' or
+                           sentimentResult == '매우 부정적' or
+                           sentimentResult == '조금 부정적'} ? 'sentiment-negative' :
+                          'sentiment-neutral')">
+                </div>
                 <div class="spec-box mt-3">
                     <!-- 상품 기본 정보 -->
                     <ul class="list-unstyled">
@@ -318,13 +339,15 @@
                         </ul>
                         <br>
                         <div> <!-- 태그 공간 -->
-                            <span>#게이밍</span> <span>#펠월드</span> <span>#무거운</span>
+                            <span class="tag" th:each="tag : ${tags}" style="background-color: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-size: 0.8em; margin-right: 5px;">
+                                <span th:text="${'#' + tag.tagData}"></span>
+                            </span>
                         </div>
                     </div>
-
+                    <br>
                     <div class="col-md-5">
                         <div class="review-group">
-                            <div class="review-list">
+                            <div class="review-list2">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span style="font-size: 20px;"><strong>상품 리뷰 <span th:text="${'(' + paymentReviewDTOList.size() + '건)'}"></span></strong></span>
                                     <a href="#" id="review-scroll" class="text-decoration-none ms-2" style="position: relative; top: -3px; font-size: 17px;">더보기 ></a>
@@ -343,7 +366,7 @@
                                 <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                     <p>아직 작성된 리뷰가 없습니다.</p>
                                 </div>
-                                <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
+                                <div th:each="review : ${ reviewTop3 }" class="review-item">
                                     <div class="review-header">
                                         <div class="review-content-wrapper">
                                         <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
@@ -778,19 +801,6 @@
 
 
                         <br>
-
-                        <div class="col-12 mt-4">
-                            <h4><strong>연관상품</strong></h4>
-                        </div>
-                        <hr>
-
-
-                        <div id="recommend-box">
-
-                        </div>
-
-                        <br> <br>
-
                     </div>
                 </div>
             </div>
@@ -924,8 +934,18 @@
     <th:block th:if="${ typeNo == 2 }">
         <div class="row">
             <div class="col-md-4" style="height: 612px;">
-                <img th:src="@{'/img/product/' + ${ mouse.image }}" class="card-img-top" alt="상품 이미지"
+                <img th:src="@{${ mouse.image }}" class="card-img-top" alt="상품 이미지"
                      style="height: 400px; object-fit: contain;">
+                <div class="sentiment-result w-100" th:if="${sentimentResult != null}"
+                     th:text="${sentimentResult}"
+                     th:classappend="${sentimentResult == '압도적 긍정적' or
+                          sentimentResult == '매우 긍정적' or
+                          sentimentResult == '조금 긍정적'} ? 'sentiment-positive' :
+                         (${sentimentResult == '압도적 부정적' or
+                           sentimentResult == '매우 부정적' or
+                           sentimentResult == '조금 부정적'} ? 'sentiment-negative' :
+                          'sentiment-neutral')">
+                </div>
                 <div class="spec-box mt-3">
                     <!-- 상품 기본 정보 -->
                     <ul class="list-unstyled">
@@ -1038,10 +1058,10 @@
                             <li><strong>등록월 : </strong><span class="spec"
                                                              th:text="${ mouse.registrationDate }"> 0000.00</span></li>
                             <li><strong>DPI : </strong><span class="spec"
-                                                             th:text="${ mouse.mousePerformance.maxDPI }"></span>
+                                                             th:text="${ mouse.mousePerformance.maxDPI != null ? mouse.mousePerformance.maxDPI : 'X' }"></span>
                             </li>
                             <li><strong>응답속도 : </strong><span class="spec"
-                                                              th:text="${ mouse.mousePerformance.responseTime }"></span>
+                                                              th:text="${ mouse.mousePerformance.responseTime != null ? mouse.mousePerformance.responseTime : 'X'  }"></span>
                             </li>
                         </ul>
                     </div>
@@ -1067,7 +1087,7 @@
                                 <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                     <p>아직 작성된 리뷰가 없습니다.</p>
                                 </div>
-                                <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
+                                <div th:each="review : ${ reviewTop3 }" class="review-item">
                                     <div class="review-header">
                                         <div class="review-content-wrapper">
                                         <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
@@ -1229,7 +1249,7 @@
                 <br> <br>
 
                 <div class="col-12 mt-4">
-                    <h4><strong>문의/리뷰</strong></h4>
+                    <h4 id="custmer-review-box"><strong>문의/리뷰</strong></h4>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box"
@@ -1393,22 +1413,7 @@
                                 </nav>
                             </div>
                         </div>
-
-
                         <br>
-
-                        <div class="col-12 mt-4">
-                            <h4><strong>연관상품</strong></h4>
-                        </div>
-                        <hr>
-
-
-                        <div id="recommend-box">
-
-                        </div>
-
-                        <br> <br>
-
                     </div>
                 </div>
 
@@ -1546,14 +1551,24 @@
         <div class="row">
             <div class="col-md-4" style="height: 612px;">
                 <!-- 상품 이미지 -->
-                <img th:src="@{'/img/product/' + ${ keyboard.image }}" class="card-img-top" alt="상품 이미지"
+                <img th:src="@{${ keyboard.image }}" class="card-img-top" alt="상품 이미지"
                      style="height: 400px; object-fit: contain;">
+                <div class="sentiment-result w-100" th:if="${sentimentResult != null}"
+                     th:text="${sentimentResult}"
+                     th:classappend="${sentimentResult == '압도적 긍정적' or
+                          sentimentResult == '매우 긍정적' or
+                          sentimentResult == '조금 긍정적'} ? 'sentiment-positive' :
+                         (${sentimentResult == '압도적 부정적' or
+                           sentimentResult == '매우 부정적' or
+                           sentimentResult == '조금 부정적'} ? 'sentiment-negative' :
+                          'sentiment-neutral')">
+                </div>
                 <div class="spec-box mt-3">
                     <!-- 상품 기본 정보 -->
                     <ul class="list-unstyled">
-                        <li><strong>사이즈<span class="float-end" th:text="${ keyboard.size }"></span></strong></li>
+                        <li><strong>사이즈<span class="float-end" th:text="${ keyboard.size != null ? keyboard.size : 'X' }"></span></strong></li>
                         <li><strong>연결 방식<span class="float-end"
-                                               th:text="${ keyboard.connectionType }"></span></strong></li>
+                                               th:text="${ keyboard.connectionType != null ? keyboard.connectionType : 'X' }"></span></strong></li>
                         <li><strong>인터페이스<span class="float-end"
                                                th:text="${ keyboard.interfaceType != null ? keyboard.interfaceType : 'X'  }"></span></strong></li>
                         <li><strong>접점 방식<span class="float-end"
@@ -1674,7 +1689,7 @@
                                 <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                     <p>아직 작성된 리뷰가 없습니다.</p>
                                 </div>
-                                <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
+                                <div th:each="review : ${ reviewTop3 }" class="review-item">
                                     <div class="review-header">
                                         <div class="review-content-wrapper">
                                         <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
@@ -1845,7 +1860,7 @@
                 </div>
 
                 <div class="col-12 mt-4">
-                    <h4><strong>문의/리뷰</strong></h4>
+                    <h4 id="custmer-review-box"><strong>문의/리뷰</strong></h4>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer-box"
@@ -1997,22 +2012,7 @@
                                 </nav>
                             </div>
                         </div>
-
-
                         <br>
-
-                        <div class="col-12 mt-4">
-                            <h4><strong>연관상품</strong></h4>
-                        </div>
-                        <hr>
-
-
-                        <div id="recommend-box">
-
-                        </div>
-
-                        <br> <br>
-
                     </div>
                 </div>
 

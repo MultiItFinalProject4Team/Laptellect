@@ -7,34 +7,45 @@ $(function () {
 
         // 정규식 변수
         let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-_])(?=.*[0-9]).{8,15}$/;
-
+        
         $("#nickNameInput").on("blur", function () {
           let nickName = $(this).val();
+          let regId = /[^a-zA-Z0-9가-힣ㄱ-ㅎ]/g;
+
           console.log(nickName);
 
-          $.ajax({
-            url: "/api/check-nickname",
-            type: "POST",
-            data: { nickName: nickName },
-            success: function (response) {
-              if (response === true) {
-                console.log("중복된 닉네임");
-                $("#nickNameError").show();
+          if(regId.test(nickName)) {
+            $("#nickNameError").text("특수문자를 사용할 수 없습니다.");
+            $("#nickNameError").show();
+            $('#nickNameInput').addClass('is-invalid');
+          } else {
+            $.ajax({
+              url: "/api/check-nickname",
+              type: "POST",
+              data: { nickName: nickName },
+              success: function (response) {
+                if (response === true) {
+                  console.log("중복된 닉네임");
+                  $("#nickNameError").text("중복된 닉네임 입니다.");
+                  $("#nickNameError").show();
+                  $('#nickNameInput').addClass('is-invalid');
+                  $("#nickNameChangeBtn").prop("disabled", true);
+                } else {
+                  console.log("중복되지 않은 닉네임");
+                  $("#nickNameError").hide();
+                  $('#nickNameInput').removeClass('is-invalid');
+                  $("#nickNameChangeBtn").prop("disabled", false);
+                }
+  
+              },
+              error: function () {
+                console.log("닉네임 확인 실패");
                 $('#nickNameInput').addClass('is-invalid');
-                $("#nickNameChangeBtn").prop("disabled", true);
-              } else {
-                console.log("중복되지 않은 닉네임");
-                $("#nickNameError").hide();
-                $('#nickNameInput').removeClass('is-invalid');
-                $("#nickNameChangeBtn").prop("disabled", false);
-              }
+              },
+            });
+          }
 
-            },
-            error: function () {
-              console.log("닉네임 확인 실패");
-              $('#nickNameInput').addClass('is-invalid');
-            },
-          });
+          
         });
 
         $("#nickNameChangeBtn").on("click", function () {
@@ -291,7 +302,9 @@ $(function () {
             success: function (response) {
               if (response === true) {
                 swal("회원 탈퇴 성공", "", "success");
-                window.location.href='/';
+                setTimeout(function() {
+                    window.location.href='/';
+                }, 1500);
               } else {
                 swal("회원 탈퇴 실패", "", "error");
               }
@@ -386,7 +399,7 @@ $(function () {
         });
 
         $("#telChangeBtn").on("click", function () {
-          let tel = $('#phoneNumInput').val();
+          let tel = $('#phoneNumInput').val().replace(/-/g, '');
           let verifyCode = $('#phoneNumVer').val();
           console.log(tel, verifyCode);
 

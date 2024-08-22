@@ -5,6 +5,8 @@
 
                 var formData = new FormData(this);
                 console.log(formData.get('productNo'))
+                const button = this.querySelector('#save_update');
+                button.disabled = true;
 
                 // 날짜 포맷팅 함수
                 function formatDate(dateString) {
@@ -22,6 +24,7 @@
                         if (response == 1) {
                             swal("상품 문의 등록", '', "success");
                             $('#productqForm')[0].reset(); // 폼 필드 초기화
+                            button.disabled = false;
                             $('#productModal').modal('hide'); // 모달 닫기
                             loadComments(1);
 
@@ -56,6 +59,8 @@
 
         var formData = new FormData(this);
         console.log(formData.get('productqNo'));
+        const button = this.querySelector('#Asave_update');
+        button.disabled = true;
 
         // 날짜 포맷팅 함수
         function formatDate(dateString) {
@@ -73,6 +78,7 @@
                 if (response == 1) {
                     swal("상품 문의 답변 등록", '', "success");
                     $('#productAForm')[0].reset(); // 폼 필드 초기화
+                    button.disabled = false;
                     $('#productAnswerModal').modal('hide'); // 모달 닫기
                     loadComments(1);
 

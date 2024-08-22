@@ -154,7 +154,7 @@ function mypayment() {
                     });
 
                     if (data.success) {
-                        swal("결제 및 검증 성공", "", "success");
+//                        swal("결제 및 검증 성공", "", "success");
                         window.location.href = data.redirectUrl;
                     } else {
                         // 검증 실패 시 결제 취소 로직 추가

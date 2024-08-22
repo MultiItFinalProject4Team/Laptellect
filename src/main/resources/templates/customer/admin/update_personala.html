@@ -13,13 +13,14 @@
     <link rel="stylesheet" href="/css/customer/ckeditor.css">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script>
+        $('style').append('.ck-content { height: 500px; }');
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">1:1 문의 답변 수정</h1>
-    </header>
+<div class="profile-box">
+    <h1 align="left"style="font-size:40px">1:1 문의 답변 수정</h1>
     <hr>
     <form action="/customer/admin/update_personala" method="post" enctype="multipart/form-data">
         <label for="personalqNo">번호</label>
@@ -32,7 +33,7 @@
         </div>
         <input type="hidden" id="personalaNo" name="personalaNo" th:value="${dto.personalaNo}">
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-custom-primary">답변 수정</button>
+            <button type="submit" class="btn btn-custom-primary mt-2">답변 수정</button>
         </div>
     </form>
 

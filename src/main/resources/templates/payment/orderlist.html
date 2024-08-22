@@ -26,7 +26,7 @@
     <div th:if="${not #lists.isEmpty(orderItems)}">
         <div class="order-item" th:each="item : ${orderItems}" th:data-username="${item.userName}">
             <div class="order-info">
-                <img th:src="@{'/img/product/' + ${item.productName} + '.jpg'}" alt="Product Image" onerror="this.src='/img/payment/notebooktest.PNG';">
+                <img th:src="@{${item.productName}}" alt="Product Image" onerror="this.src='/img/payment/notebooktest.PNG';">
                 <div class="order-details">
                     <p th:text="${item.createdAt != null ? #temporals.format(item.createdAt, 'yyyy-MM-dd') : '날짜 없음'}"></p>
                     <h3 th:text="${item.productName}"></h3>

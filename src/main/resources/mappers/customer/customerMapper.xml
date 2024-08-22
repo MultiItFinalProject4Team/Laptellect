@@ -76,6 +76,7 @@
         from
         personal_answer
         where personalq_no=#{personalqNo}
+        LIMIT 1
     </select>
 
     <update id="personalAnwerChange">
@@ -185,7 +186,7 @@
         from
         product_answer
         where productq_no=#{productqNo}
-        order by producta_no desc
+        LIMIT 1
     </select>
 
     <update id="updateProductq" parameterType="com.multi.laptellect.customer.dto.ProductqAppDto">
@@ -499,5 +500,12 @@
         <if test='date == "old"'>
             order by a.created_at asc
         </if>
+    </select>
+
+    <select id="getEmail">
+        SELECT a.email
+        FROM mem_member a
+        JOIN personal_question b ON b.member_no = a.member_no
+        WHERE b.personalq_no = #{personalqNo}
     </select>
 </mapper>

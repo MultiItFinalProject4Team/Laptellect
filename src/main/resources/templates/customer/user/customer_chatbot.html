@@ -11,14 +11,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="/js/customer/chatbot.js"></script>
-
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container mt-5">
-        <header>
-            <h1 align="left"style="font-size:40px">챗 봇</h1>
-        </header>
+    <div class="profile-box">
+        <h1 align="left"style="font-size:40px">챗 봇</h1>
         <hr>
         <div class="row justify-content-center">
             <div class="col-md-12 chat-container">
@@ -31,10 +28,10 @@
             <div class="form-container">
                 <form class="form-inline">
                     <div class="form-group">
-                        <input type="text" id="msg" class="form-control" placeholder="내용을 입력하세요...." size="35px">
+                        <input type="text" id="msg" class="form-control" placeholder="내용을 입력하세요...." size="59px">
                     </div>
                     <input type="text" id="prevmsg" class="form-control" hidden="true">
-                    <button id="send" class="btn btn-default" type="submit">보내기</button>
+                    <button id="send" class="btn btn-default ms-1" type="submit">보내기</button>
                     <button id="reset" class="btn btn-default" type="submit">처음으로</button>
                 </form>
             </div>

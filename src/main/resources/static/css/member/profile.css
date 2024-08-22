@@ -45,8 +45,16 @@ ul {
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 700px;
-    margin-top: -17px;
+    height: 750px;
+    margin-top: -16px;
+}
+
+.profile-box2 {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 750px;
 }
 
 .profile-point {

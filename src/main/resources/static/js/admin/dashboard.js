@@ -293,31 +293,41 @@ function openQuestionModal(question) {
     }
 
     function deleteReview() {
-          const reviewId = document.getElementById('modalReviewNumber').textContent;
-          if (confirm('이 리뷰를 삭제하시겠습니까?')) {
-            fetch('/admin/deleteReviews', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify([reviewId]),
-            })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success) {
-                swal('리뷰가 삭제되었습니다.', '', 'success');
-                closeReviewModal();
-                drawRecentReviewsTable();
-              } else {
-                swal('리뷰 삭제 중 오류가 발생했습니다.', '', 'error');
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              swal('리뷰 삭제 중 오류가 발생했습니다.', '', 'error');
-            });
-          }
+      const reviewId = document.getElementById('modalReviewNumber').textContent;
+      swal({
+        title: '리뷰 삭제',
+        text: '이 리뷰를 삭제하시겠습니까?',
+        icon: 'warning',
+        buttons: ['취소', '삭제'],
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          fetch('/admin/deleteReviews', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify([reviewId]),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              swal('삭제 완료', '리뷰가 삭제되었습니다.', 'success')
+                .then(() => {
+                  closeReviewModal();
+                  drawRecentReviewsTable();
+                });
+            } else {
+              swal('오류', '리뷰 삭제 중 오류가 발생했습니다.', 'error');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            swal('오류', '리뷰 삭제 중 오류가 발생했습니다.', 'error');
+          });
         }
+      });
+    }
 
     function openQuestion(){
         const questionId = document.getElementById('modalQuestionNumber').textContent;

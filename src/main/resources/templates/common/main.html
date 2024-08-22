@@ -22,6 +22,17 @@
                 }
             });
 
+            let urlParams = new URLSearchParams(window.location.search);
+            let success = urlParams.get('success');
+
+            if (success === 'true') {
+                swal("로그인 성공", "", "success");
+
+                setTimeout(function() {
+                    swal.close(); //
+                }, 1500);
+            }
+
             $('.price').each(function() {
                 let value = $(this).text().replace(' 원', '');
                 let formattedValue = new Intl.NumberFormat().format(value);
@@ -94,11 +105,11 @@
                             <div class="col-md-3" th:each="laptop : ${laptops}">
                                 <div class="card" style="width: 18rem;">
                                     <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
-                                        <img th:src="@{'/img/product/' + ${laptop.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                        <img th:src="@{${laptop.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
                                         <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
-                                            <p class="card-text" content="product-name" th:text="${laptop.productName}">상품명</p>
+                                            <p class="card-text" content="product-name" th:text="${laptop.productName.length() > 17 ? laptop.productName.substring(0, 17) + '...' : laptop.productName}">상품명</p>
                                             <p class="card-text"><strong class="price" th:text="${laptop.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
                                         <ul class="prodinfo_spec">
@@ -122,11 +133,11 @@
                             <div class="col-md-3" th:each="mouse : ${ mouses }">
                                 <div class="card" style="width: 18rem;">
                                     <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
-                                        <img th:src="@{'/img/product/' + ${mouse.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                        <img th:src="@{${mouse.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
                                         <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
-                                            <p class="card-text" content="product-name" th:text="${mouse.productName}">상품명</p>
+                                            <p class="card-text" content="product-name" th:text="${mouse.productName.length() > 17 ? mouse.productName.substring(0, 17) + '...' : mouse.productName}">상품명</p>
                                             <p class="card-text"><strong class="price" th:text="${mouse.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
                                         <ul class="prodinfo_spec">
@@ -150,11 +161,11 @@
                             <div class="col-md-3" th:each="keyboard : ${ keyboards }">
                                 <div class="card" style="width: 18rem;">
                                     <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
-                                        <img th:src="@{'/img/product/' + ${keyboard.image}}" class="card-img-top product-image" alt="상품 이미지">
+                                        <img th:src="@{${ keyboard.image }}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
                                         <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
-                                            <p class="card-text" content="product-name" th:text="${keyboard.productName}">상품명</p>
+                                            <p class="card-text" content="product-name" th:text="${keyboard.productName.length() > 17 ? keyboard.productName.substring(0, 17) + '...' : keyboard.productName}">상품명</p>
                                             <p class="card-text"><strong class="price" th:text="${keyboard.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
                                         <ul class="prodinfo_spec">

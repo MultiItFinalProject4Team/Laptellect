@@ -59,6 +59,17 @@
             return value.trim() === "" ? null : value;
         }
 
+        // 날짜 검색 현재 날짜 set
+        function setEndDate() {
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = String(today.getMonth() + 1).padStart(2, '0');
+            let day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        $("#endDate").val(setEndDate());
+
         function loadOrderList(page) {
             let startDate = convertEmptyToNull($("#startDate").val());
             let endDate = convertEmptyToNull($("#endDate").val());
@@ -209,32 +220,59 @@
                 .text()
                 .replace(/[^0-9]/g, "");
 
-            if (confirm("이 주문을 환불하시겠습니까?")) {
-                $.ajax({
-                    url: "/payment/cancel",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        paymentNo: paymentNo,
-                        imPortId: imPortId,
-                        amount: purchasePrice,
-                    }),
-                    success: function (response) {
-                        if (response.success) {
-                            swal("환불이 성공적으로 처리되었습니다.", "", "success")
-                            $("#orderModal").modal("hide");
-                            loadOrderList(0);
-                            window.location.href = "/profile";
-                        } else {
-                            swal("환불 처리 중 오류가 발생했습니다.", response.message, "warning");
-                        }
+            swal({
+                title: '이 주문을 환불하시겠습니까?',
+                text: "이 작업은 되돌릴 수 없습니다!",
+                icon: 'warning',
+                buttons: {
+                    cancel: {
+                        text: "취소",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
                     },
-                    error: function (xhr, status, error) {
-                        console.error("환불 처리 실패:", error);
-                        swal("환불 처리 중 오류가 발생했습니다.", "", "error");
-                    },
-                });
-            }
+                    confirm: {
+                        text: "예, 환불합니다!",
+                        value: true,
+                        visible: true,
+                        className: "btn-danger",
+                        closeModal: true
+                    }
+                }
+            }).then((willRefund) => {
+                if (willRefund) {
+                    $.ajax({
+                        url: "/payment/cancel",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            paymentNo: paymentNo,
+                            imPortId: imPortId,
+                            amount: purchasePrice,
+                        }),
+                        success: function (response) {
+                            if (response.success) {
+                                swal({
+                                    title: "환불이 성공적으로 처리되었습니다.",
+                                    icon: "success",
+                                    button: "확인",
+                                }).then((value) => {
+                                    $("#orderModal").modal("hide");
+                                    loadOrderList(0);
+                                    window.location.href = "/profile";
+                                });
+                            } else {
+                                swal("환불 처리 중 오류가 발생했습니다.", response.message, "warning");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("환불 처리 실패:", error);
+                            swal("환불 처리 중 오류가 발생했습니다.", "", "error");
+                        },
+                    });
+                }
+            });
         });
     });
 
@@ -253,7 +291,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-  <div class="profile-box" style="height: auto; width: auto">
+  <div class="profile-box" style="min-height: 760;">
     <h2>주문목록</h2>
     <div class="input-group mb-3 d-flex align-items-center">
       <input

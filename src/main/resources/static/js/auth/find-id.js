@@ -47,7 +47,6 @@ $(function () {
                             }
                             window.close();
                         }, 1500);
-                        window.close();
                     } else {
                         console.log("이메일 전송 실패");
                         swal('이메일 전송 실패', '', 'error');

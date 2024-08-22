@@ -34,8 +34,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         } catch (Exception e) {
             log.error("로그인 로그 DB 삽입 실패");
         }
-
         log.info("로그인 성공 = {}", userName);
-        response.sendRedirect("/");
+        response.sendRedirect("/home?success=true");
     }
 }

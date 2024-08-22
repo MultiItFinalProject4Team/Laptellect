@@ -1,7 +1,7 @@
 package com.multi.laptellect.product.model.mapper;
 
+import com.multi.laptellect.common.model.FileDto;
 import com.multi.laptellect.product.model.dto.*;
-import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +17,7 @@ public interface ProductMapper {
     int countByProductCode(int productNo); //상품코드 계수
 
 
-    List<ProductDTO> getProductsByType(@Param("typeNo")Integer typeNo);
+    List<ProductDTO> getProductsByType(@Param("typeNo") Integer typeNo);
 
 
     int getTotalProducts();
@@ -26,7 +26,7 @@ public interface ProductMapper {
 
     void updateReferenceCode(ProductDTO productDTO);
 
-    void inputImage(ImageDTO imageDTO);
+    void inputImage(FileDto fileDto);
 
     ProductCategoryDTO findByOptions(@Param("specName") String specName);
 
@@ -39,12 +39,14 @@ public interface ProductMapper {
     @Select("SELECT * FROM product WHERE type_no = #{ typeNo }")
     List<ProductDTO> findProductsByType(@Param("typeNo") int typeNo);
 
-    List<ProductDTO> getReviewRequired ();
+    List<ProductDTO> getReviewRequired();
 
     List<LaptopDetailsDTO> laptopProductDetails(int productNo);
 
 
-    int checkSpecExists(@Param("productNo") int productNo,@Param("category")String category,@Param("specValue") String specValue);
+    int checkSpecExists(@Param("productNo") int productNo,@Param("specName") String specName);
+
+    int checkCategory(@Param("productNo") int productNo,@Param("categoryNo") String categoryNo);
 
     void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
 
@@ -69,7 +71,7 @@ public interface ProductMapper {
 
     @Select("SELECT COUNT(*) FROM wishlist WHERE member_no = #{ memberNo }")
     int countAllWishlistByMemberNo(int memberNo);
-    
+
     ProductDTO findProductByProductNo(String productNo);
 
     long countBySearchCriteria(@Param("searchDTO") ProductSearchDTO searchDTO);
@@ -84,14 +86,13 @@ public interface ProductMapper {
 
     @Delete("DELETE FROM product WHERE product_no = #{ productNo }")
     void deleteproduct(@Param("productNo") String productNo);
-    
+
 
     @Update("UPDATE product SET view_count = view_count + #{ visitCount }, updated_at = updated_at WHERE product_no = #{ productNo }")
     int updateProductVisit(@Param("productNo") String productNo, @Param("visitCount") int visitCount);
 
 
-    @Select("SELECT pt.tag_no, lt.tag_data FROM machine_tagkey pt JOIN laptop_tag lt ON pt.tag_no = lt.tag_no WHERE pt.product_no = #{productNo}")
-    List<TaggDTO> getTagsForProduct(@Param("productNo") int productNo);
 
-
+    @Select("SELECT COUNT(*) FROM images WHERE reference_code = #{ referenceCode }")
+    int findImageByReferenceCode(String referenceCode);
 }

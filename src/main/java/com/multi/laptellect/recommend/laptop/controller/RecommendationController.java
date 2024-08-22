@@ -1,10 +1,11 @@
 package com.multi.laptellect.recommend.laptop.controller;
 
-import com.multi.laptellect.product.model.dto.laptop.LaptopSpecDTO;
+import com.multi.laptellect.product.service.ProductService;
 import com.multi.laptellect.recommend.clovaapi.service.EmotionAnalyzeService;
 import com.multi.laptellect.recommend.laptop.model.dto.CurationDTO;
 import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
-import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
+import com.multi.laptellect.recommend.service.RedisCacheService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -12,9 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -24,47 +23,51 @@ public class RecommendationController {
 
     private final RecommendProductService recommendProductService;
     private final EmotionAnalyzeService emotionAnalyzeService;
+    private final RedisCacheService redisCacheService;
+    private final ProductService productService;
 
-    @GetMapping("/recommend")
-    public String showRecommendationForm() {
-        return "recommend/recommend";
-    }
+        @GetMapping("/recommend")
+        public String showRecommendationForm(Model model, HttpSession session) {
+            String cacheKey = (String) session.getAttribute("lastCurationKey");
+            if (cacheKey != null) {
+                try {
+                    CurationDTO lastCuration = redisCacheService.getCurationResult(cacheKey);
+                    if (lastCuration != null) {
+                        model.addAttribute("curationDTO", lastCuration);
+                    }
+                } catch (Exception e) {
+                    log.error("에러", e);
+                }
+            }
+            return "recommend/recommend";
+        }
 
-    @PostMapping("/recommendpage")
-    public String getRecommendations(CurationDTO curationDTO, Model model) {
-        log.info("사용자 선택지 값 = {}", curationDTO);
-        try {
-            ArrayList<LaptopSpecDTO> recommendations = recommendProductService.getRecommendations(curationDTO);
-            Map<Integer, List<TaggDTO>> productTags = new HashMap<>();
-            Map<Integer, String> sentiments = new HashMap<>();
+        @PostMapping("/recommendpage")
+        public String getRecommendations(CurationDTO curationDTO, Model model, HttpSession session) {
+            Map<String, Object> modelMap = new HashMap<>();
+            recommendProductService.processRecommendations(curationDTO, modelMap);
 
-            for (LaptopSpecDTO laptop : recommendations) {
-                int productNo = laptop.getProductNo();
-                List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
-                productTags.put(productNo, tags);
-                String sentiment = emotionAnalyzeService.analyzeSentiment(productNo);
-                sentiments.put(productNo, sentiment);
+            if (modelMap.containsKey("error")) {
+                model.addAttribute("error", modelMap.get("error"));
+                return "error";
             }
 
-            model.addAttribute("recommendations", recommendations);
-            model.addAttribute("productTags", productTags);
-            model.addAttribute("sentiments", sentiments);
+            session.setAttribute("lastCurationKey", modelMap.get("cacheKey"));
+            model.addAllAttributes(modelMap);
             return "recommend/recommendpage";
-        } catch (Exception e) {
-            log.error("에러 발생", e);
-            model.addAttribute("error", "An error occurred while processing your request.");
-            return "error";
         }
-    }
-//    @PostMapping("/productList") //어떻게 해야할까
-//    public String getProductList(Model model) {
-//        try {
-//            ArrayList<LaptopSpecDTO> products = recommendProductService.getAllProducts();
-//            model.addAttribute("products", products);
-//            return "recommend/productList";
-//        } catch (Exception e) {
-//            log.error("에러 발생", e);
-//            model.addAttribute("에러", "에러 밸상.");
-//            return "에러";
-//        }
+
+        @GetMapping("/recommendpage")
+        public String getLastRecommendations(Model model, HttpSession session) {
+            String cacheKey = (String) session.getAttribute("lastCurationKey");
+            Map<String, Object> modelMap = new HashMap<>();
+            recommendProductService.getLastRecommendations(cacheKey, modelMap);
+
+            if (modelMap.isEmpty()) {
+                return "redirect:/recommend";
+            }
+
+            model.addAllAttributes(modelMap);
+            return "recommend/recommendpage";
+        }
     }

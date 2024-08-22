@@ -9,21 +9,20 @@
     <link href="/css/customer/nav.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css">
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
-    <style>
+    <script>
         .crud-btn{
             background-color: transparent !important;
         }
-    </style>
+
+        $('style').append('.ck-content { height: 500px; }');
+        objEditor = editor;
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <header>
-            <h1 align="left"style="font-size:40px">공지사항</h1>
-        </header>
-        <hr>
-    </header>
+<div class="profile-box" style="height: auto;">
+    <h1 align="left"style="font-size:40px">공지사항</h1>
+    <hr>
     <div>
         <input type="hidden" id="noitceNo" th:value="${notice.noticeNo}" />
         <input type="hidden" id="mainRegist" th:value="${notice.mainRegist}" />
@@ -37,14 +36,15 @@
     <hr class="border border-dark">
     <div id="content" name="content" th:utext="${notice.content}" readonly="true">내용</div>
 
-    <hr class="border border-dark">
-</div>
-<div align="center">
-    <hr class="border border-dark">
-    <div class="btn-group" aria-label="Small button group">
-        <a href="/customer/admin/admin_notice" class="btn btn-custom-primary">목록으로</a>
+<!--    <hr class="border border-dark">-->
+    <div align="center">
+        <hr class="border border-dark">
+        <div class="btn-group" aria-label="Small button group">
+            <a href="/customer/admin/admin_notice" class="btn btn-custom-primary">목록으로</a>
+        </div>
     </div>
 </div>
+
 </div>
 </body>
 </html>

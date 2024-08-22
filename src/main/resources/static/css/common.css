@@ -108,7 +108,6 @@ a {
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     height: 700px;
-    margin-top: -17px;
 }
 
 /* Footer */
@@ -158,9 +157,10 @@ body { font-family: 'Noto Sans KR', sans-serif; }
 .profile-box {
     border: 1px solid #dee2e6;
     border-radius: 8px;
-    padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 700px;
+    weight: auto;
+    display: flex;
+    flex-direction: column; height: auto;
 }
 
 .profile-point {
@@ -171,4 +171,11 @@ body { font-family: 'Noto Sans KR', sans-serif; }
     border-radius: 4px;
     box-sizing: border-box;
     text-align: right;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }

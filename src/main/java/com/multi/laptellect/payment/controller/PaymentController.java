@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Payment controller.
+ */
 @Controller
 @RequestMapping("/payment")
 @Slf4j
@@ -37,6 +40,14 @@ public class PaymentController {
     private final MemberService memberService;
     private final CartService cartService;
 
+    /**
+     * PaymentService,MemberMapper,MemberService,CartService 생성자
+     *
+     * @param paymentService the payment service
+     * @param memberMapper   the member mapper
+     * @param memberService  the member service
+     * @param cartService    the cart service
+     */
     public PaymentController(PaymentService paymentService, MemberMapper memberMapper, MemberService memberService, CartService cartService) {
         this.paymentService = paymentService;
         this.memberMapper = memberMapper;
@@ -44,6 +55,14 @@ public class PaymentController {
         this.cartService = cartService;
     }
 
+    /**
+     * 결제완료페이지
+     *
+     * @param impUid the imp uid
+     * @param model  the model
+     * @return the string
+     * @throws Exception the exception
+     */
     @GetMapping("/complete")
     public String paymentComplete(@RequestParam("impUid") String impUid, Model model) throws Exception {
         PaymentCompleteDTO paymentInfo = paymentService.getPaymentInfo(impUid);
@@ -64,6 +83,16 @@ public class PaymentController {
 //        return "/payment/orderlist";
 //    }
 
+    /**
+     * 결제페이지
+     *
+     * @param img         the img
+     * @param productName the product name
+     * @param price       the price
+     * @param model       the model
+     * @return the string
+     * @throws Exception the exception
+     */
     @PostMapping("/payment")
     public String paymentpage(@RequestParam("imageUrl") String img,
                               @RequestParam("productName") String productName,
@@ -107,6 +136,12 @@ public class PaymentController {
         return "/payment/payment";
     }
 
+    /**
+     * 장바구니 결제페이지
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/cart-payment")
     public String cartPayment(Model model) {
         try {
@@ -174,6 +209,12 @@ public class PaymentController {
         return "payment/cart-payment";
     }
 
+    /**
+     * 단일 결제검증
+     *
+     * @param request the request
+     * @return the response entity
+     */
     @Transactional
     @PostMapping("/verifyPayment")
     public ResponseEntity<Map<String, Object>> verifyPayment(@RequestBody VerificationRequestDTO request) {
@@ -228,6 +269,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * 장바구니결제검증
+     *
+     * @param request the request
+     * @return the response entity
+     */
     @Transactional
     @PostMapping("/verifyCartPayment")
     public ResponseEntity<Map<String, Object>> verifyCartPayment(@RequestBody CartPaymentDTO request) {
@@ -280,6 +327,7 @@ public class PaymentController {
     /**
      * 결제 취소 매서드
      * 결제취소시 사용된 포인트 반환 및 실결제금액 반환
+     *
      * @param cancelRequest 결제검증dto를 통한 결제취소 요청 데이터
      * @return 결제취소에 대한 성공여부 반환
      */
@@ -328,6 +376,7 @@ public class PaymentController {
     /**
      * 리뷰등록 매서드
      * 리뷰 등록 시 결제에 사용가능한 포인트 부여
+     *
      * @param reviewDTO 리뷰dto
      * @return 리뷰등록 성공여부 반환
      */
@@ -348,6 +397,12 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 상품상세페이지 리뷰수정 매서드
+     *
+     * @param reviewDTO the review dto
+     * @return the response entity
+     */
     @Transactional
     @PostMapping("/reviews/update")
     public ResponseEntity<Map<String, Object>> updateReview(@RequestBody PaymentReviewDTO reviewDTO) {
@@ -369,6 +424,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * 상품상세페이지 리뷰삭제 매서드
+     *
+     * @param payload the payload
+     * @return the response entity
+     */
     @Transactional
     @PostMapping("/reviews/delete")
     public ResponseEntity<Map<String, Object>> deleteReview(@RequestBody Map<String, Integer> payload) {
