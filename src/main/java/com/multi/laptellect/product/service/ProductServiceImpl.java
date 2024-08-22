@@ -7,6 +7,7 @@ import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.dto.mouse.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
+import com.multi.laptellect.util.CustomMultipartFile;
 import com.multi.laptellect.util.FileService;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,23 +93,23 @@ public class ProductServiceImpl implements ProductService {
         String url = "http:" + image;
         String referenceCode = productDTO.getReferenceCode();
 
+// 이미지 다운로드
+        InputStream inputStream = new URL("http:" + image).openStream();
 
+        // 이미지 파일 이름 추출 (URL에서 이름을 추출하거나 직접 설정할 수 있음)
+        String fileName = Paths.get(new URL("http:" + image).getPath()).getFileName().toString();
 
+        // InputStream의 내용을 바이트 배열로 읽어들임
+        byte[] imageBytes = inputStream.readAllBytes();
 
+        // CustomMultipartFile 생성
+        MultipartFile multipartFile = new CustomMultipartFile(
+                "file",         // form name
+                fileName,       // original file name
+                "image/jpeg",   // MIME 타입
+                imageBytes      // 파일 내용
+        );
 
-            // 이미지 다운로드
-            InputStream inputStream = new URL(url).openStream();
-
-            // 이미지 파일 이름 추출 (URL에서 이름을 추출하거나 직접 설정할 수 있음)
-            String fileName = Paths.get(new URL(url).getPath()).getFileName().toString();
-
-            // InputStream을 MultipartFile로 변환
-            MultipartFile multipartFile = new MockMultipartFile(
-                    fileName,
-                    fileName,
-                    "image/jpeg",  // MIME 타입
-                    inputStream
-            );
         FileDto uploadFile = fileService.uploadFiles(multipartFile,"product");
 
 
