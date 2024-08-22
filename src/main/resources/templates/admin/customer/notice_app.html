@@ -11,8 +11,11 @@
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <link href="/css/customer/nav.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <style>
-    </style>
+
+    <script>
+        $('style').append('.ck-content { height: 500px; }');
+        objEditor = editor;
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -44,7 +47,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-custom-primary">등록</button>
+            <button type="submit" class="btn btn-custom-primary mt-2">등록</button>
         </div>
     </form>
     <script type="importmap">
