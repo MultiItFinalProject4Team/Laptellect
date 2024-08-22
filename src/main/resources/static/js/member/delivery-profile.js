@@ -66,8 +66,10 @@ $(function () {
               swal("필수 입력 항목", "상세 주소를 입력해주세요.", "info");
           } else if (!recipientPhone) {
               swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
+          } else if (!request) {
+              swal("필수 입력 항목", "요청 사항을 입력해주세요.", "info");
           } else {
-            console.log(addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
+              console.log(addressName, addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
 
               $.ajax({
                   url: "/api/member/insert-address",
