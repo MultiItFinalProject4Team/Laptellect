@@ -215,13 +215,13 @@ function deleteReview(paymentProductReviewsNo) {
 }
 
 // 페이징 관련 변수
-const itemsPerPage = 10;
+const itemsPerPage = 7;
 let currentPage = 1;
 let reviewItems;
 
 // 페이징 초기화 함수
 function initPagination() {
-    reviewItems = document.querySelectorAll('.review-item');
+    reviewItems = Array.from(document.querySelectorAll('#review-section .review-item'));
     const totalPages = Math.ceil(reviewItems.length / itemsPerPage);
 
     showPage(currentPage);
@@ -246,6 +246,10 @@ function showPage(page) {
 function setupPagination(totalPages) {
     const paginationElement = document.getElementById('reviewPagination');
     paginationElement.innerHTML = '';
+
+    if (totalPages <= 1) {
+        return; // 페이지가 1개 이하면 페이지네이션을 표시하지 않음
+    }
 
     // 이전 버튼
     const prevLi = document.createElement('li');
@@ -296,3 +300,6 @@ function updatePaginationActive() {
         }
     });
 }
+
+// 페이지 로드 완료 후 페이징 초기화
+window.addEventListener('load', initPagination);
