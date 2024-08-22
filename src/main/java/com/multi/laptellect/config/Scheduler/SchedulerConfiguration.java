@@ -79,26 +79,26 @@ public class SchedulerConfiguration {
         }
     }
 
-//    @Scheduled(fixedRate = 60000)
-//    public void scheduleTagAssignment() {
-//        log.info("태그 할당 스케줄러 시작");
-//        try {
-//            recommenService.assignTagsToProducts();
-//            log.info("태그 할당 스케줄러 완료");
-//        } catch (Exception e) {
-//            log.error("태그 할당 중 오류:", e);
-//        }
-//    }
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void assignProductTags() {
+        log.info("태그화 스케줄러 시작");
+        try {
+            recommenService.assignTagsToProducts();
+            log.info("노트북 태그화 성공");
+        } catch (Exception e) {
+            log.error("노트북 태그화 에러 = {}", e.getMessage());
+        }
+    }
 
-//    @Scheduled (fixedRate = 6000) // 1분 간격으로 감정 분석
-//    public void scheduleEmotionAnalysis() {
-//        log.info("감정 분석 스케쥴러 시작");
-//        try {
-//            emotionAnalyzeService.analyzeAllUnanlyzedReviews();
-//            log.info("감정 분석 스케쥴러 완료");
-//        } catch (Exception e) {
-//            log.error("감정 분석 중 오류:", e);
-//        }
-//
-//    }
+
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void analyzeSentiments() {
+        log.info("감정 분석 스케줄러 시작");
+        try {
+            emotionAnalyzeService.analyzeAllUnanlyzedReviews();
+            log.info("감정 분석 완료");
+        } catch (Exception e) {
+            log.error("감정 분석 에러 = {}", e.getMessage());
+        }
+    }
 }
