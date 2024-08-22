@@ -1058,10 +1058,10 @@
                             <li><strong>등록월 : </strong><span class="spec"
                                                              th:text="${ mouse.registrationDate }"> 0000.00</span></li>
                             <li><strong>DPI : </strong><span class="spec"
-                                                             th:text="${ mouse.mousePerformance.maxDPI }"></span>
+                                                             th:text="${ mouse.mousePerformance.maxDPI != null ? mouse.mousePerformance.maxDPI : 'X' }"></span>
                             </li>
                             <li><strong>응답속도 : </strong><span class="spec"
-                                                              th:text="${ mouse.mousePerformance.responseTime }"></span>
+                                                              th:text="${ mouse.mousePerformance.responseTime != null ? mouse.mousePerformance.responseTime : 'X'  }"></span>
                             </li>
                         </ul>
                     </div>
@@ -1566,9 +1566,9 @@
                 <div class="spec-box mt-3">
                     <!-- 상품 기본 정보 -->
                     <ul class="list-unstyled">
-                        <li><strong>사이즈<span class="float-end" th:text="${ keyboard.size }"></span></strong></li>
+                        <li><strong>사이즈<span class="float-end" th:text="${ keyboard.size != null ? keyboard.size : 'X' }"></span></strong></li>
                         <li><strong>연결 방식<span class="float-end"
-                                               th:text="${ keyboard.connectionType }"></span></strong></li>
+                                               th:text="${ keyboard.connectionType != null ? keyboard.connectionType : 'X' }"></span></strong></li>
                         <li><strong>인터페이스<span class="float-end"
                                                th:text="${ keyboard.interfaceType != null ? keyboard.interfaceType : 'X'  }"></span></strong></li>
                         <li><strong>접점 방식<span class="float-end"
