@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-md-7">
                         <div class="card-body">
-                            <a th:href="@{/product/laptopDetails(productCode=${wishlist.productNo})}" class="product-name"><h6 class="card-title" th:text="${wishlist.productName}"></h6></a>
+                            <a th:href="@{/product/productDetail(productNo=${wishlist.productNo})}" class="product-name"><h6 class="card-title" th:text="${wishlist.productName}"></h6></a>
                             <p class="card-text text-danger price" th:text="${wishlist.price} + ' 원'"></p>
                         </div>
                     </div>
