@@ -7,34 +7,45 @@ $(function () {
 
         // 정규식 변수
         let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-_])(?=.*[0-9]).{8,15}$/;
-
+        
         $("#nickNameInput").on("blur", function () {
           let nickName = $(this).val();
+          let regId = /[^a-zA-Z0-9]/g;
+
           console.log(nickName);
 
-          $.ajax({
-            url: "/api/check-nickname",
-            type: "POST",
-            data: { nickName: nickName },
-            success: function (response) {
-              if (response === true) {
-                console.log("중복된 닉네임");
-                $("#nickNameError").show();
+          if(regId.test(nickName)) {
+            $("#nickNameError").text("특수문자를 사용할 수 없습니다.");
+            $("#nickNameError").show();
+            $('#nickNameInput').addClass('is-invalid');
+          } else {
+            $.ajax({
+              url: "/api/check-nickname",
+              type: "POST",
+              data: { nickName: nickName },
+              success: function (response) {
+                if (response === true) {
+                  console.log("중복된 닉네임");
+                  $("#nickNameError").text("중복된 닉네임 입니다.");
+                  $("#nickNameError").show();
+                  $('#nickNameInput').addClass('is-invalid');
+                  $("#nickNameChangeBtn").prop("disabled", true);
+                } else {
+                  console.log("중복되지 않은 닉네임");
+                  $("#nickNameError").hide();
+                  $('#nickNameInput').removeClass('is-invalid');
+                  $("#nickNameChangeBtn").prop("disabled", false);
+                }
+  
+              },
+              error: function () {
+                console.log("닉네임 확인 실패");
                 $('#nickNameInput').addClass('is-invalid');
-                $("#nickNameChangeBtn").prop("disabled", true);
-              } else {
-                console.log("중복되지 않은 닉네임");
-                $("#nickNameError").hide();
-                $('#nickNameInput').removeClass('is-invalid');
-                $("#nickNameChangeBtn").prop("disabled", false);
-              }
+              },
+            });
+          }
 
-            },
-            error: function () {
-              console.log("닉네임 확인 실패");
-              $('#nickNameInput').addClass('is-invalid');
-            },
-          });
+          
         });
 
         $("#nickNameChangeBtn").on("click", function () {

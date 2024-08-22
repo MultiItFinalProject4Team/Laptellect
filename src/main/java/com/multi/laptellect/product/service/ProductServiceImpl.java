@@ -5,6 +5,7 @@ import com.multi.laptellect.product.model.dto.keyboard.*;
 import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.dto.mouse.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
+import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final CrawlingService crawlingService;
     private final RedisUtil redisUtil;
     private final static String CACHE_KEY_PRODUCT = "product:";
+    private final RecommendProductDAO recommendProductDAO;
 
     @Override
     @Transactional
@@ -866,15 +868,17 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-
-    //상품 전체 조회
     @Override
     @Transactional
     public List<ProductDTO> getStoredProducts(Integer typeNo) {
+        List<ProductDTO> products = productMapper.getProductsByType(typeNo);
 
-
-        return productMapper.getProductsByType(typeNo);
+        return products;
     }
+
+
+
+
 
 
     @Override
@@ -918,4 +922,5 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-}
+    }
+

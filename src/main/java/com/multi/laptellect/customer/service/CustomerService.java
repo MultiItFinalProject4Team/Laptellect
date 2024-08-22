@@ -100,7 +100,9 @@ public class CustomerService {
         Email email=new Email();
         email.setMailTitle("답변이 완료되었습니다");
         email.setMailContent("문의주신 "+getPersonalq(answerDto.getPersonalqNo()).getTitle()+"의 문의에 관리자가 답변을 남겼습니다.\n 답변내용: \n"+contents);
-        email.setReceiveAddress("anjy0821@naver.com");
+        String address = customDao.getEmail(answerDto.getPersonalqNo());
+        System.out.println(address);
+        email.setReceiveAddress(address);
 
         try {
             emailUtil.sendEmail(email);
@@ -142,21 +144,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            fileService.deleteFile(url);
         }
         return customDao.deletePersonalq(personalqNo);
     }
@@ -218,21 +206,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         customDao.deletePersonala(personalqNo);
     }
@@ -273,7 +247,8 @@ public class CustomerService {
         Email email=new Email();
         email.setMailTitle("답변이 완료되었습니다");
         email.setMailContent("문의주신 상품문의 "+getProductq(answerDto.getProductqNo()).getTitle()+"에 관리자가 답변을 남겼습니다.\n 답변내용: \n"+contents);
-        email.setReceiveAddress("anjy0821@naver.com");
+        String address = customDao.getEmail(answerDto.getProductqNo());
+        email.setReceiveAddress(address);
 
         try {
             emailUtil.sendEmail(email);
@@ -309,21 +284,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         return customDao.deleteProductq(productqNo);
     }
@@ -343,21 +304,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         customDao.deleteProducta(productqNo);
     }
@@ -421,21 +368,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         customDao.deleteNotice(noticeNo);
     }

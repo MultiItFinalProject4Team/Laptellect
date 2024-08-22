@@ -27,7 +27,7 @@ public interface OAuthService {
      *
      * @param socialDTO 카카오 프로필 정보가 담긴 DTO
      */
-    void processKakaoUser(SocialDTO socialDTO);
+    String processKakaoUser(SocialDTO socialDTO);
 
     /**
      * 구글 엑세스 토큰 발급을 위한 메서드
@@ -45,5 +45,5 @@ public interface OAuthService {
      */
     SocialDTO getGoogleProfileInfo(String accessToken);
 
-    void processGoogleUser(SocialDTO SocialDTO);
+    String processGoogleUser(SocialDTO SocialDTO);
 }

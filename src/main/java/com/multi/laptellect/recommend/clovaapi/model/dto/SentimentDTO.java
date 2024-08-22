@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class SentimentDTO {
-
     private int productNo;
     private int sentimentPositive;
     private int sentimentDenial;

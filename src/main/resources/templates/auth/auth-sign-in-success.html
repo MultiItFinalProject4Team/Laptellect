@@ -11,24 +11,21 @@
 </head>
 <body>
     <script th:inline="javascript">
-        let loginSuccess = /*[[${loginSuccess}]]*/ 'false';
-
         $(document).ready(function() {
-            if (loginSuccess === 'success') {
-                swal('로그인 성공!', '', 'success');
-
-                setTimeout(function() {
-                    if (window.opener) {
-                        window.opener.postMessage('closeAndRedirect', '*');
-                    }
+            let message = [[${message}]];
+            switch (message) {
+                case "SignUp":
+                    window.opener.postMessage('SignUp', '*');
                     window.close();
-            }, 1500);
-            } else {
-                swal('로그인 실패. 다시 시도하세요.', '', 'error');
-
-                setTimeout(function() {
+                    break;
+                case "SignIn":
+                    window.opener.postMessage('SignIn', '*');
                     window.close();
-                }, 1500);
+                    break;
+                default:
+                    window.opener.postMessage('Fail', '*');
+                    window.close();
+                    break;
             }
         });
     </script>

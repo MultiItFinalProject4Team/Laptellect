@@ -14,7 +14,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -71,20 +70,22 @@ public class LogAspect {
         } else {
             log.info("세션 있음 방문자 수 카운트 = {}", redisUtil.getData(sessionKey));
         }
-        // IP 정보 기록
-        String ipAddress = httpServletRequest.getRemoteAddr();
 
-        // 접속 브라우저 기록
-        String userAgent = httpServletRequest.getHeader("User-Agent");
-
-        // 방문 시간 기록
-        String visitTime = LocalDateTime.now().format(formatter);
-
-        // 문자열로 통합
-        String visitLog = ipAddress + "|" + userAgent + "|" + visitTime;
-
-        // Redis 리스트 형태로 저장
-        redisUtil.setListData("VisitLog", visitLog);
+        // 접속 회원 로그
+//        // IP 정보 기록
+//        String ipAddress = httpServletRequest.getRemoteAddr();
+//
+//        // 접속 브라우저 기록
+//        String userAgent = httpServletRequest.getHeader("User-Agent");
+//
+//        // 방문 시간 기록
+//        String visitTime = LocalDateTime.now().format(formatter);
+//
+//        // 문자열로 통합
+//        String visitLog = ipAddress + "|" + userAgent + "|" + visitTime;
+//
+//        // Redis 리스트 형태로 저장
+//        redisUtil.setListData("VisitLog", visitLog);
 
 //        log.info("방문 로그 기록 = {}" , redisUtil.getListData("VisitLog"));
     }

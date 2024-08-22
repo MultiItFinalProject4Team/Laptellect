@@ -6,6 +6,8 @@ import com.multi.laptellect.product.model.dto.SpecDTO;
 import com.multi.laptellect.product.model.dto.WishlistDTO;
 import com.multi.laptellect.product.service.CartService;
 import com.multi.laptellect.product.service.ProductService;
+import com.multi.laptellect.recommend.laptop.service.RecommendProductService;
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import com.multi.laptellect.util.PaginationUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
 public class ProductApiController {
     private final ProductService productService;
     private final CartService cartService;
+    private final RecommendProductService recommendProductService;
 
     /**
      * 위시리스트 추가
@@ -90,6 +93,8 @@ public class ProductApiController {
 
 
         log.info("카테고리 파라미터 확인 = {},",searchDTO);
+
+
 
 
 
@@ -171,6 +176,23 @@ public class ProductApiController {
                         productDTO.setSpecs(filteredSpecs);
                         log.info("필터링된 Spec 값 전달 확인 ={}", filteredSpecs);
 
+                        //태그 가져 오는 서비스 만들고 list<taggs>??
+
+
+                        List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
+                        if (tags.size() > 3) {
+                            tags = tags.subList(0, 3);
+                        }
+                        // 현재는 태그가많아서 앞에서 3개를 짜른거임
+                        // 태그별 우선순위를 정해서 우선순위로 정렬을하고
+                        // 그다음 앞에서 짜르면 중요한 3개 태그만 나옴
+                        productDTO.setTags(tags);
+
+
+
+
+
+
                         String specsString = filteredSpecs.stream()
                                 .map(spec -> spec.getOptions() + ": " + spec.getOptionValue())
                                 .collect(Collectors.joining(" | "));
@@ -217,6 +239,8 @@ public class ProductApiController {
                         detailUrl = "/product/productDetail?productNo=" + productNo;
                         productDTO.setUrl(detailUrl);
                         break;
+
+
                 }
 
             }

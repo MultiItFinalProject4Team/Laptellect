@@ -11,19 +11,38 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * The type Admin service.
+ */
 @Service
 public class AdminService {
 
     private final AdminDAO adminDAO;
 
+    /**
+     * AdminDAO 생성자
+     *
+     * @param adminDAO the admin dao
+     */
     public AdminService(AdminDAO adminDAO) {
         this.adminDAO = adminDAO;
     }
 
+    /**
+     * 관리자페이지 리뷰관리 - 모든리뷰 조회
+     *
+     * @return the list
+     */
     public List<AdminReviewDTO> selectAllReviews() {
         return adminDAO.selectAllReviews();
     }
 
+    /**
+     * 관리자페이지 리뷰관리 - 리뷰삭제
+     *
+     * @param reviewIds the review ids
+     * @return the boolean
+     */
     public boolean deleteReviews(List<Long> reviewIds) {
         try {
             adminDAO.deleteReviews(reviewIds);
@@ -34,10 +53,20 @@ public class AdminService {
         }
     }
 
+    /**
+     * 관리자페이지 주문관리 - 주문조회
+     *
+     * @return the list
+     */
     public List<AdminOrderlistDTO> selectAllOrders() {
         return adminDAO.selectAllOrders();
     }
 
+    /**
+     * 관리자페이지 일일지표 데이터 조회
+     *
+     * @return the last seven days sales
+     */
     public List<AdminDashboardDTO> getLastSevenDaysSales() {
         List<AdminDashboardDTO> salesData = adminDAO.getLastSevenDaysSales();
         List<AdminDashboardDTO> visitsData = adminDAO.getLastSevenDaysVisits();
@@ -92,11 +121,23 @@ public class AdminService {
         return finalResult;
     }
 
+    /**
+     * 관리자페이지 대시보드 리뷰탭 - 최근리뷰조회
+     *
+     * @param limit the limit
+     * @return the recent reviews
+     */
     public List<AdminReviewDTO> getRecentReviews(int limit) {
         return adminDAO.getRecentReviews(limit);
     }
 
 
+    /**
+     * 관리자페이지 대시보드 문의탭 - 최근문의
+     *
+     * @param limit the limit
+     * @return the recent questions
+     */
     public List<AdminQuestionDTO> getRecentQuestions(int limit) {
         return adminDAO.getRecentQuestions(limit);
     }

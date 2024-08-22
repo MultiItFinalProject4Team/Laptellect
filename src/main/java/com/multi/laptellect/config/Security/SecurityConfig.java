@@ -1,5 +1,6 @@
 package com.multi.laptellect.config.Security;
 
+import com.multi.laptellect.error.CustomAccessDeniedHandler;
 import com.multi.laptellect.error.CustomAuthenticationFailureHandler;
 import com.multi.laptellect.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationFailureHandler customFailureHandler;
-
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final RedisUtil redisUtil;
 
     @Bean // 비밀번호 암호화
@@ -67,6 +68,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                        .requestMatchers("/customer/admin/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 );
@@ -98,7 +101,7 @@ public class SecurityConfig {
         http
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling
-                                .accessDeniedPage("/error/denied"));
+                                .accessDeniedHandler(customAccessDeniedHandler));
 
         http
                 .csrf((auth) -> auth.disable());

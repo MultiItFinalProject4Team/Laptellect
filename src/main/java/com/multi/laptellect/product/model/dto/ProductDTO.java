@@ -1,5 +1,6 @@
 package com.multi.laptellect.product.model.dto;
 
+import com.multi.laptellect.recommend.txttag.model.dto.TaggDTO;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -25,9 +26,11 @@ public class ProductDTO {
     private int totalPrice;
     private String url;
     private String optionValue;
+    private List<TaggDTO> tags;
 
     public int getTotalPrice() {
         return this.price * this.quantity;
     }
+
 }
 
