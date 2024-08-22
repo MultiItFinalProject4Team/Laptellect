@@ -382,6 +382,8 @@ public class ProductController {
 //        crawlingService.reviewCrawler();
 //    }
 
+
+
     @GetMapping("/cart")
     public String showCartList() {
         return "product/productCart";

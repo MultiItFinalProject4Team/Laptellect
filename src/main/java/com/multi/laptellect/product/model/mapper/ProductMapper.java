@@ -1,5 +1,6 @@
 package com.multi.laptellect.product.model.mapper;
 
+import com.multi.laptellect.common.model.FileDto;
 import com.multi.laptellect.product.model.dto.*;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public interface ProductMapper {
 
     void updateReferenceCode(ProductDTO productDTO);
 
-    void inputImage(ImageDTO imageDTO);
+    void inputImage(FileDto fileDto);
 
     ProductCategoryDTO findByOptions(@Param("specName") String specName);
 

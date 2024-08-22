@@ -4,6 +4,7 @@ import com.multi.laptellect.admin.member.model.dto.AdminMemberDTO;
 import com.multi.laptellect.admin.model.dto.AdminDashboardDTO;
 import com.multi.laptellect.admin.model.dto.AdminOrderlistDTO;
 import com.multi.laptellect.admin.model.dto.AdminReviewDTO;
+import com.multi.laptellect.common.model.FileDto;
 import com.multi.laptellect.main.model.dto.ProductMainDTO;
 import com.multi.laptellect.member.model.dto.AddressDTO;
 import com.multi.laptellect.member.model.dto.MemberDTO;
@@ -83,6 +84,7 @@ public class MybatisConfig {
 
         configuration.getTypeAliasRegistry().registerAlias("socialDTO", SocialDTO.class);
         configuration.getTypeAliasRegistry().registerAlias("wishlistDTO", WishlistDTO.class);
+        configuration.getTypeAliasRegistry().registerAlias("fileDto", FileDto.class);
 
 
 

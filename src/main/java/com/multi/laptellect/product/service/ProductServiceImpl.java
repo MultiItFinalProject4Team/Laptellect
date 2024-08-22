@@ -1,11 +1,13 @@
 package com.multi.laptellect.product.service;
 
+import com.multi.laptellect.common.model.FileDto;
 import com.multi.laptellect.product.model.dto.*;
 import com.multi.laptellect.product.model.dto.keyboard.*;
 import com.multi.laptellect.product.model.dto.laptop.*;
 import com.multi.laptellect.product.model.dto.mouse.*;
 import com.multi.laptellect.product.model.mapper.ProductMapper;
 import com.multi.laptellect.recommend.laptop.model.dao.RecommendProductDAO;
+import com.multi.laptellect.util.FileService;
 import com.multi.laptellect.util.RedisUtil;
 import com.multi.laptellect.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +17,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -29,6 +36,7 @@ import java.util.*;
 public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final CrawlingService crawlingService;
+    private final FileService fileService;
     private final RedisUtil redisUtil;
     private final static String CACHE_KEY_PRODUCT = "product:";
     private final RecommendProductDAO recommendProductDAO;
@@ -81,26 +89,45 @@ public class ProductServiceImpl implements ProductService {
 
     private void processImage(ProductDTO productDTO, String image) throws Exception {
         ImageDTO imageDTO = new ImageDTO();
+
         String url = "http:" + image;
-        String filePath = "src/main/resources/static/img/product";
-        String uuid = UUID.randomUUID().toString();
-        String uploadName = uuid + ".jpg";
         String referenceCode = productDTO.getReferenceCode();
 
-        crawlingService.downloadImage(url, filePath, uploadName);
 
-        log.info("이미지 명 확인 = {}", uploadName);
+
+
+
+            // 이미지 다운로드
+            InputStream inputStream = new URL(url).openStream();
+
+            // 이미지 파일 이름 추출 (URL에서 이름을 추출하거나 직접 설정할 수 있음)
+            String fileName = Paths.get(new URL(url).getPath()).getFileName().toString();
+
+            // InputStream을 MultipartFile로 변환
+            MultipartFile multipartFile = new MockMultipartFile(
+                    fileName,
+                    fileName,
+                    "image/jpeg",  // MIME 타입
+                    inputStream
+            );
+        FileDto uploadFile = fileService.uploadFiles(multipartFile,"product");
+
+
+        uploadFile.setReferenceCode(referenceCode);
+
+
+
+        // multipartFile을 사용하여 필요한 작업 수행 (예: 업로드, 저장 등)
+        System.out.println("파일 이름: " + multipartFile.getOriginalFilename());
+        System.out.println("파일 크기: " + multipartFile.getSize());
+
         log.info("url 확인 = {}", url);
-        log.info("저장위치 확인 = {}", filePath);
 
-        imageDTO.setOriginName(url);
-        imageDTO.setReferenceCode(referenceCode);
-        imageDTO.setUploadName(uploadName);
 
         if(productMapper.findImageByReferenceCode(referenceCode) > 0) {
             log.debug("이미 저장된 이미지입니다.");
         } else {
-            productMapper.inputImage(imageDTO);
+            productMapper.inputImage(uploadFile);
         }
     }
 

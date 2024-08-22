@@ -6,17 +6,13 @@ CREATE TABLE product (
     price INT NOT NULL,
     product_code VARCHAR(20) NOT NULL,
     reference_code VARCHAR(255),
+    view_count INT NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT product_PK PRIMARY KEY(product_no),
-    CONSTRAINT fk_product_type_no FOREIGN KEY (type_no) REFERENCES product_type(type_no)
+    CONSTRAINT fk_product_type_no FOREIGN KEY (type_no) REFERENCES product_type(type_no) ON DELETE CASCADE,
+    CONSTRAINT unique_product_code UNIQUE (product_code)
 );
--- product 테이블 제약조건
-ALTER TABLE product
-ADD CONSTRAINT unique_product_code UNIQUE (product_code);
-
-alter table product
-add column view_count INT not null default 0;
 
 -- 상품 카테고리 테이블
 CREATE TABLE product_category (
@@ -47,8 +43,8 @@ CREATE TABLE product_spec (
     category_no VARCHAR(50) NOT NULL,
     option_value VARCHAR(50),
     CONSTRAINT product_spec_PK PRIMARY KEY(spec_no),
-    CONSTRAINT fk_product_spec_product_no FOREIGN KEY (product_no) REFERENCES product(product_no),
-    CONSTRAINT fk_product_spec_category_no FOREIGN KEY (category_no) REFERENCES product_category(category_no)
+    CONSTRAINT fk_product_spec_product_no FOREIGN KEY (product_no) REFERENCES product(product_no) ON DELETE CASCADE,
+    CONSTRAINT fk_product_spec_category_no FOREIGN KEY (category_no) REFERENCES product_category(category_no)ON DELETE CASCADE
 );
 
 -- 위시리스트 테이블

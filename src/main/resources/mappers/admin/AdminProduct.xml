@@ -100,5 +100,13 @@
         product(product_no, type_no, product_name, price, product_code, reference_code, created_at, view_count)
         VALUES( #{productNo}, #{typeNo}, #{productName}, #{price}, #{productCode}, #{referenceCode}, #{createdAt}, #{viewCount})
     </insert>
+    
+    
+    <select id="findUploadName">
+        SELECT b.upload_name
+        FROM product a
+        JOIN images b ON a.reference_code = b.reference_code
+        WHERE a.product_no =#{productNo}
+    </select>
 
 </mapper>

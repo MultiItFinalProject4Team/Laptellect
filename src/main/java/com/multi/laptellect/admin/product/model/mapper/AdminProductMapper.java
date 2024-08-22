@@ -27,4 +27,6 @@ public interface AdminProductMapper {
     ProductDTO getProductById(@Param("productNo")int productNo);
 
     void insertProduct(ProductDTO product);
+
+    String findUploadName(@Param("productNo")int productNo);
 }

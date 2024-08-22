@@ -3,7 +3,7 @@
     <div class="col-md-4 mb-4" th:each="product : ${products}">
         <div class="card h-100 product-wap rounded-0">
             <div class="card rounded-0">
-                <img th:src="@{'/img/product/' + ${product.uploadName}}"
+                <img th:src="@{${product.uploadName}}"
                      class="card-img-top card-img rounded-0 img-fluid" alt="상품 이미지"
                      style="height: 200px; object-fit: contain;">
                 <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">

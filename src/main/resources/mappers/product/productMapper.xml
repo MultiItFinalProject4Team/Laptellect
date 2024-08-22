@@ -461,10 +461,10 @@
 
 
     <!--이미지를 저장시키는 쿼리-->
-    <insert id="inputImage" parameterType="imageDTO" useGeneratedKeys="true">
+    <insert id="inputImage" parameterType="fileDto" useGeneratedKeys="true">
         INSERT INTO
         images( reference_code, origin_name, upload_name)
-        VALUES ( #{referenceCode}, #{originName}, #{uploadName})
+        VALUES ( #{referenceCode}, #{originalFileName}, #{uploadFileUrl})
     </insert>
 
     <!--저장된 이미지를 불러오는 쿼리-->
