@@ -161,23 +161,6 @@ $('.btn-success').on('click', function() {
     // 수정 모달에 배송지 id 삽입
 });
 
-$("#address-name2").on("blur", function () {
-    let addressName = $(this).val().trim();
-    let regId = /[^a-zA-Z0-9가-힣ㄱ-ㅎ]/g;
-
-    if (addressName === "") {
-        $("#addressError2").text("저장할 배송지 이름을 입력해주세요.");
-        $(".updateAddressBtn").prop("disabled", true);
-        $("#addressError2").show();
-    } else if (regId.test(addressName)) {
-        $("#addressError2").text("특수문자를 사용할 수 없습니다.");
-        $(".updateAddressBtn").prop("disabled", true);
-        $("#addressError2").show();
-    } else {
-        $("#addressError2").hide();
-        $(".updateAddressBtn").prop("disabled", false);
-    }
-});
 
 $(".updateAddressBtn").on("click", function () {
     function convertEmptyToNull(value) {
