@@ -40,7 +40,7 @@
                 <tbody>
                 <tr th:each="product : ${cartList}" th:attr="data-product-no=${product.productNo}">
                     <td>
-                        <img th:src="@{'/img/product/' + ${product.image}}" alt="Product Image"
+                        <img th:src="@{${product.image}}" alt="Product Image"
                              class="payment-product-image">
                     </td>
                     <td th:text="${product.productName}">상품명</td>

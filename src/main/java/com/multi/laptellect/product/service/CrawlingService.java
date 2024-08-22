@@ -56,7 +56,7 @@ public class CrawlingService {
     public List<ProductDTO> crawlProducts(int typeNo) throws IOException {
         List<ProductDTO> productList = new ArrayList<>();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            for (int page = 3; 1 <= page; page--) {
+            for (int page = 5; 1 <= page; page--) {
                 String responseString = sendPostRequest(httpClient, page, typeNo);
                 parseHtml(responseString, productList);
                 log.info("productList확인{}", productList);
@@ -90,7 +90,7 @@ public class CrawlingService {
                         "&physicsCate2=869" +
                         "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
-                        "&listCount=10");
+                        "&listCount=60");
                 log.info("laptopType {}", productType);
                 break;
 

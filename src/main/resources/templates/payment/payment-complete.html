@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="product : ${paymentInfo.products}">
-                    <td class="product-image"><img th:src="@{'/img/product/' + ${product.image}}" alt="Product Image"></td>
+                    <td class="product-image"><img th:src="@{${product.image}}" alt="Product Image"></td>
                     <td th:text="${product.productName}"></td>
                     <td th:text="${product.quantity}"></td>
                     <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + '원'}"></td>

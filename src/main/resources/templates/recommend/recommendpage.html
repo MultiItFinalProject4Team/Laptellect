@@ -92,7 +92,7 @@
                         <div class="row g-0 align-items-center">
                             <div class="col-md-2">
                                 <a th:href="@{/product/productDetail(productNo=${product.productNo})}">
-                                    <img th:src="@{'/img/product/' + ${product.image}}" class="img-fluid rounded-start" alt="Product Image">
+                                    <img th:src="@{${product.image}}" class="img-fluid rounded-start" alt="Product Image">
                                 </a>
                             </div>
                             <div class="col-md-7">
