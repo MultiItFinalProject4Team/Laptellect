@@ -72,7 +72,7 @@ public class MemberApiController {
         } catch (Exception e) {
             model.addAttribute("message", "배송지 리스트 조회 실패");
         }
-        return "/member/delivery/address-list";
+        return "member/delivery/address-list";
     }
 
     /**
@@ -171,7 +171,7 @@ public class MemberApiController {
         } catch (Exception e) {
             log.error("포인트 조회 실패 = ", e);
         }
-        return "/member/point/all-point-tab";
+        return "member/point/all-point-tab";
     }
 
     /**
@@ -202,7 +202,7 @@ public class MemberApiController {
         } catch (Exception e) {
             log.error("포인트 조회 실패 = ", e);
         }
-        return "/member/point/save-point-tab";
+        return "member/point/save-point-tab";
     }
 
     /**
@@ -233,7 +233,7 @@ public class MemberApiController {
         } catch (Exception e) {
             log.error("포인트 조회 실패 = ", e);
         }
-        return "/member/point/use-point-tab";
+        return "member/point/use-point-tab";
     }
 
     @PostMapping("/order-list")

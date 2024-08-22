@@ -25,7 +25,7 @@ public class CustomerAdminController {
     @GetMapping("/answer_personalq/{personalqNo}")
     public String move_answer_personalq(@PathVariable("personalqNo") int personalqNo, Model model){
         model.addAttribute("personalqNo",personalqNo);
-        return"/customer/admin/answer_personalq";
+        return"customer/admin/answer_personalq";
     }
     //답변 전송
     @PostMapping("/answer_personalq")
@@ -44,7 +44,7 @@ public class CustomerAdminController {
     public String update_answer(@PathVariable("personalqNo") int personalqNo, Model model){
         PersonalqAnswerDto dto = customerService.getPersonala(personalqNo);
         model.addAttribute("dto",dto);
-        return"/customer/admin/update_personala";
+        return"customer/admin/update_personala";
     }
     //답변 수정 전송
     @PostMapping("/update_personala")
@@ -76,7 +76,7 @@ public class CustomerAdminController {
     @GetMapping("/answer_productq/{productqNo}")
     public String answer_producta(@PathVariable("productqNo") int productqNo, Model model){
         model.addAttribute("productqNo",productqNo);
-        return"/customer/admin/answer_productq";
+        return"customer/admin/answer_productq";
     }
 
     /**
@@ -117,7 +117,7 @@ public class CustomerAdminController {
     public String update_proudcta(@PathVariable("productqNo") int productqNo,Model model){
         ProductqAnswerDto dto = customerService.getProducta(productqNo);
         model.addAttribute("dto",dto);
-        return"/customer/admin/update_producta";
+        return"customer/admin/update_producta";
     }
     @GetMapping("/update_producta")
     public ResponseEntity<ProductqAnswerDto> update_producta(@RequestParam("productqNo") int productqNo) {
@@ -201,7 +201,7 @@ public class CustomerAdminController {
         model.addAttribute("category",category);
         model.addAttribute("role","admin");
         model.addAttribute("state","all");
-        return "/admin/customer/admin_personalq";
+        return "admin/customer/admin_personalq";
     }
 
     /**
@@ -229,7 +229,7 @@ public class CustomerAdminController {
         model.addAttribute("role","admin");
         model.addAttribute("answer",searchDto.getAnswer());
         model.addAttribute("date",searchDto.getDate());
-        return "/customer/admin/search_all_personalq";
+        return "customer/admin/search_all_personalq";
     }
 
     @GetMapping("/admin_notice")
@@ -252,13 +252,13 @@ public class CustomerAdminController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("dto",searchDto);
         model.addAttribute("state","all");
-        return "/admin/customer/admin_notice";
+        return "admin/customer/admin_notice";
     }
 
     @GetMapping("/notice_app")
     public String notice_app(Model model){
         model.addAttribute("memberNo",SecurityUtil.getUserNo());
-        return "/admin/customer/notice_app";
+        return "admin/customer/notice_app";
     }
 
     @PostMapping("/notice_app")
@@ -282,7 +282,7 @@ public class CustomerAdminController {
         System.out.println(noticeNo);
         NoticeListDto notice = customerService.getnotice(noticeNo);
         model.addAttribute("notice",notice);
-        return "/admin/customer/admin_notice_detail";
+        return "admin/customer/admin_notice_detail";
     }
 
     @GetMapping("/delete_notice/{noticeNo}")
@@ -295,7 +295,7 @@ public class CustomerAdminController {
     public String update_notice(@PathVariable("noticeNo") int noticeNo, Model model){
         NoticeListDto dto = customerService.getnotice(noticeNo);
         model.addAttribute("dto",dto);
-        return "/admin/customer/notice_update";
+        return "admin/customer/notice_update";
     }
 
     @PostMapping("/update_notice")
@@ -319,12 +319,12 @@ public class CustomerAdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("state","search");
-        return "/admin/customer/admin_notice";
+        return "admin/customer/admin_notice";
     }
 
     @GetMapping("/admin_customer")
     public String admin_customer(){
-        return "/admin/customer/admin_customer";
+        return "admin/customer/admin_customer";
     }
 
     @GetMapping("/search_all_personal_question")
@@ -343,7 +343,7 @@ public class CustomerAdminController {
         model.addAttribute("category",category);
         model.addAttribute("role","admin");
         model.addAttribute("state","search");
-        return "/admin/customer/admin_personalq";
+        return "admin/customer/admin_personalq";
     }
 
     @GetMapping("/all_product_question")
@@ -361,7 +361,7 @@ public class CustomerAdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("state","all");
-        return "/admin/customer/admin_productqList";
+        return "admin/customer/admin_productqList";
     }
 
     @GetMapping("search_all_product_question")
@@ -377,6 +377,6 @@ public class CustomerAdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("state","search");
-        return "/admin/customer/admin_productqList";
+        return "admin/customer/admin_productqList";
     }
 }

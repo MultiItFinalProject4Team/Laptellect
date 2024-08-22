@@ -47,7 +47,7 @@ public class CustomerController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("dto",searchDto);
         model.addAttribute("state","all");
-        return "/customer/user/customer_notice";
+        return "customer/user/customer_notice";
     }
     //1:1문의 페이지
     @GetMapping("/customer_personalq")
@@ -56,7 +56,7 @@ public class CustomerController {
         try {
             memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         List<PersonalqListDto> list = customerService.getPersonalqList(memberNo);
         int page_size=10;
@@ -72,7 +72,7 @@ public class CustomerController {
         model.addAttribute("role","user");
         model.addAttribute("answer","A");
         model.addAttribute("date","recent");
-        return "/customer/user/customer_personalq";
+        return "customer/user/customer_personalq";
     }
     //챗봇 페이지
     @GetMapping("/customer_chatbot")
@@ -84,7 +84,7 @@ public class CustomerController {
         System.out.println(noticeNo);
         NoticeListDto notice = customerService.getnotice(noticeNo);
         model.addAttribute("notice",notice);
-        return "/customer/user/notice_detail";
+        return "customer/user/notice_detail";
     }
     //1:1문의 상세조회
     @GetMapping("/personalq_detail/{personalqNo}")
@@ -98,7 +98,7 @@ public class CustomerController {
             model.addAttribute("personala", answerDto);
             System.out.println("답변: "+answerDto);
         }
-        return"/customer/user/personalq_detail";
+        return"customer/user/personalq_detail";
     }
     //1:1문의 신청 페이지 이동
     @GetMapping("/personalq_app")
@@ -140,7 +140,7 @@ public class CustomerController {
         categoryDto.remove(0);
         model.addAttribute("category",categoryDto);
         model.addAttribute("dto",dto);
-        return "/customer/user/personalq_update";
+        return "customer/user/personalq_update";
     }
 
     /**
@@ -209,7 +209,7 @@ public class CustomerController {
         model.addAttribute("state","all");
         model.addAttribute("date","recent");
         model.addAttribute("answer","A");
-        return "/customer/user/customer_productq";
+        return "customer/user/customer_productq";
     }
     //상품 문의 신청 이동
     @GetMapping("/productq_app")
@@ -257,7 +257,7 @@ public class CustomerController {
         try {
             memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         ProductqDto productqDto = customerService.getProductq(productqNo);
         String[] imageList = customerService.getImage(productqDto.getReferenceCode());
@@ -273,7 +273,7 @@ public class CustomerController {
             model.addAttribute("imageList2", imageList2);
             System.out.println("답변: "+answerDto);
         }
-        return"/customer/user/productq_detail";
+        return"customer/user/productq_detail";
     }
 
     /**
@@ -288,7 +288,7 @@ public class CustomerController {
         try {
             memberNo=SecurityUtil.getUserNo();
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         System.out.println(productNo);
         List<ProuductqListDto> productqList = customerService.getMyProudctqList(productNo, memberNo);
@@ -307,7 +307,7 @@ public class CustomerController {
         model.addAttribute("state","my");
         model.addAttribute("date","recent");
         model.addAttribute("answer","A");
-        return "/customer/user/customer_productq";
+        return "customer/user/customer_productq";
     }
 
     /**
@@ -323,7 +323,7 @@ public class CustomerController {
         categoryDto.remove(0);
         model.addAttribute("category",categoryDto);
         model.addAttribute("dto",dto);
-        return "/customer/user/productq_update";
+        return "customer/user/productq_update";
     }
     @GetMapping("/update_productq")
     public ResponseEntity<ProductqDto> getProductDetails(@RequestParam("productqNo") int productqNo) {
@@ -410,7 +410,7 @@ public class CustomerController {
             memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         System.out.println(searchDto);
         List<PersonalqListDto> list = customerService.getPersonalqSearchList(searchDto);
@@ -428,7 +428,7 @@ public class CustomerController {
         model.addAttribute("page_keyword",searchDto.getKeyword());
         model.addAttribute("answer",searchDto.getAnswer());
         model.addAttribute("date",searchDto.getDate());
-        return "/customer/user/search_personalq";
+        return "customer/user/search_personalq";
     }
 
     /**
@@ -445,7 +445,7 @@ public class CustomerController {
             memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         searchDto.setProductNo(productNo);
         List<ProuductqListDto> productqList = customerService.getProudctqSearchList(searchDto);
@@ -466,7 +466,7 @@ public class CustomerController {
         model.addAttribute("answer",searchDto.getAnswer());
         model.addAttribute("date",searchDto.getDate());
         model.addAttribute("state","all");
-        return "/customer/user/search_productq";
+        return "customer/user/search_productq";
     }
 
     /**
@@ -483,7 +483,7 @@ public class CustomerController {
             memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         System.out.println(productNo);
         searchDto.setProductNo(productNo);
@@ -505,7 +505,7 @@ public class CustomerController {
         model.addAttribute("answer",searchDto.getAnswer());
         model.addAttribute("date",searchDto.getDate());
         model.addAttribute("state","my");
-        return "/customer/user/search_productq";
+        return "customer/user/search_productq";
     }
 
     /**
@@ -650,7 +650,7 @@ public class CustomerController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("state","search");
-        return "/customer/user/customer_notice";
+        return "customer/user/customer_notice";
     }
     @GetMapping("/user_productqList")
     public String user_proudctqList(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
@@ -660,7 +660,7 @@ public class CustomerController {
             memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         List<UserProductqList> list = customerService.getUserProudctList(memberNo);
         int page_size=10;
@@ -676,7 +676,7 @@ public class CustomerController {
         model.addAttribute("category",category);
         model.addAttribute("state","all");
 
-        return "/customer/user/user_productqList";
+        return "customer/user/user_productqList";
     }
 
     @GetMapping("search_user_productqList")
@@ -686,7 +686,7 @@ public class CustomerController {
             memberNo=SecurityUtil.getUserNo();
             searchDto.setMemberNo(memberNo);
         }catch (Exception e){
-            return "/auth/auth-sign-in";
+            return "auth/auth-sign-in";
         }
         List<UserProductqList> list = customerService.getUserSearchProudctList(searchDto);
         List<ProductqCategoryDto> category = customerService.getProductqCategory();
@@ -701,6 +701,6 @@ public class CustomerController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("category",category);
         model.addAttribute("state","search");
-        return "/customer/user/user_productqList";
+        return "customer/user/user_productqList";
     }
 }

@@ -107,7 +107,7 @@ public class ProductController {
 
         model.addAttribute("cate", cate);
         model.addAttribute("typeNo", typeNo);
-        return "/product/productList";
+        return "product/productList";
 
     }
 
