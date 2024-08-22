@@ -93,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
         String url = "http:" + image;
         String referenceCode = productDTO.getReferenceCode();
 
-// 이미지 다운로드
+        // 이미지 다운로드
         InputStream inputStream = new URL("http:" + image).openStream();
 
         // 이미지 파일 이름 추출 (URL에서 이름을 추출하거나 직접 설정할 수 있음)
@@ -112,17 +112,13 @@ public class ProductServiceImpl implements ProductService {
 
         FileDto uploadFile = fileService.uploadFiles(multipartFile,"product");
 
-
         uploadFile.setReferenceCode(referenceCode);
-
-
 
         // multipartFile을 사용하여 필요한 작업 수행 (예: 업로드, 저장 등)
         System.out.println("파일 이름: " + multipartFile.getOriginalFilename());
         System.out.println("파일 크기: " + multipartFile.getSize());
 
         log.info("url 확인 = {}", url);
-
 
         if(productMapper.findImageByReferenceCode(referenceCode) > 0) {
             log.debug("이미 저장된 이미지입니다.");
