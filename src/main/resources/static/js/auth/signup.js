@@ -18,55 +18,74 @@ $(document).ready(function() {
     }
   }
 
-  // 아이디 중복 체크
-  $("#id").on("blur", function () {
-      let userId = $("#id").val().trim();
+// 아이디 중복 체크
+$("#id").on("blur", function () {
+    let userId = $("#id").val().trim();
+    let regId = /^[a-zA-Z0-9]+$/; // 알파벳 대소문자와 숫자만 허용
 
-      console.log(userId);
-      if (userId != "") {
-          if (regId.test(userId)) {
-            $("#idError").text("아이디에는 특수문자를 사용할 수 없습니다.");
-            $("#idError").show();
-          } else {
-             $.ajax({
-                  url: "/api/check-id",
-                  type: "POST",
-                  data: { userName: userId },
-                  success: function (response) {
-                      if (response === true) {
-                          $('#id').addClass('is-invalid');
-                          console.log("아이디 중복");
+    console.log(userId);
+    if (userId === "") {
+        $('#id').addClass('is-invalid');
+        $("#idError").hide();
+        $("#idError2").text("아이디를 입력해주세요.");
+        $("#idError2").show();
+        isId = false;
+        signupVisible();
+    } else if (userId.length < 4) {
+        $('#id').addClass('is-invalid');
+        $("#idError").text("아이디는 최소 4글자 이상이어야 합니다.");
+        $("#idError").show();
+        $("#idError2").hide();
+        isId = false;
+        signupVisible();
+    } else if (regId.test(userId) === false) {
+        $('#id').addClass('is-invalid');
+        $("#idError").text("아이디는 특수문자 또는 한글을 사용할 수 없습니다.");
+        $("#idError").show();
+        $("#idError2").hide();
+        isId = false;
+        signupVisible();
+    } else if (/^\d+$/.test(userId)) { // 숫자만 입력된 경우
+        $('#id').addClass('is-invalid');
+        $("#idError").text("아이디는 숫자만 사용할 수 없습니다.");
+        $("#idError").show();
+        $("#idError2").hide();
+        isId = false;
+        signupVisible();
+    } else {
+        $.ajax({
+            url: "/api/check-id",
+            type: "POST",
+            data: { userName: userId },
+            success: function (response) {
+                if (response === true) {
+                    $('#id').addClass('is-invalid');
+                    console.log("아이디 중복");
 
-                          isId = false;
-                          signupVisible();
-                          $("#idError").text("중복된 아이디 입니다.");
-                          $("#idError").show();
-                          $("#idError2").hide();
-                      } else {
-                          console.log("아이디 중복 X");
-                          $('#id').removeClass('is-invalid');
-                          isId = true;
-                          signupVisible();
-                          $("#idError").hide();
-                          $("#idError2").hide();
-                      }
-                  },
-                  error: function () {
-                      swal("실패", "아이디 중복 확인 실패", "error");
-                      $("#idError").hide();
-                      isId = false;
-                      $("#insertBtn").prop("disabled", true);
-                  }
-            });
-
-          }
-      } else {
-          $('#id').addClass('is-invalid');
-          $("#idError2").show();
-          isId = false;
-          signupVisible();
-      }
-  });
+                    isId = false;
+                    signupVisible();
+                    $("#idError").text("중복된 아이디 입니다.");
+                    $("#idError").show();
+                    $("#idError2").hide();
+                } else {
+                    console.log("아이디 중복 X");
+                    $('#id').removeClass('is-invalid');
+                    isId = true;
+                    signupVisible();
+                    $("#idError").hide();
+                    $("#idError2").hide();
+                }
+            },
+            error: function () {
+                swal("실패", "아이디 중복 확인 실패", "error");
+                $("#idError").hide();
+                $("#idError2").hide();
+                isId = false;
+                $("#insertBtn").prop("disabled", true);
+            }
+        });
+    }
+});
 
   // 패스워드 정규식 검증
   $("#pass").on("blur", function () {

@@ -175,16 +175,22 @@ public class ProductController {
                     model.addAttribute("laptop", laptop);
 
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    List<PaymentReviewDTO> reviewTop3 = new ArrayList<>();
                     List<TaggDTO> tags = recommendProductService.getTagsForProduct(productNo);
                     String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
-
+                    if (paymentReviewDTOList.size() < 3) {
+                        reviewTop3 = paymentReviewDTOList;
+                    } else {
+                        reviewTop3 = paymentReviewDTOList.subList(0, 3);
+                    }
 
                     model.addAttribute("sentimentResult", sentimentResult);
                     model.addAttribute("tags", tags);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
+                    model.addAttribute("reviewTop3", reviewTop3);
                     model.addAttribute("productDTO", productDTO );
                     model.addAttribute("memberNo", memberNo);
                     model.addAttribute("memberName", memberName);
@@ -200,14 +206,20 @@ public class ProductController {
                     model.addAttribute("mouse", mouse);
 
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    List<PaymentReviewDTO> reviewTop3 = new ArrayList<>();
                     String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
-
+                    if (paymentReviewDTOList.size() < 3) {
+                        reviewTop3 = paymentReviewDTOList;
+                    } else {
+                        reviewTop3 = paymentReviewDTOList.subList(0, 3);
+                    }
 
                     model.addAttribute("sentimentResult", sentimentResult);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
+                    model.addAttribute("reviewTop3", reviewTop3);
                     model.addAttribute("productDTO", productDTO);
                     model.addAttribute("memberNo", memberNo);
                     model.addAttribute("memberName", memberName);
@@ -221,14 +233,20 @@ public class ProductController {
                     model.addAttribute("productNo", keyboard.getProductNo());
                     model.addAttribute("keyboard", keyboard);
                     List<PaymentReviewDTO> paymentReviewDTOList = paymentService.findPaymentReviewsByProductNo(productNo);
+                    List<PaymentReviewDTO> reviewTop3 = new ArrayList<>();
                     String sentimentResult = emotionAnalyzeService.analyzeSentiment(productNo);
 
-
+                    if (paymentReviewDTOList.size() < 3) {
+                        reviewTop3 = paymentReviewDTOList;
+                    } else {
+                        reviewTop3 = paymentReviewDTOList.subList(0, 3);
+                    }
 
                     model.addAttribute("sentimentResult", sentimentResult);
                     model.addAttribute("typeNo", typeNo);
                     model.addAttribute("paymentDTO", paymentDTO);
                     model.addAttribute("paymentReviewDTOList", paymentReviewDTOList);
+                    model.addAttribute("reviewTop3", reviewTop3);
                     model.addAttribute("productDTO", productDTO);
                     model.addAttribute("memberNo", memberNo);
                     model.addAttribute("memberName", memberName);

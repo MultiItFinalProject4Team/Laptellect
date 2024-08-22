@@ -83,7 +83,7 @@ $(document).ready(function () {
     $(document).on("click", "#btn-change-nickname", function () {
         let memberNo = $(this).data("memberno");
         let nickName = $('#nickName').val().trim();
-        let regId = /[^a-zA-Z0-9]/g;
+        let regId = /[^a-zA-Z0-9가-힣ㄱ-ㅎ]/g;
         console.log(memberNo);
             if (nickName != "" && nickName != "정보 없음") {
                 if (regId.test(nickName)) {
@@ -174,7 +174,7 @@ $(document).ready(function () {
     // 연락처 변경
     $(document).on("click", "#btn-change-tel", function () {
         let memberNo = $(this).data("memberno");
-        let tel = $('#tel').val().trim();
+        let tel = $('#phoneNumInput').val().replace(/-/g, '').trim();
         let phoneReg = /^01[016789]\d{3,4}\d{4}$/;
         let isValid = phoneReg.test(tel);
         console.log(tel);

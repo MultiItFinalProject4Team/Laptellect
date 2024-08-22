@@ -17,29 +17,7 @@ $(function () {
         getAddressList();
 
         $(".error-message").hide();
-        $(".addAddressBtn").prop("disabled", true);
-
-        $("#address-name").on("blur", function () {
-          let addressName = $(this).val().trim();
-          let regId = /[^a-zA-Z0-9]/g;
-          console.log(addressName);
-
-          if (addressName !== "") {
-              if (regId.test(addressName)) {
-                  $("#addressError").text("특수문자를 사용할 수 없습니다.");
-                  $(".addAddressBtn").prop("disabled", true);
-                  $("#addressError").show();
-              } else {
-                  $("#addressError").hide();
-                  $(".addAddressBtn").prop("disabled", false);
-              }
-          } else {
-              $("#addressError").text("저장할 배송지 이름을 입력해주세요.");
-              $("#addressError").show();
-              $(".addAddressBtn").prop("disabled", true);
-          }
-          // 배송지 이름 빈칸 검증
-        });
+//        $(".addAddressBtn").prop("disabled", true);
 
         $(".addAddressBtn").on("click", function () {
           function convertEmptyToNull(value) {
@@ -66,8 +44,10 @@ $(function () {
               swal("필수 입력 항목", "상세 주소를 입력해주세요.", "info");
           } else if (!recipientPhone) {
               swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
+          } else if (!request) {
+              swal("필수 입력 항목", "요청 사항을 입력해주세요.", "info");
           } else {
-            console.log(addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
+              console.log(addressName, addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
 
               $.ajax({
                   url: "/api/member/insert-address",

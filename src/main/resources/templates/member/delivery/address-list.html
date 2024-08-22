@@ -161,23 +161,6 @@ $('.btn-success').on('click', function() {
     // 수정 모달에 배송지 id 삽입
 });
 
-$("#address-name2").on("blur", function () {
-    let addressName = $(this).val().trim();
-    let regId = /[^a-zA-Z0-9]/g;
-
-    if (addressName === "") {
-        $("#addressError2").text("저장할 배송지 이름을 입력해주세요.");
-        $(".updateAddressBtn").prop("disabled", true);
-        $("#addressError2").show();
-    } else if (regId.test(addressName)) {
-        $("#addressError2").text("특수문자를 사용할 수 없습니다.");
-        $(".updateAddressBtn").prop("disabled", true);
-        $("#addressError2").show();
-    } else {
-        $("#addressError2").hide();
-        $(".updateAddressBtn").prop("disabled", false);
-    }
-});
 
 $(".updateAddressBtn").on("click", function () {
     function convertEmptyToNull(value) {
@@ -195,18 +178,20 @@ $(".updateAddressBtn").on("click", function () {
     let request = convertEmptyToNull($('#request2').val());
 
     if (!addressName) {
-          swal("필수 입력 항목", "저장할 배송지 이름을 입력해주세요.", "info");
-      } else if (!recipientName) {
-          swal("필수 입력 항목", "수령인 이름을 입력해주세요.", "info");
-      } else if (!postalCode) {
-          swal("필수 입력 항목", "우편번호를 입력해주세요.", "info");
-      } else if (!address) {
-          swal("필수 입력 항목", "주소를 입력해주세요.", "info");
-      } else if (!detailAddress) {
-          swal("필수 입력 항목", "상세 주소를 입력해주세요.", "info");
-      } else if (!recipientPhone) {
-          swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
-      } else {
+        swal("필수 입력 항목", "저장할 배송지 이름을 입력해주세요.", "info");
+    } else if (!recipientName) {
+        swal("필수 입력 항목", "수령인 이름을 입력해주세요.", "info");
+    } else if (!postalCode) {
+        swal("필수 입력 항목", "우편번호를 입력해주세요.", "info");
+    } else if (!address) {
+        swal("필수 입력 항목", "주소를 입력해주세요.", "info");
+    } else if (!detailAddress) {
+        swal("필수 입력 항목", "상세 주소를 입력해주세요.", "info");
+    } else if (!recipientPhone) {
+        swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
+    } else if (!request) {
+        swal("필수 입력 항목", "요청 사항을 입력해주세요.", "info");
+    } else {
         console.log(addressId, memberNo, addressName, recipientName, postalCode, address, detailAddress, recipientPhone, request);
 
         $.ajax({

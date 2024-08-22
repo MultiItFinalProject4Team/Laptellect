@@ -10,7 +10,7 @@ $(function () {
         
         $("#nickNameInput").on("blur", function () {
           let nickName = $(this).val();
-          let regId = /[^a-zA-Z0-9]/g;
+          let regId = /[^a-zA-Z0-9가-힣ㄱ-ㅎ]/g;
 
           console.log(nickName);
 
@@ -399,7 +399,7 @@ $(function () {
         });
 
         $("#telChangeBtn").on("click", function () {
-          let tel = $('#phoneNumInput').val();
+          let tel = $('#phoneNumInput').val().replace(/-/g, '');
           let verifyCode = $('#phoneNumVer').val();
           console.log(tel, verifyCode);
 
