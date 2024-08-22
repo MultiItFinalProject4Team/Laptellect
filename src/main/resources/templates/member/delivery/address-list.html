@@ -163,7 +163,7 @@ $('.btn-success').on('click', function() {
 
 $("#address-name2").on("blur", function () {
     let addressName = $(this).val().trim();
-    let regId = /[^a-zA-Z0-9가-힣]/g;
+    let regId = /[^a-zA-Z0-9가-힣ㄱ-ㅎ]/g;
 
     if (addressName === "") {
         $("#addressError2").text("저장할 배송지 이름을 입력해주세요.");
