@@ -399,7 +399,7 @@ $(function () {
         });
 
         $("#telChangeBtn").on("click", function () {
-          let tel = $('#phoneNumInput').val();
+          let tel = $('#phoneNumInput').val().replace(/-/g, '');
           let verifyCode = $('#phoneNumVer').val();
           console.log(tel, verifyCode);
 
