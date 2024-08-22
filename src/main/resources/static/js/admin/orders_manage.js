@@ -113,28 +113,37 @@ function refundSelectedOrders() {
     return;
   }
 
-  if (confirm(`선택한 ${selectedOrders.length}개의 주문을 환불하시겠습니까?`)) {
-    Promise.all(selectedOrders.map(order => refundOrder(order.imPortId, order.amount, order.paymentNo)))
-      .then(results => {
-        const successCount = results.filter(result => result.success).length;
-        const failCount = results.length - successCount;
+  swal({
+    title: '선택한 주문을 환불하시겠습니까?',
+    text: `${selectedOrders.length}개의 주문이 환불됩니다.`,
+    icon: 'warning',
+    buttons: ['취소', '환불'],
+    dangerMode: true,
+  }).then((willRefund) => {
+    if (willRefund) {
+      Promise.all(selectedOrders.map(order => refundOrder(order.imPortId, order.amount, order.paymentNo)))
+        .then(results => {
+          const successCount = results.filter(result => result.success).length;
+          const failCount = results.length - successCount;
 
-        if (successCount > 0) {
-          swal({
+          if (successCount > 0) {
+            swal({
               title: '환불 처리 결과',
               text: `${successCount}개의 주문이 성공적으로 환불되었습니다.${failCount > 0 ? `\n${failCount}개의 주문 환불에 실패했습니다.` : ''}`,
               icon: failCount > 0 ? 'warning' : 'success'
-          });
-          location.reload();
-        } else {
-          swal('환불 처리 중 오류가 발생했습니다.', '', 'warning');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        swal('환불 처리 중 오류가 발생했습니다.', '', 'error')
-      });
-  }
+            }).then(() => {
+              location.reload();
+            });
+          } else {
+            swal('환불 처리 중 오류가 발생했습니다.', '', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          swal('환불 처리 중 오류가 발생했습니다.', '', 'error');
+        });
+    }
+  });
 }
 
 function openModal(orderId) {
@@ -170,14 +179,11 @@ function refundSingleOrder(imPortId, amount, paymentNo) {
   swal({
     title: '이 주문을 환불하시겠습니까?',
     text: "이 작업은 되돌릴 수 없습니다!",
-    type: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: '예, 환불합니다!',
-    cancelButtonText: '취소'
-  }).then(function(isConfirm) {
-    if (isConfirm) {
+    icon: 'warning',
+    buttons: ['취소', '환불'],
+    dangerMode: true,
+  }).then((willRefund) => {
+    if (willRefund) {
       refundOrder(imPortId, amount, paymentNo)
         .then(result => {
           if (result.success) {
@@ -186,7 +192,7 @@ function refundSingleOrder(imPortId, amount, paymentNo) {
                 location.reload();
               });
           } else {
-            swal('오류', '환불 처리 중 오류가 발생했습니다. ' + result.message, 'warning');
+            swal('오류', '환불 처리 중 오류가 발생했습니다. ' + result.message, 'error');
           }
         })
         .catch(error => {
