@@ -25,7 +25,7 @@
         <h1 align="left"style="font-size:40px">상품 문의 답변</h1>
     </header>
     <hr>
-    <form action="/customer/admin/answer_productQ" method="post" enctype="multipart/form-data">
+    <form action="/customer/admin/answer_productQ" method="post" enctype="multipart/form-data" onsubmit="disableButton(this);">
         <label for="productqNo">번호</label>
         <input type="text" th:value="${productqNo}" readonly="true" id="productqNo" name="productqNo">
         <label for="title">제목:</label>
@@ -35,7 +35,7 @@
             <div class="editor-container__editor" aria-required="true"><textarea id="content" name="content"></textarea></div>
         </div>
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-custom-primary">등록</button>
+            <button type="submit" id="submitButton" class="btn btn-custom-primary">등록</button>
         </div>
     </form>
 
@@ -48,7 +48,12 @@
         }
     </script>
     <script type="module" src="/js/customer/ckeditor.js"></script>
-
+    <script>
+        function disableButton(form) {
+            const button = form.querySelector('#submitButton');
+            button.disabled = true;
+        }
+    </script>
 </div>
 </div>
 </body>
