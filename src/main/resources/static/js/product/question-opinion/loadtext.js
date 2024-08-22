@@ -9,7 +9,7 @@ function createCommentItem(productqList, memberNo) {
                     <span class="author-name">${productqList.memberName || '정보 없음'}</span>
                     <span class="question-date">${formatDate(productqList.createdAt)}</span>
                     <a class="question-update" onclick="updateQuestion(${productqList.productqNo})">${(productqList.memberNo == memberNo) ? '수정/':''}</a>
-                    <a class="question-delete" onclick="confirmDelete(${productqList.productqNo})">${(productqList.memberNo == memberNo) ? '삭제':''}</a>
+                    <a class="question-delete" onclick="confirmDelete(${productqList.productqNo})">${(productqList.memberNo == memberNo || curauth == 'ADMIN') ? '삭제':''}</a>
                 </div>
             </div>
             <div class="question-body">
