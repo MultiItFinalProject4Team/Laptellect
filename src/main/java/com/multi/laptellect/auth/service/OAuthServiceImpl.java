@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+
 /**
  * 소셜 인가/인증 관련 클래스
  */
@@ -117,7 +118,7 @@ public class OAuthServiceImpl implements OAuthService{
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void processKakaoUser(SocialDTO socialDTO) {
+    public String processKakaoUser(SocialDTO socialDTO) {
         MemberDTO memberDTO = new MemberDTO();
         socialDTO.setLoginType("kakao");
 
@@ -143,8 +144,7 @@ public class OAuthServiceImpl implements OAuthService{
             Long socialId = socialDTO.getSocialId();
             log.info("SocialMember Insert 완료 = {}", socialId);
 
-            memberDTO = authMapper.findMemberBySocialId(socialId);
-            log.info("Member 조회 완료 = {}", memberDTO);
+            return "SignUp";
         }
         CustomUserDetails userDetails = new CustomUserDetails(memberDTO);
 
@@ -157,6 +157,7 @@ public class OAuthServiceImpl implements OAuthService{
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             log.info("Session updated with new authentication details");
         }
+        return "SignIn";
     }
 
     @Override
@@ -238,7 +239,7 @@ public class OAuthServiceImpl implements OAuthService{
     }
 
     @Override
-    public void processGoogleUser(SocialDTO socialDTO) {
+    public String processGoogleUser(SocialDTO socialDTO) {
         MemberDTO memberDTO = new MemberDTO();
         socialDTO.setLoginType("google");
 
@@ -265,8 +266,7 @@ public class OAuthServiceImpl implements OAuthService{
             Long socialId = socialDTO.getSocialId();
             log.info("SocialMember Insert 완료 = {}", socialId);
 
-            memberDTO = authMapper.findMemberBySocialId(socialId);
-            log.info("Member 조회 완료 = {}", memberDTO);
+            return "SignUp";
         }
         CustomUserDetails userDetails = new CustomUserDetails(memberDTO);
 
@@ -279,5 +279,6 @@ public class OAuthServiceImpl implements OAuthService{
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             log.info("Session updated with new authentication details");
         }
+        return "SignIn";
     }
 }

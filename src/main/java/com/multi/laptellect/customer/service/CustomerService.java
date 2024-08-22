@@ -144,21 +144,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            fileService.deleteFile(url);
         }
         return customDao.deletePersonalq(personalqNo);
     }
@@ -220,21 +206,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         customDao.deletePersonala(personalqNo);
     }
@@ -312,21 +284,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         return customDao.deleteProductq(productqNo);
     }
@@ -346,21 +304,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         customDao.deleteProducta(productqNo);
     }
@@ -424,21 +368,7 @@ public class CustomerService {
             urls.add(img.attr("src"));
         }
         for(String url : urls){
-            try {
-                String prefix = "4team/";
-                int prefixIndex = url.indexOf(prefix);
-
-                if (prefixIndex != -1) {
-                    url = url.substring(prefixIndex + prefix.length());
-                    System.out.println("url: "+url);
-                    int result=fileService.deleteFile(url);
-                    System.out.println("결과: "+result);
-                } else {
-                    System.out.println("주어진 URL에 '4team/'이 포함되지 않았습니다.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int result=fileService.deleteFile(url);
         }
         customDao.deleteNotice(noticeNo);
     }

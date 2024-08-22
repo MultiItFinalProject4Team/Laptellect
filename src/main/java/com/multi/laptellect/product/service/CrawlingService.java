@@ -17,13 +17,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -32,6 +30,7 @@ import java.util.*;
  */
 @Slf4j
 @Service
+@Component
 @RequiredArgsConstructor
 public class CrawlingService {
 
@@ -39,6 +38,13 @@ public class CrawlingService {
 
     private final String PRODUCT_LIST_URL = "https://prod.danawa.com/list/ajax/getProductList.ajax.php";
     private final String PRODUCT_DETAILS_URL = "https://prod.danawa.com/info/ajax/getProductDescription.ajax.php";
+
+
+
+    @Value("${spring.ncp.s3.bucket}")
+    private String bucketName;
+
+
 
     /**
      * 지정된 타입의 제품을 크롤링하는 메서드
@@ -50,7 +56,7 @@ public class CrawlingService {
     public List<ProductDTO> crawlProducts(int typeNo) throws IOException {
         List<ProductDTO> productList = new ArrayList<>();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            for (int page = 10; 1 <= page; page--) {
+            for (int page = 5; 1 <= page; page--) {
                 String responseString = sendPostRequest(httpClient, page, typeNo);
                 parseHtml(responseString, productList);
                 log.info("productList확인{}", productList);
@@ -84,7 +90,7 @@ public class CrawlingService {
                         "&physicsCate2=869" +
                         "&sortMethod=NEW" +
                         "&viewMethod=LIST" +
-                        "&listCount=30");
+                        "&listCount=60");
                 log.info("laptopType {}", productType);
                 break;
 
@@ -188,7 +194,13 @@ public class CrawlingService {
             return null;
         }
 
-        int firstPrice = Integer.parseInt(price.split(" ")[0]);
+        int firstPrice;
+        try {
+            firstPrice = Integer.parseInt(price.split(" ")[0]);
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            log.error("가격 파싱 중 오류 발생: {}", price, e);
+            return null;
+        }
 
         log.info("가격 데이터 확인 = {}", firstPrice);
 
@@ -476,35 +488,7 @@ public class CrawlingService {
     }
 
 
-    /**
-     * 이미지 파일을 다운로드하는 메서드
-     *
-     * @param imageUrl      이미지 URL
-     * @param saveDirectory 저장할 디렉토리 경로
-     * @param imageName     저장할 이미지 파일명
-     */
-    public static void downloadImage(String imageUrl, String saveDirectory, String imageName) {
-        // 디렉토리 경로에 이미지 파일명을 추가
-        String savePath = saveDirectory + "/" + imageName;
 
-        // 디렉토리 생성 (존재하지 않는 경우)
-        File directory = new File(saveDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        try (BufferedInputStream in = new BufferedInputStream(new URL(imageUrl).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(savePath)) {
-            byte dataBuffer[] = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
-            }
-            System.out.println("Image successfully downloaded: " + savePath);
-        } catch (IOException e) {
-            System.out.println("Error downloading image: " + e.getMessage());
-        }
-    }
 
     public Map<String, List<String>> createLaptopCategory(int productType) {
         ArrayList<String> laptopSpecNames = new ArrayList<>();

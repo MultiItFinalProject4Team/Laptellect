@@ -16,10 +16,33 @@ function openKakaoLogin() {
 
     $(document).ready(function(){
         window.addEventListener('message', function(event) {
-            if (event.data === 'closeAndRedirect') {
-                window.location.href = '/';
+            switch(event.data) {
+                case 'SignUp':
+                    swal("회원가입 성공", "", "success");
+
+                    setTimeout(function() {
+                        swal.close();
+                        window.location.href = '/signin';
+                    }, 1500);
+                    break;
+                case 'SignIn':
+                    swal("로그인 성공", "", "success");
+
+                    setTimeout(function() {
+                        swal.close();
+                        window.location.href = '/';
+                    }, 1500);
+                    break;
+                case 'Fail':
+                    swal("에러", "다시 시도해 주세요", "error");
+
+                    setTimeout(function() {
+                        swal.close();
+                        window.location.href = '/';
+                    }, 1500);
+                    break;
             }
-        });
+        }, false);
 
         $("#kakao-login").on("click", function() {
             openKakaoLogin();

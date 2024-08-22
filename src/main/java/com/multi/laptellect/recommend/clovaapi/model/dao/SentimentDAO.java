@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface SentimentDAO {
     @Insert("INSERT INTO laptop_sentiment(product_no, sentiment_positive, sentiment_denial, sentiment_neutrality) " +
-            "VALUES (#{ productNo }, #{ sentimentPositive }, #{sentimentDenial}, #{sentimentNeutrality}) " +
+            "VALUES (#{ productNo }, #{ sentimentPositive }, #{ sentimentDenial }, #{ sentimentNeutrality }) " +
             "ON DUPLICATE KEY UPDATE " +
             "sentiment_positive = sentiment_positive + #{sentimentPositive}, " +
             "sentiment_denial = sentiment_denial + #{sentimentDenial}, " +
