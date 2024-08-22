@@ -21,7 +21,7 @@ $(function () {
 
         $("#address-name").on("blur", function () {
           let addressName = $(this).val().trim();
-          let regId = /[^a-zA-Z0-9]/g;
+          let regId = /[^a-zA-Z0-9가-힣]/g;
           console.log(addressName);
 
           if (addressName !== "") {
