@@ -366,7 +366,7 @@
                                 <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                     <p>아직 작성된 리뷰가 없습니다.</p>
                                 </div>
-                                <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
+                                <div th:each="review : ${ reviewTop3 }" class="review-item">
                                     <div class="review-header">
                                         <div class="review-content-wrapper">
                                         <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
@@ -1087,7 +1087,7 @@
                                 <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                     <p>아직 작성된 리뷰가 없습니다.</p>
                                 </div>
-                                <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
+                                <div th:each="review : ${ reviewTop3 }" class="review-item">
                                     <div class="review-header">
                                         <div class="review-content-wrapper">
                                         <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
@@ -1689,7 +1689,7 @@
                                 <div th:if="${#lists.isEmpty(paymentReviewDTOList)}">
                                     <p>아직 작성된 리뷰가 없습니다.</p>
                                 </div>
-                                <div th:each="review : ${paymentReviewDTOList.size() > 3 ? paymentReviewDTOList.subList(0, 3) : paymentReviewDTOList}" class="review-item">
+                                <div th:each="review : ${ reviewTop3 }" class="review-item">
                                     <div class="review-header">
                                         <div class="review-content-wrapper">
                                         <span class="review-content" style="font-size: 14px;" th:text="${review.content.length() > 50 ? review.content.substring(0, 50) + '...' : review.content}">
