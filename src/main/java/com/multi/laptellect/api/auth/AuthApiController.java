@@ -253,9 +253,9 @@ public class AuthApiController {
      */
     @ResponseBody
     @PostMapping("/check-verify-tel")
-    public boolean isVerifyTel(@RequestParam("verifyCode") String verifyCode) {
+    public boolean isVerifyTel(@RequestParam("verifyCode") String verifyCode, @RequestParam("tel") String tel) {
         try {
-            if(authService.isVerifyTel(verifyCode)) {
+            if(authService.isVerifyTel(verifyCode, tel)) {
                 return true;
             } else {
                 return false;

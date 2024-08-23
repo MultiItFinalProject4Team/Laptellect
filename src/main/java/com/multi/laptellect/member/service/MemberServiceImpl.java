@@ -63,22 +63,27 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public boolean updateTel(MemberDTO memberDTO, String verifyCode) throws Exception{
-        if(redisUtil.getData(verifyCode).equals(String.valueOf(memberDTO.getMemberNo()))) {
-            if(memberMapper.updateTel(memberDTO) == 0) {
-                throw new RuntimeException("휴대폰 번호 업데이트 실패");
-            }
-            log.info("휴대폰 번호 업데이트 완료 = {} ", memberDTO.getEmail());
+        String redisTel = redisUtil.getData(verifyCode);
 
-            // Redis 인증 코드 삭제
-            redisUtil.deleteData(verifyCode);
-
-            memberDTO = memberMapper.findMemberByNo(memberDTO.getMemberNo());
-            SecurityUtil.updateUserDetails(memberDTO);
-            return true;
-        } else {
-            log.error("updateTel Error : 업데이트 실패");
-            return false;
+        if(redisTel == null) {
+            throw new RuntimeException("휴대폰 번호 Null 실패");
         }
+
+        if(!redisTel.equals(memberDTO.getTel())) {
+            throw new RuntimeException("휴대폰 번호 불일치");
+        }
+
+        if(memberMapper.updateTel(memberDTO) == 0) {
+            throw new RuntimeException("휴대폰 번호 업데이트 실패");
+        }
+        log.info("휴대폰 번호 업데이트 완료 = {} ", memberDTO.getEmail());
+
+        // Redis 인증 코드 삭제
+        redisUtil.deleteData(verifyCode);
+
+        memberDTO = memberMapper.findMemberByNo(memberDTO.getMemberNo());
+        SecurityUtil.updateUserDetails(memberDTO);
+        return true;
     }
 
     @Override

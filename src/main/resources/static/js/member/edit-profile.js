@@ -373,23 +373,23 @@ $(function () {
 
         $("#phoneNumVer").on("blur", function () {
           let verifyCode = $(this).val();
+          let tel = $('#phoneNumInput').val();
           console.log(verifyCode);
 
           $.ajax({
             url: "/api/check-verify-tel",
             type: "POST",
-            data: { verifyCode: verifyCode },
+            data: { verifyCode: verifyCode, tel: tel },
             success: function (response) {
               if (response === true) {
                 console.log("인증번호 확인 완료");
                 $("#phoneError").hide();
                 $("#telChangeBtn").prop("disabled", false);
               } else {
-                console.log("틀린 인증번호");
+                console.log("틀린 인증번호거나 전화번호가 다릅니다.");
                 $("#phoneError").show();
                 $("#telChangeBtn").prop("disabled", true);
               }
-
             },
             error: function () {
               console.log("인증번호 확인 실패");

@@ -106,10 +106,11 @@ public interface AuthService {
      * SMS 인증 번호 검증
      *
      * @param verifyCode 사용자가 입력한 인증 번호
+     * @param tel
      * @return the boolean
      * @throws Exception the exception
      */
-    boolean isVerifyTel(String verifyCode) throws Exception;
+    boolean isVerifyTel(String verifyCode, String tel) throws Exception;
 
     int isRegistrationNo(MemberDTO memberDTO) throws Exception;
 }
