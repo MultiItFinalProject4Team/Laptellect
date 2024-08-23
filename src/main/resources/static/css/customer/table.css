@@ -7,7 +7,7 @@
 
 /* 테이블 헤더 및 셀 스타일 */
 .fixed-table th, .fixed-table td {
-    padding: 12px; /* 셀 안쪽 여백 */
+    padding: 10px; /* 셀 안쪽 여백 */
 }
 
 /* 테이블 헤더 스타일 */
@@ -50,5 +50,5 @@
 /* 테이블 컨테이너 스타일 */
 .fixed-table-container {
             width: 100%; /* 원하는 너비로 설정 */
-            height: 550px; /* 원하는 높이로 설정 */
+            height: 1500px; /* 원하는 높이로 설정 */
         }
