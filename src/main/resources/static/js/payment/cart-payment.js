@@ -1,6 +1,5 @@
 // 전역 변수 선언
 let userName, originalPrice, possessionPoint;
-let selectedAddressId = 1; // 선택된 주소의 ID를 저장할 변수
 
 // 숫자 포맷팅 함수
 function formatNumber(num) {
@@ -152,7 +151,7 @@ function mypayment() {
                         products: products,
                         addressId: selectedAddressId
                     });
-
+                    console.log(selectedAddressId);
                     if (data.success) {
 //                        swal("결제 및 검증 성공", "", "success");
                         window.location.href = data.redirectUrl;
