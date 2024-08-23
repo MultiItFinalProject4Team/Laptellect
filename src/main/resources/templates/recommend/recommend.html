@@ -70,7 +70,42 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        #loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner {
+           width: 56px;
+           height: 56px;
+           border-radius: 50%;
+           background: conic-gradient(#0000 10%,#3498db);
+           -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 0);
+           animation: spinner-zp9dbg 0.8s infinite linear;
+}
+
+        @keyframes spinner-zp9dbg {
+           to {
+              transform: rotate(1turn);
+           }
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 9998;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css">
 </head>
 <body>
 <div layout:fragment="content">
@@ -78,7 +113,7 @@
 
     <h1>맞춤형 노트북 추천 시스템</h1>
 
-    <form th:action="@{/recommendpage}" method="post">
+    <form th:action="@{/recommendpage}" id="recommendForm" method="post">
         <div class="section">
             <h3>용도 선택</h3>
             <div class="option-container">
@@ -95,6 +130,10 @@
             <button type="submit" id="recommendButton" disabled>나에게 맞는 노트북 추천받기</button>
         </div>
     </form>
+    <div id="overlay"></div>
+    <div id="loading-spinner">
+        <div class="spinner"></div>
+    </div>
 
     <script th:inline="javascript">
 $(document).ready(function() {
@@ -147,6 +186,11 @@ $(document).ready(function() {
         let allSelected = requiredCategories.every(category => selectedOptions[category]);
         $('#recommendButton').prop('disabled', !allSelected);
     }
+
+    $('#recommendForm').submit(function(event) {
+        $('#overlay').show();
+        $('#loading-spinner').show();
+    });
 
     function generateGamingOptions() {
         return `

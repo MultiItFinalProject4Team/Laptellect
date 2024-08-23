@@ -49,7 +49,7 @@ public class AdminMemberController {
             log.error("Member Mgt Error = ", e);
         }
 
-        return "/admin/member/member-manage";
+        return "admin/member/member-manage";
     }
 
     @PostMapping("/list")
@@ -76,7 +76,7 @@ public class AdminMemberController {
             log.error("어드민 멤버 내역 전체 조회 실패");
         }
 
-        return "/admin/member/member-list";
+        return "admin/member/member-list";
     }
 
     @PostMapping("/member-info")
@@ -89,7 +89,7 @@ public class AdminMemberController {
         } catch (Exception e) {
             log.info("멤버 조회 실패 = {}", memberNo);
         }
-        return "/admin/member/member-info";
+        return "admin/member/member-info";
     }
 
     @ResponseBody

@@ -1,6 +1,5 @@
 // 전역 변수 선언
 let userName, productName, productPrice, originalPrice, possessionPoint;
-let selectedAddressId = 1; // 선택된 주소의 ID를 저장할 변수
 
 // 숫자 포맷팅 함수
 function formatNumber(num) {

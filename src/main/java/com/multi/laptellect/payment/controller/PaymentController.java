@@ -101,7 +101,7 @@ public class PaymentController {
         log.info("파라미터 = {} {} {}", img, productName, price);
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-        paymentpageDTO.setPrice(400);
+//        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
@@ -114,14 +114,14 @@ public class PaymentController {
 
         if(userAddressList.isEmpty()){
             model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 기본배송지 미설정");
-            return "/member/delivery-profile";
+            return "member/delivery-profile";
         } else if (memberDTO.getTel() == null) {
 
             CustomUserDetails userInfo = SecurityUtil.getUserDetails();
 
             model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 전화번호 미인증");
             model.addAttribute("userInfo", userInfo);
-            return "/member/edit-profile";
+            return "member/edit-profile";
         }
 
 
@@ -133,7 +133,7 @@ public class PaymentController {
         model.addAttribute("paymentpointDTO", paymentpointDTO);
         model.addAttribute("memberDTO", memberDTO);
 
-        return "/payment/payment";
+        return "payment/payment";
     }
 
     /**
@@ -173,14 +173,14 @@ public class PaymentController {
 
             if(userAddressList.isEmpty()){
                 model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 기본배송지 미설정");
-                return "/member/delivery-profile";
+                return "member/delivery-profile";
             } else if (memberDTO.getTel() == null) {
 
                 CustomUserDetails userInfo = SecurityUtil.getUserDetails();
 
                 model.addAttribute("warningMessage", "기본배송지 설정 및 전화번호 인증을 먼저해주세요. \n\n사유 : 전화번호 미인증");
                 model.addAttribute("userInfo", userInfo);
-                return "/member/edit-profile";
+                return "member/edit-profile";
             }
 
             AddressDTO userAddress = userAddressList.get(userAddressList.size()-1);

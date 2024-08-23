@@ -30,11 +30,6 @@ public class SchedulerConfiguration {
     private final RecommenService recommenService;
     private final EmotionAnalyzeService emotionAnalyzeService;
 
-    @Scheduled(fixedRate = 50000) // fixedRate(서버 작동하자마자 시작) fixedDelay(종료 시점부터 시작, 1000 = 1초)
-    public void run() {
-        log.info("서버 시작 스케쥴러 확인");
-    }
-
     @Scheduled(fixedRate = 300000) // 5분 간격으로 방문자 수 카운트
     public void visitCount() {
         log.info("방문자 수 카운트 스케쥴러");
@@ -65,7 +60,7 @@ public class SchedulerConfiguration {
             if (!visitProducts.isEmpty()) {
                 for (String productNo : productNos) {
                     visitCount = Integer.parseInt(visitProducts.get(productNo));
-                    log.info("상품 조회수 = {}, {}", productNo, visitCount);
+                    log.debug("상품 조회수 = {}, {}", productNo, visitCount);
 
                     productService.updateProductVisit(productNo, visitCount);
                     log.info("상품 조회수 업데이트 완료 = {}", visitCount);
@@ -81,7 +76,7 @@ public class SchedulerConfiguration {
 
     @Scheduled(cron = "0 0 1 * * ?")
     public void assignProductTags() {
-        log.info("태그화 스케줄러 시작");
+        log.debug("태그화 스케줄러 시작");
         try {
             recommenService.assignTagsToProducts();
             log.info("노트북 태그화 성공");
@@ -93,7 +88,7 @@ public class SchedulerConfiguration {
 
     @Scheduled(cron = "0 0 2 * * ?")
     public void analyzeSentiments() {
-        log.info("감정 분석 스케줄러 시작");
+        log.debug("감정 분석 스케줄러 시작");
         try {
             emotionAnalyzeService.analyzeAllUnanlyzedReviews();
             log.info("감정 분석 완료");

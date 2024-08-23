@@ -24,14 +24,14 @@ public class EmotionAnalyzeService {
     private final SentimentDAO sentimentDAO;
 
     @Value("${spring.sentiment.clientId}")
-    private String clientId;
+    private String clientId; //각각 API 키를 가져옴
 
     @Value("${spring.sentiment.clientSecret}")
     private String clientSecret;
 
     public HashMap<String, Object> getAnalyzeResult(int productNo, ReviewDTO reviewDTO) {
 
-        String url = "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
+        String url = "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze"; //API 주소
         HashMap<String, Object> result = new HashMap<>(); // 결과
         String review = reviewDTO.getContent(); //리뷰내용
         RestTemplate restTemplate = new RestTemplate();//RestTemplate 객체

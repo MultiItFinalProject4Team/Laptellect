@@ -3,7 +3,7 @@ function openKakaoLogin() {
     }
 
     function openGoogleLogin() {
-        window.open("/signin/google", '_blank', 'width=600,height=425');
+        window.open("/signin/google", '_blank', 'width=600,height=460');
     }
 
     function openFindId() {

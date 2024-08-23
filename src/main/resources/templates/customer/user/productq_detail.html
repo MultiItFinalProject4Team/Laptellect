@@ -13,13 +13,11 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">상품 문의</h1>
-    </header>
+<div class="profile-box" style="min-height: 560px;">
+    <h1 align="left"style="font-size:40px">상품 문의</h1>
     <hr>
     <div>
-        <p style="font-size: 15px; color: light-gray; line-height: 0;">질문</p>
+        <p style="font-size: 12px; color: gray; line-height: 0; margin-bottom: 5px;">-질문-</p>
         <h3 th:text="${productq.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</h3>
         <p th:text="${#dates.format(productq.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
         <div class="d-flex justify-content-end" aria-label="Small button group">
@@ -38,7 +36,7 @@
 <div  th:if="${productq.answer=='Y'}">
 
     <div>
-        <p style="font-size: 15px; color: light-gray; line-height: 0;">답변</p>
+        <p style="font-size: 12px; color: gray; line-height: 0; margin-bottom: 5px;">-답변-</p>
         <h3 th:text="${producta.title}" style="font-size: 40px; font-weight: bold; line-height: 1;">제목</h3>
         <p th:text="${#dates.format(producta.createdAt, 'YY/MM/dd HH:mm')}" class="text-end" style="font-size: 12;">작성일</p>
     </div>
@@ -46,8 +44,6 @@
     <div id="content2" name="content2" th:utext="${producta.content}" readonly="true">내용</div>
 
     <hr class="border border-dark">
-</div>
-
 </div>
     <div align="center">
         <div class="btn-group" aria-label="Small button group" th:if="${productq.answer=='N'}">
@@ -58,6 +54,9 @@
             <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:href="@{/customer/user/customer_productq/{productNo}(productNo=${productq.productNo})}" class="btn btn-custom-primary">목록으로</a>
         </div>
     </div>
+</div>
+
+
 </div>
 </body>
 </html>

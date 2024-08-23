@@ -166,4 +166,26 @@ const editorConfig = {
 let editor;
 
 ClassicEditor
-.create( document.querySelector( '#content' ) , editorConfig);
+.create( document.querySelector( '#content' ) , editorConfig)
+.then(newEditor => {
+    editor = newEditor;
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    // 폼 제출 시 검증 로직
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // 폼 기본 제출 동작 방지
+
+        // CKEditor의 내용 가져오기
+        const content = editor.getData();
+
+        // CKEditor 내용이 비어 있는지 확인
+        if (!content.trim()) {
+            swal("내용을 입력하세요", "", "error");
+            return; // 폼 제출 중지
+        }
+
+        // 폼 제출 허용 (AJAX로 제출하는 경우에만 필요)
+        this.submit();
+    });
+});
