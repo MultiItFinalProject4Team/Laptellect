@@ -184,11 +184,7 @@ public class CrawlingService {
             return null;
         }
 
-        // String imageUrl = product.select(".thumb_image img").attr("data-original");
 
-//        if (imageUrl == null || imageUrl.isEmpty()) { // 이미지 URL이 없을 경우 대체 URL 사용
-//            imageUrl = product.select(".thumb_image img").attr("src");
-//        }
 
         if (productName.isEmpty() || price.isEmpty() || productCode.isEmpty()) {
             return null;
@@ -486,9 +482,6 @@ public class CrawlingService {
         }
         return "정보 없음";
     }
-
-
-
 
     public Map<String, List<String>> createLaptopCategory(int productType) {
         ArrayList<String> laptopSpecNames = new ArrayList<>();
