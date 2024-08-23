@@ -32,20 +32,20 @@ public class RecommenService {
     public void assignTagsToProducts() {
         log.info("태그 할당 프로세스 시작");
 
-        ArrayList<Integer> productNOs = tagMapper.findAllProductNo(); // 제품 번호 조회
+        ArrayList<Integer> productNOs = tagMapper.findAllProductNo(); //노트북 조회
         log.info("제품 번호 수 = {}", productNOs.size());
 
         for (int productNO : productNOs) {
             log.info("제품 {} 처리 시작", productNO);
-            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNO);
-            // 제품 번호별로 태그 할당
+            List<LaptopDetailsDTO> laptopDetails = productMapper.laptopProductDetails(productNO); //제품 번호별로 상세 정보 가져오기
 
 
-            if (!laptopDetails.isEmpty()) {
+
+            if (!laptopDetails.isEmpty()) { //상세 정보가 있으면
                 log.info("제품 {}의 상세 정보 존재", laptopDetails);
-                LaptopSpecDTO laptops = productService.getLaptopSpec(productNO, laptopDetails);
+                LaptopSpecDTO laptops = productService.getLaptopSpec(productNO, laptopDetails);//넘버로 정보 가져오기
 
-                List<Integer> tags = determineTagsForProduct(laptops);
+                List<Integer> tags = determineTagsForProduct(laptops); //태그 할당
                 log.info("제품 {}에 할당된 태그 = {}", productNO, tags);
 
                 for (int tag : tags) {
@@ -63,11 +63,11 @@ public class RecommenService {
     }
 
 
-    //제품번호별로 태그 할당
+    //프로덕트 넘버로 태그 할당
     private List<Integer> determineTagsForProduct(LaptopSpecDTO laptopSpecDTO) {
-        List<Integer> assignedTags = new ArrayList<>(); //미리 선언 해두는게 나음
-        List<TaggDTO> tags = tagMapper.findAllTag();
-        int tagNo; //int 도 미리미리 해두는게 나음
+        List<Integer> assignedTags = new ArrayList<>(); //할당된 태그
+        List<TaggDTO> tags = tagMapper.findAllTag(); //태그 조회
+        int tagNo;
         log.info("DTO 확인 : {}", laptopSpecDTO);
 
 
@@ -87,8 +87,7 @@ public class RecommenService {
         String priceName = laptopSpecDTO.getPrice(); //가격
 
 
-        //gpuName, screenSize 변수명 변경
-        if (isGpuSuitableForSteamOrFPS(gpuName, gpuTypeName)) {
+        if (isGpuSuitableForSteamOrFPS(gpuName, gpuTypeName)) { //
             tagNo = findTagByData(tags, "게이밍");
             assignedTags.add(tagNo);
             log.info("'게이밍' 태그(#{}) 할당", tagNo);
@@ -244,16 +243,16 @@ public class RecommenService {
         return assignedTags;
     }
 
-
+    //태그 할당
     private boolean islost(String cpu, String gpu, String gpuTypeName) {
-        Map<String, Integer> cEnt = cpuConfig.getCpuMark();
+        Map<String, Integer> cEnt = cpuConfig.getCpuMark(); //각 벤치마킹 점수 YML에서 가져오는중
         Map<String, Integer> gEnt = gpuConfig.getGpuMark();
-        Pattern pattern = Pattern.compile("[\\s()]+");
-        String minCpuKey = pattern.matcher("i3-6100U (2.3GHz)").replaceAll("");
+        Pattern pattern = Pattern.compile("[\\s()]+");// 공백 특수문자 등등 제거
+        String minCpuKey = pattern.matcher("i3-6100U (2.3GHz)").replaceAll(""); //적용
         String minGpuKey = pattern.matcher("GTX1050 Ti").replaceAll("");
         Integer minCpuScore = cEnt.get(minCpuKey);
         Integer minGpuScore = gEnt.get(minGpuKey);
-        int cpuScore = -1;
+        int cpuScore = -1; //초기화
         int gpuScore = -1;
 
         if (cpu == null || gpu == null || minCpuScore == null || minGpuScore == null || gpuTypeName == null || gpuTypeName.equals("내장그래픽")) {
@@ -262,9 +261,9 @@ public class RecommenService {
 
         for (String cpuName : cEnt.keySet()) {
             String cpuNameC1 = pattern.matcher(cpuName).replaceAll("");
-            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) {
+            if (cpu.replaceAll("[\\s()]+", "").contains(cpuNameC1)) { //cpu 이름이랑 같은지 확인
                 cpuScore = cEnt.get(cpuName);
-                break;
+                break; //찾으면 탈출
             }
         }
         for (String gpuName : gEnt.keySet()) {
@@ -274,7 +273,7 @@ public class RecommenService {
                 break;
             }
         }
-        return cpuScore >= minCpuScore && gpuScore >= minGpuScore;
+        return cpuScore >= minCpuScore && gpuScore >= minGpuScore; //cpu gpu 점수가 높으면 true
     }
 
     private boolean isBet(String cpu, String gpu, String gpuTypeName) {
@@ -839,9 +838,9 @@ public class RecommenService {
         }
     }
 
-    private int findTagByData(List<TaggDTO> tags, String tagData) {
-        for (TaggDTO tag : tags) {
-            if (tag.getTagData().equals(tagData)) {
+    private int findTagByData(List<TaggDTO> tags, String tagData) { //태그 찾는 메소드
+        for (TaggDTO tag : tags) { //태그 리스트에서 태그 찾기
+            if (tag.getTagData().equals(tagData)) { //태그가 같으면 태그번호로 리턴함
                 log.info("태그 '{}' 찾음: #{}", tagData, tag.getTagNo());
                 return tag.getTagNo();
             }
