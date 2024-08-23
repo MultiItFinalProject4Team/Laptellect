@@ -110,7 +110,6 @@ public class ProductController {
         model.addAttribute("cate", cate);
         model.addAttribute("typeNo", typeNo);
         return "product/productList";
-
     }
 
 
@@ -170,7 +169,7 @@ public class ProductController {
                 case 1 -> {
                     // 제품 상세 정보 가져오기
                     LaptopSpecDTO laptop = productService.getLaptopProductDetails(productNo);
-                    log.info("상세 제품 정보 결과 값 = {}, {},{}",laptop,laptop.getProductNo(),laptop.getImage());
+                    log.debug("상세 제품 정보 결과 값 = {}, {},{}",laptop,laptop.getProductNo(),laptop.getImage());
 
 
                     model.addAttribute("productNo",laptop.getProductNo());
@@ -201,8 +200,8 @@ public class ProductController {
                     // 제품 상세 정보 가져오기
                     MouseSpecDTO mouse = productService.getMouseProductDetails(productNo);
 
-                    log.info("마우스 조회 목록 = {}",mouse);
-                    log.info("마우스 조회 목록 = {}",mouse.getImage());
+                    log.debug("마우스 조회 목록 = {}",mouse);
+                    log.debug("마우스 조회 목록 = {}",mouse.getImage());
 
                     model.addAttribute("productNo",mouse.getProductNo());
                     model.addAttribute("mouse", mouse);
@@ -229,8 +228,8 @@ public class ProductController {
                 case 3 -> {
                     KeyBoardSpecDTO keyboard = productService.getKeyboardProductDetails(productNo);
 
-                    log.info("키보드 조회 목록 = {}",keyboard);
-                    log.info("키보드 조회 목록 = {}",keyboard.getImage());
+                    log.debug("키보드 조회 목록 = {}",keyboard);
+                    log.debug("키보드 조회 목록 = {}",keyboard.getImage());
 
                     model.addAttribute("productNo", keyboard.getProductNo());
                     model.addAttribute("keyboard", keyboard);
@@ -427,7 +426,7 @@ public class ProductController {
                 break;
         }
 
-    return "redirect:productList?typeNo=1";
+    return "redirect:/productList?typeNo=1";
 
 
     }

@@ -20,6 +20,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -40,10 +41,8 @@ public class CrawlingService {
     private final String PRODUCT_DETAILS_URL = "https://prod.danawa.com/info/ajax/getProductDescription.ajax.php";
 
 
-
     @Value("${spring.ncp.s3.bucket}")
     private String bucketName;
-
 
 
     /**
@@ -185,7 +184,6 @@ public class CrawlingService {
         }
 
 
-
         if (productName.isEmpty() || price.isEmpty() || productCode.isEmpty()) {
             return null;
         }
@@ -317,9 +315,9 @@ public class CrawlingService {
                 log.info("doc 확인 = {}", doc);
 
                 Map<String, List<String>> categoryMap = createMouseCategory(productType);
-                log.info("getkeyboardDetails = {}", categoryMap);
+                log.debug("getkeyboardDetails = {}", categoryMap);
                 productDTO = getProductDetails1(code);
-                log.info("getProductDetails1 = {}", categoryMap);
+                log.debug("getProductDetails1 = {}", categoryMap);
                 createMouseSpec(prodNo, categoryMap, doc, productDTO);
             } catch (IOException e) {
                 log.error("Error while getting product details", e);
@@ -512,7 +510,7 @@ public class CrawlingService {
                 categoryCount++;
                 String categoryNo = categoryPrefix + categoryCount;
 
-                ProductCategoryDTO spec = productMapper.findByOptions(specName);
+                ProductCategoryDTO spec = productMapper.findByOptions(specName, 1);
                 log.info("specname {}:", specName);
                 if (spec == null) {
 
@@ -530,7 +528,7 @@ public class CrawlingService {
 
         Map<String, List<String>> categoryMap = new LinkedHashMap<>();
 
-        categoryMap.put("KBI", Arrays.asList(".제조사", ".등록월", "사이즈", "연결 방식", "인터페이스", "접점 방식"));
+        categoryMap.put("KBI", Arrays.asList("제조사", "등록월", "사이즈", "연결 방식", "인터페이스", "접점 방식"));
         categoryMap.put("KB", Arrays.asList("키 배열", "스위치", "키 스위치", "스위치 방식", "램 교체")); //Key Build 키보드 빌더
         categoryMap.put("KD", Arrays.asList("레인보우 백라이트", "스텝스컬쳐2", "금속하우징", "생활방수", "RGB 백라이트", "스테빌라이저", "단색 백라이트")); //키보드 구조
         categoryMap.put("KF", Arrays.asList("동시입력", "키캡 재질", "응답속도", "키캡 각인방식", "각인 위치")); //키보드 기능
@@ -543,9 +541,9 @@ public class CrawlingService {
             String categoryPrefix = entry.getKey();
             List<String> specs = entry.getValue();
 
-            log.info("categoryPrefix 데이터 확인 = {}", categoryPrefix);
-            log.info("specs 데이터 확인 = {}", specs);
-            log.info("createLaptopCategory = {}", productType);
+            log.debug("categoryPrefix 데이터 확인 = {}", categoryPrefix);
+            log.debug("specs 데이터 확인 = {}", specs);
+            log.debug("createLaptopCategory = {}", productType);
 
 
             for (String specName : specs) {
@@ -553,7 +551,7 @@ public class CrawlingService {
                 categoryCount++;
                 String categoryNo = categoryPrefix + categoryCount;
 
-                ProductCategoryDTO spec = productMapper.findByOptions(specName);
+                ProductCategoryDTO spec = productMapper.findByOptions(specName, 3);
                 log.info("specname {}:", specName);
                 if (spec == null) {
 
@@ -583,9 +581,9 @@ public class CrawlingService {
             String categoryPrefix = entry.getKey();
             List<String> specs = entry.getValue();
 
-            log.info("categoryPrefix 데이터 확인 = {}", categoryPrefix);
-            log.info("specs 데이터 확인 = {}", specs);
-            log.info("createLaptopCategory = {}", productType);
+            log.debug("categoryPrefix 데이터 확인 = {}", categoryPrefix);
+            log.debug("specs 데이터 확인 = {}", specs);
+            log.debug("createLaptopCategory = {}", productType);
 
 
             for (String specName : specs) {
@@ -593,13 +591,10 @@ public class CrawlingService {
                 categoryCount++;
                 String categoryNo = categoryPrefix + categoryCount;
 
-                ProductCategoryDTO spec = productMapper.findByOptions(specName);
+                ProductCategoryDTO spec = productMapper.findByOptions(specName, 2);
                 log.info("specname {}:", specName);
                 if (spec == null) {
-
                     productMapper.insertProductCategory(categoryNo, productType, specName);
-
-
                 }
             }
         }
@@ -611,6 +606,7 @@ public class CrawlingService {
     public void createLaptopSpec(int productNo, Map<String, List<String>> categoryMap, Document doc, ProductDTO productDTO) {
         ArrayList<String> laptopSpecValue = new ArrayList<>();
         log.info("createLaptopSpec 메서드가 호출됨: productNo = {}", productNo);
+        int typeNo = 1;
 
         // 노트북 기본 정보 (LBI)
         laptopSpecValue.add(getSpecValue(doc, "운영체제(OS)"));
@@ -673,17 +669,17 @@ public class CrawlingService {
 
 
         log.debug("상품 스펙 저장 시작 = {}", laptopSpecValue);
-        log.info("GPU 제조사 값 = {}", getSpecValue(doc, "GPU 제조사"));
+        log.debug("GPU 제조사 값 = {}", getSpecValue(doc, "GPU 제조사"));
         int index = 0;
 
         for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
             List<String> specs = entry.getValue();
             String category = entry.getKey();
-            log.info("category넘버= {}", category);
+            log.debug("category넘버= {}", category);
 
 
-            if(productMapper.checkCategory(productNo,category) > 0){
-                log.info("카테고리 중복 확인 = {},{}", productNo, category );
+            if (productMapper.checkCategory(productNo, category) > 0) {
+                log.debug("카테고리 중복 확인 = {},{}", productNo, category);
                 continue;
             }
 
@@ -703,16 +699,16 @@ public class CrawlingService {
                     log.info("Insert 값 = {} : {}", specName, specValue);
 
                     // 중복 확인 쿼리
-                     int check = productMapper.checkSpecExists(productNo, specName);
-                     log.info("checkcheck{}",check);
+                    int check = productMapper.checkSpecExists(productNo, specName);
+                    log.info("checkcheck{}", check);
 
                     if (check == 0) {
                         log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
                         log.info("exists 값 = {}", check);
-                        productMapper.insertProductSpec(productNo, specName, specValue);
+                        productMapper.insertProductSpec(productNo, specName, specValue, 1);
 
                         log.info("ProductSpec Insert 완료 = {}", productNo);
-                    }else {
+                    } else {
                         log.info("중복 이미 들어간 정보입니다");
                         break;
                     }
@@ -725,186 +721,116 @@ public class CrawlingService {
 
     }
 
+    @Transactional
     public void createKeyboardSpec(int productNo, Map<String, List<String>> categoryMap, Document doc, ProductDTO productDTO) {
         ArrayList<String> keyboardSpecValue = new ArrayList<>();
-        log.info("createKeyboardSpec 메서드가 호출됨: productNo = {}", productNo);
+        int typeNo = 3;
+        log.debug("createKeyboardSpec 메서드가 호출됨: productNo = {}", productNo);
 
         // KBI: 제조사, 등록월, 사이즈, 연결 방식, 인터페이스, 접점 방식
-        keyboardSpecValue.add(productDTO.getManufacturer()); // 제조사
-        keyboardSpecValue.add(productDTO.getRegistrationMonth()); // 등록월
-        keyboardSpecValue.add(getSpecValue(doc, "사이즈")); // 사이즈
-        keyboardSpecValue.add(getSpecValue(doc, "연결 방식")); // 연결 방식
-        keyboardSpecValue.add(getSpecValue(doc, "인터페이스")); // 인터페이스
-        keyboardSpecValue.add(getSpecValue(doc, "접점 방식")); // 접점 방식
+        insertProductSpec(productNo, "제조사", productDTO.getManufacturer(), typeNo);
+        insertProductSpec(productNo, "등록월", productDTO.getRegistrationMonth(), typeNo);
+        insertProductSpec(productNo, "사이즈", getSpecValue(doc, "사이즈"), typeNo);
+        insertProductSpec(productNo, "연결 방식", getSpecValue(doc, "연결 방식"), typeNo);
+        insertProductSpec(productNo, "인터페이스", getSpecValue(doc, "인터페이스"), typeNo);
+        insertProductSpec(productNo, "접점 방식", getSpecValue(doc, "접점 방식"), typeNo);
 
         // KB: 키 배열, 스위치, 키 스위치, 스위치 방식, 램 교체
-        keyboardSpecValue.add(getSpecValue(doc, "키 배열")); // 키 배열
-        keyboardSpecValue.add(getSpecValue(doc, "스위치")); // 스위치
-        keyboardSpecValue.add(getSpecValue(doc, "키 스위치")); // 키 스위치
-        keyboardSpecValue.add(getSpecValue(doc, "스위치 방식")); // 스위치 방식
-        keyboardSpecValue.add(getSpecValue(doc, "램 교체")); // 램 교체
+        insertProductSpec(productNo, "키 배열", getSpecValue(doc, "키 배열"), typeNo);
+        insertProductSpec(productNo, "스위치", getSpecValue(doc, "스위치"), typeNo);
+        insertProductSpec(productNo, "키 스위치", getSpecValue(doc, "키 스위치"), typeNo);
+        insertProductSpec(productNo, "스위치 방식", getSpecValue(doc, "스위치 방식"), typeNo);
 
         // KD: 레인보우 백라이트, 스텝스컬쳐2, 금속하우징, 생활방수, RGB 백라이트, 스테빌라이저, 단색 백라이트
-        keyboardSpecValue.add(getSpecValue(doc, "레인보우 백라이트")); // 레인보우 백라이트
-        keyboardSpecValue.add(getSpecValue(doc, "스텝스컬쳐2")); // 스텝스컬쳐2
-        keyboardSpecValue.add(getSpecValue(doc, "금속하우징")); // 금속하우징
-        keyboardSpecValue.add(getSpecValue(doc, "생활방수")); // 생활방수
-        keyboardSpecValue.add(getSpecValue(doc, "RGB 백라이트")); // RGB 백라이트
-        keyboardSpecValue.add(getSpecValue(doc, "스테빌라이저")); // 스테빌라이저
-        keyboardSpecValue.add(getSpecValue(doc, "단색 백라이트")); // 단색 백라이트
+        insertProductSpec(productNo, "레인보우 백라이트", getSpecValue(doc, "레인보우 백라이트"), typeNo);
+        insertProductSpec(productNo, "스텝스컬쳐2", getSpecValue(doc, "스텝스컬쳐2"), typeNo);
+        insertProductSpec(productNo, "금속하우징", getSpecValue(doc, "금속하우징"), typeNo);
+        insertProductSpec(productNo, "생활방수", getSpecValue(doc, "생활방수"), typeNo);
+        insertProductSpec(productNo, "RGB 백라이트", getSpecValue(doc, "RGB 백라이트"), typeNo);
+        insertProductSpec(productNo, "스테빌라이저", getSpecValue(doc, "스테빌라이저"), typeNo);
+        insertProductSpec(productNo, "단색 백라이트", getSpecValue(doc, "단색 백라이트"), typeNo);
 
         // KF: 동시입력, 키캡 재질, 응답속도, 키캡 각인방식, 각인 위치
-        keyboardSpecValue.add(getSpecValue(doc, "동시입력"));     // 동시입력
-        keyboardSpecValue.add(getSpecValue(doc, "키캡 재질"));    // 키캡 재질
-        keyboardSpecValue.add(getSpecValue(doc, "응답속도"));     // 응답속도
-        keyboardSpecValue.add(getSpecValue(doc, "키캡 각인방식")); // 키캡 각인방식
-        keyboardSpecValue.add(getSpecValue(doc, "각인 위치"));    // 각인 위치
+        insertProductSpec(productNo, "동시입력", getSpecValue(doc, "동시입력"), typeNo);
+        insertProductSpec(productNo, "키캡 재질", getSpecValue(doc, "키캡 재질"), typeNo);
+        insertProductSpec(productNo, "응답속도", getSpecValue(doc, "응답속도"), typeNo);
+        insertProductSpec(productNo, "키캡 각인방식", getSpecValue(doc, "키캡 각인방식"), typeNo);
+        insertProductSpec(productNo, "각인 위치", getSpecValue(doc, "각인 위치"), typeNo);
 
         // KDW: 가로, 세로, 높이, 무게, 케이블 길이
-        keyboardSpecValue.add(getSpecValue(doc, "가로")); // 가로
-        keyboardSpecValue.add(getSpecValue(doc, "세로")); // 세로
-        keyboardSpecValue.add(getSpecValue(doc, "높이")); // 높이
-        keyboardSpecValue.add(getSpecValue(doc, "무게")); // 무게
-        keyboardSpecValue.add(getSpecValue(doc, "케이블 길이")); // 케이블 길이
+        insertProductSpec(productNo, "가로", getSpecValue(doc, "가로"), typeNo);
+        insertProductSpec(productNo, "세로", getSpecValue(doc, "세로"), typeNo);
+        insertProductSpec(productNo, "높이", getSpecValue(doc, "높이"), typeNo);
+        insertProductSpec(productNo, "무게", getSpecValue(doc, "무게"), typeNo);
+        insertProductSpec(productNo, "케이블 길이", getSpecValue(doc, "케이블 길이"), typeNo);
 
         // KC: 키캡 리무버, 청소용 브러쉬, 장패드, 키스킨, 루프, 일체형 손목받침대
-        keyboardSpecValue.add(getSpecValue(doc, "키캡 리무버"));   // 키캡 리무버
-        keyboardSpecValue.add(getSpecValue(doc, "청소용 브러쉬")); // 청소용 브러쉬
-        keyboardSpecValue.add(getSpecValue(doc, "장패드"));      // 장패드
-        keyboardSpecValue.add(getSpecValue(doc, "키스킨"));      // 키스킨
-        keyboardSpecValue.add(getSpecValue(doc, "루프"));       // 루프
-        keyboardSpecValue.add(getSpecValue(doc, "일체형 손목받침대")); // 일체형 손목받침대
-
-
-        log.debug("상품 스펙 저장 시작 = {}", keyboardSpecValue);
-        int index = 0;
-
-        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
-            List<String> specs = entry.getValue();
-            String category = entry.getKey();
-            log.info("category넘버= {}", category);
-
-            if(productMapper.checkCategory(productNo,category) > 0){
-                log.info("카테고리 중복 확인 = {},{}", productNo, category );
-                continue;
-            }
-
-
-            for (String specName : specs) {
-                if (index >= keyboardSpecValue.size()) {
-                    log.error("Index out of bounds: index = {}, size = {}", index, keyboardSpecValue.size());
-                    return; // 인덱스가 리스트 크기를 벗어날 때 메서드 종료
-                }
-
-                String specValue = keyboardSpecValue.get(index);
-
-                if (specValue == null || specValue.equals("정보 없음")) {
-                    log.info("옵션 정보 없음 = {}", specValue);
-                } else {
-                    log.info("Insert 값 = {} : {}", specName, specValue);
-
-                    // 중복 확인 쿼리
-                    int exists = productMapper.checkSpecExists(productNo, specName);
-                    if (exists == 0) {
-                        log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
-                        log.info("exists 값 = {}", exists);
-                        productMapper.insertProductSpec(productNo, specName, specValue);
-
-                        log.info("ProductSpec Insert 완료 = {}", productNo);
-                    }else {
-                        log.info("중복 확인");
-                        break;
-                    }
-
-                    log.info("ProductSpec Insert 완료");
-                }
-                index++;
-            }
-        }
-
+        insertProductSpec(productNo, "키캡 리무버", getSpecValue(doc, "키캡 리무버"), typeNo);
+        insertProductSpec(productNo, "청소용 브러쉬", getSpecValue(doc, "청소용 브러쉬"), typeNo);
+        insertProductSpec(productNo, "장패드", getSpecValue(doc, "장패드"), typeNo);
+        insertProductSpec(productNo, "키스킨", getSpecValue(doc, "키스킨"), typeNo);
+        insertProductSpec(productNo, "루프", getSpecValue(doc, "루프"), typeNo);
+        insertProductSpec(productNo, "일체형 손목받침대", getSpecValue(doc, "일체형 손목받침대"), typeNo);
     }
 
     public void createMouseSpec(int productNo, Map<String, List<String>> categoryMap, Document doc, ProductDTO productDTO) {
         ArrayList<String> mouseSpecValue = new ArrayList<>();
+        int typeNo = 2;
         log.info("createKeyboardSpec 메서드가 호출됨: productNo = {}", productNo);
 
         // KBI: 제조사, 등록월, 사이즈, 연결 방식, 인터페이스, 접점 방식
-        mouseSpecValue.add(productDTO.getManufacturer()); // 제조사
-        mouseSpecValue.add(productDTO.getRegistrationMonth()); // 등록월
-        mouseSpecValue.add(getSpecValue(doc, "연결 방식")); // 연결 방식
-        mouseSpecValue.add(getSpecValue(doc, "무선 연결")); // 무선 연결
-        mouseSpecValue.add(getSpecValue(doc, "인터페이스")); // 인터페이스
+        insertProductSpec(productNo, "제조사(마우스)", productDTO.getManufacturer(), typeNo);
+        insertProductSpec(productNo, "등록월(마우스)", productDTO.getRegistrationMonth(), typeNo);
+        insertProductSpec(productNo, "연결 방식", getSpecValue(doc, "연결 방식"), typeNo);
+        insertProductSpec(productNo, "무선 연결(M)", getSpecValue(doc, "무선 연결"), typeNo);
+        insertProductSpec(productNo, "인터페이스(M)", getSpecValue(doc, "인터페이스(M)"), typeNo);
 
         // 최대 감도(DPI), 응답속도, 센서, 스위치 방식, 마우스 형태
-        mouseSpecValue.add(getSpecValue(doc, "최대 감도(DPI)")); // 최대 감도(DPI)
-        mouseSpecValue.add(getSpecValue(doc, "응답속도")); // 응답속도
-        mouseSpecValue.add(getSpecValue(doc, "센서")); // 센서
-        mouseSpecValue.add(getSpecValue(doc, "스위치 방식")); // 스위치 방식
-        mouseSpecValue.add(getSpecValue(doc, "마우스 형태")); // 마우스 형태
+        insertProductSpec(productNo, "최대 감도(DPI)", getSpecValue(doc, "최대 감도(DPI)"), typeNo);
+        insertProductSpec(productNo, "응답속도(M)", getSpecValue(doc, "응답속도"), typeNo);
+        insertProductSpec(productNo, "센서", getSpecValue(doc, "센서"), typeNo);
+        insertProductSpec(productNo, "스위치 방식(M)", getSpecValue(doc, "스위치 방식"), typeNo);
+        insertProductSpec(productNo, "마우스 형태", getSpecValue(doc, "마우스 형태"), typeNo);
 
-        mouseSpecValue.add(getSpecValue(doc, "무한휠 지원")); // 무한휠 지원
-        mouseSpecValue.add(getSpecValue(doc, "스위치")); // 스위치
-        mouseSpecValue.add(getSpecValue(doc, "마우스 코팅")); // 마우스 코팅
-
+        insertProductSpec(productNo, "무한휠 지원", getSpecValue(doc, "무한휠 지원"), typeNo);
+        insertProductSpec(productNo, "스위치", getSpecValue(doc, "스위치"), typeNo);
+        insertProductSpec(productNo, "마우스 코팅", getSpecValue(doc, "마우스 코팅"), typeNo);
 
         // 멀티페어링, 매크로, 소프트웨어 지원
-        mouseSpecValue.add(getSpecValue(doc, "멀티페어링")); // 멀티페어링
-        mouseSpecValue.add(getSpecValue(doc, "매크로")); // 매크로
-        mouseSpecValue.add(getSpecValue(doc, "소프트웨어 지원")); // 소프트웨어 지원
+        insertProductSpec(productNo, "멀티페어링", getSpecValue(doc, "멀티페어링"), typeNo);
+        insertProductSpec(productNo, "매크로", getSpecValue(doc, "매크로"), typeNo);
+        insertProductSpec(productNo, "소프트웨어 지원", getSpecValue(doc, "소프트웨어 지원"), typeNo);
 
         // 가로, 세로, 높이, 무게
-        mouseSpecValue.add(getSpecValue(doc, "가로")); // 가로
-        mouseSpecValue.add(getSpecValue(doc, "세로")); // 세로
-        mouseSpecValue.add(getSpecValue(doc, "높이")); // 높이
-        mouseSpecValue.add(getSpecValue(doc, "무게")); // 무게
+        insertProductSpec(productNo, "가로(M)", getSpecValue(doc, "가로"), typeNo);
+        insertProductSpec(productNo, "세로(M)", getSpecValue(doc, "세로"), typeNo);
+        insertProductSpec(productNo, "세로(M)", getSpecValue(doc, "높이"), typeNo);
+        insertProductSpec(productNo, "무게(M)", getSpecValue(doc, "무게"), typeNo);
+    }
 
+    public int insertProductSpec(int productNo, String specName, String specValue, int typeNo) {
+        int result = 0;
 
-        log.debug("상품 스펙 저장 시작 = {}", mouseSpecValue);
-        int index = 0;
+        if (specValue == null || specValue.equals("정보 없음")) {
+            log.info("옵션 정보 없음 = {}", specValue);
+        } else {
+            log.info("Insert 값 = {} : {}", specName, specValue);
+            log.info("파라미터값 = {} {} {}", productNo, specName, specValue);
 
-        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
-            List<String> specs = entry.getValue();
-            String category = entry.getKey();
-            log.info("category넘버= {}", category);
+            // 중복 확인 쿼리
+            int exists = productMapper.checkSpecExists(productNo, specName);
+            log.info("exists 값 = {}", exists);
+            if (exists == 0) {
+                log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
+                log.info("exists 값 = {}", exists);
+                productMapper.insertProductSpec(productNo, specName, specValue, typeNo);
 
-            if(productMapper.checkCategory(productNo,category) > 0){
-                log.info("카테고리 중복 확인 = {},{}", productNo, category );
-                continue;
-            }
-
-
-            for (String specName : specs) {
-                if (index >= mouseSpecValue.size()) {
-                    log.error("Index out of bounds: index = {}, size = {}", index, mouseSpecValue.size());
-                    return; // 인덱스가 리스트 크기를 벗어날 때 메서드 종료
-                }
-
-                String specValue = mouseSpecValue.get(index);
-
-                if (specValue == null || specValue.equals("정보 없음")) {
-                    log.info("옵션 정보 없음 = {}", specValue);
-                } else {
-                    log.info("Insert 값 = {} : {}", specName, specValue);
-                    log.info("파라미터값 = {} {} {}", productNo, specName, specValue);
-
-                    // 중복 확인 쿼리
-                    int exists = productMapper.checkSpecExists(productNo, specName);
-                    log.info("exists 값 = {}", exists);
-                    if (exists == 0) {
-                        log.info("상품 스펙 insert 값 = {} {} {}", productNo, specName, specValue);
-                        log.info("exists 값 = {}", exists);
-                        productMapper.insertProductSpec(productNo, specName, specValue);
-
-                        log.info("ProductSpec Insert 완료 = {}", productNo);
-                    }else {
-                        log.info("중복 확인");
-                        break;
-                    }
-                }
-                index++;
+                log.info("ProductSpec Insert 완료 = {}", productNo);
+            }else {
+                log.info("중복 확인");
             }
         }
-
+        return result;
     }
 
 

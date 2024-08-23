@@ -32,11 +32,52 @@
             return filters;
         }
 
+        
+        
+        function activeTab() {
+            switch(typeNo) {
+                case 1:
+                    $('.product-link').removeClass('active');
+                    $('#laptop-tab').addClass('active');
+                    break;
+                case 2:
+                    $('.product-link').removeClass('active');
+                    $('#mouse-tab').addClass('active');
+                    break;
+                case 3:
+                    $('.product-link').removeClass('active');
+                    $('#keyboard-tab').addClass('active');
+                    break;
+                default:
+                    $('.product-link').removeClass('active');
+                    $('#laptop-tab').addClass('active');
+                    break;
+            }
+        }
+
+        activeTab();
+
 
 
         // 제품 리스트를 로드하는 함수
         function loadProducts(page, size, typeNo) {
             let keyword = convertEmptyToNull($("#form1").val());
+            let minPrice = $("#site-search1").val();
+            let maxPrice = $("#site-search2").val()
+
+            if (minPrice > maxPrice && maxPrice != 0) {
+                swal({
+                    title: "가격 설정 오류",
+                    text: "최소 가격은 최대 가격보다 적어야 합니다.",
+                    icon: "info",
+                    button: "ok"
+                });
+                return;
+            }
+
+            if (maxPrice == 0) {
+                maxPrice = null;
+            }
 
             let data = {
                 page: page,
@@ -51,8 +92,8 @@
                 LC13: getSelectedFiltersByCategory('cpu'),
                 LR9: getSelectedFiltersByCategory('ram'),
                 LD25: getSelectedFiltersByCategory('resolution'),
-                minPrice: $("#site-search1").val(),  // 여기서 값을 직접 할당
-                maxPrice: $("#site-search2").val()
+                minPrice: minPrice,  // 여기서 값을 직접 할당
+                maxPrice: maxPrice
             };
 
             console.log("Calling loadProducts with - data:", data);

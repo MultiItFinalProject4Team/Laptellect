@@ -844,7 +844,7 @@ public class ProductServiceImpl implements ProductService {
     @Cacheable(value = "product", key = "'cate'", cacheManager = "mainPageCacheManager")
     public Map<String, List<String>> productFilterSearch() {
 
-        List<SpecDTO> specDTOS = productMapper.productFilterSearch();
+        List<SpecDTO> specDTOS = productMapper.productFilterSearch(1);
 
         Map<String, List<String>> specMap = new HashMap<>();
 
