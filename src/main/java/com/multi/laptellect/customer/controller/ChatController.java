@@ -32,6 +32,14 @@ public class ChatController {
     @Value("${spring.ncp.chatbot.url}")
     private String apiUrl;
 
+    /**
+     * 소켓통신을 활용한 챗봇 사용 메소드
+     *
+     * @param roomId
+     * @param chatMessage
+     * @return 전처리를 완료한 메시지
+     * @throws IOException
+     */
     @MessageMapping("/sendMessage/{roomId}")
     @SendTo("/topic/public/{roomId}")
     public String sendMessage(@DestinationVariable("roomId") String roomId, @Payload String chatMessage) throws IOException
@@ -107,6 +115,12 @@ public class ChatController {
         return chatMessage;
     }
 
+    /**
+     * 링크 형태의 답변에서 링크를 추출하는 메소드
+     *
+     * @param contentTable
+     * @return 링크 url
+     */
     private static String getString(JSONArray contentTable) {
         JSONArray linkArray = (JSONArray) contentTable.get(0);
         JSONObject link_data = (JSONObject)linkArray.get(0);
@@ -118,7 +132,13 @@ public class ChatController {
         return link_url;
     }
 
-    //보낼 메세지를 네이버에서 제공해준 암호화로 변경해주는 메소드
+    /**
+     * 보낼 메세지를 네이버에서 제공해준 암호화로 변경해주는 메소드
+     *
+     * @param message
+     * @param secretKey
+     * @return 암호화 된 보낼 메시지
+     */
     public static String makeSignature(String message, String secretKey) {
 
         String encodeBase64String = "";
@@ -143,7 +163,12 @@ public class ChatController {
 
     }
 
-    //보낼 메세지를 네이버 챗봇에 포맷으로 변경해주는 메소드
+    /**
+     * 보낼 메세지를 네이버 챗봇 포맷으로 변경해주는 메소드
+     *
+     * @param voiceMessage
+     * @return 보낼 메시지
+     */
     public static String getReqMessage(String voiceMessage) {
 
         String requestBody = "";
