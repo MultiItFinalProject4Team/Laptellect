@@ -170,7 +170,6 @@ public class ProductApiController {
                 switch (searchDTO.getTypeNo()) {
                     case 1: // 노트북
                         log.info("laptop Get Spec = {}", searchDTO.getTypeNo());
-//                        Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "해상도", "화면 크기", "GPU 종류", "코어 수", "CPU 넘버");
                         Set<String> neededOptions = Set.of("운영체제(OS)", "제조사", "램 용량", "저장 용량", "화면 크기", "CPU 넘버");
                         List<SpecDTO> filteredSpecs = productService.filterSpecs(productNo, neededOptions);
                         productDTO.setSpecs(filteredSpecs);

@@ -34,6 +34,13 @@ public class AuthApiController {
     private final AuthService authService;
     private final MemberService memberService;
 
+    public enum SignupResult {
+        SUCCESS,
+        INVALID_USER_ID,
+        INVALID_PASSWORD,
+        USER_ID_ALREADY_EXISTS,
+        EMAIL_ALREADY_EXISTS;
+    }
 
     /**
      * 입력 받은 ID로 Member 유무 체크
@@ -384,7 +391,7 @@ public class AuthApiController {
             httpSession.invalidate();
             Cookie cookie = new Cookie("remember-me", null);
             cookie.setPath("/");
-            cookie.setMaxAge(0); // 쿠키를 만료시킴
+            cookie.setMaxAge(0);
             response.addCookie(cookie);
             SecurityContextHolder.clearContext();
         } catch (Exception e) {
@@ -416,4 +423,6 @@ public class AuthApiController {
             return result;
         }
     }
+
+
 }
