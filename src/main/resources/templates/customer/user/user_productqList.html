@@ -21,119 +21,118 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
+    <div class="profile-box">
         <h1 align="left"style="font-size:40px">상품문의 내역</h1>
-    </header>
-    <hr>
-    <div class="form-container">
-        <form class="d-flex" role="search" th:action="@{/customer/user/search_user_productqList}">
+        <hr>
+        <div class="form-container">
+            <form class="d-flex" role="search" th:action="@{/customer/user/search_user_productqList}">
 
-            <select class="form-select" id="categorySelect2" name="answer">
-                <option value="A" th:selected="${dto.answer == 'A'}">답변 여부</option>
-                <option value="N" th:selected="${dto.answer == 'N'}">답변 대기</option>
-                <option value="Y" th:selected="${dto.answer == 'Y'}">답변 완료</option>
-            </select>
+                <select class="form-select" id="categorySelect2" name="answer">
+                    <option value="A" th:selected="${dto.answer == 'A'}">답변 여부</option>
+                    <option value="N" th:selected="${dto.answer == 'N'}">답변 대기</option>
+                    <option value="Y" th:selected="${dto.answer == 'Y'}">답변 완료</option>
+                </select>
 
-            <select class="form-select" id="categorySelect" name="category">
-                <option th:each="categories : ${category}"
-                        th:value="${categories.productqCategorycode}"
-                        th:text="${categories.productqCategoryname}"
-                        th:selected="${categories.productqCategorycode == dto.category}">
-                </option>
-            </select>
+                <select class="form-select" id="categorySelect" name="category">
+                    <option th:each="categories : ${category}"
+                            th:value="${categories.productqCategorycode}"
+                            th:text="${categories.productqCategoryname}"
+                            th:selected="${categories.productqCategorycode == dto.category}">
+                    </option>
+                </select>
 
-            <select class="form-select" id="categorySelect4" name="type">
-                <option value="A" th:selected="${dto.type == 'A'}">상품명/문의명</option>
-                <option value="P" th:selected="${dto.type == 'P'}">상품명</option>
-                <option value="Q" th:selected="${dto.type == 'Q'}">문의명</option>
-            </select>
+                <select class="form-select" id="categorySelect4" name="type">
+                    <option value="A" th:selected="${dto.type == 'A'}">상품명/문의명</option>
+                    <option value="P" th:selected="${dto.type == 'P'}">상품명</option>
+                    <option value="Q" th:selected="${dto.type == 'Q'}">문의명</option>
+                </select>
 
-            <input class="form-control me-2" type="search" id="title" placeholder="상품명/문의명" aria-label="Search" style="width: 300px;" name="keyword" th:value="${dto.keyword}">
-            <select class="form-select" id="categorySelect3" name="date">
-                <option value="recent" th:selected="${dto.date == 'recent'}">최신순</option>
-                <option value="old" th:selected="${dto.date == 'old'}">오래된순</option>
-            </select>
-            <button id="searchButton" class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-    </div>
-    <hr>
-    <div class="fixed-table-container">
-    <table class="table table-striped fixed-table" style="text-align: center">
-        <thead>
-        <tr>
-            <th>No</th>
-            <th>상품명</th>
-            <th>문의명</th>
-            <th>답변 여부</th>
-            <th>등록일</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="each : ${list}" class="align-middle">
-            <td th:text="${each.productqNo}">번호</td>
-            <td style="text-align: center;">
-                <a style="text-decoration: none;" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.productName}">상품명</a>
-            </td>
-            <td style="text-align: center;">
-                <a style="text-decoration: none;" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.title}">문의명</a>
-            </td>
-            <td th:text="${each.answer}">답변 여부</td>
-            <td th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">등록일</td>
-        </tr>
-        </tbody>
-    </table>
-    </div>
-</div>
-    <div class="pagination-container">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center"
-                th:with="startPage=${T(java.lang.Math).max(1, ((currentPage - 1) / 10) * 10 + 1)},
+                <input class="form-control me-2" type="search" id="title" placeholder="상품명/문의명" aria-label="Search" style="width: 300px;" name="keyword" th:value="${dto.keyword}">
+                <select class="form-select" id="categorySelect3" name="date">
+                    <option value="recent" th:selected="${dto.date == 'recent'}">최신순</option>
+                    <option value="old" th:selected="${dto.date == 'old'}">오래된순</option>
+                </select>
+                <button id="searchButton" class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+        <hr>
+        <div class="fixed-table-container">
+        <table class="table table-striped fixed-table" style="text-align: center">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>상품명</th>
+                <th>문의명</th>
+                <th>답변 여부</th>
+                <th>등록일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="each : ${list}" class="align-middle">
+                <td th:text="${each.productqNo}">번호</td>
+                <td style="text-align: center;">
+                    <a style="text-decoration: none;" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.productName}">상품명</a>
+                </td>
+                <td style="text-align: center;">
+                    <a style="text-decoration: none;" th:href="@{/customer/user/productq_detail/{productqNo}(productqNo=${each.productqNo})}" th:text="${each.title}">문의명</a>
+                </td>
+                <td th:text="${each.answer}">답변 여부</td>
+                <td th:text="${#dates.format(each.createdAt, 'YY/MM/dd HH:mm')}">등록일</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="pagination-container">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center"
+                    th:with="startPage=${T(java.lang.Math).max(1, ((currentPage - 1) / 10) * 10 + 1)},
                       endPage=${T(java.lang.Math).min(startPage + 9, totalPages)}">
 
-                <!-- Previous 10 pages button -->
-                <li class="page-item" th:if="${startPage > 1}">
-                    <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${startPage - 1})}" aria-label="Previous 10">
-                        <span aria-hidden="true">&laquo;&laquo;</span>
-                    </a>
-                    <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${startPage - 1}, keyword=${dto.keyword}, category=${dto.category}, answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Previous 10">
-                        <span aria-hidden="true">&laquo;&laquo;</span>
-                    </a>
-                </li>
+                    <!-- Previous 10 pages button -->
+                    <li class="page-item" th:if="${startPage > 1}">
+                        <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${startPage - 1})}" aria-label="Previous 10">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${startPage - 1}, keyword=${dto.keyword}, category=${dto.category}, answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Previous 10">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
 
-                <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
-                    <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${currentPage - 1})}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${currentPage - 1}, keyword=${dto.keyword}, category=${dto.category}, answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
-                    <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
-                    <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${pageNum}, keyword=${dto.keyword}, category=${dto.category}, answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" th:text="${pageNum}">현재페이지</a>
-                </li>
-                <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
-                    <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${currentPage + 1})}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                    <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${currentPage + 1}, keyword=${dto.keyword}, category=${dto.category},answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
+                    <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                        <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${currentPage - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${currentPage - 1}, keyword=${dto.keyword}, category=${dto.category}, answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNum} ? 'active' : ''">
+                        <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${pageNum})}" th:text="${pageNum}">현재페이지</a>
+                        <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${pageNum}, keyword=${dto.keyword}, category=${dto.category}, answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" th:text="${pageNum}">현재페이지</a>
+                    </li>
+                    <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                        <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${currentPage + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${currentPage + 1}, keyword=${dto.keyword}, category=${dto.category},answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
 
-                <!-- Next 10 pages button -->
-                <li class="page-item" th:if="${endPage < totalPages}">
-                    <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${endPage + 1})}" aria-label="Next 10">
-                        <span aria-hidden="true">&raquo;&raquo;</span>
-                    </a>
-                    <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${endPage + 1}, keyword=${dto.keyword}, category=${dto.category},answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Next 10">
-                        <span aria-hidden="true">&raquo;&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                    <!-- Next 10 pages button -->
+                    <li class="page-item" th:if="${endPage < totalPages}">
+                        <a class="page-link" th:if="${state=='all'}" th:href="@{/customer/user/user_productqList(page=${endPage + 1})}" aria-label="Next 10">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${state=='search'}" th:href="@{/customer/user/search_user_productqList(page=${endPage + 1}, keyword=${dto.keyword}, category=${dto.category},answer=${dto.answer}, date=${dto.date}, type=${dto.type})}" aria-label="Next 10">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
+
 </div>
 </body>
 </html>

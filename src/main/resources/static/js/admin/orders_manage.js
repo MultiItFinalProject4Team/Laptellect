@@ -7,6 +7,13 @@ function formatPrice(price) {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원';
 }
 
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function renderTable() {
   const tableBody = document.getElementById('orderTableBody');
   const ordersToShow = filteredOrders.length > 0 ? filteredOrders : orders;
@@ -22,6 +29,9 @@ function renderTable() {
   }
 
   pageOrders.forEach(order => {
+  const formattedCreatedAt = formatDate(new Date(order.createdAt));
+  const formattedRefundAt = order.refundAt ? formatDate(new Date(order.refundAt)) : '환불되지 않음';
+
     const row = `
       <tr>
         <td class="checkbox-column"><input type="checkbox" name="orderCheck" value="${order.imPortId}" data-amount="${order.purchasePrice}" data-payment-no="${order.paymentNo}" ${order.refund === 'Y' ? 'disabled' : ''}></td>
@@ -30,10 +40,10 @@ function renderTable() {
         <td class="product-name-column"><a href="/product/productDetail?productNo=${order.productNo}" class="order-content">${order.productName}</a></td>
         <td class="price-column">${formatPrice(order.productPrice)}</td>
         <td class="purchase-price-column">${formatPrice(order.purchasePrice)}</td>
-        <td class="date-column">${order.createdAt}</td>
+        <td class="date-column">${formattedCreatedAt}</td>
         <td class="imPortId-column">${order.imPortId}</td>
         <td class="refund-column">${order.refund}</td>
-        <td class="refund-date-column">${order.refundAt || '환불되지 않음'}</td>
+        <td class="refund-date-column">${formattedRefundAt}</td>
       </tr>
     `;
     tableBody.innerHTML += row;

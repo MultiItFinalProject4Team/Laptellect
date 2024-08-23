@@ -19,10 +19,8 @@
 </head>
 <body>
 <div layout:fragment="content">
-<div class="container mt-2">
-    <header>
-        <h1 align="left"style="font-size:40px">상품 문의 답변 수정</h1>
-    </header>
+<div class="profile-box">
+    <h1 align="left"style="font-size:40px">상품 문의 답변 수정</h1>
     <hr>
     <form action="/customer/admin/update_productA" method="post" enctype="multipart/form-data">
         <label for="productqNo">번호</label>
@@ -36,7 +34,7 @@
 
         <input type="hidden" id="productaNo" name="productaNo" th:value="${dto.productaNo}">
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-custom-primary">답변 수정</button>
+            <button type="submit" class="btn btn-custom-primary mt-2">답변 수정</button>
         </div>
     </form>
 

@@ -68,12 +68,12 @@ public class AuthController {
         MemberDTO memberDTO = new MemberDTO();
         model.addAttribute("member", memberDTO);
 
-        return  "/auth/auth-sign-up-form";
+        return  "auth/auth-sign-up-form";
     }
 
     @GetMapping("/signup/seller")
     public String showSellerSignUpForm() {
-        return "/auth/auth-seller-sign-up-form";
+        return "auth/auth-seller-sign-up-form";
     }
 
     /**
@@ -110,7 +110,7 @@ public class AuthController {
             log.error("카카오 로그인 에러 = ", e);
             model.addAttribute("message", "fail");
         }
-        return "/auth/auth-sign-in-success";
+        return "auth/auth-sign-in-success";
     }
 
     /**
@@ -153,17 +153,17 @@ public class AuthController {
             model.addAttribute("message", "fail");
         }
         
-        return "/auth/auth-sign-in-success";
+        return "auth/auth-sign-in-success";
     }
 
     @GetMapping("/find-id")
     public String findId() {
-        return "/auth/auth-find-id";
+        return "auth/auth-find-id";
     }
 
     @GetMapping("/find-pw")
     public String findPw() {
-        return "/auth/auth-find-pw";
+        return "auth/auth-find-pw";
     }
 
     @GetMapping("/delete-id")

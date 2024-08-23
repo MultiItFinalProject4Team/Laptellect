@@ -10,6 +10,8 @@ import com.multi.laptellect.member.model.dto.CustomUserDetails;
 import com.multi.laptellect.member.model.dto.MemberDTO;
 import com.multi.laptellect.member.model.dto.SocialDTO;
 import com.multi.laptellect.util.CodeGenerator;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -147,16 +149,23 @@ public class OAuthServiceImpl implements OAuthService{
             return "SignUp";
         }
         CustomUserDetails userDetails = new CustomUserDetails(memberDTO);
+        log.info("유저 디테일 생성 = {}", userDetails);
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("시큐리티 객체 생성 = {}", authentication);
 
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession(true);
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = attr.getRequest();
+        HttpServletResponse response = attr.getResponse();
+        HttpSession session = request.getSession(true);
+
 
         if (session != null) {
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-            log.info("Session updated with new authentication details");
+            new HttpSessionSecurityContextRepository().saveContext(SecurityContextHolder.getContext(), request, response);
+            log.info("소셜 로그인 성공.");
         }
+
         return "SignIn";
     }
 

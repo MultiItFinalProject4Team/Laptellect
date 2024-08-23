@@ -8,7 +8,7 @@
 </head>
 <body>
 <div layout:fragment="content" class="content-wrapper">
-  <div class="profile-box" style="height: auto; width: auto">
+  <div class="profile-box" style="min-height: 800px;">
   <h1>리뷰 관리</h1>
   <div class="controls">
     <div class="search-group">
@@ -31,14 +31,14 @@
     <table>
       <thead>
       <tr>
-        <th class="checkbox-column"><input type="checkbox" id="selectAll"></th>
-        <th class="review-number-column">리뷰번호</th>
-        <th class="product-name-column">상품명</th>
-        <th class="author-column">작성자</th>
-        <th class="content-column">리뷰내용</th>
-        <th class="rating-column">평점</th>
-        <th class="date-column">등록일자</th>
-        <th class="date-column">수정일자</th>
+        <th style="width: 3%;" class="checkbox-column"><input type="checkbox" id="selectAll"></th>
+        <th style="width: 8%;" class="review-number-column">리뷰번호</th>
+        <th style="width: 30%;" class="product-name-column">상품명</th>
+        <th style="width: 10%;" class="author-column">작성자</th>
+        <th style="width: 25%;" class="content-column">리뷰내용</th>
+        <th style="width: 5%;" class="rating-column">평점</th>
+        <th style="width: 15%;" class="date-column">등록일자</th>
+        <th style="width: 15%;" class="date-column">수정일자</th>
       </tr>
       </thead>
       <tbody id="reviewTableBody">

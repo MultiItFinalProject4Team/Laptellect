@@ -37,7 +37,7 @@ public class AdminController {
      */
     @GetMapping({"/dashboard", ""})
     public String admin_dashboard_page() {
-        return "/admin/dashboard";
+        return "admin/dashboard";
     }
 
     /**
@@ -50,7 +50,7 @@ public class AdminController {
     public String reviews_manage_page(Model model) {
         List<AdminReviewDTO> reviewsAllList = adminService.selectAllReviews();
         model.addAttribute("reviewsAllList", reviewsAllList);
-        return "/admin/reviews_manage";
+        return "admin/reviews_manage";
     }
 
     /**
@@ -63,7 +63,7 @@ public class AdminController {
     public String orders_manage_page(Model model) {
         List<AdminOrderlistDTO> selectAllOrders = adminService.selectAllOrders();
         model.addAttribute("selectAllOrders", selectAllOrders);
-        return "/admin/orders_manage";
+        return "admin/orders_manage";
     }
 
     /**
