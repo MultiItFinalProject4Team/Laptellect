@@ -132,12 +132,13 @@ $(function () {
 
         $("#emailVer").on("blur", function () {
           let verifyCode = $(this).val();
-          console.log(verifyCode);
+          let email = $('#emailInput').val();
+          console.log(verifyCode, email);
 
           $.ajax({
             url: "/api/check-verify-email",
             type: "POST",
-            data: { verifyCode: verifyCode },
+            data: { verifyCode: verifyCode, email: email },
             success: function (response) {
               if (response === true) {
                 console.log("인증번호 확인 완료");
