@@ -3,8 +3,9 @@
   layout:decorate="~{common/layout}">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" th:href="@{/css/product/product.css}">
-<script th:inline="javascript">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css">
+    <link rel="stylesheet" th:href="@{/css/product/product.css}">
+    <script th:inline="javascript">
     $(document).ready(function() {
         let currentPage = 0;
         let pageSize = 12;
@@ -65,6 +66,8 @@
             let minPrice = $("#site-search1").val();
             let maxPrice = $("#site-search2").val()
 
+
+
             if (minPrice > maxPrice && maxPrice != 0) {
                 swal({
                     title: "가격 설정 오류",
@@ -96,7 +99,7 @@
                 maxPrice: maxPrice
             };
 
-            console.log("Calling loadProducts with - data:", data);
+            $('#loading-spinner').show();
 
             $.ajax({
                 url: "/api/product/product-list",
@@ -108,6 +111,9 @@
                 },
                 error: function(error) {
                     console.log(error);
+                },
+                complete: function() {
+                    $('#loading-spinner').hide();
                 }
             });
         }
@@ -165,33 +171,6 @@
         });
     });
 </script>
-
-<style>
-    /* 스타일 정의 */
-    .left-align {
-        text-align: left;
-    }
-    .filter-header {
-        width: 100px;
-    }
-    .options-list {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .options-list label {
-        margin-right: 10px;
-    }
-    .btn-custom-price {
-        background-color: #3498DB;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 5.4px 20px;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-</style>
 </head>
 
 <body>
@@ -361,8 +340,12 @@
         </li>
     </ul>
 </div>
+    <div id="loading-spinner">
+        <div class="spinner"></div>
+    </div>
 <br>
 <div class="row" id="product-list"></div>
+
 </div>
 </body>
 </html>
