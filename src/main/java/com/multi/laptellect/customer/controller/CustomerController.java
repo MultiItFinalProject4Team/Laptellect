@@ -15,11 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 고객센터 유저 클래스
+ */
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/customer/user")
@@ -32,7 +34,13 @@ public class CustomerController {
     @Autowired
     private FileService fileService;
 
-    //공지사항 페이지(메인)
+    /**
+     * 공지사항 페이지(메인 페이지) 이동 메소드
+     *
+     * @param model
+     * @param page
+     * @return 공지사항 페이지
+     */
     @GetMapping({"/customer_notice",""})
     public String customer_notice(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         NoticeSearchDto searchDto = NoticeSearchDto.builder().mainRegist("A").keyword("").date("recent").build();
@@ -49,7 +57,14 @@ public class CustomerController {
         model.addAttribute("state","all");
         return "customer/user/customer_notice";
     }
-    //1:1문의 페이지
+
+    /**
+     * 1:1 문의 이동 메소드
+     *
+     * @param model
+     * @param page
+     * @return 1:1 문의 페이지
+     */
     @GetMapping("/customer_personalq")
     public String customer_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
@@ -74,11 +89,21 @@ public class CustomerController {
         model.addAttribute("date","recent");
         return "customer/user/customer_personalq";
     }
-    //챗봇 페이지
+
+    /**
+     * 챗봇 페이지
+     *
+     */
     @GetMapping("/customer_chatbot")
     public void customer_chatbot(){
     }
-    //공지사항 상세조회
+
+    /**
+     * 공지사항 상세조회 메소드
+     * @param noticeNo
+     * @param model
+     * @return 공지사항 상세조회 페이지
+     */
     @GetMapping("/notice_detail/{noticeNo}")
     public String notice_detail(@PathVariable("noticeNo") int noticeNo, Model model) {
         System.out.println(noticeNo);
@@ -86,7 +111,14 @@ public class CustomerController {
         model.addAttribute("notice",notice);
         return "customer/user/notice_detail";
     }
-    //1:1문의 상세조회
+
+    /**
+     * 1:1 문의 상세조회 메소드
+     *
+     * @param personalqNo
+     * @param model
+     * @return 1:1 문의 상세조회 페이지
+     */
     @GetMapping("/personalq_detail/{personalqNo}")
     public String personalq_detail(@PathVariable("personalqNo") int personalqNo, Model model){
         PersonalqDto personalqDto = customerService.getPersonalq(personalqNo);
@@ -100,7 +132,12 @@ public class CustomerController {
         }
         return"customer/user/personalq_detail";
     }
-    //1:1문의 신청 페이지 이동
+
+    /**
+     * 1:1 문의 신청 페이지 이동 메소드
+     *
+     * @param model
+     */
     @GetMapping("/personalq_app")
     public void personalq_app(Model model){
         List<PersonalqCategoryDto> category = customerService.getPersonalqCategory();
@@ -108,7 +145,13 @@ public class CustomerController {
         System.out.println(category);
         model.addAttribute("category",category);
     }
-    //1:1 문의 신청
+
+    /**
+     * 1:1 문의 신청 메소드
+     *
+     * @param appDto
+     * @return 1:1 문의 전체조회 페이지
+     */
     @PostMapping("/personalq_app")
     public String personalq_app(PersonalqAppDto appDto){
         int memberNo;
@@ -127,10 +170,11 @@ public class CustomerController {
     }
 
     /**
-     * 1:1문의 수정 페이지
+     * 1:1 문의 수정 페이지 이동 메소드
+     *
      * @param model
      * @param personalqNo
-     * @return
+     * @return 1:1 문의 수정 페이지 이동
      */
     @GetMapping("/update_personalq/{personalqNo}")
     public String update_personalq(Model model, @PathVariable("personalqNo") int personalqNo){
@@ -145,8 +189,9 @@ public class CustomerController {
 
     /**
      * 1:1문의 질문 수정
+     *
      * @param appDto
-     * @return
+     * @return 1:1 문의 상세조회 페이지
      */
     @PostMapping("/update_personalq")
     public String update_personalq(PersonalqAppDto appDto){
@@ -165,7 +210,12 @@ public class CustomerController {
         return "redirect:"+redirectUrl;
     }
 
-    //1:1 문의 질문 삭제
+    /**
+     * 1:1 문의 삭제 메소드
+     *
+     * @param personalqNo
+     * @return 1:1 문의 전체조회 페이지
+     */
     @GetMapping("/delete_personalq/{personalqNo}")
     public String delete_personalq(@PathVariable("personalqNo") int personalqNo){
         String code = customerService.getPersonalq(personalqNo).getReferenceCode();
@@ -173,17 +223,14 @@ public class CustomerController {
         return "redirect:/customer/user/customer_personalq";
     }
 
-    //임시 상품(1)
-    @GetMapping("/my_productqList")
-    public void product(Model model){
-        List<Integer> plist = new ArrayList<>();
-        for(int i=1; i<=5; i++){
-            plist.add(i);
-        }
-        model.addAttribute("plist",plist);
-    }
-
-    //상품 문의 이동
+    /**
+     * 상품 문의 이동 메소드
+     *
+     * @param productNo
+     * @param model
+     * @param page
+     * @return 상품 문의 전체조회 페이지
+     */
     @GetMapping("/customer_productq/{productNo}")
     public String customer_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
@@ -211,7 +258,13 @@ public class CustomerController {
         model.addAttribute("answer","A");
         return "customer/user/customer_productq";
     }
-    //상품 문의 신청 이동
+
+    /**
+     * 상품 문의 신청 이동 메소드
+     *
+     * @param model
+     * @param productNo
+     */
     @GetMapping("/productq_app")
     public void productq_app(Model model, @RequestParam("productNo") int productNo){
         List<ProductqCategoryDto> category = customerService.getProductqCategory();
@@ -221,11 +274,12 @@ public class CustomerController {
         model.addAttribute("category",category);
         model.addAttribute("productNo",productNo);
     }
+
     /**
-     * 상품 문의 신청 메서드
+     * 상품 문의 신청 메서드(모달)
      *
      * @param appDto the ProductqAppDto
-     * @return the String
+     * @return the int
      */
     @PostMapping("/productq_app")
     @ResponseBody // JSON 응답을 반환하기 위해 추가
@@ -246,10 +300,10 @@ public class CustomerController {
     }
 
     /**
-     * 상품 문의 상세보기 메서드
+     * 상품 문의 상세조회 이동 메서드
      *
      * @param productqNo the productqNo
-     * @return the String
+     * @return 상품 문의 상세조회 페이지
      */
     @GetMapping("/productq_detail/{productqNo}")
     public String productq_detail(@PathVariable("productqNo") int productqNo, Model model){
@@ -277,10 +331,11 @@ public class CustomerController {
     }
 
     /**
-     * 내 문의 보기 메소드
+     * 내 상품 문의 내역 이동 메소드
+     *
      * @param productNo
      * @param model
-     * @return
+     * @return 내 상품 문의 내역 페이지
      */
     @GetMapping("/my_productq/{productNo}")
     public String my_productq(@PathVariable("productNo") int productNo, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
@@ -311,10 +366,11 @@ public class CustomerController {
     }
 
     /**
-     * 상품문의 수정 페이지
+     * 상품문의 수정 페이지 이동 메소드
+     *
      * @param model
      * @param productqNo
-     * @return
+     * @return 상품 문의 수정 페이지
      */
     @GetMapping("/update_productq/{productqNo}")
     public String update_productq(Model model, @PathVariable("productqNo") int productqNo){
@@ -325,6 +381,13 @@ public class CustomerController {
         model.addAttribute("dto",dto);
         return "customer/user/productq_update";
     }
+
+    /**
+     * 상품 문의 수정 페이지 이동 메소드(모달)
+     *
+     * @param productqNo
+     * @return the ResponseEntity
+     */
     @GetMapping("/update_productq")
     public ResponseEntity<ProductqDto> getProductDetails(@RequestParam("productqNo") int productqNo) {
         // 서비스 또는 데이터베이스에서 제품 세부정보를 가져옴
@@ -335,9 +398,10 @@ public class CustomerController {
     }
 
     /**
-     * 상품 문의 수정 메소드
+     * 상품 문의 수정 메소드(모달)
+     *
      * @param appDto
-     * @return
+     * @return the int
      */
     @PostMapping("/update_productq")
     @ResponseBody
@@ -356,6 +420,12 @@ public class CustomerController {
         return text_result;
     }
 
+    /**
+     * 상품 문의 수정 메소드(페이지)
+     *
+     * @param appDto
+     * @return 상품문의 상세조회 페이지
+     */
     @PostMapping("/update_productQ")
     public String update_productQ(ProductqAppDto appDto){
         int memberNo = 0;
@@ -373,10 +443,11 @@ public class CustomerController {
     }
 
     /**
-     * 상품 문의 삭제
+     * 상품 문의 삭제 메소드(페이지)
+     *
      * @param productqNo
      * @param productNo
-     * @return
+     * @return 상품문의 내역 조회 페이지
      */
     @GetMapping("/delete_productq/{productqNo}/{productNo}")
     public String delete_productq(@PathVariable("productqNo") int productqNo, @PathVariable("productNo") int productNo){
@@ -386,6 +457,12 @@ public class CustomerController {
         return "redirect:"+redirectUrl;
     }
 
+    /**
+     * 상품 문의 삭제 메소드(모달)
+     *
+     * @param productqNo
+     * @return the ResponseEntity
+     */
     @PostMapping("/delete_productq")
     public ResponseEntity<?> delete_productq(@RequestParam("productqNo") int productqNo) {
         String code = customerService.getProductq(productqNo).getReferenceCode();
@@ -398,10 +475,11 @@ public class CustomerController {
     }
 
     /**
-     * 1:1 문의 검색
+     * 1:1 문의 검색 메소드
+     *
      * @param model
      * @param page
-     * @return
+     * @return 상품 문의 검색 결과 페이지
      */
     @GetMapping("/search_personalq")
     public String search_personalq(Model model, @RequestParam(value = "page",defaultValue = "1") int page, PersonalqSearchDto searchDto){
@@ -432,11 +510,12 @@ public class CustomerController {
     }
 
     /**
-     * 상품 문의 검색
+     * 상품 문의 검색 메소드
+     *
      * @param model
      * @param productNo
      * @param page
-     * @return
+     * @return 상품 문의 검색 결과 메소드
      */
     @GetMapping("/search_productq/{productNo}")
     public String search_productq(Model model, @RequestParam(value = "page",defaultValue = "1") int page,ProductSearchDto searchDto, @PathVariable("productNo") int productNo){
@@ -470,11 +549,12 @@ public class CustomerController {
     }
 
     /**
-     * 내 상품 문의 검색
+     * 내 상품 문의 검색 메소드
+     *
      * @param model
      * @param productNo
      * @param page
-     * @return
+     * @return 상품 문의 페이지 검색 결과
      */
     @GetMapping("/search_myproductq/{productNo}")
     public String search_myproductq(Model model, @PathVariable("productNo") int productNo, ProductSearchDto searchDto, @RequestParam(value = "page",defaultValue = "1") int page){
@@ -509,9 +589,10 @@ public class CustomerController {
     }
 
     /**
-     * ck에디터 사진 업로드
+     * ckEditor 이미지 업로드 메소드
+     *
      * @param image
-     * @return
+     * @return the ResponseEntity
      */
     @PostMapping("/imageUpload")
     @ResponseBody
@@ -526,32 +607,20 @@ public class CustomerController {
         System.out.println("url: "+dto.getUploadFileUrl());
         System.out.println("path: "+dto.getUploadFilePath());
         System.out.println("name: "+dto.getUploadFileName());
-        // 파일 확장자와 파일 이름 처리 기존방식
-//            String uploadDir = System.getProperty("user.dir") + "/uploads/";
-//            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-//            String uuid = UUID.randomUUID().toString();
-//            String extension = fileName.substring(fileName.lastIndexOf("."));
-//            String storeFileName = uuid + extension;
-//
-//            // 업로드 디렉토리 설정 및 파일 저장
-//            Path filePath = Paths.get(uploadDir, storeFileName);
-//            Files.createDirectories(filePath.getParent());
-//            image.transferTo(filePath.toFile());
-//
-//            // 파일 접근 URL 반환
-//            String fileUrl = "/uploads/" + storeFileName;
-//            response.put("url", fileUrl);
         //오브젝트 스토리지
         String fileUrl = dto.getUploadFileUrl();
         response.put("url",fileUrl);
         return ResponseEntity.ok(response);
 
     }
-    //파일 업로드 사용 예제
-//    public void uploadFilesSample(@RequestPart(value = "files") List<MultipartFile> multipartFiles) {
-//            fileService.uploadFiles(multipartFiles, "customer");
-//        }
 
+    /**
+     * 상품 문의 내역 조회 메소드(ajax)
+     *
+     * @param productNo
+     * @param page
+     * @return 상품 문의 전체 내역
+     */
     @GetMapping("/get_AllproductqList")
     public ResponseEntity<PageResponse<ProductqList>> getAllProductqList(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
@@ -569,6 +638,14 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    /**
+     * 상품 문의 문의 카테고리 조회 메소드(ajax)
+     *
+     * @param productNo
+     * @param page
+     * @return 상품 문의 문의 카테고리 데이터
+     */
 
     @GetMapping("/getQuestion")
     public ResponseEntity<PageResponse<ProductqList>> getQuestion(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
@@ -588,6 +665,13 @@ public class CustomerController {
         }
     }
 
+    /**
+     * 상품 문의 의견 카테고리 조회 메소드(ajax)
+     *
+     * @param productNo
+     * @param page
+     * @return 상품 문의 의견 카테고리 데이터
+     */
     @GetMapping("/getOpinion")
     public ResponseEntity<PageResponse<ProductqList>> getOpinion(@RequestParam("productNo") int productNo, @RequestParam("page") int page){
         try {
@@ -606,6 +690,16 @@ public class CustomerController {
         }
     }
 
+    /**
+     * 상품 문의 검색 메소드(ajax)
+     *
+     * @param productNo
+     * @param key
+     * @param keyword
+     * @param tpye
+     * @param page
+     * @return 상품 문의 검색 결과 데이터
+     */
     @GetMapping("/getQuestionSearch")
     public ResponseEntity<PageResponse<ProductqList>> getQuestionSearch(@RequestParam("productNo") int productNo, @RequestParam("key") String key, @RequestParam("keyword") String keyword, @RequestParam("type") String tpye, @RequestParam("page") int page){
         ProductSearchDto searchDto = ProductSearchDto.builder()
@@ -625,6 +719,12 @@ public class CustomerController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 상품 문의 답변 조회 메소드
+     *
+     * @param productqNo
+     * @return 상품 문의 답변 데이터
+     */
     @GetMapping("/get_AllproductaList")
     public ResponseEntity<ProductqAnswerDto> getAllProductaList(@RequestParam("productqNo") int productqNo){
         try {
@@ -636,6 +736,14 @@ public class CustomerController {
         }
     }
 
+    /**
+     * 공지사항 검색 메소드
+     *
+     * @param dto
+     * @param model
+     * @param page
+     * @return 공지사항 검색 결과 페이지
+     */
     @GetMapping("/user_search_notice")
     public String search_notice(NoticeSearchDto dto, Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         System.out.println(dto);
@@ -652,6 +760,14 @@ public class CustomerController {
         model.addAttribute("state","search");
         return "customer/user/customer_notice";
     }
+
+    /**
+     * 내 상품 문의 내역 조회 메소드
+     *
+     * @param model
+     * @param page
+     * @return 내 상품 문의 내역 조회 페이지
+     */
     @GetMapping("/user_productqList")
     public String user_proudctqList(Model model, @RequestParam(value = "page",defaultValue = "1") int page){
         ProductSearchDto searchDto = ProductSearchDto.builder().keyword("").date("recent").category("productq_all").answer("A").type("A").build();
@@ -679,6 +795,14 @@ public class CustomerController {
         return "customer/user/user_productqList";
     }
 
+    /**
+     * 내 상품 문의 검색 메소드
+     *
+     * @param model
+     * @param searchDto
+     * @param page
+     * @return 내 상품 문의 검색 결과 페이지
+     */
     @GetMapping("search_user_productqList")
     public String search_user_productqList(Model model, ProductSearchDto searchDto, @RequestParam(value = "page",defaultValue = "1") int page){
         int memberNo;
