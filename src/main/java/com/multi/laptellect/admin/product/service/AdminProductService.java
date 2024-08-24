@@ -17,7 +17,7 @@ public interface AdminProductService {
     Page<ProductDTO> getProductList(PagebleDTO pagebleDTO) throws Exception;
 
 
-    int deleteProduct(int productNo);
+    int deleteProduct(int productNo) throws Exception;
 
     String findUploadName(int productNo);
 }

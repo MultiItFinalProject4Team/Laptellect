@@ -399,22 +399,22 @@ $(function () {
         });
 
         $("#telChangeBtn").on("click", function () {
-          let tel = $('#phoneNumInput').val().replace(/-/g, '');
+          let tel2 = $('#phoneNumInput').val().replace(/-/g, '');
           let verifyCode = $('#phoneNumVer').val();
-          console.log(tel, verifyCode);
+          console.log(tel2, verifyCode);
 
 
           $.ajax({
             url: "/api/update-tel",
             type: "POST",
-            data: { tel: tel, verifyCode: verifyCode },
+            data: { tel: tel2, verifyCode: verifyCode },
             success: function (response) {
               if (response === true) {
                 swal("휴대폰 번호 변경 완료", "", "success");
                 $('#phoneModal').modal('hide');
 
                 $("#phoneNumber").prop("readonly", false);
-                $("#phoneNumber").val(tel);
+                $("#phoneNumber").val(tel2);
                 $("#phoneNumber").prop("readonly", true);
 
                 $("#telChangeBtn").prop("disabled", true);
