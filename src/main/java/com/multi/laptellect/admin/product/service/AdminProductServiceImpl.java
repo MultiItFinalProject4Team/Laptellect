@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -32,20 +33,25 @@ public class AdminProductServiceImpl implements AdminProductService{
 
     @Override
     public Page<ProductDTO> getProductList(PagebleDTO pagebleDTO) throws Exception {
-        log.info("파라미터 확인 = {}", pagebleDTO);
+        log.debug("파라미터 확인 = {}", pagebleDTO);
 
         ArrayList<ProductDTO> products = adminProductMapper.getAllProducts(pagebleDTO);
-        log.info("서비스 파라미터 확인 = {}",products);
+        log.debug("서비스 파라미터 확인 = {}",products);
         long total = adminProductMapper.countAllProduct(pagebleDTO);
-        log.info("총수량 확인 = {}",total);
+        log.debug("총수량 확인 = {}",total);
 
         return new PageImpl<>(products, pagebleDTO, total);
 
     }
 
     @Override
-    public int deleteProduct(int productNo) {
-        log.info("ProductServiceImpl 삭제정보 : {}",productNo);
+    @Transactional
+    public int deleteProduct(int productNo) throws Exception{
+        log.debug("ProductServiceImpl 삭제정보 : {}",productNo);
+
+        int typeNo = adminProductMapper.findProductTypeNoByProducctNo(productNo);
+        redisUtil.deleteData("product::" + productNo);
+        redisUtil.deleteData("main::" + typeNo);
 
         return adminProductMapper.deleteProduct(productNo);
     }
