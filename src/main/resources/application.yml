@@ -9,7 +9,7 @@ spring:
     restart:
       enabled: true
   thymeleaf:
-    cache: false
+    cache: true
 
 server:
   port: 8099
@@ -20,15 +20,15 @@ server:
 logging:
   level:
     org.springframework: INFO
-    com.multi.laptellect: DEBUG
+    com.multi.laptellect: INFO
 
-    sql: DEBUG
-    jdbc.audit: ERROR
-    jdbc.sqlonly: ERROR
-    jdbc.sqltiming: ERROR
-    jdbc.resultset: ERROR
+    sql: INFO
+    jdbc.audit: INFO
+    jdbc.sqlonly: INFO
+    jdbc.sqltiming: INFO
+    jdbc.resultset: INFO
 
-    jdbc.resultsettable: DEBUG
+    jdbc.resultsettable: INFO
 
 cpus:
   cpuMark:
