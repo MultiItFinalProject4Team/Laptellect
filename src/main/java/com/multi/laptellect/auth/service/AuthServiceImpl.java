@@ -94,12 +94,13 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public boolean isVerifyEmail(String verifyCode) throws Exception { // 인증코드 검증
-        String redisVerifyCode = redisUtil.getData(verifyCode);
+    public boolean isVerifyEmail(String userEmail, String verifyCode) throws Exception { // 인증코드 검증
+        String redisEmail = redisUtil.getData(verifyCode);
 
-        // 프론트에서 바꿀 가능성 있으므로 작업 후 인증코드 삭제하는 로직 추가해야함
-        // ex) redisUtil.deleteData(verifyCode);
-        return redisVerifyCode != null;
+        if (redisEmail == null) { return false; }
+        log.debug("이메일 확인 = {} {} {}", userEmail, verifyCode, redisEmail.equals(userEmail));
+
+        return redisEmail.equals(userEmail);
     }
 
     @Override
@@ -162,7 +163,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void sendSms(String tel) throws Exception {
-        int memberNo = SecurityUtil.getUserNo();
         String verifyCode;
         String text;
 

@@ -20,6 +20,6 @@ public interface LogMapper {
     @Insert("INSERT INTO log_count_visit (created_at, visit_count) VALUES (CURDATE(), #{ count }) ON DUPLICATE KEY UPDATE visit_count = visit_count + #{ count }")
     int insertVisitCount(int count);
 
-    @Select("SELECT * FROM log_login WHERE member_no = #{ memberNo } LIMIT 1")
+    @Select("SELECT * FROM log_login WHERE member_no = #{ memberNo } ORDER BY created_at DESC LIMIT 1")
     LoginLog findLoginLogByMemberNo(int memberNo);
 }

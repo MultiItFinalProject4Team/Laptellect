@@ -840,10 +840,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-
+    @Transactional(readOnly = true)
+    @Cacheable(value = "product", key = "'cate'", cacheManager = "mainPageCacheManager")
     public Map<String, List<String>> productFilterSearch() {
 
-        List<SpecDTO> specDTOS = productMapper.productFilterSearch();
+        List<SpecDTO> specDTOS = productMapper.productFilterSearch(1);
 
         Map<String, List<String>> specMap = new HashMap<>();
 

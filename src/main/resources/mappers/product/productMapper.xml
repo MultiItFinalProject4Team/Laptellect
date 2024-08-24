@@ -410,10 +410,10 @@
     </delete>
 
     <!--제품 카테고리를 옵션으로 조회-->
-    <select id="findByOptions" parameterType="map" resultType="productCategoryDTO">
+    <select id="findByOptions" resultType="productCategoryDTO">
         SELECT *
         FROM product_category
-        WHERE options = #{specName}
+        WHERE options = #{specName} AND type_no = #{ typeNo }
     </select>
 
     <insert id="insertProductCategory" parameterType="map">
@@ -425,7 +425,7 @@
         INSERT INTO product_spec (product_no, category_no, option_value)
         VALUES (
         #{productNo},
-        (SELECT category_no FROM product_category WHERE options = #{specName}),
+        (SELECT category_no FROM product_category WHERE options = #{specName} AND type_no = #{ typeNo }),
         #{specValue}
         )
     </insert>
@@ -436,10 +436,13 @@
 <!--        product-->
 <!--    </select>-->
 <!--    -->
-    <select id="productFilterSearch" resultType="specDTO">
-        SELECT options, option_value, category_no
+    <select id="productFilterSearch" parameterType="INT" resultType="specDTO">
+        SELECT DISTINCT
+            options, option_value, category_no
         FROM
-        vw_spec_and_value
+            vw_spec_and_value
+        WHERE
+            type_no = #{ typeNo }
     </select>
 
     <select id="laptopProductDetails" resultType="LaptopDetailsDTO" parameterType="LaptopDetailsDTO">

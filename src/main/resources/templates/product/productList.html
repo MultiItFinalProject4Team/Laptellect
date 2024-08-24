@@ -3,12 +3,18 @@
   layout:decorate="~{common/layout}">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" th:href="@{/css/product/product.css}">
-<script th:inline="javascript">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css">
+    <link rel="stylesheet" th:href="@{/css/product/product.css}">
+    <script th:inline="javascript">
     $(document).ready(function() {
         let currentPage = 0;
         let pageSize = 12;
         let typeNo = [[${ typeNo }]];
+        $('#filterForm').hide();
+
+        if(typeNo === 1) {
+            $('#filterForm').show();
+        }
 
         function convertEmptyToNull(value) {
             return value.trim() === "" ? null : value;
@@ -32,11 +38,58 @@
             return filters;
         }
 
+        
+        
+        function activeTab() {
+            switch(typeNo) {
+                case 1:
+                    $('.product-link').removeClass('active');
+                    $('#laptop-tab').addClass('active');
+                    $('#filterForm').show();
+                    break;
+                case 2:
+                    $('.product-link').removeClass('active');
+                    $('#mouse-tab').addClass('active');
+                    $('#filterForm').hide();
+                    break;
+                case 3:
+                    $('.product-link').removeClass('active');
+                    $('#keyboard-tab').addClass('active');
+                    $('#filterForm').hide();
+                    break;
+                default:
+                    $('.product-link').removeClass('active');
+                    $('#laptop-tab').addClass('active');
+                    $('#filterForm').show();
+                    break;
+            }
+        }
+
+        activeTab();
+
 
 
         // 제품 리스트를 로드하는 함수
         function loadProducts(page, size, typeNo) {
             let keyword = convertEmptyToNull($("#form1").val());
+            let minPrice = $("#site-search1").val();
+            let maxPrice = $("#site-search2").val()
+
+
+
+            if (minPrice > maxPrice && maxPrice != 0) {
+                swal({
+                    title: "가격 설정 오류",
+                    text: "최소 가격은 최대 가격보다 작아야 합니다.",
+                    icon: "info",
+                    button: "ok"
+                });
+                return;
+            }
+
+            if (maxPrice == 0) {
+                maxPrice = null;
+            }
 
             let data = {
                 page: page,
@@ -51,11 +104,11 @@
                 LC13: getSelectedFiltersByCategory('cpu'),
                 LR9: getSelectedFiltersByCategory('ram'),
                 LD25: getSelectedFiltersByCategory('resolution'),
-                minPrice: $("#site-search1").val(),  // 여기서 값을 직접 할당
-                maxPrice: $("#site-search2").val()
+                minPrice: minPrice,  // 여기서 값을 직접 할당
+                maxPrice: maxPrice
             };
 
-            console.log("Calling loadProducts with - data:", data);
+            $('#loading-spinner').show();
 
             $.ajax({
                 url: "/api/product/product-list",
@@ -67,6 +120,9 @@
                 },
                 error: function(error) {
                     console.log(error);
+                },
+                complete: function() {
+                    $('#loading-spinner').hide();
                 }
             });
         }
@@ -124,33 +180,6 @@
         });
     });
 </script>
-
-<style>
-    /* 스타일 정의 */
-    .left-align {
-        text-align: left;
-    }
-    .filter-header {
-        width: 100px;
-    }
-    .options-list {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .options-list label {
-        margin-right: 10px;
-    }
-    .btn-custom-price {
-        background-color: #3498DB;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 5.4px 20px;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-</style>
 </head>
 
 <body>
@@ -178,7 +207,6 @@
         </form> <hr> <br>
     </th:block>
 
-<th:block th:if="${ typeNo == 1}">
 <form id="filterForm">
     <table border="1">
         <tbody class="table custom-table custom-table-striped custom-table-bordered custom-table-hover">
@@ -294,7 +322,7 @@
         </tbody>
     </table>
 </form>
-</th:block>
+
 <br>
 <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
     <div class="product-search">
@@ -320,8 +348,12 @@
         </li>
     </ul>
 </div>
+    <div id="loading-spinner">
+        <div class="spinner"></div>
+    </div>
 <br>
 <div class="row" id="product-list"></div>
+
 </div>
 </body>
 </html>

@@ -159,3 +159,62 @@ ul li:active .btn-custom { background-color: #236097 !important; }
        box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
        margin-right: 10px; /* 버튼과 간격 설정 */
    }
+    /* 스타일 정의 */
+    .left-align {
+        text-align: left;
+    }
+    .filter-header {
+        width: 100px;
+    }
+    .options-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .options-list label {
+        margin-right: 10px;
+    }
+    .btn-custom-price {
+        background-color: #3498DB;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5.4px 20px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #loading-spinner {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+    }
+
+    .spinner {
+       width: 56px;
+       height: 56px;
+       border-radius: 50%;
+       background: conic-gradient(#0000 10%,#3498db);
+       -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 0);
+       animation: spinner-zp9dbg 0.8s infinite linear;
+    }
+
+    @keyframes spinner-zp9dbg {
+       to {
+          transform: rotate(1turn);
+       }
+    }
+
+    #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 9998;
+    }

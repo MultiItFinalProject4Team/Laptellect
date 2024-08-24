@@ -76,7 +76,13 @@ $(document).ready(function () {
     $(document).on("click", ".btn-modal", function () {
         let memberNo = $(this).data("memberno");
         console.log(memberNo);
+
+        $('.nav-link').removeClass('active');
+        $('.tab-pane').removeClass('show active'); 
         
+        $('#member-tab').addClass('active');
+        $('#member-tab-pane').addClass('show active');
+
         getModal(memberNo);
     });
     

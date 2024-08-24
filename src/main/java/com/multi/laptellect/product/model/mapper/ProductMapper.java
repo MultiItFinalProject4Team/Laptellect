@@ -28,7 +28,7 @@ public interface ProductMapper {
 
     void inputImage(FileDto fileDto);
 
-    ProductCategoryDTO findByOptions(@Param("specName") String specName);
+    ProductCategoryDTO findByOptions(@Param("specName") String specName, @Param("typeNo") int typeNo);
 
     void inputReviewDate(ReviewDTO reviewDTO);
 
@@ -48,14 +48,14 @@ public interface ProductMapper {
 
     int checkCategory(@Param("productNo") int productNo,@Param("categoryNo") String categoryNo);
 
-    void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue);
+    void insertProductSpec(@Param("productNo") int productNo, @Param("specName") String specName, @Param("specValue") String specValue, @Param("typeNo") int typeNo);
 
 
     List<SpecDTO> getProductSpec(@Param("productNo") int productNo);
 
     List<LaptopDetailsDTO> productDetails(int productNo);
 
-    List<SpecDTO> productFilterSearch();
+    List<SpecDTO> productFilterSearch(int typeNo);
 
 
     @Insert("INSERT INTO wishlist (product_no, member_no) VALUES (#{ productNo }, #{ memberNo });")
