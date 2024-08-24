@@ -10,6 +10,11 @@
         let currentPage = 0;
         let pageSize = 12;
         let typeNo = [[${ typeNo }]];
+        $('#filterForm').hide();
+
+        if(typeNo === 1) {
+            $('#filterForm').show();
+        }
 
         function convertEmptyToNull(value) {
             return value.trim() === "" ? null : value;
@@ -40,18 +45,22 @@
                 case 1:
                     $('.product-link').removeClass('active');
                     $('#laptop-tab').addClass('active');
+                    $('#filterForm').show();
                     break;
                 case 2:
                     $('.product-link').removeClass('active');
                     $('#mouse-tab').addClass('active');
+                    $('#filterForm').hide();
                     break;
                 case 3:
                     $('.product-link').removeClass('active');
                     $('#keyboard-tab').addClass('active');
+                    $('#filterForm').hide();
                     break;
                 default:
                     $('.product-link').removeClass('active');
                     $('#laptop-tab').addClass('active');
+                    $('#filterForm').show();
                     break;
             }
         }
@@ -71,7 +80,7 @@
             if (minPrice > maxPrice && maxPrice != 0) {
                 swal({
                     title: "가격 설정 오류",
-                    text: "최소 가격은 최대 가격보다 적어야 합니다.",
+                    text: "최소 가격은 최대 가격보다 작아야 합니다.",
                     icon: "info",
                     button: "ok"
                 });
@@ -198,7 +207,6 @@
         </form> <hr> <br>
     </th:block>
 
-<th:block th:if="${ typeNo == 1}">
 <form id="filterForm">
     <table border="1">
         <tbody class="table custom-table custom-table-striped custom-table-bordered custom-table-hover">
@@ -314,7 +322,7 @@
         </tbody>
     </table>
 </form>
-</th:block>
+
 <br>
 <form th:action="@{/product/search}" method="get" id="searchForm" name="search-form">
     <div class="product-search">
