@@ -101,7 +101,7 @@ public class PaymentController {
         log.info("파라미터 = {} {} {}", img, productName, price);
         PaymentpageDTO paymentpageDTO = paymentService.findProduct(productName);
         paymentpageDTO.setImage(img);
-//        paymentpageDTO.setPrice(400);
+        paymentpageDTO.setPrice(400);
 
         int memberNo = SecurityUtil.getUserNo();
         MemberDTO memberDTO = memberMapper.findMemberByNo(memberNo);
