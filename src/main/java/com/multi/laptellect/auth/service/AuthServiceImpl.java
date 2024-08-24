@@ -164,6 +164,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public void sendSms(String tel) throws Exception {
         String verifyCode;
+        int memberNo = SecurityUtil.getUserNo();
         String text;
 
         do {
