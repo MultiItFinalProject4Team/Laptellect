@@ -400,15 +400,15 @@ $(function () {
         });
 
         $("#telChangeBtn").on("click", function () {
-          let tel2 = $('#phoneNumInput').val().replace(/-/g, '');
+          let changeTel = $('#phoneNumInput').val().replace(/-/g, '');
           let verifyCode = $('#phoneNumVer').val();
-          console.log(tel2, verifyCode);
+          console.log(changeTel, verifyCode);
 
 
           $.ajax({
             url: "/api/update-tel",
             type: "POST",
-            data: { tel: tel2, verifyCode: verifyCode },
+            data: { tel: changeTel, verifyCode: verifyCode },
             success: function (response) {
               if (response === true) {
                 swal("휴대폰 번호 변경 완료", "", "success");
