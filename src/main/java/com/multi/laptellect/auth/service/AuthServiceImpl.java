@@ -174,18 +174,15 @@ public class AuthServiceImpl implements AuthService{
 
         smsUtil.sendOne(tel, text);
 
-        redisUtil.setDataExpire(verifyCode, String.valueOf(tel), 60*3L);
+        redisUtil.setDataExpire(verifyCode, String.valueOf(memberNo) + ":" + tel, 60*3L);
     }
 
     @Override
     public boolean isVerifyTel(String verifyCode, String tel) throws Exception {
-        String redisTel = redisUtil.getData(verifyCode);
+        String redisVerifyCode = redisUtil.getData(verifyCode);
+        int memberNo = SecurityUtil.getUserNo();
 
-        if (redisTel == null) {
-            return false;
-        }
-
-        return redisTel.equals(tel);
+        return redisVerifyCode.equals(String.valueOf(memberNo) + ":" + tel);
     }
 
     @Override

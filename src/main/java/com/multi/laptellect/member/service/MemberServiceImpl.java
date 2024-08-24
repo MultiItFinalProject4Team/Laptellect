@@ -63,27 +63,24 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public boolean updateTel(MemberDTO memberDTO, String verifyCode) throws Exception{
-        String redisTel = redisUtil.getData(verifyCode);
+        String value = String.valueOf(memberDTO.getMemberNo() + ":" + memberDTO.getTel());
+        String code = redisUtil.getData(verifyCode);
+        if(code.equals(value)) {
+            if(memberMapper.updateTel(memberDTO) == 0) {
+                throw new RuntimeException("휴대폰 번호 업데이트 실패");
+            }
+            log.info("휴대폰 번호 업데이트 완료 = {} ", memberDTO.getEmail());
 
-        if(redisTel == null) {
-            throw new RuntimeException("휴대폰 번호 Null 실패");
+            // Redis 인증 코드 삭제
+            redisUtil.deleteData(verifyCode);
+
+            memberDTO = memberMapper.findMemberByNo(memberDTO.getMemberNo());
+            SecurityUtil.updateUserDetails(memberDTO);
+            return true;
+        } else {
+            log.error("휴대폰 번호 또는 인증번호 불일치 = {} {}", verifyCode, code);
+            return false;
         }
-
-        if(!redisTel.equals(memberDTO.getTel())) {
-            throw new RuntimeException("휴대폰 번호 불일치");
-        }
-
-        if(memberMapper.updateTel(memberDTO) == 0) {
-            throw new RuntimeException("휴대폰 번호 업데이트 실패");
-        }
-        log.info("휴대폰 번호 업데이트 완료 = {} ", memberDTO.getEmail());
-
-        // Redis 인증 코드 삭제
-        redisUtil.deleteData(verifyCode);
-
-        memberDTO = memberMapper.findMemberByNo(memberDTO.getMemberNo());
-        SecurityUtil.updateUserDetails(memberDTO);
-        return true;
     }
 
     @Override
