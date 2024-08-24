@@ -181,7 +181,7 @@ $(function () {
                 $("#emailChangeBtn").prop("disabled", true);
               } else {
                 console.log("이메일 변경 실패");
-                swal("이메일 변경 실패", "", "error");
+                swal("휴대폰 번호 또는 인증번호가 일치하지 않습니다.", "", "error");
               }
 
             },

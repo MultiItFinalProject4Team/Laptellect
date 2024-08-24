@@ -156,8 +156,13 @@
 
             if (typeNo === 1) { // 노트북 탭에서만 필터 폼을 보이게 하는 예시
                 $("#filterForm").show();
+                $("#form1").val("");
             } else {
                 $("#filterForm").hide();
+                $("#filterForm input[type='checkbox']").prop("checked", false);
+                $("#site-search1").val("");
+                $("#site-search2").val("");
+                $("#form1").val("");
             }
 
             searchProducts();
