@@ -174,16 +174,15 @@ public class AuthServiceImpl implements AuthService{
 
         smsUtil.sendOne(tel, text);
 
-        redisUtil.setDataExpire(verifyCode, String.valueOf(memberNo), 60*3L);
+        redisUtil.setDataExpire(verifyCode, String.valueOf(memberNo) + ":" + tel, 60*3L);
     }
 
     @Override
-    public boolean isVerifyTel(String verifyCode) throws Exception {
+    public boolean isVerifyTel(String verifyCode, String tel) throws Exception {
         String redisVerifyCode = redisUtil.getData(verifyCode);
+        int memberNo = SecurityUtil.getUserNo();
 
-        // 프론트에서 바꿀 가능성 있으므로 작업 후 인증코드 삭제하는 로직 추가해야함
-        // ex) redisUtil.deleteData(verifyCode);
-        return redisVerifyCode != null;
+        return redisVerifyCode.equals(String.valueOf(memberNo) + ":" + tel);
     }
 
     @Override

@@ -63,7 +63,9 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public boolean updateTel(MemberDTO memberDTO, String verifyCode) throws Exception{
-        if(redisUtil.getData(verifyCode).equals(String.valueOf(memberDTO.getMemberNo()))) {
+        String value = String.valueOf(memberDTO.getMemberNo() + ":" + memberDTO.getTel());
+        String code = redisUtil.getData(verifyCode);
+        if(code.equals(value)) {
             if(memberMapper.updateTel(memberDTO) == 0) {
                 throw new RuntimeException("휴대폰 번호 업데이트 실패");
             }
@@ -76,7 +78,7 @@ public class MemberServiceImpl implements MemberService{
             SecurityUtil.updateUserDetails(memberDTO);
             return true;
         } else {
-            log.error("updateTel Error : 업데이트 실패");
+            log.error("휴대폰 번호 또는 인증번호 불일치 = {} {}", verifyCode, code);
             return false;
         }
     }

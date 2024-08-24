@@ -236,6 +236,7 @@ public class AuthApiController {
     @ResponseBody
     @PostMapping("/verify-tel")
     public boolean sendVerifySms(@RequestParam("tel") String tel) {
+        tel = tel.replaceAll("[-\\s]", "");
         try {
             authService.sendSms(tel);
             return true;
@@ -253,9 +254,9 @@ public class AuthApiController {
      */
     @ResponseBody
     @PostMapping("/check-verify-tel")
-    public boolean isVerifyTel(@RequestParam("verifyCode") String verifyCode) {
+    public boolean isVerifyTel(@RequestParam("verifyCode") String verifyCode, @RequestParam("tel") String tel) {
         try {
-            if(authService.isVerifyTel(verifyCode)) {
+            if(authService.isVerifyTel(verifyCode, tel)) {
                 return true;
             } else {
                 return false;
@@ -367,8 +368,10 @@ public class AuthApiController {
         CustomUserDetails userDetails = SecurityUtil.getUserDetails();
         MemberDTO memberDTO = new MemberDTO();
 
+        log.info("파라 확인 tel = {}, verifyCode = {}", tel, verifyCode);
+
         memberDTO.setMemberNo(userDetails.getMemberNo());
-        memberDTO.setTel(tel);
+        memberDTO.setTel(tel.replaceAll("[-\\s]", ""));
 
         try {
             if(memberService.updateTel(memberDTO, verifyCode)) {
