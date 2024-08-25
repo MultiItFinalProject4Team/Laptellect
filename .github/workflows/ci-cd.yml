@@ -85,6 +85,8 @@ jobs:
         run: chmod +x ./gradlew
         
       - name: Build with Gradle
+        env:
+          JAVA_HOME: ${{ steps.setup-java.outputs.java-home }}
         run: ./gradlew build --warning-mode all
       
       - name: Upload Test Reports
