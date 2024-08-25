@@ -56,6 +56,11 @@
 
            // 구매하기 버튼 클릭 이벤트
            $(document).on('click', '.btn-payment', function() {
+               if ($('.card.mb-3').length === 0) {
+                    swal('장바구니에 담긴 상품이 없습니다.', '', 'info');
+                    return;
+                }
+
                window.location.href = '/payment/cart-payment';
            });
         });
