@@ -87,6 +87,7 @@ jobs:
         
       - name: Build with Gradle
         run: |
+          # Ensure JAVA_HOME is set to JDK 17
           export JAVA_HOME="${{ steps.setup-java.outputs.java-home }}"
           export PATH="$JAVA_HOME/bin:$PATH"
           java -version
@@ -98,6 +99,13 @@ jobs:
         with:
           name: test-reports
           path: build/reports/tests/test/index.html
+
+      - name: Upload Gradle Build Log
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: gradle-log
+          path: gradle.log
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
