@@ -4,6 +4,7 @@ import com.multi.laptellect.common.model.PagebleDTO;
 import com.multi.laptellect.product.model.dto.ProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.ArrayList;
 
@@ -29,4 +30,7 @@ public interface AdminProductMapper {
     void insertProduct(ProductDTO product);
 
     String findUploadName(@Param("productNo")int productNo);
+
+    @Select("SELECT type_no FROM product WHERE product_no = #{ productNo }")
+    int findProductTypeNoByProducctNo(int productNo);
 }

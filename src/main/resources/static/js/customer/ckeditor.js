@@ -135,7 +135,7 @@ const editorConfig = {
 	language: 'ko',
 	link: {
 		addTargetToExternalLinks: true,
-		defaultProtocol: 'http://localhost:8099/customer/user/imageUpload',
+		defaultProtocol: '/customer/user/imageUpload',
 		decorators: {
 			toggleDownloadable: {
 				mode: 'manual',
@@ -159,7 +159,7 @@ const editorConfig = {
 	placeholder: 'Type or paste your content here!',
     translations: [translations],
     simpleUpload: {
-        uploadUrl: 'http://localhost:8099/customer/user/imageUpload' // 업로드 URL
+        uploadUrl: '/customer/user/imageUpload' // 업로드 URL
     }
 };
 

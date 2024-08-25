@@ -133,9 +133,9 @@ public class AuthApiController {
      */
     @ResponseBody
     @PostMapping("/check-verify-email")
-    public boolean isVerifyEmail(@RequestParam("verifyCode") String verifyCode) {
+    public boolean isVerifyEmail(@RequestParam("verifyCode") String verifyCode, @RequestParam("email") String email) {
         try {
-            if(authService.isVerifyEmail(verifyCode)) {
+            if(authService.isVerifyEmail(email, verifyCode)) {
                 return true;
             } else {
                 return false;
@@ -236,6 +236,7 @@ public class AuthApiController {
     @ResponseBody
     @PostMapping("/verify-tel")
     public boolean sendVerifySms(@RequestParam("tel") String tel) {
+        tel = tel.replaceAll("[-\\s]", "");
         try {
             authService.sendSms(tel);
             return true;
@@ -253,9 +254,9 @@ public class AuthApiController {
      */
     @ResponseBody
     @PostMapping("/check-verify-tel")
-    public boolean isVerifyTel(@RequestParam("verifyCode") String verifyCode) {
+    public boolean isVerifyTel(@RequestParam("verifyCode") String verifyCode, @RequestParam("tel") String tel) {
         try {
-            if(authService.isVerifyTel(verifyCode)) {
+            if(authService.isVerifyTel(verifyCode, tel)) {
                 return true;
             } else {
                 return false;
@@ -318,7 +319,7 @@ public class AuthApiController {
      */
     @ResponseBody
     @PostMapping("/signup")
-    public int createMember(MemberDTO memberDTO) {
+    public int createMember(MemberDTO memberDTO, @RequestParam(name = "verifyCode") String verifyCode) {
         log.info("회원가입 실행 = {}", memberDTO);
 
         try {
@@ -337,12 +338,17 @@ public class AuthApiController {
             }
 
             if (authService.isMemberById(userId)) {
-                log.error("아이디 중복 = {}", userId);
+                log.warn("아이디 중복 = {}", userId);
                 return 1; // ID 중복
             }
             if (authService.isMemberByEmail(userEmail)) {
-                log.error("이메일 중복 = {}", userEmail);
+                log.warn("이메일 중복 = {}", userEmail);
                 return 2; // 이메일 중복
+            }
+
+            if (!authService.isVerifyEmail(userEmail, verifyCode)) {
+                log.warn("이메일 불일치 = {}", userEmail);
+                return 3;
             }
 
             authService.createMember(memberDTO);
@@ -350,7 +356,7 @@ public class AuthApiController {
             return 0; // 회원 가입 완료
         } catch (Exception e) {
             log.error("회원가입 에러 = " + e);
-            return 3; // 회원가입 에러
+            return 4; // 회원가입 에러
         }
     }
 
@@ -367,8 +373,10 @@ public class AuthApiController {
         CustomUserDetails userDetails = SecurityUtil.getUserDetails();
         MemberDTO memberDTO = new MemberDTO();
 
+        log.info("파라 확인 tel = {}, verifyCode = {}", tel, verifyCode);
+
         memberDTO.setMemberNo(userDetails.getMemberNo());
-        memberDTO.setTel(tel);
+        memberDTO.setTel(tel.replaceAll("[-\\s]", ""));
 
         try {
             if(memberService.updateTel(memberDTO, verifyCode)) {

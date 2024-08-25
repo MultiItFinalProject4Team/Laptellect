@@ -132,12 +132,13 @@ $(function () {
 
         $("#emailVer").on("blur", function () {
           let verifyCode = $(this).val();
-          console.log(verifyCode);
+          let email = $('#emailInput').val();
+          console.log(verifyCode, email);
 
           $.ajax({
             url: "/api/check-verify-email",
             type: "POST",
-            data: { verifyCode: verifyCode },
+            data: { verifyCode: verifyCode, email: email },
             success: function (response) {
               if (response === true) {
                 console.log("인증번호 확인 완료");
@@ -349,7 +350,7 @@ $(function () {
 
 
         function sendSmsVerification() {
-          let tel = $('#phoneNumInput').val();
+          let tel = $('#phoneNumInput').val().replace(/-/g, '');;
 
           $.ajax({
             url: "/api/verify-tel",
@@ -372,24 +373,26 @@ $(function () {
         });
 
         $("#phoneNumVer").on("blur", function () {
-          let verifyCode = $(this).val();
+
+          let verifyCode = $(this).val()
+          let tel = $('#phoneNumInput').val().replace(/-/g, '');;
+
           console.log(verifyCode);
 
           $.ajax({
             url: "/api/check-verify-tel",
             type: "POST",
-            data: { verifyCode: verifyCode },
+            data: { verifyCode: verifyCode, tel: tel },
             success: function (response) {
               if (response === true) {
                 console.log("인증번호 확인 완료");
                 $("#phoneError").hide();
                 $("#telChangeBtn").prop("disabled", false);
               } else {
-                console.log("틀린 인증번호");
+                console.log("틀린 인증번호거나 전화번호가 다릅니다.");
                 $("#phoneError").show();
                 $("#telChangeBtn").prop("disabled", true);
               }
-
             },
             error: function () {
               console.log("인증번호 확인 실패");
@@ -399,28 +402,28 @@ $(function () {
         });
 
         $("#telChangeBtn").on("click", function () {
-          let tel = $('#phoneNumInput').val().replace(/-/g, '');
+          let changeTel = $('#phoneNumInput').val().replace(/-/g, '');
           let verifyCode = $('#phoneNumVer').val();
-          console.log(tel, verifyCode);
+          console.log(changeTel, verifyCode);
 
 
           $.ajax({
             url: "/api/update-tel",
             type: "POST",
-            data: { tel: tel, verifyCode: verifyCode },
+            data: { tel: changeTel, verifyCode: verifyCode },
             success: function (response) {
               if (response === true) {
                 swal("휴대폰 번호 변경 완료", "", "success");
                 $('#phoneModal').modal('hide');
 
                 $("#phoneNumber").prop("readonly", false);
-                $("#phoneNumber").val(tel);
+                $("#phoneNumber").val(changeTel);
                 $("#phoneNumber").prop("readonly", true);
 
                 $("#telChangeBtn").prop("disabled", true);
               } else {
-                console.log("휴대폰 번호 변경 실패");
-                swal("휴대폰 번호 변경 실패", "", "error");
+                console.log("휴대폰 번호 또는 인증번호가 일치하지 않습니다.");
+                swal("휴대폰 번호 또는 인증번호가 일치하지 않습니다.", "", "error");
               }
 
             },

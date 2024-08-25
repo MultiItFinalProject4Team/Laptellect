@@ -88,9 +88,9 @@
     </div>
 
     <div class="form-group">
-      <label for="created-at" class="d-flex align-items-center"><i class="fa-solid fa-signature"></i> 로그인 시간</label>
+      <label for="created-at" class="d-flex align-items-center">로그인 시간</label>
       <div class="input-group">
-        <input type="text" class="form-control" id="created-at" th:value="${ loginLog.createdAt != null ? loginLog.createdAt : '로그인 기록 없음'}" readonly>
+        <input type="text" class="form-control" id="created-at" th:value="${loginLog.createdAt != null ? #dates.format(loginLog.createdAt, 'yyyy-MM-dd HH:mm:ss') : '로그인 기록 없음'}" readonly>
       </div>
       <br> <br>
     </div>

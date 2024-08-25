@@ -108,18 +108,19 @@ JOIN
 JOIN
     images i ON p.reference_code = i.reference_code;
 
-    create view vw_spec_and_value as
-    SELECT
+create view vw_spec_and_value as
+SELECT
     s.spec_no,
     s.product_no,
+    p.type_no,
     s.category_no,
     s.option_value,
     c.options
-    FROM
+FROM
     product_spec s
-    JOIN
+JOIN
     product p ON s.product_no = p.product_no
-    JOIN
+JOIN
     product_category c ON s.category_no = c.category_no
 
 -- view 테이블 삭제

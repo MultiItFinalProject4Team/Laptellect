@@ -33,10 +33,11 @@ public interface AuthService {
      * Email 인증 번호 검증
      *
      * @param verifyCode 인증 번호
+     * @param code
      * @return boll값으로 반환
      * @throws Exception the exception
      */
-    boolean isVerifyEmail(String verifyCode) throws Exception;
+    boolean isVerifyEmail(String userEmail, String verifyCode) throws Exception;
 
     /**
      * 임시 비밀번호 Email 전송
@@ -106,10 +107,11 @@ public interface AuthService {
      * SMS 인증 번호 검증
      *
      * @param verifyCode 사용자가 입력한 인증 번호
+     * @param tel
      * @return the boolean
      * @throws Exception the exception
      */
-    boolean isVerifyTel(String verifyCode) throws Exception;
+    boolean isVerifyTel(String verifyCode, String tel) throws Exception;
 
     int isRegistrationNo(MemberDTO memberDTO) throws Exception;
 }

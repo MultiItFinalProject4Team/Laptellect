@@ -203,12 +203,13 @@ $("#id").on("blur", function () {
   // 이메일 인증 번호 검증
   $("#emailVer").on("blur", function () {
     let verifyCode = $(this).val();
+    let email = $('#emailInput').val();
     console.log(verifyCode);
 
     $.ajax({
       url: "/api/check-verify-email",
       type: "POST",
-      data: { verifyCode: verifyCode },
+      data: { verifyCode: verifyCode, email: email },
       success: function (response) {
         if (response === true) {
           console.log("인증번호 확인 완료");
@@ -237,14 +238,20 @@ $("#id").on("blur", function () {
   $("#insertBtn").on("click", function () {
     let memberName = $('#id').val();
     let password = $('#pass2').val();
-    let email = $('#emailInput').val();
+    let email2 = $('#emailInput').val();
+    let verifyCode = $('#emailVer').val();
 
-    console.log(memberName, password, email)
+    console.log(memberName, password, email2, verifyCode)
 
     $.ajax({
-      url: "/api/signup",
-      type: "POST",
-      data: { memberName: memberName, password: password, email: email },
+        url: "/api/signup",
+        type: "POST",
+        data: {
+            memberName: memberName,
+            password: password,
+            email: email2,
+            verifyCode: verifyCode
+        },
       success: function (response) {
         switch (response) {
           case 0:
@@ -258,6 +265,9 @@ $("#id").on("blur", function () {
             break;
           case 2:
             swal("오류", "중복된 이메일입니다.", "error");
+            break;
+          case 3:
+            swal("오류", "이메일이 일치하지 않습니다.", "error");
             break;
           default:
             swal("오류", "회원 가입 중 오류가 발생했습니다.", "error");
