@@ -11,11 +11,12 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Set up JDK 17
-        id: setup-java
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
           java-version: '17'
+          distribution: 'temurin'
 
       - name: Generate configuration files
         run: |
@@ -86,12 +87,9 @@ jobs:
         run: chmod +x ./gradlew
         
       - name: Build with Gradle
-        run: |
-          # Ensure JAVA_HOME is set to JDK 17
-          export JAVA_HOME="${{ steps.setup-java.outputs.java-home }}"
-          export PATH="$JAVA_HOME/bin:$PATH"
-          java -version
-          ./gradlew build --warning-mode all
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: build
       
       - name: Upload Test Reports
         if: always()
