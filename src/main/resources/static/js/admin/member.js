@@ -183,7 +183,7 @@ $(document).ready(function () {
     $(document).on("click", "#btn-change-tel", function () {
         let memberNo = $(this).data("memberno");
         let tel = $('#tel').val().replace(/-/g, '').trim();
-        let phoneReg = /^01[016789]\d{3,4}\d{4}$/;
+        let phoneReg = /^01[016789]\d{4}\d{4}$/;
         let isValid = phoneReg.test(tel);
         console.log(tel);
 
