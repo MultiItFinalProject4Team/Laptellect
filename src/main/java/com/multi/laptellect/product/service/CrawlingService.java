@@ -372,7 +372,6 @@ public class CrawlingService {
         for (Element element : manufacturerElements) {
             String[] parts = element.text().split(": ");
 
-            log.info("parts 값 확인 합니다. = {}", parts);
             if (parts.length == 2) {
                 productDTO.setManufacturer(parts[1].trim());
                 manufacturerFound = true;
@@ -385,7 +384,6 @@ public class CrawlingService {
             for (Element element : alternativeManufacturerElements) {
                 String[] parts = element.text().split(": ");
 
-                log.info("parts 값 확인 합니다. = {}", parts);
                 if (parts.length == 2) {
                     productDTO.setManufacturer(parts[1].trim());
                     manufacturerFound = true;
