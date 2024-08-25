@@ -12,7 +12,16 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+        
+    - name: Build with Gradle
+      run: ./gradlew build
+      
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -42,6 +51,6 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         port: 22
         script: |
-          docker pull cpfur18/laptellect:latest
+          docker pull cpfur18/laptellcet:latest
           docker-compose down
           docker-compose up -d
