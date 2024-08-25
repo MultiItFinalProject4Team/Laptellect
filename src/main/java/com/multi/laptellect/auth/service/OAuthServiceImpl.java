@@ -41,6 +41,7 @@ public class OAuthServiceImpl implements OAuthService{
     private final KakaoConfig kakaoConfig;
     private final GoogleConfig googleConfig;
     private final AuthMapper authMapper;
+    
     @Override
     public String getKakaoAccessToken(String code) {
         String KakaoRestApiKey = kakaoConfig.getKakaoRestApiKey();
