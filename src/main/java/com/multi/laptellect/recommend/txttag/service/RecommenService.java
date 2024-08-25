@@ -586,11 +586,10 @@ public class RecommenService {
         List<String> suitableSur = List.of("눈부심 방지");
         for (String suitableSure : suitableSur) {
             if (panel.contains(suitableSure)) {
-
+                return true;
             }
         }
-        return true;
-
+        return false;
     }
 
     private boolean isWeightSuitable(String weight) {
@@ -643,6 +642,7 @@ public class RecommenService {
 
     private boolean isPower(String power) {
         if (power == null) {
+            return false;
         }
         try {
             double powerWh = Double.parseDouble(power.replace("W", ""));
@@ -654,6 +654,7 @@ public class RecommenService {
 
     private boolean isPowerSmall(String powersmall) {
         if (powersmall == null) {
+            return false;
         }
         try {
             double powerWhSmall = Double.parseDouble(powersmall.replace("W", ""));
