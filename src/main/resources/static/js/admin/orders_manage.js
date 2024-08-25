@@ -64,13 +64,21 @@ function renderPagination() {
   const pageNumbers = document.getElementById('pageNumbers');
   pageNumbers.innerHTML = '';
 
-  for (let i = 1; i <= totalPages; i++) {
+  let startPage = Math.max(currentPage - 2, 1);
+  let endPage = Math.min(startPage + 4, totalPages);
+
+  if (endPage - startPage < 4) {
+    startPage = Math.max(endPage - 4, 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
     const pageNumber = document.createElement('button');
     pageNumber.textContent = i;
-    pageNumber.onclick = () => changePage(i);
+    pageNumber.classList.add('page-number');
     if (i === currentPage) {
       pageNumber.classList.add('active');
     }
+    pageNumber.onclick = () => changePage(i);
     pageNumbers.appendChild(pageNumber);
   }
 
