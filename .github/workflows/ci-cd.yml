@@ -15,39 +15,39 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Print all environment variables (including sensitive)
+      - name: Check environment variables
         run: |
-          echo "Printing all environment variables..."
-          echo "GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}"
-          echo "GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}"
-          echo "COOLSMS_API_KEY: ${{ secrets.COOLSMS_API_KEY }}"
-          echo "COOLSMS_API_SECRET: ${{ secrets.COOLSMS_API_SECRET }}"
-          echo "COOLSMS_CALLER: ${{ secrets.COOLSMS_CALLER }}"
-          echo "GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}"
-          echo "GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}"
-          echo "GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}"
-          echo "KAKAO_ADMIN_KEY: ${{ secrets.KAKAO_ADMIN_KEY }}"
-          echo "KAKAO_KEY: ${{ secrets.KAKAO_KEY }}"
-          echo "KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}"
-          echo "KAKAO_SECRET_KEY: ${{ secrets.KAKAO_SECRET_KEY }}"
-          echo "DATA_API_KEY: ${{ secrets.DATA_API_KEY }}"
-          echo "NCP_ACCESS_KEY: ${{ secrets.NCP_ACCESS_KEY }}"
-          echo "NCP_SECRET_KEY: ${{ secrets.NCP_SECRET_KEY }}"
-          echo "NCP_CHATBOT_KEY: ${{ secrets.NCP_CHATBOT_KEY }}"
-          echo "IAMPORT_API_KEY: ${{ secrets.IAMPORT_API_KEY }}"
-          echo "IAMPORT_API_SECRET: ${{ secrets.IAMPORT_API_SECRET }}"
-          echo "SENTIMENT_CLIENT_ID: ${{ secrets.SENTIMENT_CLIENT_ID }}"
-          echo "SENTIMENT_CLIENT_SECRET: ${{ secrets.SENTIMENT_CLIENT_SECRET }}"
-          echo "DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}"
-          echo "DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}"
-          echo "REDIS_HOST: ${{ secrets.REDIS_HOST }}"
-          echo "REDIS_PORT: ${{ secrets.REDIS_PORT }}"
-          echo "REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}"
-          echo "DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}"
-          echo "DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}"
-          echo "EC2_HOST: ${{ secrets.EC2_HOST }}"
-          echo "EC2_USER: ${{ secrets.EC2_USER }}"
-          echo "EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}"
+          echo "Checking environment variables..."
+          if [ -z "${{ secrets.GMAIL_USERNAME }}" ]; then echo "GMAIL_USERNAME is not set"; else echo "GMAIL_USERNAME is set"; fi
+          if [ -z "${{ secrets.GMAIL_PASSWORD }}" ]; then echo "GMAIL_PASSWORD is not set"; else echo "GMAIL_PASSWORD is set"; fi
+          if [ -z "${{ secrets.COOLSMS_API_KEY }}" ]; then echo "COOLSMS_API_KEY is not set"; else echo "COOLSMS_API_KEY is set"; fi
+          if [ -z "${{ secrets.COOLSMS_API_SECRET }}" ]; then echo "COOLSMS_API_SECRET is not set"; else echo "COOLSMS_API_SECRET is set"; fi
+          if [ -z "${{ secrets.COOLSMS_CALLER }}" ]; then echo "COOLSMS_CALLER is not set"; else echo "COOLSMS_CALLER is set"; fi
+          if [ -z "${{ secrets.GOOGLE_API_KEY }}" ]; then echo "GOOGLE_API_KEY is not set"; else echo "GOOGLE_API_KEY is set"; fi
+          if [ -z "${{ secrets.GOOGLE_CLIENT_ID }}" ]; then echo "GOOGLE_CLIENT_ID is not set"; else echo "GOOGLE_CLIENT_ID is set"; fi
+          if [ -z "${{ secrets.GOOGLE_CLIENT_SECRET }}" ]; then echo "GOOGLE_CLIENT_SECRET is not set"; else echo "GOOGLE_CLIENT_SECRET is set"; fi
+          if [ -z "${{ secrets.KAKAO_ADMIN_KEY }}" ]; then echo "KAKAO_ADMIN_KEY is not set"; else echo "KAKAO_ADMIN_KEY is set"; fi
+          if [ -z "${{ secrets.KAKAO_KEY }}" ]; then echo "KAKAO_KEY is not set"; else echo "KAKAO_KEY is set"; fi
+          if [ -z "${{ secrets.KAKAO_REST_KEY }}" ]; then echo "KAKAO_REST_KEY is not set"; else echo "KAKAO_REST_KEY is set"; fi
+          if [ -z "${{ secrets.KAKAO_SECRET_KEY }}" ]; then echo "KAKAO_SECRET_KEY is not set"; else echo "KAKAO_SECRET_KEY is set"; fi
+          if [ -z "${{ secrets.DATA_API_KEY }}" ]; then echo "DATA_API_KEY is not set"; else echo "DATA_API_KEY is set"; fi
+          if [ -z "${{ secrets.NCP_ACCESS_KEY }}" ]; then echo "NCP_ACCESS_KEY is not set"; else echo "NCP_ACCESS_KEY is set"; fi
+          if [ -z "${{ secrets.NCP_SECRET_KEY }}" ]; then echo "NCP_SECRET_KEY is not set"; else echo "NCP_SECRET_KEY is set"; fi
+          if [ -z "${{ secrets.NCP_CHATBOT_KEY }}" ]; then echo "NCP_CHATBOT_KEY is not set"; else echo "NCP_CHATBOT_KEY is set"; fi
+          if [ -z "${{ secrets.IAMPORT_API_KEY }}" ]; then echo "IAMPORT_API_KEY is not set"; else echo "IAMPORT_API_KEY is set"; fi
+          if [ -z "${{ secrets.IAMPORT_API_SECRET }}" ]; then echo "IAMPORT_API_SECRET is not set"; else echo "IAMPORT_API_SECRET is set"; fi
+          if [ -z "${{ secrets.SENTIMENT_CLIENT_ID }}" ]; then echo "SENTIMENT_CLIENT_ID is not set"; else echo "SENTIMENT_CLIENT_ID is set"; fi
+          if [ -z "${{ secrets.SENTIMENT_CLIENT_SECRET }}" ]; then echo "SENTIMENT_CLIENT_SECRET is not set"; else echo "SENTIMENT_CLIENT_SECRET is set"; fi
+          if [ -z "${{ secrets.DATASOURCE_USERNAME }}" ]; then echo "DATASOURCE_USERNAME is not set"; else echo "DATASOURCE_USERNAME is set"; fi
+          if [ -z "${{ secrets.DATASOURCE_PASSWORD }}" ]; then echo "DATASOURCE_PASSWORD is not set"; else echo "DATASOURCE_PASSWORD is set"; fi
+          if [ -z "${{ secrets.REDIS_HOST }}" ]; then echo "REDIS_HOST is not set"; else echo "REDIS_HOST is set"; fi
+          if [ -z "${{ secrets.REDIS_PORT }}" ]; then echo "REDIS_PORT is not set"; else echo "REDIS_PORT is set"; fi
+          if [ -z "${{ secrets.REDIS_PASSWORD }}" ]; then echo "REDIS_PASSWORD is not set"; else echo "REDIS_PASSWORD is set"; fi
+          if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ]; then echo "DOCKERHUB_USERNAME is not set"; else echo "DOCKERHUB_USERNAME is set"; fi
+          if [ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]; then echo "DOCKERHUB_TOKEN is not set"; else echo "DOCKERHUB_TOKEN is set"; fi
+          if [ -z "${{ secrets.EC2_HOST }}" ]; then echo "EC2_HOST is not set"; else echo "EC2_HOST is set"; fi
+          if [ -z "${{ secrets.EC2_USER }}" ]; then echo "EC2_USER is not set"; else echo "EC2_USER is set"; fi
+          if [ -z "${{ secrets.EC2_SSH_KEY }}" ]; then echo "EC2_SSH_KEY is not set"; else echo "EC2_SSH_KEY is set"; fi
       
       - name: Generate configuration files
         run: |
