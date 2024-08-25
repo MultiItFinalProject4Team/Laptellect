@@ -166,6 +166,7 @@ $(document).ready(function () {
                             break;
                         case 3:
                             swal("중복된 이메일입니다", "", "warning");
+                            break;
                         case 0:
                             swal("이메일 변경 실패", "", "error");
                             break;
@@ -181,7 +182,7 @@ $(document).ready(function () {
     // 연락처 변경
     $(document).on("click", "#btn-change-tel", function () {
         let memberNo = $(this).data("memberno");
-        let tel = $('#phoneNumInput').val().replace(/-/g, '').trim();
+        let tel = $('#tel').val().replace(/-/g, '').trim();
         let phoneReg = /^01[016789]\d{3,4}\d{4}$/;
         let isValid = phoneReg.test(tel);
         console.log(tel);
@@ -291,6 +292,7 @@ $(document).ready(function () {
                             break;
                         default:
                             swal("회원 탈퇴 실패", "", "error");
+                            break;
                     }
                 },
                 error: function() { console.log("회원 탈퇴 에러"); }
