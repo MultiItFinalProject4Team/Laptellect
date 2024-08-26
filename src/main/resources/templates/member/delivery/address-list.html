@@ -166,6 +166,7 @@ $(".updateAddressBtn").on("click", function () {
     function convertEmptyToNull(value) {
             return value.trim() === "" ? null : value;
     }
+    let phoneReg = /^01[016789]\d{4}\d{4}$/;
 
     let addressId = $('#address-id2').val();
     let memberNo = $('#member-no2').val();
@@ -174,7 +175,7 @@ $(".updateAddressBtn").on("click", function () {
     let postalCode = convertEmptyToNull($('#postal-code2').val());
     let address = convertEmptyToNull($('#address2').val());
     let detailAddress = convertEmptyToNull($('#detail-address2').val());
-    let recipientPhone = convertEmptyToNull($('#recipient-phone2').val());
+    let recipientPhone = convertEmptyToNull($('#recipient-phone2').val().replace(/-/g, '').trim());
     let request = convertEmptyToNull($('#request2').val());
 
     if (!addressName) {
@@ -189,6 +190,8 @@ $(".updateAddressBtn").on("click", function () {
         swal("필수 입력 항목", "상세 주소를 입력해주세요.", "info");
     } else if (!recipientPhone) {
         swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
+    } else if (!phoneReg.test(recipientPhone)) {
+        swal("유효하지 않은 번호", "수령인 전화번호 형식을 확인해주세요. 010-1234-5678 형식으로 입력해야 합니다.", "info");
     } else if (!request) {
         swal("필수 입력 항목", "요청 사항을 입력해주세요.", "info");
     } else {
@@ -220,10 +223,13 @@ $(".updateAddressBtn").on("click", function () {
                         break;
                     case 0:
                         swal('배송지 이름을 입력해주세요.', '', 'info');
+                        break;
                     case 401:
                         swal('유저 불일치', '', 'warning');
+                        break;
                     case 500:
                         swal('배송지 수정 실패', '', 'error');
+                        break;
                 }
                 getAddressList()
             },

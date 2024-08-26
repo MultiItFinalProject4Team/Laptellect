@@ -23,13 +23,14 @@ $(function () {
           function convertEmptyToNull(value) {
                   return value.trim() === "" ? null : value;
           }
+          let phoneReg = /^01[016789]\d{4}\d{4}$/;
 
           let addressName = convertEmptyToNull($('#address-name').val());
           let recipientName = convertEmptyToNull($('#recipient-name').val());
           let postalCode = convertEmptyToNull($('#postal-code').val());
           let address = convertEmptyToNull($('#address').val());
           let detailAddress = convertEmptyToNull($('#detail-address').val());
-          let recipientPhone = convertEmptyToNull($('#recipient-phone').val());
+          let recipientPhone = convertEmptyToNull($('#recipient-phone').val().replace(/-/g, '').trim());
           let request = convertEmptyToNull($('#request').val());
 
           if (!addressName) {
@@ -43,7 +44,9 @@ $(function () {
           } else if (!detailAddress) {
               swal("필수 입력 항목", "상세 주소를 입력해주세요.", "info");
           } else if (!recipientPhone) {
-              swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
+            swal("필수 입력 항목", "수령인 전화번호를 입력해주세요.", "info");
+          } else if (!phoneReg.test(recipientPhone)) {
+            swal("유효하지 않은 번호", "수령인 전화번호 형식을 확인해주세요. 010-1234-5678 형식으로 입력해야 합니다.", "info");
           } else if (!request) {
               swal("필수 입력 항목", "요청 사항을 입력해주세요.", "info");
           } else {

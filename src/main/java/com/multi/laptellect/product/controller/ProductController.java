@@ -78,9 +78,7 @@ public class ProductController {
         try {
             List<ProductDTO> products = crawlingService.crawlProducts(typeNo);
 
-
             log.info("제품 확인 {}", products);
-
 
             productService.saveProductsToDB(products, typeNo);
 
@@ -95,7 +93,6 @@ public class ProductController {
             log.error("2.에러발생", e);
         }
         return "redirect:productList?typeNo=1";
-
     }
 
 
@@ -111,7 +108,6 @@ public class ProductController {
         model.addAttribute("typeNo", typeNo);
         return "product/productList";
     }
-
 
     /**
      * Product details string.
