@@ -72,12 +72,13 @@
         // 제품 리스트를 로드하는 함수
         function loadProducts(page, size, typeNo) {
             let keyword = convertEmptyToNull($("#form1").val());
-            let minPrice = $("#site-search1").val();
-            let maxPrice = $("#site-search2").val()
+            let minPrice = parseInt($("#site-search1").val(), 10);
+            let maxPrice = parseInt($("#site-search2").val(), 10);
 
+            minPrice = isNaN(minPrice) ? 0 : minPrice;
+            maxPrice = isNaN(maxPrice) ? null : maxPrice;
 
-
-            if (minPrice > maxPrice && maxPrice != 0) {
+            if (minPrice > maxPrice && maxPrice != null) {
                 swal({
                     title: "가격 설정 오류",
                     text: "최소 가격은 최대 가격보다 작아야 합니다.",
