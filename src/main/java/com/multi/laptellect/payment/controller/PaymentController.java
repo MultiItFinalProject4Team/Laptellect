@@ -390,6 +390,9 @@ public class PaymentController {
         if (result > 0) {
             response.put("success", true);
             response.put("message", "리뷰가 성공적으로 저장되었습니다.");
+
+            MemberDTO memberDTO = memberMapper.findMemberByNo(SecurityUtil.getUserNo());
+            SecurityUtil.updateUserDetails(memberDTO);
         } else {
             response.put("success", false);
             response.put("message", "리뷰 저장에 실패했습니다.");
