@@ -41,13 +41,13 @@
                         <input type="checkbox" class="form-check-input wishlist-checkbox" th:attr="data-product-no=${wishlist.productNo}">
                     </div>
                     <div class="col-md-2">
-                        <a th:href="@{/product/productDetail(productNo=${wishlist.productNo})}">
+                        <a th:href="@{/product/productDetail(productNo=${wishlist.productNo})}" target="_blank">
                             <img th:src="@{${wishlist.uploadName}}" class="img-fluid rounded-start" alt="Product Image">
                         </a>
                     </div>
                     <div class="col-md-7">
                         <div class="card-body">
-                            <a th:href="@{/product/productDetail(productNo=${wishlist.productNo})}" class="product-name"><h6 class="card-title" th:text="${wishlist.productName}"></h6></a>
+                            <a th:href="@{/product/productDetail(productNo=${wishlist.productNo})}" target="_blank" class="product-name"><h6 class="card-title" th:text="${wishlist.productName}"></h6></a>
                             <p class="card-text text-danger price" th:text="${wishlist.price} + ' 원'"></p>
                         </div>
                     </div>

@@ -107,11 +107,11 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="laptop : ${laptops}">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                    <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}" target="_blank">
                                         <img th:src="@{${laptop.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}">
+                                        <a th:href="@{/product/productDetail(productNo=${laptop.productNo})}" target="_blank">
                                             <p class="card-text" content="product-name" th:text="${laptop.productName.length() > 17 ? laptop.productName.substring(0, 17) + '...' : laptop.productName}">상품명</p>
                                             <p class="card-text"><strong class="price" th:text="${laptop.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
@@ -135,11 +135,11 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="mouse : ${ mouses }">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                    <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}" target="_blank">
                                         <img th:src="@{${mouse.image}}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}">
+                                        <a th:href="@{/product/productDetail(productNo=${mouse.productNo})}" target="_blank">
                                             <p class="card-text" content="product-name" th:text="${mouse.productName.length() > 17 ? mouse.productName.substring(0, 17) + '...' : mouse.productName}">상품명</p>
                                             <p class="card-text"><strong class="price" th:text="${mouse.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>
@@ -163,11 +163,11 @@
                         <div class="row justify-content-center">
                             <div class="col-md-3" th:each="keyboard : ${ keyboards }">
                                 <div class="card" style="width: 18rem;">
-                                    <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                    <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}" target="_blank">
                                         <img th:src="@{${ keyboard.image }}" class="card-img-top product-image" alt="상품 이미지">
                                     </a>
                                     <div class="card-body">
-                                        <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}">
+                                        <a th:href="@{/product/productDetail(productNo=${keyboard.productNo})}" target="_blank">
                                             <p class="card-text" content="product-name" th:text="${keyboard.productName.length() > 17 ? keyboard.productName.substring(0, 17) + '...' : keyboard.productName}">상품명</p>
                                             <p class="card-text"><strong class="price" th:text="${keyboard.price}">가격대</strong><span style="font-size: 14px">원</span></p>
                                         </a>

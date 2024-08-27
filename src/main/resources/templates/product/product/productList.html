@@ -24,7 +24,7 @@
                             </div>
                         </li>
                         <li><a class="btn btn-custom text-white mt-2 mb-2"
-                               th:href="@{${product.Url}}"><i
+                               th:href="@{${product.Url}}" target="_blank"><i
                                 class="far fa-eye"></i></a></li>
                         <li>
                             <div th:if="${carts != null}">
@@ -44,7 +44,7 @@
                     </ul>
                 </div>
             </div>
-            <a th:href="@{${product.Url}}">
+            <a th:href="@{${product.Url}}" target="_blank">
                 <div class="card-body">
                     <div class="tags mb-2" style="display: flex; flex-wrap: wrap; gap: 5px;">
                         <span class="tag" th:each="tag, iterStat : ${product.tags}" style="background-color: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-size: 0.8em; margin-right: 5px;" th:style="${iterStat.index % 3 == 2 ? 'margin-right: 0;' : ''}">
