@@ -33,3 +33,6 @@
 
 #### 💾 ERD 설계
 ![ERD설계](https://github.com/user-attachments/assets/faeb8ae7-e90e-43aa-a3a5-24218173abcb)
+
+#### 🗂️ 구현 내용
+[구현내용](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
