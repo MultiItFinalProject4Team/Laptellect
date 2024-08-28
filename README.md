@@ -46,3 +46,5 @@
 - **박재민** : Payment, Point, Review, Admin dashboard [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 - **윤상현** : Recommend, Laptop Tag [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 
+### 📌PART 3. 시연영상 <hr>
+[여기를 클릭하여 동영상 보기](https://drive.google.com/file/d/1e9GmwZhhw9rhnQg4E1TmejJ2uKH8-_SY/view?usp=sharing)
