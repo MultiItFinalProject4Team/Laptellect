@@ -37,7 +37,7 @@
 ![요약 흐름도](https://github.com/user-attachments/assets/add04954-2b4e-45af-82b7-cd93417ba627)
 
 #### 💾 ERD 설계
-![ERD설계](https://github.com/user-attachments/assets/faeb8ae7-e90e-43aa-a3a5-24218173abcb)
+![4조_Laptellect(public)](https://github.com/user-attachments/assets/28ba6e41-7a22-4fda-b997-216a0e0a2b28)
 
 #### 🗂️ [구현 내용](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 - **이강석** : AUTH, LOG, UI, Redis, AWS EC2 [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
