@@ -40,9 +40,9 @@
 ![ERD설계](https://github.com/user-attachments/assets/faeb8ae7-e90e-43aa-a3a5-24218173abcb)
 
 #### 🗂️ [구현 내용](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
-- **이강석** : AUTH, LOG, UI, Redis, AWS EC2 [(링크)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
-- **안진원** : customer , Object Storage [(링크)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
-- **이우석** : Product Management [(링크)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
-- **박재민** : Payment, Point, Review, Admin dashboard [(링크)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
-- **윤상현** : Recommend, Laptop Tag [(링크)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+- **이강석** : AUTH, LOG, UI, Redis, AWS EC2 [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+- **안진원** : customer , Object Storage [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+- **이우석** : Product Management [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+- **박재민** : Payment, Point, Review, Admin dashboard [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+- **윤상현** : Recommend, Laptop Tag [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 
