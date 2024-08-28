@@ -1,4 +1,4 @@
-# 💻 노트북 추천 웹 서비스(Mutltiit Final Project)
+# 💻 Laptellect(노트북 추천 웹 서비스)
 ##### Java Spring Boot를 사용한 노트북 추천 및 구매 쇼핑몰 개발
 
 ### 📌PART 1. 프로젝트 소개 <hr>
@@ -35,4 +35,4 @@
 ![ERD설계](https://github.com/user-attachments/assets/faeb8ae7-e90e-43aa-a3a5-24218173abcb)
 
 #### 🗂️ 구현 내용
-[구현내용](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+[주요 기능](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
