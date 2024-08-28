@@ -47,4 +47,4 @@
 - **윤상현** : Recommend, Laptop Tag [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 
 ### 📌PART 3. 시연영상 <hr>
-[여기를 클릭하여 동영상 보기](https://drive.google.com/file/d/1e9GmwZhhw9rhnQg4E1TmejJ2uKH8-_SY/view?usp=sharing)
+<iframe src="https://drive.google.com/uc?export=preview&id=1e9GmwZhhw9rhnQg4E1TmejJ2uKH8-_SY" width="640" height="480" allow="autoplay"></iframe>
