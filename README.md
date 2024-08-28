@@ -34,5 +34,10 @@
 #### 💾 ERD 설계
 ![ERD설계](https://github.com/user-attachments/assets/faeb8ae7-e90e-43aa-a3a5-24218173abcb)
 
-#### 🗂️ 구현 내용
-[주요 기능](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+#### 🗂️ [구현 내용](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+- **이강석** : AUTH, LOG, UI, Redis, AWS EC2
+- **안진원** : customer , Object Storage
+- **이우석** : Product Management
+- **박재민** : Payment, Point, Review, Admin dashboard
+- **윤상현** : Recommend, Laptop Tag
+
