@@ -24,6 +24,7 @@
 
 #### 🗄️ WBS
 ![image](https://github.com/user-attachments/assets/a375f43c-6f1c-44c9-9f40-303cd0204877)
+<br>
 
 ### 📌PART 2. 시스템 설계 <hr>
 
@@ -45,6 +46,7 @@
 - **이우석** : Product Management [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 - **박재민** : Payment, Point, Review, Admin dashboard [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 - **윤상현** : Recommend, Laptop Tag [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+<br>
 
 ### 📌PART 3. 시연영상 <hr>
 [여기를 클릭하여 동영상 보기](https://drive.google.com/file/d/1e9GmwZhhw9rhnQg4E1TmejJ2uKH8-_SY/view?usp=sharing)
