@@ -41,7 +41,7 @@
 ![4조_Laptellect(public)](https://github.com/user-attachments/assets/28ba6e41-7a22-4fda-b997-216a0e0a2b28)
 
 #### 🗂️ [구현 내용](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
-- **이강석** : AUTH, LOG, UI, Redis, AWS EC2 [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
+- **이강석** : AUTH, LOG, UI, Redis, AWS EC2 [(Link)](https://drive.google.com/file/d/1tZ7wcXv0igEdXsO5t1RiLzYF-mQ_0BNt/view?usp=sharing)
 - **안진원** : customer , Object Storage [(Link)](https://drive.google.com/file/d/1m0qNnOVyxYiGTJN97I3G8yn8IwQfSIW1/view?usp=drive_link)
 - **이우석** : Product Management [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
 - **박재민** : Payment, Point, Review, Admin dashboard [(Link)](https://github.com/MultiItFinalProject4Team/Laptellect/wiki)
